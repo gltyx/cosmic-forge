@@ -2,7 +2,6 @@ import { getGold, setGold, getSilver, setSilver, getLanguage, setElements, getEl
 import { manualIncrementer, startAutoIncrementer, doubleSpeed, toggleTimer, resetCounter, setGameState, startGame } from './game.js';
 import { initLocalization, localize } from './localization.js';
 
-
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
     // Event listeners
