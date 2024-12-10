@@ -16,17 +16,35 @@
         </div>
     </div>
 
-    <!-- Canvas Container -->
-    <div id="canvasContainer" class="d-none">
-        <!-- Button Row -->
-        <div id="buttonRow" class="d-flex justify-content-center mb-3">
-            <button id="button1" class="btn btn-warning mr-2">Button1</button>
-            <button id="button2" class="btn btn-success">Button2</button>
-            <button id="returnToMenu" class="btn btn-secondary mr-2">Return to Menu</button>
+    <div id="summaryContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
+        <div class="summary-item" id="goldContainer">
+            <span id="goldPerSec">Gold/sec: 0</span>
         </div>
-        <!-- Canvas Row -->
-        <div class="d-flex justify-content-center">
-            <canvas id="canvas"></canvas>
+        <div class="summary-item" id="silverContainer">
+            <span id="silverPerSec">Silver/sec: 0</span>
+        </div>
+    </div>    
+
+    <div id="canvasContainer" class="d-flex">
+        <div class="timer" id="goldTimer">
+          <p>Gold: <span id="goldQuantity">0</span></p>
+          <!-- New buttons for gold -->
+          <button id="incrementGold" class="btn btn-secondary mt-2">1 Gold</button>
+          <button id="startAutoIncrementGold" class="btn btn-secondary mt-2">Buy Auto Gold</button>
+          <!-- Existing buttons for gold -->
+          <button id="pauseResumegoldTimer" class="btn btn-secondary mt-2">Pause Gold Acquisition</button>
+          <button id="doubleSpeedgoldTimer" class="btn btn-secondary mt-2">Double Gold Acquisition</button>
+          <button id="resetCountergoldTimer" class="btn btn-secondary mt-2">Reset Gold</button>
+        </div>
+        <div class="timer" id="silverTimer">
+          <p>Silver: <span id="silverQuantity">0</span></p>
+          <!-- New buttons for silver -->
+          <button id="incrementSilver" class="btn btn-secondary mt-2">1 Silver</button>
+          <button id="startAutoIncrementSilver" class="btn btn-secondary mt-2">Buy Auto Silver</button>
+          <!-- Existing buttons for silver -->
+          <button id="pauseResumesilverTimer" class="btn btn-secondary mt-2">Pause Silver Acquisition</button>
+          <button id="doubleSpeedsilverTimer" class="btn btn-secondary mt-2">Double Silver Acquisition</button>
+          <button id="resetCountersilverTimer" class="btn btn-secondary mt-2">Reset Silver</button>
         </div>
     </div>
 

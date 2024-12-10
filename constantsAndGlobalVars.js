@@ -17,6 +17,20 @@ export const GAME_VISIBLE_PAUSED = 'gameVisiblePaused';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 
 //GLOBAL VARIABLES
+const increments = {
+    goldTimer: 1,
+    silverTimer: 1
+};
+
+let counters = {
+    goldTimer: 0,
+    silverTimer: 0
+};
+
+let gold = 0;
+let silver = 0;
+let goldRate = 0;
+let silverRate = 0;
 
 //FLAGS
 let audioMuted;
@@ -36,6 +50,7 @@ export function setElements() {
         returnToMenuButton: document.getElementById('returnToMenu'),
         canvas: document.getElementById('canvas'),
         canvasContainer: document.getElementById('canvasContainer'),
+        summaryContainer: document.getElementById('summaryContainer'),
         buttonRow: document.getElementById('buttonRow'),
         overlay: document.getElementById('overlay'),
         button1: document.getElementById('button1'),
@@ -162,4 +177,60 @@ export function getGameInProgress() {
 
 export function setGameInProgress(value) {
     gameInProgress = value;
+}
+
+export function setIncrement(timerKey, value) {
+    increments[timerKey] = value;
+}
+
+export function getIncrement(timerKey) {
+    return increments[timerKey];
+}
+
+export function getCounter(key) {
+    if (counters.hasOwnProperty(key)) {
+        return counters[key];
+    } else {
+        console.error(`Counter with key "${key}" not found.`);
+        return null;
+    }
+}
+
+export function setCounter(key, value) {
+    if (counters.hasOwnProperty(key)) {
+        counters[key] = value;
+        console.log(`Counter "${key}" set to ${value}`);
+    } else {
+        console.error(`Counter with key "${key}" not found.`);
+    }
+}
+
+export function getGold() {
+    return gold;
+}
+
+export function setGold(value) {
+    gold = value;
+}
+
+export function getSilver() {
+    return silver;
+}
+
+export function setSilver(value) {
+    silver = value;
+}
+
+export function getGoldRate() {
+    return goldRate;
+}
+
+export function getSilverRate() {
+    return silverRate;
+}
+export function setGoldRate(value) {
+    goldRate = value;
+}
+export function setSilverRate(value) {
+    silverRate = value;
 }

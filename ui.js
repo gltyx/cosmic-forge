@@ -16,18 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         startGame();
     });
 
-    getElements().returnToMenuButton.addEventListener('click', () => {
-        setGameState(getMenuState());
-    });
-
-    getElements().button1.addEventListener('click', () => {
-        //BUTTON 1 CODE
-    });
-
-    getElements().button2.addEventListener('click', () => {
-        //BUTTON 2 CODE
-    });
-
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
 });
