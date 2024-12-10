@@ -7,8 +7,6 @@ import {
     setGold,
     getSilver,
     setSilver,
-    setCounter,
-    getCounter, 
     getIncrement,
     setIncrement,
     setBeginGameStatus, 
@@ -132,7 +130,7 @@ const updateDisplay = (elementId, count) => {
 };
 
 // Pause/Resume logic for buttons
-function toggleTimer(key, buttonId) {
+export function toggleTimer(key, buttonId) {
     const timer = timerManager.getTimer(key);
     if (timer) {
         const button = document.getElementById(buttonId);
@@ -146,7 +144,7 @@ function toggleTimer(key, buttonId) {
     }
 }
 
-function doubleSpeed(key) {
+export function doubleSpeed(key) {
     const timer = timerManager.getTimer(key);
     if (timer) {
         const currentIncrement = getIncrement(key);
@@ -173,7 +171,7 @@ function doubleSpeed(key) {
     }
 }
 
-function resetCounter(key) {
+export function resetCounter(key) {
     if (key === "goldTimer") {
         setGold(0);
         updateDisplay("goldQuantity", getGold());
@@ -183,13 +181,13 @@ function resetCounter(key) {
     }
 }
 
-function manualIncrementer(getResource, setResource, incrementAmount, elementId) {
+export function manualIncrementer(getResource, setResource, incrementAmount, elementId) {
     let currentResource = getResource();
     setResource(currentResource + incrementAmount);
     updateDisplay(elementId, getResource());
 }
 
-function startAutoIncrementer(resourceKey) {
+export function startAutoIncrementer(resourceKey) {
     if (resourceKey === "gold") {
         setGoldRate(getIncrement("goldTimer"));
         timerManager.addTimer("goldTimer", 1000, () => {
@@ -207,11 +205,6 @@ function startAutoIncrementer(resourceKey) {
             updateSummary();
         });
     }
-}
-
-function updateSummary() {
-    document.getElementById("goldPerSec").textContent = `Gold: ${getGoldRate()}/s`;
-    document.getElementById("silverPerSec").textContent = `Silver: ${getSilverRate()}/s`;
 }
 
 function calculateRate(resourceKey) {
@@ -241,19 +234,10 @@ function updateRate(resourceKey, reachedFastestInterval) {
     updateSummary();
 }
 
-// Event listeners for the buttons
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("pauseResumegoldTimer").addEventListener("click", () => toggleTimer("goldTimer", "pauseResumegoldTimer"));
-    document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    document.getElementById("doubleSpeedgoldTimer").addEventListener("click", () => doubleSpeed("goldTimer"));
-    document.getElementById("doubleSpeedsilverTimer").addEventListener("click", () => doubleSpeed("silverTimer"));
-    document.getElementById("resetCountergoldTimer").addEventListener("click", () => resetCounter("goldTimer"));
-    document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    document.getElementById("incrementGold").addEventListener("click", () => manualIncrementer(getGold, setGold, 1, "goldQuantity"));
-    document.getElementById("incrementSilver").addEventListener("click", () => manualIncrementer(getSilver, setSilver, 1, "silverQuantity"));
-    document.getElementById("startAutoIncrementGold").addEventListener("click", () => startAutoIncrementer("gold"));
-    document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
-});
+function updateSummary() {
+    document.getElementById("goldPerSec").textContent = `Gold: ${getGoldRate()}/s`;
+    document.getElementById("silverPerSec").textContent = `Silver: ${getSilverRate()}/s`;
+}
 
 //===============================================================================================================
 

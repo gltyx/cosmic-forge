@@ -13,18 +13,12 @@ let oldLanguage = 'en';
 //CONSTANTS
 export let gameState;
 export const MENU_STATE = 'menuState';
-export const GAME_VISIBLE_PAUSED = 'gameVisiblePaused';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 
 //GLOBAL VARIABLES
 const increments = {
     goldTimer: 1,
     silverTimer: 1
-};
-
-let counters = {
-    goldTimer: 0,
-    silverTimer: 0
 };
 
 let gold = 0;
@@ -185,24 +179,6 @@ export function setIncrement(timerKey, value) {
 
 export function getIncrement(timerKey) {
     return increments[timerKey];
-}
-
-export function getCounter(key) {
-    if (counters.hasOwnProperty(key)) {
-        return counters[key];
-    } else {
-        console.error(`Counter with key "${key}" not found.`);
-        return null;
-    }
-}
-
-export function setCounter(key, value) {
-    if (counters.hasOwnProperty(key)) {
-        counters[key] = value;
-        console.log(`Counter "${key}" set to ${value}`);
-    } else {
-        console.error(`Counter with key "${key}" not found.`);
-    }
 }
 
 export function getGold() {
