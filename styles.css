@@ -588,7 +588,7 @@ body {
 }
 
 .option-button {
-    background-color: var(--tab-selected-bg-color); /* Button background follows the selected tab color */
+    background-color: var(--tab-selected-bg-color);
     color: var(--text-color);
     border: none;
     padding: 10px 15px;

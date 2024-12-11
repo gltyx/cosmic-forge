@@ -111,7 +111,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     { value: 'forest', text: 'Forest' },
                 ], document.body.getAttribute('data-theme') || 'dark', (value) => {
                     selectTheme(value);
-                })
+                }),
+                false
             );
             optionContent.appendChild(themeRow);
     
@@ -122,7 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     { value: 'scientific', text: 'Scientific' },
                 ], 'normal', (value) => {
                     setNotationType(value);
-                })
+                }),
+                false
             );
             optionContent.appendChild(notationRow);
     
@@ -130,21 +132,28 @@ document.addEventListener('DOMContentLoaded', async () => {
                 'Notifications:',
                 createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                     setNotificationsToggle(isEnabled);
-                })
+                }),
+                false
             );
             optionContent.appendChild(notificationsRow);
 
             const triggerNotificationsRow = createOptionRow(
                 'Trigger Notification:',
-                createButton('Send Notification', 'btn-secondary', sendTestNotification)
+                createButton('Send Notification', 'btn-secondary', sendTestNotification),
+                true
             );
             optionContent.appendChild(triggerNotificationsRow);
         }
     }    
     
-    function createOptionRow(labelText, inputElement) {
+    function createOptionRow(labelText, inputElement, hidden) {
         const row = document.createElement('div');
-        row.classList.add('option-row', 'd-flex');
+
+        if (hidden) {
+            row.classList.add('option-row', 'd-none');
+        } else {
+            row.classList.add('option-row', 'd-flex');
+        }
     
         const labelContainer = document.createElement('div');
         labelContainer.classList.add('label-container');
