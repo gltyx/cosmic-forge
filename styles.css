@@ -2,6 +2,10 @@ h4 {
     font-weight: 700;
 }
 
+label {
+    margin-bottom: 0;
+}
+
 button {
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
@@ -402,7 +406,7 @@ body {
 #optionContent {
     display: flex;
     width: 100%;
-    gap: 20px;
+    flex-direction: column;
 }
 
 #labelContainer {
@@ -417,7 +421,6 @@ body {
     position: relative;
     width: 100%;
     max-width: 300px;
-    margin: 10px 0;
 }
 
 /* Style the select box itself */
@@ -435,12 +438,89 @@ body {
     -moz-appearance: none;
 }
 
+.option-row {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid var(--container-border-color);
+}
+
+.option-row:first-of-type {
+    border-top: 1px solid var(--container-border-color);
+}
+
+.label-container {
+    width: 20%;
+    display: flex;
+    align-items: center;
+}
+
+.input-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 10px 0;
+}
+
 /* Style when dropdown is focused */
 .select-container select:focus {
     border-color: var(--tab-selected-bg-color);
     outline: none;
     box-shadow: 0 0 5px var(--tab-selected-bg-color);
 }
+
+/* Container for the toggle switch */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Hidden default checkbox */
+.toggle-container input[type="checkbox"] {
+    display: none;
+}
+
+/* The switch slider */
+.toggle-container label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    background-color: var(--tab-bg-color);
+    border-radius: 12px;
+    transition: background-color 0.3s;
+    border: 1px solid var(--container-border-color);
+}
+
+.toggle-container label::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--text-color);
+    border-radius: 50%;
+    transition: transform 0.3s;
+    transform: translateX(0);
+}
+
+/* When the checkbox is checked */
+.toggle-container input[type="checkbox"]:checked + label {
+    background-color: var(--tab-selected-bg-color);
+}
+
+.toggle-container input[type="checkbox"]:checked + label::after {
+    transform: translateX(26px); /* Adjust for the switch size */
+}
+
+/* Optional: Accessible focus style */
+.toggle-container input[type="checkbox"]:focus + label {
+    box-shadow: 0 0 2px 2px var(--text-color);
+}
+
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {

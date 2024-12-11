@@ -71,72 +71,132 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     document.querySelector('.option1').addEventListener('click', function() {
-        updateContent('Themes', 'Select theme.');
+        updateContent('Visual');
     });
 
     document.querySelector('.option2').addEventListener('click', function() {
-        updateContent('Additional Menu Content 1', 'Content for option 2 goes here.');
+        updateContent('Additional Menu Content 1');
     });
 
     document.querySelector('.option3').addEventListener('click', function() {
-        updateContent('Additional Menu Content 2', 'Content for option 3 goes here.');
+        updateContent('Additional Menu Content 2');
     });
 
     document.querySelector('.option4').addEventListener('click', function() {
-        updateContent('Additional Menu Content 3', 'Content for option 4 goes here.');
+        updateContent('Additional Menu Content 3');
     });
 
-    function updateContent(heading, content) {
+    function updateContent(heading) {
         document.getElementById('headingContent').innerText = heading;
     
-        const labelContainer = document.getElementById('labelContainer');
-        const inputContainer = document.getElementById('inputContainer');
+        const optionContent = document.getElementById('optionContent');
+        optionContent.innerHTML = '';
     
-        labelContainer.innerHTML = '';
-        inputContainer.innerHTML = '';
+        if (heading === 'Visual') {
+            const themeRow = createOptionRow(
+                'Theme:',
+                createDropdown('themeSelect', [
+                    { value: 'light', text: 'Light' },
+                    { value: 'dark', text: 'Dark' },
+                    { value: 'frosty', text: 'Frosty' },
+                    { value: 'summer', text: 'Summer' },
+                    { value: 'forest', text: 'Forest' },
+                ], document.body.getAttribute('data-theme') || 'dark', (value) => {
+                    selectTheme(value);
+                })
+            );
+            optionContent.appendChild(themeRow);
     
-        if (heading === 'Themes') {
-            const themeLabel = document.createElement('label');
-            themeLabel.setAttribute('for', 'themeSelect');
-            themeLabel.innerText = 'Theme:';
-            labelContainer.appendChild(themeLabel);
+            const notationRow = createOptionRow(
+                'Notation:',
+                createDropdown('notationSelect', [
+                    { value: 'normal', text: 'Normal' },
+                    { value: 'scientific', text: 'Scientific' },
+                ], 'normal', (value) => {
+                    console.log('Notation selected:', value);
+                })
+            );
+            optionContent.appendChild(notationRow);
     
-            const selectContainer = document.createElement('div');
-            selectContainer.classList.add('select-container'); 
-    
-            const themeSelect = document.createElement('select');
-            themeSelect.id = 'themeSelect';
-            themeSelect.innerHTML = `
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="frosty">Frosty</option>
-                <option value="summer">Summer</option>
-                <option value="forest">Forest</option>
-            `;
-    
-            const currentTheme = document.body.getAttribute('data-theme') || 'dark';
-            themeSelect.value = currentTheme;
-    
-            themeSelect.addEventListener('change', (event) => {
-                selectTheme(event.target.value);
-            });
-
-            selectContainer.appendChild(themeSelect);
-            inputContainer.appendChild(selectContainer);
-    
-        } else {
-            const contentContainer = document.createElement('div');
-            contentContainer.innerHTML = content;
-            inputContainer.appendChild(contentContainer);
+            const notificationsRow = createOptionRow(
+                'Notifications:',
+                createToggleSwitch('notificationsToggle', true, (isEnabled) => {
+                    console.log('Notifications:', isEnabled ? 'Enabled' : 'Disabled');
+                })
+            );
+            optionContent.appendChild(notificationsRow);
         }
+    }    
+    
+    function createOptionRow(labelText, inputElement) {
+        const row = document.createElement('div');
+        row.classList.add('option-row', 'd-flex');
+    
+        const labelContainer = document.createElement('div');
+        labelContainer.classList.add('label-container');
+        const label = document.createElement('label');
+        label.innerText = labelText;
+        labelContainer.appendChild(label);
+        row.appendChild(labelContainer);
+    
+        const inputContainer = document.createElement('div');
+        inputContainer.classList.add('input-container');
+        inputContainer.appendChild(inputElement);
+        row.appendChild(inputContainer);
+    
+        return row;
     }
     
+    function createDropdown(id, options, selectedValue, onChange) {
+        const selectContainer = document.createElement('div');
+        selectContainer.classList.add('select-container');
+    
+        const select = document.createElement('select');
+        select.id = id;
+        options.forEach((option) => {
+            const opt = document.createElement('option');
+            opt.value = option.value;
+            opt.innerText = option.text;
+            if (option.value === selectedValue) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+    
+        select.addEventListener('change', (event) => {
+            onChange(event.target.value);
+        });
+    
+        selectContainer.appendChild(select);
+        return selectContainer;
+    }
 
+    function createToggleSwitch(id, isChecked, onChange) {
+        const toggleContainer = document.createElement('div');
+        toggleContainer.classList.add('toggle-container');
+    
+        const toggle = document.createElement('input');
+        toggle.type = 'checkbox';
+        toggle.id = id;
+        toggle.checked = isChecked;
+    
+        toggle.addEventListener('change', (event) => {
+            onChange(event.target.checked);
+        });
+    
+        const toggleLabel = document.createElement('label');
+        toggleLabel.htmlFor = id;
+    
+        toggleContainer.appendChild(toggle);
+        toggleContainer.appendChild(toggleLabel);
+        return toggleContainer;
+    }
+    
+    
     function selectTheme(theme) {
         const body = document.body;
         body.setAttribute('data-theme', theme);
     }
-
 });
 
 function highlightActiveTab(activeIndex) {
