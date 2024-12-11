@@ -362,6 +362,55 @@ body {
 }
 
 /* TAB 8 (Settings)*/
+.tab-1-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-2-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-3-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-4-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-5-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-6-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.tab-7-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
 .tab-8-container-group {
     justify-content: space-between;
     align-items: stretch;
@@ -370,7 +419,7 @@ body {
 }
 
 .container-item-menu {
-    width: 33%;
+    width: 25%;
     height: 100%;
     box-sizing: border-box;
     border-right: 1px solid var(--container-border-color);
@@ -378,7 +427,7 @@ body {
 }
 
 .container-item-content {
-    width: 67%;
+    width: 75%;
     height: 100%;
     box-sizing: border-box;
     flex-direction: column;
@@ -403,7 +452,7 @@ body {
     cursor: pointer;
 }
 
-#optionContent {
+.option-content {
     display: flex;
     width: 100%;
     flex-direction: column;
