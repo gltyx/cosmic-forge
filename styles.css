@@ -215,7 +215,7 @@ button.disabled {
     flex: 1;
 }
 
-#goldPerSec, #silverPerSec {
+#dustPerSec, #silverPerSec {
     margin: 0;
 }
 
@@ -656,13 +656,23 @@ body {
 }
 
 .option-button:focus {
-    background-color: var(--tab-selected-bg-hover-color); /* Theme hover state */
+    background-color: var(--tab-selected-bg-hover-color);
     outline: none;
-    box-shadow: 0 0 8px var(--tab-selected-bg-color); /* Focus state with theme colors */
+    box-shadow: 0 0 8px var(--tab-selected-bg-color);
     color: var(--text-color);
 }
 
+.row-side-menu {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+}
 
+.row-side-menu-item {
+    width: 33%;
+    box-sizing: border-box;
+}
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {

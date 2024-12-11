@@ -17,13 +17,13 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 
 //GLOBAL VARIABLES
 const increments = {
-    goldTimer: 1,
+    dustTimer: 1,
     silverTimer: 1
 };
 
-let gold = 0;
+let dust = 0;
 let silver = 0;
-let goldRate = 0;
+let dustRate = 0;
 let silverRate = 0;
 
 let currentTab = 1;
@@ -184,12 +184,12 @@ export function getIncrement(timerKey) {
     return increments[timerKey];
 }
 
-export function getGold() {
-    return gold;
+export function getDust() {
+    return dust;
 }
 
-export function setGold(value) {
-    gold = value;
+export function setDust(value) {
+    dust = value;
 }
 
 export function getSilver() {
@@ -200,15 +200,15 @@ export function setSilver(value) {
     silver = value;
 }
 
-export function getGoldRate() {
-    return goldRate;
+export function getDustRate() {
+    return dustRate;
 }
 
 export function getSilverRate() {
     return silverRate;
 }
-export function setGoldRate(value) {
-    goldRate = value;
+export function setDustRate(value) {
+    dustRate = value;
 }
 export function setSilverRate(value) {
     silverRate = value;

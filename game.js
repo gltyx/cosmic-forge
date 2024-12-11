@@ -1,10 +1,10 @@
 import {
-    setGoldRate,
+    setDustRate,
     setSilverRate,
-    getGoldRate,
+    getDustRate,
     getSilverRate,
-    getGold,
-    setGold,
+    getDust,
+    setDust,
     getSilver,
     setSilver,
     getIncrement,
@@ -154,9 +154,9 @@ export function doubleSpeed(key) {
 }
 
 export function resetCounter(key) {
-    if (key === "goldTimer") {
-        setGold(0);
-        updateDisplay("goldQuantity", getGold());
+    if (key === "dustTimer") {
+        setDust(0);
+        updateDisplay("dustQuantity", getDust());
     } else if (key === "silverTimer") {
         setSilver(0);
         updateDisplay("silverQuantity", getSilver());
@@ -170,12 +170,12 @@ export function manualIncrementer(getResource, setResource, incrementAmount, ele
 }
 
 export function startAutoIncrementer(resourceKey) {
-    if (resourceKey === "gold") {
-        setGoldRate(getIncrement("goldTimer"));
-        timerManager.addTimer("goldTimer", 1000, () => {
-            const currentGold = getGold();
-            setGold(currentGold + getIncrement("goldTimer"));
-            updateDisplay("goldQuantity", getGold());
+    if (resourceKey === "dust") {
+        setDustRate(getIncrement("dustTimer"));
+        timerManager.addTimer("dustTimer", 1000, () => {
+            const currentDust = getDust();
+            setDust(currentDust + getIncrement("dustTimer"));
+            updateDisplay("dustQuantity", getDust());
             updateSummary();
         });
     } else if (resourceKey === "silver") {
@@ -208,8 +208,8 @@ function calculateRate(resourceKey) {
 function updateRate(resourceKey, reachedFastestInterval) {
     let rate;
     reachedFastestInterval ? rate = calculateRate(resourceKey) * 64 : rate = calculateRate(resourceKey);
-    if (resourceKey === "goldTimer") {
-        setGoldRate(rate);
+    if (resourceKey === "dustTimer") {
+        setDustRate(rate);
     } else if (resourceKey === "silverTimer") {
         setSilverRate(rate);
     }
@@ -217,7 +217,7 @@ function updateRate(resourceKey, reachedFastestInterval) {
 }
 
 function updateSummary() {
-    document.getElementById("goldPerSec").textContent = `Gold: ${getGoldRate()}/s`;
+    document.getElementById("dustPerSec").textContent = `Dust: ${getDustRate()}/s`;
     document.getElementById("silverPerSec").textContent = `Silver: ${getSilverRate()}/s`;
 }
 

@@ -5,8 +5,8 @@ import {
     setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getGold,
-    setGold,
+    getDust,
+    setDust,
     getSilver,
     setSilver,
     getLanguage,
@@ -70,37 +70,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            updateContent('Visual', 'tab8');
+            updateContent(this.textContent, 'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            updateContent('Additional Menu Content 1', 'tab8');
+            updateContent(this.textContent, 'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            updateContent('Additional Menu Content 2','tab8');
+            updateContent(this.textContent,'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            updateContent('Additional Menu Content 3', 'tab8');
+            updateContent(this.textContent, 'tab8');
         });
     });
 
-    // document.getElementById("pauseResumegoldTimer").addEventListener("click", () => toggleTimer("goldTimer", "pauseResumegoldTimer"));
+    // document.getElementById("pauseResumedustTimer").addEventListener("click", () => toggleTimer("dustTimer", "pauseResumedustTimer"));
     // document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    // document.getElementById("doubleSpeedgoldTimer").addEventListener("click", () => doubleSpeed("goldTimer"));
+    // document.getElementById("doubleSpeeddustTimer").addEventListener("click", () => doubleSpeed("dustTimer"));
     // document.getElementById("doubleSpeedsilverTimer").addEventListener("click", () => doubleSpeed("silverTimer"));
-    // document.getElementById("resetCountergoldTimer").addEventListener("click", () => resetCounter("goldTimer"));
+    // document.getElementById("resetCounterdustTimer").addEventListener("click", () => resetCounter("dustTimer"));
     // document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    // document.getElementById("incrementGold").addEventListener("click", () => manualIncrementer(getGold, setGold, 1, "goldQuantity"));
+    // document.getElementById("incrementDust").addEventListener("click", () => manualIncrementer(getDust, setDust, 1, "dustQuantity"));
     // document.getElementById("incrementSilver").addEventListener("click", () => manualIncrementer(getSilver, setSilver, 1, "silverQuantity"));
-    // document.getElementById("startAutoIncrementGold").addEventListener("click", () => startAutoIncrementer("gold"));
+    // document.getElementById("startAutoIncrementDust").addEventListener("click", () => startAutoIncrementer("dust"));
     // document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
 
     const tabs = document.querySelectorAll('#tabsContainer .tab');
@@ -156,7 +156,7 @@ function updateContent(heading, tab) {
 } 
 
 function drawTab1Content(heading, optionContentElement) {
-    // Your logic for tab 1
+    
 }
 
 function drawTab2Content(heading, optionContentElement) {
