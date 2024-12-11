@@ -21,10 +21,14 @@ const increments = {
     silverTimer: 1
 };
 
-let dust = 0;
-let silver = 0;
+let increaseStorageFactor = 2;
+
+let dustQuantity = 0;
 let dustRate = 0;
+let dustStorage = 100;
+let silverQuantity = 0;
 let silverRate = 0;
+let silverStorage = 100;
 
 let currentTab = 1;
 let notationType = 'normal';
@@ -49,7 +53,10 @@ export function setElements() {
         canvas: document.getElementById('canvas'),
         testContainer: document.getElementById('testContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
-        mainContainer: document.getElementById('mainContainer')
+        mainContainer: document.getElementById('mainContainer'),
+        dustOption: document.getElementById('dustOption'),
+        dustRate: document.getElementById('dustRate'),
+        dustQuantity: document.getElementById('dustQuantity'),
     };
 }
 
@@ -184,20 +191,28 @@ export function getIncrement(timerKey) {
     return increments[timerKey];
 }
 
-export function getDust() {
-    return dust;
+export function getDustQuantity() {
+    return dustQuantity;
 }
 
-export function setDust(value) {
-    dust = value;
+export function setDustQuantity(value) {
+    dustQuantity = value;
 }
 
-export function getSilver() {
-    return silver;
+export function getDustStorage() {
+    return dustStorage;
 }
 
-export function setSilver(value) {
-    silver = value;
+export function setDustStorage(value) {
+    dustStorage = value;
+}
+
+export function getSilverQuantity() {
+    return silverQuantity;
+}
+
+export function setSilverQuantity(value) {
+    silverQuantity = value;
 }
 
 export function getDustRate() {
@@ -236,4 +251,12 @@ export function getNotationType() {
 
 export function setNotationType(value) {
     notationType = value;
+}
+
+export function getIncreaseStorageFactor() {
+    return increaseStorageFactor;
+}
+
+export function setIncreaseStorageFactor(value) {
+    increaseStorageFactor = value;
 }

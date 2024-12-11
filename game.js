@@ -1,12 +1,15 @@
 import {
+    getIncreaseStorageFactor,
+    setDustStorage,
+    getDustStorage,
     setDustRate,
     setSilverRate,
     getDustRate,
     getSilverRate,
-    getDust,
-    setDust,
-    getSilver,
-    setSilver,
+    getDustQuantity,
+    setDustQuantity,
+    getSilverQuantity,
+    setSilverQuantity,
     getIncrement,
     setIncrement,
     setBeginGameStatus, 
@@ -37,6 +40,8 @@ export async function gameLoop() {
         if (gameState === getGameVisibleActive()) {
             drawScreen(getCurrentTab());
         }
+
+        monitorResourceCostChecks();
 
         requestAnimationFrame(gameLoop);
     }
@@ -103,10 +108,10 @@ class TimerManager {
 
 const timerManager = new TimerManager();
 
-const updateDisplay = (elementId, count) => {
+const updateDisplay = (elementId, count, storage) => {
     const element = document.getElementById(elementId);
     if (element) {
-        element.textContent = count;
+        element.textContent = count + "/" + storage;
     } else {
         console.error(`Element with id "${elementId}" not found.`);
     }
@@ -126,7 +131,7 @@ export function toggleTimer(key, buttonId) {
     }
 }
 
-export function doubleSpeed(key) {
+export function doubleRate(key) {
     const timer = timerManager.getTimer(key);
     if (timer) {
         const currentIncrement = getIncrement(key);
@@ -138,7 +143,7 @@ export function doubleSpeed(key) {
                 timer.stop();
                 timer.duration = newDuration;
                 timer.start();
-                console.log(`${key} speed doubled, new interval: ${newDuration}ms`);
+                console.log(`${key} Rate doubled, new interval: ${newDuration}ms`);
                 updateRate(key, false);
             } else {
                 setIncrement(key, 2);
@@ -155,35 +160,41 @@ export function doubleSpeed(key) {
 
 export function resetCounter(key) {
     if (key === "dustTimer") {
-        setDust(0);
-        updateDisplay("dustQuantity", getDust());
+        setDustQuantity(0);
+        updateDisplay("dustQuantity", getDustQuantity());
     } else if (key === "silverTimer") {
-        setSilver(0);
-        updateDisplay("silverQuantity", getSilver());
+        setSilverQuantity(0);
+        updateDisplay("silverQuantity", getSilverQuantity());
     }
 }
 
-export function manualIncrementer(getResource, setResource, incrementAmount, elementId) {
-    let currentResource = getResource();
-    setResource(currentResource + incrementAmount);
-    updateDisplay(elementId, getResource());
+export function manualIncrementer(getResourceQuantity, setResource, getResourceStorage, incrementAmount, elementId) {
+    if (getResourceQuantity() < getResourceStorage()) {
+        getElements()[elementId].classList.remove('green-text');
+        let currentResource = getResourceQuantity();
+        setResource(currentResource + incrementAmount);
+        updateDisplay(elementId, getResourceQuantity(), getResourceStorage());
+        if (getResourceQuantity() === getResourceStorage()) {
+            getElements()[elementId].classList.add('green-text');
+        }
+    }
 }
 
 export function startAutoIncrementer(resourceKey) {
     if (resourceKey === "dust") {
         setDustRate(getIncrement("dustTimer"));
         timerManager.addTimer("dustTimer", 1000, () => {
-            const currentDust = getDust();
-            setDust(currentDust + getIncrement("dustTimer"));
-            updateDisplay("dustQuantity", getDust());
+            const currentDust = getDustQuantity();
+            setDustQuantity(currentDust + getIncrement("dustTimer"));
+            updateDisplay("dustQuantity", getDustQuantity());
             updateSummary();
         });
     } else if (resourceKey === "silver") {
         setSilverRate(getIncrement("silverTimer"));
         timerManager.addTimer("silverTimer", 1000, () => {
-            const currentSilver = getSilver();
-            setSilver(currentSilver + getIncrement("silverTimer"));
-            updateDisplay("silverQuantity", getSilver());
+            const currentSilver = getSilverQuantity();
+            setSilverQuantity(currentSilver + getIncrement("silverTimer"));
+            updateDisplay("silverQuantity", getSilverQuantity());
             updateSummary();
         });
     }
@@ -275,4 +286,31 @@ function manageTabSpecificUi() {
     } else {
         console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
     }
+}
+
+function monitorResourceCostChecks() {
+    const elements = document.querySelectorAll('.resource-cost-check');
+
+    elements.forEach(element => {
+        if (element.dataset.conditionCheck === 'dustStorageCheck' && getDustQuantity() === getDustStorage()) {
+            element.classList.remove('red-text');
+        }
+        //} else if () {
+
+        //} 
+        else {
+            element.classList.add('red-text');
+        }
+        // } else if (element.dataset.conditionCheck === 'otherCheck' && /* other condition */) {
+        //     element.classList.remove('red-text');
+        // }
+    });
+}
+
+export function increaseResourceStorage(setResourceStorage, getResourceStorage, getResourceQuantity, setResourceQuantity, elementId) {
+    const increaseFactor = getIncreaseStorageFactor();
+    setResourceStorage(getResourceStorage() * increaseFactor);
+    setResourceQuantity(0);
+    updateDisplay(elementId, getResourceQuantity(), getResourceStorage());
+    getElements()[elementId].classList.remove('green-text');
 }

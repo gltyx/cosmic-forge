@@ -646,7 +646,7 @@ body {
     display: inline-block;
     font-size: 16px;
     text-align: center;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: background-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
 
 .option-button:hover {
@@ -672,6 +672,28 @@ body {
 .row-side-menu-item {
     width: 33%;
     box-sizing: border-box;
+}
+
+[class*="option1"],
+[class*="option2"],
+[class*="option3"],
+[class*="option4"],
+[class*="option5"],
+[class*="option6"],
+[class*="option7"],
+[class*="option8"] {
+    cursor: pointer; /* Changes the cursor to a pointer for these elements */
+}
+
+.red-text {
+    color: red;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.green-text {
+    color: lime;
+    font-weight: bold;
 }
 
 /* SCROLL BAR */

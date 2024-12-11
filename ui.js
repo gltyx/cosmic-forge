@@ -1,14 +1,16 @@
 import {
+    getDustStorage,
+    setDustStorage,
     getNotationType,
     setNotationType,
     getNotificationsToggle,
     setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getDust,
-    setDust,
-    getSilver,
-    setSilver,
+    getDustQuantity,
+    setDustQuantity,
+    getSilverQuantity,
+    setSilverQuantity,
     getLanguage,
     setElements,
     getElements,
@@ -22,9 +24,10 @@ import {
     setLanguage
 } from './constantsAndGlobalVars.js';
 import {
+    increaseResourceStorage,
     manualIncrementer,
     startAutoIncrementer,
-    doubleSpeed,
+    doubleRate,
     toggleTimer,
     resetCounter,
     setGameState,
@@ -94,12 +97,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // document.getElementById("pauseResumedustTimer").addEventListener("click", () => toggleTimer("dustTimer", "pauseResumedustTimer"));
     // document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    // document.getElementById("doubleSpeeddustTimer").addEventListener("click", () => doubleSpeed("dustTimer"));
-    // document.getElementById("doubleSpeedsilverTimer").addEventListener("click", () => doubleSpeed("silverTimer"));
+    // document.getElementById("doubleRatedustTimer").addEventListener("click", () => doubleRate("dustTimer"));
+    // document.getElementById("doubleRatesilverTimer").addEventListener("click", () => doubleRate("silverTimer"));
     // document.getElementById("resetCounterdustTimer").addEventListener("click", () => resetCounter("dustTimer"));
     // document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    // document.getElementById("incrementDust").addEventListener("click", () => manualIncrementer(getDust, setDust, 1, "dustQuantity"));
-    // document.getElementById("incrementSilver").addEventListener("click", () => manualIncrementer(getSilver, setSilver, 1, "silverQuantity"));
     // document.getElementById("startAutoIncrementDust").addEventListener("click", () => startAutoIncrementer("dust"));
     // document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
 
@@ -156,7 +157,25 @@ function updateContent(heading, tab) {
 } 
 
 function drawTab1Content(heading, optionContentElement) {
-    
+    if (heading === 'Dust') {
+        const dustRow = createOptionRow(
+            'Gain 1 Dust:',
+            createButton('Gain', ['option-button'], () => {
+                manualIncrementer(getDustQuantity, setDustQuantity, getDustStorage, 1, "dustQuantity")
+            }, ''),
+            false
+        );
+        optionContentElement.appendChild(dustRow);
+
+        const containerSizeRow = createOptionRow(
+            'Increase Container Size:',
+            createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
+                increaseResourceStorage(setDustStorage, getDustStorage, getDustQuantity, setDustQuantity, "dustQuantity");
+            }, 'dustStorageCheck'),
+            false
+        );
+        optionContentElement.appendChild(containerSizeRow);
+    }
 }
 
 function drawTab2Content(heading, optionContentElement) {
@@ -223,7 +242,7 @@ function drawTab8Content(heading, optionContentElement) {
 
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
-            createButton('Send Notification', 'btn-secondary', sendTestNotification),
+            createButton('Send Notification', ['btn-secondary'], sendTestNotification, ''),
             true
         );
         optionContentElement.appendChild(triggerNotificationsRow);
@@ -300,10 +319,20 @@ function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-function createButton(text, className, onClick) {
+function createButton(text, classNames, onClick, dataConditionCheck) {
     const button = document.createElement('button');
     button.innerText = text;
-    button.classList.add('option-button', className);
+    
+    if (Array.isArray(classNames)) {
+        classNames.forEach(className => button.classList.add(className));
+    } else if (typeof classNames === 'string') {
+        button.classList.add(classNames);
+    }
+
+    if (dataConditionCheck) {
+        button.dataset.conditionCheck = dataConditionCheck;
+    }
+
     button.addEventListener('click', onClick);
     return button;
 }
