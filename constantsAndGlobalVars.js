@@ -33,6 +33,7 @@ let audioMuted;
 let languageChangedFlag;
 let beginGameState = true;
 let gameInProgress = false;
+let notificationsToggle = true;
 
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
@@ -218,4 +219,12 @@ export function getCurrentTab() {
 
 export function setCurrentTab(value) {
     currentTab = value;
+}
+
+export function getNotificationsToggle() {
+    return notificationsToggle;
+}
+
+export function setNotificationsToggle(value) {
+    notificationsToggle = value;
 }

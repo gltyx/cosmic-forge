@@ -1,4 +1,6 @@
 import {
+    getNotificationsToggle,
+    setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
     getGold,
@@ -46,6 +48,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
+
+    let notificationContainer = document.createElement('div');
+    notificationContainer.className = 'notification-container';
+    document.body.appendChild(notificationContainer);
 
     document.getElementById("pauseResumegoldTimer").addEventListener("click", () => toggleTimer("goldTimer", "pauseResumegoldTimer"));
     document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
@@ -121,10 +127,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const notificationsRow = createOptionRow(
                 'Notifications:',
                 createToggleSwitch('notificationsToggle', true, (isEnabled) => {
-                    console.log('Notifications:', isEnabled ? 'Enabled' : 'Disabled');
+                    setNotificationsToggle(isEnabled);
                 })
             );
             optionContent.appendChild(notificationsRow);
+
+            const triggerNotificationsRow = createOptionRow(
+                'Trigger Notification:',
+                createButton('Send Notification', 'btn-secondary', sendTestNotification)
+            );
+            optionContent.appendChild(triggerNotificationsRow);
         }
     }    
     
@@ -181,7 +193,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggle.checked = isChecked;
     
         toggle.addEventListener('change', (event) => {
-            onChange(event.target.checked);
+            const isEnabled = event.target.checked;
+            onChange(isEnabled);
         });
     
         const toggleLabel = document.createElement('label');
@@ -191,12 +204,59 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleContainer.appendChild(toggleLabel);
         return toggleContainer;
     }
-    
+
+    function createButton(text, className, onClick) {
+        const button = document.createElement('button');
+        button.innerText = text;
+        button.classList.add('option-button', className);
+        button.addEventListener('click', onClick);
+        return button;
+    }
     
     function selectTheme(theme) {
         const body = document.body;
         body.setAttribute('data-theme', theme);
     }
+
+    let count = 0;
+    function sendTestNotification() {
+        showNotification("This is a Test!", 'info', 5000, count);
+        count++;
+    }
+    
+    function showNotification(message, type = 'info', duration = 5000, test) {
+        if (getNotificationsToggle()) {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerText = `${message} ${test}`;
+            
+            const allNotifications = document.querySelectorAll('.notification');
+            
+            allNotifications.forEach((notification, index) => {
+                notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
+            });
+            
+            notificationContainer.prepend(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 50);
+            
+            setTimeout(() => {
+                hideNotification(notification);
+            }, duration);
+        }
+    }
+    
+    function hideNotification(notification) {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateY(100px)';
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    } 
 });
 
 function highlightActiveTab(activeIndex) {

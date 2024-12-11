@@ -436,6 +436,7 @@ body {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    cursor: pointer;
 }
 
 .option-row {
@@ -467,6 +468,7 @@ body {
     border-color: var(--tab-selected-bg-color);
     outline: none;
     box-shadow: 0 0 5px var(--tab-selected-bg-color);
+    cursor: pointer;
 }
 
 /* Container for the toggle switch */
@@ -474,7 +476,6 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    cursor: pointer;
 }
 
 /* Hidden default checkbox */
@@ -492,6 +493,7 @@ body {
     border-radius: 12px;
     transition: background-color 0.3s;
     border: 1px solid var(--container-border-color);
+    cursor: pointer;
 }
 
 .toggle-container label::after {
@@ -520,6 +522,97 @@ body {
 .toggle-container input[type="checkbox"]:focus + label {
     box-shadow: 0 0 2px 2px var(--text-color);
 }
+
+.notification-container {
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    width: 10%; /* Width of the notification area */
+    max-width: 300px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between notifications */
+}
+
+.notification {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    padding: 15px;
+    background-color: var(--tab-bg-color);
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    min-height: 100px;
+    text-align: center;
+}
+
+.notification-content {
+    flex-grow: 1;
+    padding-right: 10px;
+    text-align: center;
+}
+
+.notification-info {
+    background-color: var(--tab-bg-color);
+    color: var(--text-color);
+}
+
+.notification-success {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.notification-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.notification-error {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+
+.notification-container.slide-in {
+    bottom: 1%;
+    opacity: 1;
+}
+
+.notification-container.slide-out {
+    bottom: -10%;
+    opacity: 0;
+}
+
+.option-button {
+    background-color: var(--tab-selected-bg-color); /* Button background follows the selected tab color */
+    color: var(--text-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.option-button:hover {
+    background-color: var(--tab-selected-bg-hover-color); /* Theme hover state */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+}
+
+.option-button:focus {
+    background-color: var(--tab-selected-bg-hover-color); /* Theme hover state */
+    outline: none;
+    box-shadow: 0 0 8px var(--tab-selected-bg-color); /* Focus state with theme colors */
+    color: var(--text-color);
+}
+
 
 
 /* SCROLL BAR */
