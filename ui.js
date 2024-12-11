@@ -1,4 +1,6 @@
 import {
+    getNotationType,
+    setNotationType,
     getNotificationsToggle,
     setNotificationsToggle,
     setCurrentTab,
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     { value: 'normal', text: 'Normal' },
                     { value: 'scientific', text: 'Scientific' },
                 ], 'normal', (value) => {
-                    console.log('Notation selected:', value);
+                    setNotationType(value);
                 })
             );
             optionContent.appendChild(notationRow);
@@ -218,17 +220,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         body.setAttribute('data-theme', theme);
     }
 
-    let count = 0;
     function sendTestNotification() {
-        showNotification("This is a Test!", 'info', 5000, count);
-        count++;
+        showNotification("This is a Test!", 'info', 5000);
     }
     
     function showNotification(message, type = 'info', duration = 5000, test) {
         if (getNotificationsToggle()) {
             const notification = document.createElement('div');
             notification.className = `notification notification-${type}`;
-            notification.innerText = `${message} ${test}`;
+            notification.innerText = `${message}`;
             
             const allNotifications = document.querySelectorAll('.notification');
             

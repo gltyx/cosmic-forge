@@ -27,6 +27,7 @@ let goldRate = 0;
 let silverRate = 0;
 
 let currentTab = 1;
+let notationType = 'normal';
 
 //FLAGS
 let audioMuted;
@@ -227,4 +228,12 @@ export function getNotificationsToggle() {
 
 export function setNotificationsToggle(value) {
     notificationsToggle = value;
+}
+
+export function getNotationType() {
+    return notationType;
+}
+
+export function setNotationType(value) {
+    notationType = value;
 }
