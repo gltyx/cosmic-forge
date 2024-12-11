@@ -1,14 +1,5 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: black;
-    color: white;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+h4 {
+    font-weight: 700;
 }
 
 button {
@@ -102,7 +93,7 @@ button.disabled {
     justify-content: center;
 }
 
-#canvasContainer {
+#testContainer {
     display: none;
     width: 100vw;
     height: 100vh;
@@ -110,29 +101,6 @@ button.disabled {
     align-items: center;
     justify-content: center;
     background-color: black;
-}
-
-#buttonRow {
-    width: 80%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-#buttonRow button {
-    width: 200px;
-    height: 50px;
-    margin: 0 10px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-canvas {
-    width: 80%;
-    height: auto;
-    border: 1px solid white;
 }
 
 .disabled {
@@ -200,31 +168,15 @@ canvas {
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 998;
 }
-
-.container {
-    display: flex;
-    gap: 20px;
-  }
   
-  .timer {
+.timer {
     background-color: #000;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    margin: 0 0 10px;
-    font-size: 18px;
-  }
-  
-  p {
-    font-size: 16px;
-    margin: 0;
-  }
-  
+}  
 
 #menu {
     display: flex;
@@ -263,5 +215,259 @@ canvas {
     margin: 0;
 }
 
+/* THEMEABLE CSS */
 
+/* Dark Theme Variables */
+:root {
+    --bg-color: black;
+    --text-color: white;
+    --tab-bg-color: #444;
+    --tab-bg-hover: #555;
+    --tab-selected-bg-color: #222;
+    --tab-border-color: #555;
+    --tab-invisible-bg-color: #333;
+    --tab-invisible-text-color: #333;
+    --container-border-color: #bbb;
+    --container-bg-color: #333;
+}
+
+/* Light Theme Variables */
+[data-theme="light"] {
+    --bg-color: white;
+    --text-color: black;
+    --tab-bg-color: #f0f0f0;
+    --tab-bg-hover: #ddd;
+    --tab-selected-bg-color: #ccc;
+    --tab-border-color: #ccc;
+    --tab-invisible-bg-color: #e0e0e0;
+    --tab-invisible-text-color: #bbb;
+    --container-border-color: #ddd;
+    --container-bg-color: #fafafa;
+}
+
+/* Frosty Theme Variables */
+[data-theme="frosty"] {
+    --bg-color: #e1f7ff;
+    --text-color: #129fdb;
+    --tab-bg-color: #b0e0e6;
+    --tab-bg-hover: #add8e6;
+    --tab-selected-bg-color: #87cefa;
+    --tab-border-color: #4682b4;
+    --tab-invisible-bg-color: #d1e7f0;
+    --tab-invisible-text-color: #b0c4de;
+    --container-border-color: #a3c8e3;
+    --container-bg-color: #f0f8ff;
+}
+
+/* Summer Theme Variables */
+[data-theme="summer"] {
+    --bg-color: #fffae6;
+    --text-color: #2d2d2d;
+    --tab-bg-color: #ffeb3b;
+    --tab-bg-hover: #fff176;
+    --tab-selected-bg-color: #ffcc00;
+    --tab-border-color: #ff9800;
+    --tab-invisible-bg-color: #fdd835;
+    --tab-invisible-text-color: #ff7043;
+    --container-border-color: #ffb74d;
+    --container-bg-color: #fff3e0;
+}
+
+/* Forest Theme Variables */
+[data-theme="forest"] {
+    --bg-color: #2f4f4f;
+    --text-color: #0c4318;
+    --tab-bg-color: #228b22;
+    --tab-bg-hover: #6b8e23;
+    --tab-selected-bg-color: #556b2f;
+    --tab-border-color: #8b4513;
+    --tab-invisible-bg-color: #2e8b57;
+    --tab-invisible-text-color: #90ee90;
+    --container-border-color: #228b22;
+    --container-bg-color: #98fb98;
+}
+
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-y: scroll;
+}
+
+/* Tabs Container */
+#tabsContainer {
+    height: 50px;
+    background-color: var(--tab-bg-color);
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+    border-bottom: 2px solid var(--tab-border-color);
+}
+
+/* Tab Styles */
+.tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--tab-bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    border: 1px solid var(--tab-border-color);
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Invisible Tab (disabled or hidden) */
+.invisible {
+    background-color: var(--tab-invisible-bg-color);
+    color: var(--tab-invisible-text-color);
+    border: none;
+    border-radius: 0;
+    pointer-events: none;
+}
+
+/* Hover Effect on Tabs */
+.tab:hover {
+    background-color: var(--tab-bg-hover);
+    color: #ddd;
+}
+
+/* Selected Tab */
+.tab.selected {
+    background-color: var(--tab-selected-bg-color);
+    color: white;
+    font-weight: bold;
+    border-bottom: 2px solid var(--tab-selected-bg-color);
+}
+
+/* Main Content Container */
+.main-container {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--container-border-color);
+    margin-top: 50px;
+    background-color: var(--container-bg-color);
+}
+
+/* TAB 8 (Settings)*/
+.tab-8-container-group {
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 100%;
+}
+
+.container-item-menu {
+    width: 33%;
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid var(--container-border-color);
+    flex-direction: column;
+}
+
+.container-item-content {
+    width: 67%;
+    height: 100%;
+    box-sizing: border-box;
+    flex-direction: column;
+}
+
+.container-item-menu-header {
+    padding: 15px;
+    height: auto;
+    overflow: hidden;
+    background-color: var(--container-bg-color);
+}
+
+.container-item-menu-body {
+    padding: 15px;
+    background-color: var(--container-bg-color);
+    height: auto;
+    overflow: auto;
+    flex-direction: column;
+}
+
+.container-item-menu-body p {
+    cursor: pointer;
+}
+
+#optionContent {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
+#labelContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* General dropdown container */
+.select-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    margin: 10px 0;
+}
+
+/* Style the select box itself */
+.select-container select {
+    width: 100%;
+    padding: 3px 3px;
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--container-border-color);
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+/* Style when dropdown is focused */
+.select-container select:focus {
+    border-color: var(--tab-selected-bg-color);
+    outline: none;
+    box-shadow: 0 0 5px var(--tab-selected-bg-color);
+}
+
+/* SCROLL BAR */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+    border: 3px solid #333;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #333;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track:hover {
+    background-color: #ddd;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #f1f1f1;
+}
 

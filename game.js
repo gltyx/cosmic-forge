@@ -16,28 +16,13 @@ import {
     getGameVisibleActive, 
     getElements, 
     getLanguage, 
-    gameState 
+    gameState, 
+    getCurrentTab
 } from './constantsAndGlobalVars.js';
 
 //--------------------------------------------------------------------------------------------------------
 
 export function startGame() {
-    function updateCanvasSize() {
-        const canvasWidth = container.clientWidth * 0.8;
-        const canvasHeight = container.clientHeight * 0.8;
-
-        getElements().canvas.style.width = `${canvasWidth}px`;
-        getElements().canvas.style.height = `${canvasHeight}px`;
-
-        getElements().canvas.width = canvasWidth;
-        getElements().canvas.height = canvasHeight;
-        
-        ctx.scale(1, 1);
-    }
-
-    //updateCanvasSize();
-    window.addEventListener('resize', updateCanvasSize);
-
     if (getBeginGameStatus()) {
         setBeginGameStatus(false);
     }
@@ -50,15 +35,15 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
 
         if (gameState === getGameVisibleActive()) {
-            draw(); //(ctx)
+            drawScreen(getCurrentTab());
         }
 
         requestAnimationFrame(gameLoop);
     }
 }
 
-function draw() {
-    // Clear and draw logic here if needed
+function drawScreen(tabNumber) {
+    
 }
 
 class Timer {
@@ -85,7 +70,6 @@ class Timer {
     }
 }
 
-// TimerManager class
 class TimerManager {
     constructor() {
         this.timers = new Map();
@@ -117,7 +101,6 @@ class TimerManager {
     }
 }
 
-// Timer logic
 const timerManager = new TimerManager();
 
 const updateDisplay = (elementId, count) => {
@@ -129,7 +112,6 @@ const updateDisplay = (elementId, count) => {
     }
 };
 
-// Pause/Resume logic for buttons
 export function toggleTimer(key, buttonId) {
     const timer = timerManager.getTimer(key);
     if (timer) {
@@ -249,18 +231,48 @@ export function setGameState(newState) {
         case getMenuState():
             getElements().menu.classList.remove('d-none');
             getElements().menu.classList.add('d-flex');
-            getElements().canvasContainer.classList.remove('d-flex');
-            getElements().canvasContainer.classList.add('d-none');
-            getElements().summaryContainer.classList.remove('d-flex');
-            getElements().summaryContainer.classList.add('d-none');
+            getElements().tabsContainer.classList.remove('d-flex');
+            getElements().tabsContainer.classList.add('d-none');
+            getElements().mainContainer.classList.remove('d-flex');
+            getElements().mainContainer.classList.add('d-none');
             break;
         case getGameVisibleActive():
             getElements().menu.classList.remove('d-flex');
             getElements().menu.classList.add('d-none');
-            getElements().canvasContainer.classList.remove('d-none');
-            getElements().canvasContainer.classList.add('d-flex');
-            getElements().summaryContainer.classList.remove('d-none');
-            getElements().summaryContainer.classList.add('d-flex');
+            getElements().tabsContainer.classList.remove('d-none');
+            getElements().tabsContainer.classList.add('d-flex');
+            getElements().mainContainer.classList.remove('d-none');
+            getElements().mainContainer.classList.add('d-flex');
+
+            manageTabSpecificUi();
             break;
+    }
+}
+
+function manageTabSpecificUi() {
+    const currentTab = getCurrentTab();
+    const tabElements = document.querySelectorAll(`.tab-${currentTab}`);
+    const allTabElements = document.querySelectorAll('[class^="tab-"]');
+    allTabElements.forEach(element => {
+        const tabNumberMatch = element.className.match(/tab-(\d+)/);
+        if (tabNumberMatch) {
+            const tabNumber = parseInt(tabNumberMatch[1], 10);
+
+            if (tabNumber !== currentTab) {
+                element.classList.remove('d-flex');
+                element.classList.add('d-none');
+            }
+        }
+    });
+
+    if (tabElements.length > 0) {
+        tabElements.forEach(element => {
+            element.classList.remove('d-none');
+            element.classList.add('d-flex');
+        });
+
+        console.log(`Showing UI for Tab ${currentTab}.`);
+    } else {
+        console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
     }
 }

@@ -7,7 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-theme="dark">
     <!-- Menu Container -->
     <div id="menu" class="d-flex flex-column align-items-center justify-content-center d-none">
         <h1 id="menuTitle" class="mb-4">Game Title Placeholder</h1>
@@ -16,35 +16,62 @@
         </div>
     </div>
 
-    <div id="summaryContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
-        <div class="summary-item" id="goldContainer">
-            <span id="goldPerSec">Gold/sec: 0</span>
-        </div>
-        <div class="summary-item" id="silverContainer">
-            <span id="silverPerSec">Silver/sec: 0</span>
-        </div>
-    </div>    
+    <!-- Tabs Container -->
+    <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
+        <div class="tab selected" id="tab1">Resources</div>
+        <div class="tab" id="tab2">Tab 2</div>
+        <div class="tab" id="tab3">Tab 3</div>
+        <div class="tab" id="tab4">Tab 4</div>
+        <div class="tab" id="tab5">Tab 5</div>
+        <div class="tab" id="tab6">Tab 6</div>
+        <div class="tab" id="tab7">Tab 7</div>
+        <div class="tab" id="tab8">☰</div>
+    </div>
 
-    <div id="canvasContainer" class="d-flex">
-        <div class="timer" id="goldTimer">
-          <p>Gold: <span id="goldQuantity">0</span></p>
-          <!-- New buttons for gold -->
-          <button id="incrementGold" class="btn btn-secondary mt-2">1 Gold</button>
-          <button id="startAutoIncrementGold" class="btn btn-secondary mt-2">Buy Auto Gold</button>
-          <!-- Existing buttons for gold -->
-          <button id="pauseResumegoldTimer" class="btn btn-secondary mt-2">Pause Gold Acquisition</button>
-          <button id="doubleSpeedgoldTimer" class="btn btn-secondary mt-2">Double Gold Acquisition</button>
-          <button id="resetCountergoldTimer" class="btn btn-secondary mt-2">Reset Gold</button>
+    <div id="mainContainer" class="d-flex main-container">
+        <div id="testContainer" class="tab-6">
+            <div class="timer" id="goldTimer">
+              <p>Gold: <span id="goldQuantity">0</span></p>
+              <button id="incrementGold" class="btn btn-secondary mt-2">1 Gold</button>
+              <button id="startAutoIncrementGold" class="btn btn-secondary mt-2">Buy Auto Gold</button>
+              <button id="pauseResumegoldTimer" class="btn btn-secondary mt-2">Pause Gold Acquisition</button>
+              <button id="doubleSpeedgoldTimer" class="btn btn-secondary mt-2">Double Gold Acquisition</button>
+              <button id="resetCountergoldTimer" class="btn btn-secondary mt-2">Reset Gold</button>
+            </div>
+            <div class="timer" id="silverTimer">
+              <p>Silver: <span id="silverQuantity">0</span></p>
+              <button id="incrementSilver" class="btn btn-secondary mt-2">1 Silver</button>
+              <button id="startAutoIncrementSilver" class="btn btn-secondary mt-2">Buy Auto Silver</button>
+              <button id="pauseResumesilverTimer" class="btn btn-secondary mt-2">Pause Silver Acquisition</button>
+              <button id="doubleSpeedsilverTimer" class="btn btn-secondary mt-2">Double Silver Acquisition</button>
+              <button id="resetCountersilverTimer" class="btn btn-secondary mt-2">Reset Silver</button>
+            </div>
         </div>
-        <div class="timer" id="silverTimer">
-          <p>Silver: <span id="silverQuantity">0</span></p>
-          <!-- New buttons for silver -->
-          <button id="incrementSilver" class="btn btn-secondary mt-2">1 Silver</button>
-          <button id="startAutoIncrementSilver" class="btn btn-secondary mt-2">Buy Auto Silver</button>
-          <!-- Existing buttons for silver -->
-          <button id="pauseResumesilverTimer" class="btn btn-secondary mt-2">Pause Silver Acquisition</button>
-          <button id="doubleSpeedsilverTimer" class="btn btn-secondary mt-2">Double Silver Acquisition</button>
-          <button id="resetCountersilverTimer" class="btn btn-secondary mt-2">Reset Silver</button>
+
+        <div id="tab8ContainerGroup" class="tab-8-container-group tab-8">
+            <div class="container-item-menu tab-8">
+                <div class="container-item-menu-header tab-8">
+                    <h4>Options</h4>
+                </div>
+                <div class="container-item-menu-body tab-8">
+                    <p class="option1">Themes</p>
+                    <p class="option2">Additional Menu Content Here</p>
+                    <p class="option3">Additional Menu Content Here</p>
+                    <p class="option4">Additional Menu Content Here</p>
+                </div>
+            </div>
+            <div class="container-item-content tab-8">
+                <div class="container-item-menu-header tab-8">
+                    <h4 id="headingContent"></h4>
+                </div>
+                <div class="container-item-menu-body tab-8">
+                    <div id="optionContent" class="d-flex">
+                        <!-- Two containers for the labels and the input options -->
+                        <div id="labelContainer" class="d-flex"></div>
+                        <div id="inputContainer" class="d-flex"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

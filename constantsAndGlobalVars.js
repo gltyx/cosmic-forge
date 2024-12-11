@@ -26,6 +26,8 @@ let silver = 0;
 let goldRate = 0;
 let silverRate = 0;
 
+let currentTab = 1;
+
 //FLAGS
 let audioMuted;
 let languageChangedFlag;
@@ -43,14 +45,13 @@ export function setElements() {
         newGameMenuButton: document.getElementById('newGame'),
         returnToMenuButton: document.getElementById('returnToMenu'),
         canvas: document.getElementById('canvas'),
-        canvasContainer: document.getElementById('canvasContainer'),
-        summaryContainer: document.getElementById('summaryContainer'),
-        buttonRow: document.getElementById('buttonRow'),
-        overlay: document.getElementById('overlay'),
-        button1: document.getElementById('button1'),
-        button2: document.getElementById('button2')
+        testContainer: document.getElementById('testContainer'),
+        tabsContainer: document.getElementById('tabsContainer'),
+        mainContainer: document.getElementById('mainContainer')
     };
 }
+
+mainContainer
 
 export function setGameStateVariable(value) {
     gameState = value;
@@ -209,4 +210,12 @@ export function setGoldRate(value) {
 }
 export function setSilverRate(value) {
     silverRate = value;
+}
+
+export function getCurrentTab() {
+    return currentTab;
+}
+
+export function setCurrentTab(value) {
+    currentTab = value;
 }
