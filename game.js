@@ -1,17 +1,18 @@
 import {
+    functionRegistry,
     getCurrentOptionPane,
     setCurrentOptionPane,
     getIncreaseStorageFactor,
     setSandStorage,
     getSandStorage,
     setSandRate,
-    setSilverRate,
+    setScienceRate,
     getSandRate,
-    getSilverRate,
+    getScienceRate,
     getSandQuantity,
     setSandQuantity,
-    getSilverQuantity,
-    setSilverQuantity,
+    getScienceQuantity,
+    setScienceQuantity,
     getIncrement,
     setIncrement,
     setBeginGameStatus, 
@@ -175,8 +176,8 @@ export function resetCounter(key) {
         setSandQuantity(0);
         updateDisplay("sandQuantity", getSandQuantity());
     } else if (key === "silverTimer") {
-        setSilverQuantity(0);
-        updateDisplay("silverQuantity", getSilverQuantity());
+        setScienceQuantity(0);
+        updateDisplay("silverQuantity", getScienceQuantity());
     }
 }
 
@@ -202,11 +203,11 @@ export function startAutoIncrementer(resourceKey) {
             updateSummary();
         });
     } else if (resourceKey === "silver") {
-        setSilverRate(getIncrement("silverTimer"));
+        setScienceRate(getIncrement("silverTimer"));
         timerManager.addTimer("silverTimer", 1000, () => {
-            const currentSilver = getSilverQuantity();
-            setSilverQuantity(currentSilver + getIncrement("silverTimer"));
-            updateDisplay("silverQuantity", getSilverQuantity());
+            const currentSilver = getScienceQuantity();
+            setScienceQuantity(currentSilver + getIncrement("silverTimer"));
+            updateDisplay("silverQuantity", getScienceQuantity());
             updateSummary();
         });
     }
@@ -234,14 +235,14 @@ function updateRate(resourceKey, reachedFastestInterval) {
     if (resourceKey === "sandTimer") {
         setSandRate(rate);
     } else if (resourceKey === "silverTimer") {
-        setSilverRate(rate);
+        setScienceRate(rate);
     }
     updateSummary();
 }
 
 function updateSummary() {
     document.getElementById("sandPerSec").textContent = `Sand: ${getSandRate()}/s`;
-    document.getElementById("silverPerSec").textContent = `Silver: ${getSilverRate()}/s`;
+    document.getElementById("silverPerSec").textContent = `Silver: ${getScienceRate()}/s`;
 }
 
 //===============================================================================================================
@@ -300,12 +301,26 @@ function manageTabSpecificUi() {
     }
 }
 
-function monitorResourceCostChecks(element, resourcePriceObject, argument) {
-    if (element.dataset.conditionCheck && element.dataset.conditionCheck !== 'undefined') {
-        if (element.dataset.conditionCheck === 'upgradeCheck' && JSON.parse(element.dataset.resourcePriceObject)(argument).checkQuantity() >= JSON.parse(element.dataset.resourcePriceObject).price) {
-            element.classList.remove('red-text');
+function monitorResourceCostChecks(element) {
+    if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
+        const functionName = element.dataset.resourcePriceObject;
+        const functionObjectRetrieval = functionRegistry[functionName];
+        const resourceObjectSectionKey = element.dataset.argumentToPass;
+        const checkQuantityString = element.dataset.argumentCheckQuantity;
+        const functionGetResourceQuantity = functionRegistry[checkQuantityString];
+        
+        if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
+            const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);
+            const checkQuantity = functionGetResourceQuantity();
+            
+            // Perform the check and update the element's class
+            if (element.dataset.conditionCheck === 'upgradeCheck' && checkQuantity >= resourceObjectSection.price) { 
+                element.classList.remove('red-text');
+            } else {
+                element.classList.add('red-text');
+            }
         } else {
-            element.classList.add('red-text');
+            console.error(`Function ${functionName} is not defined or not callable.`);
         }
     }
 }

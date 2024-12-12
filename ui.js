@@ -14,8 +14,8 @@ import {
     getCurrentTab,
     getSandQuantity,
     setSandQuantity,
-    getSilverQuantity,
-    setSilverQuantity,
+    getScienceQuantity,
+    setScienceQuantity,
     getLanguage,
     setElements,
     getElements,
@@ -187,12 +187,13 @@ function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Sand:',
             createButton('Gain', ['option-button'], () => {
                 manualIncrementer(getSandQuantity, setSandQuantity, getSandStorage, 1, "sandQuantity")
-            }, ''),
+            }, null, null, null, null),
             false,
-            '',
-            '',
-            '',
-            ''
+            null,
+            null,
+            null,
+            null,
+            null
         );
         optionContentElement.appendChild(sandRow);
 
@@ -200,12 +201,13 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 increaseResourceStorage(setSandStorage, getSandStorage, getSandQuantity, setSandQuantity, "sandQuantity");
-            }, 'upgradeCheck', getUpgradeSand, 'storage'),
+            }, 'upgradeCheck', 'getUpgradeSand', 'storage', 'getSandQuantity'),
             false,
             `${getUpgradeSand('storage').price + " " + getUpgradeSand('storage').resource}`,
-            getUpgradeSand(),
+            'getUpgradeSand',
             'upgradeCheck',
-            'storage'
+            'storage',
+            'getSandQuantity'
         );
         optionContentElement.appendChild(containerSizeRow);
     }
@@ -217,7 +219,7 @@ function drawTab2Content(heading, optionContentElement) {
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, getScienceKitPrice, 1, "scienceKitQuantity")
-            }, 'upgradeCheck', getUpgradeScience, 'scienceKit'),
+            }, 'upgradeCheck', 'getUpgradeScience', 'scienceKit', 'getScienceQuantity'),
             false,
             `${getUpgradeScience('scienceKit').price + " " + getUpgradeScience('scienceKit').resource}`,
             getUpgradeScience('scienceKit'),
@@ -230,7 +232,7 @@ function drawTab2Content(heading, optionContentElement) {
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, getScienceClubPrice, 1, "scienceClubQuantity")
-            }, 'upgradeCheck', getUpgradeScience, 'scienceKit'),
+            }, 'upgradeCheck', 'getUpgradeScience', 'scienceClub', 'getScienceQuantity'),
             false,
             `${getUpgradeScience('scienceClub').price + " " + getUpgradeScience('scienceClub').resource}`,
             getUpgradeSand('scienceClub'),
@@ -324,7 +326,7 @@ function drawTab8Content(heading, optionContentElement) {
     }
 }
 
-function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck, dataArgument) {
+function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument, quantityArgument) {
     const row = document.createElement('div');
 
     if (hidden) {
@@ -349,11 +351,17 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
     descriptionContainer.classList.add('label-container');
     const description = document.createElement('label');
     description.innerText = descriptionText;
-    description.classList.add('red-text');
-    description.classList.add('resource-cost-check');
-    description.dataset.conditionCheck = dataConditionCheck;
-    description.dataset.resourcePriceObject = JSON.stringify(resourcePriceObject);
-    description.dataset.argumentToPass = dataArgument;
+
+    if (dataConditionCheck) {
+        description.classList.add('red-text');
+        description.classList.add('resource-cost-check');
+
+        description.dataset.conditionCheck = dataConditionCheck;
+        description.dataset.resourcePriceObject = resourcePriceObject;
+        description.dataset.argumentToPass = objectSectionArgument;
+        description.dataset.argumentCheckQuantity = quantityArgument;
+    }
+
     descriptionContainer.appendChild(description);
     row.appendChild(descriptionContainer);
 
@@ -406,7 +414,7 @@ function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, dataArgument) {
+function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument, quantityArgument) {
     const button = document.createElement('button');
     button.innerText = text;
     
@@ -418,8 +426,9 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
 
     if (dataConditionCheck) {
         button.dataset.conditionCheck = dataConditionCheck;
-        button.dataset.resourcePriceObject = JSON.stringify(resourcePriceObject);
-        button.dataset.argumentToPass = dataArgument;
+        button.dataset.resourcePriceObject = resourcePriceObject;
+        button.dataset.argumentToPass = objectSectionArgument;
+        button.dataset.argumentCheckQuantity = quantityArgument;
     }
 
     button.addEventListener('click', onClick);

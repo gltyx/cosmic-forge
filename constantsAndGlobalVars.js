@@ -26,8 +26,8 @@ let increaseStorageFactor = 2;
 let sandQuantity = 0;
 let sandRate = 0;
 let sandStorage = 100;
-let silverQuantity = 0;
-let silverRate = 0;
+let scienceQuantity = 0;
+let scienceRate = 0;
 let silverStorage = 100;
 
 let upgradeSand = {
@@ -73,6 +73,13 @@ let notificationsToggle = true;
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
 
+//FUNCTION REGISTRY
+export const functionRegistry = {
+    getUpgradeSand: getUpgradeSand,
+    getSandQuantity: getSandQuantity,
+    // Add more functions here as needed
+};
+
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
@@ -89,8 +96,6 @@ export function setElements() {
         sandQuantity: document.getElementById('sandQuantity'),
     };
 }
-
-mainContainer
 
 export function setGameStateVariable(value) {
     gameState = value;
@@ -237,26 +242,28 @@ export function setSandStorage(value) {
     sandStorage = value;
 }
 
-export function getSilverQuantity() {
-    return silverQuantity;
+export function getScienceQuantity() {
+    return scienceQuantity;
 }
 
-export function setSilverQuantity(value) {
-    silverQuantity = value;
+export function setScienceQuantity(value) {
+    scienceQuantity = value;
 }
 
 export function getSandRate() {
     return sandRate;
 }
 
-export function getSilverRate() {
-    return silverRate;
-}
 export function setSandRate(value) {
     sandRate = value;
 }
-export function setSilverRate(value) {
-    silverRate = value;
+
+export function getScienceRate() {
+    return scienceRate;
+}
+
+export function setScienceRate(value) {
+    scienceRate = value;
 }
 
 export function getCurrentTab() {
