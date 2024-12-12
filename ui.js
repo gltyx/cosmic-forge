@@ -280,9 +280,10 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Change styling of the page.',
-            '',
-            '',
-            ''
+            null,
+            null,
+            null,
+            null
         );
         optionContentElement.appendChild(themeRow);
 
@@ -296,9 +297,10 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Change the notation used.',
-            '',
-            '',
-            ''
+            null,
+            null,
+            null,
+            null
         );
         optionContentElement.appendChild(notationRow);
 
@@ -309,9 +311,10 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Toggle notifications',
-            '',
-            '',
-            ''
+            null,
+            null,
+            null,
+            null
         );
         optionContentElement.appendChild(notificationsRow);
 
@@ -320,9 +323,10 @@ function drawTab8Content(heading, optionContentElement) {
             createButton('Send Notification', ['btn-secondary'], sendTestNotification, ''),
             true,
             'Send test notification',
-            '',
-            '',
-            ''
+            null,
+            null,
+            null,
+            null
         );
         optionContentElement.appendChild(triggerNotificationsRow);
     }
@@ -350,7 +354,7 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
     row.appendChild(inputContainer);
 
     const descriptionContainer = document.createElement('div');
-    descriptionContainer.classList.add('label-container');
+    descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
     description.innerText = descriptionText;
 
