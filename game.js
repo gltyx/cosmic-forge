@@ -48,8 +48,12 @@ export async function gameLoop() {
         //get screen visible and get resourcePrice object
         //get all elements on screen
         //for each element  
-            monitorResourceCostChecks(); //resourcePriceObject pass in
-        //iterate
+        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-check');
+        elementsResourcesCheck.forEach((elementResourceCheck) => {
+            const resourcePriceObject = elementResourceCheck.dataset.resourcePriceObject;
+            const argumentToPass = elementResourceCheck.dataset.argumentToPass;
+            monitorResourceCostChecks(elementResourceCheck, resourcePriceObject, argumentToPass);
+        });
 
         requestAnimationFrame(gameLoop);
     }
@@ -296,21 +300,16 @@ function manageTabSpecificUi() {
     }
 }
 
-function monitorResourceCostChecks(resourcePriceObject) {
-    const elements = document.querySelectorAll('.resource-cost-check');
-
-    elements.forEach(element => {
-        if (element.dataset.conditionCheck === 'sandStorageCheck' && getSandQuantity() === getSandStorage()) {
+function monitorResourceCostChecks(element, resourcePriceObject, argument) {
+    if (element.dataset.conditionCheck && element.dataset.conditionCheck !== 'undefined') {
+        if (element.dataset.conditionCheck === 'upgradeCheck' && JSON.parse(element.dataset.resourcePriceObject)(argument).checkQuantity() >= JSON.parse(element.dataset.resourcePriceObject).price) {
             element.classList.remove('red-text');
-        } 
-        //else if (element.dataset.conditionCheck === 'buyUpgradeCheck' && resourcePriceObject.checkQuantity() >= resourcePriceObject.price) {
-        //     element.classList.remove('red-text');
-        // }
-         else {
+        } else {
             element.classList.add('red-text');
         }
-    });
+    }
 }
+
 
 export function increaseResourceStorage(setResourceStorage, getResourceStorage, getResourceQuantity, setResourceQuantity, elementId) {
     const increaseFactor = getIncreaseStorageFactor();

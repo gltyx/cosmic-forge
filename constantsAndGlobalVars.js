@@ -30,10 +30,34 @@ let silverQuantity = 0;
 let silverRate = 0;
 let silverStorage = 100;
 
-let storageUpgradeCostSand = {requirementQty: 1, price: 100, resource: "Sand", checkQuantity: getSandQuantity}
+let upgradeSand = {
+    storage: {
+        requirementQty: 1,
+        price: 100,
+        resource: "Sand"
+    },
+    autobuyer: {
+        requirementQty: 1,
+        price: 100,
+        resource: "Sand", 
+    },
+    checkQuantity: getSandQuantity
+};
 
-let scienceKitPrice = {requirementQty: 1, price: 50, resource: "Sand", checkQuantity: getSandQuantity}
-let scienceClubPrice = {requirementQty: 1, price: 1000, resource: "Sand", checkQuantity: getSandQuantity}
+let upgradeScience = {
+    scienceKit: {
+        requirementQty: 1, 
+        price: 50, 
+        resource: "Research", 
+        checkQuantity: getSandQuantity
+    },
+    scienceClub: {
+        requirementQty: 1, 
+        price: 1000, 
+        resource: "Research", 
+        checkQuantity: getSandQuantity
+    }
+};
 
 let currentTab = 1;
 let currentOptionPane = null;
@@ -267,28 +291,20 @@ export function setIncreaseStorageFactor(value) {
     increaseStorageFactor = value;
 }
 
-export function getStorageUpgradeCostSand() {
-    return storageUpgradeCostSand;
+export function getUpgradeSand(key) {
+    return upgradeSand[key];
 }
 
-export function getScienceKitPrice() {
-    return scienceKitPrice;
+export function setUpgradeSand(key, value) {
+    upgradeSand[key] = value;
 }
 
-export function getScienceClubPrice() {
-    return scienceClubPrice;
+export function setUpgradeScience(key, value) {
+    upgradeScience[key] = value;
 }
 
-export function setStorageUpgradeCostSand(value) {
-    storageUpgradeCostSand = value;
-}
-
-export function setScienceKitPrice(value) {
-    scienceKitPrice = value;
-}
-
-export function setScienceClubPrice(value) {
-    scienceClubPrice = value;
+export function getUpgradeScience(key) {
+    return upgradeScience[key];
 }
 
 export function getCurrentOptionPane() {

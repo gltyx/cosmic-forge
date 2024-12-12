@@ -1,9 +1,9 @@
 import {
     getCurrentOptionPane,
     setCurrentOptionPane,
-    getStorageUpgradeCostSand,
-    getScienceKitPrice,
-    getScienceClubPrice,
+    getUpgradeSand,
+    getUpgradeScience,
+    setUpgradeScience,
     getSandStorage,
     setSandStorage,
     getNotationType,
@@ -190,6 +190,8 @@ function drawTab1Content(heading, optionContentElement) {
             }, ''),
             false,
             '',
+            '',
+            '',
             ''
         );
         optionContentElement.appendChild(sandRow);
@@ -198,11 +200,12 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 increaseResourceStorage(setSandStorage, getSandStorage, getSandQuantity, setSandQuantity, "sandQuantity");
-            }, 'sandStorageCheck'),
+            }, 'upgradeCheck', getUpgradeSand, 'storage'),
             false,
-            `${getStorageUpgradeCostSand().price + " " + getStorageUpgradeCostSand().resource}`,
-            getStorageUpgradeCostSand(),
-            'sandStorageCheck'
+            `${getUpgradeSand('storage').price + " " + getUpgradeSand('storage').resource}`,
+            getUpgradeSand(),
+            'upgradeCheck',
+            'storage'
         );
         optionContentElement.appendChild(containerSizeRow);
     }
@@ -214,11 +217,12 @@ function drawTab2Content(heading, optionContentElement) {
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, getScienceKitPrice, 1, "scienceKitQuantity")
-            }, 'buyUpgradeCheck'),
+            }, 'upgradeCheck', getUpgradeScience, 'scienceKit'),
             false,
-            `${getScienceKitPrice().price + " " + getScienceKitPrice().resource}`,
-            getScienceKitPrice(),
-            'buyUpgradeCheck'
+            `${getUpgradeScience('scienceKit').price + " " + getUpgradeScience('scienceKit').resource}`,
+            getUpgradeScience('scienceKit'),
+            'upgradeCheck',
+            'scienceKit'
         );
         optionContentElement.appendChild(scienceKitRow);
 
@@ -226,11 +230,12 @@ function drawTab2Content(heading, optionContentElement) {
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, getScienceClubPrice, 1, "scienceClubQuantity")
-            }, 'buyUpgradeCheck'),
+            }, 'upgradeCheck', getUpgradeScience, 'scienceKit'),
             false,
-            `${getScienceClubPrice().price + " " + getScienceClubPrice().resource}`,
-            getScienceClubPrice(),
-            'buyUpgradeCheck'
+            `${getUpgradeScience('scienceClub').price + " " + getUpgradeScience('scienceClub').resource}`,
+            getUpgradeSand('scienceClub'),
+            'upgradeCheck',
+            'scienceClub'
         );
         optionContentElement.appendChild(scienceClubRow);
     }
@@ -271,6 +276,8 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Change styling of the page.',
+            '',
+            '',
             ''
         );
         optionContentElement.appendChild(themeRow);
@@ -285,6 +292,8 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Change the notation used.',
+            '',
+            '',
             ''
         );
         optionContentElement.appendChild(notationRow);
@@ -296,6 +305,8 @@ function drawTab8Content(heading, optionContentElement) {
             }),
             false,
             'Toggle notifications',
+            '',
+            '',
             ''
         );
         optionContentElement.appendChild(notificationsRow);
@@ -305,13 +316,15 @@ function drawTab8Content(heading, optionContentElement) {
             createButton('Send Notification', ['btn-secondary'], sendTestNotification, ''),
             true,
             'Send test notification',
+            '',
+            '',
             ''
         );
         optionContentElement.appendChild(triggerNotificationsRow);
     }
 }
 
-function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck) {
+function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck, dataArgument) {
     const row = document.createElement('div');
 
     if (hidden) {
@@ -339,12 +352,10 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
     description.classList.add('red-text');
     description.classList.add('resource-cost-check');
     description.dataset.conditionCheck = dataConditionCheck;
+    description.dataset.resourcePriceObject = JSON.stringify(resourcePriceObject);
+    description.dataset.argumentToPass = dataArgument;
     descriptionContainer.appendChild(description);
     row.appendChild(descriptionContainer);
-
-    if (resourcePriceObject && resourcePriceObject.checkQuantity() >= resourcePriceObject.price) {
-        description.classList.remove('red-text');
-    }
 
     return row;
 }
@@ -395,7 +406,7 @@ function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-function createButton(text, classNames, onClick, dataConditionCheck) {
+function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, dataArgument) {
     const button = document.createElement('button');
     button.innerText = text;
     
@@ -407,6 +418,8 @@ function createButton(text, classNames, onClick, dataConditionCheck) {
 
     if (dataConditionCheck) {
         button.dataset.conditionCheck = dataConditionCheck;
+        button.dataset.resourcePriceObject = JSON.stringify(resourcePriceObject);
+        button.dataset.argumentToPass = dataArgument;
     }
 
     button.addEventListener('click', onClick);
