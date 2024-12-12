@@ -222,9 +222,10 @@ function drawTab2Content(heading, optionContentElement) {
             }, 'upgradeCheck', 'getUpgradeScience', 'scienceKit', 'getScienceQuantity'),
             false,
             `${getUpgradeScience('scienceKit').price + " " + getUpgradeScience('scienceKit').resource}`,
-            getUpgradeScience('scienceKit'),
+            'getUpgradeScience',
             'upgradeCheck',
-            'scienceKit'
+            'scienceKit',
+            'getScienceQuantity'
         );
         optionContentElement.appendChild(scienceKitRow);
 
@@ -235,9 +236,10 @@ function drawTab2Content(heading, optionContentElement) {
             }, 'upgradeCheck', 'getUpgradeScience', 'scienceClub', 'getScienceQuantity'),
             false,
             `${getUpgradeScience('scienceClub').price + " " + getUpgradeScience('scienceClub').resource}`,
-            getUpgradeSand('scienceClub'),
+            'getUpgradeScience',
             'upgradeCheck',
-            'scienceClub'
+            'scienceClub',
+            'getScienceQuantity'
         );
         optionContentElement.appendChild(scienceClubRow);
     }

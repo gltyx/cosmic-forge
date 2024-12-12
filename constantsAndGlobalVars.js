@@ -76,7 +76,9 @@ export let pauseAutoSaveCountdown = true;
 //FUNCTION REGISTRY
 export const functionRegistry = {
     getUpgradeSand: getUpgradeSand,
+    getUpgradeScience: getUpgradeScience,
     getSandQuantity: getSandQuantity,
+    getScienceQuantity: getScienceQuantity
     // Add more functions here as needed
 };
 
