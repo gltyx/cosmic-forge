@@ -1,14 +1,19 @@
 import {
-    getDustStorage,
-    setDustStorage,
+    getCurrentOptionPane,
+    setCurrentOptionPane,
+    getStorageUpgradeCostSand,
+    getScienceKitPrice,
+    getScienceClubPrice,
+    getSandStorage,
+    setSandStorage,
     getNotationType,
     setNotationType,
     getNotificationsToggle,
     setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getDustQuantity,
-    setDustQuantity,
+    getSandQuantity,
+    setSandQuantity,
     getSilverQuantity,
     setSilverQuantity,
     getLanguage,
@@ -61,47 +66,67 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
         });
     });
     
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent,'tab8');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
     });
 
-    // document.getElementById("pauseResumedustTimer").addEventListener("click", () => toggleTimer("dustTimer", "pauseResumedustTimer"));
+    // document.getElementById("pauseResumesandTimer").addEventListener("click", () => toggleTimer("sandTimer", "pauseResumesandTimer"));
     // document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    // document.getElementById("doubleRatedustTimer").addEventListener("click", () => doubleRate("dustTimer"));
+    // document.getElementById("doubleRatesandTimer").addEventListener("click", () => doubleRate("sandTimer"));
     // document.getElementById("doubleRatesilverTimer").addEventListener("click", () => doubleRate("silverTimer"));
-    // document.getElementById("resetCounterdustTimer").addEventListener("click", () => resetCounter("dustTimer"));
+    // document.getElementById("resetCountersandTimer").addEventListener("click", () => resetCounter("sandTimer"));
     // document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    // document.getElementById("startAutoIncrementDust").addEventListener("click", () => startAutoIncrementer("dust"));
+    // document.getElementById("startAutoIncrementSand").addEventListener("click", () => startAutoIncrementer("sand"));
     // document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
 
     const tabs = document.querySelectorAll('#tabsContainer .tab');
@@ -157,29 +182,58 @@ function updateContent(heading, tab) {
 } 
 
 function drawTab1Content(heading, optionContentElement) {
-    if (heading === 'Dust') {
-        const dustRow = createOptionRow(
-            'Gain 1 Dust:',
+    if (heading === 'Sand') {
+        const sandRow = createOptionRow(
+            'Gain 1 Sand:',
             createButton('Gain', ['option-button'], () => {
-                manualIncrementer(getDustQuantity, setDustQuantity, getDustStorage, 1, "dustQuantity")
+                manualIncrementer(getSandQuantity, setSandQuantity, getSandStorage, 1, "sandQuantity")
             }, ''),
-            false
+            false,
+            '',
+            ''
         );
-        optionContentElement.appendChild(dustRow);
+        optionContentElement.appendChild(sandRow);
 
         const containerSizeRow = createOptionRow(
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
-                increaseResourceStorage(setDustStorage, getDustStorage, getDustQuantity, setDustQuantity, "dustQuantity");
-            }, 'dustStorageCheck'),
-            false
+                increaseResourceStorage(setSandStorage, getSandStorage, getSandQuantity, setSandQuantity, "sandQuantity");
+            }, 'sandStorageCheck'),
+            false,
+            `${getStorageUpgradeCostSand().price + " " + getStorageUpgradeCostSand().resource}`,
+            getStorageUpgradeCostSand(),
+            'sandStorageCheck'
         );
         optionContentElement.appendChild(containerSizeRow);
     }
 }
 
 function drawTab2Content(heading, optionContentElement) {
-    // Your logic for tab 2
+    if (heading === 'Research') {
+        const scienceKitRow = createOptionRow(
+            'Science Kit:',
+            createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
+                manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, getScienceKitPrice, 1, "scienceKitQuantity")
+            }, 'buyUpgradeCheck'),
+            false,
+            `${getScienceKitPrice().price + " " + getScienceKitPrice().resource}`,
+            getScienceKitPrice(),
+            'buyUpgradeCheck'
+        );
+        optionContentElement.appendChild(scienceKitRow);
+
+        const scienceClubRow = createOptionRow(
+            'Open Science Club:',
+            createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
+                manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, getScienceClubPrice, 1, "scienceClubQuantity")
+            }, 'buyUpgradeCheck'),
+            false,
+            `${getScienceClubPrice().price + " " + getScienceClubPrice().resource}`,
+            getScienceClubPrice(),
+            'buyUpgradeCheck'
+        );
+        optionContentElement.appendChild(scienceClubRow);
+    }
 }
 
 function drawTab3Content(heading, optionContentElement) {
@@ -215,7 +269,9 @@ function drawTab8Content(heading, optionContentElement) {
             ], document.body.getAttribute('data-theme') || 'dark', (value) => {
                 selectTheme(value);
             }),
-            false
+            false,
+            'Change styling of the page.',
+            ''
         );
         optionContentElement.appendChild(themeRow);
 
@@ -227,7 +283,9 @@ function drawTab8Content(heading, optionContentElement) {
             ], 'normal', (value) => {
                 setNotationType(value);
             }),
-            false
+            false,
+            'Change the notation used.',
+            ''
         );
         optionContentElement.appendChild(notationRow);
 
@@ -236,20 +294,24 @@ function drawTab8Content(heading, optionContentElement) {
             createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                 setNotificationsToggle(isEnabled);
             }),
-            false
+            false,
+            'Toggle notifications',
+            ''
         );
         optionContentElement.appendChild(notificationsRow);
 
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
             createButton('Send Notification', ['btn-secondary'], sendTestNotification, ''),
-            true
+            true,
+            'Send test notification',
+            ''
         );
         optionContentElement.appendChild(triggerNotificationsRow);
     }
 }
 
-function createOptionRow(labelText, inputElement, hidden) {
+function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck) {
     const row = document.createElement('div');
 
     if (hidden) {
@@ -269,6 +331,20 @@ function createOptionRow(labelText, inputElement, hidden) {
     inputContainer.classList.add('input-container');
     inputContainer.appendChild(inputElement);
     row.appendChild(inputContainer);
+
+    const descriptionContainer = document.createElement('div');
+    descriptionContainer.classList.add('label-container');
+    const description = document.createElement('label');
+    description.innerText = descriptionText;
+    description.classList.add('red-text');
+    description.classList.add('resource-cost-check');
+    description.dataset.conditionCheck = dataConditionCheck;
+    descriptionContainer.appendChild(description);
+    row.appendChild(descriptionContainer);
+
+    if (resourcePriceObject && resourcePriceObject.checkQuantity() >= resourcePriceObject.price) {
+        description.classList.remove('red-text');
+    }
 
     return row;
 }

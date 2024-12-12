@@ -1,13 +1,15 @@
 import {
+    getCurrentOptionPane,
+    setCurrentOptionPane,
     getIncreaseStorageFactor,
-    setDustStorage,
-    getDustStorage,
-    setDustRate,
+    setSandStorage,
+    getSandStorage,
+    setSandRate,
     setSilverRate,
-    getDustRate,
+    getSandRate,
     getSilverRate,
-    getDustQuantity,
-    setDustQuantity,
+    getSandQuantity,
+    setSandQuantity,
     getSilverQuantity,
     setSilverQuantity,
     getIncrement,
@@ -41,7 +43,13 @@ export async function gameLoop() {
             drawScreen(getCurrentTab());
         }
 
-        monitorResourceCostChecks();
+        const tabVisible = getCurrentTab();
+        const currentOptionPane = getCurrentOptionPane();
+        //get screen visible and get resourcePrice object
+        //get all elements on screen
+        //for each element  
+            monitorResourceCostChecks(); //resourcePriceObject pass in
+        //iterate
 
         requestAnimationFrame(gameLoop);
     }
@@ -159,9 +167,9 @@ export function doubleRate(key) {
 }
 
 export function resetCounter(key) {
-    if (key === "dustTimer") {
-        setDustQuantity(0);
-        updateDisplay("dustQuantity", getDustQuantity());
+    if (key === "sandTimer") {
+        setSandQuantity(0);
+        updateDisplay("sandQuantity", getSandQuantity());
     } else if (key === "silverTimer") {
         setSilverQuantity(0);
         updateDisplay("silverQuantity", getSilverQuantity());
@@ -181,12 +189,12 @@ export function manualIncrementer(getResourceQuantity, setResource, getResourceS
 }
 
 export function startAutoIncrementer(resourceKey) {
-    if (resourceKey === "dust") {
-        setDustRate(getIncrement("dustTimer"));
-        timerManager.addTimer("dustTimer", 1000, () => {
-            const currentDust = getDustQuantity();
-            setDustQuantity(currentDust + getIncrement("dustTimer"));
-            updateDisplay("dustQuantity", getDustQuantity());
+    if (resourceKey === "sand") {
+        setSandRate(getIncrement("sandTimer"));
+        timerManager.addTimer("sandTimer", 1000, () => {
+            const currentSand = getSandQuantity();
+            setSandQuantity(currentSand + getIncrement("sandTimer"));
+            updateDisplay("sandQuantity", getSandQuantity());
             updateSummary();
         });
     } else if (resourceKey === "silver") {
@@ -219,8 +227,8 @@ function calculateRate(resourceKey) {
 function updateRate(resourceKey, reachedFastestInterval) {
     let rate;
     reachedFastestInterval ? rate = calculateRate(resourceKey) * 64 : rate = calculateRate(resourceKey);
-    if (resourceKey === "dustTimer") {
-        setDustRate(rate);
+    if (resourceKey === "sandTimer") {
+        setSandRate(rate);
     } else if (resourceKey === "silverTimer") {
         setSilverRate(rate);
     }
@@ -228,7 +236,7 @@ function updateRate(resourceKey, reachedFastestInterval) {
 }
 
 function updateSummary() {
-    document.getElementById("dustPerSec").textContent = `Dust: ${getDustRate()}/s`;
+    document.getElementById("sandPerSec").textContent = `Sand: ${getSandRate()}/s`;
     document.getElementById("silverPerSec").textContent = `Silver: ${getSilverRate()}/s`;
 }
 
@@ -288,22 +296,19 @@ function manageTabSpecificUi() {
     }
 }
 
-function monitorResourceCostChecks() {
+function monitorResourceCostChecks(resourcePriceObject) {
     const elements = document.querySelectorAll('.resource-cost-check');
 
     elements.forEach(element => {
-        if (element.dataset.conditionCheck === 'dustStorageCheck' && getDustQuantity() === getDustStorage()) {
+        if (element.dataset.conditionCheck === 'sandStorageCheck' && getSandQuantity() === getSandStorage()) {
             element.classList.remove('red-text');
-        }
-        //} else if () {
-
-        //} 
-        else {
-            element.classList.add('red-text');
-        }
-        // } else if (element.dataset.conditionCheck === 'otherCheck' && /* other condition */) {
+        } 
+        //else if (element.dataset.conditionCheck === 'buyUpgradeCheck' && resourcePriceObject.checkQuantity() >= resourcePriceObject.price) {
         //     element.classList.remove('red-text');
         // }
+         else {
+            element.classList.add('red-text');
+        }
     });
 }
 

@@ -17,20 +17,26 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 
 //GLOBAL VARIABLES
 const increments = {
-    dustTimer: 1,
+    sandTimer: 1,
     silverTimer: 1
 };
 
 let increaseStorageFactor = 2;
 
-let dustQuantity = 0;
-let dustRate = 0;
-let dustStorage = 100;
+let sandQuantity = 0;
+let sandRate = 0;
+let sandStorage = 100;
 let silverQuantity = 0;
 let silverRate = 0;
 let silverStorage = 100;
 
+let storageUpgradeCostSand = {requirementQty: 1, price: 100, resource: "Sand", checkQuantity: getSandQuantity}
+
+let scienceKitPrice = {requirementQty: 1, price: 50, resource: "Sand", checkQuantity: getSandQuantity}
+let scienceClubPrice = {requirementQty: 1, price: 1000, resource: "Sand", checkQuantity: getSandQuantity}
+
 let currentTab = 1;
+let currentOptionPane = null;
 let notationType = 'normal';
 
 //FLAGS
@@ -54,9 +60,9 @@ export function setElements() {
         testContainer: document.getElementById('testContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
         mainContainer: document.getElementById('mainContainer'),
-        dustOption: document.getElementById('dustOption'),
-        dustRate: document.getElementById('dustRate'),
-        dustQuantity: document.getElementById('dustQuantity'),
+        sandOption: document.getElementById('sandOption'),
+        sandRate: document.getElementById('sandRate'),
+        sandQuantity: document.getElementById('sandQuantity'),
     };
 }
 
@@ -191,20 +197,20 @@ export function getIncrement(timerKey) {
     return increments[timerKey];
 }
 
-export function getDustQuantity() {
-    return dustQuantity;
+export function getSandQuantity() {
+    return sandQuantity;
 }
 
-export function setDustQuantity(value) {
-    dustQuantity = value;
+export function setSandQuantity(value) {
+    sandQuantity = value;
 }
 
-export function getDustStorage() {
-    return dustStorage;
+export function getSandStorage() {
+    return sandStorage;
 }
 
-export function setDustStorage(value) {
-    dustStorage = value;
+export function setSandStorage(value) {
+    sandStorage = value;
 }
 
 export function getSilverQuantity() {
@@ -215,15 +221,15 @@ export function setSilverQuantity(value) {
     silverQuantity = value;
 }
 
-export function getDustRate() {
-    return dustRate;
+export function getSandRate() {
+    return sandRate;
 }
 
 export function getSilverRate() {
     return silverRate;
 }
-export function setDustRate(value) {
-    dustRate = value;
+export function setSandRate(value) {
+    sandRate = value;
 }
 export function setSilverRate(value) {
     silverRate = value;
@@ -259,4 +265,36 @@ export function getIncreaseStorageFactor() {
 
 export function setIncreaseStorageFactor(value) {
     increaseStorageFactor = value;
+}
+
+export function getStorageUpgradeCostSand() {
+    return storageUpgradeCostSand;
+}
+
+export function getScienceKitPrice() {
+    return scienceKitPrice;
+}
+
+export function getScienceClubPrice() {
+    return scienceClubPrice;
+}
+
+export function setStorageUpgradeCostSand(value) {
+    storageUpgradeCostSand = value;
+}
+
+export function setScienceKitPrice(value) {
+    scienceKitPrice = value;
+}
+
+export function setScienceClubPrice(value) {
+    scienceClubPrice = value;
+}
+
+export function getCurrentOptionPane() {
+    return currentOptionPane;
+}
+
+export function setCurrentOptionPane(value) {
+    currentOptionPane = value;
 }

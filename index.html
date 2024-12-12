@@ -19,12 +19,12 @@
     <!-- Tabs Container -->
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
         <div class="tab selected" id="tab1">Resources</div>
-        <div class="tab" id="tab2">Tab 2</div>
-        <div class="tab" id="tab3">Tab 3</div>
-        <div class="tab" id="tab4">Tab 4</div>
-        <div class="tab" id="tab5">Tab 5</div>
-        <div class="tab" id="tab6">Tab 6</div>
-        <div class="tab" id="tab7">Tab 7</div>
+        <div class="tab" id="tab2">Technology</div>
+        <div class="tab invisible" id="tab3">Tab 3</div>
+        <div class="tab invisible" id="tab4">Tab 4</div>
+        <div class="tab invisible" id="tab5">Tab 5</div>
+        <div class="tab invisible" id="tab6">Tab 6</div>
+        <div class="tab invisible" id="tab7">Tab 7</div>
         <div class="tab" id="tab8">☰</div>
     </div>
 
@@ -37,13 +37,13 @@
                 <div class="container-item-menu-body tab-1">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="dustOption" class="tab1.option1">Dust</p>
+                            <p id="sandOption" class="tab1.option1">Sand</p>
                         </div>
                         <div class="row-side-menu-item">
-                            <p id="dustRate"></p>
+                            <p id="sandRate">0/s</p>
                         </div>
                         <div class="row-side-menu-item">
-                            <p id="dustQuantity">0/100</p>
+                            <p id="sandQuantity">0/100</p>
                         </div>
                     </div>
                     <div class="row-side-menu d-flex invisible">
@@ -65,6 +65,49 @@
                 </div>
                 <div class="container-item-menu-body tab-1">
                     <div id="optionContentTab1" class="option-content d-flex">
+                        <div id="labelContainer" class="d-flex"></div>
+                        <div id="inputContainer" class="d-flex"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2ContainerGroup" class="tab-2-container-group tab-2">
+            <div class="container-item-menu tab-2">
+                <div class="container-item-menu-header tab-2">
+                    <h4>Technology</h4>
+                </div>
+                <div class="container-item-menu-body tab-2">
+                    <div class="row-side-menu d-flex">
+                        <div class="row-side-menu-item">
+                            <p id="scienceOption" class="tab2.option1">Research</p>
+                        </div>
+                        <div class="row-side-menu-item">
+                            <p id="scienceRate">0/s</p>
+                        </div>
+                        <div class="row-side-menu-item">
+                            <p id="scienceQuantity">10</p>
+                        </div>
+                    </div>
+                    <div class="row-side-menu d-flex">
+                        <div class="row-side-menu-item">
+                            <p class="tab2.option2">Tech Tree</p>
+                        </div>
+                        <div class="row-side-menu-item">
+                            <p></p>
+                        </div>
+                        <div class="row-side-menu-item">
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-item-content tab-2">
+                <div class="container-item-menu-header tab-2">
+                    <h4 id="headerContentTab2"></h4>
+                </div>
+                <div class="container-item-menu-body tab-2">
+                    <div id="optionContentTab2" class="option-content d-flex">
                         <div id="labelContainer" class="d-flex"></div>
                         <div id="inputContainer" class="d-flex"></div>
                     </div>
