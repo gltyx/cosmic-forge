@@ -26,9 +26,9 @@ let increaseStorageFactor = 2;
 let sandQuantity = 0;
 let sandRate = 0;
 let sandStorage = 100;
+
 let scienceQuantity = 0;
 let scienceRate = 0;
-let silverStorage = 100;
 
 let upgradeSand = {
     storage: {
