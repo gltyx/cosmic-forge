@@ -100,7 +100,6 @@ function checkAndIncreasePrices() {
 function setNewResourcePrice(currentPrice, setPriceTarget) {
     if (setPriceTarget) {
         let newPrice;
-        //newPrice = Math.ceil(getUpgradeResearch('scienceClub').price * 1.15); //example if currentPrice doesnt work
 
         switch (setPriceTarget) {
             case 'sandAutoGainPrice':
