@@ -1,4 +1,6 @@
 import {
+    getResourcesToIncreasePrice,
+    setResourcesToIncreasePrice,
     getResourcesToDeduct,
     setResourcesToDeduct,
     functionRegistry,
@@ -28,7 +30,10 @@ import {
     getCurrentTab,
     getScienceKitQuantity,
     getScienceClubQuantity,
-    getUpgradeResearch
+    getUpgradeResearch,
+    setUpgradeResearch,
+    getUpgradeSand,
+    setUpgradeSand
 } from './constantsAndGlobalVars.js';
 
 //--------------------------------------------------------------------------------------------------------
@@ -66,12 +71,51 @@ export async function gameLoop() {
             checkAndDeductResources();
         }
 
+        if (getResourcesToIncreasePrice() && Object.keys(getResourcesToIncreasePrice()).length > 0) {
+            checkAndIncreasePrices();
+        }
+
         while (deferredActions.length > 0) { //mainly for increasing storage at the moment
             const runDeferredJobs = deferredActions.shift();
             runDeferredJobs();
         }
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function checkAndIncreasePrices() {
+    const priceIncreaseObject = getResourcesToIncreasePrice();
+
+    for (const resource in priceIncreaseObject) {
+        if (priceIncreaseObject.hasOwnProperty(resource)) {
+            const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
+            setNewResourcePrice(currentPrice, setPriceTarget);
+        }
+    }
+
+    setResourcesToIncreasePrice('clear');
+}
+
+function setNewResourcePrice(currentPrice, setPriceTarget) {
+    if (setPriceTarget) {
+        let newPrice;
+        //newPrice = Math.ceil(getUpgradeResearch('scienceClub').price * 1.15); //example if currentPrice doesnt work
+
+        switch (setPriceTarget) {
+            case 'sandAutoGainPrice':
+                newPrice = Math.ceil(currentPrice * 1.15);
+                setUpgradeSand('autobuyer', 'price', newPrice);
+                break;
+            case 'scienceKitPrice':
+                newPrice = Math.ceil(currentPrice * 1.15);
+                setUpgradeResearch('scienceKit', 'price', newPrice);
+                break;
+            case 'scienceClubPrice':
+                newPrice = Math.ceil(currentPrice * 1.15);
+                setUpgradeResearch('scienceClub', 'price', newPrice);
+                break;
+        }
     }
 }
 
@@ -320,24 +364,25 @@ export function doubleRate(key) {
 export function manualIncrementer(getResourceQuantity, setResourceQuantity, getResourceStorage, incrementAmount, elementId, getResourceObject, resource) {
     let currentResource = getResourceQuantity();
 
-    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) {
+    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like sand
         getElements()[elementId].classList.remove('green-text');
         setResourceQuantity(currentResource + incrementAmount);
-    } else if (!getResourceStorage || getResourceQuantity() < getResourceStorage()) { //first part for items without storage like research
+    } else if (!getResourceStorage || getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
         setResourceQuantity(currentResource + incrementAmount); 
     }
     
-
     if (getResourceObject) {
         const getResourceObjectFn = functionRegistry[getResourceObject];
         const resourceObject = getResourceObjectFn(resource);
-        const resourceAmountToDeduct = resourceObject.price;
+        const resourceAmountToDeductOrPrice = resourceObject.price;
         const resourceToDeductName = resourceObject.resource;
         const resourceToDeductSetFn = resourceObject.deduct;
         const resourceToDeductGetFn = resourceObject.checkQuantity;
+        const resourceSetNewPrice = resourceObject.setPrice;
 
         //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
+        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeductOrPrice);
+        setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, resourceAmountToDeductOrPrice);
     }
 }
 

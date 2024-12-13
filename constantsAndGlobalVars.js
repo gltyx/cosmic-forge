@@ -22,6 +22,7 @@ const increments = {
 };
 
 let resourcesToDeduct = {};
+let resourcesToIncreasePrice = {};
 
 let increaseStorageFactor = 2;
 
@@ -41,14 +42,16 @@ let upgradeSand = {
         price: getSandStorage,
         resource: 'sand',
         checkQuantity: getSandQuantity,
-        deduct: setSandQuantity
+        deduct: setSandQuantity,
+        setPrice: null
     },
     autobuyer: {
         requirementQty: 1,
         price: 100,
         resource: 'sand',
         checkQuantity: getSandQuantity,
-        deduct: setSandQuantity
+        deduct: setSandQuantity,
+        setPrice: 'sandAutoGainPrice'
     },
 };
 
@@ -58,14 +61,16 @@ let upgradeResearch = {
         price: 50, 
         resource: 'research', 
         checkQuantity: getResearchQuantity,
-        deduct: setResearchQuantity
+        deduct: setResearchQuantity,
+        setPrice: 'scienceKitPrice'
     },
     scienceClub: {
         requirementQty: 1, 
         price: 1000, 
         resource: 'research', 
         checkQuantity: getResearchQuantity,
-        deduct: setResearchQuantity
+        deduct: setResearchQuantity,
+        setPrice: 'scienceClubPrice'
     }
 };
 
@@ -333,12 +338,12 @@ export function getUpgradeSand(key) {
     return upgradeSand[key];
 }
 
-export function setUpgradeSand(key, value) {
-    upgradeSand[key] = value;
+export function setUpgradeSand(key, property, value) {
+    upgradeSand[key][property] = value;
 }
 
-export function setUpgradeResearch(key, value) {
-    upgradeResearch[key] = value;
+export function setUpgradeResearch(key, property, value) {
+    upgradeResearch[key][property] = value;
 }
 
 export function getUpgradeResearch(key) {
@@ -370,4 +375,22 @@ export function setResourcesToDeduct(name, setFunctionName, getFunctionName, amo
 
 export function getResourcesToDeduct() {
     return resourcesToDeduct;
+}
+
+export function setResourcesToIncreasePrice(name, setPriceTarget, currentPrice) {
+    if (name === 'clear') {
+        resourcesToIncreasePrice = {};
+        return;
+    }
+
+    if (!resourcesToIncreasePrice[name]) {
+        resourcesToIncreasePrice[name] = {};
+    }
+
+    resourcesToIncreasePrice[name].currentPrice = currentPrice;
+    resourcesToIncreasePrice[name].setPriceTarget = setPriceTarget;
+}
+
+export function getResourcesToIncreasePrice() {
+    return resourcesToIncreasePrice;
 }
