@@ -59,17 +59,17 @@ let upgradeResearch = {
     scienceKit: {
         requirementQty: 1, 
         price: 50, 
-        resource: 'research', 
-        checkQuantity: getResearchQuantity,
-        deduct: setResearchQuantity,
+        resource: 'sand', 
+        checkQuantity: getSandQuantity,
+        deduct: setSandQuantity,
         setPrice: 'scienceKitPrice'
     },
     scienceClub: {
         requirementQty: 1, 
         price: 1000, 
-        resource: 'research', 
-        checkQuantity: getResearchQuantity,
-        deduct: setResearchQuantity,
+        resource: 'sand', 
+        checkQuantity: getSandQuantity,
+        deduct: setSandQuantity,
         setPrice: 'scienceClubPrice'
     }
 };

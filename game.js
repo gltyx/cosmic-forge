@@ -204,8 +204,8 @@ function getAllResourceDescriptionElements() {
 
     const allResourceDescElements = {
         sandIncreaseStorage: {element: sandIncreaseStorageDescElement, price: sandStoragePrice, string: ' Sand'},
-        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Research'},
-        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Research'}
+        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Sand'},
+        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Sand'}
     };
 
     return allResourceDescElements;
@@ -305,6 +305,10 @@ const updateDisplay = (element, data1, data2, desc) => {
     
         if (element && data2 && data1 === data2) {
             element.classList.add('green-text');
+        }
+
+        if (element && element.classList.contains('green-text') && data1 !== data2) {
+            element.classList.remove('green-text');
         }
     }   
 };

@@ -226,13 +226,13 @@ function drawTab2Content(heading, optionContentElement) {
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit')
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getResearchQuantity', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getSandQuantity', false),
             false,
             `${getUpgradeResearch('scienceKit').price + ' ' + getUpgradeResearch('scienceKit').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceKit',
-            'getResearchQuantity'
+            'getSandQuantity'
         );
         optionContentElement.appendChild(scienceKitRow);
 
@@ -240,13 +240,13 @@ function drawTab2Content(heading, optionContentElement) {
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub')
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getResearchQuantity', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getSandQuantity', false),
             false,
             `${getUpgradeResearch('scienceClub').price + ' ' + getUpgradeResearch('scienceClub').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceClub',
-            'getResearchQuantity'
+            'getSandQuantity'
         );
         optionContentElement.appendChild(scienceClubRow);
     }
@@ -392,7 +392,6 @@ function generateElementId(labelText) {
     id = id.replace(/\s+/g, '');
     return id;
 }
-
 
 function createDropdown(id, options, selectedValue, onChange) {
     const selectContainer = document.createElement('div');
