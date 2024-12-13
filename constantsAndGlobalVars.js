@@ -21,41 +21,51 @@ const increments = {
     silverTimer: 1
 };
 
+let resourcesToDeduct = {};
+
 let increaseStorageFactor = 2;
 
 let sandQuantity = 0;
 let sandRate = 0;
 let sandStorage = 100;
 
-let scienceQuantity = 0;
-let scienceRate = 0;
+let researchQuantity = 1040;
+let researchRate = 0;
+
+let scienceKitQuantity = 0;
+let scienceClubQuantity = 0;
 
 let upgradeSand = {
     storage: {
         requirementQty: 1,
-        price: 100,
-        resource: "Sand"
+        price: getSandStorage,
+        resource: 'sand',
+        checkQuantity: getSandQuantity,
+        deduct: setSandQuantity
     },
     autobuyer: {
         requirementQty: 1,
         price: 100,
-        resource: "Sand", 
+        resource: 'sand',
+        checkQuantity: getSandQuantity,
+        deduct: setSandQuantity
     },
-    checkQuantity: getSandQuantity
 };
 
-let upgradeScience = {
+let upgradeResearch = {
     scienceKit: {
         requirementQty: 1, 
         price: 50, 
-        resource: "Research", 
-        checkQuantity: getSandQuantity
+        resource: 'research', 
+        checkQuantity: getResearchQuantity,
+        deduct: setResearchQuantity
     },
     scienceClub: {
         requirementQty: 1, 
         price: 1000, 
-        resource: "Research", 
-        checkQuantity: getSandQuantity
+        resource: 'research', 
+        checkQuantity: getResearchQuantity,
+        deduct: setResearchQuantity
     }
 };
 
@@ -76,9 +86,9 @@ export let pauseAutoSaveCountdown = true;
 //FUNCTION REGISTRY
 export const functionRegistry = {
     getUpgradeSand: getUpgradeSand,
-    getUpgradeScience: getUpgradeScience,
+    getUpgradeResearch: getUpgradeResearch,
     getSandQuantity: getSandQuantity,
-    getScienceQuantity: getScienceQuantity
+    getResearchQuantity: getResearchQuantity
     // Add more functions here as needed
 };
 
@@ -96,6 +106,9 @@ export function setElements() {
         sandOption: document.getElementById('sandOption'),
         sandRate: document.getElementById('sandRate'),
         sandQuantity: document.getElementById('sandQuantity'),
+        researchRate: document.getElementById('researchRate'),
+        researchQuantity: document.getElementById('researchQuantity'),
+        // scienceKitQuantity: document.getElementById('scienceKitQuantity'), //IF TRYING TO ADD ELEMENTS HERE FROM DYNAMICALLY GENERATED ELEMENTS IT WONT WORK UNLESS WE CALL SET ELEMENTS AFTER CREATING THEM
     };
 }
 
@@ -244,12 +257,28 @@ export function setSandStorage(value) {
     sandStorage = value;
 }
 
-export function getScienceQuantity() {
-    return scienceQuantity;
+export function getResearchQuantity() {
+    return researchQuantity;
 }
 
-export function setScienceQuantity(value) {
-    scienceQuantity = value;
+export function setResearchQuantity(value) {
+    researchQuantity = value;
+}
+
+export function getScienceKitQuantity() {
+    return scienceKitQuantity;
+}
+
+export function setScienceKitQuantity(value) {
+    scienceKitQuantity = value;
+}
+
+export function getScienceClubQuantity() {
+    return scienceClubQuantity;
+}
+
+export function setScienceClubQuantity(value) {
+    scienceClubQuantity = value;
 }
 
 export function getSandRate() {
@@ -260,12 +289,12 @@ export function setSandRate(value) {
     sandRate = value;
 }
 
-export function getScienceRate() {
-    return scienceRate;
+export function getResearchRate() {
+    return researchRate;
 }
 
-export function setScienceRate(value) {
-    scienceRate = value;
+export function setResearchRate(value) {
+    researchRate = value;
 }
 
 export function getCurrentTab() {
@@ -308,12 +337,12 @@ export function setUpgradeSand(key, value) {
     upgradeSand[key] = value;
 }
 
-export function setUpgradeScience(key, value) {
-    upgradeScience[key] = value;
+export function setUpgradeResearch(key, value) {
+    upgradeResearch[key] = value;
 }
 
-export function getUpgradeScience(key) {
-    return upgradeScience[key];
+export function getUpgradeResearch(key) {
+    return upgradeResearch[key];
 }
 
 export function getCurrentOptionPane() {
@@ -322,4 +351,23 @@ export function getCurrentOptionPane() {
 
 export function setCurrentOptionPane(value) {
     currentOptionPane = value;
+}
+
+export function setResourcesToDeduct(name, setFunctionName, getFunctionName, amount) {
+    if (name === 'clear') {
+        resourcesToDeduct = {};
+        return;
+    }
+
+    if (!resourcesToDeduct[name]) {
+        resourcesToDeduct[name] = {};
+    }
+
+    resourcesToDeduct[name].deductQuantity = amount;
+    resourcesToDeduct[name].setFunction = setFunctionName;
+    resourcesToDeduct[name].getFunction = getFunctionName;
+}
+
+export function getResourcesToDeduct() {
+    return resourcesToDeduct;
 }

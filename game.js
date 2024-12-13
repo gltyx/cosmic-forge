@@ -1,4 +1,6 @@
 import {
+    getResourcesToDeduct,
+    setResourcesToDeduct,
     functionRegistry,
     getCurrentOptionPane,
     setCurrentOptionPane,
@@ -6,13 +8,13 @@ import {
     setSandStorage,
     getSandStorage,
     setSandRate,
-    setScienceRate,
+    setResearchRate,
     getSandRate,
-    getScienceRate,
+    getResearchRate,
     getSandQuantity,
     setSandQuantity,
-    getScienceQuantity,
-    setScienceQuantity,
+    getResearchQuantity,
+    setResearchQuantity,
     getIncrement,
     setIncrement,
     setBeginGameStatus, 
@@ -23,10 +25,15 @@ import {
     getElements, 
     getLanguage, 
     gameState, 
-    getCurrentTab
+    getCurrentTab,
+    getScienceKitQuantity,
+    getScienceClubQuantity,
+    getUpgradeResearch
 } from './constantsAndGlobalVars.js';
 
 //--------------------------------------------------------------------------------------------------------
+
+let deferredActions = [];
 
 export function startGame() {
     if (getBeginGameStatus()) {
@@ -40,15 +47,7 @@ export function startGame() {
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
 
-        if (gameState === getGameVisibleActive()) {
-            drawScreen(getCurrentTab());
-        }
-
-        const tabVisible = getCurrentTab();
-        const currentOptionPane = getCurrentOptionPane();
-        //get screen visible and get resourcePrice object
-        //get all elements on screen
-        //for each element  
+        //Check and update what can afford to buy
         const elementsResourcesCheck = document.querySelectorAll('.resource-cost-check');
         elementsResourcesCheck.forEach((elementResourceCheck) => {
             const resourcePriceObject = elementResourceCheck.dataset.resourcePriceObject;
@@ -56,12 +55,140 @@ export async function gameLoop() {
             monitorResourceCostChecks(elementResourceCheck, resourcePriceObject, argumentToPass);
         });
 
+        //updateAndIncrementQuantities
+        const allQuantities = getAllQuantities();
+        const allStorages = getAllStorages();
+        const allResourceElements = getAllResourceElements();
+        const allResourceDescElements = getAllResourceDescriptionElements();
+        updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescElements);
+
+        if (getResourcesToDeduct() && Object.keys(getResourcesToDeduct()).length > 0) {
+            checkAndDeductResources();
+        }
+
+        while (deferredActions.length > 0) { //mainly for increasing storage at the moment
+            const runDeferredJobs = deferredActions.shift();
+            runDeferredJobs();
+        }
+
         requestAnimationFrame(gameLoop);
     }
 }
 
-function drawScreen(tabNumber) {
-    
+function checkAndDeductResources() {
+    const deductObject = getResourcesToDeduct();
+    let deductAmount;
+
+    for (const resource in deductObject) {
+        if (deductObject.hasOwnProperty(resource)) {
+            const { deductQuantity, setFunction, getFunction } = deductObject[resource];
+
+            if (typeof deductQuantity === 'function') { //in case of storage upgrades
+                deductAmount = deductQuantity();
+            } else {
+                deductAmount = deductQuantity;
+            }
+
+            if (typeof getFunction === 'function' && typeof setFunction === 'function') {
+                const currentQuantity = getFunction();
+                setFunction(currentQuantity - deductAmount);
+            } else {
+                console.error(`Error: getFunction or setFunction for resource '${resource}' is not callable.`);
+            }
+        }
+    }
+
+    setResourcesToDeduct('clear');
+}
+
+function getAllQuantities() {
+    const sandQuantity = getSandQuantity();
+    const researchQuantity = getResearchQuantity();
+    const scienceKitQuantity = getScienceKitQuantity();
+    const scienceClubQuantity = getScienceClubQuantity();
+
+    const allQuantities = {
+        sand: sandQuantity,
+        research: researchQuantity,
+        scienceKit: scienceKitQuantity,
+        scienceClub: scienceClubQuantity,
+    };
+
+    return allQuantities;
+}
+
+function getAllStorages() {
+    const sandStorage = getSandStorage();
+    const researchStorage = null;
+    const scienceKitStorage = null;
+    const scienceClubStorage = null;
+
+    const allStorages = {
+        sand: sandStorage,
+        research: researchStorage,
+        scienceKit: scienceKitStorage,
+        scienceClub: scienceClubStorage,
+    };
+
+    return allStorages;
+}
+
+function getAllResourceElements() {
+    const sandElement = getElements().sandQuantity;
+    const researchElement = getElements().researchQuantity;
+    const scienceKitElement = document.getElementById('scienceKitQuantity');
+    const scienceClubElement = document.getElementById('scienceClubQuantity');
+
+    const allResourceElements = {
+        sand: sandElement,
+        research: researchElement,
+        scienceKit: scienceKitElement,
+        scienceClub: scienceClubElement,
+    };
+
+    return allResourceElements;
+}
+
+function getAllResourceDescriptionElements() {
+    const sandIncreaseStorageDescElement = document.getElementById('increaseContainerSizeDescription');
+    const sandStoragePrice = getSandStorage();
+
+    const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
+    const scienceKitBuyPrice = getUpgradeResearch('scienceKit').price;
+
+    const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
+    const scienceClubBuyPrice = getUpgradeResearch('scienceClub').price;
+
+    const allResourceDescElements = {
+        sandIncreaseStorage: {element: sandIncreaseStorageDescElement, price: sandStoragePrice, string: ' Sand'},
+        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Research'},
+        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Research'}
+    };
+
+    return allResourceDescElements;
+}
+
+
+function updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescriptionElements) {
+    for (const resource in allQuantities) {
+        if (allQuantities.hasOwnProperty(resource)) {
+            const quantity = allQuantities[resource];
+            const storage = allStorages[resource];
+            const element = allResourceElements[resource];
+
+            updateDisplay(element, quantity, storage, false);
+        }
+    }
+
+    for (const allResourceDescriptionElement in allResourceDescriptionElements) {
+        if (allResourceDescriptionElements.hasOwnProperty(allResourceDescriptionElement)) {
+            const price = allResourceDescriptionElements[allResourceDescriptionElement].price;
+            const resourceName = allResourceDescriptionElements[allResourceDescriptionElement].string;
+            const element = allResourceDescriptionElements[allResourceDescriptionElement].element;
+
+            updateDisplay(element, price, resourceName, true);
+        }
+    }
 }
 
 class Timer {
@@ -121,13 +248,22 @@ class TimerManager {
 
 const timerManager = new TimerManager();
 
-const updateDisplay = (elementId, count, storage) => {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = count + "/" + storage;
+const updateDisplay = (element, data1, data2, desc) => {
+    if (desc) {
+        if (element && data2) {
+            element.textContent = data1 + ' ' + data2;
+        }
     } else {
-        console.error(`Element with id "${elementId}" not found.`);
-    }
+        if (element && data2) {
+            element.textContent = data1 + '/' + data2;
+        } else if (element) {
+            element.textContent = data1;
+        }
+    
+        if (element && data2 && data1 === data2) {
+            element.classList.add('green-text');
+        }
+    }   
 };
 
 export function toggleTimer(key, buttonId) {
@@ -171,47 +307,80 @@ export function doubleRate(key) {
     }
 }
 
-export function resetCounter(key) {
-    if (key === "sandTimer") {
-        setSandQuantity(0);
-        updateDisplay("sandQuantity", getSandQuantity());
-    } else if (key === "silverTimer") {
-        setScienceQuantity(0);
-        updateDisplay("silverQuantity", getScienceQuantity());
-    }
-}
+// export function resetCounter(key) {
+//     if (key === "sandTimer") {
+//         setSandQuantity(0);
+//         updateDisplay("sandQuantity", getSandQuantity());
+//     } else if (key === "silverTimer") {
+//         setResearchQuantity(0);
+//         updateDisplay("silverQuantity", getResearchQuantity());
+//     }
+// }
 
-export function manualIncrementer(getResourceQuantity, setResource, getResourceStorage, incrementAmount, elementId) {
-    if (getResourceQuantity() < getResourceStorage()) {
+export function manualIncrementer(getResourceQuantity, setResourceQuantity, getResourceStorage, incrementAmount, elementId, getResourceObject, resource) {
+    let currentResource = getResourceQuantity();
+
+    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) {
         getElements()[elementId].classList.remove('green-text');
-        let currentResource = getResourceQuantity();
-        setResource(currentResource + incrementAmount);
-        updateDisplay(elementId, getResourceQuantity(), getResourceStorage());
-        if (getResourceQuantity() === getResourceStorage()) {
-            getElements()[elementId].classList.add('green-text');
-        }
+        setResourceQuantity(currentResource + incrementAmount);
+    } else if (!getResourceStorage || getResourceQuantity() < getResourceStorage()) { //first part for items without storage like research
+        setResourceQuantity(currentResource + incrementAmount); 
+    }
+    
+
+    if (getResourceObject) {
+        const getResourceObjectFn = functionRegistry[getResourceObject];
+        const resourceObject = getResourceObjectFn(resource);
+        const resourceAmountToDeduct = resourceObject.price;
+        const resourceToDeductName = resourceObject.resource;
+        const resourceToDeductSetFn = resourceObject.deduct;
+        const resourceToDeductGetFn = resourceObject.checkQuantity;
+
+        //set resource to deduct
+        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
     }
 }
 
-export function startAutoIncrementer(resourceKey) {
-    if (resourceKey === "sand") {
-        setSandRate(getIncrement("sandTimer"));
-        timerManager.addTimer("sandTimer", 1000, () => {
-            const currentSand = getSandQuantity();
-            setSandQuantity(currentSand + getIncrement("sandTimer"));
-            updateDisplay("sandQuantity", getSandQuantity());
-            updateSummary();
-        });
-    } else if (resourceKey === "silver") {
-        setScienceRate(getIncrement("silverTimer"));
-        timerManager.addTimer("silverTimer", 1000, () => {
-            const currentSilver = getScienceQuantity();
-            setScienceQuantity(currentSilver + getIncrement("silverTimer"));
-            updateDisplay("silverQuantity", getScienceQuantity());
-            updateSummary();
-        });
+export function increaseResourceStorage(setResourceStorage, getResourceStorage, elementId, getResourceObject, resource) {
+    const increaseFactor = getIncreaseStorageFactor();
+
+    if (getResourceObject) {
+        const getResourceObjectFn = functionRegistry[getResourceObject];
+        const resourceObject = getResourceObjectFn(resource);
+        const resourceAmountToDeduct = resourceObject.price;
+        const resourceToDeductName = resourceObject.resource;
+        const resourceToDeductSetFn = resourceObject.deduct;
+        const resourceToDeductGetFn = resourceObject.checkQuantity;
+
+        //set resource to deduct
+        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
     }
+
+    deferredActions.push(() => {
+        setResourceStorage(getResourceStorage() * increaseFactor);
+        getElements()[elementId].classList.remove('green-text');
+    });
 }
+
+// export function startAutoIncrementer(resourceKey) {
+//     if (resourceKey === "sand") {
+//         setSandRate(getIncrement("sandTimer"));
+//         timerManager.addTimer("sandTimer", 1000, () => {
+//             const currentSand = getSandQuantity();
+//             setSandQuantity(currentSand + getIncrement("sandTimer"));
+//             updateDisplay("sandQuantity", getSandQuantity());
+//             updateSummary();
+//         });
+//     } else if (resourceKey === "silver") {
+//         setResearchRate(getIncrement("silverTimer"));
+//         timerManager.addTimer("silverTimer", 1000, () => {
+//             const currentSilver = getResearchQuantity();
+//             setResearchQuantity(currentSilver + getIncrement("silverTimer"));
+//             updateDisplay("silverQuantity", getResearchQuantity());
+//             updateSummary();
+//         });
+//     }
+// }
 
 function calculateRate(resourceKey) {
     const timer = timerManager.getTimer(resourceKey);
@@ -235,14 +404,14 @@ function updateRate(resourceKey, reachedFastestInterval) {
     if (resourceKey === "sandTimer") {
         setSandRate(rate);
     } else if (resourceKey === "silverTimer") {
-        setScienceRate(rate);
+        setResearchRate(rate);
     }
     updateSummary();
 }
 
 function updateSummary() {
     document.getElementById("sandPerSec").textContent = `Sand: ${getSandRate()}/s`;
-    document.getElementById("silverPerSec").textContent = `Silver: ${getScienceRate()}/s`;
+    document.getElementById("silverPerSec").textContent = `Silver: ${getResearchRate()}/s`;
 }
 
 //===============================================================================================================
@@ -312,9 +481,14 @@ function monitorResourceCostChecks(element) {
         if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
             const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);
             const checkQuantity = functionGetResourceQuantity();
+            let price = resourceObjectSection.price;
+
+            if (typeof price === 'function') {
+                price = price();
+            }
             
             // Perform the check and update the element's class
-            if (element.dataset.conditionCheck === 'upgradeCheck' && checkQuantity >= resourceObjectSection.price) { 
+            if (element.dataset.conditionCheck === 'upgradeCheck' && checkQuantity >= price) { 
                 element.classList.remove('red-text');
             } else {
                 element.classList.add('red-text');
@@ -323,13 +497,4 @@ function monitorResourceCostChecks(element) {
             console.error(`Function ${functionName} is not defined or not callable.`);
         }
     }
-}
-
-
-export function increaseResourceStorage(setResourceStorage, getResourceStorage, getResourceQuantity, setResourceQuantity, elementId) {
-    const increaseFactor = getIncreaseStorageFactor();
-    setResourceStorage(getResourceStorage() * increaseFactor);
-    setResourceQuantity(0);
-    updateDisplay(elementId, getResourceQuantity(), getResourceStorage());
-    getElements()[elementId].classList.remove('green-text');
 }

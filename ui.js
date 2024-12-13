@@ -1,9 +1,15 @@
 import {
+    getResourcesToDeduct,
+    setResourcesToDeduct,
+    getScienceKitQuantity,
+    setScienceKitQuantity,
+    getScienceClubQuantity,
+    setScienceClubQuantity,
     getCurrentOptionPane,
     setCurrentOptionPane,
     getUpgradeSand,
-    getUpgradeScience,
-    setUpgradeScience,
+    getUpgradeResearch,
+    setUpgradeResearch,
     getSandStorage,
     setSandStorage,
     getNotationType,
@@ -14,8 +20,8 @@ import {
     getCurrentTab,
     getSandQuantity,
     setSandQuantity,
-    getScienceQuantity,
-    setScienceQuantity,
+    getResearchQuantity,
+    setResearchQuantity,
     getLanguage,
     setElements,
     getElements,
@@ -31,10 +37,6 @@ import {
 import {
     increaseResourceStorage,
     manualIncrementer,
-    startAutoIncrementer,
-    doubleRate,
-    toggleTimer,
-    resetCounter,
     setGameState,
     startGame
 } from './game.js';
@@ -186,8 +188,8 @@ function drawTab1Content(heading, optionContentElement) {
         const sandRow = createOptionRow(
             'Gain 1 Sand:',
             createButton('Gain', ['option-button'], () => {
-                manualIncrementer(getSandQuantity, setSandQuantity, getSandStorage, 1, "sandQuantity")
-            }, null, null, null, null),
+                manualIncrementer(getSandQuantity, setSandQuantity, getSandStorage, 1, 'sandQuantity', null, null)
+            }, null, null, null, null, false), //set false to true out of development to stop fast gains by holding enter
             false,
             null,
             null,
@@ -196,14 +198,19 @@ function drawTab1Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(sandRow);
+        let price = getUpgradeSand('storage').price;
+
+        if (typeof price === 'function') {
+            price = price();
+        }
 
         const containerSizeRow = createOptionRow(
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
-                increaseResourceStorage(setSandStorage, getSandStorage, getSandQuantity, setSandQuantity, "sandQuantity");
-            }, 'upgradeCheck', 'getUpgradeSand', 'storage', 'getSandQuantity'),
+                increaseResourceStorage(setSandStorage, getSandStorage, 'sandQuantity', 'getUpgradeSand', 'storage');
+            }, 'upgradeCheck', 'getUpgradeSand', 'storage', 'getSandQuantity', true),
             false,
-            `${getUpgradeSand('storage').price + " " + getUpgradeSand('storage').resource}`,
+            `${price + " " + getUpgradeSand('storage').resource}`,
             'getUpgradeSand',
             'upgradeCheck',
             'storage',
@@ -218,28 +225,28 @@ function drawTab2Content(heading, optionContentElement) {
         const scienceKitRow = createOptionRow(
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
-                manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, getScienceKitPrice, 1, "scienceKitQuantity")
-            }, 'upgradeCheck', 'getUpgradeScience', 'scienceKit', 'getScienceQuantity'),
+                manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit')
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getResearchQuantity', false),
             false,
-            `${getUpgradeScience('scienceKit').price + " " + getUpgradeScience('scienceKit').resource}`,
-            'getUpgradeScience',
+            `${getUpgradeResearch('scienceKit').price + ' ' + getUpgradeResearch('scienceKit').resource}`,
+            'getUpgradeResearch',
             'upgradeCheck',
             'scienceKit',
-            'getScienceQuantity'
+            'getResearchQuantity'
         );
         optionContentElement.appendChild(scienceKitRow);
 
         const scienceClubRow = createOptionRow(
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
-                manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, getScienceClubPrice, 1, "scienceClubQuantity")
-            }, 'upgradeCheck', 'getUpgradeScience', 'scienceClub', 'getScienceQuantity'),
+                manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub')
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getResearchQuantity', false),
             false,
-            `${getUpgradeScience('scienceClub').price + " " + getUpgradeScience('scienceClub').resource}`,
-            'getUpgradeScience',
+            `${getUpgradeResearch('scienceClub').price + ' ' + getUpgradeResearch('scienceClub').resource}`,
+            'getUpgradeResearch',
             'upgradeCheck',
             'scienceClub',
-            'getScienceQuantity'
+            'getResearchQuantity'
         );
         optionContentElement.appendChild(scienceClubRow);
     }
@@ -320,7 +327,7 @@ function drawTab8Content(heading, optionContentElement) {
 
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
-            createButton('Send Notification', ['btn-secondary'], sendTestNotification, ''),
+            createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, false),
             true,
             'Send test notification',
             null,
@@ -356,6 +363,7 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
+    description.id = generateElementId(labelText);
     description.innerText = descriptionText;
 
     if (dataConditionCheck) {
@@ -373,6 +381,18 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
 
     return row;
 }
+
+function generateElementId(labelText) {
+    let id = labelText.replace(/:$/, '');
+    id = id.replace(/(^\w|[A-Z]|\s+)(\w*)/g, (match, p1, p2, index) => {
+        return index === 0 ? p1.toLowerCase() + p2 : p1.toUpperCase() + p2;
+    });
+
+    id += 'Description';
+    id = id.replace(/\s+/g, '');
+    return id;
+}
+
 
 function createDropdown(id, options, selectedValue, onChange) {
     const selectContainer = document.createElement('div');
@@ -420,7 +440,7 @@ function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument, quantityArgument) {
+function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument, quantityArgument, disableKeyboardForButton) {
     const button = document.createElement('button');
     button.innerText = text;
     
@@ -438,6 +458,16 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
     }
 
     button.addEventListener('click', onClick);
+
+    if (disableKeyboardForButton) {
+        button.setAttribute('tabindex', '-1');
+        button.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+            }
+        });
+    }
+
     return button;
 }
 
