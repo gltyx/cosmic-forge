@@ -1,20 +1,22 @@
 import {
+    setSalePreview,
+    getFunctionRegistryResourceQuantity,
     getResourcesToIncreasePrice,
     setResourcesToIncreasePrice,
     getResourcesToDeduct,
     setResourcesToDeduct,
-    functionRegistry,
+    functionRegistryUpgrade,
     getCurrentOptionPane,
     setCurrentOptionPane,
     getIncreaseStorageFactor,
-    setSandStorage,
-    getSandStorage,
-    setSandRate,
+    setHydrogenStorage,
+    getHydrogenStorage,
+    setHydrogenRate,
     setResearchRate,
-    getSandRate,
+    getHydrogenRate,
     getResearchRate,
-    getSandQuantity,
-    setSandQuantity,
+    getHydrogenQuantity,
+    setHydrogenQuantity,
     getResearchQuantity,
     setResearchQuantity,
     getIncrement,
@@ -32,8 +34,8 @@ import {
     getScienceClubQuantity,
     getUpgradeResearch,
     setUpgradeResearch,
-    getUpgradeSand,
-    setUpgradeSand
+    getUpgradeHydrogen,
+    setUpgradeHydrogen
 } from './constantsAndGlobalVars.js';
 
 //--------------------------------------------------------------------------------------------------------
@@ -75,12 +77,35 @@ export async function gameLoop() {
             checkAndIncreasePrices();
         }
 
+        updateAllSalePricePreviews();
+
         while (deferredActions.length > 0) { //mainly for increasing storage at the moment
             const runDeferredJobs = deferredActions.shift();
             runDeferredJobs();
         }
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function updateAllSalePricePreviews() {
+    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
+    const currentScreen = getCurrentOptionPane();
+
+    for (const resource in functionRegistryResourceQuantity) {
+        if (functionRegistryResourceQuantity.hasOwnProperty(resource) && resource === currentScreen) {
+            const dropDownElementId = currentScreen + "SellSelectQuantity";
+            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value);
+
+            const resourceFunctions = functionRegistryResourceQuantity[resource];
+
+            const salePreviewString = resourceFunctions.getSalePreview();
+            const salePreviewElement = document.getElementById(resourceFunctions.salePreviewElement);
+
+            if (salePreviewElement) {
+                salePreviewElement.textContent = salePreviewString;
+            }
+        }
     }
 }
 
@@ -102,9 +127,9 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
         let newPrice;
 
         switch (setPriceTarget) {
-            case 'sandAutoGainPrice':
+            case 'hydrogenAutoGainPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeSand('autobuyer', 'price', newPrice);
+                setUpgradeHydrogen('autobuyer', 'price', newPrice);
                 break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
@@ -145,13 +170,13 @@ function checkAndDeductResources() {
 }
 
 function getAllQuantities() {
-    const sandQuantity = getSandQuantity();
+    const hydrogenQuantity = getHydrogenQuantity();
     const researchQuantity = getResearchQuantity();
     const scienceKitQuantity = getScienceKitQuantity();
     const scienceClubQuantity = getScienceClubQuantity();
 
     const allQuantities = {
-        sand: sandQuantity,
+        hydrogen: hydrogenQuantity,
         research: researchQuantity,
         scienceKit: scienceKitQuantity,
         scienceClub: scienceClubQuantity,
@@ -161,13 +186,13 @@ function getAllQuantities() {
 }
 
 function getAllStorages() {
-    const sandStorage = getSandStorage();
+    const hydrogenStorage = getHydrogenStorage();
     const researchStorage = null;
     const scienceKitStorage = null;
     const scienceClubStorage = null;
 
     const allStorages = {
-        sand: sandStorage,
+        hydrogen: hydrogenStorage,
         research: researchStorage,
         scienceKit: scienceKitStorage,
         scienceClub: scienceClubStorage,
@@ -177,13 +202,13 @@ function getAllStorages() {
 }
 
 function getAllResourceElements() {
-    const sandElement = getElements().sandQuantity;
+    const hydrogenElement = getElements().hydrogenQuantity;
     const researchElement = getElements().researchQuantity;
     const scienceKitElement = document.getElementById('scienceKitQuantity');
     const scienceClubElement = document.getElementById('scienceClubQuantity');
 
     const allResourceElements = {
-        sand: sandElement,
+        hydrogen: hydrogenElement,
         research: researchElement,
         scienceKit: scienceKitElement,
         scienceClub: scienceClubElement,
@@ -193,8 +218,8 @@ function getAllResourceElements() {
 }
 
 function getAllResourceDescriptionElements() {
-    const sandIncreaseStorageDescElement = document.getElementById('increaseContainerSizeDescription');
-    const sandStoragePrice = getSandStorage();
+    const hydrogenIncreaseStorageDescElement = document.getElementById('increaseContainerSizeDescription');
+    const hydrogenStoragePrice = getHydrogenStorage();
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getUpgradeResearch('scienceKit').price;
@@ -203,9 +228,9 @@ function getAllResourceDescriptionElements() {
     const scienceClubBuyPrice = getUpgradeResearch('scienceClub').price;
 
     const allResourceDescElements = {
-        sandIncreaseStorage: {element: sandIncreaseStorageDescElement, price: sandStoragePrice, string: ' Sand'},
-        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Sand'},
-        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Sand'}
+        hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
+        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Hydrogen'},
+        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Hydrogen'}
     };
 
     return allResourceDescElements;
@@ -355,9 +380,9 @@ export function doubleRate(key) {
 }
 
 // export function resetCounter(key) {
-//     if (key === "sandTimer") {
-//         setSandQuantity(0);
-//         updateDisplay("sandQuantity", getSandQuantity());
+//     if (key === "hydrogenTimer") {
+//         setHydrogenQuantity(0);
+//         updateDisplay("hydrogenQuantity", getHydrogenQuantity());
 //     } else if (key === "silverTimer") {
 //         setResearchQuantity(0);
 //         updateDisplay("silverQuantity", getResearchQuantity());
@@ -367,7 +392,7 @@ export function doubleRate(key) {
 export function manualIncrementer(getResourceQuantity, setResourceQuantity, getResourceStorage, incrementAmount, elementId, getResourceObject, resource) {
     let currentResource = getResourceQuantity();
 
-    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like sand
+    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
         getElements()[elementId].classList.remove('green-text');
         setResourceQuantity(currentResource + incrementAmount);
     } else if (!getResourceStorage || getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
@@ -375,7 +400,7 @@ export function manualIncrementer(getResourceQuantity, setResourceQuantity, getR
     }
     
     if (getResourceObject) {
-        const getResourceObjectFn = functionRegistry[getResourceObject];
+        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
         const resourceObject = getResourceObjectFn(resource);
         const resourceAmountToDeductOrPrice = resourceObject.price;
         const resourceToDeductName = resourceObject.resource;
@@ -393,7 +418,7 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
     const increaseFactor = getIncreaseStorageFactor();
 
     if (getResourceObject) {
-        const getResourceObjectFn = functionRegistry[getResourceObject];
+        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
         const resourceObject = getResourceObjectFn(resource);
         const resourceAmountToDeduct = resourceObject.price;
         const resourceToDeductName = resourceObject.resource;
@@ -411,12 +436,12 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
 }
 
 // export function startAutoIncrementer(resourceKey) {
-//     if (resourceKey === "sand") {
-//         setSandRate(getIncrement("sandTimer"));
-//         timerManager.addTimer("sandTimer", 1000, () => {
-//             const currentSand = getSandQuantity();
-//             setSandQuantity(currentSand + getIncrement("sandTimer"));
-//             updateDisplay("sandQuantity", getSandQuantity());
+//     if (resourceKey === "hydrogen") {
+//         setHydrogenRate(getIncrement("hydrogenTimer"));
+//         timerManager.addTimer("hydrogenTimer", 1000, () => {
+//             const currentHydrogen = getHydrogenQuantity();
+//             setHydrogenQuantity(currentHydrogen + getIncrement("hydrogenTimer"));
+//             updateDisplay("hydrogenQuantity", getHydrogenQuantity());
 //             updateSummary();
 //         });
 //     } else if (resourceKey === "silver") {
@@ -449,8 +474,8 @@ function calculateRate(resourceKey) {
 function updateRate(resourceKey, reachedFastestInterval) {
     let rate;
     reachedFastestInterval ? rate = calculateRate(resourceKey) * 64 : rate = calculateRate(resourceKey);
-    if (resourceKey === "sandTimer") {
-        setSandRate(rate);
+    if (resourceKey === "hydrogenTimer") {
+        setHydrogenRate(rate);
     } else if (resourceKey === "silverTimer") {
         setResearchRate(rate);
     }
@@ -458,7 +483,7 @@ function updateRate(resourceKey, reachedFastestInterval) {
 }
 
 function updateSummary() {
-    document.getElementById("sandPerSec").textContent = `Sand: ${getSandRate()}/s`;
+    document.getElementById("hydrogenPerSec").textContent = `Hydrogen: ${getHydrogenRate()}/s`;
     document.getElementById("silverPerSec").textContent = `Silver: ${getResearchRate()}/s`;
 }
 
@@ -472,6 +497,8 @@ export function setGameState(newState) {
         case getMenuState():
             getElements().menu.classList.remove('d-none');
             getElements().menu.classList.add('d-flex');
+            getElements().statsContainer.classList.remove('d-flex');
+            getElements().statsContainer.classList.add('d-none');
             getElements().tabsContainer.classList.remove('d-flex');
             getElements().tabsContainer.classList.add('d-none');
             getElements().mainContainer.classList.remove('d-flex');
@@ -480,6 +507,8 @@ export function setGameState(newState) {
         case getGameVisibleActive():
             getElements().menu.classList.remove('d-flex');
             getElements().menu.classList.add('d-none');
+            getElements().statsContainer.classList.remove('d-none');
+            getElements().statsContainer.classList.add('d-flex');
             getElements().tabsContainer.classList.remove('d-none');
             getElements().tabsContainer.classList.add('d-flex');
             getElements().mainContainer.classList.remove('d-none');
@@ -521,10 +550,10 @@ function manageTabSpecificUi() {
 function monitorResourceCostChecks(element) {
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         const functionName = element.dataset.resourcePriceObject;
-        const functionObjectRetrieval = functionRegistry[functionName];
+        const functionObjectRetrieval = functionRegistryUpgrade[functionName];
         const resourceObjectSectionKey = element.dataset.argumentToPass;
         const checkQuantityString = element.dataset.argumentCheckQuantity;
-        const functionGetResourceQuantity = functionRegistry[checkQuantityString];
+        const functionGetResourceQuantity = functionRegistryUpgrade[checkQuantityString];
         
         if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
             const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);

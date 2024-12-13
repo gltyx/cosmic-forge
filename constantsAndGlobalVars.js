@@ -15,43 +15,46 @@ export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 
-//GLOBAL VARIABLES
-const increments = {
-    sandTimer: 1,
-    silverTimer: 1
-};
+//ELEMENT VALUES
+export const VALUE_HYDROGEN = 0.005;
 
+//GLOBAL VARIABLES
+let increaseStorageFactor = 2;
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
 
-let increaseStorageFactor = 2;
+let hydrogenSalePreview = 0;
 
-let sandQuantity = 0;
-let sandRate = 0;
-let sandStorage = 100;
+const increments = {
+    hydrogenTimer: 1
+};
 
-let researchQuantity = 1040;
+let hydrogenQuantity = 0;
+let hydrogenRate = 0;
+let hydrogenStorage = 100;
+
+let researchQuantity = 10;
 let researchRate = 0;
 
 let scienceKitQuantity = 0;
 let scienceClubQuantity = 0;
 
-let upgradeSand = {
+let upgradeHydrogen = {
     storage: {
         requirementQty: 1,
-        price: getSandStorage,
-        resource: 'sand',
-        checkQuantity: getSandQuantity,
-        deduct: setSandQuantity,
+        price: getHydrogenStorage,
+        resource: 'hydrogen',
+        checkQuantity: getHydrogenQuantity,
+        deduct: setHydrogenQuantity,
         setPrice: null
     },
     autobuyer: {
         requirementQty: 1,
         price: 100,
-        resource: 'sand',
-        checkQuantity: getSandQuantity,
-        deduct: setSandQuantity,
-        setPrice: 'sandAutoGainPrice'
+        resource: 'hydrogen',
+        checkQuantity: getHydrogenQuantity,
+        deduct: setHydrogenQuantity,
+        setPrice: 'hydrogenAutoGainPrice'
     },
 };
 
@@ -59,17 +62,17 @@ let upgradeResearch = {
     scienceKit: {
         requirementQty: 1, 
         price: 50, 
-        resource: 'sand', 
-        checkQuantity: getSandQuantity,
-        deduct: setSandQuantity,
+        resource: 'hydrogen', 
+        checkQuantity: getHydrogenQuantity,
+        deduct: setHydrogenQuantity,
         setPrice: 'scienceKitPrice'
     },
     scienceClub: {
         requirementQty: 1, 
         price: 1000, 
-        resource: 'sand', 
-        checkQuantity: getSandQuantity,
-        deduct: setSandQuantity,
+        resource: 'hydrogen', 
+        checkQuantity: getHydrogenQuantity,
+        deduct: setHydrogenQuantity,
         setPrice: 'scienceClubPrice'
     }
 };
@@ -88,13 +91,19 @@ let notificationsToggle = true;
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
 
-//FUNCTION REGISTRY
-export const functionRegistry = {
-    getUpgradeSand: getUpgradeSand,
+//FUNCTION REGISTRIES
+export const functionRegistryUpgrade = {
+    getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeResearch: getUpgradeResearch,
-    getSandQuantity: getSandQuantity,
+    getHydrogenQuantity: getHydrogenQuantity,
     getResearchQuantity: getResearchQuantity
     // Add more functions here as needed
+};
+
+const functionRegistryResourceQuantity = {
+    hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setHydrogenSalePreview, getSalePreview: getHydrogenSalePreview, salePreviewElement: 'sellHydrogenDescription' },
+    //helium: { getQuantity: getHeliumQuantity, setSalePreview: setHeliumSalePreview },
+    // Add more resources here...
 };
 
 //GETTER SETTER METHODS
@@ -106,11 +115,12 @@ export function setElements() {
         returnToMenuButton: document.getElementById('returnToMenu'),
         canvas: document.getElementById('canvas'),
         testContainer: document.getElementById('testContainer'),
+        statsContainer: document.getElementById('statsContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
         mainContainer: document.getElementById('mainContainer'),
-        sandOption: document.getElementById('sandOption'),
-        sandRate: document.getElementById('sandRate'),
-        sandQuantity: document.getElementById('sandQuantity'),
+        hydrogenOption: document.getElementById('hydrogenOption'),
+        hydrogenRate: document.getElementById('hydrogenRate'),
+        hydrogenQuantity: document.getElementById('hydrogenQuantity'),
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
         // scienceKitQuantity: document.getElementById('scienceKitQuantity'), //IF TRYING TO ADD ELEMENTS HERE FROM DYNAMICALLY GENERATED ELEMENTS IT WONT WORK UNLESS WE CALL SET ELEMENTS AFTER CREATING THEM
@@ -246,20 +256,20 @@ export function getIncrement(timerKey) {
     return increments[timerKey];
 }
 
-export function getSandQuantity() {
-    return sandQuantity;
+export function getHydrogenQuantity() {
+    return hydrogenQuantity;
 }
 
-export function setSandQuantity(value) {
-    sandQuantity = value;
+export function setHydrogenQuantity(value) {
+    hydrogenQuantity = value;
 }
 
-export function getSandStorage() {
-    return sandStorage;
+export function getHydrogenStorage() {
+    return hydrogenStorage;
 }
 
-export function setSandStorage(value) {
-    sandStorage = value;
+export function setHydrogenStorage(value) {
+    hydrogenStorage = value;
 }
 
 export function getResearchQuantity() {
@@ -286,12 +296,12 @@ export function setScienceClubQuantity(value) {
     scienceClubQuantity = value;
 }
 
-export function getSandRate() {
-    return sandRate;
+export function getHydrogenRate() {
+    return hydrogenRate;
 }
 
-export function setSandRate(value) {
-    sandRate = value;
+export function setHydrogenRate(value) {
+    hydrogenRate = value;
 }
 
 export function getResearchRate() {
@@ -334,12 +344,12 @@ export function setIncreaseStorageFactor(value) {
     increaseStorageFactor = value;
 }
 
-export function getUpgradeSand(key) {
-    return upgradeSand[key];
+export function getUpgradeHydrogen(key) {
+    return upgradeHydrogen[key];
 }
 
-export function setUpgradeSand(key, property, value) {
-    upgradeSand[key][property] = value;
+export function setUpgradeHydrogen(key, property, value) {
+    upgradeHydrogen[key][property] = value;
 }
 
 export function setUpgradeResearch(key, property, value) {
@@ -355,7 +365,7 @@ export function getCurrentOptionPane() {
 }
 
 export function setCurrentOptionPane(value) {
-    currentOptionPane = value;
+    currentOptionPane = value.toLowerCase();
 }
 
 export function setResourcesToDeduct(name, setFunctionName, getFunctionName, amount) {
@@ -393,4 +403,73 @@ export function setResourcesToIncreasePrice(name, setPriceTarget, currentPrice) 
 
 export function getResourcesToIncreasePrice() {
     return resourcesToIncreasePrice;
+}
+
+export function setSalePreview(resource, amount) {
+    const resourceFunc = functionRegistryResourceQuantity[resource];
+
+    if (resourceFunc) {
+        let calculatedAmount;
+
+        switch (amount) {
+            case 'all':
+                calculatedAmount = Math.floor(resourceFunc.getQuantity());
+                break;
+            case 'threeQuarters':
+                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 0.75);
+                break;
+            case 'twoThirds':
+                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 2 / 3);
+                break;
+            case 'half':
+                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 0.5);
+                break;
+            case 'oneThird':
+                calculatedAmount = Math.floor(resourceFunc.getQuantity() / 3);
+                break;
+            case '100000':
+                calculatedAmount = Math.min(100000, resourceFunc.getQuantity());
+                break;
+            case '10000':
+                calculatedAmount = Math.min(10000, resourceFunc.getQuantity());
+                break;
+            case '1000':
+                calculatedAmount = Math.min(1000, resourceFunc.getQuantity());
+                break;
+            case '100':
+                calculatedAmount = Math.min(100, resourceFunc.getQuantity());
+                break;
+            case '10':
+                calculatedAmount = Math.min(10, resourceFunc.getQuantity());
+                break;
+            case '1':
+                calculatedAmount = Math.min(1, resourceFunc.getQuantity());
+                break;
+            default:
+                calculatedAmount = 0;
+                break;
+        }
+
+        resourceFunc.setSalePreview(calculatedAmount);
+    } else {
+        console.warn(`No functions found for resource: ${resource}`);
+    }
+}
+
+export function setHydrogenSalePreview(value) {
+    const quantityInStock = getHydrogenQuantity();
+    if (value <= quantityInStock) {
+        hydrogenSalePreview = (value * VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
+        console.log("sell hydrogen for" + hydrogenSalePreview);
+    } else {
+        hydrogenSalePreview = (quantityInStock * VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+    }
+}
+
+export function getHydrogenSalePreview() {
+    return hydrogenSalePreview;
+}
+
+export function getFunctionRegistryResourceQuantity() {
+    return functionRegistryResourceQuantity;
 }

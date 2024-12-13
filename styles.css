@@ -215,12 +215,11 @@ button.disabled {
     flex: 1;
 }
 
-#sandPerSec, #silverPerSec {
+#hydrogenPerSec, #silverPerSec {
     margin: 0;
 }
 
 /* THEMEABLE CSS */
-
 /* Dark Theme Variables */
 :root {
     --bg-color: black;
@@ -291,6 +290,32 @@ button.disabled {
     --container-bg-color: #98fb98;
 }
 
+/* Theme-specific variations for .stats-container */
+[data-theme="light"] .stats-container {
+    background-color: var(--container-bg-color);
+    border-color: var(--container-border-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="frosty"] .stats-container {
+    background-color: var(--tab-invisible-bg-color);
+    border-color: var(--tab-border-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="summer"] .stats-container {
+    background-color: var(--container-bg-color);
+    border-color: var(--tab-border-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="forest"] .stats-container {
+    background-color: var(--container-bg-color);
+    border-color: var(--tab-border-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+
 /* Global Styles */
 body {
     margin: 0;
@@ -312,11 +337,10 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 0;
-    margin: 0;
+    margin-top: 30px;
     border-bottom: 2px solid var(--tab-border-color);
 }
 
-/* Tab Styles */
 .tab {
     flex: 1;
     text-align: center;
@@ -330,7 +354,6 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Invisible Tab (disabled or hidden) */
 .invisible {
     background-color: var(--tab-invisible-bg-color);
     color: var(--tab-invisible-text-color);
@@ -358,7 +381,7 @@ body {
     width: 100%;
     height: auto;
     border: 1px solid var(--container-border-color);
-    margin-top: 50px;
+    margin-top: 80px;
     background-color: var(--container-bg-color);
 }
 
@@ -703,6 +726,41 @@ body {
     color: lime;
     font-weight: bold;
 }
+
+.stats-container {
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 30px;
+    padding-left: 10px;
+}
+
+.stats-title {
+    font-weight: 700;
+}
+
+.stat-item {
+    width: 100%;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.stat-value {
+    font-size: 0.8rem;
+    color: var(--text-color);
+}
+
+.stat-value,
+.stat-label {
+    color: var(--text-color);
+}
+
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {

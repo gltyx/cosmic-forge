@@ -1,4 +1,6 @@
 import {
+    getHydrogenSalePreview,
+    setSalePreview,
     getResourcesToDeduct,
     setResourcesToDeduct,
     getScienceKitQuantity,
@@ -7,19 +9,19 @@ import {
     setScienceClubQuantity,
     getCurrentOptionPane,
     setCurrentOptionPane,
-    getUpgradeSand,
+    getUpgradeHydrogen,
     getUpgradeResearch,
     setUpgradeResearch,
-    getSandStorage,
-    setSandStorage,
+    getHydrogenStorage,
+    setHydrogenStorage,
     getNotationType,
     setNotationType,
     getNotificationsToggle,
     setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getSandQuantity,
-    setSandQuantity,
+    getHydrogenQuantity,
+    setHydrogenQuantity,
     getResearchQuantity,
     setResearchQuantity,
     getLanguage,
@@ -122,13 +124,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    // document.getElementById("pauseResumesandTimer").addEventListener("click", () => toggleTimer("sandTimer", "pauseResumesandTimer"));
+    // document.getElementById("pauseResumehydrogenTimer").addEventListener("click", () => toggleTimer("hydrogenTimer", "pauseResumehydrogenTimer"));
     // document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    // document.getElementById("doubleRatesandTimer").addEventListener("click", () => doubleRate("sandTimer"));
+    // document.getElementById("doubleRatehydrogenTimer").addEventListener("click", () => doubleRate("hydrogenTimer"));
     // document.getElementById("doubleRatesilverTimer").addEventListener("click", () => doubleRate("silverTimer"));
-    // document.getElementById("resetCountersandTimer").addEventListener("click", () => resetCounter("sandTimer"));
+    // document.getElementById("resetCounterhydrogenTimer").addEventListener("click", () => resetCounter("hydrogenTimer"));
     // document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    // document.getElementById("startAutoIncrementSand").addEventListener("click", () => startAutoIncrementer("sand"));
+    // document.getElementById("startAutoIncrementHydrogen").addEventListener("click", () => startAutoIncrementer("hydrogen"));
     // document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
 
     const tabs = document.querySelectorAll('#tabsContainer .tab');
@@ -184,12 +186,46 @@ function updateContent(heading, tab) {
 } 
 
 function drawTab1Content(heading, optionContentElement) {
-    if (heading === 'Sand') {
-        const sandRow = createOptionRow(
-            'Gain 1 Sand:',
+    if (heading === 'Hydrogen') {
+        const sellHydrogenRow = createOptionRow(
+            'Sell Hydrogen:',
+            createDropdown('hydrogenSellSelectQuantity', [
+                { value: 'all', text: 'All Stock' },
+                { value: 'threeQuarters', text: '75% Stock' },
+                { value: 'twoThirds', text: '67% Stock' },
+                { value: 'half', text: '50% Stock' },
+                { value: 'oneThird', text: '33% Stock' },
+                { value: '100000', text: '100,000' },
+                { value: '10000', text: '10,000' },
+                { value: '1000', text: '1,000' },
+                { value: '100', text: '100' },
+                { value: '10', text: '10' },
+                { value: '1', text: '1' },
+            ], 'all', (value) => {
+                setSalePreview('hydrogen', value);
+            }),
+            null,
+            null,
+            null,
+            null,
+            false,
+            `${getHydrogenSalePreview()}`,
+            null,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(sellHydrogenRow);
+
+        const hydrogenRow = createOptionRow(
+            'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
-                manualIncrementer(getSandQuantity, setSandQuantity, getSandStorage, 1, 'sandQuantity', null, null)
+                manualIncrementer(getHydrogenQuantity, setHydrogenQuantity, getHydrogenStorage, 1, 'hydrogenQuantity', null, null)
             }, null, null, null, null, false), //set false to true out of development to stop fast gains by holding enter
+            null,
+            null,
+            null,
+            null,
             false,
             null,
             null,
@@ -197,8 +233,8 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null
         );
-        optionContentElement.appendChild(sandRow);
-        let price = getUpgradeSand('storage').price;
+        optionContentElement.appendChild(hydrogenRow);
+        let price = getUpgradeHydrogen('storage').price;
 
         if (typeof price === 'function') {
             price = price();
@@ -207,14 +243,18 @@ function drawTab1Content(heading, optionContentElement) {
         const containerSizeRow = createOptionRow(
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
-                increaseResourceStorage(setSandStorage, getSandStorage, 'sandQuantity', 'getUpgradeSand', 'storage');
-            }, 'upgradeCheck', 'getUpgradeSand', 'storage', 'getSandQuantity', true),
+                increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
+            }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', 'getHydrogenQuantity', true),
+            null,
+            null,
+            null,
+            null,
             false,
-            `${price + " " + getUpgradeSand('storage').resource}`,
-            'getUpgradeSand',
+            `${price + " " + getUpgradeHydrogen('storage').resource}`,
+            'getUpgradeHydrogen',
             'upgradeCheck',
             'storage',
-            'getSandQuantity'
+            'getHydrogenQuantity'
         );
         optionContentElement.appendChild(containerSizeRow);
     }
@@ -226,13 +266,17 @@ function drawTab2Content(heading, optionContentElement) {
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit')
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getSandQuantity', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getHydrogenQuantity', false),
+            null,
+            null,
+            null,
+            null,
             false,
             `${getUpgradeResearch('scienceKit').price + ' ' + getUpgradeResearch('scienceKit').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceKit',
-            'getSandQuantity'
+            'getHydrogenQuantity'
         );
         optionContentElement.appendChild(scienceKitRow);
 
@@ -240,13 +284,17 @@ function drawTab2Content(heading, optionContentElement) {
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
                 manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub')
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getSandQuantity', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getHydrogenQuantity', false),
+            null,
+            null,
+            null,
+            null,
             false,
             `${getUpgradeResearch('scienceClub').price + ' ' + getUpgradeResearch('scienceClub').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceClub',
-            'getSandQuantity'
+            'getHydrogenQuantity'
         );
         optionContentElement.appendChild(scienceClubRow);
     }
@@ -285,6 +333,10 @@ function drawTab8Content(heading, optionContentElement) {
             ], document.body.getAttribute('data-theme') || 'dark', (value) => {
                 selectTheme(value);
             }),
+            null,
+            null,
+            null,
+            null,
             false,
             'Change styling of the page.',
             null,
@@ -302,6 +354,10 @@ function drawTab8Content(heading, optionContentElement) {
             ], 'normal', (value) => {
                 setNotationType(value);
             }),
+            null,
+            null,
+            null,
+            null,
             false,
             'Change the notation used.',
             null,
@@ -316,6 +372,10 @@ function drawTab8Content(heading, optionContentElement) {
             createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                 setNotificationsToggle(isEnabled);
             }),
+            null,
+            null,
+            null,
+            null,
             false,
             'Toggle notifications',
             null,
@@ -328,6 +388,10 @@ function drawTab8Content(heading, optionContentElement) {
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
             createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, false),
+            null,
+            null,
+            null,
+            null,
             true,
             'Send test notification',
             null,
@@ -339,7 +403,7 @@ function drawTab8Content(heading, optionContentElement) {
     }
 }
 
-function createOptionRow(labelText, inputElement, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument, quantityArgument) {
+function createOptionRow(labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument, quantityArgument) {
     const row = document.createElement('div');
 
     if (hidden) {
@@ -357,7 +421,23 @@ function createOptionRow(labelText, inputElement, hidden, descriptionText, resou
 
     const inputContainer = document.createElement('div');
     inputContainer.classList.add('input-container');
-    inputContainer.appendChild(inputElement);
+
+    if (inputElement1) {
+        inputContainer.appendChild(inputElement1);
+    }
+    if (inputElement2) {
+        inputContainer.appendChild(inputElement2);
+    }
+    if (inputElement3) {
+        inputContainer.appendChild(inputElement3);
+    }
+    if (inputElement4) {
+        inputContainer.appendChild(inputElement4);
+    }
+    if (inputElement5) {
+        inputContainer.appendChild(inputElement5);
+    }
+
     row.appendChild(inputContainer);
 
     const descriptionContainer = document.createElement('div');
