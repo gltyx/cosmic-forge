@@ -84,23 +84,26 @@ let upgradeHydrogen = {
 };
 
 let upgradeResearch = {
-    scienceKit: {
-        requirementQty: 1, 
-        price: 5,
-        rate: 0.003,
-        resource: 'cash', 
-        checkQuantity: getCash,
-        deduct: setCash,
-        setPrice: 'scienceKitPrice'
-    },
-    scienceClub: {
-        requirementQty: 1, 
-        price: 100,
-        rate: 0.06,
-        resource: 'cash', 
-        checkQuantity: getCash,
-        deduct: setCash,
-        setPrice: 'scienceClubPrice'
+    techs: {},
+    research: {
+        scienceKit: {
+            requirementQty: 1, 
+            price: 5,
+            rate: 0.003,
+            resource: 'cash', 
+            checkQuantity: getCash,
+            deduct: setCash,
+            setPrice: 'scienceKitPrice'
+        },
+        scienceClub: {
+            requirementQty: 1, 
+            price: 100,
+            rate: 0.06,
+            resource: 'cash', 
+            checkQuantity: getCash,
+            deduct: setCash,
+            setPrice: 'scienceClubPrice'
+        }
     }
 };
 
@@ -398,12 +401,12 @@ export function setUpgradeHydrogen(key, tier, property, value) {
     upgradeHydrogen[key][tier][property] = value;
 }
 
-export function setUpgradeResearch(key, property, value) {
-    upgradeResearch[key][property] = value;
+export function setUpgradeResearch(key1, key2, property, value) {
+    upgradeResearch[key1][key2][property] = value;
 }
 
-export function getUpgradeResearch(key) {
-    return upgradeResearch[key];
+export function getUpgradeResearch(key1, key2) {
+    return upgradeResearch[key1][key2];
 }
 
 export function getCurrentOptionPane() {

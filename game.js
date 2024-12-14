@@ -213,11 +213,11 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
                 break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeResearch('scienceKit', 'price', newPrice);
+                setUpgradeResearch('research', 'scienceKit', 'price', newPrice);
                 break;
             case 'scienceClubPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeResearch('scienceClub', 'price', newPrice);
+                setUpgradeResearch('research', 'scienceClub', 'price', newPrice);
                 break;
         }
     }
@@ -305,10 +305,10 @@ function getAllResourceDescriptionElements() {
     const hydrogenAutoBuyerTier1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
-    const scienceKitBuyPrice = getUpgradeResearch('scienceKit').price;
+    const scienceKitBuyPrice = getUpgradeResearch('research', 'scienceKit').price;
 
     const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
-    const scienceClubBuyPrice = getUpgradeResearch('scienceClub').price;
+    const scienceClubBuyPrice = getUpgradeResearch('research', 'scienceClub').price;
 
     const allResourceDescElements = {
         hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
@@ -319,7 +319,6 @@ function getAllResourceDescriptionElements() {
 
     return allResourceDescElements;
 }
-
 
 function updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescriptionElements) {
     for (const resource in allQuantities) {
@@ -375,7 +374,8 @@ function monitorResourceCostChecks(element) {
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         const functionName = element.dataset.resourcePriceObject;
         const functionObjectRetrieval = functionRegistryUpgrade[functionName];
-        const resourceObjectSectionKey = element.dataset.argumentToPass;
+        const resourceObjectSectionKey1 = element.dataset.argumentToPass1;
+        const resourceObjectSectionKey2 = element.dataset.argumentToPass2;
         const checkQuantityString = element.dataset.argumentCheckQuantity;
         const functionGetResourceQuantity = functionRegistryUpgrade[checkQuantityString];
 
@@ -393,7 +393,7 @@ function monitorResourceCostChecks(element) {
         }
         
         if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
-            const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);
+            const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey1, resourceObjectSectionKey2);
             const checkQuantity = functionGetResourceQuantity();
 
             let price;
@@ -465,8 +465,13 @@ export function gain(getFunction, setFunction, getResourceStorage, incrementAmou
         let resourceSetNewPrice;
 
         const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
-        const resourceObject = getResourceObjectFn(resource);
-
+        let resourceObject;
+        if (getResourceObjectFn === getUpgradeResearch) {
+            resourceObject = getResourceObjectFn('research', resource);
+        } else {
+            resourceObject = getResourceObjectFn(resource);
+        }
+        
         if (autoBuyerPurchase) {
             resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
             resourceSetNewPrice = resourceObject[tierAB].setPrice;
@@ -519,7 +524,7 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
             });
         }
     } else if (timerName === 'scienceKit') {
-        const rateScienceKit = getUpgradeResearch('scienceKit').rate;
+        const rateScienceKit = getUpgradeResearch('research', 'scienceKit').rate;
         setResearchRate(getResearchRate() + rateScienceKit);
         getElements().researchRate.textContent = `${(getResearchRate() * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('research')) {
@@ -529,7 +534,7 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
             });
         }
     } else if (timerName === 'scienceClub') {
-        const rateScienceClub = getUpgradeResearch('scienceClub').rate;
+        const rateScienceClub = getUpgradeResearch('research', 'scienceClub').rate;
         setResearchRate(getResearchRate() + rateScienceClub);
         getElements().researchRate.textContent = `${(getResearchRate() * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('research')) {
