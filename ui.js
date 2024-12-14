@@ -171,59 +171,27 @@ function updateContent(heading, tab) {
         
     switch (tab) {
         case 'tab1':
-            if (getLastScreenOpenRegister('tab1')) {
-                heading = getLastScreenOpenRegister('tab1');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab1Content(heading, optionContentElement);
             break;
         case 'tab2':
-            if (getLastScreenOpenRegister('tab2')) {
-                heading = getLastScreenOpenRegister('tab2');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab2Content(heading, optionContentElement);
             break;
         case 'tab3':
-            if (getLastScreenOpenRegister('tab3')) {
-                heading = getLastScreenOpenRegister('tab3');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab3Content(heading, optionContentElement);
             break;
         case 'tab4':
-            if (getLastScreenOpenRegister('tab4')) {
-                heading = getLastScreenOpenRegister('tab4');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab4Content(heading, optionContentElement);
             break;
         case 'tab5':
-            if (getLastScreenOpenRegister('tab5')) {
-                heading = getLastScreenOpenRegister('tab5');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab5Content(heading, optionContentElement);
             break;
         case 'tab6':
-            if (getLastScreenOpenRegister('tab6')) {
-                heading = getLastScreenOpenRegister('tab6');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab6Content(heading, optionContentElement);
             break;
         case 'tab7':
-            if (getLastScreenOpenRegister('tab7')) {
-                heading = getLastScreenOpenRegister('tab7');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab7Content(heading, optionContentElement);
             break;
         case 'tab8':
-            if (getLastScreenOpenRegister('tab8')) {
-                heading = getLastScreenOpenRegister('tab8');
-                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
-            }
             drawTab8Content(heading, optionContentElement);
             break;
         default:
