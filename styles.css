@@ -540,7 +540,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin: 10px 0;
+    margin: 10px 0 10px 30px;
 }
 
 /* Style when dropdown is focused */
@@ -714,6 +714,10 @@ body {
 [class*="option7"],
 [class*="option8"] {
     cursor: pointer; /* Changes the cursor to a pointer for these elements */
+}
+
+.sell {
+    margin-left: 30px;
 }
 
 .red-text {

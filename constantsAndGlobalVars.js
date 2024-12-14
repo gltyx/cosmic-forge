@@ -19,9 +19,22 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const VALUE_HYDROGEN = 0.005;
 
 //GLOBAL VARIABLES
+let currencySymbol = '$';
 let increaseStorageFactor = 2;
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
+let cash = 0;
+
+let lastScreenOpenRegister = {
+    tab1: null,
+    tab2: null,
+    tab3: null,
+    tab4: null,
+    tab5: null,
+    tab6: null,
+    tab7: null,
+    tab8: null,
+};
 
 let hydrogenSalePreview = 0;
 
@@ -123,6 +136,8 @@ export function setElements() {
         hydrogenQuantity: document.getElementById('hydrogenQuantity'),
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
+        cashStat: document.getElementById('cashStat'),
+        
         // scienceKitQuantity: document.getElementById('scienceKitQuantity'), //IF TRYING TO ADD ELEMENTS HERE FROM DYNAMICALLY GENERATED ELEMENTS IT WONT WORK UNLESS WE CALL SET ELEMENTS AFTER CREATING THEM
     };
 }
@@ -254,6 +269,22 @@ export function setIncrement(timerKey, value) {
 
 export function getIncrement(timerKey) {
     return increments[timerKey];
+}
+
+export function getCash() {
+    return cash;
+}
+
+export function setCash(value) {
+    cash = value;
+}
+
+export function getCurrencySymbol() {
+    return currencySymbol;
+}
+
+export function setCurrencySymbol(value) {
+    currencySymbol = value;
 }
 
 export function getHydrogenQuantity() {
@@ -459,10 +490,9 @@ export function setSalePreview(resource, amount) {
 export function setHydrogenSalePreview(value) {
     const quantityInStock = getHydrogenQuantity();
     if (value <= quantityInStock) {
-        hydrogenSalePreview = (value * VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
-        console.log("sell hydrogen for" + hydrogenSalePreview);
+        hydrogenSalePreview = `${getCurrencySymbol()}` + (value * VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
     } else {
-        hydrogenSalePreview = (quantityInStock * VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+        hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
     }
 }
 
@@ -472,4 +502,12 @@ export function getHydrogenSalePreview() {
 
 export function getFunctionRegistryResourceQuantity() {
     return functionRegistryResourceQuantity;
+}
+
+export function getLastScreenOpenRegister(key) {
+    return lastScreenOpenRegister[key];
+}
+
+export function setLastScreenOpenRegister(key, value) {
+    lastScreenOpenRegister[key] = value;
 }

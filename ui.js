@@ -1,4 +1,6 @@
 import {
+    getLastScreenOpenRegister,
+    setLastScreenOpenRegister,
     getHydrogenSalePreview,
     setSalePreview,
     getResourcesToDeduct,
@@ -34,9 +36,11 @@ import {
     getMenuState,
     getLanguageSelected,
     setLanguageSelected,
-    setLanguage
+    setLanguage,
+    setCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
+    sellResource,
     increaseResourceStorage,
     manualIncrementer,
     setGameState,
@@ -67,9 +71,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     notificationContainer.className = 'notification-container';
     document.body.appendChild(notificationContainer);
 
-
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'hydrogen');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
         });
@@ -77,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'option2');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
         });
@@ -84,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'research');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab2');
         });
@@ -91,6 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'tech tree');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab2');
         });
@@ -98,6 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'visual');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
@@ -105,6 +113,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'option2');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
@@ -112,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'option3');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent,'tab8');
         });
@@ -119,6 +129,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'option4');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8');
         });
@@ -139,6 +150,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentTab(index + 1);
             highlightActiveTab(index);
             setGameState(getGameVisibleActive());
+            const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab());
+            if (lastOpenOptionPane) {
+                setCurrentOptionPane(lastOpenOptionPane);
+            }
         });
     });   
 });
@@ -153,37 +168,69 @@ function updateContent(heading, tab) {
 
     headerContentElement.innerText = heading;
     optionContentElement.innerHTML = '';
-
+        
     switch (tab) {
         case 'tab1':
+            if (getLastScreenOpenRegister('tab1')) {
+                heading = getLastScreenOpenRegister('tab1');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab1Content(heading, optionContentElement);
             break;
         case 'tab2':
+            if (getLastScreenOpenRegister('tab2')) {
+                heading = getLastScreenOpenRegister('tab2');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab2Content(heading, optionContentElement);
             break;
         case 'tab3':
+            if (getLastScreenOpenRegister('tab3')) {
+                heading = getLastScreenOpenRegister('tab3');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab3Content(heading, optionContentElement);
             break;
         case 'tab4':
+            if (getLastScreenOpenRegister('tab4')) {
+                heading = getLastScreenOpenRegister('tab4');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab4Content(heading, optionContentElement);
             break;
         case 'tab5':
+            if (getLastScreenOpenRegister('tab5')) {
+                heading = getLastScreenOpenRegister('tab5');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab5Content(heading, optionContentElement);
             break;
         case 'tab6':
+            if (getLastScreenOpenRegister('tab6')) {
+                heading = getLastScreenOpenRegister('tab6');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab6Content(heading, optionContentElement);
             break;
         case 'tab7':
+            if (getLastScreenOpenRegister('tab7')) {
+                heading = getLastScreenOpenRegister('tab7');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab7Content(heading, optionContentElement);
             break;
         case 'tab8':
+            if (getLastScreenOpenRegister('tab8')) {
+                heading = getLastScreenOpenRegister('tab8');
+                heading = heading.charAt(0).toUpperCase() + heading.slice(1);
+            }
             drawTab8Content(heading, optionContentElement);
             break;
         default:
             console.error('Invalid tab:', tab);
             break;
     }   
-} 
+}
 
 function drawTab1Content(heading, optionContentElement) {
     if (heading === 'Hydrogen') {
@@ -204,7 +251,9 @@ function drawTab1Content(heading, optionContentElement) {
             ], 'all', (value) => {
                 setSalePreview('hydrogen', value);
             }),
-            null,
+            createButton('Sell', ['option-button', 'red-text', 'resource-cost-sell-check', 'sell'], () => {
+                sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
+            }, 'sellResource', null, null, 'getHydrogenQuantity', true),
             null,
             null,
             null,
@@ -242,7 +291,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const containerSizeRow = createOptionRow(
             'Increase Container Size:',
-            createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-check'], () => {
+            createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', 'getHydrogenQuantity', true),
             null,
@@ -264,7 +313,7 @@ function drawTab2Content(heading, optionContentElement) {
     if (heading === 'Research') {
         const scienceKitRow = createOptionRow(
             'Science Kit:',
-            createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
+            createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit')
             }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getHydrogenQuantity', false),
             null,
@@ -282,7 +331,7 @@ function drawTab2Content(heading, optionContentElement) {
 
         const scienceClubRow = createOptionRow(
             'Open Science Club:',
-            createButton('Buy', ['option-button', 'red-text', 'resource-cost-check'], () => {
+            createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub')
             }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getHydrogenQuantity', false),
             null,
@@ -322,29 +371,32 @@ function drawTab7Content(heading, optionContentElement) {
 
 function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Visual') {
-        const themeRow = createOptionRow(
-            'Theme:',
-            createDropdown('themeSelect', [
-                { value: 'light', text: 'Light' },
-                { value: 'dark', text: 'Dark' },
-                { value: 'frosty', text: 'Frosty' },
-                { value: 'summer', text: 'Summer' },
-                { value: 'forest', text: 'Forest' },
-            ], document.body.getAttribute('data-theme') || 'dark', (value) => {
-                selectTheme(value);
+        const currencySymbolRow = createOptionRow(
+            'Currency:',
+            createDropdown('notationSelect', [
+                { value: '$', text: 'Dollar ($)' },
+                { value: '€', text: 'Euro (€)' },
+                { value: '£', text: 'Pound (£)' },
+                { value: '¥', text: 'Yen (¥)' },
+                { value: '₹', text: 'Rupee (₹)' },
+                { value: '₩', text: 'Won (₩)' },
+                { value: '₣', text: 'Franc (₣)' },
+                { value: '₿', text: 'Bitcoin (₿)' },
+            ], '$', (value) => {
+                setCurrencySymbol(value);
             }),
             null,
             null,
             null,
             null,
             false,
-            'Change styling of the page.',
+            'Change the symbol used for Cash (Visual Only).',
             null,
             null,
             null,
             null
         );
-        optionContentElement.appendChild(themeRow);
+        optionContentElement.appendChild(currencySymbolRow);
 
         const notationRow = createOptionRow(
             'Notation:',
@@ -384,6 +436,30 @@ function drawTab8Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(notificationsRow);
+
+        const themeRow = createOptionRow(
+            'Theme:',
+            createDropdown('themeSelect', [
+                { value: 'light', text: 'Light' },
+                { value: 'dark', text: 'Dark' },
+                { value: 'frosty', text: 'Frosty' },
+                { value: 'summer', text: 'Summer' },
+                { value: 'forest', text: 'Forest' },
+            ], document.body.getAttribute('data-theme') || 'dark', (value) => {
+                selectTheme(value);
+            }),
+            null,
+            null,
+            null,
+            null,
+            false,
+            'Change styling of the page.',
+            null,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(themeRow);
 
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
@@ -448,7 +524,7 @@ function createOptionRow(labelText, inputElement1, inputElement2, inputElement3,
 
     if (dataConditionCheck) {
         description.classList.add('red-text');
-        description.classList.add('resource-cost-check');
+        description.classList.add('resource-cost-sell-check');
 
         description.dataset.conditionCheck = dataConditionCheck;
         description.dataset.resourcePriceObject = resourcePriceObject;
@@ -530,10 +606,15 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
     }
 
     if (dataConditionCheck) {
-        button.dataset.conditionCheck = dataConditionCheck;
-        button.dataset.resourcePriceObject = resourcePriceObject;
-        button.dataset.argumentToPass = objectSectionArgument;
-        button.dataset.argumentCheckQuantity = quantityArgument;
+        if (dataConditionCheck === 'sellResource') {
+            button.dataset.conditionCheck = dataConditionCheck;
+            button.dataset.argumentCheckQuantity = quantityArgument;
+        } else {
+            button.dataset.conditionCheck = dataConditionCheck;
+            button.dataset.resourcePriceObject = resourcePriceObject;
+            button.dataset.argumentToPass = objectSectionArgument;
+            button.dataset.argumentCheckQuantity = quantityArgument;
+        }
     }
 
     button.addEventListener('click', onClick);

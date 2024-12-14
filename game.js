@@ -1,4 +1,8 @@
 import {
+    getCurrencySymbol,
+    setCurrencySymbol,
+    setCash,
+    getCash,
     setSalePreview,
     getFunctionRegistryResourceQuantity,
     getResourcesToIncreasePrice,
@@ -35,7 +39,8 @@ import {
     getUpgradeResearch,
     setUpgradeResearch,
     getUpgradeHydrogen,
-    setUpgradeHydrogen
+    setUpgradeHydrogen,
+    getLastScreenOpenRegister
 } from './constantsAndGlobalVars.js';
 
 //--------------------------------------------------------------------------------------------------------
@@ -55,11 +60,9 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
 
         //Check and update what can afford to buy
-        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-check');
+        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
         elementsResourcesCheck.forEach((elementResourceCheck) => {
-            const resourcePriceObject = elementResourceCheck.dataset.resourcePriceObject;
-            const argumentToPass = elementResourceCheck.dataset.argumentToPass;
-            monitorResourceCostChecks(elementResourceCheck, resourcePriceObject, argumentToPass);
+            monitorResourceCostChecks(elementResourceCheck);
         });
 
         //updateAndIncrementQuantities
@@ -68,6 +71,7 @@ export async function gameLoop() {
         const allResourceElements = getAllResourceElements();
         const allResourceDescElements = getAllResourceDescriptionElements();
         updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescElements);
+        updateStats();
 
         if (getResourcesToDeduct() && Object.keys(getResourcesToDeduct()).length > 0) {
             checkAndDeductResources();
@@ -88,9 +92,27 @@ export async function gameLoop() {
     }
 }
 
+function updateStats() {
+    //cash
+    getElements().cashStat.textContent = `${getCurrencySymbol()}${getCash().toFixed(2)}`;
+}
+
+export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
+    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
+    const resourceQuantity = getResourceQuantity();
+    const saleData = functionRegistryResourceQuantity[functionRegistryRef].getSalePreview();
+
+    const cashRaised = parseFloat(saleData.slice(1).split(' ')[0]);
+    const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
+
+    setResourceQuantity(resourceQuantity - quantityToDeduct);
+    setCash(getCash() + cashRaised);
+}
+
 function updateAllSalePricePreviews() {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const currentScreen = getCurrentOptionPane();
+    console.log(currentScreen);
 
     for (const resource in functionRegistryResourceQuantity) {
         if (functionRegistryResourceQuantity.hasOwnProperty(resource) && resource === currentScreen) {
@@ -554,6 +576,19 @@ function monitorResourceCostChecks(element) {
         const resourceObjectSectionKey = element.dataset.argumentToPass;
         const checkQuantityString = element.dataset.argumentCheckQuantity;
         const functionGetResourceQuantity = functionRegistryUpgrade[checkQuantityString];
+
+        if (element.classList.contains('sell') && element.dataset.conditionCheck === 'sellResource') {    
+            if (typeof functionGetResourceQuantity === 'function') {
+                const checkQuantity = functionGetResourceQuantity();
+    
+                if (checkQuantity > 0) { 
+                    element.classList.remove('red-text');
+                } else {
+                    element.classList.add('red-text');
+                }
+            }
+            return;
+        }
         
         if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
             const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);
