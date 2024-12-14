@@ -149,9 +149,9 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
         let newPrice;
 
         switch (setPriceTarget) {
-            case 'hydrogenAutoGainPrice':
+            case 'hydrogenAB1Price':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeHydrogen('autobuyer', 'price', newPrice);
+                setUpgradeHydrogen('autoBuyer', 'tier1', 'price', newPrice);
                 break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
@@ -411,24 +411,38 @@ export function doubleRate(key) {
 //     }
 // }
 
-export function manualIncrementer(getResourceQuantity, setResourceQuantity, getResourceStorage, incrementAmount, elementId, getResourceObject, resource) {
-    let currentResource = getResourceQuantity();
-
-    if (getResourceStorage && getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
-        getElements()[elementId].classList.remove('green-text');
-        setResourceQuantity(currentResource + incrementAmount);
-    } else if (!getResourceStorage || getResourceQuantity() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
-        setResourceQuantity(currentResource + incrementAmount); 
+export function gain(getFunction, setFunction, getResourceStorage, incrementAmount, elementId, getResourceObject, resource, autoBuyerPurchase, tierAB) {
+    let currentResource = getFunction();
+    if (autoBuyerPurchase) {
+        setFunction(currentResource + incrementAmount);
+    } else {
+        if (getResourceStorage && getFunction() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
+            getElements()[elementId].classList.remove('green-text');
+            setFunction(currentResource + incrementAmount);
+        } else if (!getResourceStorage || getFunction() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
+            setFunction(currentResource + incrementAmount); 
+        }
     }
-    
+
     if (getResourceObject) {
+        let resourceAmountToDeductOrPrice;
+        let resourceSetNewPrice;
+
         const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
         const resourceObject = getResourceObjectFn(resource);
-        const resourceAmountToDeductOrPrice = resourceObject.price;
+
+        if (autoBuyerPurchase) {
+            resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
+            resourceSetNewPrice = resourceObject[tierAB].setPrice;
+        } else {
+            resourceAmountToDeductOrPrice = resourceObject.price;
+            resourceSetNewPrice = resourceObject.setPrice;
+        }
+        
         const resourceToDeductName = resourceObject.resource;
         const resourceToDeductSetFn = resourceObject.deduct;
         const resourceToDeductGetFn = resourceObject.checkQuantity;
-        const resourceSetNewPrice = resourceObject.setPrice;
+
 
         //set resource to deduct
         setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeductOrPrice);
@@ -593,9 +607,17 @@ function monitorResourceCostChecks(element) {
         if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
             const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey);
             const checkQuantity = functionGetResourceQuantity();
-            let price = resourceObjectSection.price;
 
-            if (typeof price === 'function') {
+            let price;
+
+            if (resourceObjectSection.type && resourceObjectSection.type === 'autoBuyer') {
+                const autoBuyerTier = element.dataset.autoBuyerTier;
+                price = resourceObjectSection[autoBuyerTier].price;
+            } else {
+                price = resourceObjectSection.price;
+            }
+
+            if (typeof price === 'function' && resourceObjectSection.type === 'storage') {
                 price = price();
             }
             

@@ -1,4 +1,6 @@
 import {
+    getHydrogenAB1Quantity,
+    setHydrogenAB1Quantity,
     getLastScreenOpenRegister,
     setLastScreenOpenRegister,
     getHydrogenSalePreview,
@@ -42,7 +44,7 @@ import {
 import {
     sellResource,
     increaseResourceStorage,
-    manualIncrementer,
+    gain,
     setGameState,
     startGame
 } from './game.js';
@@ -202,6 +204,9 @@ function updateContent(heading, tab) {
 
 function drawTab1Content(heading, optionContentElement) {
     if (heading === 'Hydrogen') {
+        let storagePrice = getUpgradeHydrogen('storage').price;
+        let autobuyer1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
+
         const sellHydrogenRow = createOptionRow(
             'Sell Hydrogen:',
             createDropdown('hydrogenSellSelectQuantity', [
@@ -221,12 +226,13 @@ function drawTab1Content(heading, optionContentElement) {
             }),
             createButton('Sell', ['option-button', 'red-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
-            }, 'sellResource', null, null, 'getHydrogenQuantity', true),
+            }, 'sellResource', null, null, 'getHydrogenQuantity', true, null),
             null,
             null,
             null,
             false,
             `${getHydrogenSalePreview()}`,
+            null,
             null,
             null,
             null,
@@ -237,13 +243,14 @@ function drawTab1Content(heading, optionContentElement) {
         const hydrogenRow = createOptionRow(
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
-                manualIncrementer(getHydrogenQuantity, setHydrogenQuantity, getHydrogenStorage, 1, 'hydrogenQuantity', null, null)
-            }, null, null, null, null, false), //set false to true out of development to stop fast gains by holding enter
+                gain(getHydrogenQuantity, setHydrogenQuantity, getHydrogenStorage, 1, 'hydrogenQuantity', null, null, false, null)
+            }, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
             null,
             false,
+            null,
             null,
             null,
             null,
@@ -251,29 +258,48 @@ function drawTab1Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(hydrogenRow);
-        let price = getUpgradeHydrogen('storage').price;
 
-        if (typeof price === 'function') {
-            price = price();
+        if (typeof storagePrice === 'function') {
+            storagePrice = storagePrice();
         }
 
         const containerSizeRow = createOptionRow(
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
-            }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', 'getHydrogenQuantity', true),
+            }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', 'getHydrogenQuantity', true, null),
             null,
             null,
             null,
             null,
             false,
-            `${price + " " + getUpgradeHydrogen('storage').resource}`,
+            `${storagePrice + " " + getUpgradeHydrogen('storage').resource}`,
             'getUpgradeHydrogen',
             'upgradeCheck',
             'storage',
-            'getHydrogenQuantity'
+            'getHydrogenQuantity',
+            null
         );
         optionContentElement.appendChild(containerSizeRow);
+
+        const autoBuyerRow = createOptionRow(
+            'Hydrogen Compressor:',
+            createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate} Hydrogen /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+                gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1')
+            }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', 'getHydrogenQuantity', true, 'tier1'),
+            null,
+            null,
+            null,
+            null,
+            false,
+            `${autobuyer1Price + " " + getUpgradeHydrogen('autoBuyer').resource}`,
+            'getUpgradeHydrogen',
+            'upgradeCheck',
+            'autoBuyer',
+            'getHydrogenQuantity',
+            'tier1'
+        );
+        optionContentElement.appendChild(autoBuyerRow);
     }
 }
 
@@ -282,7 +308,7 @@ function drawTab2Content(heading, optionContentElement) {
         const scienceKitRow = createOptionRow(
             'Science Kit:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
-                manualIncrementer(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit')
+                gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null)
             }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getHydrogenQuantity', false),
             null,
             null,
@@ -293,14 +319,15 @@ function drawTab2Content(heading, optionContentElement) {
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceKit',
-            'getHydrogenQuantity'
+            'getHydrogenQuantity',
+            null
         );
         optionContentElement.appendChild(scienceKitRow);
 
         const scienceClubRow = createOptionRow(
             'Open Science Club:',
             createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
-                manualIncrementer(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub')
+                gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
             }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getHydrogenQuantity', false),
             null,
             null,
@@ -311,7 +338,8 @@ function drawTab2Content(heading, optionContentElement) {
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceClub',
-            'getHydrogenQuantity'
+            'getHydrogenQuantity',
+            null
         );
         optionContentElement.appendChild(scienceClubRow);
     }
@@ -362,6 +390,7 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(currencySymbolRow);
@@ -383,6 +412,7 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(notationRow);
@@ -398,6 +428,7 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             false,
             'Toggle notifications',
+            null,
             null,
             null,
             null,
@@ -425,13 +456,14 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(themeRow);
 
         const triggerNotificationsRow = createOptionRow(
             'Trigger Notification:',
-            createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, false),
+            createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, false, null),
             null,
             null,
             null,
@@ -441,13 +473,14 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(triggerNotificationsRow);
     }
 }
 
-function createOptionRow(labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument, quantityArgument) {
+function createOptionRow(labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument, quantityArgument, autoBuyerTier) {
     const row = document.createElement('div');
 
     if (hidden) {
@@ -498,6 +531,7 @@ function createOptionRow(labelText, inputElement1, inputElement2, inputElement3,
         description.dataset.resourcePriceObject = resourcePriceObject;
         description.dataset.argumentToPass = objectSectionArgument;
         description.dataset.argumentCheckQuantity = quantityArgument;
+        description.dataset.autoBuyerTier = autoBuyerTier;
     }
 
     descriptionContainer.appendChild(description);
@@ -563,7 +597,7 @@ function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument, quantityArgument, disableKeyboardForButton) {
+function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument, quantityArgument, disableKeyboardForButton, autoBuyerTier) {
     const button = document.createElement('button');
     button.innerText = text;
     
@@ -582,6 +616,7 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
             button.dataset.resourcePriceObject = resourcePriceObject;
             button.dataset.argumentToPass = objectSectionArgument;
             button.dataset.argumentCheckQuantity = quantityArgument;
+            button.dataset.autoBuyerTier = autoBuyerTier;
         }
     }
 

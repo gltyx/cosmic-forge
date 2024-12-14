@@ -18,6 +18,12 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 //ELEMENT VALUES
 export const VALUE_HYDROGEN = 0.005;
 
+export let autoBuyerPriceAndRate = { 
+        hydrogen: { tier1: { price: 100, rate: 5 }, tier2: { price: 500, rate: 25 }, tier3: { price: 2500, rate: 125 }, tier4: { price: 12500, rate: 625 } }
+};
+
+
+
 //GLOBAL VARIABLES
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
@@ -46,6 +52,8 @@ let hydrogenQuantity = 0;
 let hydrogenRate = 0;
 let hydrogenStorage = 100;
 
+let hydrogenAB1Quantity = 0;
+
 let researchQuantity = 10;
 let researchRate = 0;
 
@@ -54,6 +62,7 @@ let scienceClubQuantity = 0;
 
 let upgradeHydrogen = {
     storage: {
+        type: 'storage',
         requirementQty: 1,
         price: getHydrogenStorage,
         resource: 'hydrogen',
@@ -61,13 +70,24 @@ let upgradeHydrogen = {
         deduct: setHydrogenQuantity,
         setPrice: null
     },
-    autobuyer: {
+    autoBuyer: {
+        type: 'autoBuyer',
+        tier1: { 
+            price: 200, rate: 5, setPrice: 'hydrogenAB1Price'
+        }, 
+        tier2: { 
+            price: 500, rate: 25, setPrice: 'hydrogenAB2Price'
+        }, 
+        tier3: { 
+            price: 2500, rate: 125, setPrice: 'hydrogenAB3Price'
+        }, 
+        tier4: { 
+            price: 12500, rate: 625, setPrice: 'hydrogenAB4Price'
+        },
         requirementQty: 1,
-        price: 100,
         resource: 'hydrogen',
         checkQuantity: getHydrogenQuantity,
         deduct: setHydrogenQuantity,
-        setPrice: 'hydrogenAutoGainPrice'
     },
 };
 
@@ -379,8 +399,8 @@ export function getUpgradeHydrogen(key) {
     return upgradeHydrogen[key];
 }
 
-export function setUpgradeHydrogen(key, property, value) {
-    upgradeHydrogen[key][property] = value;
+export function setUpgradeHydrogen(key, tier, property, value) {
+    upgradeHydrogen[key][tier][property] = value;
 }
 
 export function setUpgradeResearch(key, property, value) {
@@ -510,4 +530,20 @@ export function getLastScreenOpenRegister(key) {
 
 export function setLastScreenOpenRegister(key, value) {
     lastScreenOpenRegister[key] = value;
+}
+
+export function getAutoBuyerPriceAndRate(key, buyerTier, level) {
+    return autoBuyerPriceAndRate[key][buyerTier][level];
+}
+
+export function setAutoBuyerPriceAndRate(key, buyerTier, level, value) { //value is a {rate, price} object
+    autoBuyerPriceAndRate[key][buyerTier][level] = value;
+}
+
+export function getHydrogenAB1Quantity() {
+    return hydrogenAB1Quantity;
+}
+
+export function setHydrogenAB1Quantity(value) {
+    hydrogenAB1Quantity = value;
 }
