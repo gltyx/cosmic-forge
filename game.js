@@ -1,4 +1,6 @@
 import {
+    getTimerRateRatio,
+    getTimerUpdateInterval,
     getCurrencySymbol,
     setCurrencySymbol,
     setCash,
@@ -23,8 +25,6 @@ import {
     setHydrogenQuantity,
     getResearchQuantity,
     setResearchQuantity,
-    getIncrement,
-    setIncrement,
     setBeginGameStatus, 
     setGameStateVariable, 
     getBeginGameStatus, 
@@ -43,8 +43,66 @@ import {
     getLastScreenOpenRegister
 } from './constantsAndGlobalVars.js';
 
+//---------------------------------------------------------------------------------------------------------
+
+class TimerManager {
+    constructor() {
+        this.timers = new Map();
+    }
+
+    addTimer(key, duration, onExpire) {
+        if (this.timers.has(key)) {
+            console.error(`Timer with key "${key}" already exists.`);
+            return;
+        }
+        const timer = new Timer(duration, onExpire);
+        this.timers.set(key, timer);
+        timer.start();
+    }
+
+    removeTimer(key) {
+        if (this.timers.has(key)) {
+            this.timers.get(key).stop();
+            this.timers.delete(key);
+        }
+    }
+
+    stopAllTimers() {
+        this.timers.forEach(timer => timer.stop());
+    }
+
+    getTimer(key) {
+        return this.timers.get(key);
+    }
+}
+
+class Timer {
+    constructor(duration, onExpire) {
+        this.duration = duration;
+        this.onExpire = onExpire;
+        this.timerId = null;
+    }
+
+    start() {
+        if (this.timerId) {
+            clearTimeout(this.timerId);
+        }
+        this.timerId = setInterval(() => {
+            this.onExpire();
+        }, this.duration);
+    }
+
+    stop() {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.timerId = null;
+        }
+    }
+}
+
 //--------------------------------------------------------------------------------------------------------
 
+const timerManager = new TimerManager();
 let deferredActions = [];
 
 export function startGame() {
@@ -285,280 +343,6 @@ function updateUIQuantities(allQuantities, allStorages, allResourceElements, all
     }
 }
 
-class Timer {
-    constructor(duration, onExpire) {
-        this.duration = duration;
-        this.onExpire = onExpire;
-        this.timerId = null;
-    }
-
-    start() {
-        if (this.timerId) {
-            clearTimeout(this.timerId);
-        }
-        this.timerId = setInterval(() => {
-            this.onExpire();
-        }, this.duration);
-    }
-
-    stop() {
-        if (this.timerId) {
-            clearInterval(this.timerId);
-            this.timerId = null;
-        }
-    }
-}
-
-class TimerManager {
-    constructor() {
-        this.timers = new Map();
-    }
-
-    addTimer(key, duration, onExpire) {
-        if (this.timers.has(key)) {
-            console.error(`Timer with key "${key}" already exists.`);
-            return;
-        }
-        const timer = new Timer(duration, onExpire);
-        this.timers.set(key, timer);
-        timer.start();
-    }
-
-    removeTimer(key) {
-        if (this.timers.has(key)) {
-            this.timers.get(key).stop();
-            this.timers.delete(key);
-        }
-    }
-
-    stopAllTimers() {
-        this.timers.forEach(timer => timer.stop());
-    }
-
-    getTimer(key) {
-        return this.timers.get(key);
-    }
-}
-
-const timerManager = new TimerManager();
-
-const updateDisplay = (element, data1, data2, desc) => {
-    if (desc) {
-        if (element && data2) {
-            element.textContent = data1 + ' ' + data2;
-        }
-    } else {
-        if (element && data2) {
-            element.textContent = data1 + '/' + data2;
-        } else if (element) {
-            element.textContent = data1;
-        }
-    
-        if (element && data2 && data1 === data2) {
-            element.classList.add('green-text');
-        }
-
-        if (element && element.classList.contains('green-text') && data1 !== data2) {
-            element.classList.remove('green-text');
-        }
-    }   
-};
-
-export function toggleTimer(key, buttonId) {
-    const timer = timerManager.getTimer(key);
-    if (timer) {
-        const button = document.getElementById(buttonId);
-        if (timer.timerId) {
-            timer.stop();
-            button.textContent = `Resume ${key.charAt(0).toUpperCase() + key.slice(1)}`;
-        } else {
-            timer.start();
-            button.textContent = `Pause ${key.charAt(0).toUpperCase() + key.slice(1)}`;
-        }
-    }
-}
-
-export function doubleRate(key) {
-    const timer = timerManager.getTimer(key);
-    if (timer) {
-        const currentIncrement = getIncrement(key);
-        const currentDuration = timer.duration;
-
-        if (currentIncrement === 1) {
-            const newDuration = Math.max(currentDuration / 2, 1);
-            if (newDuration >= 10) {
-                timer.stop();
-                timer.duration = newDuration;
-                timer.start();
-                console.log(`${key} Rate doubled, new interval: ${newDuration}ms`);
-                updateRate(key, false);
-            } else {
-                setIncrement(key, 2);
-                updateRate(key, true);
-            }
-        } else {
-            const newIncrement = currentIncrement * 2;
-            setIncrement(key, newIncrement);
-            console.log(`${key} increment doubled, new increment: ${newIncrement}`);
-            updateRate(key, true);
-        }
-    }
-}
-
-// export function resetCounter(key) {
-//     if (key === "hydrogenTimer") {
-//         setHydrogenQuantity(0);
-//         updateDisplay("hydrogenQuantity", getHydrogenQuantity());
-//     } else if (key === "silverTimer") {
-//         setResearchQuantity(0);
-//         updateDisplay("silverQuantity", getResearchQuantity());
-//     }
-// }
-
-export function gain(getFunction, setFunction, getResourceStorage, incrementAmount, elementId, getResourceObject, resource, autoBuyerPurchase, tierAB) {
-    let currentResource = getFunction();
-    if (autoBuyerPurchase) {
-        setFunction(currentResource + incrementAmount);
-    } else {
-        if (getResourceStorage && getFunction() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
-            getElements()[elementId].classList.remove('green-text');
-            setFunction(currentResource + incrementAmount);
-        } else if (!getResourceStorage || getFunction() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
-            setFunction(currentResource + incrementAmount); 
-        }
-    }
-
-    if (getResourceObject) {
-        let resourceAmountToDeductOrPrice;
-        let resourceSetNewPrice;
-
-        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
-        const resourceObject = getResourceObjectFn(resource);
-
-        if (autoBuyerPurchase) {
-            resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
-            resourceSetNewPrice = resourceObject[tierAB].setPrice;
-        } else {
-            resourceAmountToDeductOrPrice = resourceObject.price;
-            resourceSetNewPrice = resourceObject.setPrice;
-        }
-        
-        const resourceToDeductName = resourceObject.resource;
-        const resourceToDeductSetFn = resourceObject.deduct;
-        const resourceToDeductGetFn = resourceObject.checkQuantity;
-
-
-        //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeductOrPrice);
-        setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, resourceAmountToDeductOrPrice);
-    }
-}
-
-export function increaseResourceStorage(setResourceStorage, getResourceStorage, elementId, getResourceObject, resource) {
-    const increaseFactor = getIncreaseStorageFactor();
-
-    if (getResourceObject) {
-        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
-        const resourceObject = getResourceObjectFn(resource);
-        const resourceAmountToDeduct = resourceObject.price;
-        const resourceToDeductName = resourceObject.resource;
-        const resourceToDeductSetFn = resourceObject.deduct;
-        const resourceToDeductGetFn = resourceObject.checkQuantity;
-
-        //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
-    }
-
-    deferredActions.push(() => {
-        setResourceStorage(getResourceStorage() * increaseFactor);
-        getElements()[elementId].classList.remove('green-text');
-    });
-}
-
-// export function startAutoIncrementer(resourceKey) {
-//     if (resourceKey === "hydrogen") {
-//         setHydrogenRate(getIncrement("hydrogenTimer"));
-//         timerManager.addTimer("hydrogenTimer", 1000, () => {
-//             const currentHydrogen = getHydrogenQuantity();
-//             setHydrogenQuantity(currentHydrogen + getIncrement("hydrogenTimer"));
-//             updateDisplay("hydrogenQuantity", getHydrogenQuantity());
-//             updateSummary();
-//         });
-//     } else if (resourceKey === "silver") {
-//         setResearchRate(getIncrement("silverTimer"));
-//         timerManager.addTimer("silverTimer", 1000, () => {
-//             const currentSilver = getResearchQuantity();
-//             setResearchQuantity(currentSilver + getIncrement("silverTimer"));
-//             updateDisplay("silverQuantity", getResearchQuantity());
-//             updateSummary();
-//         });
-//     }
-// }
-
-function calculateRate(resourceKey) {
-    const timer = timerManager.getTimer(resourceKey);
-    const currentIncrement = getIncrement(resourceKey);
-    const currentDuration = timer.duration;
-
-    let rate = 0;
-
-    if (currentIncrement === 1) {
-        rate = 1000 / currentDuration * currentIncrement;
-    } else {
-        rate = currentIncrement;
-    }
-
-    return rate;
-}
-
-function updateRate(resourceKey, reachedFastestInterval) {
-    let rate;
-    reachedFastestInterval ? rate = calculateRate(resourceKey) * 64 : rate = calculateRate(resourceKey);
-    if (resourceKey === "hydrogenTimer") {
-        setHydrogenRate(rate);
-    } else if (resourceKey === "silverTimer") {
-        setResearchRate(rate);
-    }
-    updateSummary();
-}
-
-function updateSummary() {
-    document.getElementById("hydrogenPerSec").textContent = `Hydrogen: ${getHydrogenRate()}/s`;
-    document.getElementById("silverPerSec").textContent = `Silver: ${getResearchRate()}/s`;
-}
-
-//===============================================================================================================
-
-export function setGameState(newState) {
-    console.log("Setting game state to " + newState);
-    setGameStateVariable(newState);
-
-    switch (newState) {
-        case getMenuState():
-            getElements().menu.classList.remove('d-none');
-            getElements().menu.classList.add('d-flex');
-            getElements().statsContainer.classList.remove('d-flex');
-            getElements().statsContainer.classList.add('d-none');
-            getElements().tabsContainer.classList.remove('d-flex');
-            getElements().tabsContainer.classList.add('d-none');
-            getElements().mainContainer.classList.remove('d-flex');
-            getElements().mainContainer.classList.add('d-none');
-            break;
-        case getGameVisibleActive():
-            getElements().menu.classList.remove('d-flex');
-            getElements().menu.classList.add('d-none');
-            getElements().statsContainer.classList.remove('d-none');
-            getElements().statsContainer.classList.add('d-flex');
-            getElements().tabsContainer.classList.remove('d-none');
-            getElements().tabsContainer.classList.add('d-flex');
-            getElements().mainContainer.classList.remove('d-none');
-            getElements().mainContainer.classList.add('d-flex');
-
-            manageTabSpecificUi();
-            break;
-    }
-}
-
 function manageTabSpecificUi() {
     const currentTab = getCurrentTab();
     const tabElements = document.querySelectorAll(`.tab-${currentTab}`);
@@ -634,5 +418,160 @@ function monitorResourceCostChecks(element) {
         } else {
             console.error(`Function ${functionName} is not defined or not callable.`);
         }
+    }
+}
+
+const updateDisplay = (element, data1, data2, desc) => {
+    if (desc) {
+        if (element && data2) {
+            element.textContent = data1 + ' ' + data2;
+        }
+    } else {
+        if (element && data2) {
+            element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
+        } else if (element) {
+            element.textContent = Math.floor(data1);
+        }
+    
+        if (element && data2 && data1 === data2) {
+            element.classList.add('green-text');
+        }
+
+        if (element && element.classList.contains('green-text') && data1 !== data2) {
+            element.classList.remove('green-text');
+        }
+    }   
+};
+
+export function gain(getFunction, setFunction, getResourceStorage, incrementAmount, elementId, getResourceObject, resource, autoBuyerPurchase, tierAB) {
+    let currentResource = getFunction();
+    if (autoBuyerPurchase) {
+        setFunction(currentResource + incrementAmount);
+    } else {
+        if (getResourceStorage && getFunction() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
+            getElements()[elementId].classList.remove('green-text');
+            setFunction(currentResource + incrementAmount);
+        } else if (!getResourceStorage || getFunction() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
+            setFunction(currentResource + incrementAmount); 
+        }
+    }
+
+    if (getResourceObject) {
+        let resourceAmountToDeductOrPrice;
+        let resourceSetNewPrice;
+
+        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
+        const resourceObject = getResourceObjectFn(resource);
+
+        if (autoBuyerPurchase) {
+            resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
+            resourceSetNewPrice = resourceObject[tierAB].setPrice;
+        } else {
+            resourceAmountToDeductOrPrice = resourceObject.price;
+            resourceSetNewPrice = resourceObject.setPrice;
+        }
+        
+        const resourceToDeductName = resourceObject.resource;
+        const resourceToDeductSetFn = resourceObject.deduct;
+        const resourceToDeductGetFn = resourceObject.checkQuantity;
+
+
+        //set resource to deduct
+        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeductOrPrice);
+        setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, resourceAmountToDeductOrPrice);
+    }
+}
+
+export function increaseResourceStorage(setResourceStorage, getResourceStorage, elementId, getResourceObject, resource) {
+    const increaseFactor = getIncreaseStorageFactor();
+
+    if (getResourceObject) {
+        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
+        const resourceObject = getResourceObjectFn(resource);
+        const resourceAmountToDeduct = resourceObject.price;
+        const resourceToDeductName = resourceObject.resource;
+        const resourceToDeductSetFn = resourceObject.deduct;
+        const resourceToDeductGetFn = resourceObject.checkQuantity;
+
+        //set resource to deduct
+        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
+    }
+
+    deferredActions.push(() => {
+        setResourceStorage(getResourceStorage() * increaseFactor);
+        getElements()[elementId].classList.remove('green-text');
+    });
+}
+
+export function startUpdateAutoBuyerTimersAndRates(autoBuyerResourceTier) {
+    if (autoBuyerResourceTier === 'hydrogenAB1') {
+        const rateHydrogenAB1 = getUpgradeHydrogen('autoBuyer').tier1.rate;
+        setHydrogenRate(getHydrogenRate() + rateHydrogenAB1);
+        getElements().hydrogenRate.textContent = `${(getHydrogenRate() * getTimerRateRatio()).toFixed(1)} / s`;
+        if (!timerManager.getTimer('hydrogenAB1')) {
+            timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
+                const currentHydrogen = getHydrogenQuantity();
+                setHydrogenQuantity(Math.min(currentHydrogen + getHydrogenRate(), getHydrogenStorage()));
+            });
+        }
+    } 
+    //else if { //more autobuyers
+
+    //}
+}
+
+// export function toggleTimer(key, buttonId) {
+//     const timer = timerManager.getTimer(key);
+//     if (timer) {
+//         const button = document.getElementById(buttonId);
+//         if (timer.timerId) {
+//             timer.stop();
+//             button.textContent = `Resume ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+//         } else {
+//             timer.start();
+//             button.textContent = `Pause ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+//         }
+//     }
+// }
+
+// export function resetCounter(key) {
+//     if (key === "hydrogenTimer") {
+//         setHydrogenQuantity(0);
+//         updateDisplay("hydrogenQuantity", getHydrogenQuantity());
+//     } else if (key === "silverTimer") {
+//         setResearchQuantity(0);
+//         updateDisplay("silverQuantity", getResearchQuantity());
+//     }
+// }
+
+//===============================================================================================================
+
+export function setGameState(newState) {
+    console.log("Setting game state to " + newState);
+    setGameStateVariable(newState);
+
+    switch (newState) {
+        case getMenuState():
+            getElements().menu.classList.remove('d-none');
+            getElements().menu.classList.add('d-flex');
+            getElements().statsContainer.classList.remove('d-flex');
+            getElements().statsContainer.classList.add('d-none');
+            getElements().tabsContainer.classList.remove('d-flex');
+            getElements().tabsContainer.classList.add('d-none');
+            getElements().mainContainer.classList.remove('d-flex');
+            getElements().mainContainer.classList.add('d-none');
+            break;
+        case getGameVisibleActive():
+            getElements().menu.classList.remove('d-flex');
+            getElements().menu.classList.add('d-none');
+            getElements().statsContainer.classList.remove('d-none');
+            getElements().statsContainer.classList.add('d-flex');
+            getElements().tabsContainer.classList.remove('d-none');
+            getElements().tabsContainer.classList.add('d-flex');
+            getElements().mainContainer.classList.remove('d-none');
+            getElements().mainContainer.classList.add('d-flex');
+
+            manageTabSpecificUi();
+            break;
     }
 }

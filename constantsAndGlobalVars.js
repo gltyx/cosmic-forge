@@ -14,15 +14,11 @@ let oldLanguage = 'en';
 export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
+export const TIMER_UPDATE_INTERVAL = 10;
+export const TIMER_RATE_RATIO = 100;
 
 //ELEMENT VALUES
-export const VALUE_HYDROGEN = 0.005;
-
-export let autoBuyerPriceAndRate = { 
-        hydrogen: { tier1: { price: 100, rate: 5 }, tier2: { price: 500, rate: 25 }, tier3: { price: 2500, rate: 125 }, tier4: { price: 12500, rate: 625 } }
-};
-
-
+export const SALE_VALUE_HYDROGEN = 0.005;
 
 //GLOBAL VARIABLES
 let currencySymbol = '$';
@@ -43,10 +39,6 @@ let lastScreenOpenRegister = {
 };
 
 let hydrogenSalePreview = 0;
-
-const increments = {
-    hydrogenTimer: 1
-};
 
 let hydrogenQuantity = 0;
 let hydrogenRate = 0;
@@ -73,7 +65,7 @@ let upgradeHydrogen = {
     autoBuyer: {
         type: 'autoBuyer',
         tier1: { 
-            price: 200, rate: 5, setPrice: 'hydrogenAB1Price'
+            price: 65, rate: 0.005, setPrice: 'hydrogenAB1Price'
         }, 
         tier2: { 
             price: 500, rate: 25, setPrice: 'hydrogenAB2Price'
@@ -283,12 +275,12 @@ export function setGameInProgress(value) {
     gameInProgress = value;
 }
 
-export function setIncrement(timerKey, value) {
-    increments[timerKey] = value;
+export function getTimerUpdateInterval() {
+    return TIMER_UPDATE_INTERVAL;
 }
 
-export function getIncrement(timerKey) {
-    return increments[timerKey];
+export function getTimerRateRatio() {
+    return TIMER_RATE_RATIO;
 }
 
 export function getCash() {
@@ -510,9 +502,9 @@ export function setSalePreview(resource, amount) {
 export function setHydrogenSalePreview(value) {
     const quantityInStock = getHydrogenQuantity();
     if (value <= quantityInStock) {
-        hydrogenSalePreview = `${getCurrencySymbol()}` + (value * VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
+        hydrogenSalePreview = `${getCurrencySymbol()}` + (value * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
     } else {
-        hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+        hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
     }
 }
 
@@ -530,14 +522,6 @@ export function getLastScreenOpenRegister(key) {
 
 export function setLastScreenOpenRegister(key, value) {
     lastScreenOpenRegister[key] = value;
-}
-
-export function getAutoBuyerPriceAndRate(key, buyerTier, level) {
-    return autoBuyerPriceAndRate[key][buyerTier][level];
-}
-
-export function setAutoBuyerPriceAndRate(key, buyerTier, level, value) { //value is a {rate, price} object
-    autoBuyerPriceAndRate[key][buyerTier][level] = value;
 }
 
 export function getHydrogenAB1Quantity() {

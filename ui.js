@@ -1,4 +1,5 @@
 import {
+    getTimerRateRatio,
     getHydrogenAB1Quantity,
     setHydrogenAB1Quantity,
     getLastScreenOpenRegister,
@@ -42,6 +43,7 @@ import {
     setCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
+    startUpdateAutoBuyerTimersAndRates,
     sellResource,
     increaseResourceStorage,
     gain,
@@ -284,8 +286,9 @@ function drawTab1Content(heading, optionContentElement) {
 
         const autoBuyerRow = createOptionRow(
             'Hydrogen Compressor:',
-            createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate} Hydrogen /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
-                gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1')
+            createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+                gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1'),
+                startUpdateAutoBuyerTimersAndRates('hydrogenAB1');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', 'getHydrogenQuantity', true, 'tier1'),
             null,
             null,
