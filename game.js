@@ -243,6 +243,9 @@ function getAllResourceDescriptionElements() {
     const hydrogenIncreaseStorageDescElement = document.getElementById('increaseContainerSizeDescription');
     const hydrogenStoragePrice = getHydrogenStorage();
 
+    const hydrogenAutoBuyerTier1DescElement = document.getElementById('hydrogenCompressorDescription');
+    const hydrogenAutoBuyerTier1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
+
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getUpgradeResearch('scienceKit').price;
 
@@ -251,8 +254,9 @@ function getAllResourceDescriptionElements() {
 
     const allResourceDescElements = {
         hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
+        hydrogenAutoBuyerTier1: {element: hydrogenAutoBuyerTier1DescElement, price: hydrogenAutoBuyerTier1Price, string: ' Hydrogen'},
         scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Hydrogen'},
-        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Hydrogen'}
+        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Hydrogen'},
     };
 
     return allResourceDescElements;
