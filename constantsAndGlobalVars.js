@@ -18,7 +18,7 @@ export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
 
 //ELEMENT VALUES
-export const SALE_VALUE_HYDROGEN = 0.005;
+export const SALE_VALUE_HYDROGEN = 0.1; //0.005;
 
 //GLOBAL VARIABLES
 let currencySymbol = '$';
@@ -42,11 +42,11 @@ let hydrogenSalePreview = 0;
 
 let hydrogenQuantity = 0;
 let hydrogenRate = 0;
-let hydrogenStorage = 100;
+let hydrogenStorage = 200;
 
 let hydrogenAB1Quantity = 0;
 
-let researchQuantity = 10;
+let researchQuantity = 0;
 let researchRate = 0;
 
 let scienceKitQuantity = 0;
@@ -65,7 +65,7 @@ let upgradeHydrogen = {
     autoBuyer: {
         type: 'autoBuyer',
         tier1: { 
-            price: 65, rate: 0.005, setPrice: 'hydrogenAB1Price'
+            price: 65, rate: 0.01, setPrice: 'hydrogenAB1Price'
         }, 
         tier2: { 
             price: 500, rate: 25, setPrice: 'hydrogenAB2Price'
@@ -86,18 +86,20 @@ let upgradeHydrogen = {
 let upgradeResearch = {
     scienceKit: {
         requirementQty: 1, 
-        price: 50, 
-        resource: 'hydrogen', 
-        checkQuantity: getHydrogenQuantity,
-        deduct: setHydrogenQuantity,
+        price: 5,
+        rate: 0.003,
+        resource: 'cash', 
+        checkQuantity: getCash,
+        deduct: setCash,
         setPrice: 'scienceKitPrice'
     },
     scienceClub: {
         requirementQty: 1, 
-        price: 1000, 
-        resource: 'hydrogen', 
-        checkQuantity: getHydrogenQuantity,
-        deduct: setHydrogenQuantity,
+        price: 100,
+        rate: 0.06,
+        resource: 'cash', 
+        checkQuantity: getCash,
+        deduct: setCash,
         setPrice: 'scienceClubPrice'
     }
 };
@@ -121,7 +123,8 @@ export const functionRegistryUpgrade = {
     getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeResearch: getUpgradeResearch,
     getHydrogenQuantity: getHydrogenQuantity,
-    getResearchQuantity: getResearchQuantity
+    getResearchQuantity: getResearchQuantity,
+    getCash: getCash,
     // Add more functions here as needed
 };
 

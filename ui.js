@@ -310,9 +310,10 @@ function drawTab2Content(heading, optionContentElement) {
     if (heading === 'Research') {
         const scienceKitRow = createOptionRow(
             'Science Kit:',
-            createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
-                gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null)
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getHydrogenQuantity', false),
+            createButton(`Add ${getUpgradeResearch('scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+                gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
+                startUpdateAutoBuyerTimersAndRates('scienceKit');
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getCash', false),
             null,
             null,
             null,
@@ -322,16 +323,17 @@ function drawTab2Content(heading, optionContentElement) {
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceKit',
-            'getHydrogenQuantity',
+            'getCash',
             null
         );
         optionContentElement.appendChild(scienceKitRow);
 
         const scienceClubRow = createOptionRow(
             'Open Science Club:',
-            createButton('Buy', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getUpgradeResearch('scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
-            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getHydrogenQuantity', false),
+                startUpdateAutoBuyerTimersAndRates('scienceClub');
+            }, 'upgradeCheck', 'getUpgradeResearch', 'scienceClub', 'getCash', false),
             null,
             null,
             null,
@@ -341,7 +343,7 @@ function drawTab2Content(heading, optionContentElement) {
             'getUpgradeResearch',
             'upgradeCheck',
             'scienceClub',
-            'getHydrogenQuantity',
+            'getCash',
             null
         );
         optionContentElement.appendChild(scienceClubRow);

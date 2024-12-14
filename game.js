@@ -313,8 +313,8 @@ function getAllResourceDescriptionElements() {
     const allResourceDescElements = {
         hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
         hydrogenAutoBuyerTier1: {element: hydrogenAutoBuyerTier1DescElement, price: hydrogenAutoBuyerTier1Price, string: ' Hydrogen'},
-        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: ' Hydrogen'},
-        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: 'Hydrogen'},
+        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol()},
+        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol()},
     };
 
     return allResourceDescElements;
@@ -335,10 +335,10 @@ function updateUIQuantities(allQuantities, allStorages, allResourceElements, all
     for (const allResourceDescriptionElement in allResourceDescriptionElements) {
         if (allResourceDescriptionElements.hasOwnProperty(allResourceDescriptionElement)) {
             const price = allResourceDescriptionElements[allResourceDescriptionElement].price;
-            const resourceName = allResourceDescriptionElements[allResourceDescriptionElement].string;
+            const costResourceName = allResourceDescriptionElements[allResourceDescriptionElement].string;
             const element = allResourceDescriptionElements[allResourceDescriptionElement].element;
 
-            updateDisplay(element, price, resourceName, true);
+            updateDisplay(element, price, costResourceName, true);
         }
     }
 }
@@ -424,7 +424,11 @@ function monitorResourceCostChecks(element) {
 const updateDisplay = (element, data1, data2, desc) => {
     if (desc) {
         if (element && data2) {
-            element.textContent = data1 + ' ' + data2;
+            if(data2 === getCurrencySymbol()) {
+                element.textContent = data2 + data1;
+            } else {
+                element.textContent = data1 + ' ' + data2;
+            }
         }
     } else {
         if (element && data2) {
@@ -503,8 +507,8 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
     });
 }
 
-export function startUpdateAutoBuyerTimersAndRates(autoBuyerResourceTier) {
-    if (autoBuyerResourceTier === 'hydrogenAB1') {
+export function startUpdateAutoBuyerTimersAndRates(timerName) {
+    if (timerName === 'hydrogenAB1') {
         const rateHydrogenAB1 = getUpgradeHydrogen('autoBuyer').tier1.rate;
         setHydrogenRate(getHydrogenRate() + rateHydrogenAB1);
         getElements().hydrogenRate.textContent = `${(getHydrogenRate() * getTimerRateRatio()).toFixed(1)} / s`;
@@ -514,10 +518,27 @@ export function startUpdateAutoBuyerTimersAndRates(autoBuyerResourceTier) {
                 setHydrogenQuantity(Math.min(currentHydrogen + getHydrogenRate(), getHydrogenStorage()));
             });
         }
-    } 
-    //else if { //more autobuyers
-
-    //}
+    } else if (timerName === 'scienceKit') {
+        const rateScienceKit = getUpgradeResearch('scienceKit').rate;
+        setResearchRate(getResearchRate() + rateScienceKit);
+        getElements().researchRate.textContent = `${(getResearchRate() * getTimerRateRatio()).toFixed(1)} / s`;
+        if (!timerManager.getTimer('research')) {
+            timerManager.addTimer('research', getTimerUpdateInterval(), () => {
+                const currentResearch = getResearchQuantity();
+                setResearchQuantity(currentResearch + getResearchRate());
+            });
+        }
+    } else if (timerName === 'scienceClub') {
+        const rateScienceClub = getUpgradeResearch('scienceClub').rate;
+        setResearchRate(getResearchRate() + rateScienceClub);
+        getElements().researchRate.textContent = `${(getResearchRate() * getTimerRateRatio()).toFixed(1)} / s`;
+        if (!timerManager.getTimer('research')) {
+            timerManager.addTimer('research', getTimerUpdateInterval(), () => {
+                const currentResearch = getResearchQuantity();
+                setResearchQuantity(currentResearch + getResearchRate());
+            });
+        }
+    }
 }
 
 // export function toggleTimer(key, buttonId) {
