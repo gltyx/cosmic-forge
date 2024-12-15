@@ -379,7 +379,7 @@ function monitorResourceCostChecks(element) {
         const checkQuantityString = element.dataset.argumentCheckQuantity;
         const functionGetResourceQuantity = functionRegistryUpgrade[checkQuantityString];
 
-        if (element.classList.contains('sell') && element.dataset.conditionCheck === 'sellResource') {    
+        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellResource') {    
             if (typeof functionGetResourceQuantity === 'function') {
                 const checkQuantity = functionGetResourceQuantity();
     
@@ -387,6 +387,34 @@ function monitorResourceCostChecks(element) {
                     element.classList.remove('red-text');
                 } else {
                     element.classList.add('red-text');
+                }
+            }
+            return;
+        }
+
+        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') {    
+            if (typeof functionGetResourceQuantity === 'function') {
+                const checkQuantity = functionGetResourceQuantity();
+    
+                if (!element.classList.contains('unlocked-tech')) {
+                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
+                        element.classList.remove('red-text');
+                    } else {
+                        element.classList.add('red-text');
+                    }
+                } else {
+                    if (element.tagName.toLowerCase() === 'button') {
+                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+                        accompanyingLabel.classList.remove('red-text');
+                        accompanyingLabel.classList.add('unlocked-tech');
+                        accompanyingLabel.classList.add('green-text');
+                        accompanyingLabel.textContent = 'Researched';
+                        accompanyingLabel.style.pointerEvents = 'none';
+                    }
+
+                    element.classList.add('green-text');
+                    element.textContent = 'Researched';
+                    element.style.pointerEvents = 'none';
                 }
             }
             return;
@@ -447,10 +475,14 @@ const updateDisplay = (element, data1, data2, desc) => {
     }   
 };
 
-export function gain(getFunction, setFunction, getResourceStorage, incrementAmount, elementId, getResourceObject, resource, autoBuyerPurchase, tierAB) {
+export function gain(getFunction, setFunction, getResourceStorage, incrementAmount, elementId, getResourceObject, resource, ABOrTechPurchase, tierAB) {
     let currentResource = getFunction();
-    if (autoBuyerPurchase) {
-        setFunction(currentResource + incrementAmount);
+    if (ABOrTechPurchase) {
+        if (ABOrTechPurchase === 'techUnlock') {
+            setFunction(currentResource - getUpgradeResearch('techs', incrementAmount).price);
+        } else {
+            setFunction(currentResource + incrementAmount);
+        }
     } else {
         if (getResourceStorage && getFunction() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
             getElements()[elementId].classList.remove('green-text');
@@ -472,7 +504,7 @@ export function gain(getFunction, setFunction, getResourceStorage, incrementAmou
             resourceObject = getResourceObjectFn(resource);
         }
         
-        if (autoBuyerPurchase) {
+        if (ABOrTechPurchase) {
             resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
             resourceSetNewPrice = resourceObject[tierAB].setPrice;
         } else {

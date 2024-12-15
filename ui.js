@@ -317,7 +317,7 @@ function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
                 startUpdateAutoBuyerTimersAndRates('scienceKit');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'getCash', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'getCash', false, null),
             null,
             null,
             null,
@@ -338,7 +338,7 @@ function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
                 startUpdateAutoBuyerTimersAndRates('scienceClub');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'getCash', false),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'getCash', false, null),
             null,
             null,
             null,
@@ -354,25 +354,27 @@ function drawTab2Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(scienceClubRow);
     } else if (heading === 'Tech Tree') {
-        // const knowledgeSharing = createOptionRow(
-        //     'Knowledge Sharing:',
-        //     createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
-        //         gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
-        //         startUpdateAutoBuyerTimersAndRates('scienceKit');
-        //     }, 'upgradeCheck', 'getUpgradeResearch', 'scienceKit', 'getCash', false),
-        //     null,
-        //     null,
-        //     null,
-        //     null,
-        //     false,
-        //     `${getUpgradeResearch('research', 'scienceKit').price + ' ' + getUpgradeResearch('research', 'scienceKit').resource}`,
-        //     'getUpgradeResearch',
-        //     'upgradeCheck',
-        //     'scienceKit',
-        //     'getCash',
-        //     null
-        // );
-        // optionContentElement.appendChild(scienceKitRow);
+        const knowledgeSharing = createOptionRow(
+            'Knowledge Sharing:',
+            createButton(`Research`, ['option-button', 'red-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                gain(getResearchQuantity, setResearchQuantity, null, 'knowledgeSharing', null, null, null, 'techUnlock', false, null)
+                event.currentTarget.classList.add('unlocked-tech');
+                //revealElement('scienceClubRow');
+            }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'getResearchQuantity', false, null),
+            null,
+            null,
+            null,
+            null,
+            false,
+            `${getUpgradeResearch('techs', 'knowledgeSharing').price + ' Research'}`,
+            'getUpgradeResearch',
+            'techUnlock',
+            'knowledgeSharing',
+            null,
+            'getResearchQuantity',
+            null
+        );
+        optionContentElement.appendChild(knowledgeSharing);
     }
 }
 
@@ -563,12 +565,18 @@ function createOptionRow(labelText, inputElement1, inputElement2, inputElement3,
         description.classList.add('red-text');
         description.classList.add('resource-cost-sell-check');
 
-        description.dataset.conditionCheck = dataConditionCheck;
-        description.dataset.resourcePriceObject = resourcePriceObject;
-        description.dataset.argumentToPass1 = objectSectionArgument1;
-        description.dataset.argumentToPass2 = objectSectionArgument2;
-        description.dataset.argumentCheckQuantity = quantityArgument;
-        description.dataset.autoBuyerTier = autoBuyerTier;
+        if (dataConditionCheck === 'techUnlock') {
+            description.dataset.conditionCheck = dataConditionCheck;
+            description.dataset.argumentToPass1 = objectSectionArgument1;
+            description.dataset.argumentCheckQuantity = quantityArgument;
+        } else {
+            description.dataset.conditionCheck = dataConditionCheck;
+            description.dataset.resourcePriceObject = resourcePriceObject;
+            description.dataset.argumentToPass1 = objectSectionArgument1;
+            description.dataset.argumentToPass2 = objectSectionArgument2;
+            description.dataset.argumentCheckQuantity = quantityArgument;
+            description.dataset.autoBuyerTier = autoBuyerTier;
+        }
     }
 
     descriptionContainer.appendChild(description);
@@ -647,6 +655,10 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
     if (dataConditionCheck) {
         if (dataConditionCheck === 'sellResource') {
             button.dataset.conditionCheck = dataConditionCheck;
+            button.dataset.argumentCheckQuantity = quantityArgument;
+        } else if (dataConditionCheck === 'techUnlock') {
+            button.dataset.conditionCheck = dataConditionCheck;
+            button.dataset.argumentToPass1 = objectSectionArgument1;
             button.dataset.argumentCheckQuantity = quantityArgument;
         } else {
             button.dataset.conditionCheck = dataConditionCheck;

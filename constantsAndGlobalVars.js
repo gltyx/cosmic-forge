@@ -84,7 +84,13 @@ let upgradeHydrogen = {
 };
 
 let upgradeResearch = {
-    techs: {},
+    techs: {
+        knowledgeSharing: {
+            price: 5,
+            resource: 'research',
+            effectFunction: 'revealElement'
+        }
+    },
     research: {
         scienceKit: {
             requirementQty: 1, 
