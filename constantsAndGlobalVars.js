@@ -2,6 +2,7 @@
 export let debugFlag = false;
 export let debugOptionFlag = false;
 export let stateLoading = false;
+export const debugVisibilityArray = ['settingsNotificationTestRow'];
 
 //ELEMENTS
 let elements;
@@ -26,6 +27,8 @@ let increaseStorageFactor = 2;
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
 let cash = 0;
+
+let techUnlockedArray = [];
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -542,4 +545,16 @@ export function getHydrogenAB1Quantity() {
 
 export function setHydrogenAB1Quantity(value) {
     hydrogenAB1Quantity = value;
+}
+
+export function getDebugVisibilityArray() {
+    return debugVisibilityArray;
+}
+
+export function getTechUnlockedArray() {
+    return techUnlockedArray;
+}
+
+export function setTechUnlockedArray(value) {
+    techUnlockedArray.unshift(value);
 }

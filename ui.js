@@ -1,4 +1,7 @@
 import {
+    setTechUnlockedArray,
+    getDebugVisibilityArray,
+    getTechUnlockedArray,
     getTimerRateRatio,
     getHydrogenAB1Quantity,
     setHydrogenAB1Quantity,
@@ -43,6 +46,7 @@ import {
     setCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
+    revealElement,
     startUpdateAutoBuyerTimersAndRates,
     sellResource,
     increaseResourceStorage,
@@ -209,7 +213,8 @@ function drawTab1Content(heading, optionContentElement) {
         let storagePrice = getUpgradeHydrogen('storage').price;
         let autobuyer1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
 
-        const sellHydrogenRow = createOptionRow(
+        const hydrogenSellRow = createOptionRow(
+            'hydrogenSellRow',
             'Sell Hydrogen:',
             createDropdown('hydrogenSellSelectQuantity', [
                 { value: 'all', text: 'All Stock' },
@@ -232,18 +237,19 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             `${getHydrogenSalePreview()}`,
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(sellHydrogenRow);
+        optionContentElement.appendChild(hydrogenSellRow);
 
-        const hydrogenRow = createOptionRow(
+        const hydrogenGainRow = createOptionRow(
+            'hydrogenGainRow',
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
                 gain(getHydrogenQuantity, setHydrogenQuantity, getHydrogenStorage, 1, 'hydrogenQuantity', null, null, false, null)
@@ -252,22 +258,23 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             null,
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(hydrogenRow);
+        optionContentElement.appendChild(hydrogenGainRow);
 
         if (typeof storagePrice === 'function') {
             storagePrice = storagePrice();
         }
 
-        const containerSizeRow = createOptionRow(
+        const hydrogenIncreaseStorageRow = createOptionRow(
+            'hydrogenIncreaseStorageRow',
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
@@ -276,18 +283,19 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             `${storagePrice + " " + getUpgradeHydrogen('storage').resource}`,
             'getUpgradeHydrogen',
             'upgradeCheck',
             'storage',
             null,
             'getHydrogenQuantity',
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(containerSizeRow);
+        optionContentElement.appendChild(hydrogenIncreaseStorageRow);
 
-        const autoBuyerRow = createOptionRow(
+        const hydrogenAutoBuyer1Row = createOptionRow(
+            'hydrogenAutoBuyer1Row',
             'Hydrogen Compressor:',
             createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1'),
@@ -297,22 +305,23 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             `${autobuyer1Price + " " + getUpgradeHydrogen('autoBuyer').resource}`,
             'getUpgradeHydrogen',
             'upgradeCheck',
             'autoBuyer',
             null,
             'getHydrogenQuantity',
-            'tier1'
+            'tier1',
+            false
         );
-        optionContentElement.appendChild(autoBuyerRow);
+        optionContentElement.appendChild(hydrogenAutoBuyer1Row);
     }
 }
 
 function drawTab2Content(heading, optionContentElement) {
     if (heading === 'Research') {
-        const scienceKitRow = createOptionRow(
+        const researchScienceKitRow = createOptionRow(
+            'researchScienceKitRow',
             'Science Kit:',
             createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
@@ -322,18 +331,19 @@ function drawTab2Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             `${getUpgradeResearch('research', 'scienceKit').price + ' ' + getUpgradeResearch('research', 'scienceKit').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'research',
             'scienceKit',
             'getCash',
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(scienceKitRow);
+        optionContentElement.appendChild(researchScienceKitRow);
 
-        const scienceClubRow = createOptionRow(
+        const researchScienceClubRow = createOptionRow(
+            'researchScienceClubRow',
             'Open Science Club:',
             createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
@@ -343,38 +353,39 @@ function drawTab2Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             `${getUpgradeResearch('research', 'scienceClub').price + ' ' + getUpgradeResearch('research', 'scienceClub').resource}`,
             'getUpgradeResearch',
             'upgradeCheck',
             'research',
             'scienceClub',
             'getCash',
-            null
+            null,
+            ['tech', 'knowledgeSharing']
         );
-        optionContentElement.appendChild(scienceClubRow);
+        optionContentElement.appendChild(researchScienceClubRow);
     } else if (heading === 'Tech Tree') {
-        const knowledgeSharing = createOptionRow(
+        const techKnowledgeSharingRow = createOptionRow(
+            'techKnowledgeSharingRow',
             'Knowledge Sharing:',
             createButton(`Research`, ['option-button', 'red-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                 gain(getResearchQuantity, setResearchQuantity, null, 'knowledgeSharing', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
-                //revealElement('scienceClubRow');
+                setTechUnlockedArray('knowledgeSharing');
             }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'getResearchQuantity', false, null),
             null,
             null,
             null,
             null,
-            false,
             `${getUpgradeResearch('techs', 'knowledgeSharing').price + ' Research'}`,
             'getUpgradeResearch',
             'techUnlock',
             'knowledgeSharing',
             null,
             'getResearchQuantity',
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(knowledgeSharing);
+        optionContentElement.appendChild(techKnowledgeSharingRow);
     }
 }
 
@@ -400,7 +411,8 @@ function drawTab7Content(heading, optionContentElement) {
 
 function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Visual') {
-        const currencySymbolRow = createOptionRow(
+        const settingsCurrencySymbolRow = createOptionRow(
+            'settingsCurrencySymbolRow',
             'Currency:',
             createDropdown('notationSelect', [
                 { value: '$', text: 'Dollar ($)' },
@@ -418,18 +430,19 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             'Change the symbol used for Cash (Visual Only).',
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(currencySymbolRow);
+        optionContentElement.appendChild(settingsCurrencySymbolRow);
 
-        const notationRow = createOptionRow(
+        const settingsNotationRow = createOptionRow(
+            'settingsNotationRow',
             'Notation:',
             createDropdown('notationSelect', [
                 { value: 'normal', text: 'Normal' },
@@ -441,19 +454,20 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             'Change the notation used.',
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(notationRow);
+        optionContentElement.appendChild(settingsNotationRow);
 
-        const notificationsRow = createOptionRow(
-            'Notifications:',
+        const settingsToggleNotificationsRow = createOptionRow(
+            'settingsToggleNotificationsRow',
+            'Toggle Notifications:',
             createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                 setNotificationsToggle(isEnabled);
             }),
@@ -461,18 +475,19 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             'Toggle notifications',
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(notificationsRow);
+        optionContentElement.appendChild(settingsToggleNotificationsRow);
 
-        const themeRow = createOptionRow(
+        const settingsThemeRow = createOptionRow(
+            'settingsThemeRow',
             'Theme:',
             createDropdown('themeSelect', [
                 { value: 'light', text: 'Light' },
@@ -487,44 +502,59 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false,
             'Change styling of the page.',
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            false
         );
-        optionContentElement.appendChild(themeRow);
+        optionContentElement.appendChild(settingsThemeRow);
 
-        const triggerNotificationsRow = createOptionRow(
+        const settingsNotificationTestRow = createOptionRow(
+            'settingsNotificationTestRow',
             'Trigger Notification:',
             createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, null, false, null),
             null,
             null,
             null,
             null,
-            true,
             'Send test notification',
             null,
             null,
             null,
             null,
             null,
-            null
+            null,
+            ['debug', 'settingsNotificationTestRow']
         );
-        optionContentElement.appendChild(triggerNotificationsRow);
+        optionContentElement.appendChild(settingsNotificationTestRow);
     }
 }
 
-function createOptionRow(labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, hidden, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument1, objectSectionArgument2, quantityArgument, autoBuyerTier) {
+function createOptionRow(labelId, labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument1, objectSectionArgument2, quantityArgument, autoBuyerTier, startInvisibleValue) {
     const row = document.createElement('div');
 
-    if (hidden) {
-        row.classList.add('option-row', 'd-none');
-    } else {
-        row.classList.add('option-row', 'd-flex');
+    row.id = labelId;
+    row.classList.add('option-row', 'd-flex');
+
+    if (startInvisibleValue) {
+        const revealElementType = startInvisibleValue[0];
+        const revealElementCondition = startInvisibleValue[1];
+
+        if (revealElementType === 'tech') {
+            if (!getTechUnlockedArray().includes(revealElementCondition)) {
+                row.classList.add('option-row', 'invisible');
+            }
+        }
+
+        if (revealElementType === 'debug') {
+            if (getDebugVisibilityArray().includes(revealElementCondition)) {
+                row.classList.add('option-row', 'invisible');
+            }
+        }
     }
 
     const labelContainer = document.createElement('div');

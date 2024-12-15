@@ -544,6 +544,11 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
     });
 }
 
+export function revealElement(elementId) {
+    const element = document.getElementById(elementId);
+    element.classList.remove('invisible');
+}
+
 export function startUpdateAutoBuyerTimersAndRates(timerName) {
     if (timerName === 'hydrogenAB1') {
         const rateHydrogenAB1 = getUpgradeHydrogen('autoBuyer').tier1.rate;
