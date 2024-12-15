@@ -152,7 +152,11 @@ export async function gameLoop() {
 
 function updateStats() {
     //cash
-    getElements().cashStat.textContent = `${getCurrencySymbol()}${getCash().toFixed(2)}`;
+    if (getCurrencySymbol() !== "€") {
+        getElements().cashStat.textContent = `${getCurrencySymbol()}${getCash().toFixed(2)}`;
+    } else {
+        getElements().cashStat.textContent = `${getCash().toFixed(2) + getCurrencySymbol()}`;
+    }
 }
 
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
@@ -452,7 +456,9 @@ function monitorResourceCostChecks(element) {
 const updateDisplay = (element, data1, data2, desc) => {
     if (desc) {
         if (element && data2) {
-            if(data2 === getCurrencySymbol()) {
+            if (data2 === '€') {
+                element.textContent = data1 + data2;
+            } else if (data2 === getCurrencySymbol()) {
                 element.textContent = data2 + data1;
             } else {
                 element.textContent = data1 + ' ' + data2;

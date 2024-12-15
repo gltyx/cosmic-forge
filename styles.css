@@ -290,32 +290,6 @@ button.disabled {
     --container-bg-color: #98fb98;
 }
 
-/* Theme-specific variations for .stats-container */
-[data-theme="light"] .stats-container {
-    background-color: var(--container-bg-color);
-    border-color: var(--container-border-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="frosty"] .stats-container {
-    background-color: var(--tab-invisible-bg-color);
-    border-color: var(--tab-border-color);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="summer"] .stats-container {
-    background-color: var(--container-bg-color);
-    border-color: var(--tab-border-color);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-[data-theme="forest"] .stats-container {
-    background-color: var(--container-bg-color);
-    border-color: var(--tab-border-color);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-
 /* Global Styles */
 body {
     margin: 0;
@@ -733,8 +707,9 @@ body {
 
 .stats-container {
     background-color: var(--container-bg-color);
+    border-color: var(--tab-border-color);
     color: var(--text-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     width: 100%;

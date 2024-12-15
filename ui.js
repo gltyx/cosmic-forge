@@ -43,7 +43,8 @@ import {
     getLanguageSelected,
     setLanguageSelected,
     setLanguage,
-    setCurrencySymbol
+    setCurrencySymbol,
+    getCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
     revealElement,
@@ -423,7 +424,7 @@ function drawTab8Content(heading, optionContentElement) {
                 { value: '₩', text: 'Won (₩)' },
                 { value: '₣', text: 'Franc (₣)' },
                 { value: '₿', text: 'Bitcoin (₿)' },
-            ], '$', (value) => {
+            ], getCurrencySymbol(), (value) => {
                 setCurrencySymbol(value);
             }),
             null,
@@ -447,7 +448,7 @@ function drawTab8Content(heading, optionContentElement) {
             createDropdown('notationSelect', [
                 { value: 'normal', text: 'Normal' },
                 { value: 'scientific', text: 'Scientific' },
-            ], 'normal', (value) => {
+            ], getNotationType(), (value) => {
                 setNotationType(value);
             }),
             null,
@@ -495,7 +496,7 @@ function drawTab8Content(heading, optionContentElement) {
                 { value: 'frosty', text: 'Frosty' },
                 { value: 'summer', text: 'Summer' },
                 { value: 'forest', text: 'Forest' },
-            ], document.body.getAttribute('data-theme') || 'dark', (value) => {
+            ], document.body.getAttribute('data-theme'), (value) => {
                 selectTheme(value);
             }),
             null,

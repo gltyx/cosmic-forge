@@ -516,10 +516,18 @@ export function setSalePreview(resource, amount) {
 
 export function setHydrogenSalePreview(value) {
     const quantityInStock = getHydrogenQuantity();
-    if (value <= quantityInStock) {
-        hydrogenSalePreview = `${getCurrencySymbol()}` + (value * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
+    if (getCurrencySymbol() !== "€") {
+        if (value <= quantityInStock) {
+            hydrogenSalePreview = `${getCurrencySymbol()}` + (value * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
+        } else {
+            hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+        }
     } else {
-        hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+        if (value <= quantityInStock) {
+            hydrogenSalePreview = `${(value * SALE_VALUE_HYDROGEN).toFixed(2) + getCurrencySymbol()} (${value} Hydrogen)`;
+        } else {
+            hydrogenSalePreview = `${(quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + getCurrencySymbol()} (${quantityInStock} Hydrogen)`;
+        }
     }
 }
 
