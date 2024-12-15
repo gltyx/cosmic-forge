@@ -1,4 +1,6 @@
 import {
+    getHeaderDescriptions,
+    setHeaderDescriptions,
     setTechUnlockedArray,
     getDebugVisibilityArray,
     getTechUnlockedArray,
@@ -168,8 +170,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function updateContent(heading, tab) {
+    const optionDescriptionElements = getElements().optionPaneDescriptions;
+    const optionDescription = getHeaderDescriptions([heading.toLowerCase()]);
+
     let headerContentElement;
     let optionContentElement;
+    let optionDescriptionElement;
 
     let tabNumber = parseInt(tab.replace('tab', ''));
     headerContentElement = document.getElementById(`headerContentTab${tabNumber}`);
@@ -180,27 +186,51 @@ function updateContent(heading, tab) {
         
     switch (tab) {
         case 'tab1':
+            optionDescriptionElement = optionDescriptionElements[0];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab1Content(heading, optionContentElement);
             break;
         case 'tab2':
+            optionDescriptionElement = optionDescriptionElements[1];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab2Content(heading, optionContentElement);
             break;
         case 'tab3':
+            optionDescriptionElement = optionDescriptionElements[2];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab3Content(heading, optionContentElement);
             break;
         case 'tab4':
+            optionDescriptionElement = optionDescriptionElements[3];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab4Content(heading, optionContentElement);
             break;
         case 'tab5':
+            optionDescriptionElement = optionDescriptionElements[4];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab5Content(heading, optionContentElement);
             break;
         case 'tab6':
+            optionDescriptionElement = optionDescriptionElements[5];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab6Content(heading, optionContentElement);
             break;
         case 'tab7':
+            optionDescriptionElement = optionDescriptionElements[6];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab7Content(heading, optionContentElement);
             break;
         case 'tab8':
+            optionDescriptionElement = optionDescriptionElements[7];
+            optionDescriptionElement.textContent = optionDescription;
+            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
             drawTab8Content(heading, optionContentElement);
             break;
         default:

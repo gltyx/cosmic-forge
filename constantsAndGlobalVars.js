@@ -149,6 +149,14 @@ const functionRegistryResourceQuantity = {
     // Add more resources here...
 };
 
+const headerDescriptions = {
+    visual: "Change the visual settings of the game.",
+    research: "Here you can buy upgrades to generate research points for unlocking new technology.",
+    'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+    hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it."
+
+}
+
 //GETTER SETTER METHODS
 export function setElements() {
     elements = {
@@ -167,6 +175,7 @@ export function setElements() {
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
         cashStat: document.getElementById('cashStat'),
+        optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
         
         // scienceKitQuantity: document.getElementById('scienceKitQuantity'), //IF TRYING TO ADD ELEMENTS HERE FROM DYNAMICALLY GENERATED ELEMENTS IT WONT WORK UNLESS WE CALL SET ELEMENTS AFTER CREATING THEM
     };
@@ -588,3 +597,12 @@ export function getTechUnlockedArray() {
 export function setTechUnlockedArray(value) {
     techUnlockedArray.unshift(value);
 }
+
+export function getHeaderDescriptions(key) {
+    return headerDescriptions[key];
+}
+
+export function setHeaderDescriptions(value) {
+    headerDescriptions[key] = value;
+}
+

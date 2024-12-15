@@ -2,6 +2,18 @@ h4 {
     font-weight: 700;
 }
 
+p {
+    font-size: 0.9rem;
+}
+
+.center-align {
+    text-align: center;
+}
+
+.right-align {
+    text-align: right;
+}
+
 label {
     margin-bottom: 0;
 }
@@ -188,29 +200,6 @@ button {
     left: 0;
 }
 
-#summaryContainer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #333;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    z-index: 1000;
-    width: 100%;
-}
-
-.summary-item {
-    display: flex;
-    justify-content: center;
-    flex: 1;
-}
-
-#hydrogenPerSec, #silverPerSec {
-    margin: 0;
-}
-
 /* THEMEABLE CSS */
 /* Dark Theme Variables */
 :root {
@@ -346,9 +335,6 @@ button {
     --button-bg-color: #333;
     --button-bg-active: #555;
 }
-
-
-
 /* Global Styles */
 body {
     margin: 0;
@@ -363,15 +349,16 @@ body {
     user-select: none;
 }
 
-/* Tabs Container */
 #tabsContainer {
-    height: 50px;
+    height: 50px; /* Adjust the container height as needed */
     background-color: var(--tab-bg-color);
     display: flex;
     justify-content: space-around;
     padding: 0;
     margin-top: 30px;
-    border-bottom: 2px solid var(--tab-border-color);
+    border-bottom: 5px solid var(--tab-border-color);
+    overflow: visible; /* Ensure overflow is visible */
+    width: 100%;
 }
 
 .tab {
@@ -382,11 +369,19 @@ body {
     color: var(--text-color);
     cursor: pointer;
     border: 1px solid var(--tab-border-color);
-    border-bottom: none;
     border-radius: 8px 8px 0 0;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, height 0.3s ease;
+    height: 100%;
+    transform: translateY(5px);
 }
 
+.tab.selected {
+    background-color: var(--tab-selected-bg-color);
+    color: var(--text-focus-color);
+    font-weight: bold;
+    height: 100%;
+    transform: translateY(0);
+}
 .invisible {
     background-color: var(--tab-invisible-bg-color);
     color: var(--tab-invisible-text-color);
@@ -399,13 +394,6 @@ body {
 .tab:hover {
     background-color: var(--tab-bg-hover) !important;
     color: var(--text-hover-color) !important;
-}
-
-.tab.selected {
-    background-color: var(--tab-selected-bg-color);
-    color: var(--text-focus-color);
-    font-weight: bold;
-    border-bottom: 2px solid var(--tab-selected-bg-color);
 }
 
 .main-container {
@@ -474,6 +462,7 @@ body {
 }
 
 .container-item-menu {
+    flex: 1;
     width: 25%;
     height: 100%;
     box-sizing: border-box;
@@ -493,6 +482,16 @@ body {
     height: auto;
     overflow: hidden;
     background-color: var(--container-bg-color);
+    flex-direction: column;
+}
+
+.option-pane-description {
+    margin-top: 10px;
+    box-sizing: border-box;
+    padding: 10px;
+    height: auto;
+    width: 100%;
+    border-radius: 5px;
 }
 
 .container-item-menu-body {
@@ -533,7 +532,7 @@ body {
     color: var(--text-color);
     border: 1px solid var(--container-border-color);
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 1rem;
     transition: all 0.3s ease;
     appearance: none;
     -webkit-appearance: none;
@@ -689,7 +688,7 @@ body {
     opacity: 0;
 }
 
-button.option-button {
+.option-button {
     background-color: var(--button-bg-color) !important;
     color: var(--text-color);
     border: none;
@@ -697,7 +696,7 @@ button.option-button {
     border-radius: 5px;
     cursor: pointer;
     display: inline-block;
-    font-size: 16px;
+    font-size: 1rem;
     text-align: center;
     transition: background-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
 }
@@ -792,7 +791,6 @@ button.red-disabled-text {
 .stat-label {
     color: var(--text-color);
 }
-
 
 /* SCROLL BAR */
 ::-webkit-scrollbar {
