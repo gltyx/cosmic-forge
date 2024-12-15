@@ -491,6 +491,7 @@ function drawTab8Content(heading, optionContentElement) {
             'settingsThemeRow',
             'Theme:',
             createDropdown('themeSelect', [
+                { value: 'terminal', text: 'Terminal' },
                 { value: 'light', text: 'Light' },
                 { value: 'dark', text: 'Dark' },
                 { value: 'frosty', text: 'Frosty' },

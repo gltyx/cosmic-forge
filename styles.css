@@ -70,13 +70,6 @@ button {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
 }
 
-button.disabled {
-    background-color: #6c757d;
-    color: #ccc;
-    pointer-events: none;
-    box-shadow: none;
-}
-
 .btn-primary:focus,
 .btn-success:focus,
 .btn-danger:focus,
@@ -89,7 +82,6 @@ button.disabled {
     margin: 10px;
     padding: 10px 20px;
     font-size: 18px;
-    border: none;
     border-radius: 5px;
     cursor: pointer;
     display: flex;
@@ -222,8 +214,11 @@ button.disabled {
 /* THEMEABLE CSS */
 /* Dark Theme Variables */
 :root {
+    --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;
+    --text-hover-color: #ddd;
+    --text-focus-color: #eee;
     --tab-bg-color: #444;
     --tab-bg-hover: #555;
     --tab-selected-bg-color: #222;
@@ -232,69 +227,106 @@ button.disabled {
     --tab-invisible-text-color: #333;
     --container-border-color: #bbb;
     --container-bg-color: #333;
+    --button-bg-color: #444;
+    --button-bg-active: #666;
 }
 
 /* Light Theme Variables */
 [data-theme="light"] {
     --bg-color: white;
     --text-color: black;
+    --text-hover-color: #666;
+    --text-focus-color: #333;
     --tab-bg-color: #f0f0f0;
-    --tab-bg-hover: #ddd;
+    --tab-bg-hover: #aaa;
     --tab-selected-bg-color: #ccc;
     --tab-border-color: #ccc;
     --tab-invisible-bg-color: #e0e0e0;
     --tab-invisible-text-color: #bbb;
     --container-border-color: #ddd;
     --container-bg-color: #fafafa;
+    --button-bg-color: #e5e5e5;
+    --button-bg-active: #bfbfbf;
 }
 
 /* Frosty Theme Variables */
 [data-theme="frosty"] {
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
+    --text-hover-color: #fff;
+    --text-focus-color: #fff;
     --tab-bg-color: #b0e0e6;
-    --tab-bg-hover: #add8e6;
+    --tab-bg-hover: #67aac6;
     --tab-selected-bg-color: #87cefa;
     --tab-border-color: #4682b4;
     --tab-invisible-bg-color: #d1e7f0;
     --tab-invisible-text-color: #b0c4de;
     --container-border-color: #a3c8e3;
     --container-bg-color: #f0f8ff;
+    --button-bg-color: #d8eff6;
+    --button-bg-active: #c0e2eb;
 }
 
 /* Summer Theme Variables */
 [data-theme="summer"] {
     --bg-color: #fffae6;
-    --text-color: #2d2d2d;
+    --text-color: #ff774e;
+    --text-hover-color: #ffee57;
+    --text-focus-color: #ffee57;
     --tab-bg-color: #ffeb3b;
-    --tab-bg-hover: #fff176;
-    --tab-selected-bg-color: #ffcc00;
+    --tab-bg-hover: #ffcc00;
+    --tab-selected-bg-color: #ff774e;
     --tab-border-color: #ff9800;
     --tab-invisible-bg-color: #fdd835;
-    --tab-invisible-text-color: #ff7043;
+    --tab-invisible-text-color: #ff774e;
     --container-border-color: #ffb74d;
     --container-bg-color: #fff3e0;
+    --button-bg-color: #ffe8c0;
+    --button-bg-active: #ffdab0;
 }
 
 /* Forest Theme Variables */
 [data-theme="forest"] {
     --bg-color: #2f4f4f;
-    --text-color: #0c4318;
-    --tab-bg-color: #228b22;
-    --tab-bg-hover: #6b8e23;
+    --text-color: #d67733;
+    --text-hover-color: #32a132;
+    --text-focus-color: #32a132;
+    --tab-bg-color: #136213;
+    --tab-bg-hover: #0c4318;
     --tab-selected-bg-color: #556b2f;
     --tab-border-color: #8b4513;
     --tab-invisible-bg-color: #2e8b57;
     --tab-invisible-text-color: #90ee90;
     --container-border-color: #228b22;
     --container-bg-color: #98fb98;
+    --button-bg-color: #b5f1b5;
+    --button-bg-active: #c6f9c6;
 }
+
+/* Terminal Theme Variables */
+[data-theme="terminal"] {
+    --bg-color: black;
+    --text-color: lime;
+    --text-hover-color: #fff;
+    --text-focus-color: #fff;
+    --tab-bg-color: #111;
+    --tab-bg-hover: rgb(0, 114, 0);
+    --tab-selected-bg-color: rgb(0, 154, 0);
+    --tab-border-color: lime;
+    --tab-invisible-bg-color: #000;
+    --tab-invisible-text-color: lime;
+    --container-border-color: lime;
+    --container-bg-color: #000;
+    --button-bg-color: #212121;
+    --button-bg-active: #333;
+}
+
 
 /* Global Styles */
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family);
     background-color: var(--bg-color);
     color: var(--text-color);
     display: flex;
@@ -336,21 +368,19 @@ body {
     pointer-events: none;
 }
 
-/* Hover Effect on Tabs */
+.option-button:hover,
 .tab:hover {
-    background-color: var(--tab-bg-hover);
-    color: #ddd;
+    background-color: var(--tab-bg-hover) !important;
+    color: var(--text-hover-color) !important;
 }
 
-/* Selected Tab */
 .tab.selected {
     background-color: var(--tab-selected-bg-color);
-    color: white;
+    color: var(--text-focus-color);
     font-weight: bold;
     border-bottom: 2px solid var(--tab-selected-bg-color);
 }
 
-/* Main Content Container */
 .main-container {
     width: 100%;
     height: auto;
@@ -463,14 +493,12 @@ body {
     align-items: center;
 }
 
-/* General dropdown container */
 .select-container {
     position: relative;
     width: 100%;
     max-width: 300px;
 }
 
-/* Style the select box itself */
 .select-container select {
     width: 100%;
     padding: 3px 3px;
@@ -517,7 +545,6 @@ body {
     margin: 10px 0 10px 30px;
 }
 
-/* Style when dropdown is focused */
 .select-container select:focus {
     border-color: var(--tab-selected-bg-color);
     outline: none;
@@ -525,19 +552,16 @@ body {
     cursor: pointer;
 }
 
-/* Container for the toggle switch */
 .toggle-container {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-/* Hidden default checkbox */
 .toggle-container input[type="checkbox"] {
     display: none;
 }
 
-/* The switch slider */
 .toggle-container label {
     position: relative;
     display: inline-block;
@@ -563,16 +587,14 @@ body {
     transform: translateX(0);
 }
 
-/* When the checkbox is checked */
 .toggle-container input[type="checkbox"]:checked + label {
-    background-color: var(--tab-selected-bg-color);
+    background-color: var(--tab-bg-hover);
 }
 
 .toggle-container input[type="checkbox"]:checked + label::after {
-    transform: translateX(26px); /* Adjust for the switch size */
+    transform: translateX(26px);
 }
 
-/* Optional: Accessible focus style */
 .toggle-container input[type="checkbox"]:focus + label {
     box-shadow: 0 0 2px 2px var(--text-color);
 }
@@ -630,7 +652,6 @@ body {
     color: #ffffff;
 }
 
-
 .notification-container.slide-in {
     bottom: 1%;
     opacity: 1;
@@ -641,8 +662,8 @@ body {
     opacity: 0;
 }
 
-.option-button {
-    background-color: var(--tab-selected-bg-color);
+button.option-button {
+    background-color: var(--button-bg-color) !important;
     color: var(--text-color);
     border: none;
     padding: 10px 15px;
@@ -656,15 +677,20 @@ body {
 
 .option-button:hover {
     background-color: var(--tab-selected-bg-hover-color); /* Theme hover state */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     color: var(--text-color);
 }
 
+.option-button.selected  {
+    background-color: var(--tab-bg-hover);
+    font-weight: bold;
+}
+
 .option-button:focus {
-    background-color: var(--tab-selected-bg-hover-color);
-    outline: none;
-    box-shadow: 0 0 8px var(--tab-selected-bg-color);
-    color: var(--text-color);
+    outline: 0;
+}
+
+.option-button:active {
+    background-color: var(--button-bg-active) !important;
 }
 
 .row-side-menu {
