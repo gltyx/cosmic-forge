@@ -18,17 +18,13 @@ export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
 
-//ELEMENT VALUES
-export const SALE_VALUE_HYDROGEN = 0.1; //0.005;
-
 //GLOBAL VARIABLES
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
-let cash = 0;
-
 let techUnlockedArray = [];
+let cash = 0;
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -41,7 +37,14 @@ let lastScreenOpenRegister = {
     tab8: null,
 };
 
-let hydrogenSalePreview = 0;
+//ELEMENT VALUES
+export const SALE_VALUES = {
+    hydrogen: 0.005
+}
+
+let salePreviews = {
+    hydrogen: 0
+};
 
 let hydrogenQuantity = 0;
 let hydrogenRate = 0;
@@ -141,7 +144,7 @@ export const functionRegistryUpgrade = {
 };
 
 const functionRegistryResourceQuantity = {
-    hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setHydrogenSalePreview, getSalePreview: getHydrogenSalePreview, salePreviewElement: 'sellHydrogenDescription' },
+    hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHydrogenDescription' },
     //helium: { getQuantity: getHeliumQuantity, setSalePreview: setHeliumSalePreview },
     // Add more resources here...
 };
@@ -508,31 +511,50 @@ export function setSalePreview(resource, amount) {
                 break;
         }
 
-        resourceFunc.setSalePreview(calculatedAmount);
+        resourceFunc.setSalePreview(resource, calculatedAmount);
     } else {
         console.warn(`No functions found for resource: ${resource}`);
     }
 }
+export function setResourceSalePreview(resource, value) {
+    const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
+    const resourceQuantity = functionRegistryResourceQuantity[resource].getQuantity();
 
-export function setHydrogenSalePreview(value) {
-    const quantityInStock = getHydrogenQuantity();
     if (getCurrencySymbol() !== "€") {
-        if (value <= quantityInStock) {
-            hydrogenSalePreview = `${getCurrencySymbol()}` + (value * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${value} Hydrogen)`;
+        if (value <= resourceQuantity) {
+            salePreviews[resource] = 
+                getCurrencySymbol() + 
+                (value * SALE_VALUES[resource]).toFixed(2) + 
+                ' (' + 
+                value + ' ' + resourceString + ')';
         } else {
-            hydrogenSalePreview = `${getCurrencySymbol()}` + (quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + ` (${quantityInStock} Hydrogen)`;
+            salePreviews[resource] = 
+                getCurrencySymbol() + 
+                (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
+                ' (' + 
+                resourceQuantity + ' ' + resourceString + ')';
         }
     } else {
-        if (value <= quantityInStock) {
-            hydrogenSalePreview = `${(value * SALE_VALUE_HYDROGEN).toFixed(2) + getCurrencySymbol()} (${value} Hydrogen)`;
+        if (value <= resourceQuantity) {
+            salePreviews[resource] = 
+                (value * SALE_VALUES[resource]).toFixed(2) + 
+                getCurrencySymbol() + 
+                ' (' + 
+                value + ' ' + resourceString + ')';
         } else {
-            hydrogenSalePreview = `${(quantityInStock * SALE_VALUE_HYDROGEN).toFixed(2) + getCurrencySymbol()} (${quantityInStock} Hydrogen)`;
+            salePreviews[resource] = 
+                (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
+                getCurrencySymbol() + 
+                ' (' + 
+                resourceQuantity + ' ' + resourceString + ')';
         }
     }
+    console.log(salePreviews[resource]);
 }
 
-export function getHydrogenSalePreview() {
-    return hydrogenSalePreview;
+
+export function getResourceSalePreview(key) {
+    return salePreviews[key];
 }
 
 export function getFunctionRegistryResourceQuantity() {

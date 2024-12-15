@@ -162,7 +162,7 @@ function updateStats() {
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const resourceQuantity = getResourceQuantity();
-    const saleData = functionRegistryResourceQuantity[functionRegistryRef].getSalePreview();
+    const saleData = functionRegistryResourceQuantity[functionRegistryRef].getSalePreview(functionRegistryRef);
 
     const cashRaised = parseFloat(saleData.slice(1).split(' ')[0]);
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
@@ -183,7 +183,7 @@ function updateAllSalePricePreviews() {
 
             const resourceFunctions = functionRegistryResourceQuantity[resource];
 
-            const salePreviewString = resourceFunctions.getSalePreview();
+            const salePreviewString = resourceFunctions.getSalePreview(currentScreen);
             const salePreviewElement = document.getElementById(resourceFunctions.salePreviewElement);
 
             if (salePreviewElement) {
