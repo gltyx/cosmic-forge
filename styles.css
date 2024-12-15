@@ -233,7 +233,6 @@ button {
     --button-bg-active: #666;
 }
 
-/* Light Theme Variables */
 [data-theme="light"] {
     --disabled-text: red;
     --ready-text: lime;
@@ -253,7 +252,6 @@ button {
     --button-bg-active: #bfbfbf;
 }
 
-/* Frosty Theme Variables */
 [data-theme="frosty"] {
     --disabled-text: red;
     --ready-text: lime;
@@ -273,7 +271,6 @@ button {
     --button-bg-active: #c0e2eb;
 }
 
-/* Summer Theme Variables */
 [data-theme="summer"] {
     --disabled-text: red;
     --ready-text: lime;
@@ -293,7 +290,6 @@ button {
     --button-bg-active: #ffdab0;
 }
 
-/* Forest Theme Variables */
 [data-theme="forest"] {
     --disabled-text: red;
     --ready-text: lime;
@@ -313,7 +309,6 @@ button {
     --button-bg-active: #c6f9c6;
 }
 
-/* Terminal Theme Variables */
 [data-theme="terminal"] {
     --disabled-text: red;
     --ready-text: #fff;
@@ -332,6 +327,26 @@ button {
     --button-bg-color: #212121;
     --button-bg-active: #333;
 }
+
+[data-theme="dark"] {
+    --disabled-text: #ff0000;
+    --ready-text: #00ff00;
+    --bg-color: #000;
+    --text-color: #fff;
+    --text-hover-color: #ccc;
+    --text-focus-color: #fff;
+    --tab-bg-color: #333;
+    --tab-bg-hover: #555;
+    --tab-selected-bg-color: #000;
+    --tab-border-color: #fff;
+    --tab-invisible-bg-color: #222;
+    --tab-invisible-text-color: #aaa;
+    --container-border-color: #666;
+    --container-bg-color: #111;
+    --button-bg-color: #333;
+    --button-bg-active: #555;
+}
+
 
 
 /* Global Styles */
@@ -807,24 +822,3 @@ button.red-disabled-text {
 ::-webkit-scrollbar-corner {
     background-color: #f1f1f1;
 }
-
-.terminal-row {
-    font-family: Consolas, 'Courier New', monospace;
-    color: var(--text-color);
-}
-
-.terminal-row span {
-    display: inline-block;
-    opacity: 0;
-    animation: fadeIn 0.2s ease-in-out forwards;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-

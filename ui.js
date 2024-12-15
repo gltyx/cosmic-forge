@@ -492,11 +492,13 @@ function drawTab8Content(heading, optionContentElement) {
             'Theme:',
             createDropdown('themeSelect', [
                 { value: 'terminal', text: 'Terminal' },
-                { value: 'light', text: 'Light' },
                 { value: 'dark', text: 'Dark' },
+                { value: 'misty', text: 'Misty' },
+                { value: 'light', text: 'Light' },
                 { value: 'frosty', text: 'Frosty' },
                 { value: 'summer', text: 'Summer' },
                 { value: 'forest', text: 'Forest' },
+
             ], document.body.getAttribute('data-theme'), (value) => {
                 selectTheme(value);
             }),
