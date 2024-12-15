@@ -174,7 +174,7 @@ export function sellResource(getResourceQuantity, setResourceQuantity, functionR
 function updateAllSalePricePreviews() {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const currentScreen = getCurrentOptionPane();
-    console.log(currentScreen);
+    //console.log(currentScreen);
 
     for (const resource in functionRegistryResourceQuantity) {
         if (functionRegistryResourceQuantity.hasOwnProperty(resource) && resource === currentScreen) {
@@ -388,9 +388,9 @@ function monitorResourceCostChecks(element) {
                 const checkQuantity = functionGetResourceQuantity();
     
                 if (checkQuantity > 0) { 
-                    element.classList.remove('red-text');
+                    element.classList.remove('red-disabled-text');
                 } else {
-                    element.classList.add('red-text');
+                    element.classList.add('red-disabled-text');
                 }
             }
             return;
@@ -402,21 +402,21 @@ function monitorResourceCostChecks(element) {
     
                 if (!element.classList.contains('unlocked-tech')) {
                     if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
-                        element.classList.remove('red-text');
+                        element.classList.remove('red-disabled-text');
                     } else {
-                        element.classList.add('red-text');
+                        element.classList.add('red-disabled-text');
                     }
                 } else {
                     if (element.tagName.toLowerCase() === 'button') {
                         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                        accompanyingLabel.classList.remove('red-text');
+                        accompanyingLabel.classList.remove('red-disabled-text');
                         accompanyingLabel.classList.add('unlocked-tech');
-                        accompanyingLabel.classList.add('green-text');
+                        accompanyingLabel.classList.add('green-ready-text');
                         accompanyingLabel.textContent = 'Researched';
                         accompanyingLabel.style.pointerEvents = 'none';
                     }
 
-                    element.classList.add('green-text');
+                    element.classList.add('green-ready-text');
                     element.textContent = 'Researched';
                     element.style.pointerEvents = 'none';
                 }
@@ -443,9 +443,9 @@ function monitorResourceCostChecks(element) {
             
             // Perform the check and update the element's class
             if (element.dataset.conditionCheck === 'upgradeCheck' && checkQuantity >= price) { 
-                element.classList.remove('red-text');
+                element.classList.remove('red-disabled-text');
             } else {
-                element.classList.add('red-text');
+                element.classList.add('red-disabled-text');
             }
         } else {
             console.error(`Function ${functionName} is not defined or not callable.`);
@@ -472,11 +472,11 @@ const updateDisplay = (element, data1, data2, desc) => {
         }
     
         if (element && data2 && data1 === data2) {
-            element.classList.add('green-text');
+            element.classList.add('green-ready-text');
         }
 
-        if (element && element.classList.contains('green-text') && data1 !== data2) {
-            element.classList.remove('green-text');
+        if (element && element.classList.contains('green-ready-text') && data1 !== data2) {
+            element.classList.remove('green-ready-text');
         }
     }   
 };
@@ -491,7 +491,7 @@ export function gain(getFunction, setFunction, getResourceStorage, incrementAmou
         }
     } else {
         if (getResourceStorage && getFunction() < getResourceStorage()) { //buying upgrades affecting standard resources with storage like hydrogen
-            getElements()[elementId].classList.remove('green-text');
+            getElements()[elementId].classList.remove('green-ready-text');
             setFunction(currentResource + incrementAmount);
         } else if (!getResourceStorage || getFunction() < getResourceStorage()) { //buying upgrades affecting resources without storage like research 
             setFunction(currentResource + incrementAmount); 
@@ -546,7 +546,7 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
 
     deferredActions.push(() => {
         setResourceStorage(getResourceStorage() * increaseFactor);
-        getElements()[elementId].classList.remove('green-text');
+        getElements()[elementId].classList.remove('green-ready-text');
     });
 }
 

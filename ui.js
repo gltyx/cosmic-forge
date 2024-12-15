@@ -232,7 +232,7 @@ function drawTab1Content(heading, optionContentElement) {
             ], 'all', (value) => {
                 setSalePreview('hydrogen', value);
             }),
-            createButton('Sell', ['option-button', 'red-text', 'resource-cost-sell-check', 'sell'], () => {
+            createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
             }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
             null,
@@ -277,7 +277,7 @@ function drawTab1Content(heading, optionContentElement) {
         const hydrogenIncreaseStorageRow = createOptionRow(
             'hydrogenIncreaseStorageRow',
             'Increase Container Size:',
-            createButton('Increase Storage', ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+            createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', null, 'getHydrogenQuantity', true, null),
             null,
@@ -298,7 +298,7 @@ function drawTab1Content(heading, optionContentElement) {
         const hydrogenAutoBuyer1Row = createOptionRow(
             'hydrogenAutoBuyer1Row',
             'Hydrogen Compressor:',
-            createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1'),
                 startUpdateAutoBuyerTimersAndRates('hydrogenAB1');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', null, 'getHydrogenQuantity', true, 'tier1'),
@@ -324,7 +324,7 @@ function drawTab2Content(heading, optionContentElement) {
         const researchScienceKitRow = createOptionRow(
             'researchScienceKitRow',
             'Science Kit:',
-            createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
                 startUpdateAutoBuyerTimersAndRates('scienceKit');
             }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'getCash', false, null),
@@ -346,7 +346,7 @@ function drawTab2Content(heading, optionContentElement) {
         const researchScienceClubRow = createOptionRow(
             'researchScienceClubRow',
             'Open Science Club:',
-            createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
                 startUpdateAutoBuyerTimersAndRates('scienceClub');
             }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'getCash', false, null),
@@ -368,7 +368,7 @@ function drawTab2Content(heading, optionContentElement) {
         const techKnowledgeSharingRow = createOptionRow(
             'techKnowledgeSharingRow',
             'Knowledge Sharing:',
-            createButton(`Research`, ['option-button', 'red-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                 gain(getResearchQuantity, setResearchQuantity, null, 'knowledgeSharing', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('knowledgeSharing');
@@ -594,7 +594,7 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     description.innerText = descriptionText;
 
     if (dataConditionCheck) {
-        description.classList.add('red-text');
+        description.classList.add('red-disabled-text');
         description.classList.add('resource-cost-sell-check');
 
         if (dataConditionCheck === 'techUnlock') {

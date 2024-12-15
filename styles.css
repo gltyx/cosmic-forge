@@ -214,6 +214,8 @@ button {
 /* THEMEABLE CSS */
 /* Dark Theme Variables */
 :root {
+    --disabled-text: red;
+    --ready-text: lime;
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;
@@ -233,6 +235,8 @@ button {
 
 /* Light Theme Variables */
 [data-theme="light"] {
+    --disabled-text: red;
+    --ready-text: lime;
     --bg-color: white;
     --text-color: black;
     --text-hover-color: #666;
@@ -251,6 +255,8 @@ button {
 
 /* Frosty Theme Variables */
 [data-theme="frosty"] {
+    --disabled-text: red;
+    --ready-text: lime;
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
     --text-hover-color: #fff;
@@ -269,8 +275,10 @@ button {
 
 /* Summer Theme Variables */
 [data-theme="summer"] {
+    --disabled-text: red;
+    --ready-text: lime;
     --bg-color: #fffae6;
-    --text-color: #ff774e;
+    --text-color: #ffa14e;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
     --tab-bg-color: #ffeb3b;
@@ -287,6 +295,8 @@ button {
 
 /* Forest Theme Variables */
 [data-theme="forest"] {
+    --disabled-text: red;
+    --ready-text: lime;
     --bg-color: #2f4f4f;
     --text-color: #d67733;
     --text-hover-color: #32a132;
@@ -305,6 +315,8 @@ button {
 
 /* Terminal Theme Variables */
 [data-theme="terminal"] {
+    --disabled-text: red;
+    --ready-text: #fff;
     --bg-color: black;
     --text-color: lime;
     --text-hover-color: #fff;
@@ -720,14 +732,14 @@ button.option-button {
     margin-left: 30px;
 }
 
-.red-text {
-    color: red;
+button.red-disabled-text {
+    color: var(--disabled-text) !important;
     font-weight: bold;
     pointer-events: none;
 }
 
-.green-text {
-    color: lime;
+.green-ready-text {
+    color: var(--ready-text) !important;
     font-weight: bold;
 }
 
@@ -794,5 +806,25 @@ button.option-button {
 
 ::-webkit-scrollbar-corner {
     background-color: #f1f1f1;
+}
+
+.terminal-row {
+    font-family: Consolas, 'Courier New', monospace;
+    color: var(--text-color);
+}
+
+.terminal-row span {
+    display: inline-block;
+    opacity: 0;
+    animation: fadeIn 0.2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
