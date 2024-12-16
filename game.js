@@ -443,14 +443,28 @@ function monitorResourceCostChecks(element) {
             return;
         }
 
-        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') {    
+        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') {  
+            const prerequisite = getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[1];  
+            const prerequisiteSpan = element.querySelector('span');
+            
+            if (getTechUnlockedArray().includes(prerequisite)) {
+                
+                if (prerequisiteSpan) {
+                    prerequisiteSpan.classList.remove('red-disabled-text');
+                    prerequisiteSpan.classList.add('green-ready-text');
+                }
+            }
+
             if (typeof functionGetResourceQuantity === 'function') { //
                 const checkQuantity = functionGetResourceQuantity();
     
                 if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(element.dataset.argumentToPass1)) {
-                    const prerequisite = getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[1];
-                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price && (prerequisite === null || getTechUnlockedArray().includes(prerequisite))) {
-                        element.classList.remove('red-disabled-text');
+                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
+                        if ((getTechUnlockedArray().includes(prerequisite) || prerequisite === null) && element.tagName.toLowerCase() === 'button') {
+                            element.classList.remove('red-disabled-text');
+                        } else if (element.tagName.toLowerCase() !== 'button') {
+                            element.classList.remove('red-disabled-text');
+                        }
                     } else {
                         element.classList.add('red-disabled-text');
                     }

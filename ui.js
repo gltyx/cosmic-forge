@@ -614,7 +614,7 @@ function drawTab2Content(heading, optionContentElement) {
             null,
             null,
             null,
-            `${getUpgradeResearch('techs', 'hydrogenFusion').price + ' Research'}`,
+            `${getUpgradeResearch('techs', 'hydrogenFusion').price} Research, <span id="hydrogenFusionPrereq" class="red-disabled-text">Fusion Theory</span>`,
             'getUpgradeResearch',
             'techUnlock',
             'hydrogenFusion',
@@ -851,7 +851,7 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
     description.id = generateElementId(labelText, resourceString);
-    description.innerText = descriptionText;
+    description.innerHTML = descriptionText;
 
     if (dataConditionCheck) {
         description.classList.add('red-disabled-text');

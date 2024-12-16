@@ -754,6 +754,12 @@ button.red-disabled-text {
     pointer-events: none;
 }
 
+.red-disabled-text {
+    color: var(--disabled-text);
+    font-weight: bold;
+    pointer-events: none;
+}
+
 .green-ready-text {
     color: var(--ready-text) !important;
     font-weight: bold;
