@@ -414,7 +414,7 @@ function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
         if (getRevealedTechArray().includes(element.dataset.argumentToPass1)) {
             element.classList.remove('invisible');
-        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResearchQuantity() >= getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt) {
+        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResearchQuantity() >= getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[0]) {
             element.classList.remove('invisible');
             setRevealedTechArray(element.dataset.argumentToPass1);
         }
@@ -448,7 +448,8 @@ function monitorResourceCostChecks(element) {
                 const checkQuantity = functionGetResourceQuantity();
     
                 if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(element.dataset.argumentToPass1)) {
-                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
+                    const prerequisite = getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[1];
+                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price && (prerequisite === null || getTechUnlockedArray().includes(prerequisite))) {
                         element.classList.remove('red-disabled-text');
                     } else {
                         element.classList.add('red-disabled-text');

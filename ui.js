@@ -573,6 +573,58 @@ function drawTab2Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(techdiscoverHeliumRow);
+
+        const techFusionTheoryRow = createOptionRow(
+            'techFusionTheoryRow',
+            'Fusion Theory:',
+            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                gain(getResearchQuantity, setResearchQuantity, null, 'fusionTheory', null, null, null, 'techUnlock', false, null)
+                event.currentTarget.classList.add('unlocked-tech');
+                setTechUnlockedArray('fusionTheory');
+                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
+
+            }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'getResearchQuantity', false, null),
+            null,
+            null,
+            null,
+            null,
+            `${getUpgradeResearch('techs', 'fusionTheory').price + ' Research'}`,
+            'getUpgradeResearch',
+            'techUnlock',
+            'fusionTheory',
+            null,
+            'getResearchQuantity',
+            null,
+            ['research', 'researchPoints'],
+            null
+        );
+        optionContentElement.appendChild(techFusionTheoryRow);
+
+        const techHydrogenFusionRow = createOptionRow(
+            'techHydrogenFusionRow',
+            'Hydrogen Fusion:',
+            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                gain(getResearchQuantity, setResearchQuantity, null, 'hydrogenFusion', null, null, null, 'techUnlock', false, null)
+                event.currentTarget.classList.add('unlocked-tech');
+                setTechUnlockedArray('hydrogenFusion');
+                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
+
+            }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'getResearchQuantity', false, null),
+            null,
+            null,
+            null,
+            null,
+            `${getUpgradeResearch('techs', 'hydrogenFusion').price + ' Research'}`,
+            'getUpgradeResearch',
+            'techUnlock',
+            'hydrogenFusion',
+            null,
+            'getResearchQuantity',
+            null,
+            ['research', 'researchPoints'],
+            null
+        );
+        optionContentElement.appendChild(techHydrogenFusionRow);
     }
 }
 
@@ -739,9 +791,13 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
 
     if (dataConditionCheck === "techUnlock") {
         const functionGetResearchUpgrade = functionRegistryUpgrade[resourcePriceObject];
-        if (getResearchQuantity() < functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt && !getRevealedTechArray().includes(objectSectionArgument1)) {
+        const researchPointsToAppear = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0];
+        const prerequisiteForTech = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[1];
+        if (getResearchQuantity() < researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
             row.classList.add('invisible'); 
-        } else if (getResearchQuantity() >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt && !getRevealedTechArray().includes(objectSectionArgument1)) {
+        } else if (!getTechUnlockedArray().includes(prerequisiteForTech)) {
+            row.classList.add('invisible');
+        } else if (getResearchQuantity() >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0] && !getRevealedTechArray().includes(objectSectionArgument1)) {
             setRevealedTechArray(objectSectionArgument1);
         }
     }

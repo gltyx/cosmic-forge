@@ -16,6 +16,7 @@ export const functionRegistryResourceQuantity = {
     hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHydrogenDescription' },
     helium: { getQuantity: getHeliumQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHeliumDescription' },
     // Add more resources here...
+    //CARBON from helium
 };
 
 //RESOURCE SALE VALUES
@@ -26,7 +27,7 @@ export const SALE_VALUES = {
 
 //QUANTITY VARIABLES
 //RESOURCES
-export let cash = 100;
+export let cash = 100000;
 export let researchQuantity = 0;
 export let hydrogenQuantity = 0;
 export let heliumQuantity = 0;
@@ -113,16 +114,34 @@ export let upgradeHelium = {
 export let upgradeResearch = {
     techs: {
         knowledgeSharing: {
-            appearsAt: 0,
+            appearsAt: [0, null],
             price: 5,
             resource: 'research',
             effectFunction: 'revealElement'
         },
         discoverHelium: {
-            appearsAt: 20, //300
-            price: 30, //500
+            appearsAt: [300, null],
+            price: 500,
             resource: 'research',
             effectFunction: 'revealElement'
+        },
+        fusionTheory: { // prereq for hydrogenFusion
+            appearsAt: [500, null],
+            price: 750,
+            resource: 'research',
+            effectFunction: 'prerequisite'
+        },
+        hydrogenFusion: { //will reveal a button to fuse hydrogen to helium next to sell button ratio 2H -> 1He
+            appearsAt: [750, 'fusionTheory'],
+            price: 1500,
+            resource: 'research',
+            effectFunction: 'revealElement'
+        },
+        gammaRayCollection: { //prereq for something
+            appearsAt: [1000, null],
+            price: 2000,
+            resource: 'research',
+            effectFunction: 'prerequisite'
         }
     },
     research: {
