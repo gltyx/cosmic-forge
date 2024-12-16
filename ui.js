@@ -1,4 +1,8 @@
 import {
+    getUnlockedResourcesArray,
+    setUnlockedResourcesArray,
+    getFuseArray,
+    setFuseArray,
     setTechSpecificUIItemsArray,
     getTechSpecificUIItemsArray,
     getRevealedTechArray,
@@ -65,6 +69,7 @@ import {
 import {
     revealElement,
     startUpdateAutoBuyerTimersAndRates,
+    fuseResource,
     sellResource,
     increaseResourceStorage,
     gain,
@@ -273,12 +278,14 @@ function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('hydrogen', value);
+                setSalePreview('hydrogen', value, 'helium');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
             }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
-            null,
+            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], () => {
+                fuseResource('hydrogen', getFuseArray('hydrogen', 'fuseTo'), getFuseArray('hydrogen', 'ratio'), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity)
+            }, 'fuseResource', null, 'hydrogen', 'helium', 'getHydrogenQuantity', true, null),
             null,
             null,
             `${getResourceSalePreview('hydrogen')}`,
@@ -385,7 +392,7 @@ function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('helium', value);
+                setSalePreview('helium', value, 'carbon');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHeliumQuantity, setHeliumQuantity, 'helium')
@@ -557,6 +564,7 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'discoverHelium', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('discoverHelium');
+                setUnlockedResourcesArray('helium');
                 document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
 
             }, 'techUnlock', 'getUpgradeResearch', 'discoverHelium', null, 'getResearchQuantity', false, null),
@@ -950,9 +958,11 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
     }
 
     if (dataConditionCheck) {
-        if (dataConditionCheck === 'sellResource') {
+        if (dataConditionCheck === 'sellResource' || dataConditionCheck === 'fuseResource') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentCheckQuantity = quantityArgument;
+            button.dataset.argumentToPass1 = objectSectionArgument1;
+            button.dataset.argumentToPass2 = objectSectionArgument2;
         } else if (dataConditionCheck === 'techUnlock') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentToPass1 = objectSectionArgument1;

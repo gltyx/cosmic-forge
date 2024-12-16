@@ -29,6 +29,15 @@ let resourcesToIncreasePrice = {};
 let techUnlockedArray = [];
 let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
+let unlockedResourcesArray = ['hydrogen'];
+
+let fuseArray = {
+    hydrogen: {
+        fuseTo: 'helium',
+        ratio: 0.5
+    }
+};
+
 let lastScreenOpenRegister = {
     tab1: null,
     tab2: null,
@@ -301,7 +310,7 @@ export function getResourcesToIncreasePrice() {
     return resourcesToIncreasePrice;
 }
 
-export function setSalePreview(resource, amount) {
+export function setSalePreview(resource, amount, fusionTo) {
     const resourceFunc = functionRegistryResourceQuantity[resource];
 
     if (resourceFunc) {
@@ -346,12 +355,24 @@ export function setSalePreview(resource, amount) {
                 break;
         }
 
-        resourceFunc.setSalePreview(resource, calculatedAmount);
+        resourceFunc.setSalePreview(resource, calculatedAmount, fusionTo);
     } else {
         console.warn(`No functions found for resource: ${resource}`);
     }
 }
-export function setResourceSalePreview(resource, value) {
+
+export function setResourceSalePreview(resource, value, fusionToResource) {
+
+    let fusionFlag = false;
+    let suffixFusion = '';
+
+    if (getTechUnlockedArray().includes(resource + 'Fusion')) {
+        fusionFlag = true;
+        const fusionTo = fusionToResource.charAt(0).toUpperCase() + fusionToResource.slice(1);
+        const quantityFuseTo = Math.floor(value * getFuseArray(resource, 'ratio'));
+        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}`;
+    }
+
     const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
     const resourceQuantity = functionRegistryResourceQuantity[resource].getQuantity();
 
@@ -361,13 +382,13 @@ export function setResourceSalePreview(resource, value) {
                 getCurrencySymbol() + 
                 (value * SALE_VALUES[resource]).toFixed(2) + 
                 ' (' + 
-                value + ' ' + resourceString + ')';
+                value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] = 
                 getCurrencySymbol() + 
                 (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
                 ' (' + 
-                resourceQuantity + ' ' + resourceString + ')';
+                resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         }
     } else {
         if (value <= resourceQuantity) {
@@ -375,15 +396,16 @@ export function setResourceSalePreview(resource, value) {
                 (value * SALE_VALUES[resource]).toFixed(2) + 
                 getCurrencySymbol() + 
                 ' (' + 
-                value + ' ' + resourceString + ')';
+                value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] = 
                 (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
                 getCurrencySymbol() + 
                 ' (' + 
-                resourceQuantity + ' ' + resourceString + ')';
+                resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         }
     }
+
     console.log(salePreviews[resource]);
 }
 
@@ -432,11 +454,34 @@ export function setHeaderDescriptions(value) {
     headerDescriptions[key] = value;
 }
 
-export function setTechSpecificUIItemsArray(key, type, prerequisite) {
+export function getUnlockedResourcesArray() {
+    return unlockedResourcesArray;
+}
+
+export function setUnlockedResourcesArray(value) {
+    unlockedResourcesArray.unshift(value);
+}
+
+export function getFuseArray(key1, key2) {
+    if (fuseArray[key1] && fuseArray[key1][key2] !== undefined) {
+        return fuseArray[key1][key2]; // Return the value if it exists
+    }
+    return null; // Return null if key1 or key2 does not exist
+}
+
+
+export function setFuseArray(key1, key2, value) {
+    if (!fuseArray[key1]) {
+        fuseArray[key1] = {};
+    }
+    fuseArray[key1][key2] = value;
+}
+
+export function setTechSpecificUIItemsArray(key, type, value) {
     if (!techSpecificUIItemsArray[key]) {
         techSpecificUIItemsArray[key] = {};
     }
-    techSpecificUIItemsArray[key][type] = prerequisite;
+    techSpecificUIItemsArray[key][type] = value;
 }
 
 export function getTechSpecificUIItemsArray(key, type) {

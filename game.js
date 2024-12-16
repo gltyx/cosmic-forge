@@ -1,4 +1,8 @@
 import {
+    getUnlockedResourcesArray,
+    setUnlockedResourcesArray,
+    getFuseArray,
+    setFuseArray,
     getTechSpecificUIItemsArray,
     setTechSpecificUIItemsArray,
     setRevealedTechArray,
@@ -179,6 +183,20 @@ function updateStats() {
     }
 }
 
+export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity) {
+    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
+
+    if (getUnlockedResourcesArray().includes(fuseTo)) {
+        const fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+    
+        const amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
+        const amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
+    
+        setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
+        setToResourceQuantity(getToResourceQuantity() + amountToAddToResource);
+    }
+}
+
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const resourceQuantity = getResourceQuantity();
@@ -195,11 +213,18 @@ function updateAllSalePricePreviews() {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const currentScreen = getCurrentOptionPane();
     //console.log(currentScreen);
+    let fusionTo = '';
 
     for (const resource in functionRegistryResourceQuantity) {
+        const fuseData = getFuseArray(resource, 'fuseTo');
+        
+        if (fuseData) {
+            fusionTo = getFuseArray(resource, 'fuseTo');
+        }
+
         if (functionRegistryResourceQuantity.hasOwnProperty(resource) && resource === currentScreen) {
             const dropDownElementId = currentScreen + "SellSelectQuantity";
-            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value);
+            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fusionTo);
 
             const resourceFunctions = functionRegistryResourceQuantity[resource];
 
@@ -438,6 +463,25 @@ function monitorResourceCostChecks(element) {
     
                 if (checkQuantity > 0) { 
                     element.classList.remove('red-disabled-text');
+                } else {
+                    element.classList.add('red-disabled-text');
+                }
+            }
+            return;
+        }
+
+        if(element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
+            if (typeof functionGetResourceQuantity === 'function') {
+                const checkQuantity = functionGetResourceQuantity();
+
+                if (getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion') && getUnlockedResourcesArray().includes(resourceObjectSectionKey2)) {
+                    element.classList.remove('invisible'); 
+                }
+    
+                if (getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion') && checkQuantity > 0) {
+                    element.classList.remove('red-disabled-text');
+                } else if (!getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion')) {
+                    element.classList.add('invisible');
                 } else {
                     element.classList.add('red-disabled-text');
                 }
