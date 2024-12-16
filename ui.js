@@ -1,4 +1,6 @@
 import {
+    setTechSpecificUIItemsArray,
+    getTechSpecificUIItemsArray,
     getRevealedTechArray,
     setRevealedTechArray,
     getHeaderDescriptions,
@@ -581,8 +583,6 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'fusionTheory', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('fusionTheory');
-                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
-
             }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'getResearchQuantity', false, null),
             null,
             null,
@@ -607,8 +607,7 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'hydrogenFusion', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('hydrogenFusion');
-                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
-
+                setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
             }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'getResearchQuantity', false, null),
             null,
             null,
@@ -893,7 +892,6 @@ function generateElementId(labelText, resource) {
     
     return id;
 }
-
 
 function createDropdown(id, options, selectedValue, onChange) {
     const selectContainer = document.createElement('div');

@@ -1,4 +1,6 @@
 import {
+    getTechSpecificUIItemsArray,
+    setTechSpecificUIItemsArray,
     setRevealedTechArray,
     getTimerRateRatio,
     getTimerUpdateInterval,

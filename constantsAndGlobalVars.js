@@ -28,6 +28,7 @@ let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
 let techUnlockedArray = [];
 let revealedTechArray = [];
+let techSpecificUIItemsArray = {};
 let lastScreenOpenRegister = {
     tab1: null,
     tab2: null,
@@ -431,5 +432,17 @@ export function setHeaderDescriptions(value) {
     headerDescriptions[key] = value;
 }
 
-getRevealedTechArray
+export function setTechSpecificUIItemsArray(key, type, prerequisite) {
+    if (!techSpecificUIItemsArray[key]) {
+        techSpecificUIItemsArray[key] = {};
+    }
+    techSpecificUIItemsArray[key][type] = prerequisite;
+}
+
+export function getTechSpecificUIItemsArray(key, type) {
+    if (techSpecificUIItemsArray[key] && techSpecificUIItemsArray[key][type]) {
+        return techSpecificUIItemsArray[key][type];
+    }
+    return null;
+}
 

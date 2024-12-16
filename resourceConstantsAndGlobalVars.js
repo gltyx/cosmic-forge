@@ -125,7 +125,7 @@ export let upgradeResearch = {
             resource: 'research',
             effectFunction: 'revealElement'
         },
-        fusionTheory: { // prereq for hydrogenFusion
+        fusionTheory: {
             appearsAt: [500, null],
             price: 750,
             resource: 'research',
