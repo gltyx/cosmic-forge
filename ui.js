@@ -445,7 +445,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumAutoBuyer1Row = createOptionRow(
             'heliumAutoBuyer1Row',
-            'Helium Compressor:',
+            'Atmosphere Scraper:',
             createButton(`Add ${getUpgradeHelium('autoBuyer').tier1.rate * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getHeliumAB1Quantity, setHeliumAB1Quantity, null, 1, 'heliumAB1Quantity', 'getUpgradeHelium', 'autoBuyer', true, 'tier1'),
                 startUpdateAutoBuyerTimersAndRates('heliumAB1');

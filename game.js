@@ -339,7 +339,7 @@ function getAllResourceDescriptionElements() {
     const heliumIncreaseStorageDescElement = document.getElementById('heliumIncreaseContainerSizeDescription');
     const heliumStoragePrice = getHeliumStorage();
 
-    const heliumAutoBuyerTier1DescElement = document.getElementById('heliumCompressorDescription');
+    const heliumAutoBuyerTier1DescElement = document.getElementById('atmosphereScraperDescription');
     const heliumAutoBuyerTier1Price = getUpgradeHelium('autoBuyer').tier1.price;
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
