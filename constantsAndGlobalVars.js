@@ -379,7 +379,7 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
         if (Math.floor(value * getFuseArray(resource, 'ratio')) > fusionToStorage - fuseToQuantity) {
             tooManyToStore = true;
         }
-        const quantityFuseTo = Math.min(Math.floor(value * getFuseArray(resource, 'ratio')), (fusionToStorage - fuseToQuantity));
+        const quantityFuseTo = Math.min(Math.floor(value * getFuseArray(resource, 'ratio')), (Math.floor(fusionToStorage - fuseToQuantity)));
         suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}` + (tooManyToStore ? '!' : '');
     }
 

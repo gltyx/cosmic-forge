@@ -24,7 +24,7 @@ export const functionRegistryResourceQuantity = {
 //RESOURCE SALE VALUES
 export const SALE_VALUES = {
     hydrogen: 0.005,
-    helium: 0.010,
+    helium: 0.01,
 };
 
 //QUANTITY VARIABLES
