@@ -38,19 +38,26 @@ import {
 import {
     getHydrogenAB1Quantity,
     setHydrogenAB1Quantity,
+    getHeliumAB1Quantity,
+    setHeliumAB1Quantity,
     getScienceKitQuantity,
     setScienceKitQuantity,
     getScienceClubQuantity,
     setScienceClubQuantity, 
     getHydrogenStorage,
     setHydrogenStorage, 
+    getHeliumStorage,
+    setHeliumStorage,
     getHydrogenQuantity,
     setHydrogenQuantity,
+    getHeliumQuantity,
+    setHeliumQuantity,
     getResearchQuantity,
     setResearchQuantity,
     getUpgradeResearch,
     setUpgradeResearch,
     getUpgradeHydrogen,
+    getUpgradeHelium,
     functionRegistryUpgrade
 } from "./resourceConstantsAndGlobalVars.js";
 import {
@@ -97,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'option2');
+            setLastScreenOpenRegister('tab1', 'helium');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
         });
@@ -150,15 +157,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateContent(this.textContent, 'tab8');
         });
     });
-
-    // document.getElementById("pauseResumehydrogenTimer").addEventListener("click", () => toggleTimer("hydrogenTimer", "pauseResumehydrogenTimer"));
-    // document.getElementById("pauseResumesilverTimer").addEventListener("click", () => toggleTimer("silverTimer", "pauseResumesilverTimer"));
-    // document.getElementById("doubleRatehydrogenTimer").addEventListener("click", () => doubleRate("hydrogenTimer"));
-    // document.getElementById("doubleRatesilverTimer").addEventListener("click", () => doubleRate("silverTimer"));
-    // document.getElementById("resetCounterhydrogenTimer").addEventListener("click", () => resetCounter("hydrogenTimer"));
-    // document.getElementById("resetCountersilverTimer").addEventListener("click", () => resetCounter("silverTimer"));
-    // document.getElementById("startAutoIncrementHydrogen").addEventListener("click", () => startAutoIncrementer("hydrogen"));
-    // document.getElementById("startAutoIncrementSilver").addEventListener("click", () => startAutoIncrementer("silver"));
 
     const tabs = document.querySelectorAll('#tabsContainer .tab');
     tabs.forEach((tab, index) => {
@@ -280,7 +278,8 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(hydrogenSellRow);
 
@@ -301,7 +300,8 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(hydrogenGainRow);
 
@@ -319,14 +319,15 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            `${storagePrice + " " + getUpgradeHydrogen('storage').resource}`,
+            `${storagePrice + " " + getUpgradeHydrogen('storage').resource.charAt(0).toUpperCase() + getUpgradeHydrogen('storage').resource.slice(1)}`,
             'getUpgradeHydrogen',
             'upgradeCheck',
             'storage',
             null,
             'getHydrogenQuantity',
             null,
-            false
+            false,
+            'hydrogen'
         );
         optionContentElement.appendChild(hydrogenIncreaseStorageRow);
 
@@ -348,9 +349,122 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             'getHydrogenQuantity',
             'tier1',
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(hydrogenAutoBuyer1Row);
+    } 
+    
+    else if (heading === 'Helium') {
+        let storagePrice = getUpgradeHelium('storage').price;
+        let autobuyer1Price = getUpgradeHelium('autoBuyer').tier1.price;
+
+        const heliumSellRow = createOptionRow(
+            'heliumSellRow',
+            'Sell Helium:',
+            createDropdown('heliumSellSelectQuantity', [
+                { value: 'all', text: 'All Stock' },
+                { value: 'threeQuarters', text: '75% Stock' },
+                { value: 'twoThirds', text: '67% Stock' },
+                { value: 'half', text: '50% Stock' },
+                { value: 'oneThird', text: '33% Stock' },
+                { value: '100000', text: '100,000' },
+                { value: '10000', text: '10,000' },
+                { value: '1000', text: '1,000' },
+                { value: '100', text: '100' },
+                { value: '10', text: '10' },
+                { value: '1', text: '1' },
+            ], 'all', (value) => {
+                setSalePreview('helium', value);
+            }),
+            createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
+                sellResource(getHeliumQuantity, setHeliumQuantity, 'helium')
+            }, 'sellResource', null, null, null, 'getHeliumQuantity', true, null),
+            null,
+            null,
+            null,
+            `${getResourceSalePreview('helium')}`,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(heliumSellRow);
+
+        const heliumGainRow = createOptionRow(
+            'heliumGainRow',
+            'Gain 1 Helium:',
+            createButton('Gain', ['option-button'], () => {
+                gain(getHeliumQuantity, setHeliumQuantity, getHeliumStorage, 1, 'heliumQuantity', null, null, false, null)
+            }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(heliumGainRow);
+
+        if (typeof storagePrice === 'function') {
+            storagePrice = storagePrice();
+        }
+
+        const heliumIncreaseStorageRow = createOptionRow(
+            'heliumIncreaseStorageRow',
+            'Increase Container Size:',
+            createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                increaseResourceStorage(setHeliumStorage, getHeliumStorage, 'heliumQuantity', 'getUpgradeHelium', 'storage');
+            }, 'upgradeCheck', 'getUpgradeHelium', 'storage', null, 'getHeliumQuantity', true, null),
+            null,
+            null,
+            null,
+            null,
+            `${storagePrice + " " + getUpgradeHelium('storage').resource.charAt(0).toUpperCase() + getUpgradeHelium('storage').resource.slice(1)}`,
+            'getUpgradeHelium',
+            'upgradeCheck',
+            'storage',
+            null,
+            'getHeliumQuantity',
+            null,
+            false,
+            'helium'
+        );
+        optionContentElement.appendChild(heliumIncreaseStorageRow);
+
+        const heliumAutoBuyer1Row = createOptionRow(
+            'heliumAutoBuyer1Row',
+            'Helium Compressor:',
+            createButton(`Add ${getUpgradeHelium('autoBuyer').tier1.rate * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(getHeliumAB1Quantity, setHeliumAB1Quantity, null, 1, 'heliumAB1Quantity', 'getUpgradeHelium', 'autoBuyer', true, 'tier1'),
+                startUpdateAutoBuyerTimersAndRates('heliumAB1');
+            }, 'upgradeCheck', 'getUpgradeHelium', 'autoBuyer', null, 'getHeliumQuantity', true, 'tier1'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer1Price + " " + getUpgradeHelium('autoBuyer').resource}`,
+            'getUpgradeHelium',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'getHeliumQuantity',
+            'tier1',
+            false,
+            null
+        );
+        optionContentElement.appendChild(heliumAutoBuyer1Row);
     }
 }
 
@@ -374,7 +488,8 @@ function drawTab2Content(heading, optionContentElement) {
             'scienceKit',
             'getCash',
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(researchScienceKitRow);
 
@@ -396,7 +511,8 @@ function drawTab2Content(heading, optionContentElement) {
             'scienceClub',
             'getCash',
             null,
-            ['tech', 'knowledgeSharing']
+            ['tech', 'knowledgeSharing'],
+            null
         );
         optionContentElement.appendChild(researchScienceClubRow);
     } else if (heading === 'Tech Tree') {
@@ -419,7 +535,8 @@ function drawTab2Content(heading, optionContentElement) {
             null,
             'getResearchQuantity',
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(techKnowledgeSharingRow);
 
@@ -430,7 +547,7 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'discoverHelium', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('discoverHelium');
-                //reveal helium
+                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
 
             }, 'techUnlock', 'getUpgradeResearch', 'discoverHelium', null, 'getResearchQuantity', false, null),
             null,
@@ -445,6 +562,7 @@ function drawTab2Content(heading, optionContentElement) {
             'getResearchQuantity',
             null,
             ['research', 'researchPoints'],
+            null
         );
         optionContentElement.appendChild(techdiscoverHeliumRow);
     }
@@ -498,7 +616,8 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(settingsCurrencySymbolRow);
 
@@ -522,7 +641,8 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(settingsNotationRow);
 
@@ -543,7 +663,8 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(settingsToggleNotificationsRow);
 
@@ -573,7 +694,8 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            false
+            false,
+            null
         );
         optionContentElement.appendChild(settingsThemeRow);
 
@@ -592,13 +714,14 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            ['debug', 'settingsNotificationTestRow']
+            ['debug', 'settingsNotificationTestRow'],
+            null
         );
         optionContentElement.appendChild(settingsNotificationTestRow);
     }
 }
 
-function createOptionRow(labelId, labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument1, objectSectionArgument2, quantityArgument, autoBuyerTier, startInvisibleValue) {
+function createOptionRow(labelId, labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument1, objectSectionArgument2, quantityArgument, autoBuyerTier, startInvisibleValue, resourceString) {
     const row = document.createElement('div');
 
     row.id = labelId;
@@ -663,7 +786,7 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
-    description.id = generateElementId(labelText);
+    description.id = generateElementId(labelText, resourceString);
     description.innerText = descriptionText;
 
     if (dataConditionCheck) {
@@ -690,16 +813,23 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     return row;
 }
 
-function generateElementId(labelText) {
+function generateElementId(labelText, resource) {
+
     let id = labelText.replace(/:$/, '');
     id = id.replace(/(^\w|[A-Z]|\s+)(\w*)/g, (match, p1, p2, index) => {
         return index === 0 ? p1.toLowerCase() + p2 : p1.toUpperCase() + p2;
     });
 
+    if (resource !== null) {
+        id = resource.toLowerCase() + id.charAt(0).toUpperCase() + id.slice(1);
+    }
+
     id += 'Description';
     id = id.replace(/\s+/g, '');
+    
     return id;
 }
+
 
 function createDropdown(id, options, selectedValue, onChange) {
     const selectContainer = document.createElement('div');

@@ -27,6 +27,12 @@ import {
     getTechUnlockedArray
 } from './constantsAndGlobalVars.js';
 import {
+    getHeliumRate,
+    getHeliumStorage,
+    getHeliumQuantity,
+    setHeliumQuantity,
+    setHeliumStorage,
+    setHeliumRate,
     setHydrogenRate,
     setResearchRate,
     getHydrogenRate,
@@ -45,7 +51,9 @@ import {
     setUpgradeResearch,
     getUpgradeHydrogen,
     setUpgradeHydrogen,
-    functionRegistryUpgrade
+    getUpgradeHelium,
+    setUpgradeHelium,
+    functionRegistryUpgrade,
 } from "./resourceConstantsAndGlobalVars.js";
 
 //---------------------------------------------------------------------------------------------------------
@@ -225,6 +233,10 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
                 newPrice = Math.ceil(currentPrice * 1.15);
                 setUpgradeHydrogen('autoBuyer', 'tier1', 'price', newPrice);
                 break;
+            case 'heliumAB1Price':
+                newPrice = Math.ceil(currentPrice * 1.15);
+                setUpgradeHelium('autoBuyer', 'tier1', 'price', newPrice);
+                break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
                 setUpgradeResearch('research', 'scienceKit', 'price', newPrice);
@@ -245,7 +257,7 @@ function checkAndDeductResources() {
         if (deductObject.hasOwnProperty(resource)) {
             const { deductQuantity, setFunction, getFunction } = deductObject[resource];
 
-            if (typeof deductQuantity === 'function') { //in case of storage upgrades
+            if (typeof deductQuantity === 'function') {
                 deductAmount = deductQuantity();
             } else {
                 deductAmount = deductQuantity;
@@ -265,12 +277,14 @@ function checkAndDeductResources() {
 
 function getAllQuantities() {
     const hydrogenQuantity = getHydrogenQuantity();
+    const heliumQuantity = getHeliumQuantity();
     const researchQuantity = getResearchQuantity();
     const scienceKitQuantity = getScienceKitQuantity();
     const scienceClubQuantity = getScienceClubQuantity();
 
     const allQuantities = {
         hydrogen: hydrogenQuantity,
+        helium: heliumQuantity,
         research: researchQuantity,
         scienceKit: scienceKitQuantity,
         scienceClub: scienceClubQuantity,
@@ -281,12 +295,14 @@ function getAllQuantities() {
 
 function getAllStorages() {
     const hydrogenStorage = getHydrogenStorage();
+    const heliumStorage = getHeliumStorage();
     const researchStorage = null;
     const scienceKitStorage = null;
     const scienceClubStorage = null;
 
     const allStorages = {
         hydrogen: hydrogenStorage,
+        helium: heliumStorage,
         research: researchStorage,
         scienceKit: scienceKitStorage,
         scienceClub: scienceClubStorage,
@@ -297,12 +313,14 @@ function getAllStorages() {
 
 function getAllResourceElements() {
     const hydrogenElement = getElements().hydrogenQuantity;
+    const heliumElement = getElements().heliumQuantity;
     const researchElement = getElements().researchQuantity;
     const scienceKitElement = document.getElementById('scienceKitQuantity');
     const scienceClubElement = document.getElementById('scienceClubQuantity');
 
     const allResourceElements = {
         hydrogen: hydrogenElement,
+        helium: heliumElement,
         research: researchElement,
         scienceKit: scienceKitElement,
         scienceClub: scienceClubElement,
@@ -312,11 +330,17 @@ function getAllResourceElements() {
 }
 
 function getAllResourceDescriptionElements() {
-    const hydrogenIncreaseStorageDescElement = document.getElementById('increaseContainerSizeDescription');
+    const hydrogenIncreaseStorageDescElement = document.getElementById('hydrogenIncreaseContainerSizeDescription');
     const hydrogenStoragePrice = getHydrogenStorage();
 
     const hydrogenAutoBuyerTier1DescElement = document.getElementById('hydrogenCompressorDescription');
     const hydrogenAutoBuyerTier1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
+
+    const heliumIncreaseStorageDescElement = document.getElementById('heliumIncreaseContainerSizeDescription');
+    const heliumStoragePrice = getHeliumStorage();
+
+    const heliumAutoBuyerTier1DescElement = document.getElementById('heliumCompressorDescription');
+    const heliumAutoBuyerTier1Price = getUpgradeHelium('autoBuyer').tier1.price;
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getUpgradeResearch('research', 'scienceKit').price;
@@ -327,6 +351,8 @@ function getAllResourceDescriptionElements() {
     const allResourceDescElements = {
         hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
         hydrogenAutoBuyerTier1: {element: hydrogenAutoBuyerTier1DescElement, price: hydrogenAutoBuyerTier1Price, string: ' Hydrogen'},
+        heliumIncreaseStorage: {element: heliumIncreaseStorageDescElement, price: heliumStoragePrice, string: ' Helium'},
+        heliumAutoBuyerTier1: {element: heliumAutoBuyerTier1DescElement, price: heliumAutoBuyerTier1Price, string: ' Helium'},
         scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol()},
         scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol()},
     };
@@ -585,6 +611,16 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
             timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
                 const currentHydrogen = getHydrogenQuantity();
                 setHydrogenQuantity(Math.min(currentHydrogen + getHydrogenRate(), getHydrogenStorage()));
+            });
+        }
+    } else if (timerName === 'heliumAB1') {
+        const rateHeliumAB1 = getUpgradeHelium('autoBuyer').tier1.rate;
+        setHeliumRate(getHeliumRate() + rateHeliumAB1);
+        getElements().heliumRate.textContent = `${(getHeliumRate() * getTimerRateRatio()).toFixed(1)} / s`;
+        if (!timerManager.getTimer('heliumAB1')) {
+            timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
+                const currentHelium = getHeliumQuantity();
+                setHeliumQuantity(Math.min(currentHelium + getHeliumRate(), getHeliumStorage()));
             });
         }
     } else if (timerName === 'scienceKit') {
