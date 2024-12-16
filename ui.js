@@ -81,8 +81,12 @@ import {
     localize
 } from './localization.js';
 
+let notificationContainer;
+
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
+
+    notificationContainer = getElements().notificationContainer;
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', async () => {
         setBeginGameStatus(true);
@@ -104,10 +108,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
-
-    let notificationContainer = document.createElement('div');
-    notificationContainer.className = 'notification-container';
-    document.body.appendChild(notificationContainer);
 
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
@@ -769,7 +769,7 @@ function drawTab8Content(heading, optionContentElement) {
         const settingsNotificationTestRow = createOptionRow(
             'settingsNotificationTestRow',
             'Trigger Notification:',
-            createButton('Send Notification', ['btn-secondary'], sendTestNotification, null, null, null, null, null, false, null),
+            createButton('Send Notification', ['btn-secondary'], sendNotificationIfActive, null, null, null, null, null, false, null),
             null,
             null,
             null,
@@ -996,34 +996,37 @@ function selectTheme(theme) {
     body.setAttribute('data-theme', theme);
 }
 
-function sendTestNotification() {
-    showNotification("This is a Test!", 'info', 5000);
+export function sendNotificationIfActive(message, type = 'info', time = 5000) {
+    if (getNotificationsToggle()) {
+        showNotification(message, type, time);
+    }
 }
 
-function showNotification(message, type = 'info', duration = 5000, test) {
+function showNotification(message, type, duration) {
     if (getNotificationsToggle()) {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.innerText = `${message}`;
-        
+        notification.innerText = message;
+
         const allNotifications = document.querySelectorAll('.notification');
-        
+
         allNotifications.forEach((notification, index) => {
             notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
         });
-        
+
         notificationContainer.prepend(notification);
-        
+
         setTimeout(() => {
             notification.style.opacity = '1';
             notification.style.transform = 'translateY(0)';
         }, 50);
-        
+
         setTimeout(() => {
             hideNotification(notification);
         }, duration);
     }
 }
+
 
 function hideNotification(notification) {
     notification.style.opacity = '0';

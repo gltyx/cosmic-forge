@@ -61,6 +61,7 @@ import {
     setUpgradeHelium,
     functionRegistryUpgrade,
 } from "./resourceConstantsAndGlobalVars.js";
+import { sendNotificationIfActive } from "./ui.js";
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -185,17 +186,35 @@ function updateStats() {
 
 export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
+    const storageToString = `get${fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1)}Storage`;
+    const storageFunction = functionRegistryUpgrade[storageToString];
+    const storageAmountFuseTo = storageFunction(); // Maximum storage for the `fuseTo` resource
 
     if (getUnlockedResourcesArray().includes(fuseTo)) {
         const fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
-    
+
         const amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
         const amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
-    
+
+        if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
+            sendNotificationIfActive(`Fused ${amountToDeductFromResource} ${resource} into ${amountToAddToResource} ${fuseTo}.`);
+        } else {
+            const wantToFuseTo = amountToDeductFromResource * ratio;
+            const currentQuantityFuseTo = getToResourceQuantity();
+            const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo;
+            const lostQuantity = wantToFuseTo - availableStorageFuseTo;
+
+            sendNotificationIfActive(
+                `Fused ${amountToDeductFromResource} ${resource} into ${availableStorageFuseTo} ${fuseTo}. Lost ${lostQuantity} ${fuseTo} as it cannot be stored.`,
+                'warning'
+            );
+        }
+
         setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
-        setToResourceQuantity(getToResourceQuantity() + amountToAddToResource);
+        setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), amountToAddToResource));
     }
 }
+
 
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();

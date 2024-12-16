@@ -93,6 +93,7 @@ export function setElements() {
         researchQuantity: document.getElementById('researchQuantity'),
         cashStat: document.getElementById('cashStat'),
         optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
+        notificationContainer: document.getElementById('notificationContainer'),
     };
 }
 
@@ -415,7 +416,7 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
         }
     }
 
-    console.log(salePreviews[resource]);
+    //console.log(salePreviews[resource]);
 }
 
 

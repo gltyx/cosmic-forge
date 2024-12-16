@@ -2,7 +2,7 @@ import { setResourceSalePreview, getResourceSalePreview } from "./constantsAndGl
 
 //FUNCTION REGISTRIES
 export const functionRegistryUpgrade = {
-    getHydrognStorage: getHydrogenStorage,
+    getHydrogenStorage: getHydrogenStorage,
     getHeliumStorage: getHeliumStorage,
     getUpgradeResearch: getUpgradeResearch,
     getUpgradeHydrogen: getUpgradeHydrogen,
