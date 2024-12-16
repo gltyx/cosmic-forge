@@ -480,9 +480,20 @@ function monitorResourceCostChecks(element) {
     
                 if (getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion') && checkQuantity > 0) {
                     element.classList.remove('red-disabled-text');
+                    if (element.tagName.toLowerCase() === 'button') {
+                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+                        if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
+                            element.classList.add('warning-orange-text');
+                            accompanyingLabel.classList.add('warning-orange-text');
+                        } else {
+                            element.classList.remove('warning-orange-text');
+                            accompanyingLabel.classList.remove('warning-orange-text');
+                        }
+                    }
                 } else if (!getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion')) {
                     element.classList.add('invisible');
                 } else {
+                    element.classList.remove('warning-orange-text');
                     element.classList.add('red-disabled-text');
                 }
             }

@@ -1,4 +1,4 @@
-import { functionRegistryResourceQuantity, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
+import { functionRegistryResourceQuantity, functionRegistryUpgrade, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
 
 //DEBUG
 export let debugFlag = false;
@@ -361,16 +361,25 @@ export function setSalePreview(resource, amount, fusionTo) {
     }
 }
 
-export function setResourceSalePreview(resource, value, fusionToResource) {
+export function setResourceSalePreview(resource, value, fuseToResource) {
 
     let fusionFlag = false;
+    let tooManyToStore = false;
     let suffixFusion = '';
 
     if (getTechUnlockedArray().includes(resource + 'Fusion')) {
+        const fuseToCapitalised = fuseToResource.charAt(0).toUpperCase() + fuseToResource.slice(1);
+        const fuseToStorageFunction = functionRegistryUpgrade[`get${fuseToCapitalised}Storage`];
+        const fuseToQuantity = functionRegistryResourceQuantity[fuseToResource].getQuantity();
+        const fusionToStorage = fuseToStorageFunction();
+
         fusionFlag = true;
-        const fusionTo = fusionToResource.charAt(0).toUpperCase() + fusionToResource.slice(1);
-        const quantityFuseTo = Math.floor(value * getFuseArray(resource, 'ratio'));
-        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}`;
+        const fusionTo = fuseToResource.charAt(0).toUpperCase() + fuseToResource.slice(1);
+        if (Math.floor(value * getFuseArray(resource, 'ratio')) > fusionToStorage - fuseToQuantity) {
+            tooManyToStore = true;
+        }
+        const quantityFuseTo = Math.min(Math.floor(value * getFuseArray(resource, 'ratio')), (fusionToStorage - fuseToQuantity));
+        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}` + (tooManyToStore ? '!' : '');
     }
 
     const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
