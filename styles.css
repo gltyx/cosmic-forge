@@ -267,7 +267,7 @@ button {
     --text-color: #7f5837;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
-    --tab-bg-color: #ffeb3b;
+    --tab-bg-color: #e4c066;
     --tab-bg-hover: #ffcc00;
     --tab-selected-bg-color: #ff774e;
     --tab-border-color: #ff9800;
@@ -275,7 +275,7 @@ button {
     --tab-invisible-text-color: #ff774e;
     --container-border-color: #ffb74d;
     --container-bg-color: #d98b71;
-    --button-bg-color: #ffe8c0;
+    --button-bg-color: #e4c066;
     --button-bg-active: #ffdab0;
 }
 
@@ -350,15 +350,17 @@ body {
 }
 
 #tabsContainer {
-    height: 50px; /* Adjust the container height as needed */
-    background-color: var(--tab-bg-color);
+    height: 50px;
+    background-color: var(--container-bg-color);
     display: flex;
     justify-content: space-around;
     padding: 0;
     margin-top: 30px;
     border-bottom: 5px solid var(--tab-border-color);
-    overflow: visible; /* Ensure overflow is visible */
+    overflow: visible;
     width: 100%;
+    opacity: 1;
+    z-index: 2000 !important;
 }
 
 .tab {
