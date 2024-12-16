@@ -264,7 +264,7 @@ button {
     --disabled-text: red;
     --ready-text: lime;
     --bg-color: #fffae6;
-    --text-color: #ffa14e;
+    --text-color: #7f5837;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
     --tab-bg-color: #ffeb3b;
@@ -274,7 +274,7 @@ button {
     --tab-invisible-bg-color: #fdd835;
     --tab-invisible-text-color: #ff774e;
     --container-border-color: #ffb74d;
-    --container-bg-color: #fff3e0;
+    --container-bg-color: #d98b71;
     --button-bg-color: #ffe8c0;
     --button-bg-active: #ffdab0;
 }
@@ -790,6 +790,49 @@ button.red-disabled-text {
 .stat-value,
 .stat-label {
     color: var(--text-color);
+}
+
+.collapsible {
+    border: 1px solid var(--border-color);
+    background-color: var(--tab-bg);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    font-family: var(--font-family);
+    color: var(--text-color);
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background-color: var(--container-bg-color);
+}
+
+.collapsible-header:hover {
+    color: var(--text-hover-color);
+}
+
+.collapsible-arrow {
+    transition: transform 0.3s ease;
+    color: var(--arrow-hover-color);
+    font-size: 1.2em;
+}
+
+.collapsible-header.active .collapsible-arrow {
+    transform: rotate(180deg);
+}
+
+.collapsible-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.collapsible-content.open {
+    max-height: 1000px;
 }
 
 /* SCROLL BAR */
