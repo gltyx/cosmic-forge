@@ -1,42 +1,26 @@
 import {
     getRevealedTechArray,
     setRevealedTechArray,
-    functionRegistryUpgrade,
     getHeaderDescriptions,
     setHeaderDescriptions,
     setTechUnlockedArray,
     getDebugVisibilityArray,
     getTechUnlockedArray,
     getTimerRateRatio,
-    getHydrogenAB1Quantity,
-    setHydrogenAB1Quantity,
     getLastScreenOpenRegister,
     setLastScreenOpenRegister,
     getResourceSalePreview,
     setSalePreview,
     getResourcesToDeduct,
     setResourcesToDeduct,
-    getScienceKitQuantity,
-    setScienceKitQuantity,
-    getScienceClubQuantity,
-    setScienceClubQuantity,
     getCurrentOptionPane,
     setCurrentOptionPane,
-    getUpgradeHydrogen,
-    getUpgradeResearch,
-    setUpgradeResearch,
-    getHydrogenStorage,
-    setHydrogenStorage,
     getNotationType,
     setNotationType,
     getNotificationsToggle,
     setNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getHydrogenQuantity,
-    setHydrogenQuantity,
-    getResearchQuantity,
-    setResearchQuantity,
     getLanguage,
     setElements,
     getElements,
@@ -51,6 +35,24 @@ import {
     setCurrencySymbol,
     getCurrencySymbol
 } from './constantsAndGlobalVars.js';
+import {
+    getHydrogenAB1Quantity,
+    setHydrogenAB1Quantity,
+    getScienceKitQuantity,
+    setScienceKitQuantity,
+    getScienceClubQuantity,
+    setScienceClubQuantity, 
+    getHydrogenStorage,
+    setHydrogenStorage, 
+    getHydrogenQuantity,
+    setHydrogenQuantity,
+    getResearchQuantity,
+    setResearchQuantity,
+    getUpgradeResearch,
+    setUpgradeResearch,
+    getUpgradeHydrogen,
+    functionRegistryUpgrade
+} from "./resourceConstantsAndGlobalVars.js";
 import {
     revealElement,
     startUpdateAutoBuyerTimersAndRates,
@@ -428,6 +430,8 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'discoverHelium', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('discoverHelium');
+                //reveal helium
+
             }, 'techUnlock', 'getUpgradeResearch', 'discoverHelium', null, 'getResearchQuantity', false, null),
             null,
             null,
