@@ -1,4 +1,7 @@
 import {
+    getRevealedTechArray,
+    setRevealedTechArray,
+    functionRegistryUpgrade,
     getHeaderDescriptions,
     setHeaderDescriptions,
     setTechUnlockedArray,
@@ -417,6 +420,29 @@ function drawTab2Content(heading, optionContentElement) {
             false
         );
         optionContentElement.appendChild(techKnowledgeSharingRow);
+
+        const techdiscoverHeliumRow = createOptionRow(
+            'techdiscoverHeliumRow',
+            'Discover Helium:',
+            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                gain(getResearchQuantity, setResearchQuantity, null, 'discoverHelium', null, null, null, 'techUnlock', false, null)
+                event.currentTarget.classList.add('unlocked-tech');
+                setTechUnlockedArray('discoverHelium');
+            }, 'techUnlock', 'getUpgradeResearch', 'discoverHelium', null, 'getResearchQuantity', false, null),
+            null,
+            null,
+            null,
+            null,
+            `${getUpgradeResearch('techs', 'discoverHelium').price + ' Research'}`,
+            'getUpgradeResearch',
+            'techUnlock',
+            'discoverHelium',
+            null,
+            'getResearchQuantity',
+            null,
+            ['research', 'researchPoints'],
+        );
+        optionContentElement.appendChild(techdiscoverHeliumRow);
     }
 }
 
@@ -573,20 +599,31 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
 
     row.id = labelId;
     row.classList.add('option-row', 'd-flex');
+    row.dataset.conditionCheck = dataConditionCheck;
+    row.dataset.argumentToPass1 = objectSectionArgument1;
 
-    if (startInvisibleValue) {
+    if (dataConditionCheck === "techUnlock") {
+        const functionGetResearchUpgrade = functionRegistryUpgrade[resourcePriceObject];
+        if (getResearchQuantity() < functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt && !getRevealedTechArray().includes(objectSectionArgument1)) {
+            row.classList.add('invisible'); 
+        } else if (getResearchQuantity() >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt && !getRevealedTechArray().includes(objectSectionArgument1)) {
+            setRevealedTechArray(objectSectionArgument1);
+        }
+    }
+
+    if (startInvisibleValue && startInvisibleValue[0] !== 'research') {
         const revealElementType = startInvisibleValue[0];
         const revealElementCondition = startInvisibleValue[1];
 
         if (revealElementType === 'tech') {
             if (!getTechUnlockedArray().includes(revealElementCondition)) {
-                row.classList.add('option-row', 'invisible');
+                row.classList.add('invisible');
             }
         }
 
         if (revealElementType === 'debug') {
             if (getDebugVisibilityArray().includes(revealElementCondition)) {
-                row.classList.add('option-row', 'invisible');
+                row.classList.add('invisible');
             }
         }
     }

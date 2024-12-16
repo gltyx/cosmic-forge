@@ -24,7 +24,8 @@ let increaseStorageFactor = 2;
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
 let techUnlockedArray = [];
-let cash = 0;
+let revealedTechArray = [];
+let cash = 100;
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -39,7 +40,7 @@ let lastScreenOpenRegister = {
 
 //ELEMENT VALUES
 export const SALE_VALUES = {
-    hydrogen: 0.005
+    hydrogen: 0.05 //0.005
 }
 
 let salePreviews = {
@@ -92,7 +93,14 @@ let upgradeHydrogen = {
 let upgradeResearch = {
     techs: {
         knowledgeSharing: {
+            appearsAt: 0,
             price: 5,
+            resource: 'research',
+            effectFunction: 'revealElement'
+        },
+        discoverHelium: {
+            appearsAt: 20, //300
+            price: 30, //500
             resource: 'research',
             effectFunction: 'revealElement'
         }
@@ -176,8 +184,6 @@ export function setElements() {
         researchQuantity: document.getElementById('researchQuantity'),
         cashStat: document.getElementById('cashStat'),
         optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
-        
-        // scienceKitQuantity: document.getElementById('scienceKitQuantity'), //IF TRYING TO ADD ELEMENTS HERE FROM DYNAMICALLY GENERATED ELEMENTS IT WONT WORK UNLESS WE CALL SET ELEMENTS AFTER CREATING THEM
     };
 }
 
@@ -598,6 +604,14 @@ export function setTechUnlockedArray(value) {
     techUnlockedArray.unshift(value);
 }
 
+export function getRevealedTechArray() {
+    return revealedTechArray;
+}
+
+export function setRevealedTechArray(value) {
+    revealedTechArray.unshift(value);
+}
+
 export function getHeaderDescriptions(key) {
     return headerDescriptions[key];
 }
@@ -605,4 +619,6 @@ export function getHeaderDescriptions(key) {
 export function setHeaderDescriptions(value) {
     headerDescriptions[key] = value;
 }
+
+getRevealedTechArray
 

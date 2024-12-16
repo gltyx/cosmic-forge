@@ -1,4 +1,5 @@
 import {
+    setRevealedTechArray,
     getTimerRateRatio,
     getTimerUpdateInterval,
     getCurrencySymbol,
@@ -40,7 +41,9 @@ import {
     setUpgradeResearch,
     getUpgradeHydrogen,
     setUpgradeHydrogen,
-    getLastScreenOpenRegister
+    getLastScreenOpenRegister,
+    getRevealedTechArray,
+    getTechUnlockedArray
 } from './constantsAndGlobalVars.js';
 
 //---------------------------------------------------------------------------------------------------------
@@ -121,6 +124,11 @@ export async function gameLoop() {
         const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
         elementsResourcesCheck.forEach((elementResourceCheck) => {
             monitorResourceCostChecks(elementResourceCheck);
+        });
+
+        const revealRowsCheck = document.querySelectorAll('.option-row');
+        revealRowsCheck.forEach((revealRowCheck) => {
+            monitorRevealRowsChecks(revealRowCheck);
         });
 
         //updateAndIncrementQuantities
@@ -374,6 +382,17 @@ function manageTabSpecificUi() {
     }
 }
 
+function monitorRevealRowsChecks(element) {
+    if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
+        if (getRevealedTechArray().includes(element.dataset.argumentToPass1)) {
+            element.classList.remove('invisible');
+        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResearchQuantity() >= getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt) {
+            element.classList.remove('invisible');
+            setRevealedTechArray(element.dataset.argumentToPass1);
+        }
+    }
+}
+
 function monitorResourceCostChecks(element) {
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         const functionName = element.dataset.resourcePriceObject;
@@ -397,10 +416,10 @@ function monitorResourceCostChecks(element) {
         }
 
         if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') {    
-            if (typeof functionGetResourceQuantity === 'function') {
+            if (typeof functionGetResourceQuantity === 'function') { //
                 const checkQuantity = functionGetResourceQuantity();
     
-                if (!element.classList.contains('unlocked-tech')) {
+                if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(element.dataset.argumentToPass1)) {
                     if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
                         element.classList.remove('red-disabled-text');
                     } else {
@@ -415,7 +434,7 @@ function monitorResourceCostChecks(element) {
                         accompanyingLabel.textContent = 'Researched';
                         accompanyingLabel.style.pointerEvents = 'none';
                     }
-
+                    element.classList.remove('red-disabled-text');
                     element.classList.add('green-ready-text');
                     element.textContent = 'Researched';
                     element.style.pointerEvents = 'none';
