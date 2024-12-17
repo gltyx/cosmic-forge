@@ -4,7 +4,8 @@ export const headerDescriptions = {
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
-    helium: "Lighter than air this one will make you float away!"
+    helium: "Lighter than air this one will make you float away!",
+    carbon: "This is the first stable solid element, made from fused Helium"
 };
 
 export const optionDescriptions = {
@@ -29,12 +30,12 @@ export const optionDescriptions = {
         updateAt: ""
     },
     heliumSellRow: {
-        content1: "Sell Helium to earn cash.",
+        content1: "Sell Carbon to earn cash, or fuse it.",
         content2: "",
         updateAt: ""
     },
     heliumGainRow: {
-        content1: "Manually gain one unit of Helium.",
+        content1: "Manually scrape one unit of Helium.",
         content2: "",
         updateAt: ""
     },
@@ -48,6 +49,26 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    carbonSellRow: {
+        content1: "Sell Carbon to earn cash, or fuse it.",
+        content2: "",
+        updateAt: ""
+    },
+    carbonGainRow: {
+        content1: "Extract Carbon manually from the environment.",
+        content2: "",
+        updateAt: ""
+    },
+    carbonIncreaseStorageRow: {
+        content1: "Expand your Carbon storage.",
+        content2: "",
+        updateAt: ""
+    },
+    carbonAutoBuyer1Row: {
+        content1: "Buy a miner to automate the collection of Carbon.",
+        content2: "",
+        updateAt: ""
+    },    
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",

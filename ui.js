@@ -1,8 +1,6 @@
 import {
     getUnlockedResourcesArray,
     setUnlockedResourcesArray,
-    getFuseArray,
-    setFuseArray,
     setTechSpecificUIItemsArray,
     getTechSpecificUIItemsArray,
     getRevealedTechArray,
@@ -40,6 +38,10 @@ import {
     getCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
+    getFuseArray,
+    setFuseArray
+} from "./resourceConstantsAndGlobalVars.js";
+import {
     getHeaderDescriptions,
     setHeaderDescriptions,
     getOptionDescription,
@@ -50,6 +52,8 @@ import {
     setHydrogenAB1Quantity,
     getHeliumAB1Quantity,
     setHeliumAB1Quantity,
+    getCarbonAB1Quantity,
+    setCarbonAB1Quantity,
     getScienceKitQuantity,
     setScienceKitQuantity,
     getScienceClubQuantity,
@@ -58,16 +62,21 @@ import {
     setHydrogenStorage, 
     getHeliumStorage,
     setHeliumStorage,
+    getCarbonStorage,
+    setCarbonStorage,
     getHydrogenQuantity,
     setHydrogenQuantity,
     getHeliumQuantity,
     setHeliumQuantity,
+    getCarbonQuantity,
+    setCarbonQuantity,
     getResearchQuantity,
     setResearchQuantity,
     getUpgradeResearch,
     setUpgradeResearch,
     getUpgradeHydrogen,
     getUpgradeHelium,
+    getUpgradeCarbon,
     functionRegistryUpgrade
 } from "./resourceConstantsAndGlobalVars.js";
 import {
@@ -125,6 +134,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'helium');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'carbon');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
         });
@@ -489,6 +506,118 @@ function drawTab1Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(heliumAutoBuyer1Row);
+    }
+
+    else if (heading === 'Carbon') {
+        let storagePrice = getUpgradeCarbon('storage').price;
+        let autobuyer1Price = getUpgradeCarbon('autoBuyer').tier1.price;
+
+        const carbonSellRow = createOptionRow(
+            'carbonSellRow',
+            'Sell Carbon:',
+            createDropdown('carbonSellSelectQuantity', [
+                { value: 'all', text: 'All Stock' },
+                { value: 'threeQuarters', text: '75% Stock' },
+                { value: 'twoThirds', text: '67% Stock' },
+                { value: 'half', text: '50% Stock' },
+                { value: 'oneThird', text: '33% Stock' },
+                { value: '100000', text: '100,000' },
+                { value: '10000', text: '10,000' },
+                { value: '1000', text: '1,000' },
+                { value: '100', text: '100' },
+                { value: '10', text: '10' },
+                { value: '1', text: '1' },
+            ], 'all', (value) => {
+                setSalePreview('carbon', value, 'nextElementsWillExpandOutHere');
+            }),
+            createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
+                sellResource(getCarbonQuantity, setCarbonQuantity, 'carbon')
+            }, 'sellResource', null, null, null, 'getCarbonQuantity', true, null),
+            null,
+            null,
+            null,
+            `${getResourceSalePreview('carbon')}`,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(carbonSellRow);
+
+        const carbonGainRow = createOptionRow(
+            'carbonGainRow',
+            'Gain 1 Carbon:',
+            createButton('Gain', ['option-button'], () => {
+                gain(getCarbonQuantity, setCarbonQuantity, getCarbonStorage, 1, 'carbonQuantity', null, null, false, null)
+            }, null, null, null, null, null, false, null),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(carbonGainRow);
+
+        if (typeof storagePrice === 'function') {
+            storagePrice = storagePrice();
+        }
+
+        const carbonIncreaseStorageRow = createOptionRow(
+            'carbonIncreaseStorageRow',
+            'Increase Container Size:',
+            createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                increaseResourceStorage(setCarbonStorage, getCarbonStorage, 'carbonQuantity', 'getUpgradeCarbon', 'storage');
+            }, 'upgradeCheck', 'getUpgradeCarbon', 'storage', null, 'getCarbonQuantity', true, null),
+            null,
+            null,
+            null,
+            null,
+            `${storagePrice + " " + capitaliseString(getUpgradeCarbon('storage').resource)}`,
+            'getUpgradeCarbon',
+            'upgradeCheck',
+            'storage',
+            null,
+            'getCarbonQuantity',
+            null,
+            false,
+            'carbon'
+        );
+        optionContentElement.appendChild(carbonIncreaseStorageRow);
+
+        const carbonAutoBuyer1Row = createOptionRow(
+            'carbonAutoBuyer1Row',
+            'Burner:',
+            createButton(`Add ${getUpgradeCarbon('autoBuyer').tier1.rate * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(getCarbonAB1Quantity, setCarbonAB1Quantity, null, 1, 'carbonAB1Quantity', 'getUpgradeCarbon', 'autoBuyer', true, 'tier1'),
+                startUpdateAutoBuyerTimersAndRates('carbonAB1');
+            }, 'upgradeCheck', 'getUpgradeCarbon', 'autoBuyer', null, 'getCarbonQuantity', true, 'tier1'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer1Price + " " + getUpgradeCarbon('autoBuyer').resource}`,
+            'getUpgradeCarbon',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'getCarbonQuantity',
+            'tier1',
+            false,
+            null
+        );
+        optionContentElement.appendChild(carbonAutoBuyer1Row);        
     }
 }
 

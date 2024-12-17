@@ -1,14 +1,17 @@
 import { setResourceSalePreview, getResourceSalePreview } from "./constantsAndGlobalVars.js";
 
-//FUNCTION REGISTRIES
+// FUNCTION REGISTRIES
 export const functionRegistryUpgrade = {
     getHydrogenStorage: getHydrogenStorage,
     getHeliumStorage: getHeliumStorage,
+    getCarbonStorage: getCarbonStorage,
     getUpgradeResearch: getUpgradeResearch,
     getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeHelium: getUpgradeHelium,
+    getUpgradeCarbon: getUpgradeCarbon,
     getHydrogenQuantity: getHydrogenQuantity,
     getHeliumQuantity: getHeliumQuantity,
+    getCarbonQuantity: getCarbonQuantity,
     getResearchQuantity: getResearchQuantity,
     getCash: getCash,
     // Add more functions here as needed
@@ -17,37 +20,42 @@ export const functionRegistryUpgrade = {
 export const functionRegistryResourceQuantity = {
     hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHydrogenDescription' },
     helium: { getQuantity: getHeliumQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHeliumDescription' },
-    // Add more resources here...
-    //CARBON from helium
+    carbon: { getQuantity: getCarbonQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellCarbonDescription' }
 };
 
-//RESOURCE SALE VALUES
+// RESOURCE SALE VALUES
 export const SALE_VALUES = {
     hydrogen: 0.005,
     helium: 0.01,
+    carbon: 0.1
 };
 
-//QUANTITY VARIABLES
-//RESOURCES
+// QUANTITY VARIABLES
+// RESOURCES
 export let cash = 100000;
 export let researchQuantity = 320;
 export let hydrogenQuantity = 0;
 export let heliumQuantity = 0;
+export let carbonQuantity = 0;
 
-//AUTOBUYERS
+// AUTOBUYERS
 export let scienceKitQuantity = 0;
 export let scienceClubQuantity = 0;
 export let hydrogenAB1Quantity = 0;
 export let heliumAB1Quantity = 0;
+export let carbonAB1Quantity = 0;
 
-//RATE VARIABLES
+// RATE VARIABLES
 export let researchRate = 0;
 export let hydrogenRate = 0;
 export let heliumRate = 0;
+export let carbonRate = 0;
 
-//STORAGE VARIABLES
+// STORAGE VARIABLES
 export let hydrogenStorage = 100;
 export let heliumStorage = 100;
+export let carbonStorage = 100;
+
 
 //RESOURCE UPGRADE OBJECTS
 export let upgradeHydrogen = {
@@ -112,6 +120,37 @@ export let upgradeHelium = {
     },
 };
 
+export let upgradeCarbon = {
+    storage: {
+        type: 'storage',
+        requirementQty: 1,
+        price: getCarbonStorage,
+        resource: 'carbon',
+        checkQuantity: getCarbonQuantity,
+        deduct: setCarbonQuantity,
+        setPrice: null
+    },
+    autoBuyer: {
+        type: 'autoBuyer',
+        tier1: {
+            price: 55, rate: 0.01, setPrice: 'carbonAB1Price'
+        },
+        tier2: {
+            price: 425, rate: 25, setPrice: 'carbonAB2Price'
+        },
+        tier3: {
+            price: 2125, rate: 125, setPrice: 'carbonAB3Price'
+        },
+        tier4: {
+            price: 10625, rate: 625, setPrice: 'carbonAB4Price'
+        },        
+        requirementQty: 1,
+        resource: 'carbon',
+        checkQuantity: getCarbonQuantity,
+        deduct: setCarbonQuantity,
+    },
+};
+
 //RESEARCH UPGRADE OBJECT
 export let upgradeResearch = {
     techs: {
@@ -173,6 +212,22 @@ export let upgradeResearch = {
         }
     }
 };
+
+//FUSE ARRAY
+export let fuseArray = {
+    hydrogen: {
+        fuseTo: 'helium',
+        ratio: 0.5
+    },
+    helium: {
+        fuseTo: 'carbon',
+        ratio: 0.3
+    },
+    carbon: {
+        fuseTo: 'nextElementsWillExpandOutHere',
+        ratio: 0.5 //etc
+    }
+};
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
 export function getUpgradeHydrogen(key) {
@@ -189,6 +244,14 @@ export function getUpgradeHelium(key) {
 
 export function setUpgradeHelium(key, tier, property, value) {
     upgradeHelium[key][tier][property] = value;
+}
+
+export function getUpgradeCarbon(key) {
+    return upgradeCarbon[key];
+}
+
+export function setUpgradeCarbon(key, tier, property, value) {
+    upgradeCarbon[key][tier][property] = value;
 }
 
 export function getUpgradeResearch(key1, key2) {
@@ -215,6 +278,14 @@ export function setHeliumRate(value) {
     heliumRate = value;
 }
 
+export function getCarbonRate() {
+    return carbonRate;
+}
+
+export function setCarbonRate(value) {
+    carbonRate = value;
+}
+
 export function getResearchRate() {
     return researchRate;
 }
@@ -238,6 +309,14 @@ export function setHeliumQuantity(value) {
     heliumQuantity = value;
 }
 
+export function getCarbonQuantity() {
+    return carbonQuantity;
+}
+
+export function setCarbonQuantity(value) {
+    carbonQuantity = value;
+}
+
 export function getHydrogenStorage() {
     return hydrogenStorage;
 }
@@ -252,6 +331,14 @@ export function getHeliumStorage() {
 
 export function setHeliumStorage(value) {
     heliumStorage = value;
+}
+
+export function getCarbonStorage() {
+    return carbonStorage;
+}
+
+export function setCarbonStorage(value) {
+    carbonStorage = value;
 }
 
 export function getResearchQuantity() {
@@ -300,3 +387,27 @@ export function getHeliumAB1Quantity() {
 export function setHeliumAB1Quantity(value) {
     heliumAB1Quantity = value;
 }
+
+export function getCarbonAB1Quantity() {
+    return carbonAB1Quantity;
+}
+
+export function setCarbonAB1Quantity(value) {
+    carbonAB1Quantity = value;
+}
+
+export function getFuseArray(key1, key2) {
+    if (fuseArray[key1] && fuseArray[key1][key2] !== undefined) {
+        return fuseArray[key1][key2];
+    }
+    return null;
+
+}
+
+export function setFuseArray(key1, key2, value) {
+    if (!fuseArray[key1]) {
+        fuseArray[key1] = {};
+    }
+    fuseArray[key1][key2] = value;
+}
+

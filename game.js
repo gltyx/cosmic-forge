@@ -1,8 +1,6 @@
 import {
     getUnlockedResourcesArray,
     setUnlockedResourcesArray,
-    getFuseArray,
-    setFuseArray,
     getTechSpecificUIItemsArray,
     setTechSpecificUIItemsArray,
     setRevealedTechArray,
@@ -33,6 +31,16 @@ import {
     getTechUnlockedArray
 } from './constantsAndGlobalVars.js';
 import {
+    getFuseArray,
+    setFuseArray
+} from "./resourceConstantsAndGlobalVars.js";
+import {
+    getCarbonRate,
+    getCarbonStorage,
+    getCarbonQuantity,
+    setCarbonQuantity,
+    setCarbonStorage,
+    setCarbonRate,
     getHeliumRate,
     getHeliumStorage,
     getHeliumQuantity,
@@ -59,6 +67,8 @@ import {
     setUpgradeHydrogen,
     getUpgradeHelium,
     setUpgradeHelium,
+    getUpgradeCarbon,
+    setUpgradeCarbon,
     functionRegistryUpgrade,
 } from "./resourceConstantsAndGlobalVars.js";
 import { sendNotificationIfActive } from "./ui.js";
@@ -234,15 +244,15 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
             realAmountToAdd = Math.floor(amountToAddToResource * randomEnergyLossFactor);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
 
-            if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) { // if not going over storage limit
+            if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
                 sendNotificationIfActive(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
                     'info'
                 );
-            } else { //going over storage limit
-                const currentQuantityFuseTo = getToResourceQuantity(); //current helium Q
-                const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; //helium space left over
-                lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0); //helium to fuse adjusted for energy loss minus space left over
+            } else { 
+                const currentQuantityFuseTo = getToResourceQuantity();
+                const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; 
+                lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
 
                 sendNotificationIfActive(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
@@ -324,6 +334,10 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
                 newPrice = Math.ceil(currentPrice * 1.15);
                 setUpgradeHelium('autoBuyer', 'tier1', 'price', newPrice);
                 break;
+            case 'carbonAB1Price':
+                newPrice = Math.ceil(currentPrice * 1.15);
+                setUpgradeCarbon('autoBuyer', 'tier1', 'price', newPrice);
+                break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
                 setUpgradeResearch('research', 'scienceKit', 'price', newPrice);
@@ -365,6 +379,7 @@ function checkAndDeductResources() {
 function getAllQuantities() {
     const hydrogenQuantity = getHydrogenQuantity();
     const heliumQuantity = getHeliumQuantity();
+    const carbonQuantity = getCarbonQuantity();
     const researchQuantity = getResearchQuantity();
     const scienceKitQuantity = getScienceKitQuantity();
     const scienceClubQuantity = getScienceClubQuantity();
@@ -372,6 +387,7 @@ function getAllQuantities() {
     const allQuantities = {
         hydrogen: hydrogenQuantity,
         helium: heliumQuantity,
+        carbon: carbonQuantity,
         research: researchQuantity,
         scienceKit: scienceKitQuantity,
         scienceClub: scienceClubQuantity,
@@ -383,6 +399,7 @@ function getAllQuantities() {
 function getAllStorages() {
     const hydrogenStorage = getHydrogenStorage();
     const heliumStorage = getHeliumStorage();
+    const carbonStorage = getCarbonStorage();
     const researchStorage = null;
     const scienceKitStorage = null;
     const scienceClubStorage = null;
@@ -390,6 +407,7 @@ function getAllStorages() {
     const allStorages = {
         hydrogen: hydrogenStorage,
         helium: heliumStorage,
+        carbon: carbonStorage,
         research: researchStorage,
         scienceKit: scienceKitStorage,
         scienceClub: scienceClubStorage,
@@ -401,6 +419,7 @@ function getAllStorages() {
 function getAllResourceElements() {
     const hydrogenElement = getElements().hydrogenQuantity;
     const heliumElement = getElements().heliumQuantity;
+    const carbonElement = getElements().carbonQuantity;
     const researchElement = getElements().researchQuantity;
     const scienceKitElement = document.getElementById('scienceKitQuantity');
     const scienceClubElement = document.getElementById('scienceClubQuantity');
@@ -408,6 +427,7 @@ function getAllResourceElements() {
     const allResourceElements = {
         hydrogen: hydrogenElement,
         helium: heliumElement,
+        carbon: carbonElement,
         research: researchElement,
         scienceKit: scienceKitElement,
         scienceClub: scienceClubElement,
@@ -429,6 +449,12 @@ function getAllResourceDescriptionElements() {
     const heliumAutoBuyerTier1DescElement = document.getElementById('atmosphereScraperDescription');
     const heliumAutoBuyerTier1Price = getUpgradeHelium('autoBuyer').tier1.price;
 
+    const carbonIncreaseStorageDescElement = document.getElementById('carbonIncreaseContainerSizeDescription');
+    const carbonStoragePrice = getCarbonStorage();
+
+    const carbonAutoBuyerTier1DescElement = document.getElementById('carbonBurnerDescription');
+    const carbonAutoBuyerTier1Price = getUpgradeCarbon('autoBuyer').tier1.price;
+
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getUpgradeResearch('research', 'scienceKit').price;
 
@@ -440,6 +466,8 @@ function getAllResourceDescriptionElements() {
         hydrogenAutoBuyerTier1: {element: hydrogenAutoBuyerTier1DescElement, price: hydrogenAutoBuyerTier1Price, string: ' Hydrogen'},
         heliumIncreaseStorage: {element: heliumIncreaseStorageDescElement, price: heliumStoragePrice, string: ' Helium'},
         heliumAutoBuyerTier1: {element: heliumAutoBuyerTier1DescElement, price: heliumAutoBuyerTier1Price, string: ' Helium'},
+        carbonIncreaseStorage: {element: carbonIncreaseStorageDescElement, price: carbonStoragePrice, string: ' Carbon'},
+        carbonAutoBuyerTier1: {element: carbonAutoBuyerTier1DescElement, price: carbonAutoBuyerTier1Price, string: ' Carbon'},
         scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol()},
         scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol()},
     };
@@ -758,6 +786,16 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
             timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
                 const currentHelium = getHeliumQuantity();
                 setHeliumQuantity(Math.min(currentHelium + getHeliumRate(), getHeliumStorage()));
+            });
+        }
+    } else if (timerName === 'carbonAB1') {
+        const rateCarbonAB1 = getUpgradeCarbon('autoBuyer').tier1.rate;
+        setCarbonRate(getCarbonRate() + rateCarbonAB1);
+        getElements().carbonRate.textContent = `${(getCarbonRate() * getTimerRateRatio()).toFixed(1)} / s`;
+        if (!timerManager.getTimer('carbonAB1')) {
+            timerManager.addTimer('carbonAB1', getTimerUpdateInterval(), () => {
+                const currentCarbon = getCarbonQuantity();
+                setCarbonQuantity(Math.min(currentCarbon + getCarbonRate(), getCarbonStorage()));
             });
         }
     } else if (timerName === 'scienceKit') {

@@ -1,4 +1,4 @@
-import { functionRegistryResourceQuantity, functionRegistryUpgrade, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
+import { functionRegistryResourceQuantity, functionRegistryUpgrade, getFuseArray, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
 import { capitaliseString } from "./utilityFunctions.js";
 
 //DEBUG
@@ -31,13 +31,6 @@ let techUnlockedArray = [];
 let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
-
-let fuseArray = {
-    hydrogen: {
-        fuseTo: 'helium',
-        ratio: 0.5
-    }
-};
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -76,12 +69,17 @@ export function setElements() {
         statsContainer: document.getElementById('statsContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
         mainContainer: document.getElementById('mainContainer'),
+        simpleSolids: document.getElementById('simpleSolids'),
+        simpleGases: document.getElementById('simpleGases'),
         hydrogenOption: document.getElementById('hydrogenOption'),
         hydrogenRate: document.getElementById('hydrogenRate'),
         hydrogenQuantity: document.getElementById('hydrogenQuantity'),
         heliumOption: document.getElementById('heliumOption'),
         heliumRate: document.getElementById('heliumRate'),
         heliumQuantity: document.getElementById('heliumQuantity'),
+        carbonOption: document.getElementById('carbonOption'),
+        carbonRate: document.getElementById('carbonRate'),
+        carbonQuantity: document.getElementById('carbonQuantity'),
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
         cashStat: document.getElementById('cashStat'),
@@ -421,8 +419,6 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
                 resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         }
     } 
-
-    //console.log(salePreviews[resource]);
 }
 
 
@@ -468,21 +464,6 @@ export function getUnlockedResourcesArray() {
 
 export function setUnlockedResourcesArray(value) {
     unlockedResourcesArray.unshift(value);
-}
-
-export function getFuseArray(key1, key2) {
-    if (fuseArray[key1] && fuseArray[key1][key2] !== undefined) {
-        return fuseArray[key1][key2]; // Return the value if it exists
-    }
-    return null; // Return null if key1 or key2 does not exist
-}
-
-
-export function setFuseArray(key1, key2, value) {
-    if (!fuseArray[key1]) {
-        fuseArray[key1] = {};
-    }
-    fuseArray[key1][key2] = value;
 }
 
 export function setTechSpecificUIItemsArray(key, type, value) {
