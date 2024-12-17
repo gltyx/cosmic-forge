@@ -596,6 +596,7 @@ function drawTab2Content(heading, optionContentElement) {
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('hydrogenFusion');
                 setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
+                updateDescriptionRow('hydrogenSellRow', 'content2');
             }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'getResearchQuantity', false, null),
             null,
             null,
@@ -1061,5 +1062,21 @@ export function disableActivateButton(button, action, activeClass) {
             button.classList.remove(activeClass);
             button.classList.add('disabled');
             break;
+    }
+}
+
+export function updateDescriptionRow(rowKey, targetProperty) {
+    const optionDescriptions = getOptionDescription(rowKey);
+
+    if (
+        optionDescriptions &&
+        targetProperty in optionDescriptions &&
+        'content1' in optionDescriptions
+    ) {
+        const temp = optionDescriptions['content1'];
+        optionDescriptions['content1'] = optionDescriptions[targetProperty];
+        optionDescriptions[targetProperty] = temp;
+    } else {
+        console.error(`Invalid row key or property: ${rowKey}, ${targetProperty}`);
     }
 }

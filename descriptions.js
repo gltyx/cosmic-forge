@@ -64,12 +64,12 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techFusionTheoryRow: {
-        content1: "Unlock Fusion Theory to pave the way for advanced technologies.",
+        content1: "Unlock Fusion Theory to pave the way for advanced fusion technologies.",
         content2: "",
         updateAt: ""
     },
     techHydrogenFusionRow: {
-        content1: "Unlock Hydrogen Fusion to enable fusion-based resource production.",
+        content1: "Unlock Hydrogen Fusion to experiment with fusing Hydrogen atoms.",
         content2: "",
         updateAt: ""
     },
