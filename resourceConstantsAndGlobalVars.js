@@ -30,7 +30,7 @@ export const SALE_VALUES = {
 //QUANTITY VARIABLES
 //RESOURCES
 export let cash = 100000;
-export let researchQuantity = 10000;
+export let researchQuantity = 320;
 export let hydrogenQuantity = 0;
 export let heliumQuantity = 0;
 

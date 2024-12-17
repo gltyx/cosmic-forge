@@ -7,8 +7,6 @@ import {
     getTechSpecificUIItemsArray,
     getRevealedTechArray,
     setRevealedTechArray,
-    getHeaderDescriptions,
-    setHeaderDescriptions,
     setTechUnlockedArray,
     getDebugVisibilityArray,
     getTechUnlockedArray,
@@ -41,6 +39,12 @@ import {
     setCurrencySymbol,
     getCurrencySymbol
 } from './constantsAndGlobalVars.js';
+import {
+    getHeaderDescriptions,
+    setHeaderDescriptions,
+    getOptionDescription,
+    setOptionDescription
+} from "./descriptions.js";
 import {
     getHydrogenAB1Quantity,
     setHydrogenAB1Quantity,
@@ -741,45 +745,56 @@ function drawTab8Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(settingsThemeRow);
-
-        const settingsNotificationTestRow = createOptionRow(
-            'settingsNotificationTestRow',
-            'Trigger Notification:',
-            createButton('Send Notification', ['btn-secondary'], sendNotificationIfActive, null, null, null, null, null, false, null),
-            null,
-            null,
-            null,
-            null,
-            'Send test notification',
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            ['debug', 'settingsNotificationTestRow'],
-            null
-        );
-        optionContentElement.appendChild(settingsNotificationTestRow);
     }
 }
 
-function createOptionRow(labelId, labelText, inputElement1, inputElement2, inputElement3, inputElement4, inputElement5, descriptionText, resourcePriceObject, dataConditionCheck, objectSectionArgument1, objectSectionArgument2, quantityArgument, autoBuyerTier, startInvisibleValue, resourceString) {
-    const row = document.createElement('div');
+function createOptionRow(
+    labelId,
+    labelText,
+    inputElement1,
+    inputElement2,
+    inputElement3,
+    inputElement4,
+    inputElement5,
+    descriptionText,
+    resourcePriceObject,
+    dataConditionCheck,
+    objectSectionArgument1,
+    objectSectionArgument2,
+    quantityArgument,
+    autoBuyerTier,
+    startInvisibleValue,
+    resourceString
+) {
+    // Main wrapper container
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('option-row', 'd-flex')
+    wrapper.id = labelId;
 
-    row.id = labelId;
-    row.classList.add('option-row', 'd-flex');
-    row.dataset.conditionCheck = dataConditionCheck;
-    row.dataset.argumentToPass1 = objectSectionArgument1;
+    // Create the description row
+    const descriptionRowContainer = document.createElement('div');
+    descriptionRowContainer.id = labelId + 'Description';
+    descriptionRowContainer.classList.add('option-row-description', 'd-flex');
+    if(getOptionDescription(labelId)) {
+        descriptionRowContainer.textContent = getOptionDescription(labelId).content1;
+    }
 
+
+    // Main row container
+    const mainRow = document.createElement('div');
+    mainRow.classList.add('option-row-main', 'd-flex');
+    wrapper.dataset.conditionCheck = dataConditionCheck;
+    wrapper.dataset.argumentToPass1 = objectSectionArgument1;
+
+    // Visibility logic for mainRow
     if (dataConditionCheck === "techUnlock") {
         const functionGetResearchUpgrade = functionRegistryUpgrade[resourcePriceObject];
         const researchPointsToAppear = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0];
         const prerequisiteForTech = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[1];
         if (getResearchQuantity() < researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
-            row.classList.add('invisible'); 
+            wrapper.classList.add('invisible');
         } else if (!getTechUnlockedArray().includes(prerequisiteForTech)) {
-            row.classList.add('invisible');
+            wrapper.classList.add('invisible');
         } else if (getResearchQuantity() >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0] && !getRevealedTechArray().includes(objectSectionArgument1)) {
             setRevealedTechArray(objectSectionArgument1);
         }
@@ -791,45 +806,38 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
 
         if (revealElementType === 'tech') {
             if (!getTechUnlockedArray().includes(revealElementCondition)) {
-                row.classList.add('invisible');
+                wrapper.classList.add('invisible');
             }
         }
 
         if (revealElementType === 'debug') {
             if (getDebugVisibilityArray().includes(revealElementCondition)) {
-                row.classList.add('invisible');
+                wrapper.classList.add('invisible');
             }
         }
     }
 
+    // Create the label container
     const labelContainer = document.createElement('div');
     labelContainer.classList.add('label-container');
     const label = document.createElement('label');
     label.innerText = labelText;
     labelContainer.appendChild(label);
-    row.appendChild(labelContainer);
+    mainRow.appendChild(labelContainer);
 
+    // Create the input container
     const inputContainer = document.createElement('div');
     inputContainer.classList.add('input-container');
 
-    if (inputElement1) {
-        inputContainer.appendChild(inputElement1);
-    }
-    if (inputElement2) {
-        inputContainer.appendChild(inputElement2);
-    }
-    if (inputElement3) {
-        inputContainer.appendChild(inputElement3);
-    }
-    if (inputElement4) {
-        inputContainer.appendChild(inputElement4);
-    }
-    if (inputElement5) {
-        inputContainer.appendChild(inputElement5);
-    }
+    if (inputElement1) inputContainer.appendChild(inputElement1);
+    if (inputElement2) inputContainer.appendChild(inputElement2);
+    if (inputElement3) inputContainer.appendChild(inputElement3);
+    if (inputElement4) inputContainer.appendChild(inputElement4);
+    if (inputElement5) inputContainer.appendChild(inputElement5);
 
-    row.appendChild(inputContainer);
+    mainRow.appendChild(inputContainer);
 
+    // Create the description container
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
@@ -837,8 +845,7 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     description.innerHTML = descriptionText;
 
     if (dataConditionCheck) {
-        description.classList.add('red-disabled-text');
-        description.classList.add('resource-cost-sell-check');
+        description.classList.add('red-disabled-text', 'resource-cost-sell-check');
 
         if (dataConditionCheck === 'techUnlock') {
             description.dataset.conditionCheck = dataConditionCheck;
@@ -855,10 +862,14 @@ function createOptionRow(labelId, labelText, inputElement1, inputElement2, input
     }
 
     descriptionContainer.appendChild(description);
-    row.appendChild(descriptionContainer);
+    mainRow.appendChild(descriptionContainer);
 
-    return row;
+    wrapper.appendChild(descriptionRowContainer);
+    wrapper.appendChild(mainRow);
+
+    return wrapper;
 }
+
 
 function generateElementId(labelText, resource) {
 

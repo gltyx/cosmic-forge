@@ -552,11 +552,20 @@ body {
 .option-row {
     display: flex;
     width: 100%;
-    border-bottom: 1px solid var(--container-border-color);
+    flex-direction: column;
 }
 
-.option-row:first-of-type {
-    border-top: 1px solid var(--container-border-color);
+.option-row-main {
+    display: flex;
+    width: 100%;
+    /* border-bottom: 1px double var(--container-border-color); */
+}
+
+.option-row-description {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px dotted var(--container-border-color);
+    border-top: 5px inset var(--container-border-color);
 }
 
 .label-container {
