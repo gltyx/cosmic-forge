@@ -44,7 +44,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     heliumAutoBuyer1Row: {
-        content1: "Add an Atmosphere Scraper to automate Helium collection.",
+        content1: "Helium seems lighter than air, so fill balloons, and add an Atmosphere Scraper to automate Helium collection.",
         content2: "",
         updateAt: ""
     },

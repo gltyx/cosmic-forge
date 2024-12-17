@@ -225,7 +225,7 @@ button {
 
 [data-theme="light"] {
     --disabled-text: red;
-    --ready-text: lime;
+    --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
     --bg-color: white;
     --text-color: black;
@@ -245,7 +245,7 @@ button {
 
 [data-theme="frosty"] {
     --disabled-text: red;
-    --ready-text: lime;
+    --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
@@ -265,10 +265,10 @@ button {
 
 [data-theme="summer"] {
     --disabled-text: red;
-    --ready-text: lime;
+    --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
     --bg-color: #fffae6;
-    --text-color: #7f5837;
+    --text-color: #8e5122;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
     --tab-bg-color: #e4c066;
@@ -277,8 +277,8 @@ button {
     --tab-border-color: #ff9800;
     --tab-invisible-bg-color: #fdd835;
     --tab-invisible-text-color: #ff774e;
-    --container-border-color: #ffb74d;
-    --container-bg-color: #d98b71;
+    --container-border-color: #ffa37f;
+    --container-bg-color: #d8cf8e;
     --button-bg-color: #e4c066;
     --button-bg-active: #ffdab0;
 }
@@ -288,12 +288,12 @@ button {
     --ready-text: lime;
     --warning-text: orange;
     --bg-color: #2f4f4f;
-    --text-color: #d67733;
-    --text-hover-color: #32a132;
+    --text-color: #7a4118;
+    --text-hover-color: #91ca2e;
     --text-focus-color: #32a132;
-    --tab-bg-color: #136213;
+    --tab-bg-color: #1fa51f;
     --tab-bg-hover: #0c4318;
-    --tab-selected-bg-color: #556b2f;
+    --tab-selected-bg-color: #91ca2e;
     --tab-border-color: #8b4513;
     --tab-invisible-bg-color: #2e8b57;
     --tab-invisible-text-color: #90ee90;
@@ -560,7 +560,6 @@ body {
     padding-top: 10px;
     display: flex;
     width: 100%;
-    /* border-bottom: 1px double var(--container-border-color); */
 }
 
 .option-row-description {
