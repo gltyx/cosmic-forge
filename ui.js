@@ -283,8 +283,9 @@ function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
             }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
-            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], () => {
+            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
                 fuseResource('hydrogen', getFuseArray('hydrogen', 'fuseTo'), getFuseArray('hydrogen', 'ratio'), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity)
+                event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'getHydrogenQuantity', true, null),
             null,
             null,

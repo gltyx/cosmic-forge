@@ -251,7 +251,7 @@ function updateAllSalePricePreviews() {
             const salePreviewElement = document.getElementById(resourceFunctions.salePreviewElement);
 
             if (salePreviewElement) {
-                salePreviewElement.textContent = salePreviewString;
+                salePreviewElement.innerHTML = salePreviewString;
             }
         }
     }
@@ -501,12 +501,17 @@ function monitorResourceCostChecks(element) {
                     element.classList.remove('red-disabled-text');
                     if (element.tagName.toLowerCase() === 'button') {
                         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                        if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
+                        if (accompanyingLabel.textContent.includes('!!')) {
+                            accompanyingLabel.classList.remove('warning-orange-text');
+                            accompanyingLabel.classList.add('red-disabled-text');
+                        } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
                             element.classList.add('warning-orange-text');
+                            //accompanyingLabel.remove('red-disabled-text');
                             accompanyingLabel.classList.add('warning-orange-text');
                         } else {
                             element.classList.remove('warning-orange-text');
                             accompanyingLabel.classList.remove('warning-orange-text');
+                            accompanyingLabel.classList.remove('red-disabled-text');
                         }
                     }
                 } else if (!getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion')) {

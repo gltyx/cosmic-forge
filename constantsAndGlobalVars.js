@@ -365,7 +365,7 @@ export function setSalePreview(resource, amount, fusionTo) {
 export function setResourceSalePreview(resource, value, fuseToResource) {
 
     let fusionFlag = false;
-    let tooManyToStore = false;
+    let tooManyToStore = 0;
     let suffixFusion = '';
 
     if (getTechUnlockedArray().includes(resource + 'Fusion')) {
@@ -376,11 +376,25 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
 
         fusionFlag = true;
         const fusionTo = fuseToResource.charAt(0).toUpperCase() + fuseToResource.slice(1);
+        
         if (Math.floor(value * getFuseArray(resource, 'ratio')) > fusionToStorage - fuseToQuantity) {
-            tooManyToStore = true;
+            tooManyToStore = 1;
         }
-        const quantityFuseTo = Math.min(Math.floor(value * getFuseArray(resource, 'ratio')), (Math.floor(fusionToStorage - fuseToQuantity)));
-        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}` + (tooManyToStore ? '!' : '');
+        if (fusionToStorage === fuseToQuantity) {
+            tooManyToStore = 2;
+        }
+        
+        const quantityFuseTo = Math.min(
+            Math.floor(value * getFuseArray(resource, 'ratio')),
+            Math.floor(fusionToStorage - fuseToQuantity)
+        );
+        
+        const suffix =
+            tooManyToStore === 0 ? '' :
+            tooManyToStore === 1 ? '!' :
+            '!!';
+        
+        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}${suffix}`;
     }
 
     const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
@@ -388,33 +402,29 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
 
     if (getCurrencySymbol() !== "€") {
         if (value <= resourceQuantity) {
-            salePreviews[resource] = 
-                getCurrencySymbol() + 
-                (value * SALE_VALUES[resource]).toFixed(2) + 
-                ' (' + 
+            salePreviews[resource] =
+                `<span class="green-ready-text">${getCurrencySymbol()}${(value * SALE_VALUES[resource]).toFixed(2)}</span>` +
+                ' (' +
                 value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         } else {
-            salePreviews[resource] = 
-                getCurrencySymbol() + 
-                (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
-                ' (' + 
+            salePreviews[resource] =
+                `<span class="green-ready-text">${getCurrencySymbol()}${(resourceQuantity * SALE_VALUES[resource]).toFixed(2)}</span>` +
+                ' (' +
                 resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         }
     } else {
         if (value <= resourceQuantity) {
-            salePreviews[resource] = 
-                (value * SALE_VALUES[resource]).toFixed(2) + 
-                getCurrencySymbol() + 
-                ' (' + 
+            salePreviews[resource] =
+                `<span class="green-ready-text">${(value * SALE_VALUES[resource]).toFixed(2)}${getCurrencySymbol()}</span>` +
+                ' (' +
                 value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         } else {
-            salePreviews[resource] = 
-                (resourceQuantity * SALE_VALUES[resource]).toFixed(2) + 
-                getCurrencySymbol() + 
-                ' (' + 
+            salePreviews[resource] =
+                `<span class="green-ready-text">${(resourceQuantity * SALE_VALUES[resource]).toFixed(2)}${getCurrencySymbol()}</span>` +
+                ' (' +
                 resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
         }
-    }
+    } 
 
     //console.log(salePreviews[resource]);
 }
