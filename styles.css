@@ -556,6 +556,8 @@ body {
 }
 
 .option-row-main {
+    padding-bottom: 15px;
+    padding-top: 10px;
     display: flex;
     width: 100%;
     /* border-bottom: 1px double var(--container-border-color); */
