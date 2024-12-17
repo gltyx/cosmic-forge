@@ -186,7 +186,9 @@ function updateStats() {
 
 export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
-    const storageToString = `get${fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1)}Storage`;
+    const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
+    const fuseToString = fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1);
+    const storageToString = `get${fuseToString}Storage`;
     const storageFunction = functionRegistryUpgrade[storageToString];
     const storageAmountFuseTo = storageFunction();
 
@@ -213,7 +215,7 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
 
         if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) { // if not going over storage limit
             sendNotificationIfActive(
-                `Fused ${amountToDeductFromResource} ${resource} into ${realAmountToAdd} ${fuseTo}. Lost ${energyLossFuseToQuantity} ${fuseTo} as energy due to sub-optimal fusion efficiency.`,
+                `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
                 'info'
             );
         } else { //going over storage limit
@@ -222,7 +224,7 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
             lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0); //helium to fuse adjusted for energy loss minus space left over
 
             sendNotificationIfActive(
-                `Should Fuse ${amountToDeductFromResource} ${resource} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseTo} but max due to storage is ${availableStorageFuseTo}.  Lost ${energyLossFuseToQuantity} of that due to sub-optimal fusion efficiency.  Receive ${realAmountToAdd - lostQuantity} ${fuseTo}`,
+                `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
                 'warning'
             );
             
