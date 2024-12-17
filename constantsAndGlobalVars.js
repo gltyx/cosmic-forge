@@ -1,4 +1,5 @@
 import { functionRegistryResourceQuantity, functionRegistryUpgrade, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
+import { capitaliseString } from "./utilityFunctions.js";
 
 //DEBUG
 export let debugFlag = false;
@@ -369,13 +370,12 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
     let suffixFusion = '';
 
     if (getTechUnlockedArray().includes(resource + 'Fusion')) {
-        const fuseToCapitalised = fuseToResource.charAt(0).toUpperCase() + fuseToResource.slice(1);
+        const fuseToCapitalised = capitaliseString(fuseToResource);
         const fuseToStorageFunction = functionRegistryUpgrade[`get${fuseToCapitalised}Storage`];
         const fuseToQuantity = functionRegistryResourceQuantity[fuseToResource].getQuantity();
         const fusionToStorage = fuseToStorageFunction();
 
         fusionFlag = true;
-        const fusionTo = fuseToResource.charAt(0).toUpperCase() + fuseToResource.slice(1);
         
         if (Math.floor(value * getFuseArray(resource, 'ratio')) > fusionToStorage - fuseToQuantity) {
             tooManyToStore = 1;
@@ -394,14 +394,14 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
             tooManyToStore === 1 ? '!' :
             '!!';
         
-        suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}${suffix}`;
+        suffixFusion = ` -> ${quantityFuseTo} ${fuseToCapitalised}${suffix}`;
 
         if (!getUnlockedResourcesArray().includes(fuseToResource)) {
             suffixFusion = '';
         }
     }
 
-    const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
+    const resourceString = capitaliseString(resource);
     const resourceQuantity = functionRegistryResourceQuantity[resource].getQuantity();
 
     if (getCurrencySymbol() !== "€") {

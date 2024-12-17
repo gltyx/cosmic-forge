@@ -80,6 +80,7 @@ import {
     initLocalization,
     localize
 } from './localization.js';
+import { capitaliseString } from './utilityFunctions.js';
 
 let notificationContainer;
 
@@ -338,7 +339,7 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            `${storagePrice + " " + getUpgradeHydrogen('storage').resource.charAt(0).toUpperCase() + getUpgradeHydrogen('storage').resource.slice(1)}`,
+            `${storagePrice + " " + capitaliseString(getUpgradeHydrogen('storage').resource)}`,
             'getUpgradeHydrogen',
             'upgradeCheck',
             'storage',
@@ -450,7 +451,7 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             null,
-            `${storagePrice + " " + getUpgradeHelium('storage').resource.charAt(0).toUpperCase() + getUpgradeHelium('storage').resource.slice(1)}`,
+            `${storagePrice + " " + capitaliseString(getUpgradeHelium('storage').resource)}`,
             'getUpgradeHelium',
             'upgradeCheck',
             'storage',
@@ -867,7 +868,7 @@ function generateElementId(labelText, resource) {
     });
 
     if (resource !== null) {
-        id = resource.toLowerCase() + id.charAt(0).toUpperCase() + id.slice(1);
+        id = resource.toLowerCase() + capitaliseString(id);
     }
 
     id += 'Description';

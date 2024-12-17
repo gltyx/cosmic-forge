@@ -61,7 +61,8 @@ import {
     setUpgradeHelium,
     functionRegistryUpgrade,
 } from "./resourceConstantsAndGlobalVars.js";
-import { updateContent, sendNotificationIfActive } from "./ui.js";
+import { sendNotificationIfActive } from "./ui.js";
+import { capitaliseString } from './utilityFunctions.js';
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -186,8 +187,8 @@ function updateStats() {
 
 export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity, resourceRowToShow) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
-    const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
-    const fuseToString = fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1);
+    const resourceString = capitaliseString(resource);
+    const fuseToString = capitaliseString(fuseTo);
     const storageToString = `get${fuseToString}Storage`;
     const storageFunction = functionRegistryUpgrade[storageToString];
     const storageAmountFuseTo = storageFunction();
@@ -260,7 +261,8 @@ export function sellResource(getResourceQuantity, setResourceQuantity, functionR
     const resourceQuantity = getResourceQuantity();
     const saleData = functionRegistryResourceQuantity[functionRegistryRef].getSalePreview(functionRegistryRef);
 
-    const cashRaised = parseFloat(saleData.slice(1).split(' ')[0]);
+    const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
+    const cashRaised = parseFloat(extractedValue);
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
 
     setResourceQuantity(resourceQuantity - quantityToDeduct);
@@ -787,21 +789,11 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
 //         const button = document.getElementById(buttonId);
 //         if (timer.timerId) {
 //             timer.stop();
-//             button.textContent = `Resume ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+//             button.textContent = `Resume ${capitaliseString(key)}`;
 //         } else {
 //             timer.start();
-//             button.textContent = `Pause ${key.charAt(0).toUpperCase() + key.slice(1)}`;
+//             button.textContent = `Pause ${capitaliseString(key)}`;
 //         }
-//     }
-// }
-
-// export function resetCounter(key) {
-//     if (key === "hydrogenTimer") {
-//         setHydrogenQuantity(0);
-//         updateDisplay("hydrogenQuantity", getHydrogenQuantity());
-//     } else if (key === "silverTimer") {
-//         setResearchQuantity(0);
-//         updateDisplay("silverQuantity", getResearchQuantity());
 //     }
 // }
 
