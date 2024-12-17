@@ -395,6 +395,10 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
             '!!';
         
         suffixFusion = ` -> ${quantityFuseTo} ${fusionTo}${suffix}`;
+
+        if (!getUnlockedResourcesArray().includes(fuseToResource)) {
+            suffixFusion = '';
+        }
     }
 
     const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);

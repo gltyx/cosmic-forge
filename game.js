@@ -61,7 +61,7 @@ import {
     setUpgradeHelium,
     functionRegistryUpgrade,
 } from "./resourceConstantsAndGlobalVars.js";
-import { sendNotificationIfActive } from "./ui.js";
+import { updateContent, sendNotificationIfActive } from "./ui.js";
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -184,7 +184,7 @@ function updateStats() {
     }
 }
 
-export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity) {
+export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity, resourceRowToShow) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const resourceString = resource.charAt(0).toUpperCase() + resource.slice(1);
     const fuseToString = fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1);
@@ -192,47 +192,67 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
     const storageFunction = functionRegistryUpgrade[storageToString];
     const storageAmountFuseTo = storageFunction();
 
-    let randomEnergyLossFactor = 1;
+    let amountToDeductFromResource;
+    let amountToAddToResource;
+    let fuseData;
+    let realAmountToAdd = 0;
 
-    if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
-        randomEnergyLossFactor = Math.random() * (0.30 - 0.20) + 0.30;
-    } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
-        randomEnergyLossFactor = Math.random() * (0.60 - 0.40) + 0.60;
-    } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
-        randomEnergyLossFactor = Math.random() * (0.80 - 0.60) + 0.80;
-    }
+    let lostQuantity = 0;
 
-    if (getUnlockedResourcesArray().includes(fuseTo)) {
-        const fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+    if (!getUnlockedResourcesArray().includes(fuseTo)) {
+        resourceRowToShow.classList.remove('invisible');
+        setUnlockedResourcesArray(fuseTo);
+        fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+        amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
+        const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
 
-        const amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
-        const amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
+        sendNotificationIfActive(
+            `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
+            'info'
+        );
+        setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
+        setToResourceQuantity(getToResourceQuantity() + amountToAdd);
+        return;
+    } else {
+        let randomEnergyLossFactor = 1;
 
-        const realAmountToAdd = Math.floor(amountToAddToResource * randomEnergyLossFactor);
-        const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
-
-        let lostQuantity = 0;
-
-        if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) { // if not going over storage limit
-            sendNotificationIfActive(
-                `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
-                'info'
-            );
-        } else { //going over storage limit
-            const currentQuantityFuseTo = getToResourceQuantity(); //current helium Q
-            const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; //helium space left over
-            lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0); //helium to fuse adjusted for energy loss minus space left over
-
-            sendNotificationIfActive(
-                `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
-                'warning'
-            );
-            
+        if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
+            randomEnergyLossFactor = Math.random() * (0.30 - 0.20) + 0.30;
+        } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
+            randomEnergyLossFactor = Math.random() * (0.60 - 0.40) + 0.60;
+        } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
+            randomEnergyLossFactor = Math.random() * (0.80 - 0.60) + 0.80;
         }
 
-        setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
-        setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), realAmountToAdd - lostQuantity));
+        if (getUnlockedResourcesArray().includes(fuseTo)) {
+            fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+
+            amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
+            amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
+
+            realAmountToAdd = Math.floor(amountToAddToResource * randomEnergyLossFactor);
+            const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
+
+            if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) { // if not going over storage limit
+                sendNotificationIfActive(
+                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
+                    'info'
+                );
+            } else { //going over storage limit
+                const currentQuantityFuseTo = getToResourceQuantity(); //current helium Q
+                const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; //helium space left over
+                lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0); //helium to fuse adjusted for energy loss minus space left over
+
+                sendNotificationIfActive(
+                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
+                    'warning'
+                );
+                
+            }
+        }
     }
+    setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
+    setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), realAmountToAdd - lostQuantity));
 }
 
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {

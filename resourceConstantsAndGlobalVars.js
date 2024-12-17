@@ -121,25 +121,31 @@ export let upgradeResearch = {
             resource: 'research',
             effectFunction: 'revealElement'
         },
-        discoverHelium: {
-            appearsAt: [300, null],
-            price: 500,
-            resource: 'research',
-            effectFunction: 'revealElement'
-        },
         fusionTheory: {
             appearsAt: [500, null],
             price: 750,
             resource: 'research',
             effectFunction: 'prerequisite'
         },
-        hydrogenFusion: { //will reveal a button to fuse hydrogen to helium next to sell button ratio 2H -> 1He
+        hydrogenFusion: {
             appearsAt: [750, 'fusionTheory'],
             price: 1500,
             resource: 'research',
             effectFunction: 'revealElement'
         },
-        gammaRayCollection: { //prereq for something
+        fusionEfficiencyI: {
+            appearsAt: [1000, null],
+            price: 2000,
+            resource: 'research',
+            effectFunction: 'prerequisite'
+        },
+        fusionEfficiencyII: {
+            appearsAt: [1000, null],
+            price: 2000,
+            resource: 'research',
+            effectFunction: 'prerequisite'
+        },
+        fusionEfficiencyIII: {
             appearsAt: [1000, null],
             price: 2000,
             resource: 'research',

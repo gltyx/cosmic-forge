@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });   
 });
 
-function updateContent(heading, tab) {
+export function updateContent(heading, tab) {
     const optionDescriptionElements = getElements().optionPaneDescriptions;
     const optionDescription = getHeaderDescriptions([heading.toLowerCase()]);
 
@@ -284,7 +284,7 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
             }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getFuseArray('hydrogen', 'fuseTo'), getFuseArray('hydrogen', 'ratio'), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity)
+                fuseResource('hydrogen', getFuseArray('hydrogen', 'fuseTo'), getFuseArray('hydrogen', 'ratio'), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity, document.querySelector('.row-side-menu:nth-child(2)'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'getHydrogenQuantity', true, null),
@@ -558,33 +558,6 @@ function drawTab2Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(techKnowledgeSharingRow);
-
-        const techdiscoverHeliumRow = createOptionRow(
-            'techdiscoverHeliumRow',
-            'Discover Helium:',
-            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain(getResearchQuantity, setResearchQuantity, null, 'discoverHelium', null, null, null, 'techUnlock', false, null)
-                event.currentTarget.classList.add('unlocked-tech');
-                setTechUnlockedArray('discoverHelium');
-                setUnlockedResourcesArray('helium');
-                document.querySelector('.row-side-menu:nth-child(2)').classList.remove('invisible');
-
-            }, 'techUnlock', 'getUpgradeResearch', 'discoverHelium', null, 'getResearchQuantity', false, null),
-            null,
-            null,
-            null,
-            null,
-            `${getUpgradeResearch('techs', 'discoverHelium').price + ' Research'}`,
-            'getUpgradeResearch',
-            'techUnlock',
-            'discoverHelium',
-            null,
-            'getResearchQuantity',
-            null,
-            ['research', 'researchPoints'],
-            null
-        );
-        optionContentElement.appendChild(techdiscoverHeliumRow);
 
         const techFusionTheoryRow = createOptionRow(
             'techFusionTheoryRow',
