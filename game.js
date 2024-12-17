@@ -188,7 +188,17 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const storageToString = `get${fuseTo.charAt(0).toUpperCase() + fuseTo.slice(1)}Storage`;
     const storageFunction = functionRegistryUpgrade[storageToString];
-    const storageAmountFuseTo = storageFunction(); // Maximum storage for the `fuseTo` resource
+    const storageAmountFuseTo = storageFunction();
+
+    let randomEnergyLossFactor = 1;
+
+    if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
+        randomEnergyLossFactor = Math.random() * (0.30 - 0.20) + 0.30;
+    } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
+        randomEnergyLossFactor = Math.random() * (0.60 - 0.40) + 0.60;
+    } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
+        randomEnergyLossFactor = Math.random() * (0.80 - 0.60) + 0.80;
+    }
 
     if (getUnlockedResourcesArray().includes(fuseTo)) {
         const fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
@@ -196,25 +206,32 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
         const amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
         const amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
 
-        if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
-            sendNotificationIfActive(`Fused ${amountToDeductFromResource} ${resource} into ${amountToAddToResource} ${fuseTo}.`);
-        } else {
-            const wantToFuseTo = amountToDeductFromResource * ratio;
-            const currentQuantityFuseTo = getToResourceQuantity();
-            const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo;
-            const lostQuantity = wantToFuseTo - availableStorageFuseTo;
+        const realAmountToAdd = Math.floor(amountToAddToResource * randomEnergyLossFactor);
+        const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
+
+        let lostQuantity = 0;
+
+        if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) { // if not going over storage limit
+            sendNotificationIfActive(
+                `Fused ${amountToDeductFromResource} ${resource} into ${realAmountToAdd} ${fuseTo}. Lost ${energyLossFuseToQuantity} ${fuseTo} as energy due to sub-optimal fusion efficiency.`,
+                'info'
+            );
+        } else { //going over storage limit
+            const currentQuantityFuseTo = getToResourceQuantity(); //current helium Q
+            const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; //helium space left over
+            lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0); //helium to fuse adjusted for energy loss minus space left over
 
             sendNotificationIfActive(
-                `Fused ${amountToDeductFromResource} ${resource} into ${availableStorageFuseTo} ${fuseTo}. Lost ${lostQuantity} ${fuseTo} as it cannot be stored.`,
+                `Should Fuse ${amountToDeductFromResource} ${resource} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseTo} but max due to storage is ${availableStorageFuseTo}.  Lost ${energyLossFuseToQuantity} of that due to sub-optimal fusion efficiency.  Receive ${realAmountToAdd - lostQuantity} ${fuseTo}`,
                 'warning'
             );
+            
         }
 
         setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
-        setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), amountToAddToResource));
+        setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), realAmountToAdd - lostQuantity));
     }
 }
-
 
 export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
     const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
