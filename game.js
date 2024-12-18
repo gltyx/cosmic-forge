@@ -665,7 +665,7 @@ const updateDisplay = (element, data1, data2, desc) => {
         }
     }   
 };
-//1,3,6 to remove
+
 export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tierAB, resourceCategory) {
     let resourceType;
 
@@ -695,9 +695,9 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
-            setResourceDataObject(getResourceDataObject('research',['quantity']) - currentResourceQuantity, 'research', ['quantity']);
+            setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceQuantity, 'research', ['quantity']);
         } else {
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', resourceCategory, 'quantity');
+            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
         }
     } else {
         if (resourceType === 'scienceUpgrade') {
@@ -706,6 +706,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
             return;
+        } else if (resourceType === 'resource' && currentResourceQuantity >= getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) {
+            setResourceDataObject(getResourceDataObject('resources', [resourceCategory, 'storageCapacity']), 'resources', [resourceCategory, 'quantity']);
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'research', ['quantity']);
@@ -758,7 +760,7 @@ export function increaseResourceStorage(elementId, resource) {
 
     deferredActions.push(() => {
         const updatedStorageSize = getResourceDataObject('resources', [resource, 'storageCapacity']) * increaseFactor;
-        setResourceDataObject(updatedStorageSize, getResourceDataObject('resources', [resource, 'storageCapacity']));
+        setResourceDataObject(updatedStorageSize, 'resources', [resource, 'storageCapacity']);
         getElements()[elementId].classList.remove('green-ready-text');
     });
 }
@@ -778,7 +780,8 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         if (!timerManager.getTimer('hydrogenAB1')) {
             timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
                 const currentHydrogen = getResourceDataObject('resources', ['hydrogen', 'quantity']);
-                setResourceDataObject(currentHydrogen + hydrogenRate, 'resources', ['hydrogen', 'quantity']);
+                const hydrogenStorage = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
+                setResourceDataObject(Math.min(currentHydrogen + hydrogenRate, hydrogenStorage), 'resources', ['hydrogen', 'quantity']);
             });
         }
     } else if (timerName === 'heliumAB1') {
@@ -790,7 +793,8 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         if (!timerManager.getTimer('heliumAB1')) {
             timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
                 const currentHelium = getResourceDataObject('resources', ['helium', 'quantity']);
-                setResourceDataObject(currentHelium + heliumRate, 'resources', ['helium', 'quantity']);
+                const heliumStorage = getResourceDataObject('resources', ['helium', 'storageCapacity']);
+                setResourceDataObject(Math.min(currentHelium + heliumRate, heliumStorage), 'resources', ['helium', 'quantity']);
             });
         }
     } else if (timerName === 'carbonAB1') {
@@ -802,7 +806,8 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         if (!timerManager.getTimer('carbonAB1')) {
             timerManager.addTimer('carbonAB1', getTimerUpdateInterval(), () => {
                 const currentCarbon = getResourceDataObject('resources', ['carbon', 'quantity']);
-                setResourceDataObject(currentCarbon + carbonRate, 'resources', ['carbon', 'quantity']);
+                const carbonStorage = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
+                setResourceDataObject(Math.min(currentCarbon + carbonRate, carbonStorage), 'resources', ['carbon', 'quantity']);
             });
         }
     } else if (timerName === 'scienceKit') {
