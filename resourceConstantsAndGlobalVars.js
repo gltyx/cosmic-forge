@@ -1,5 +1,87 @@
 import { setResourceSalePreview, getResourceSalePreview } from "./constantsAndGlobalVars.js";
 
+export const resourceData = {
+    resources: {
+        hydrogen: {
+            nameResource: 'Hydrogen',
+            screenName: 'hydrogen',
+            saleValue: 0.005,
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 65, rate: 0.01 },
+                    tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 500, rate: 25 },
+                    tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2500, rate: 125 },
+                    tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 12500, rate: 625 }
+                },
+            },
+            revealedBy: "",
+            canFuseTech: 'hydrogenFusion',
+            fuseTo1: 'helium',
+            fuseToRatio1: 0.5
+        },
+        helium: {
+            nameResource: 'Helium',
+            screenName: 'helium',
+            saleValue: 0.01,
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    tier1: { nameUpgrade: 'Helium Extractor', description: 'Automatically extracts Helium at a rate of 0.01 units per second.', price: 75, rate: 0.01 },
+                    tier2: { nameUpgrade: 'Advanced Helium Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 575, rate: 25 },
+                    tier3: { nameUpgrade: 'Industrial Helium Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2875, rate: 125 },
+                    tier4: { nameUpgrade: 'Quantum Helium Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 14375, rate: 625 }
+                },
+            },
+            revealedBy: "hydrogenFusion",
+            canFuseTech: 'heliumFusion',
+            fuseTo1: 'carbon',
+            fuseToRatio1: 0.3
+        },
+        carbon: {
+            nameResource: 'Carbon',
+            screenName: 'carbon',
+            saleValue: 0.1,
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    tier1: { nameUpgrade: 'Carbon Extractor', description: 'Automatically extracts Carbon at a rate of 0.01 units per second.', price: 55, rate: 0.01 },
+                    tier2: { nameUpgrade: 'Advanced Carbon Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 425, rate: 25 },
+                    tier3: { nameUpgrade: 'Industrial Carbon Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2125, rate: 125 },
+                    tier4: { nameUpgrade: 'Quantum Carbon Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 10625, rate: 625 }
+                },
+            },
+            revealedBy: "heliumFusion",
+            canFuseTech: 'carbonFusion',
+            fuseTo1: 'nextElement',
+            fuseToRatio1: 0.5
+        },
+    },
+    research: {
+        quantity: 0,
+        rate: 0,
+        upgrades: {
+            scienceKit: { requirementQty: 1, price: 5, rate: 0.003 },
+            scienceClub: { requirementQty: 1, price: 100, rate: 0.06 },
+        },
+    },
+    techs: {
+        knowledgeSharing: { appearsAt: [0, null], price: 5 },
+        fusionTheory: { appearsAt: [500, null], price: 750 },
+        hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500 },
+    },
+    currency: {
+        cash: 100000,
+    },
+};
+
+
 // FUNCTION REGISTRIES
 export const functionRegistryUpgrade = {
     getHydrogenStorage: getHydrogenStorage,
@@ -401,7 +483,6 @@ export function getFuseArray(key1, key2) {
         return fuseArray[key1][key2];
     }
     return null;
-
 }
 
 export function setFuseArray(key1, key2, value) {
@@ -410,4 +491,44 @@ export function setFuseArray(key1, key2, value) {
     }
     fuseArray[key1][key2] = value;
 }
+
+export function getResourceDataObject(key, subKeys) {
+    let current = resourceData[key];
+
+    if (!current) {
+        console.warn(`Resource data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined) {
+                console.warn(`Missing subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+
+
+
+
+export function setResourceDataObject(value, key, subKey1, subKey2, subKey3, subKey4, subKey5) {
+    let current = resourceData;
+
+    if (key) current = current[key] || (current[key] = {});
+    if (subKey1) current = current[subKey1] || (current[subKey1] = {});
+    if (subKey2) current = current[subKey1][subKey2] || (current[subKey1][subKey2] = {});
+    if (subKey3) current = current[subKey1][subKey2][subKey3] || (current[subKey1][subKey2][subKey3] = {});
+    if (subKey4) current = current[subKey1][subKey2][subKey3][subKey4] || (current[subKey1][subKey2][subKey3][subKey4] = {});
+    if (subKey5) current = current[subKey1][subKey2][subKey3][subKey4][subKey5] || (current[subKey1][subKey2][subKey3][subKey4][subKey5] = {});
+
+    current = value;
+}
+
+
 

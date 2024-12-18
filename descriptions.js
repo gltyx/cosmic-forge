@@ -1,4 +1,3 @@
-
 export const headerDescriptions = {
     visual: "Change the visual settings of the game.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",

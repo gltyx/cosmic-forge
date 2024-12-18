@@ -1,5 +1,4 @@
-import { functionRegistryResourceQuantity, functionRegistryUpgrade, getFuseArray, SALE_VALUES } from "./resourceConstantsAndGlobalVars.js";
-import { capitaliseString } from "./utilityFunctions.js";
+import { resourceData, getResourceDataObject, setResourceDataObject, functionRegistryResourceQuantity, getFuseArray } from "./resourceConstantsAndGlobalVars.js";
 
 //DEBUG
 export let debugFlag = false;
@@ -303,80 +302,72 @@ export function getResourcesToIncreasePrice() {
 }
 
 export function setSalePreview(resource, amount, fusionTo) {
-    const resourceFunc = functionRegistryResourceQuantity[resource];
+    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
 
-    if (resourceFunc) {
-        let calculatedAmount;
+    let calculatedAmount;
 
-        switch (amount) {
-            case 'all':
-                calculatedAmount = Math.floor(resourceFunc.getQuantity());
-                break;
-            case 'threeQuarters':
-                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 0.75);
-                break;
-            case 'twoThirds':
-                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 2 / 3);
-                break;
-            case 'half':
-                calculatedAmount = Math.floor(resourceFunc.getQuantity() * 0.5);
-                break;
-            case 'oneThird':
-                calculatedAmount = Math.floor(resourceFunc.getQuantity() / 3);
-                break;
-            case '100000':
-                calculatedAmount = Math.min(100000, resourceFunc.getQuantity());
-                break;
-            case '10000':
-                calculatedAmount = Math.min(10000, resourceFunc.getQuantity());
-                break;
-            case '1000':
-                calculatedAmount = Math.min(1000, resourceFunc.getQuantity());
-                break;
-            case '100':
-                calculatedAmount = Math.min(100, resourceFunc.getQuantity());
-                break;
-            case '10':
-                calculatedAmount = Math.min(10, resourceFunc.getQuantity());
-                break;
-            case '1':
-                calculatedAmount = Math.min(1, resourceFunc.getQuantity());
-                break;
-            default:
-                calculatedAmount = 0;
-                break;
-        }
-
-        resourceFunc.setSalePreview(resource, calculatedAmount, fusionTo);
-    } else {
-        console.warn(`No functions found for resource: ${resource}`);
+    switch (amount) {
+        case 'all':
+            calculatedAmount = Math.floor(resourceQuantity);
+            break;
+        case 'threeQuarters':
+            calculatedAmount = Math.floor(resourceQuantity * 0.75);
+            break;
+        case 'twoThirds':
+            calculatedAmount = Math.floor(resourceQuantity * 2 / 3);
+            break;
+        case 'half':
+            calculatedAmount = Math.floor(resourceQuantity * 0.5);
+            break;
+        case 'oneThird':
+            calculatedAmount = Math.floor(resourceQuantity / 3);
+            break;
+        case '100000':
+            calculatedAmount = Math.min(100000, resourceQuantity);
+            break;
+        case '10000':
+            calculatedAmount = Math.min(10000, resourceQuantity);
+            break;
+        case '1000':
+            calculatedAmount = Math.min(1000, resourceQuantity);
+            break;
+        case '100':
+            calculatedAmount = Math.min(100, resourceQuantity);
+            break;
+        case '10':
+            calculatedAmount = Math.min(10, resourceQuantity);
+            break;
+        case '1':
+            calculatedAmount = Math.min(1, resourceQuantity);
+            break;
+        default:
+            calculatedAmount = 0;
+            break;
     }
+    setResourceSalePreview(resource, calculatedAmount, fusionTo);
 }
 
 export function setResourceSalePreview(resource, value, fuseToResource) {
-
     let fusionFlag = false;
     let tooManyToStore = 0;
     let suffixFusion = '';
-
-    if (getTechUnlockedArray().includes(resource + 'Fusion')) {
-        const fuseToCapitalised = capitaliseString(fuseToResource);
-        const fuseToStorageFunction = functionRegistryUpgrade[`get${fuseToCapitalised}Storage`];
-        const fuseToQuantity = functionRegistryResourceQuantity[fuseToResource].getQuantity();
-        const fusionToStorage = fuseToStorageFunction();
+    if (getTechUnlockedArray().includes(getResourceDataObject('resources', [resource, 'canFuseTech']))) {
+        const fuseToCapitalised = getResourceDataObject('resources', [fuseToResource, 'nameResource']);
+        const fuseToQuantity = getResourceDataObject('resources', [fuseToResource, 'quantity']);
+        const fuseToStorage = getResourceDataObject('resources', [fuseToResource, 'storageCapacity']);
 
         fusionFlag = true;
         
-        if (Math.floor(value * getFuseArray(resource, 'ratio')) > fusionToStorage - fuseToQuantity) {
+        if (Math.floor(value * getFuseArray(resource, 'ratio')) > fuseToStorage - fuseToQuantity) {
             tooManyToStore = 1;
         }
-        if (fusionToStorage === fuseToQuantity) {
+        if (fuseToStorage === fuseToQuantity) {
             tooManyToStore = 2;
         }
         
-        const quantityFuseTo = Math.min(
-            Math.floor(value * getFuseArray(resource, 'ratio')),
-            Math.floor(fusionToStorage - fuseToQuantity)
+        const quantityToAddFuseTo = Math.min(
+            Math.floor(value * getResourceDataObject('resources', [resource, 'fuseToRatio1'])),
+            Math.floor(fuseToStorage - fuseToQuantity)
         );
         
         const suffix =
@@ -384,39 +375,40 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
             tooManyToStore === 1 ? '!' :
             '!!';
         
-        suffixFusion = ` -> ${quantityFuseTo} ${fuseToCapitalised}${suffix}`;
+        suffixFusion = ` -> ${quantityToAddFuseTo} ${fuseToCapitalised}${suffix}`;
 
         if (!getUnlockedResourcesArray().includes(fuseToResource)) {
             suffixFusion = '';
         }
     }
 
-    const resourceString = capitaliseString(resource);
-    const resourceQuantity = functionRegistryResourceQuantity[resource].getQuantity();
+    const resourceCapitalised = getResourceDataObject('resources', [resource, 'nameResource']);
+    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+    const resourceSaleValueFactor = getResourceDataObject('resources', [resource, 'saleValue']);
 
     if (getCurrencySymbol() !== "€") {
         if (value <= resourceQuantity) {
             salePreviews[resource] =
-                `<span class="green-ready-text">${getCurrencySymbol()}${(value * SALE_VALUES[resource]).toFixed(2)}</span>` +
+                `<span class="green-ready-text">${getCurrencySymbol()}${(value * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
-                value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
+                value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] =
-                `<span class="green-ready-text">${getCurrencySymbol()}${(resourceQuantity * SALE_VALUES[resource]).toFixed(2)}</span>` +
+                `<span class="green-ready-text">${getCurrencySymbol()}${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
-                resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
+                resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         }
     } else {
         if (value <= resourceQuantity) {
             salePreviews[resource] =
-                `<span class="green-ready-text">${(value * SALE_VALUES[resource]).toFixed(2)}${getCurrencySymbol()}</span>` +
+                `<span class="green-ready-text">${(value * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
-                value + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
+                value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] =
-                `<span class="green-ready-text">${(resourceQuantity * SALE_VALUES[resource]).toFixed(2)}${getCurrencySymbol()}</span>` +
+                `<span class="green-ready-text">${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
-                resourceQuantity + ' ' + resourceString + (fusionFlag ? suffixFusion : '') + ')';
+                resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         }
     } 
 }

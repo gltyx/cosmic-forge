@@ -32,7 +32,9 @@ import {
 } from './constantsAndGlobalVars.js';
 import {
     getFuseArray,
-    setFuseArray
+    setFuseArray,
+    getResourceDataObject,
+    setResourceDataObject,
 } from "./resourceConstantsAndGlobalVars.js";
 import {
     getCarbonRate,
