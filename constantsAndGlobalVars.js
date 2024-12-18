@@ -1,4 +1,4 @@
-import { resourceData, getResourceDataObject, setResourceDataObject, getFuseArray } from "./resourceConstantsAndGlobalVars.js";
+import { getResourceDataObject, setResourceDataObject } from "./resourceConstantsAndGlobalVars.js";
 
 //DEBUG
 export let debugFlag = false;
@@ -351,14 +351,20 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
     let fusionFlag = false;
     let tooManyToStore = 0;
     let suffixFusion = '';
+
+    const resourceCapitalised = getResourceDataObject('resources', [resource, 'nameResource']);
+    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+    const resourceSaleValueFactor = getResourceDataObject('resources', [resource, 'saleValue']);
+
     if (getTechUnlockedArray().includes(getResourceDataObject('resources', [resource, 'canFuseTech']))) {
         const fuseToCapitalised = getResourceDataObject('resources', [fuseToResource, 'nameResource']);
         const fuseToQuantity = getResourceDataObject('resources', [fuseToResource, 'quantity']);
         const fuseToStorage = getResourceDataObject('resources', [fuseToResource, 'storageCapacity']);
+        const fuseToRatio = getResourceDataObject('resources', [resource, 'fuseToRatio1']);
 
         fusionFlag = true;
         
-        if (Math.floor(value * getFuseArray(resource, 'ratio')) > fuseToStorage - fuseToQuantity) {
+        if (Math.floor(value * fuseToRatio) > fuseToStorage - fuseToQuantity) {
             tooManyToStore = 1;
         }
         if (fuseToStorage === fuseToQuantity) {
@@ -366,7 +372,7 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
         }
         
         const quantityToAddFuseTo = Math.min(
-            Math.floor(value * getResourceDataObject('resources', [resource, 'fuseToRatio1'])),
+            Math.floor(value * fuseToRatio),
             Math.floor(fuseToStorage - fuseToQuantity)
         );
         
@@ -381,10 +387,6 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
             suffixFusion = '';
         }
     }
-
-    const resourceCapitalised = getResourceDataObject('resources', [resource, 'nameResource']);
-    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
-    const resourceSaleValueFactor = getResourceDataObject('resources', [resource, 'saleValue']);
 
     if (getCurrencySymbol() !== "€") {
         if (value <= resourceQuantity) {

@@ -31,8 +31,6 @@ import {
     getResourceSalePreview
 } from './constantsAndGlobalVars.js';
 import {
-    getFuseArray,
-    setFuseArray,
     getResourceDataObject,
     setResourceDataObject,
 } from "./resourceConstantsAndGlobalVars.js";
@@ -284,7 +282,7 @@ function updateAllSalePricePreviews() {
     const resources = getResourceDataObject('resources');
 
     for (const resource in resources) {
-        const fuseTo = resources[resource]?.fuseTo;
+        const fuseTo = resources[resource]?.['fuseTo1'];
     
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";

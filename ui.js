@@ -38,8 +38,6 @@ import {
     getCurrencySymbol
 } from './constantsAndGlobalVars.js';
 import {
-    getFuseArray,
-    setFuseArray,
     getResourceDataObject,
     setResourceDataObject,
 } from "./resourceConstantsAndGlobalVars.js";
@@ -308,7 +306,7 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
             }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getFuseArray('hydrogen', 'fuseTo'), getFuseArray('hydrogen', 'ratio'), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity, document.querySelector('.row-side-menu:nth-child(2)'));
+                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity, document.querySelector('.row-side-menu:nth-child(2)'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'getHydrogenQuantity', true, null),

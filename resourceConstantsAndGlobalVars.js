@@ -1,5 +1,3 @@
-import { setResourceSalePreview, getResourceSalePreview } from "./constantsAndGlobalVars.js";
-
 export const resourceData = {
     resources: {
         hydrogen: {
@@ -292,21 +290,6 @@ export let upgradeResearch = {
     }
 };
 
-//FUSE ARRAY
-export let fuseArray = {
-    hydrogen: {
-        fuseTo: 'helium',
-        ratio: 0.5
-    },
-    helium: {
-        fuseTo: 'carbon',
-        ratio: 0.3
-    },
-    carbon: {
-        fuseTo: 'nextElementsWillExpandOutHere',
-        ratio: 0.5 //etc
-    }
-};
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
 export function getUpgradeHydrogen(key) {
@@ -473,20 +456,6 @@ export function getCarbonAB1Quantity() {
 
 export function setCarbonAB1Quantity(value) {
     carbonAB1Quantity = value;
-}
-
-export function getFuseArray(key1, key2) {
-    if (fuseArray[key1] && fuseArray[key1][key2] !== undefined) {
-        return fuseArray[key1][key2];
-    }
-    return null;
-}
-
-export function setFuseArray(key1, key2, value) {
-    if (!fuseArray[key1]) {
-        fuseArray[key1] = {};
-    }
-    fuseArray[key1][key2] = value;
 }
 
 export function getResourceDataObject(key, subKeys) {
