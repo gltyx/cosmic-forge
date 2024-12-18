@@ -1,4 +1,4 @@
-import { resourceData, getResourceDataObject, setResourceDataObject, functionRegistryResourceQuantity, getFuseArray } from "./resourceConstantsAndGlobalVars.js";
+import { resourceData, getResourceDataObject, setResourceDataObject, getFuseArray } from "./resourceConstantsAndGlobalVars.js";
 
 //DEBUG
 export let debugFlag = false;
@@ -416,10 +416,6 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
 
 export function getResourceSalePreview(key) {
     return salePreviews[key];
-}
-
-export function getFunctionRegistryResourceQuantity() {
-    return functionRegistryResourceQuantity;
 }
 
 export function getLastScreenOpenRegister(key) {

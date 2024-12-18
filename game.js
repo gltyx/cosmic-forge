@@ -9,7 +9,6 @@ import {
     getCurrencySymbol,
     setCurrencySymbol,
     setSalePreview,
-    getFunctionRegistryResourceQuantity,
     getResourcesToIncreasePrice,
     setResourcesToIncreasePrice,
     getResourcesToDeduct,
@@ -28,7 +27,8 @@ import {
     getCurrentTab,
     getLastScreenOpenRegister,
     getRevealedTechArray,
-    getTechUnlockedArray
+    getTechUnlockedArray,
+    getResourceSalePreview
 } from './constantsAndGlobalVars.js';
 import {
     getFuseArray,
@@ -198,7 +198,6 @@ function updateStats() {
 }
 
 export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity, resourceRowToShow) {
-    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const resourceString = capitaliseString(resource);
     const fuseToString = capitaliseString(fuseTo);
     const storageToString = `get${fuseToString}Storage`;
@@ -215,7 +214,7 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
     if (!getUnlockedResourcesArray().includes(fuseTo)) {
         resourceRowToShow.classList.remove('invisible');
         setUnlockedResourcesArray(fuseTo);
-        fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+        fuseData = getResourceSalePreview(resource);
         amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
         const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
 
@@ -238,7 +237,7 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
         }
 
         if (getUnlockedResourcesArray().includes(fuseTo)) {
-            fuseData = functionRegistryResourceQuantity[resource].getSalePreview(resource);
+            fuseData = getResourceSalePreview(resource);
 
             amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
             amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
@@ -268,10 +267,9 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
     setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), realAmountToAdd - lostQuantity));
 }
 
-export function sellResource(getResourceQuantity, setResourceQuantity, functionRegistryRef) {
-    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
+export function sellResource(getResourceQuantity, setResourceQuantity, resource) {
     const resourceQuantity = getResourceQuantity();
-    const saleData = functionRegistryResourceQuantity[functionRegistryRef].getSalePreview(functionRegistryRef);
+    const saleData = getResourceSalePreview(resource)
 
     const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
     const cashRaised = parseFloat(extractedValue);
@@ -282,32 +280,25 @@ export function sellResource(getResourceQuantity, setResourceQuantity, functionR
 }
 
 function updateAllSalePricePreviews() {
-    const functionRegistryResourceQuantity = getFunctionRegistryResourceQuantity();
     const currentScreen = getCurrentOptionPane();
-    //console.log(currentScreen);
-    let fusionTo = '';
+    const resources = getResourceDataObject('resources');
 
-    for (const resource in functionRegistryResourceQuantity) {
-        const fuseData = getFuseArray(resource, 'fuseTo');
-        
-        if (fuseData) {
-            fusionTo = getFuseArray(resource, 'fuseTo');
-        }
-
-        if (functionRegistryResourceQuantity.hasOwnProperty(resource) && resource === currentScreen) {
-            const dropDownElementId = currentScreen + "SellSelectQuantity";
-            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fusionTo);
-
-            const resourceFunctions = functionRegistryResourceQuantity[resource];
-
-            const salePreviewString = resourceFunctions.getSalePreview(currentScreen);
-            const salePreviewElement = document.getElementById(resourceFunctions.salePreviewElement);
-
+    for (const resource in resources) {
+        const fuseTo = resources[resource]?.fuseTo;
+    
+        if (resource === currentScreen) {
+            const dropDownElementId = resource + "SellSelectQuantity";
+            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo);
+    
+            const salePreviewString = getResourceSalePreview(resource);
+            const salePreviewElementId = resources[resource]?.salePreviewElement;
+            const salePreviewElement = document.getElementById(salePreviewElementId);
+    
             if (salePreviewElement) {
                 salePreviewElement.innerHTML = salePreviewString;
             }
         }
-    }
+    }    
 }
 
 function checkAndIncreasePrices() {

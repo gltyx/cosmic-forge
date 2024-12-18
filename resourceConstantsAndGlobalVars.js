@@ -6,6 +6,7 @@ export const resourceData = {
             nameResource: 'Hydrogen',
             screenName: 'hydrogen',
             saleValue: 0.005,
+            salePreviewElement: 'sellHydrogenDescription',
             quantity: 0,
             rate: 0,
             storageCapacity: 100,
@@ -26,6 +27,7 @@ export const resourceData = {
             nameResource: 'Helium',
             screenName: 'helium',
             saleValue: 0.01,
+            salePreviewElement: 'sellHeliumDescription',
             quantity: 0,
             rate: 0,
             storageCapacity: 100,
@@ -46,6 +48,7 @@ export const resourceData = {
             nameResource: 'Carbon',
             screenName: 'carbon',
             saleValue: 0.1,
+            salePreviewElement: 'sellCarbonDescription',
             quantity: 0,
             rate: 0,
             storageCapacity: 100,
@@ -97,12 +100,6 @@ export const functionRegistryUpgrade = {
     getResearchQuantity: getResearchQuantity,
     getCash: getCash,
     // Add more functions here as needed
-};
-
-export const functionRegistryResourceQuantity = {
-    hydrogen: { getQuantity: getHydrogenQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHydrogenDescription' },
-    helium: { getQuantity: getHeliumQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellHeliumDescription' },
-    carbon: { getQuantity: getCarbonQuantity, setSalePreview: setResourceSalePreview, getSalePreview: getResourceSalePreview, salePreviewElement: 'sellCarbonDescription' }
 };
 
 // RESOURCE SALE VALUES
@@ -513,22 +510,26 @@ export function getResourceDataObject(key, subKeys) {
     return current;
 }
 
+export function setResourceDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
 
-
-
-
-export function setResourceDataObject(value, key, subKey1, subKey2, subKey3, subKey4, subKey5) {
     let current = resourceData;
+    current = current[key] || (current[key] = {});
 
-    if (key) current = current[key] || (current[key] = {});
-    if (subKey1) current = current[subKey1] || (current[subKey1] = {});
-    if (subKey2) current = current[subKey1][subKey2] || (current[subKey1][subKey2] = {});
-    if (subKey3) current = current[subKey1][subKey2][subKey3] || (current[subKey1][subKey2][subKey3] = {});
-    if (subKey4) current = current[subKey1][subKey2][subKey3][subKey4] || (current[subKey1][subKey2][subKey3][subKey4] = {});
-    if (subKey5) current = current[subKey1][subKey2][subKey3][subKey4][subKey5] || (current[subKey1][subKey2][subKey3][subKey4][subKey5] = {});
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
 
-    current = value;
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
+    }
 }
+
 
 
 
