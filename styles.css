@@ -249,8 +249,8 @@ button {
     --warning-text: orange;
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
-    --text-hover-color: #fff;
-    --text-focus-color: #fff;
+    --text-hover-color: #0e7aa8;
+    --text-focus-color: #0e7aa8;
     --tab-bg-color: #b0e0e6;
     --tab-bg-hover: #67aac6;
     --tab-selected-bg-color: #87cefa;
