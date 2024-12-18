@@ -691,13 +691,14 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
+        console.log(currentResourceQuantity);
     }
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
             setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceQuantity, 'research', ['quantity']);
         } else {
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
+            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
         }
     } else {
         if (resourceType === 'scienceUpgrade') {
@@ -708,6 +709,7 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
             return;
         } else if (resourceType === 'resource' && currentResourceQuantity >= getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) {
             setResourceDataObject(getResourceDataObject('resources', [resourceCategory, 'storageCapacity']), 'resources', [resourceCategory, 'quantity']);
+            return;
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'research', ['quantity']);
@@ -776,12 +778,13 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const hydrogenRate = getResourceDataObject('resources', ['hydrogen', 'rate']) + rateHydrogenAB1;
         setResourceDataObject(hydrogenRate, 'resources', ['hydrogen', 'rate']);
 
-        getElements().hydrogenRate.textContent = `${(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().hydrogenRate.textContent = `${(getResourceDataObject('resources', ['hydrogen', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('hydrogenAB1')) {
             timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
                 const currentHydrogen = getResourceDataObject('resources', ['hydrogen', 'quantity']);
+                const currentHydrogenRate = getResourceDataObject('resources', ['hydrogen', 'rate']);
                 const hydrogenStorage = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentHydrogen + hydrogenRate, hydrogenStorage), 'resources', ['hydrogen', 'quantity']);
+                setResourceDataObject(Math.min(currentHydrogen + currentHydrogenRate, hydrogenStorage), 'resources', ['hydrogen', 'quantity']);
             });
         }
     } else if (timerName === 'heliumAB1') {
@@ -789,12 +792,13 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const heliumRate = getResourceDataObject('resources', ['helium', 'rate']) + rateHeliumAB1;
         setResourceDataObject(heliumRate, 'resources', ['helium', 'rate']);
 
-        getElements().heliumRate.textContent = `${(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().heliumRate.textContent = `${(getResourceDataObject('resources', ['helium', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('heliumAB1')) {
             timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
                 const currentHelium = getResourceDataObject('resources', ['helium', 'quantity']);
+                const currentHeliumRate = getResourceDataObject('resources', ['helium', 'rate']);
                 const heliumStorage = getResourceDataObject('resources', ['helium', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentHelium + heliumRate, heliumStorage), 'resources', ['helium', 'quantity']);
+                setResourceDataObject(Math.min(currentHelium + currentHeliumRate, heliumStorage), 'resources', ['helium', 'quantity']);
             });
         }
     } else if (timerName === 'carbonAB1') {
@@ -802,12 +806,13 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const carbonRate = getResourceDataObject('resources', ['carbon', 'rate']) + rateCarbonAB1;
         setResourceDataObject(carbonRate, 'resources', ['carbon', 'rate']);
 
-        getElements().carbonRate.textContent = `${(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().carbonRate.textContent = `${(getResourceDataObject('resources', ['carbon', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('carbonAB1')) {
             timerManager.addTimer('carbonAB1', getTimerUpdateInterval(), () => {
                 const currentCarbon = getResourceDataObject('resources', ['carbon', 'quantity']);
+                const currentCarbonRate = getResourceDataObject('resources', ['carbon', 'rate']);
                 const carbonStorage = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentCarbon + carbonRate, carbonStorage), 'resources', ['carbon', 'quantity']);
+                setResourceDataObject(Math.min(currentCarbon + currentCarbonRate, carbonStorage), 'resources', ['carbon', 'quantity']);
             });
         }
     } else if (timerName === 'scienceKit') {
