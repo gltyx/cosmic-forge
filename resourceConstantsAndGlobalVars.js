@@ -89,10 +89,6 @@ export const functionRegistryUpgrade = {
     getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeHelium: getUpgradeHelium,
     getUpgradeCarbon: getUpgradeCarbon,
-    getHydrogenQuantity: getHydrogenQuantity,
-    getHeliumQuantity: getHeliumQuantity,
-    getCarbonQuantity: getCarbonQuantity
-    // Add more functions here as needed
 };
 
 // QUANTITY VARIABLES
@@ -127,8 +123,8 @@ export let upgradeHydrogen = {
         requirementQty: 1,
         price: '',
         resource: 'hydrogen',
-        checkQuantity: getHydrogenQuantity,
-        deduct: setHydrogenQuantity,
+        checkQuantity: '',
+        deduct: '',
         setPrice: null
     },
     autoBuyer: {
@@ -147,8 +143,8 @@ export let upgradeHydrogen = {
         },
         requirementQty: 1,
         resource: 'hydrogen',
-        checkQuantity: getHydrogenQuantity,
-        deduct: setHydrogenQuantity,
+        checkQuantity: '',
+        deduct: '',
     },
 };
 
@@ -158,8 +154,8 @@ export let upgradeHelium = {
         requirementQty: 1,
         price: '',
         resource: 'helium',
-        checkQuantity: getHeliumQuantity,
-        deduct: setHeliumQuantity,
+        checkQuantity: '',
+        deduct: '',
         setPrice: null
     },
     autoBuyer: {
@@ -178,8 +174,8 @@ export let upgradeHelium = {
         },        
         requirementQty: 1,
         resource: 'helium',
-        checkQuantity: getHeliumQuantity,
-        deduct: setHeliumQuantity,
+        checkQuantity: '',
+        deduct: '',
     },
 };
 
@@ -189,8 +185,8 @@ export let upgradeCarbon = {
         requirementQty: 1,
         price: '',
         resource: 'carbon',
-        checkQuantity: getCarbonQuantity,
-        deduct: setCarbonQuantity,
+        checkQuantity: '',
+        deduct: '',
         setPrice: null
     },
     autoBuyer: {
@@ -209,8 +205,8 @@ export let upgradeCarbon = {
         },        
         requirementQty: 1,
         resource: 'carbon',
-        checkQuantity: getCarbonQuantity,
-        deduct: setCarbonQuantity,
+        checkQuantity: '',
+        deduct: '',
     },
 };
 
@@ -332,29 +328,6 @@ export function getResearchRate() {
 
 export function setResearchRate(value) {
     researchRate = value;
-}
-export function getHydrogenQuantity() {
-    return hydrogenQuantity;
-}
-
-export function setHydrogenQuantity(value) {
-    hydrogenQuantity = value;
-}
-
-export function getHeliumQuantity() {
-    return heliumQuantity;
-}
-
-export function setHeliumQuantity(value) {
-    heliumQuantity = value;
-}
-
-export function getCarbonQuantity() {
-    return carbonQuantity;
-}
-
-export function setCarbonQuantity(value) {
-    carbonQuantity = value;
 }
 
 export function getScienceKitQuantity() {

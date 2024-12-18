@@ -36,19 +36,13 @@ import {
 } from "./resourceConstantsAndGlobalVars.js";
 import {
     getCarbonRate,
-    getCarbonQuantity,
-    setCarbonQuantity,
     setCarbonRate,
     getHeliumRate,
-    getHeliumQuantity,
-    setHeliumQuantity,
     setHeliumRate,
     setHydrogenRate,
     setResearchRate,
     getHydrogenRate,
     getResearchRate,
-    getHydrogenQuantity,
-    setHydrogenQuantity, 
     getScienceKitQuantity,
     getScienceClubQuantity,
     getUpgradeHydrogen,
@@ -183,12 +177,13 @@ function updateStats() {
     }
 }
 
-export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, setFromResourceQuantity, getToResourceQuantity, setToResourceQuantity, resourceRowToShow) {
-    const resourceString = capitaliseString(resource);
-    const fuseToString = capitaliseString(fuseTo);
-    const storageToString = `get${fuseToString}Storage`;
-    const storageFunction = functionRegistryUpgrade[storageToString];
-    const storageAmountFuseTo = storageFunction();
+export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
+    const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
+    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+
+    const fuseToString = getResourceDataObject('resources', [fuseTo, 'nameResource']);
+    const fuseToStorageCapacity = getResourceDataObject('resources', [fuseTo, 'storageCapacity']);
+    const fuseToQuantity = getResourceDataObject('resources', [fuseTo, 'quantity']);
 
     let amountToDeductFromResource;
     let amountToAddToResource;
@@ -208,8 +203,8 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
             `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
             'info'
         );
-        setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
-        setToResourceQuantity(getToResourceQuantity() + amountToAdd);
+        setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
+        setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
         return;
     } else {
         let randomEnergyLossFactor = 1;
@@ -236,9 +231,8 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
                     'info'
                 );
-            } else { 
-                const currentQuantityFuseTo = getToResourceQuantity();
-                const availableStorageFuseTo = storageAmountFuseTo - currentQuantityFuseTo; 
+            } else { ;
+                const availableStorageFuseTo = fuseToStorageCapacity - fuseToQuantity; 
                 lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
 
                 sendNotificationIfActive(
@@ -249,20 +243,20 @@ export function fuseResource(resource, fuseTo, ratio, getFromResourceQuantity, s
             }
         }
     }
-    setFromResourceQuantity(getFromResourceQuantity() - amountToDeductFromResource);
-    setToResourceQuantity(getToResourceQuantity() + Math.min(storageAmountFuseTo - getToResourceQuantity(), realAmountToAdd - lostQuantity));
+    setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
+    setResourceDataObject(fuseToQuantity + Math.min(fuseToStorageCapacity - fuseToQuantity, realAmountToAdd - lostQuantity), 'resources', [fuseTo, 'quantity']);
 }
 
-export function sellResource(getResourceQuantity, setResourceQuantity, resource) {
-    const resourceQuantity = getResourceQuantity();
-    const saleData = getResourceSalePreview(resource)
+export function sellResource(resource) {
+    const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+    const saleData = getResourceSalePreview(resource);
 
     const currentCash = getResourceDataObject('currency', ['cash']);
     const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
     const cashRaised = parseFloat(extractedValue);
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
 
-    setResourceQuantity(resourceQuantity - quantityToDeduct);
+    setResourceDataObject(resourceQuantity - quantityToDeduct, 'resources', [resource, 'quantity']);
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
 }
 

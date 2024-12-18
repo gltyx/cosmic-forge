@@ -58,12 +58,6 @@ import {
     setScienceKitQuantity,
     getScienceClubQuantity,
     setScienceClubQuantity, 
-    getHydrogenQuantity,
-    setHydrogenQuantity,
-    getHeliumQuantity,
-    setHeliumQuantity,
-    getCarbonQuantity,
-    setCarbonQuantity,
     getUpgradeHydrogen,
     getUpgradeHelium,
     getUpgradeCarbon,
@@ -293,10 +287,10 @@ function drawTab1Content(heading, optionContentElement) {
                 setSalePreview('hydrogen', value, 'helium');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
-                sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
+                sellResource('hydrogen')
             }, 'sellResource', null, null, null, 'hydrogen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity, document.querySelector('.row-side-menu:nth-child(2)'));
+                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('.row-side-menu:nth-child(2)'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null),
@@ -409,7 +403,7 @@ function drawTab1Content(heading, optionContentElement) {
                 setSalePreview('helium', value, 'carbon');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
-                sellResource(getHeliumQuantity, setHeliumQuantity, 'helium')
+                sellResource('helium')
             }, 'sellResource', null, null, null, 'helium', true, null),
             null,
             null,
@@ -521,7 +515,7 @@ function drawTab1Content(heading, optionContentElement) {
                 setSalePreview('carbon', value, 'nextElementsWillExpandOutHere');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
-                sellResource(getCarbonQuantity, setCarbonQuantity, 'carbon')
+                sellResource('carbon')
             }, 'sellResource', null, null, null, 'carbon', true, null),
             null,
             null,
