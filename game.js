@@ -36,23 +36,17 @@ import {
 } from "./resourceConstantsAndGlobalVars.js";
 import {
     getCarbonRate,
-    getCarbonStorage,
     getCarbonQuantity,
     setCarbonQuantity,
-    setCarbonStorage,
     setCarbonRate,
     getHeliumRate,
-    getHeliumStorage,
     getHeliumQuantity,
     setHeliumQuantity,
-    setHeliumStorage,
     setHeliumRate,
     setHydrogenRate,
     setResearchRate,
     getHydrogenRate,
     getResearchRate,
-    setHydrogenStorage,
-    getHydrogenStorage,
     getHydrogenQuantity,
     setHydrogenQuantity, 
     getScienceKitQuantity,
@@ -375,41 +369,36 @@ function checkAndDeductResources() {
 }
 
 function getAllQuantities() {
-    const hydrogenQuantity = getHydrogenQuantity();
-    const heliumQuantity = getHeliumQuantity();
-    const carbonQuantity = getCarbonQuantity();
-    const researchQuantity = getResourceDataObject('research', ['quantity']);
-    const scienceKitQuantity = getScienceKitQuantity();
-    const scienceClubQuantity = getScienceClubQuantity();
+    const resourceKeys = Object.keys(getResourceDataObject('resources'));
+    const allQuantities = {};
 
-    const allQuantities = {
-        hydrogen: hydrogenQuantity,
-        helium: heliumQuantity,
-        carbon: carbonQuantity,
-        research: researchQuantity,
-        scienceKit: scienceKitQuantity,
-        scienceClub: scienceClubQuantity,
-    };
+    resourceKeys.forEach(resource => {
+        const getQuantityFunction = getResourceDataObject('resources', [resource, 'quantity']);
+        if (typeof getQuantityFunction === 'function') {
+            allQuantities[resource] = getQuantityFunction();
+        }
+    });
+
+    // Manually assign quantities for non-resource keys
+    allQuantities.research = getResourceDataObject('research', ['quantity']);
+    allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
+    allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
 
     return allQuantities;
 }
 
 function getAllStorages() {
-    const hydrogenStorage = getHydrogenStorage();
-    const heliumStorage = getHeliumStorage();
-    const carbonStorage = getCarbonStorage();
-    const researchStorage = null;
-    const scienceKitStorage = null;
-    const scienceClubStorage = null;
+    const resourceKeys = Object.keys(getResourceDataObject('resources'));
 
-    const allStorages = {
-        hydrogen: hydrogenStorage,
-        helium: heliumStorage,
-        carbon: carbonStorage,
-        research: researchStorage,
-        scienceKit: scienceKitStorage,
-        scienceClub: scienceClubStorage,
-    };
+    const allStorages = {};
+
+    resourceKeys.forEach(resource => {
+        allStorages[resource] = getResourceDataObject('resources', [resource, 'storageCapacity']);
+    });
+
+    allStorages.research = null;
+    allStorages.scienceKit = null;
+    allStorages.scienceClub = null;
 
     return allStorages;
 }
@@ -436,28 +425,28 @@ function getAllResourceElements() {
 
 function getAllResourceDescriptionElements() {
     const hydrogenIncreaseStorageDescElement = document.getElementById('hydrogenIncreaseContainerSizeDescription');
-    const hydrogenStoragePrice = getHydrogenStorage();
+    const hydrogenStoragePrice = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
 
     const hydrogenAutoBuyerTier1DescElement = document.getElementById('hydrogenCompressorDescription');
     const hydrogenAutoBuyerTier1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
 
     const heliumIncreaseStorageDescElement = document.getElementById('heliumIncreaseContainerSizeDescription');
-    const heliumStoragePrice = getHeliumStorage();
+    const heliumStoragePrice = getResourceDataObject('resources', ['helium', 'storageCapacity']);
 
     const heliumAutoBuyerTier1DescElement = document.getElementById('atmosphereScraperDescription');
     const heliumAutoBuyerTier1Price = getUpgradeHelium('autoBuyer').tier1.price;
 
     const carbonIncreaseStorageDescElement = document.getElementById('carbonIncreaseContainerSizeDescription');
-    const carbonStoragePrice = getCarbonStorage();
+    const carbonStoragePrice = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
 
     const carbonAutoBuyerTier1DescElement = document.getElementById('carbonBurnerDescription');
     const carbonAutoBuyerTier1Price = getUpgradeCarbon('autoBuyer').tier1.price;
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
-    const scienceKitBuyPrice = getUpgradeResearch('research', 'scienceKit').price;
+    const scienceKitBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']);
 
     const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
-    const scienceClubBuyPrice = getUpgradeResearch('research', 'scienceClub').price;
+    const scienceClubBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']);
 
     const allResourceDescElements = {
         hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
@@ -780,21 +769,18 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, amountToDeduct);
 }
 
-export function increaseResourceStorage(setResourceStorage, getResourceStorage, elementId, getResourceObject, resource) {
+export function increaseResourceStorage(elementId, resource) {
     const increaseFactor = getIncreaseStorageFactor();
 
-    if (getResourceObject) {
-        const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
-        const resourceObject = getResourceObjectFn(resource);
-        const amountToDeduct = resourceObject.price;
-        const resourceToDeductName = resourceObject.resource;
+    const amountToDeduct = getResourceDataObject('resources', [resource, 'storageCapacity']);
+    const resourceToDeductName = resource;
 
-        //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, amountToDeduct);
-    }
+    //set resource to deduct
+    setResourcesToDeduct(resourceToDeductName, amountToDeduct);
 
     deferredActions.push(() => {
-        setResourceStorage(getResourceStorage() * increaseFactor);
+        const updatedStorageSize = getResourceDataObject('resources', [resource, 'storageCapacity']) * increaseFactor;
+        setResourceDataObject(updatedStorageSize, getResourceDataObject('resources', [resource, 'storageCapacity']));
         getElements()[elementId].classList.remove('green-ready-text');
     });
 }

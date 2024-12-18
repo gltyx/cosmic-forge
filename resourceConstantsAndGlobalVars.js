@@ -86,9 +86,6 @@ export const resourceData = {
 
 // FUNCTION REGISTRIES
 export const functionRegistryUpgrade = {
-    getHydrogenStorage: getHydrogenStorage,
-    getHeliumStorage: getHeliumStorage,
-    getCarbonStorage: getCarbonStorage,
     getUpgradeResearch: getUpgradeResearch,
     getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeHelium: getUpgradeHelium,
@@ -129,7 +126,7 @@ export let upgradeHydrogen = {
     storage: {
         type: 'storage',
         requirementQty: 1,
-        price: getHydrogenStorage,
+        price: '',
         resource: 'hydrogen',
         checkQuantity: getHydrogenQuantity,
         deduct: setHydrogenQuantity,
@@ -160,7 +157,7 @@ export let upgradeHelium = {
     storage: {
         type: 'storage',
         requirementQty: 1,
-        price: getHeliumStorage,
+        price: '',
         resource: 'helium',
         checkQuantity: getHeliumQuantity,
         deduct: setHeliumQuantity,
@@ -191,7 +188,7 @@ export let upgradeCarbon = {
     storage: {
         type: 'storage',
         requirementQty: 1,
-        price: getCarbonStorage,
+        price: '',
         resource: 'carbon',
         checkQuantity: getCarbonQuantity,
         deduct: setCarbonQuantity,
@@ -367,30 +364,6 @@ export function getCarbonQuantity() {
 
 export function setCarbonQuantity(value) {
     carbonQuantity = value;
-}
-
-export function getHydrogenStorage() {
-    return hydrogenStorage;
-}
-
-export function setHydrogenStorage(value) {
-    hydrogenStorage = value;
-}
-
-export function getHeliumStorage() {
-    return heliumStorage;
-}
-
-export function setHeliumStorage(value) {
-    heliumStorage = value;
-}
-
-export function getCarbonStorage() {
-    return carbonStorage;
-}
-
-export function setCarbonStorage(value) {
-    carbonStorage = value;
 }
 
 export function getScienceKitQuantity() {

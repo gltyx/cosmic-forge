@@ -58,12 +58,6 @@ import {
     setScienceKitQuantity,
     getScienceClubQuantity,
     setScienceClubQuantity, 
-    getHydrogenStorage,
-    setHydrogenStorage, 
-    getHeliumStorage,
-    setHeliumStorage,
-    getCarbonStorage,
-    setCarbonStorage,
     getHydrogenQuantity,
     setHydrogenQuantity,
     getHeliumQuantity,
@@ -352,7 +346,7 @@ function drawTab1Content(heading, optionContentElement) {
             'hydrogenIncreaseStorageRow',
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
+                increaseResourceStorage('hydrogenQuantity', 'hydrogen');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', null, 'hydrogen', true, null),
             null,
             null,
@@ -464,7 +458,7 @@ function drawTab1Content(heading, optionContentElement) {
             'heliumIncreaseStorageRow',
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                increaseResourceStorage(setHeliumStorage, getHeliumStorage, 'heliumQuantity', 'getUpgradeHelium', 'storage');
+                increaseResourceStorage('heliumQuantity', 'helium');
             }, 'upgradeCheck', 'getUpgradeHelium', 'storage', null, 'helium', true, null),
             null,
             null,
@@ -576,7 +570,7 @@ function drawTab1Content(heading, optionContentElement) {
             'carbonIncreaseStorageRow',
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                increaseResourceStorage(setCarbonStorage, getCarbonStorage, 'carbonQuantity', 'getUpgradeCarbon', 'storage');
+                increaseResourceStorage('carbonQuantity','carbon');
             }, 'upgradeCheck', 'getUpgradeCarbon', 'storage', null, 'carbon', true, null),
             null,
             null,
