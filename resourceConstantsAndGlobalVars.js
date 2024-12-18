@@ -10,10 +10,10 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 65, rate: 0.01 },
-                    tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 500, rate: 25 },
-                    tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2500, rate: 125 },
-                    tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 12500, rate: 625 }
+                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 65, rate: 0.01, quantity: 0, setPrice: 'hydrogenAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 500, rate: 25, quantity: 0, setPrice: 'hydrogenAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2500, rate: 125, quantity: 0, setPrice: 'hydrogenAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 12500, rate: 625, quantity: 0, setPrice: 'hydrogenAB4Price' }
                 },
             },
             revealedBy: "",
@@ -31,10 +31,10 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Helium Extractor', description: 'Automatically extracts Helium at a rate of 0.01 units per second.', price: 75, rate: 0.01 },
-                    tier2: { nameUpgrade: 'Advanced Helium Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 575, rate: 25 },
-                    tier3: { nameUpgrade: 'Industrial Helium Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2875, rate: 125 },
-                    tier4: { nameUpgrade: 'Quantum Helium Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 14375, rate: 625 }
+                    tier1: { nameUpgrade: 'Helium Extractor', description: 'Automatically extracts Helium at a rate of 0.01 units per second.', price: 75, rate: 0.01, quantity: 0, setPrice: 'heliumAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Helium Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 575, rate: 25, quantity: 0, setPrice: 'heliumAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Helium Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2875, rate: 125, quantity: 0, setPrice: 'heliumAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Helium Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 14375, rate: 625, quantity: 0, setPrice: 'heliumAB4Price' }
                 },
             },
             revealedBy: "hydrogenFusion",
@@ -52,10 +52,10 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Carbon Extractor', description: 'Automatically extracts Carbon at a rate of 0.01 units per second.', price: 55, rate: 0.01 },
-                    tier2: { nameUpgrade: 'Advanced Carbon Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 425, rate: 25 },
-                    tier3: { nameUpgrade: 'Industrial Carbon Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2125, rate: 125 },
-                    tier4: { nameUpgrade: 'Quantum Carbon Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 10625, rate: 625 }
+                    tier1: { nameUpgrade: 'Carbon Extractor', description: 'Automatically extracts Carbon at a rate of 0.01 units per second.', price: 55, rate: 0.01, quantity: 0, setPrice: 'carbonAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Carbon Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 425, rate: 25, quantity: 0, setPrice: 'carbonAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Carbon Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2125, rate: 125, quantity: 0, setPrice: 'carbonAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Carbon Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 10625, rate: 625, quantity: 0, setPrice: 'carbonAB4Price' }
                 },
             },
             revealedBy: "heliumFusion",
@@ -65,11 +65,12 @@ export const resourceData = {
         },
     },
     research: {
-        quantity: 0,
+        screenName: 'research',
+        quantity: 1,
         rate: 0,
         upgrades: {
-            scienceKit: { requirementQty: 1, price: 5, rate: 0.003 },
-            scienceClub: { requirementQty: 1, price: 100, rate: 0.06 },
+            scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },
+            scienceClub: { requirementQty: 1, price: 100, rate: 0.06, quantity: 0, setPrice: 'scienceClubPrice' },
         },
     },
     techs: {
@@ -94,15 +95,12 @@ export const functionRegistryUpgrade = {
     getUpgradeCarbon: getUpgradeCarbon,
     getHydrogenQuantity: getHydrogenQuantity,
     getHeliumQuantity: getHeliumQuantity,
-    getCarbonQuantity: getCarbonQuantity,
-    getResearchQuantity: getResearchQuantity,
-    getCash: getCash,
+    getCarbonQuantity: getCarbonQuantity
     // Add more functions here as needed
 };
 
 // QUANTITY VARIABLES
 // RESOURCES
-export let researchQuantity = 320;
 export let hydrogenQuantity = 0;
 export let heliumQuantity = 0;
 export let carbonQuantity = 0;
@@ -266,8 +264,8 @@ export let upgradeResearch = {
             price: 5,
             rate: 0.003,
             resource: 'cash',
-            checkQuantity: getCash,
-            deduct: setCash,
+            checkQuantity: '',
+            deduct: '',
             setPrice: 'scienceKitPrice'
         },
         scienceClub: {
@@ -275,8 +273,8 @@ export let upgradeResearch = {
             price: 100,
             rate: 0.06,
             resource: 'cash',
-            checkQuantity: getCash,
-            deduct: setCash,
+            checkQuantity: '',
+            deduct: '',
             setPrice: 'scienceClubPrice'
         }
     }
@@ -395,14 +393,6 @@ export function setCarbonStorage(value) {
     carbonStorage = value;
 }
 
-export function getResearchQuantity() {
-    return researchQuantity;
-}
-
-export function setResearchQuantity(value) {
-    researchQuantity = value;
-}
-
 export function getScienceKitQuantity() {
     return scienceKitQuantity;
 }
@@ -419,13 +409,6 @@ export function setScienceClubQuantity(value) {
     scienceClubQuantity = value;
 }
 
-export function getCash() {
-    return cash;
-}
-
-export function setCash(value) {
-    cash = value;
-}
 export function getHydrogenAB1Quantity() {
     return hydrogenAB1Quantity;
 }

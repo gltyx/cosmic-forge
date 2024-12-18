@@ -70,8 +70,6 @@ import {
     setHeliumQuantity,
     getCarbonQuantity,
     setCarbonQuantity,
-    getResearchQuantity,
-    setResearchQuantity,
     getUpgradeResearch,
     setUpgradeResearch,
     getUpgradeHydrogen,
@@ -328,7 +326,7 @@ function drawTab1Content(heading, optionContentElement) {
             'hydrogenGainRow',
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
-                gain(getHydrogenQuantity, setHydrogenQuantity, getHydrogenStorage, 1, 'hydrogenQuantity', null, null, false, null)
+                gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen')
             }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
@@ -376,7 +374,7 @@ function drawTab1Content(heading, optionContentElement) {
             'hydrogenAutoBuyer1Row',
             'Hydrogen Compressor:',
             createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1'),
+                gain(1, 'hydrogenAB1Quantity', 'autoBuyer', true, 'tier1', 'hydrogen'),
                 startUpdateAutoBuyerTimersAndRates('hydrogenAB1');
             }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', null, 'hydrogen', true, 'tier1'),
             null,
@@ -440,7 +438,7 @@ function drawTab1Content(heading, optionContentElement) {
             'heliumGainRow',
             'Gain 1 Helium:',
             createButton('Gain', ['option-button'], () => {
-                gain(getHeliumQuantity, setHeliumQuantity, getHeliumStorage, 1, 'heliumQuantity', null, null, false, null)
+                gain(1, 'heliumQuantity', null, false, null, 'helium')
             }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
@@ -488,7 +486,7 @@ function drawTab1Content(heading, optionContentElement) {
             'heliumAutoBuyer1Row',
             'Atmosphere Scraper:',
             createButton(`Add ${getUpgradeHelium('autoBuyer').tier1.rate * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(getHeliumAB1Quantity, setHeliumAB1Quantity, null, 1, 'heliumAB1Quantity', 'getUpgradeHelium', 'autoBuyer', true, 'tier1'),
+                gain(1, 'heliumAB1Quantity', 'autoBuyer', true, 'tier1', 'helium'),
                 startUpdateAutoBuyerTimersAndRates('heliumAB1');
             }, 'upgradeCheck', 'getUpgradeHelium', 'autoBuyer', null, 'helium', true, 'tier1'),
             null,
@@ -552,7 +550,7 @@ function drawTab1Content(heading, optionContentElement) {
             'carbonGainRow',
             'Gain 1 Carbon:',
             createButton('Gain', ['option-button'], () => {
-                gain(getCarbonQuantity, setCarbonQuantity, getCarbonStorage, 1, 'carbonQuantity', null, null, false, null)
+                gain(1, 'carbonQuantity', null, false, null, 'carbon')
             }, null, null, null, null, null, false, null),
             null,
             null,
@@ -600,7 +598,7 @@ function drawTab1Content(heading, optionContentElement) {
             'carbonAutoBuyer1Row',
             'Burner:',
             createButton(`Add ${getUpgradeCarbon('autoBuyer').tier1.rate * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(getCarbonAB1Quantity, setCarbonAB1Quantity, null, 1, 'carbonAB1Quantity', 'getUpgradeCarbon', 'autoBuyer', true, 'tier1'),
+                gain(1, 'carbonAB1Quantity', 'autoBuyer', true, 'tier1', 'carbon'),
                 startUpdateAutoBuyerTimersAndRates('carbonAB1');
             }, 'upgradeCheck', 'getUpgradeCarbon', 'autoBuyer', null, 'carbon', true, 'tier1'),
             null,
@@ -627,7 +625,7 @@ function drawTab2Content(heading, optionContentElement) {
             'researchScienceKitRow',
             'Science Kit:',
             createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
+                gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade'),
                 startUpdateAutoBuyerTimersAndRates('scienceKit');
             }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'cash', false, null),
             null,
@@ -650,7 +648,7 @@ function drawTab2Content(heading, optionContentElement) {
             'researchScienceClubRow',
             'Open Science Club:',
             createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
+                gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade')
                 startUpdateAutoBuyerTimersAndRates('scienceClub');
             }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'cash', false, null),
             null,
@@ -673,7 +671,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techKnowledgeSharingRow',
             'Knowledge Sharing:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain(getResearchQuantity, setResearchQuantity, null, 'knowledgeSharing', null, null, null, 'techUnlock', false, null)
+                gain('knowledgeSharing', null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('knowledgeSharing');
             }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'research', false, null),
@@ -697,7 +695,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techFusionTheoryRow',
             'Fusion Theory:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain(getResearchQuantity, setResearchQuantity, null, 'fusionTheory', null, null, null, 'techUnlock', false, null)
+                gain('fusionTheory', null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('fusionTheory');
             }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'research', false, null),
@@ -721,7 +719,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techHydrogenFusionRow',
             'Hydrogen Fusion:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain(getResearchQuantity, setResearchQuantity, null, 'hydrogenFusion', null, null, null, 'techUnlock', false, null)
+                gain('hydrogenFusion', null, null, 'techUnlock', false, 'null')
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('hydrogenFusion');
                 setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
@@ -921,11 +919,11 @@ function createOptionRow(
         const functionGetResearchUpgrade = functionRegistryUpgrade[resourcePriceObject];
         const researchPointsToAppear = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0];
         const prerequisiteForTech = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[1];
-        if (getResearchQuantity() < researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
+        if (getResourceDataObject('research', ['quantity']) < researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
             wrapper.classList.add('invisible');
         } else if (!getTechUnlockedArray().includes(prerequisiteForTech)) {
             wrapper.classList.add('invisible');
-        } else if (getResearchQuantity() >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0] && !getRevealedTechArray().includes(objectSectionArgument1)) {
+        } else if (getResourceDataObject('research', ['quantity']) >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0] && !getRevealedTechArray().includes(objectSectionArgument1)) {
             setRevealedTechArray(objectSectionArgument1);
         }
     }
