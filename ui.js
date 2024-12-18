@@ -304,12 +304,12 @@ function drawTab1Content(heading, optionContentElement) {
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHydrogenQuantity, setHydrogenQuantity, 'hydrogen')
-            }, 'sellResource', null, null, null, 'getHydrogenQuantity', true, null),
+            }, 'sellResource', null, null, null, 'hydrogen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
                 fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), getHydrogenQuantity, setHydrogenQuantity, getHeliumQuantity, setHeliumQuantity, document.querySelector('.row-side-menu:nth-child(2)'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
-            }, 'fuseResource', null, 'hydrogen', 'helium', 'getHydrogenQuantity', true, null),
+            }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null),
             null,
             null,
             `${getResourceSalePreview('hydrogen')}`,
@@ -355,7 +355,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHydrogenStorage, getHydrogenStorage, 'hydrogenQuantity', 'getUpgradeHydrogen', 'storage');
-            }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', null, 'getHydrogenQuantity', true, null),
+            }, 'upgradeCheck', 'getUpgradeHydrogen', 'storage', null, 'hydrogen', true, null),
             null,
             null,
             null,
@@ -365,7 +365,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'storage',
             null,
-            'getHydrogenQuantity',
+            'hydrogen',
             null,
             false,
             'hydrogen'
@@ -378,7 +378,7 @@ function drawTab1Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeHydrogen('autoBuyer').tier1.rate * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getHydrogenAB1Quantity, setHydrogenAB1Quantity, null, 1, 'hydrogenAB1Quantity', 'getUpgradeHydrogen', 'autoBuyer', true, 'tier1'),
                 startUpdateAutoBuyerTimersAndRates('hydrogenAB1');
-            }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', null, 'getHydrogenQuantity', true, 'tier1'),
+            }, 'upgradeCheck', 'getUpgradeHydrogen', 'autoBuyer', null, 'hydrogen', true, 'tier1'),
             null,
             null,
             null,
@@ -388,7 +388,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'autoBuyer',
             null,
-            'getHydrogenQuantity',
+            'hydrogen',
             'tier1',
             false,
             null
@@ -420,7 +420,7 @@ function drawTab1Content(heading, optionContentElement) {
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getHeliumQuantity, setHeliumQuantity, 'helium')
-            }, 'sellResource', null, null, null, 'getHeliumQuantity', true, null),
+            }, 'sellResource', null, null, null, 'helium', true, null),
             null,
             null,
             null,
@@ -467,7 +467,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setHeliumStorage, getHeliumStorage, 'heliumQuantity', 'getUpgradeHelium', 'storage');
-            }, 'upgradeCheck', 'getUpgradeHelium', 'storage', null, 'getHeliumQuantity', true, null),
+            }, 'upgradeCheck', 'getUpgradeHelium', 'storage', null, 'helium', true, null),
             null,
             null,
             null,
@@ -477,7 +477,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'storage',
             null,
-            'getHeliumQuantity',
+            'helium',
             null,
             false,
             'helium'
@@ -490,7 +490,7 @@ function drawTab1Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeHelium('autoBuyer').tier1.rate * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getHeliumAB1Quantity, setHeliumAB1Quantity, null, 1, 'heliumAB1Quantity', 'getUpgradeHelium', 'autoBuyer', true, 'tier1'),
                 startUpdateAutoBuyerTimersAndRates('heliumAB1');
-            }, 'upgradeCheck', 'getUpgradeHelium', 'autoBuyer', null, 'getHeliumQuantity', true, 'tier1'),
+            }, 'upgradeCheck', 'getUpgradeHelium', 'autoBuyer', null, 'helium', true, 'tier1'),
             null,
             null,
             null,
@@ -500,7 +500,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'autoBuyer',
             null,
-            'getHeliumQuantity',
+            'helium',
             'tier1',
             false,
             null
@@ -532,7 +532,7 @@ function drawTab1Content(heading, optionContentElement) {
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource(getCarbonQuantity, setCarbonQuantity, 'carbon')
-            }, 'sellResource', null, null, null, 'getCarbonQuantity', true, null),
+            }, 'sellResource', null, null, null, 'carbon', true, null),
             null,
             null,
             null,
@@ -579,7 +579,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage(setCarbonStorage, getCarbonStorage, 'carbonQuantity', 'getUpgradeCarbon', 'storage');
-            }, 'upgradeCheck', 'getUpgradeCarbon', 'storage', null, 'getCarbonQuantity', true, null),
+            }, 'upgradeCheck', 'getUpgradeCarbon', 'storage', null, 'carbon', true, null),
             null,
             null,
             null,
@@ -589,7 +589,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'storage',
             null,
-            'getCarbonQuantity',
+            'carbon',
             null,
             false,
             'carbon'
@@ -602,7 +602,7 @@ function drawTab1Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeCarbon('autoBuyer').tier1.rate * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getCarbonAB1Quantity, setCarbonAB1Quantity, null, 1, 'carbonAB1Quantity', 'getUpgradeCarbon', 'autoBuyer', true, 'tier1'),
                 startUpdateAutoBuyerTimersAndRates('carbonAB1');
-            }, 'upgradeCheck', 'getUpgradeCarbon', 'autoBuyer', null, 'getCarbonQuantity', true, 'tier1'),
+            }, 'upgradeCheck', 'getUpgradeCarbon', 'autoBuyer', null, 'carbon', true, 'tier1'),
             null,
             null,
             null,
@@ -612,7 +612,7 @@ function drawTab1Content(heading, optionContentElement) {
             'upgradeCheck',
             'autoBuyer',
             null,
-            'getCarbonQuantity',
+            'carbon',
             'tier1',
             false,
             null
@@ -629,7 +629,7 @@ function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceKitQuantity, setScienceKitQuantity, null, 1, 'scienceKitQuantity', 'getUpgradeResearch', 'scienceKit', false, null, null),
                 startUpdateAutoBuyerTimersAndRates('scienceKit');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'getCash', false, null),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'cash', false, null),
             null,
             null,
             null,
@@ -639,7 +639,7 @@ function drawTab2Content(heading, optionContentElement) {
             'upgradeCheck',
             'research',
             'scienceKit',
-            'getCash',
+            'cash',
             null,
             false,
             null
@@ -652,7 +652,7 @@ function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(getScienceClubQuantity, setScienceClubQuantity, null, 1, 'scienceClubQuantity', 'getUpgradeResearch', 'scienceClub', false, null, null)
                 startUpdateAutoBuyerTimersAndRates('scienceClub');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'getCash', false, null),
+            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'cash', false, null),
             null,
             null,
             null,
@@ -662,7 +662,7 @@ function drawTab2Content(heading, optionContentElement) {
             'upgradeCheck',
             'research',
             'scienceClub',
-            'getCash',
+            'cash',
             null,
             ['tech', 'knowledgeSharing'],
             null
@@ -676,7 +676,7 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'knowledgeSharing', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('knowledgeSharing');
-            }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'getResearchQuantity', false, null),
+            }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'research', false, null),
             null,
             null,
             null,
@@ -686,7 +686,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techUnlock',
             'knowledgeSharing',
             null,
-            'getResearchQuantity',
+            'research',
             null,
             false,
             null
@@ -700,7 +700,7 @@ function drawTab2Content(heading, optionContentElement) {
                 gain(getResearchQuantity, setResearchQuantity, null, 'fusionTheory', null, null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('fusionTheory');
-            }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'getResearchQuantity', false, null),
+            }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'research', false, null),
             null,
             null,
             null,
@@ -710,7 +710,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techUnlock',
             'fusionTheory',
             null,
-            'getResearchQuantity',
+            'research',
             null,
             ['research', 'researchPoints'],
             null
@@ -726,7 +726,7 @@ function drawTab2Content(heading, optionContentElement) {
                 setTechUnlockedArray('hydrogenFusion');
                 setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
                 updateDescriptionRow('hydrogenSellRow', 'content2');
-            }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'getResearchQuantity', false, null),
+            }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'research', false, null),
             null,
             null,
             null,
@@ -736,7 +736,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techUnlock',
             'hydrogenFusion',
             null,
-            'getResearchQuantity',
+            'research',
             null,
             ['research', 'researchPoints'],
             null
@@ -981,6 +981,12 @@ function createOptionRow(
             description.dataset.conditionCheck = dataConditionCheck;
             description.dataset.argumentToPass1 = objectSectionArgument1;
             description.dataset.argumentCheckQuantity = quantityArgument;
+
+            description.dataset.resourceName = objectSectionArgument1;
+          
+            //TECH
+            description.dataset.techName = objectSectionArgument1;
+
         } else {
             description.dataset.conditionCheck = dataConditionCheck;
             description.dataset.resourcePriceObject = resourcePriceObject;
@@ -988,6 +994,13 @@ function createOptionRow(
             description.dataset.argumentToPass2 = objectSectionArgument2;
             description.dataset.argumentCheckQuantity = quantityArgument;
             description.dataset.autoBuyerTier = autoBuyerTier;
+
+            //FUSE
+            description.dataset.resourceName = objectSectionArgument1;
+            description.dataset.resourceToFuseTo = objectSectionArgument2;
+
+            //BOTTOM PART
+            description.dataset.type = objectSectionArgument1;
         }
     }
 
@@ -1080,10 +1093,20 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.argumentToPass1 = objectSectionArgument1;
             button.dataset.argumentToPass2 = objectSectionArgument2;
+
+            button.dataset.resourceName = objectSectionArgument1;
+            //FUSE
+            button.dataset.resourceToFuseTo = objectSectionArgument2;
+
         } else if (dataConditionCheck === 'techUnlock') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentToPass1 = objectSectionArgument1;
             button.dataset.argumentCheckQuantity = quantityArgument;
+
+            button.dataset.resourceName = objectSectionArgument1;
+
+            //TECH
+            button.dataset.techName = objectSectionArgument1;
         } else {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.resourcePriceObject = resourcePriceObject;
@@ -1091,6 +1114,10 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
             button.dataset.argumentToPass2 = objectSectionArgument2;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.autoBuyerTier = autoBuyerTier;
+
+            button.dataset.resourceName = objectSectionArgument1;
+            //BOTTOM PART
+            button.dataset.type = objectSectionArgument1;
         }
     }
 

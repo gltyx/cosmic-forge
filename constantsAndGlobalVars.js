@@ -264,7 +264,7 @@ export function setCurrentOptionPane(value) {
     currentOptionPane = value.toLowerCase();
 }
 
-export function setResourcesToDeduct(name, setFunctionName, getFunctionName, amount) {
+export function setResourcesToDeduct(name, amount) {
     if (name === 'clear') {
         resourcesToDeduct = {};
         return;
@@ -275,8 +275,6 @@ export function setResourcesToDeduct(name, setFunctionName, getFunctionName, amo
     }
 
     resourcesToDeduct[name].deductQuantity = amount;
-    resourcesToDeduct[name].setFunction = setFunctionName;
-    resourcesToDeduct[name].getFunction = getFunctionName;
 }
 
 export function getResourcesToDeduct() {

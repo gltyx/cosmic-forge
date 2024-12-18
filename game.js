@@ -51,8 +51,6 @@ import {
     setResearchRate,
     getHydrogenRate,
     getResearchRate,
-    setCash,
-    getCash,
     setHydrogenStorage,
     getHydrogenStorage,
     getHydrogenQuantity,
@@ -187,11 +185,11 @@ export async function gameLoop() {
 }
 
 function updateStats() {
-    //cash
+    const cash = getResourceDataObject('currency', ['cash']);
     if (getCurrencySymbol() !== "€") {
-        getElements().cashStat.textContent = `${getCurrencySymbol()}${getCash().toFixed(2)}`;
+        getElements().cashStat.textContent = `${getCurrencySymbol()}${cash.toFixed(2)}`;
     } else {
-        getElements().cashStat.textContent = `${getCash().toFixed(2) + getCurrencySymbol()}`;
+        getElements().cashStat.textContent = `${cash.toFixed(2) + getCurrencySymbol()}`;
     }
 }
 
@@ -269,12 +267,13 @@ export function sellResource(getResourceQuantity, setResourceQuantity, resource)
     const resourceQuantity = getResourceQuantity();
     const saleData = getResourceSalePreview(resource)
 
+    const currentCash = getResourceDataObject('currency', ['cash']);
     const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
     const cashRaised = parseFloat(extractedValue);
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
 
     setResourceQuantity(resourceQuantity - quantityToDeduct);
-    setCash(getCash() + cashRaised);
+    setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
 }
 
 function updateAllSalePricePreviews() {
@@ -344,10 +343,11 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
 function checkAndDeductResources() {
     const deductObject = getResourcesToDeduct();
     let deductAmount;
+    let mainKey;
 
     for (const resource in deductObject) {
         if (deductObject.hasOwnProperty(resource)) {
-            const { deductQuantity, setFunction, getFunction } = deductObject[resource];
+            const { deductQuantity } = deductObject[resource];
 
             if (typeof deductQuantity === 'function') {
                 deductAmount = deductQuantity();
@@ -355,12 +355,19 @@ function checkAndDeductResources() {
                 deductAmount = deductQuantity;
             }
 
-            if (typeof getFunction === 'function' && typeof setFunction === 'function') {
-                const currentQuantity = getFunction();
-                setFunction(currentQuantity - deductAmount);
+            let currentQuantity;
+
+            if (resource === 'cash') {
+                mainKey = 'currency';
+                currentQuantity = getResourceDataObject(mainKey, [resource]);
+                setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource]);
             } else {
-                console.error(`Error: getFunction or setFunction for resource '${resource}' is not callable.`);
+                mainKey = 'resources';
+                currentQuantity = getResourceDataObject(mainKey, [resource, 'quantity']);
+                setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource, 'quantity']);
             }
+
+            
         }
     }
 
@@ -529,63 +536,81 @@ function monitorRevealRowsChecks(element) {
 
 function monitorResourceCostChecks(element) {
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        const functionName = element.dataset.resourcePriceObject;
-        const functionObjectRetrieval = functionRegistryUpgrade[functionName];
-        const resourceObjectSectionKey1 = element.dataset.argumentToPass1;
-        const resourceObjectSectionKey2 = element.dataset.argumentToPass2;
-        const checkQuantityString = element.dataset.argumentCheckQuantity;
-        const functionGetResourceQuantity = functionRegistryUpgrade[checkQuantityString];
+        //FUSE
+        let resource = element.dataset.resourceName;
+        const resourceToFuseTo = element.dataset.resourceToFuseTo;
+        //
 
-        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellResource') {    
-            if (typeof functionGetResourceQuantity === 'function') {
-                const checkQuantity = functionGetResourceQuantity();
-    
-                if (checkQuantity > 0) { 
-                    element.classList.remove('red-disabled-text');
-                } else {
-                    element.classList.add('red-disabled-text');
-                }
+        //TECH
+        const techName = element.dataset.techName;
+        //
+
+        //BOTTOM PART
+        const type = element.dataset.type;
+        //
+
+        if (resource === 'storage' || resource === 'autoBuyer') {
+            resource = element.dataset.argumentCheckQuantity;
+        }
+
+        const checkQuantityString = element.dataset.argumentCheckQuantity;
+
+        let quantity;
+
+        if (checkQuantityString === 'cash') {
+            quantity = getResourceDataObject('currency', ['cash']);
+        } else {
+            if (checkQuantityString === 'research') {
+                quantity = getResourceDataObject('research', ['quantity']); //research
+            } else {
+                quantity = getResourceDataObject('resources', [checkQuantityString, 'quantity']); //research
+            } 
+        }
+
+        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellResource') { //sell
+            if (quantity > 0) { 
+                element.classList.remove('red-disabled-text');
+            } else {
+                element.classList.add('red-disabled-text');
             }
+
             return;
         }
 
         if(element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
-            if (typeof functionGetResourceQuantity === 'function') {
-                const checkQuantity = functionGetResourceQuantity();
 
-                if (getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion') && getUnlockedResourcesArray().includes(resourceObjectSectionKey2)) {
-                    element.classList.remove('invisible'); 
-                }
-    
-                if (getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion') && checkQuantity > 0) {
-                    element.classList.remove('red-disabled-text');
-                    if (element.tagName.toLowerCase() === 'button') {
-                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                        if (accompanyingLabel.textContent.includes('!!')) {
-                            accompanyingLabel.classList.remove('warning-orange-text');
-                            accompanyingLabel.classList.add('red-disabled-text');
-                        } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
-                            element.classList.add('warning-orange-text');
-                            //accompanyingLabel.remove('red-disabled-text');
-                            accompanyingLabel.classList.add('warning-orange-text');
-                        } else {
-                            element.classList.remove('warning-orange-text');
-                            accompanyingLabel.classList.remove('warning-orange-text');
-                            accompanyingLabel.classList.remove('red-disabled-text');
-                        }
+            if (getTechUnlockedArray().includes(resource + 'Fusion') && getUnlockedResourcesArray().includes(resourceToFuseTo)) {
+                element.classList.remove('invisible'); 
+            }
+
+            if (getTechUnlockedArray().includes(resource + 'Fusion') && quantity > 0) {
+                element.classList.remove('red-disabled-text');
+                if (element.tagName.toLowerCase() === 'button') {
+                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+                    if (accompanyingLabel.textContent.includes('!!')) {
+                        accompanyingLabel.classList.remove('warning-orange-text');
+                        accompanyingLabel.classList.add('red-disabled-text');
+                    } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
+                        element.classList.add('warning-orange-text');
+                        //accompanyingLabel.remove('red-disabled-text');
+                        accompanyingLabel.classList.add('warning-orange-text');
+                    } else {
+                        element.classList.remove('warning-orange-text');
+                        accompanyingLabel.classList.remove('warning-orange-text');
+                        accompanyingLabel.classList.remove('red-disabled-text');
                     }
-                } else if (!getTechUnlockedArray().includes(resourceObjectSectionKey1 + 'Fusion')) {
-                    element.classList.add('invisible');
-                } else {
-                    element.classList.remove('warning-orange-text');
-                    element.classList.add('red-disabled-text');
                 }
+            } else if (!getTechUnlockedArray().includes(resource + 'Fusion')) {
+                element.classList.add('invisible');
+            } else {
+                element.classList.remove('warning-orange-text');
+                element.classList.add('red-disabled-text');
             }
             return;
         }
 
-        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') {  
-            const prerequisite = getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[1];  
+        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') { 
+            const prerequisite = getResourceDataObject('techs', [techName, 'appearsAt'])[1];  
             const prerequisiteSpan = element.querySelector('span');
             
             if (getTechUnlockedArray().includes(prerequisite)) {
@@ -596,63 +621,57 @@ function monitorResourceCostChecks(element) {
                 }
             }
 
-            if (typeof functionGetResourceQuantity === 'function') { //
-                const checkQuantity = functionGetResourceQuantity();
-    
-                if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(element.dataset.argumentToPass1)) {
-                    if (checkQuantity >= getUpgradeResearch('techs', element.dataset.argumentToPass1).price) {
-                        if ((getTechUnlockedArray().includes(prerequisite) || prerequisite === null) && element.tagName.toLowerCase() === 'button') {
-                            element.classList.remove('red-disabled-text');
-                        } else if (element.tagName.toLowerCase() !== 'button') {
-                            element.classList.remove('red-disabled-text');
-                        }
-                    } else {
-                        element.classList.add('red-disabled-text');
+            if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(techName)) {
+                if (quantity >= getResourceDataObject('techs', [techName, 'price'])) {
+                    if ((getTechUnlockedArray().includes(prerequisite) || prerequisite === null) && element.tagName.toLowerCase() === 'button') {
+                        element.classList.remove('red-disabled-text');
+                    } else if (element.tagName.toLowerCase() !== 'button') {
+                        element.classList.remove('red-disabled-text');
                     }
                 } else {
-                    if (element.tagName.toLowerCase() === 'button') {
-                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                        accompanyingLabel.classList.remove('red-disabled-text');
-                        accompanyingLabel.classList.add('unlocked-tech');
-                        accompanyingLabel.classList.add('green-ready-text');
-                        accompanyingLabel.textContent = 'Researched';
-                        accompanyingLabel.style.pointerEvents = 'none';
-                    }
-                    element.classList.remove('red-disabled-text');
-                    element.classList.add('green-ready-text');
-                    element.textContent = 'Researched';
-                    element.style.pointerEvents = 'none';
+                    element.classList.add('red-disabled-text');
                 }
+            } else {
+                if (element.tagName.toLowerCase() === 'button') {
+                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+                    accompanyingLabel.classList.remove('red-disabled-text');
+                    accompanyingLabel.classList.add('unlocked-tech');
+                    accompanyingLabel.classList.add('green-ready-text');
+                    accompanyingLabel.textContent = 'Researched';
+                    accompanyingLabel.style.pointerEvents = 'none';
+                }
+                element.classList.remove('red-disabled-text');
+                element.classList.add('green-ready-text');
+                element.textContent = 'Researched';
+                element.style.pointerEvents = 'none';
             }
             return;
+        }        
+
+        let price;
+        let mainKey;
+
+        if (type === 'autoBuyer') {
+            mainKey = 'resources';
+            const autoBuyerTier = element.dataset.autoBuyerTier;
+            price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+        } else {
+            if (element.dataset.argumentToPass1 === "research") {
+                mainKey = 'research';
+                price = getResourceDataObject(mainKey, ['quantity']);
+            } else if (element.dataset.argumentToPass1 === "storage") {
+                mainKey = 'resources' //.storageCapacity
+                price = getResourceDataObject(mainKey, [resource, 'storageCapacity']);
+            }
         }
         
-        if (typeof functionObjectRetrieval === 'function' && typeof functionGetResourceQuantity === 'function') {
-            const resourceObjectSection = functionObjectRetrieval(resourceObjectSectionKey1, resourceObjectSectionKey2);
-            const checkQuantity = functionGetResourceQuantity();
-
-            let price;
-
-            if (resourceObjectSection.type && resourceObjectSection.type === 'autoBuyer') {
-                const autoBuyerTier = element.dataset.autoBuyerTier;
-                price = resourceObjectSection[autoBuyerTier].price;
-            } else {
-                price = resourceObjectSection.price;
-            }
-
-            if (typeof price === 'function' && resourceObjectSection.type === 'storage') {
-                price = price();
-            }
-            
-            // Perform the check and update the element's class
-            if (element.dataset.conditionCheck === 'upgradeCheck' && checkQuantity >= price) { 
-                element.classList.remove('red-disabled-text');
-            } else {
-                element.classList.add('red-disabled-text');
-            }
+        // Perform the check and update the element's class
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
+            element.classList.remove('red-disabled-text');
         } else {
-            console.error(`Function ${functionName} is not defined or not callable.`);
+            element.classList.add('red-disabled-text');
         }
+        
     }
 }
 
@@ -702,7 +721,7 @@ export function gain(getFunction, setFunction, getResourceStorage, incrementAmou
     }
 
     if (getResourceObject) {
-        let resourceAmountToDeductOrPrice;
+        let amountToDeduct;
         let resourceSetNewPrice;
 
         const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
@@ -714,21 +733,19 @@ export function gain(getFunction, setFunction, getResourceStorage, incrementAmou
         }
         
         if (ABOrTechPurchase) {
-            resourceAmountToDeductOrPrice = resourceObject[tierAB].price;
+            amountToDeduct = resourceObject[tierAB].price;
             resourceSetNewPrice = resourceObject[tierAB].setPrice;
         } else {
-            resourceAmountToDeductOrPrice = resourceObject.price;
+            amountToDeduct = resourceObject.price;
             resourceSetNewPrice = resourceObject.setPrice;
         }
         
         const resourceToDeductName = resourceObject.resource;
-        const resourceToDeductSetFn = resourceObject.deduct;
-        const resourceToDeductGetFn = resourceObject.checkQuantity;
 
 
         //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeductOrPrice);
-        setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, resourceAmountToDeductOrPrice);
+        setResourcesToDeduct(resourceToDeductName, amountToDeduct);
+        setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, amountToDeduct);
     }
 }
 
@@ -738,13 +755,11 @@ export function increaseResourceStorage(setResourceStorage, getResourceStorage, 
     if (getResourceObject) {
         const getResourceObjectFn = functionRegistryUpgrade[getResourceObject];
         const resourceObject = getResourceObjectFn(resource);
-        const resourceAmountToDeduct = resourceObject.price;
+        const amountToDeduct = resourceObject.price;
         const resourceToDeductName = resourceObject.resource;
-        const resourceToDeductSetFn = resourceObject.deduct;
-        const resourceToDeductGetFn = resourceObject.checkQuantity;
 
         //set resource to deduct
-        setResourcesToDeduct(resourceToDeductName, resourceToDeductSetFn, resourceToDeductGetFn, resourceAmountToDeduct);
+        setResourcesToDeduct(resourceToDeductName, amountToDeduct);
     }
 
     deferredActions.push(() => {

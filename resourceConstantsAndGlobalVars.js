@@ -100,16 +100,8 @@ export const functionRegistryUpgrade = {
     // Add more functions here as needed
 };
 
-// RESOURCE SALE VALUES
-export const SALE_VALUES = {
-    hydrogen: 0.005,
-    helium: 0.01,
-    carbon: 0.1
-};
-
 // QUANTITY VARIABLES
 // RESOURCES
-export let cash = 100000;
 export let researchQuantity = 320;
 export let hydrogenQuantity = 0;
 export let heliumQuantity = 0;
