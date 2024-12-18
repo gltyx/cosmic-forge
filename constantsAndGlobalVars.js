@@ -1,4 +1,4 @@
-import { getResourceDataObject, setResourceDataObject } from "./resourceConstantsAndGlobalVars.js";
+import { getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 
 //DEBUG
 export let debugFlag = false;

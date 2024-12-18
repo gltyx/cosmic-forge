@@ -30,31 +30,15 @@ import {
     getTechUnlockedArray,
     getResourceSalePreview
 } from './constantsAndGlobalVars.js';
+
 import {
     getResourceDataObject,
     setResourceDataObject,
-} from "./resourceConstantsAndGlobalVars.js";
-import {
-    getCarbonRate,
-    setCarbonRate,
-    getHeliumRate,
-    setHeliumRate,
-    setHydrogenRate,
-    setResearchRate,
-    getHydrogenRate,
-    getResearchRate,
-    getScienceKitQuantity,
-    getScienceClubQuantity,
-    getUpgradeHydrogen,
-    setUpgradeHydrogen,
-    getUpgradeHelium,
-    setUpgradeHelium,
-    getUpgradeCarbon,
-    setUpgradeCarbon,
-    functionRegistryUpgrade,
-} from "./resourceConstantsAndGlobalVars.js";
-import { sendNotificationIfActive } from "./ui.js";
-import { capitaliseString } from './utilityFunctions.js';
+} from "./resourceDataObject.js";
+
+import { 
+    sendNotificationIfActive
+} from "./ui.js";
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -302,15 +286,15 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
         switch (setPriceTarget) {
             case 'hydrogenAB1Price':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeHydrogen('autoBuyer', 'tier1', 'price', newPrice);
+                setResourceDataObject(newPrice, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
                 break;
             case 'heliumAB1Price':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeHelium('autoBuyer', 'tier1', 'price', newPrice);
+                setResourceDataObject(newPrice, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'price']);
                 break;
             case 'carbonAB1Price':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeCarbon('autoBuyer', 'tier1', 'price', newPrice);
+                setResourceDataObject(newPrice, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'price']);
                 break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
@@ -420,19 +404,19 @@ function getAllResourceDescriptionElements() {
     const hydrogenStoragePrice = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
 
     const hydrogenAutoBuyerTier1DescElement = document.getElementById('hydrogenCompressorDescription');
-    const hydrogenAutoBuyerTier1Price = getUpgradeHydrogen('autoBuyer').tier1.price;
+    const hydrogenAutoBuyerTier1Price = getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
 
     const heliumIncreaseStorageDescElement = document.getElementById('heliumIncreaseContainerSizeDescription');
     const heliumStoragePrice = getResourceDataObject('resources', ['helium', 'storageCapacity']);
 
     const heliumAutoBuyerTier1DescElement = document.getElementById('atmosphereScraperDescription');
-    const heliumAutoBuyerTier1Price = getUpgradeHelium('autoBuyer').tier1.price;
+    const heliumAutoBuyerTier1Price = getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'price']);
 
     const carbonIncreaseStorageDescElement = document.getElementById('carbonIncreaseContainerSizeDescription');
     const carbonStoragePrice = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
 
     const carbonAutoBuyerTier1DescElement = document.getElementById('carbonBurnerDescription');
-    const carbonAutoBuyerTier1Price = getUpgradeCarbon('autoBuyer').tier1.price;
+    const carbonAutoBuyerTier1Price = getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'price']);
 
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']);
