@@ -349,27 +349,25 @@ function getAllQuantities() {
     const allQuantities = {};
 
     resourceKeys.forEach(resource => {
-        const getQuantityFunction = getResourceDataObject('resources', [resource, 'quantity']);
-        if (typeof getQuantityFunction === 'function') {
-            allQuantities[resource] = getQuantityFunction();
-        }
+        const resourceName = resource;
+        allQuantities[resourceName] = getResourceDataObject('resources', [resourceName, 'quantity']);
     });
 
     // Manually assign quantities for non-resource keys
     allQuantities.research = getResourceDataObject('research', ['quantity']);
     allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
-    allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
+    allQuantities.scienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
 
     return allQuantities;
 }
 
 function getAllStorages() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
-
     const allStorages = {};
 
     resourceKeys.forEach(resource => {
-        allStorages[resource] = getResourceDataObject('resources', [resource, 'storageCapacity']);
+        const resourceName = resource;
+        allStorages[resourceName] = getResourceDataObject('resources', [resourceName, 'storageCapacity']);
     });
 
     allStorages.research = null;
@@ -673,6 +671,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
 
     if (resourceCategory === 'research') {
         resourceType = 'research';
+    } else if (resourceCategory === 'techs') { 
+        resourceType = 'techs';
     } else if (resourceCategory === 'scienceUpgrade') { 
         resourceType = 'scienceUpgrade';
     } else {
@@ -682,20 +682,20 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     let currentResourceQuantity;
 
     if (resource && resource === 'techUnlock') {
-        currentResourceQuantity = getResourceDataObject('research', ['quantity']);
+        currentResourceQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
     } else if (resource === 'scienceKit') {
         currentResourceQuantity = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']); 
     } else if (resource === 'scienceClub') {
         currentResourceQuantity = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']); 
     } else if (resource === 'autoBuyer') {
-        currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autobuyer', 'tierAB', 'quantity']);
+        currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
     }
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
-            setResourceDataObject(currentResourceQuantity - getResourceDataObject('research', ['techs', incrementAmount, 'price']), 'research', ['quantity']);
+            setResourceDataObject(getResourceDataObject('research',['quantity']) - currentResourceQuantity, 'research', ['quantity']);
         } else {
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', resourceCategory, 'quantity');
         }
@@ -718,6 +718,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     let resourceObject;
     if (resourceCategory === 'research') {
         resourceObject = getResourceDataObject('research', ['upgrades', resource]);
+    } else if (resourceCategory === 'techs') {
+        return;
     } else if (resourceCategory === 'scienceUpgrade') {
         resourceObject = getResourceDataObject('research', ['upgrades', resource]);
     } else {
@@ -725,8 +727,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     }
     
     if (ABOrTechPurchase) {
-        amountToDeduct = resourceObject[tierAB].price;
-        resourceSetNewPrice = resourceObject[tierAB].setPrice;
+        amountToDeduct = resourceObject.upgrades.autoBuyer[tierAB].price;
+        resourceSetNewPrice = resourceObject.upgrades.autoBuyer[tierAB].setPrice;
     } else {
         amountToDeduct = resourceObject.price;
         resourceSetNewPrice = resourceObject.setPrice;
@@ -772,11 +774,11 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const hydrogenRate = getResourceDataObject('resources', ['hydrogen', 'rate']) + rateHydrogenAB1;
         setResourceDataObject(hydrogenRate, 'resources', ['hydrogen', 'rate']);
 
-        getElements().hydrogenRate.textContent = `${(hydrogenRate * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().hydrogenRate.textContent = `${(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('hydrogenAB1')) {
             timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
                 const currentHydrogen = getResourceDataObject('resources', ['hydrogen', 'quantity']);
-                setResourceDataObject(currentHydrogen + hydrogenRate, 'resources', ['hydrogen', 'rate']);
+                setResourceDataObject(currentHydrogen + hydrogenRate, 'resources', ['hydrogen', 'quantity']);
             });
         }
     } else if (timerName === 'heliumAB1') {
@@ -784,11 +786,11 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const heliumRate = getResourceDataObject('resources', ['helium', 'rate']) + rateHeliumAB1;
         setResourceDataObject(heliumRate, 'resources', ['helium', 'rate']);
 
-        getElements().heliumRate.textContent = `${(heliumRate * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().heliumRate.textContent = `${(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('heliumAB1')) {
             timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
                 const currentHelium = getResourceDataObject('resources', ['helium', 'quantity']);
-                setResourceDataObject(currentHelium + heliumRate, 'resources', ['helium', 'rate']);
+                setResourceDataObject(currentHelium + heliumRate, 'resources', ['helium', 'quantity']);
             });
         }
     } else if (timerName === 'carbonAB1') {
@@ -796,11 +798,11 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const carbonRate = getResourceDataObject('resources', ['carbon', 'rate']) + rateCarbonAB1;
         setResourceDataObject(carbonRate, 'resources', ['carbon', 'rate']);
 
-        getElements().carbonRate.textContent = `${(carbonRate * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().carbonRate.textContent = `${(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('carbonAB1')) {
             timerManager.addTimer('carbonAB1', getTimerUpdateInterval(), () => {
                 const currentCarbon = getResourceDataObject('resources', ['carbon', 'quantity']);
-                setResourceDataObject(currentCarbon + carbonRate, 'resources', ['carbon', 'rate']);
+                setResourceDataObject(currentCarbon + carbonRate, 'resources', ['carbon', 'quantity']);
             });
         }
     } else if (timerName === 'scienceKit') {
@@ -808,11 +810,12 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const researchRate = getResourceDataObject('research', ['rate']) + rateScienceKit;
         setResourceDataObject(researchRate, 'research', ['rate']);
         
-        getElements().researchRate.textContent = `${(researchRate * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().researchRate.textContent = `${(getResourceDataObject('research', ['rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('research')) {
             timerManager.addTimer('research', getTimerUpdateInterval(), () => {
-                const currentResearch = getResourceDataObject('research', ['quantity']);
-                setResourceDataObject(currentResearch + researchRate, 'research', ['rate']);
+                const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+                const currentResearchRate = getResourceDataObject('research', ['rate']);
+                setResourceDataObject((currentResearchQuantity + currentResearchRate), 'research', ['quantity']);
             });
         }
     } else if (timerName === 'scienceClub') {
@@ -820,12 +823,15 @@ export function startUpdateAutoBuyerTimersAndRates(timerName) {
         const researchRate = getResourceDataObject('research', ['rate']) + rateScienceClub;
         setResourceDataObject(researchRate, 'research', ['rate']);
 
-        getElements().researchRate.textContent = `${(researchRate * getTimerRateRatio()).toFixed(1)} / s`;
+        getElements().researchRate.textContent = `${(getResourceDataObject('research', ['rate']) * getTimerRateRatio()).toFixed(1)} / s`;
         if (!timerManager.getTimer('research')) {
             timerManager.addTimer('research', getTimerUpdateInterval(), () => {
-                const currentResearch = getResourceDataObject('research', ['quantity']);
-                setResourceDataObject(currentResearch + researchRate, 'research', ['rate']);
+                const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+                const currentResearchRate = getResourceDataObject('research', ['rate']);
+                setResourceDataObject((currentResearchQuantity + currentResearchRate), 'research', ['quantity']);
             });
+        } else {
+
         }
     }
 }

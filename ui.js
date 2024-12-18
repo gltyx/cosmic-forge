@@ -631,7 +631,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techKnowledgeSharingRow',
             'Knowledge Sharing:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('knowledgeSharing', null, null, 'techUnlock', false, null)
+                gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs')
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('knowledgeSharing');
             }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
@@ -655,7 +655,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techFusionTheoryRow',
             'Fusion Theory:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('fusionTheory', null, null, 'techUnlock', false, null)
+                gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs')
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('fusionTheory');
             }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
@@ -679,7 +679,7 @@ function drawTab2Content(heading, optionContentElement) {
             'techHydrogenFusionRow',
             'Hydrogen Fusion:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('hydrogenFusion', null, null, 'techUnlock', false, 'null')
+                gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs')
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('hydrogenFusion');
                 setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');

@@ -413,7 +413,6 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
     } 
 }
 
-
 export function getResourceSalePreview(key) {
     return salePreviews[key];
 }
