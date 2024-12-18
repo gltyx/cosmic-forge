@@ -64,8 +64,6 @@ import {
     setHeliumQuantity,
     getCarbonQuantity,
     setCarbonQuantity,
-    getUpgradeResearch,
-    setUpgradeResearch,
     getUpgradeHydrogen,
     getUpgradeHelium,
     getUpgradeCarbon,
@@ -618,16 +616,16 @@ function drawTab2Content(heading, optionContentElement) {
         const researchScienceKitRow = createOptionRow(
             'researchScienceKitRow',
             'Science Kit:',
-            createButton(`Add ${getUpgradeResearch('research', 'scienceKit').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade'),
                 startUpdateAutoBuyerTimersAndRates('scienceKit');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceKit', 'cash', false, null),
+            }, 'upgradeCheck', '', 'research', 'scienceKit', 'cash', false, null),
             null,
             null,
             null,
             null,
-            `${getUpgradeResearch('research', 'scienceKit').price + ' ' + getUpgradeResearch('research', 'scienceKit').resource}`,
-            'getUpgradeResearch',
+            `${getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']) + ' Research'}`,
+            '',
             'upgradeCheck',
             'research',
             'scienceKit',
@@ -641,16 +639,16 @@ function drawTab2Content(heading, optionContentElement) {
         const researchScienceClubRow = createOptionRow(
             'researchScienceClubRow',
             'Open Science Club:',
-            createButton(`Add ${getUpgradeResearch('research', 'scienceClub').rate * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade')
                 startUpdateAutoBuyerTimersAndRates('scienceClub');
-            }, 'upgradeCheck', 'getUpgradeResearch', 'research', 'scienceClub', 'cash', false, null),
+            }, 'upgradeCheck', '', 'research', 'scienceClub', 'cash', false, null),
             null,
             null,
             null,
             null,
-            `${getUpgradeResearch('research', 'scienceClub').price + ' ' + getUpgradeResearch('research', 'scienceClub').resource}`,
-            'getUpgradeResearch',
+            `${getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']) + ' Research'}`,
+            '',
             'upgradeCheck',
             'research',
             'scienceClub',
@@ -668,13 +666,13 @@ function drawTab2Content(heading, optionContentElement) {
                 gain('knowledgeSharing', null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('knowledgeSharing');
-            }, 'techUnlock', 'getUpgradeResearch', 'knowledgeSharing', null, 'research', false, null),
+            }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
             null,
             null,
             null,
             null,
-            `${getUpgradeResearch('techs', 'knowledgeSharing').price + ' Research'}`,
-            'getUpgradeResearch',
+            `${getResourceDataObject('techs', ['knowledgeSharing', 'price']) + ' Research'}`,
+            '',
             'techUnlock',
             'knowledgeSharing',
             null,
@@ -692,13 +690,13 @@ function drawTab2Content(heading, optionContentElement) {
                 gain('fusionTheory', null, null, 'techUnlock', false, null)
                 event.currentTarget.classList.add('unlocked-tech');
                 setTechUnlockedArray('fusionTheory');
-            }, 'techUnlock', 'getUpgradeResearch', 'fusionTheory', null, 'research', false, null),
+            }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
             null,
             null,
             null,
             null,
-            `${getUpgradeResearch('techs', 'fusionTheory').price + ' Research'}`,
-            'getUpgradeResearch',
+            `${getResourceDataObject('techs', ['fusionTheory', 'price']) + ' Research'}`,
+            '',
             'techUnlock',
             'fusionTheory',
             null,
@@ -718,13 +716,13 @@ function drawTab2Content(heading, optionContentElement) {
                 setTechUnlockedArray('hydrogenFusion');
                 setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
                 updateDescriptionRow('hydrogenSellRow', 'content2');
-            }, 'techUnlock', 'getUpgradeResearch', 'hydrogenFusion', null, 'research', false, null),
+            }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null),
             null,
             null,
             null,
             null,
-            `${getUpgradeResearch('techs', 'hydrogenFusion').price} Research, <span id="hydrogenFusionPrereq" class="red-disabled-text">Fusion Theory</span>`,
-            'getUpgradeResearch',
+            `${getResourceDataObject('techs', ['hydrogenFusion', 'price'])} Research, <span id="hydrogenFusionPrereq" class="red-disabled-text">Fusion Theory</span>`,
+            '',
             'techUnlock',
             'hydrogenFusion',
             null,
@@ -910,14 +908,13 @@ function createOptionRow(
 
     // Visibility logic for mainRow
     if (dataConditionCheck === "techUnlock") {
-        const functionGetResearchUpgrade = functionRegistryUpgrade[resourcePriceObject];
-        const researchPointsToAppear = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0];
-        const prerequisiteForTech = functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[1];
+        const researchPointsToAppear = getResourceDataObject('techs', [objectSectionArgument1, 'appearsAt'])[0];
+        const prerequisiteForTech = getResourceDataObject('techs', [objectSectionArgument1, 'appearsAt'])[1];
         if (getResourceDataObject('research', ['quantity']) < researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
             wrapper.classList.add('invisible');
         } else if (!getTechUnlockedArray().includes(prerequisiteForTech)) {
             wrapper.classList.add('invisible');
-        } else if (getResourceDataObject('research', ['quantity']) >= functionGetResearchUpgrade('techs', objectSectionArgument1).appearsAt[0] && !getRevealedTechArray().includes(objectSectionArgument1)) {
+        } else if (getResourceDataObject('research', ['quantity']) >= researchPointsToAppear && !getRevealedTechArray().includes(objectSectionArgument1)) {
             setRevealedTechArray(objectSectionArgument1);
         }
     }

@@ -51,8 +51,6 @@ import {
     setHydrogenQuantity, 
     getScienceKitQuantity,
     getScienceClubQuantity,
-    getUpgradeResearch,
-    setUpgradeResearch,
     getUpgradeHydrogen,
     setUpgradeHydrogen,
     getUpgradeHelium,
@@ -322,11 +320,11 @@ function setNewResourcePrice(currentPrice, setPriceTarget) {
                 break;
             case 'scienceKitPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeResearch('research', 'scienceKit', 'price', newPrice);
+                setResourceDataObject(newPrice, 'research', ['upgrades', 'scienceKit', 'price']);
                 break;
             case 'scienceClubPrice':
                 newPrice = Math.ceil(currentPrice * 1.15);
-                setUpgradeResearch('research', 'scienceClub', 'price', newPrice);
+                setResourceDataObject(newPrice, 'research', ['upgrades', 'scienceClub', 'price']);
                 break;
         }
     }
@@ -516,7 +514,7 @@ function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
         if (getRevealedTechArray().includes(element.dataset.argumentToPass1)) {
             element.classList.remove('invisible');
-        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResourceDataObject('research', ['quantity']) >= getUpgradeResearch('techs', element.dataset.argumentToPass1).appearsAt[0]) {
+        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.argumentToPass1, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
             setRevealedTechArray(element.dataset.argumentToPass1);
         }

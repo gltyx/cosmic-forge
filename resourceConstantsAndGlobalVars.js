@@ -86,7 +86,6 @@ export const resourceData = {
 
 // FUNCTION REGISTRIES
 export const functionRegistryUpgrade = {
-    getUpgradeResearch: getUpgradeResearch,
     getUpgradeHydrogen: getUpgradeHydrogen,
     getUpgradeHelium: getUpgradeHelium,
     getUpgradeCarbon: getUpgradeCarbon,
@@ -301,14 +300,6 @@ export function getUpgradeCarbon(key) {
 
 export function setUpgradeCarbon(key, tier, property, value) {
     upgradeCarbon[key][tier][property] = value;
-}
-
-export function getUpgradeResearch(key1, key2) {
-    return upgradeResearch[key1][key2];
-}
-
-export function setUpgradeResearch(key1, key2, property, value) {
-    upgradeResearch[key1][key2][property] = value;
 }
 
 export function getHydrogenRate() {
