@@ -31,6 +31,9 @@ let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 
+let originalFrameNumbers = {
+};
+
 let lastScreenOpenRegister = {
     tab1: null,
     tab2: null,
@@ -467,4 +470,12 @@ export function getTechSpecificUIItemsArray(key, type) {
         return techSpecificUIItemsArray[key][type];
     }
     return null;
+}
+
+export function getOriginalFrameNumbers() {
+    return originalFrameNumbers;
+}
+
+export function setOriginalFrameNumbers(value) {
+    originalFrameNumbers = value;
 }

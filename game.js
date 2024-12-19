@@ -1,4 +1,6 @@
 import {
+    setOriginalFrameNumbers,
+    getOriginalFrameNumbers,
     getUnlockedResourcesArray,
     setUnlockedResourcesArray,
     setRevealedTechArray,
@@ -160,8 +162,10 @@ function updateStats() {
     const cash = getResourceDataObject('currency', ['cash']);
     if (getCurrencySymbol() !== "€") {
         getElements().cashStat.textContent = `${getCurrencySymbol()}${cash.toFixed(2)}`;
+        updateOriginalValue(getElements().cashStat, `${getCurrencySymbol()}${cash.toFixed(2)}`);
     } else {
         getElements().cashStat.textContent = `${cash.toFixed(2) + getCurrencySymbol()}`;
+        updateOriginalValue(getElements().cashStat, `${cash.toFixed(2) + getCurrencySymbol()}`);
     }
 }
 
@@ -567,6 +571,7 @@ function monitorResourceCostChecks(element) {
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
                 element.textContent = 'Researched';
+                updateOriginalValue(element, 'Researched');
                 element.style.pointerEvents = 'none';
             }
             return;
@@ -606,6 +611,7 @@ export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
         accompanyingLabel.classList.add('unlocked-tech');
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
+        updateOriginalValue(accompanyingLabel, 'Researched');
         accompanyingLabel.style.pointerEvents = 'none';
     } else if (type === 'fuse') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
@@ -630,17 +636,22 @@ const updateDisplay = (element, data1, data2, desc) => {
         if (element && data2) {
             if (data2 === '€') {
                 element.textContent = data1 + data2;
+                updateOriginalValue(element, data1 + data2);
             } else if (data2 === getCurrencySymbol()) {
                 element.textContent = data2 + data1;
+                updateOriginalValue(element, data2 + data1);
             } else {
                 element.textContent = data1 + ' ' + data2;
+                updateOriginalValue(element, data1 + ' ' +data2);
             }
         }
     } else {
         if (element && data2) {
             element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
+            updateOriginalValue(element, Math.floor(data1) + '/' + Math.floor(data2));
         } else if (element) {
             element.textContent = Math.floor(data1);
+            updateOriginalValue(element, Math.floor(data1));
         }
     
         if (element && data2 && data1 === data2) {
@@ -767,6 +778,7 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
     setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
 
     getElements()[`${elementName}Rate`].textContent = `${(newRate * getTimerRateRatio()).toFixed(1)} / s`;
+    updateOriginalValue(getElements()[`${elementName}Rate`], `${(newRate * getTimerRateRatio()).toFixed(1)} / s`);
 
     const timerName = `${elementName}AB${tier}`;
     if (!timerManager.getTimer(timerName)) {
@@ -787,6 +799,7 @@ function startUpdateScienceTimers(elementName) {
 
         setResourceDataObject(newResearchRate, 'research', ['rate']);
         getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
+        updateOriginalValue(getElements().researchRate, `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`);
 
         if (!timerManager.getTimer('research')) {
             timerManager.addTimer('research', getTimerUpdateInterval(), () => {
@@ -798,25 +811,69 @@ function startUpdateScienceTimers(elementName) {
     }
 }
 
-function formatAllNotationElements(notationType) {
+export function updateOriginalValue(element, value) {
+    let originalNumbers = getOriginalFrameNumbers();
 
-    //BROKEN SO FAR 
-    //ELEMENTS FOR RESEARCH PREREQUISITES
-    //CLASSES FOR DESCRIPTION COLORING
-    //BASICALLY ALL RULES FOR THE DESCRIPTIONS
+    let elementSelector = '';
+    if (element.id) {
+        elementSelector = `#${element.id}`;
+    } else if (element.classList.length > 0) {
+        elementSelector = `.${Array.from(element.classList).join('.')}`;
+    } else {
+        console.error("Element must have an id or a class to create a selector.");
+        return;
+    }
+
+    if (originalNumbers[elementSelector]) {
+        originalNumbers[elementSelector].originalValue = value;
+    } else if (element.classList.contains('notation')) {
+        originalNumbers[elementSelector] = {
+            originalValue: value,
+            elementSelector: elementSelector
+        };
+        console.log(`Added new entry for selector: ${elementSelector}`);
+    }
     
+
+    setOriginalFrameNumbers(originalNumbers);
+}
+
+
+function formatAllNotationElements(notationType) {
     const elements = document.querySelectorAll('.notation');
-    
+    const originalNumbers = getOriginalFrameNumbers();
+    const existingSelectors = new Set();
+
     elements.forEach(element => {
         const originalContent = element.textContent;
-        
-        // Match all numbers in the string (including decimals) and format them
+        const elementSelector = element.id ? `#${element.id}` : `.${element.className}`;
+
+        if (!(elementSelector in originalNumbers)) {
+            originalNumbers[elementSelector] = {
+                originalValue: originalContent,
+                elementSelector: elementSelector
+            };
+            existingSelectors.add(elementSelector);
+        }
+    });
+
+    setOriginalFrameNumbers(originalNumbers);
+
+    const addedElements = Object.values(originalNumbers).filter(item => !existingSelectors.has(item.elementSelector));
+    if (addedElements.length > 0) {
+        console.log("Added elements:", addedElements);
+    } else {
+        console.log("No new elements added.");
+    }
+
+    elements.forEach(element => {
+        const originalContent = element.textContent;
         const formattedContent = originalContent.replace(/-?\d+(\.\d+)?/g, match => {
             let number = parseFloat(match);
             
             if (isNaN(number)) {
                 console.warn(`Invalid number found: ${match}`);
-                return match; // Leave the invalid number as is
+                return match;
             }
 
             if (notationType === 'normal') {
@@ -836,12 +893,9 @@ function formatAllNotationElements(notationType) {
             }
         });
 
-        // Update the element's text with the formatted content
         element.textContent = formattedContent;
     });
 }
-
-
 
 // export function toggleTimer(key, buttonId) {
 //     const timer = timerManager.getTimer(key);
