@@ -478,29 +478,21 @@ function manageTabSpecificUi() {
 
 function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
-        if (getRevealedTechArray().includes(element.dataset.argumentToPass1)) {
+        if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
-        } else if (!getRevealedTechArray().includes(element.dataset.argumentToPass1) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.argumentToPass1, 'appearsAt'])[0]) {
+        } else if (!getRevealedTechArray().includes(element.dataset.type) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.type, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
-            setRevealedTechArray(element.dataset.argumentToPass1);
+            setRevealedTechArray(element.dataset.type);
         }
     }
 }
 
 function monitorResourceCostChecks(element) {
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        //FUSE
-        let resource = element.dataset.resourceName;
-        const resourceToFuseTo = element.dataset.resourceToFuseTo;
-        //
-
-        //TECH
-        const techName = element.dataset.techName;
-        //
-
-        //BOTTOM PART
+        let resource = element.dataset.type;
+        const techName = element.dataset.type;
         const type = element.dataset.type;
-        //
+        const resourceToFuseTo = element.dataset.resourceToFuseTo;
 
         if (resource === 'storage' || resource === 'autoBuyer') {
             resource = element.dataset.argumentCheckQuantity;
@@ -539,19 +531,7 @@ function monitorResourceCostChecks(element) {
             if (getTechUnlockedArray().includes(resource + 'Fusion') && quantity > 0) {
                 element.classList.remove('red-disabled-text');
                 if (element.tagName.toLowerCase() === 'button') {
-                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                    if (accompanyingLabel.textContent.includes('!!')) {
-                        accompanyingLabel.classList.remove('warning-orange-text');
-                        accompanyingLabel.classList.add('red-disabled-text');
-                    } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
-                        element.classList.add('warning-orange-text');
-                        //accompanyingLabel.remove('red-disabled-text');
-                        accompanyingLabel.classList.add('warning-orange-text');
-                    } else {
-                        element.classList.remove('warning-orange-text');
-                        accompanyingLabel.classList.remove('warning-orange-text');
-                        accompanyingLabel.classList.remove('red-disabled-text');
-                    }
+                    setTextDescriptionClassesBasedOnButtonStates(element, 'fuse');
                 }
             } else if (!getTechUnlockedArray().includes(resource + 'Fusion')) {
                 element.classList.add('invisible');
@@ -586,12 +566,7 @@ function monitorResourceCostChecks(element) {
                 }
             } else {
                 if (element.tagName.toLowerCase() === 'button') {
-                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-                    accompanyingLabel.classList.remove('red-disabled-text');
-                    accompanyingLabel.classList.add('unlocked-tech');
-                    accompanyingLabel.classList.add('green-ready-text');
-                    accompanyingLabel.textContent = 'Researched';
-                    accompanyingLabel.style.pointerEvents = 'none';
+                    setTextDescriptionClassesBasedOnButtonStates(element, 'green');
                 }
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
@@ -609,10 +584,10 @@ function monitorResourceCostChecks(element) {
             const autoBuyerTier = element.dataset.autoBuyerTier;
             price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
         } else {
-            if (element.dataset.argumentToPass1 === "research") {
+            if (element.dataset.type === "research") {
                 mainKey = 'research';
                 price = getResourceDataObject(mainKey, ['quantity']);
-            } else if (element.dataset.argumentToPass1 === "storage") {
+            } else if (element.dataset.type === "storage") {
                 mainKey = 'resources' //.storageCapacity
                 price = getResourceDataObject(mainKey, [resource, 'storageCapacity']);
             }
@@ -625,6 +600,32 @@ function monitorResourceCostChecks(element) {
             element.classList.add('red-disabled-text');
         }
         
+    }
+}
+
+function setTextDescriptionClassesBasedOnButtonStates(element, type) {
+    if (type === 'green') {
+        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+        accompanyingLabel.classList.remove('red-disabled-text');
+        accompanyingLabel.classList.add('unlocked-tech');
+        accompanyingLabel.classList.add('green-ready-text');
+        accompanyingLabel.textContent = 'Researched';
+        accompanyingLabel.style.pointerEvents = 'none';
+    } else if (type === 'fuse') {
+        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+        if (accompanyingLabel.textContent.includes('!!')) {
+            element.classList.add('warning-orange-text');
+            accompanyingLabel.classList.remove('warning-orange-text');
+            accompanyingLabel.classList.add('red-disabled-text');
+        } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
+            element.classList.add('warning-orange-text');
+            //accompanyingLabel.remove('red-disabled-text');
+            accompanyingLabel.classList.add('warning-orange-text');
+        } else {
+            element.classList.remove('warning-orange-text');
+            accompanyingLabel.classList.remove('warning-orange-text');
+            accompanyingLabel.classList.remove('red-disabled-text');
+        }
     }
 }
 

@@ -256,6 +256,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const hydrogenSellRow = createOptionRow(
             'hydrogenSellRow',
+            null,
             'Sell Hydrogen:',
             createDropdown('hydrogenSellSelectQuantity', [
                 { value: 'all', text: 'All Stock' },
@@ -296,6 +297,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const hydrogenGainRow = createOptionRow(
             'hydrogenGainRow',
+            null,
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen')
@@ -318,6 +320,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const hydrogenIncreaseStorageRow = createOptionRow(
             'hydrogenIncreaseStorageRow',
+            null,
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('hydrogenQuantity', 'hydrogen');
@@ -340,6 +343,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const hydrogenAutoBuyer1Row = createOptionRow(
             'hydrogenAutoBuyer1Row',
+            getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Hydrogen Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB1Quantity', 'autoBuyer', true, 'tier1', 'hydrogen'),
@@ -368,6 +372,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumSellRow = createOptionRow(
             'heliumSellRow',
+            null,
             'Sell Helium:',
             createDropdown('heliumSellSelectQuantity', [
                 { value: 'all', text: 'All Stock' },
@@ -404,6 +409,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumGainRow = createOptionRow(
             'heliumGainRow',
+            null,
             'Gain 1 Helium:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'heliumQuantity', null, false, null, 'helium')
@@ -426,6 +432,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumIncreaseStorageRow = createOptionRow(
             'heliumIncreaseStorageRow',
+            null,
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('heliumQuantity', 'helium');
@@ -448,6 +455,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumAutoBuyer1Row = createOptionRow(
             'heliumAutoBuyer1Row',
+            getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Helium Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB1Quantity', 'autoBuyer', true, 'tier1', 'helium'),
@@ -476,6 +484,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const carbonSellRow = createOptionRow(
             'carbonSellRow',
+            null,
             'Sell Carbon:',
             createDropdown('carbonSellSelectQuantity', [
                 { value: 'all', text: 'All Stock' },
@@ -512,6 +521,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const carbonGainRow = createOptionRow(
             'carbonGainRow',
+            null,
             'Gain 1 Carbon:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'carbonQuantity', null, false, null, 'carbon')
@@ -534,6 +544,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const carbonIncreaseStorageRow = createOptionRow(
             'carbonIncreaseStorageRow',
+            null,
             'Increase Container Size:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('carbonQuantity','carbon');
@@ -556,6 +567,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const carbonAutoBuyer1Row = createOptionRow(
             'carbonAutoBuyer1Row',
+            getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Carbon Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB1Quantity', 'autoBuyer', true, 'tier1', 'carbon'),
@@ -583,6 +595,7 @@ function drawTab2Content(heading, optionContentElement) {
     if (heading === 'Research') {
         const researchScienceKitRow = createOptionRow(
             'researchScienceKitRow',
+            null,
             'Science Kit:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade'),
@@ -606,6 +619,7 @@ function drawTab2Content(heading, optionContentElement) {
 
         const researchScienceClubRow = createOptionRow(
             'researchScienceClubRow',
+            null,
             'Open Science Club:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade')
@@ -629,6 +643,7 @@ function drawTab2Content(heading, optionContentElement) {
     } else if (heading === 'Tech Tree') {
         const techKnowledgeSharingRow = createOptionRow(
             'techKnowledgeSharingRow',
+            null,
             'Knowledge Sharing:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                 gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs')
@@ -653,6 +668,7 @@ function drawTab2Content(heading, optionContentElement) {
 
         const techFusionTheoryRow = createOptionRow(
             'techFusionTheoryRow',
+            null,
             'Fusion Theory:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                 gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs')
@@ -677,6 +693,7 @@ function drawTab2Content(heading, optionContentElement) {
 
         const techHydrogenFusionRow = createOptionRow(
             'techHydrogenFusionRow',
+            null,
             'Hydrogen Fusion:',
             createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                 gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs')
@@ -727,6 +744,7 @@ function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
             'settingsCurrencySymbolRow',
+            null,
             'Currency:',
             createDropdown('notationSelect', [
                 { value: '$', text: 'Dollar ($)' },
@@ -758,6 +776,7 @@ function drawTab8Content(heading, optionContentElement) {
 
         const settingsNotationRow = createOptionRow(
             'settingsNotationRow',
+            null,
             'Notation:',
             createDropdown('notationSelect', [
                 { value: 'normal', text: 'Normal' },
@@ -783,6 +802,7 @@ function drawTab8Content(heading, optionContentElement) {
 
         const settingsToggleNotificationsRow = createOptionRow(
             'settingsToggleNotificationsRow',
+            null,
             'Toggle Notifications:',
             createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                 setNotificationsToggle(isEnabled);
@@ -805,6 +825,7 @@ function drawTab8Content(heading, optionContentElement) {
 
         const settingsThemeRow = createOptionRow(
             'settingsThemeRow',
+            null,
             'Theme:',
             createDropdown('themeSelect', [
                 { value: 'terminal', text: 'Terminal' },
@@ -838,6 +859,7 @@ function drawTab8Content(heading, optionContentElement) {
 
 function createOptionRow(
     labelId,
+    renderNameABs,
     labelText,
     inputElement1,
     inputElement2,
@@ -872,7 +894,7 @@ function createOptionRow(
     const mainRow = document.createElement('div');
     mainRow.classList.add('option-row-main', 'd-flex');
     wrapper.dataset.conditionCheck = dataConditionCheck;
-    wrapper.dataset.argumentToPass1 = objectSectionArgument1;
+    wrapper.dataset.type = objectSectionArgument1;
 
     // Visibility logic for mainRow
     if (dataConditionCheck === "techUnlock") {
@@ -908,7 +930,7 @@ function createOptionRow(
     const labelContainer = document.createElement('div');
     labelContainer.classList.add('label-container');
     const label = document.createElement('label');
-    label.innerText = labelText;
+    objectSectionArgument1 === 'autoBuyer' ? label.innerText = renderNameABs + ':' : label.innerText = labelText;
     labelContainer.appendChild(label);
     mainRow.appendChild(labelContainer);
 
@@ -936,28 +958,15 @@ function createOptionRow(
 
         if (dataConditionCheck === 'techUnlock') {
             description.dataset.conditionCheck = dataConditionCheck;
-            description.dataset.argumentToPass1 = objectSectionArgument1;
             description.dataset.argumentCheckQuantity = quantityArgument;
-
-            description.dataset.resourceName = objectSectionArgument1;
-          
-            //TECH
-            description.dataset.techName = objectSectionArgument1;
-
+            description.dataset.type = objectSectionArgument1;
         } else {
             description.dataset.conditionCheck = dataConditionCheck;
             description.dataset.resourcePriceObject = resourcePriceObject;
-            description.dataset.argumentToPass1 = objectSectionArgument1;
-            description.dataset.argumentToPass2 = objectSectionArgument2;
+            description.dataset.type = objectSectionArgument1;
+            description.dataset.resourceToFuseTo = objectSectionArgument2;
             description.dataset.argumentCheckQuantity = quantityArgument;
             description.dataset.autoBuyerTier = autoBuyerTier;
-
-            //FUSE
-            description.dataset.resourceName = objectSectionArgument1;
-            description.dataset.resourceToFuseTo = objectSectionArgument2;
-
-            //BOTTOM PART
-            description.dataset.type = objectSectionArgument1;
         }
     }
 
@@ -1048,33 +1057,19 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
         if (dataConditionCheck === 'sellResource' || dataConditionCheck === 'fuseResource') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentCheckQuantity = quantityArgument;
-            button.dataset.argumentToPass1 = objectSectionArgument1;
-            button.dataset.argumentToPass2 = objectSectionArgument2;
-
-            button.dataset.resourceName = objectSectionArgument1;
-            //FUSE
+            button.dataset.type = objectSectionArgument1;
             button.dataset.resourceToFuseTo = objectSectionArgument2;
 
         } else if (dataConditionCheck === 'techUnlock') {
             button.dataset.conditionCheck = dataConditionCheck;
-            button.dataset.argumentToPass1 = objectSectionArgument1;
             button.dataset.argumentCheckQuantity = quantityArgument;
-
-            button.dataset.resourceName = objectSectionArgument1;
-
-            //TECH
-            button.dataset.techName = objectSectionArgument1;
+            button.dataset.type = objectSectionArgument1;
         } else {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.resourcePriceObject = resourcePriceObject;
-            button.dataset.argumentToPass1 = objectSectionArgument1;
-            button.dataset.argumentToPass2 = objectSectionArgument2;
+            button.dataset.type = objectSectionArgument1;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.autoBuyerTier = autoBuyerTier;
-
-            button.dataset.resourceName = objectSectionArgument1;
-            //BOTTOM PART
-            button.dataset.type = objectSectionArgument1;
         }
     }
 

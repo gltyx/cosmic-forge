@@ -31,11 +31,11 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Helium Extractor', description: 'Automatically extracts Helium at a rate of 0.01 units per second.', price: 75, rate: 0.01, quantity: 0, setPrice: 'heliumAB1Price' },
-                    tier2: { nameUpgrade: 'Advanced Helium Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 575, rate: 25, quantity: 0, setPrice: 'heliumAB2Price' },
-                    tier3: { nameUpgrade: 'Industrial Helium Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2875, rate: 125, quantity: 0, setPrice: 'heliumAB3Price' },
-                    tier4: { nameUpgrade: 'Quantum Helium Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 14375, rate: 625, quantity: 0, setPrice: 'heliumAB4Price' }
-                },
+                    tier1: { nameUpgrade: 'Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer1Row', price: 75, rate: 0.01, quantity: 0, setPrice: 'heliumAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer2Row', price: 575, rate: 25, quantity: 0, setPrice: 'heliumAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer3Row', price: 2875, rate: 125, quantity: 0, setPrice: 'heliumAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer4Row', price: 14375, rate: 625, quantity: 0, setPrice: 'heliumAB4Price' }
+                }
             },
             revealedBy: "hydrogenFusion",
             canFuseTech: 'heliumFusion',
@@ -52,11 +52,11 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Carbon Extractor', description: 'Automatically extracts Carbon at a rate of 0.01 units per second.', price: 55, rate: 0.01, quantity: 0, setPrice: 'carbonAB1Price' },
-                    tier2: { nameUpgrade: 'Advanced Carbon Extractor', description: 'Increases extraction rate to 0.25 units per second.', price: 425, rate: 25, quantity: 0, setPrice: 'carbonAB2Price' },
-                    tier3: { nameUpgrade: 'Industrial Carbon Extractor', description: 'Increases extraction rate to 1.25 units per second.', price: 2125, rate: 125, quantity: 0, setPrice: 'carbonAB3Price' },
-                    tier4: { nameUpgrade: 'Quantum Carbon Extractor', description: 'Maximizes extraction rate to 6.25 units per second.', price: 10625, rate: 625, quantity: 0, setPrice: 'carbonAB4Price' }
-                },
+                    tier1: { nameUpgrade: 'Burner', screen: 'carbon', place: 'carbonAutoBuyer1Row', price: 55, rate: 0.01, quantity: 0, setPrice: 'carbonAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer2Row', price: 425, rate: 25, quantity: 0, setPrice: 'carbonAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer3Row', price: 2125, rate: 125, quantity: 0, setPrice: 'carbonAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer4Row', price: 10625, rate: 625, quantity: 0, setPrice: 'carbonAB4Price' }
+                }
             },
             revealedBy: "heliumFusion",
             canFuseTech: 'carbonFusion',
@@ -66,7 +66,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 1,
+        quantity: 100,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },
