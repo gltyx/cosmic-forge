@@ -162,10 +162,10 @@ function updateStats() {
     const cash = getResourceDataObject('currency', ['cash']);
     if (getCurrencySymbol() !== "€") {
         getElements().cashStat.textContent = `${getCurrencySymbol()}${cash.toFixed(2)}`;
-        updateOriginalValue(getElements().cashStat, `${getCurrencySymbol()}${cash.toFixed(2)}`);
+        //updateOriginalValue(getElements().cashStat, `${getCurrencySymbol()}${cash.toFixed(2)}`);
     } else {
         getElements().cashStat.textContent = `${cash.toFixed(2) + getCurrencySymbol()}`;
-        updateOriginalValue(getElements().cashStat, `${cash.toFixed(2) + getCurrencySymbol()}`);
+        //updateOriginalValue(getElements().cashStat, `${cash.toFixed(2) + getCurrencySymbol()}`);
     }
 }
 
@@ -571,7 +571,7 @@ function monitorResourceCostChecks(element) {
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
                 element.textContent = 'Researched';
-                updateOriginalValue(element, 'Researched');
+                //updateOriginalValue(element, 'Researched');
                 element.style.pointerEvents = 'none';
             }
             return;
@@ -611,7 +611,7 @@ export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
         accompanyingLabel.classList.add('unlocked-tech');
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
-        updateOriginalValue(accompanyingLabel, 'Researched');
+        //updateOriginalValue(accompanyingLabel, 'Researched');
         accompanyingLabel.style.pointerEvents = 'none';
     } else if (type === 'fuse') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
@@ -636,22 +636,22 @@ const updateDisplay = (element, data1, data2, desc) => {
         if (element && data2) {
             if (data2 === '€') {
                 element.textContent = data1 + data2;
-                updateOriginalValue(element, data1 + data2);
+                //updateOriginalValue(element, data1 + data2);
             } else if (data2 === getCurrencySymbol()) {
                 element.textContent = data2 + data1;
-                updateOriginalValue(element, data2 + data1);
+                //updateOriginalValue(element, data2 + data1);
             } else {
                 element.textContent = data1 + ' ' + data2;
-                updateOriginalValue(element, data1 + ' ' +data2);
+                //updateOriginalValue(element, data1 + ' ' +data2);
             }
         }
     } else {
         if (element && data2) {
             element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
-            updateOriginalValue(element, Math.floor(data1) + '/' + Math.floor(data2));
+            //updateOriginalValue(element, Math.floor(data1) + '/' + Math.floor(data2));
         } else if (element) {
             element.textContent = Math.floor(data1);
-            updateOriginalValue(element, Math.floor(data1));
+            //updateOriginalValue(element, Math.floor(data1));
         }
     
         if (element && data2 && data1 === data2) {
@@ -778,7 +778,7 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
     setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
 
     getElements()[`${elementName}Rate`].textContent = `${(newRate * getTimerRateRatio()).toFixed(1)} / s`;
-    updateOriginalValue(getElements()[`${elementName}Rate`], `${(newRate * getTimerRateRatio()).toFixed(1)} / s`);
+    //updateOriginalValue(getElements()[`${elementName}Rate`], `${(newRate * getTimerRateRatio()).toFixed(1)} / s`);
 
     const timerName = `${elementName}AB${tier}`;
     if (!timerManager.getTimer(timerName)) {
@@ -799,7 +799,7 @@ function startUpdateScienceTimers(elementName) {
 
         setResourceDataObject(newResearchRate, 'research', ['rate']);
         getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
-        updateOriginalValue(getElements().researchRate, `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`);
+        //updateOriginalValue(getElements().researchRate, `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`);
 
         if (!timerManager.getTimer('research')) {
             timerManager.addTimer('research', getTimerUpdateInterval(), () => {
@@ -811,32 +811,32 @@ function startUpdateScienceTimers(elementName) {
     }
 }
 
-export function updateOriginalValue(element, value) {
-    let originalNumbers = getOriginalFrameNumbers();
+// export function updateOriginalValue(element, value) {
+//     let originalNumbers = getOriginalFrameNumbers();
 
-    let elementSelector = '';
-    if (element.id) {
-        elementSelector = `#${element.id}`;
-    } else if (element.classList.length > 0) {
-        elementSelector = `.${Array.from(element.classList).join('.')}`;
-    } else {
-        console.error("Element must have an id or a class to create a selector.");
-        return;
-    }
+//     let elementSelector = '';
+//     if (element.id) {
+//         elementSelector = `#${element.id}`;
+//     } else if (element.classList.length > 0) {
+//         elementSelector = `.${Array.from(element.classList).join('.')}`;
+//     } else {
+//         console.error("Element must have an id or a class to create a selector.");
+//         return;
+//     }
 
-    if (originalNumbers[elementSelector]) {
-        originalNumbers[elementSelector].originalValue = value;
-    } else if (element.classList.contains('notation')) {
-        originalNumbers[elementSelector] = {
-            originalValue: value,
-            elementSelector: elementSelector
-        };
-        console.log(`Added new entry for selector: ${elementSelector}`);
-    }
+//     if (originalNumbers[elementSelector]) {
+//         originalNumbers[elementSelector].originalValue = value;
+//     } else if (element.classList.contains('notation')) {
+//         originalNumbers[elementSelector] = {
+//             originalValue: value,
+//             elementSelector: elementSelector
+//         };
+//         console.log(`Added new entry for selector: ${elementSelector}`);
+//     }
     
 
-    setOriginalFrameNumbers(originalNumbers);
-}
+//     setOriginalFrameNumbers(originalNumbers);
+// }
 
 
 function formatAllNotationElements(notationType) {
@@ -845,7 +845,7 @@ function formatAllNotationElements(notationType) {
     const existingSelectors = new Set();
 
     elements.forEach(element => {
-        const originalContent = element.textContent;
+        const originalContent = element.innerHTML;
         const elementSelector = element.id ? `#${element.id}` : `.${element.className}`;
 
         if (!(elementSelector in originalNumbers)) {
@@ -867,35 +867,57 @@ function formatAllNotationElements(notationType) {
     }
 
     elements.forEach(element => {
-        const originalContent = element.textContent;
+        const originalContent = element.innerHTML;
         const formattedContent = originalContent.replace(/-?\d+(\.\d+)?/g, match => {
             let number = parseFloat(match);
-            
+
             if (isNaN(number)) {
                 console.warn(`Invalid number found: ${match}`);
                 return match;
             }
 
             if (notationType === 'normal') {
-                return number.toLocaleString();
+                return number;
             } else if (notationType === 'normalCondensed') {
-                if (number >= 1e12) {
-                    return (number / 1e12).toFixed(1) + 'e12';
-                } else if (number >= 1e9) {
-                    return (number / 1e9).toFixed(1) + 'B';
-                } else if (number >= 1e6) {
-                    return (number / 1e6).toFixed(1) + 'M';
-                } else if (number >= 1e3) {
-                    return (number / 1e3).toFixed(1) + 'K';
-                } else {
-                    return number.toLocaleString();
+                if (element.id === 'cashStat') {
+                    if (number >= 1e13) {
+                        let exponent = Math.floor(Math.log10(number));
+                        return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                    } else if (number >= 1e12) {
+                        return `${(number / 1e12).toFixed(1)}e12`;
+                    } else if (number >= 1e9) {
+                        return `${(number / 1e9).toFixed(1)}B`;
+                    } else if (number >= 1e6) {
+                        return `${(number / 1e6).toFixed(1)}M`;
+                    } else if (number >= 1e3) {
+                        return `${(number / 1e3).toFixed(1)}K`;
+                    } else {
+                        return Math.round(number).toLocaleString();
+                    }
                 }
-            }
+            
+                if (number >= 1e13) {
+                    let exponent = Math.floor(Math.log10(number));
+                    return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                } else if (number >= 1e12) {
+                    return `${(number / 1e12).toFixed(2)}e12`;
+                } else if (number >= 1e9) {
+                    return `${(number / 1e9).toFixed(2)}B`;
+                } else if (number >= 1e6) {
+                    return `${(number / 1e6).toFixed(2)}M`;
+                } else if (number >= 1e3) {
+                    return `${(number / 1e3).toFixed(2)}K`;
+                } else {
+                    return number.toFixed(2);
+                }
+            }                       
+             
         });
 
-        element.textContent = formattedContent;
+        element.innerHTML = formattedContent;
     });
 }
+
 
 // export function toggleTimer(key, buttonId) {
 //     const timer = timerManager.getTimer(key);
