@@ -66,7 +66,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 100,
+        quantity: 100000,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },

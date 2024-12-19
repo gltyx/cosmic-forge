@@ -781,8 +781,8 @@ function drawTab8Content(heading, optionContentElement) {
             null,
             'Notation:',
             createDropdown('notationSelect', [
+                { value: 'normalCondensed', text: 'Normal Condensed' },
                 { value: 'normal', text: 'Normal' },
-                { value: 'scientific', text: 'Scientific' },
             ], getNotationType(), (value) => {
                 setNotationType(value);
             }),
@@ -948,10 +948,11 @@ function createOptionRow(
 
     mainRow.appendChild(inputContainer);
 
-    // Create the description container
+    // Create the description container that contains prices of upgrades etc
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
+    description.classList.add('notation');
     description.id = generateElementId(labelText, resourceString);
     description.innerHTML = descriptionText;
 

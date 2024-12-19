@@ -44,7 +44,7 @@ let lastScreenOpenRegister = {
 
 let currentTab = 1;
 let currentOptionPane = null;
-let notationType = 'normal';
+let notationType = 'normalCondensed';
 
 //FLAGS
 let audioMuted;

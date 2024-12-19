@@ -22,7 +22,8 @@ import {
     getCurrentTab,
     getRevealedTechArray,
     getTechUnlockedArray,
-    getResourceSalePreview
+    getResourceSalePreview,
+    getNotationType
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -150,6 +151,7 @@ export async function gameLoop() {
             runDeferredJobs();
         }
 
+        formatAllNotationElements(getNotationType());
         requestAnimationFrame(gameLoop);
     }
 }
@@ -795,6 +797,50 @@ function startUpdateScienceTimers(elementName) {
         }
     }
 }
+
+function formatAllNotationElements(notationType) {
+
+    //BROKEN SO FAR 
+    //ELEMENTS FOR RESEARCH PREREQUISITES
+    //CLASSES FOR DESCRIPTION COLORING
+    //BASICALLY ALL RULES FOR THE DESCRIPTIONS
+    
+    const elements = document.querySelectorAll('.notation');
+    
+    elements.forEach(element => {
+        const originalContent = element.textContent;
+        
+        // Match all numbers in the string (including decimals) and format them
+        const formattedContent = originalContent.replace(/-?\d+(\.\d+)?/g, match => {
+            let number = parseFloat(match);
+            
+            if (isNaN(number)) {
+                console.warn(`Invalid number found: ${match}`);
+                return match; // Leave the invalid number as is
+            }
+
+            if (notationType === 'normal') {
+                return number.toLocaleString();
+            } else if (notationType === 'normalCondensed') {
+                if (number >= 1e12) {
+                    return (number / 1e12).toFixed(1) + 'e12';
+                } else if (number >= 1e9) {
+                    return (number / 1e9).toFixed(1) + 'B';
+                } else if (number >= 1e6) {
+                    return (number / 1e6).toFixed(1) + 'M';
+                } else if (number >= 1e3) {
+                    return (number / 1e3).toFixed(1) + 'K';
+                } else {
+                    return number.toLocaleString();
+                }
+            }
+        });
+
+        // Update the element's text with the formatted content
+        element.textContent = formattedContent;
+    });
+}
+
 
 
 // export function toggleTimer(key, buttonId) {
