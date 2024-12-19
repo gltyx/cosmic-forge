@@ -39,6 +39,7 @@ import {
 import { 
     sendNotificationIfActive
 } from "./ui.js";
+import { capitaliseString } from './utilityFunctions.js';
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -125,11 +126,18 @@ export async function gameLoop() {
             monitorRevealRowsChecks(revealRowCheck);
         });
 
-        //updateAndIncrementQuantities
+        const resourceNames = Object.keys(getResourceDataObject('resources'));
+        const resourceTierPairs = [];
+        resourceNames.forEach(resourceName => {
+            for (let tier = 1; tier <= 4; tier++) {
+                resourceTierPairs.push([resourceName, tier]);
+            }
+        });
+
         const allQuantities = getAllQuantities();
         const allStorages = getAllStorages();
-        const allResourceElements = getAllResourceElements();
-        const allResourceDescElements = getAllResourceDescriptionElements();
+        const allResourceElements = getAllResourceElements(resourceTierPairs);
+        const allResourceDescElements = getAllDynamicResourceDescriptionElements(resourceTierPairs);
         updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescElements);
         updateStats();
 
@@ -353,7 +361,6 @@ function getAllQuantities() {
         allQuantities[resourceName] = getResourceDataObject('resources', [resourceName, 'quantity']);
     });
 
-    // Manually assign quantities for non-resource keys
     allQuantities.research = getResourceDataObject('research', ['quantity']);
     allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
     allQuantities.scienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
@@ -377,63 +384,54 @@ function getAllStorages() {
     return allStorages;
 }
 
-function getAllResourceElements() {
-    const hydrogenElement = getElements().hydrogenQuantity;
-    const heliumElement = getElements().heliumQuantity;
-    const carbonElement = getElements().carbonQuantity;
-    const researchElement = getElements().researchQuantity;
-    const scienceKitElement = document.getElementById('scienceKitQuantity');
-    const scienceClubElement = document.getElementById('scienceClubQuantity');
+function getAllResourceElements(resourceTierPairs) {
+    const resourceNames = [];
+    const allResourceElements = {};
 
-    const allResourceElements = {
-        hydrogen: hydrogenElement,
-        helium: heliumElement,
-        carbon: carbonElement,
-        research: researchElement,
-        scienceKit: scienceKitElement,
-        scienceClub: scienceClubElement,
-    };
+    resourceTierPairs.forEach(pair => {
+        if (!resourceNames.includes(pair[0])) {
+            resourceNames.push(pair[0]);
+            allResourceElements[pair[0]] = getElements()[`${pair[0]}Quantity`];
+        }
+    });
+
+    allResourceElements.scienceKit = document.getElementById('scienceKitQuantity');
+    allResourceElements.scienceClub = document.getElementById('scienceClubQuantity');
 
     return allResourceElements;
 }
 
-function getAllResourceDescriptionElements() {
-    const hydrogenIncreaseStorageDescElement = document.getElementById('hydrogenIncreaseContainerSizeDescription');
-    const hydrogenStoragePrice = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
+function getAllDynamicResourceDescriptionElements(resourceTierPairs) {
+    const elements = {};
 
-    const hydrogenAutoBuyerTier1DescElement = document.getElementById('hydrogenCompressorDescription');
-    const hydrogenAutoBuyerTier1Price = getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+    resourceTierPairs.forEach(([resourceName, tier]) => {
+        const resourceIncreaseStorageDescElement = document.getElementById(`${resourceName}IncreaseContainerSizeDescription`);
+        const resourceStoragePrice = getResourceDataObject('resources', [resourceName, 'storageCapacity']);
 
-    const heliumIncreaseStorageDescElement = document.getElementById('heliumIncreaseContainerSizeDescription');
-    const heliumStoragePrice = getResourceDataObject('resources', ['helium', 'storageCapacity']);
+        const resourceAutoBuyerDescElement = document.getElementById(`${resourceName}AutoBuyerTier${tier}Description`);
+        const resourceAutoBuyerPrice = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
 
-    const heliumAutoBuyerTier1DescElement = document.getElementById('atmosphereScraperDescription');
-    const heliumAutoBuyerTier1Price = getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+        elements[`${resourceName}IncreaseStorage`] = { element: resourceIncreaseStorageDescElement, price: resourceStoragePrice, string: `${capitaliseString(resourceName)}` };
+        elements[`${resourceName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string: `${capitaliseString(resourceName)}` };
+    });
 
-    const carbonIncreaseStorageDescElement = document.getElementById('carbonIncreaseContainerSizeDescription');
-    const carbonStoragePrice = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
+    const scienceElements = getScienceResourceDescriptionElements();
+    Object.assign(elements, scienceElements);
 
-    const carbonAutoBuyerTier1DescElement = document.getElementById('carbonBurnerDescription');
-    const carbonAutoBuyerTier1Price = getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+    return elements;
+}
 
+function getScienceResourceDescriptionElements() {
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']);
 
     const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
     const scienceClubBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']);
 
-    const allResourceDescElements = {
-        hydrogenIncreaseStorage: {element: hydrogenIncreaseStorageDescElement, price: hydrogenStoragePrice, string: ' Hydrogen'},
-        hydrogenAutoBuyerTier1: {element: hydrogenAutoBuyerTier1DescElement, price: hydrogenAutoBuyerTier1Price, string: ' Hydrogen'},
-        heliumIncreaseStorage: {element: heliumIncreaseStorageDescElement, price: heliumStoragePrice, string: ' Helium'},
-        heliumAutoBuyerTier1: {element: heliumAutoBuyerTier1DescElement, price: heliumAutoBuyerTier1Price, string: ' Helium'},
-        carbonIncreaseStorage: {element: carbonIncreaseStorageDescElement, price: carbonStoragePrice, string: ' Carbon'},
-        carbonAutoBuyerTier1: {element: carbonAutoBuyerTier1DescElement, price: carbonAutoBuyerTier1Price, string: ' Carbon'},
-        scienceKitBuy: {element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol()},
-        scienceClubBuy: {element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol()},
+    return {
+        scienceKitBuy: { element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol() },
+        scienceClubBuy: { element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol() },
     };
-
-    return allResourceDescElements;
 }
 
 function updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescriptionElements) {
@@ -683,11 +681,9 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
 
     if (resource && resource === 'techUnlock') {
         currentResourceQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
-    } else if (resource === 'scienceKit') {
-        currentResourceQuantity = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']); 
-    } else if (resource === 'scienceClub') {
-        currentResourceQuantity = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']); 
-    } else if (resource === 'autoBuyer') {
+    } else if (resource && resource.startsWith('science')) {
+        currentResourceQuantity = getResourceDataObject('research', ['upgrades', resource, 'quantity']); 
+    } else if (resource && resource === 'autoBuyer') {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);

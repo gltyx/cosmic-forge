@@ -340,7 +340,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const hydrogenAutoBuyer1Row = createOptionRow(
             'hydrogenAutoBuyer1Row',
-            'Hydrogen Compressor:',
+            'Hydrogen Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB1Quantity', 'autoBuyer', true, 'tier1', 'hydrogen'),
                 startUpdateAutoBuyerTimersAndRates('hydrogen', 1);
@@ -448,7 +448,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const heliumAutoBuyer1Row = createOptionRow(
             'heliumAutoBuyer1Row',
-            'Atmosphere Scraper:',
+            'Helium Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB1Quantity', 'autoBuyer', true, 'tier1', 'helium'),
                 startUpdateAutoBuyerTimersAndRates('helium', 1);
@@ -556,7 +556,7 @@ function drawTab1Content(heading, optionContentElement) {
 
         const carbonAutoBuyer1Row = createOptionRow(
             'carbonAutoBuyer1Row',
-            'Burner:',
+            'Carbon Auto Buyer Tier 1:',
             createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB1Quantity', 'autoBuyer', true, 'tier1', 'carbon'),
                 startUpdateAutoBuyerTimersAndRates('carbon', 1);
