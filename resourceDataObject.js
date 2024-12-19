@@ -74,8 +74,8 @@ export const resourceData = {
         },
     },
     techs: {
-        knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 2 },
-        fusionTheory: { appearsAt: [500, null], price: 750, idForRenderPosition: 4 },
+        knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 1 },
+        fusionTheory: { appearsAt: [500, null], price: 750, idForRenderPosition: 2 },
         hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500, idForRenderPosition: 3 },
         fusionEfficiencyI: { appearsAt: [1000, null], price: 2000, idForRenderPosition: 4 },
         fusionEfficiencyII: { appearsAt: [1000, null], price: 2000, idForRenderPosition: 5 },

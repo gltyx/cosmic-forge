@@ -102,7 +102,7 @@ class Timer {
 
 //--------------------------------------------------------------------------------------------------------
 
-let renderChange = true;
+let techRenderChange = true;
 const timerManager = new TimerManager();
 let deferredActions = [];
 
@@ -166,9 +166,9 @@ export async function gameLoop() {
             const sortedRows = sortRowsByRenderPosition(getTemporaryRowsRepo('rows'), 'techs');
             const containerToRenderTo = getTemporaryRowsRepo('container');
         
-            if (renderChange) {
+            if (techRenderChange) {
                 sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
-                renderChange = false;
+                techRenderChange = false;
             }
         }
 
@@ -499,10 +499,10 @@ function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
         if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
-            renderChange = true;
+            techRenderChange = true;
         } else if (!getRevealedTechArray().includes(element.dataset.type) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.type, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
-            renderChange = true;
+            techRenderChange = true;
             setRevealedTechArray(element.dataset.type);
         }
     }
@@ -958,7 +958,7 @@ function sortRowsByRenderPosition(rows, mainKey) {
         }
     });
 
-    return adjustedPositions.sort((b, a) => a.adjustedPos - b.adjustedPos);
+    return adjustedPositions.sort((a, b) => a.adjustedPos - b.adjustedPos);
 }
 
 function updateClassesInRowsToRender() {
