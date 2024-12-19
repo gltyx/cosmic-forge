@@ -280,38 +280,28 @@ function checkAndIncreasePrices() {
     for (const resource in priceIncreaseObject) {
         if (priceIncreaseObject.hasOwnProperty(resource)) {
             const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
-            setNewResourcePrice(currentPrice, setPriceTarget);
+            if (setPriceTarget.startsWith('science')) {
+                setNewResourcePrice(currentPrice, setPriceTarget, '');
+            } else {
+                for (let tier = 1; tier <= 4; tier++) {
+                    setNewResourcePrice(currentPrice, setPriceTarget, tier);
+                }
+            }
         }
     }
 
     setResourcesToIncreasePrice('clear');
 }
 
-function setNewResourcePrice(currentPrice, setPriceTarget) {
-    if (setPriceTarget) {
-        let newPrice;
+function setNewResourcePrice(currentPrice, elementName, tier) {
+    if (elementName) {
+        const newPrice = Math.ceil(currentPrice * 1.15);
 
-        switch (setPriceTarget) {
-            case 'hydrogenAB1Price':
-                newPrice = Math.ceil(currentPrice * 1.15);
-                setResourceDataObject(newPrice, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
-                break;
-            case 'heliumAB1Price':
-                newPrice = Math.ceil(currentPrice * 1.15);
-                setResourceDataObject(newPrice, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'price']);
-                break;
-            case 'carbonAB1Price':
-                newPrice = Math.ceil(currentPrice * 1.15);
-                setResourceDataObject(newPrice, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'price']);
-                break;
-            case 'scienceKitPrice':
-                newPrice = Math.ceil(currentPrice * 1.15);
-                setResourceDataObject(newPrice, 'research', ['upgrades', 'scienceKit', 'price']);
-                break;
-            case 'scienceClubPrice':
-                newPrice = Math.ceil(currentPrice * 1.15);
-                setResourceDataObject(newPrice, 'research', ['upgrades', 'scienceClub', 'price']);
-                break;
+        if (elementName.startsWith('science')) {
+            setResourceDataObject(newPrice, 'research', ['upgrades', elementName, 'price']);
+        } else {
+            const resourceName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
+            setResourceDataObject(newPrice, 'resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
         }
     }
 }
