@@ -1,20 +1,16 @@
 import {
     getUnlockedResourcesArray,
     setUnlockedResourcesArray,
-    getTechSpecificUIItemsArray,
-    setTechSpecificUIItemsArray,
     setRevealedTechArray,
     getTimerRateRatio,
     getTimerUpdateInterval,
     getCurrencySymbol,
-    setCurrencySymbol,
     setSalePreview,
     getResourcesToIncreasePrice,
     setResourcesToIncreasePrice,
     getResourcesToDeduct,
     setResourcesToDeduct,
     getCurrentOptionPane,
-    setCurrentOptionPane,
     getIncreaseStorageFactor,
     setBeginGameStatus, 
     setGameStateVariable, 
@@ -22,10 +18,8 @@ import {
     getMenuState, 
     getGameVisibleActive, 
     getElements, 
-    getLanguage, 
     gameState, 
     getCurrentTab,
-    getLastScreenOpenRegister,
     getRevealedTechArray,
     getTechUnlockedArray,
     getResourceSalePreview
@@ -603,7 +597,7 @@ function monitorResourceCostChecks(element) {
     }
 }
 
-function setTextDescriptionClassesBasedOnButtonStates(element, type) {
+export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
     if (type === 'green') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         accompanyingLabel.classList.remove('red-disabled-text');
@@ -615,11 +609,11 @@ function setTextDescriptionClassesBasedOnButtonStates(element, type) {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         if (accompanyingLabel.textContent.includes('!!')) {
             element.classList.add('warning-orange-text');
+            element.classList.remove('red-disabled-text');
             accompanyingLabel.classList.remove('warning-orange-text');
             accompanyingLabel.classList.add('red-disabled-text');
         } else if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output element
             element.classList.add('warning-orange-text');
-            //accompanyingLabel.remove('red-disabled-text');
             accompanyingLabel.classList.add('warning-orange-text');
         } else {
             element.classList.remove('warning-orange-text');

@@ -1,8 +1,5 @@
 import {
-    getUnlockedResourcesArray,
-    setUnlockedResourcesArray,
     setTechSpecificUIItemsArray,
-    getTechSpecificUIItemsArray,
     getRevealedTechArray,
     setRevealedTechArray,
     setTechUnlockedArray,
@@ -13,9 +10,6 @@ import {
     setLastScreenOpenRegister,
     getResourceSalePreview,
     setSalePreview,
-    getResourcesToDeduct,
-    setResourcesToDeduct,
-    getCurrentOptionPane,
     setCurrentOptionPane,
     getNotationType,
     setNotationType,
@@ -42,13 +36,11 @@ import {
 } from "./resourceDataObject.js";
 import {
     getHeaderDescriptions,
-    setHeaderDescriptions,
     getOptionDescription,
-    setOptionDescription
 } from "./descriptions.js";
 
 import {
-    revealElement,
+    setTextDescriptionClassesBasedOnButtonStates,
     startUpdateAutoBuyerTimersAndRates,
     fuseResource,
     sellResource,
@@ -63,7 +55,9 @@ import {
     localize
 } from './localization.js';
 
-import { capitaliseString } from './utilityFunctions.js';
+import { 
+    capitaliseString 
+} from './utilityFunctions.js';
 
 let notificationContainer;
 
@@ -93,11 +87,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     setGameState(getMenuState());
     handleLanguageChange(getLanguageSelected());
 
+    let fuseButton;
+
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'hydrogen');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
     
@@ -106,6 +104,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             setLastScreenOpenRegister('tab1', 'helium');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -114,6 +114,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             setLastScreenOpenRegister('tab1', 'carbon');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
