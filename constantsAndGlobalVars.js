@@ -81,6 +81,8 @@ export function setElements() {
         carbonQuantity: document.getElementById('carbonQuantity'),
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
+        scienceKitQuantity: document.getElementById('scienceKitQuantity'),
+        scienceClubQuantity: document.getElementById('scienceClubQuantity'),
         cashStat: document.getElementById('cashStat'),
         optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
         notificationContainer: document.getElementById('notificationContainer'),

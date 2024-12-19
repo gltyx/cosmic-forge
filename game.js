@@ -298,7 +298,8 @@ function setNewResourcePrice(currentPrice, elementName, tier) {
         const newPrice = Math.ceil(currentPrice * 1.15);
 
         if (elementName.startsWith('science')) {
-            setResourceDataObject(newPrice, 'research', ['upgrades', elementName, 'price']);
+            const strippedElementName = elementName.slice(0, -5);        
+            setResourceDataObject(newPrice, 'research', ['upgrades', strippedElementName, 'price']);
         } else {
             const resourceName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
             setResourceDataObject(newPrice, 'resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
@@ -374,19 +375,20 @@ function getAllStorages() {
     return allStorages;
 }
 
-function getAllResourceElements(resourceTierPairs) {
+function getAllResourceElements(resourcesArray) {
     const resourceNames = [];
     const allResourceElements = {};
 
-    resourceTierPairs.forEach(pair => {
-        if (!resourceNames.includes(pair[0])) {
-            resourceNames.push(pair[0]);
-            allResourceElements[pair[0]] = getElements()[`${pair[0]}Quantity`];
+    resourcesArray.forEach(resource => {
+        if (!resourceNames.includes(resource[0])) {
+            resourceNames.push(resource[0]);
+            allResourceElements[resource[0]] = getElements()[`${resource[0]}Quantity`];
         }
     });
 
-    allResourceElements.scienceKit = document.getElementById('scienceKitQuantity');
-    allResourceElements.scienceClub = document.getElementById('scienceClubQuantity');
+    allResourceElements.research = getElements().researchQuantity;
+    allResourceElements.scienceKit = getElements().scienceKitQuantity;
+    allResourceElements.scienceClub = getElements().scienceClubQuantity;
 
     return allResourceElements;
 }
