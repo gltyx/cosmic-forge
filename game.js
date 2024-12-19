@@ -1,4 +1,6 @@
 import {
+    getTemporaryRowsRepo,
+    setTemporaryRowsRepo,
     setOriginalFrameNumbers,
     getOriginalFrameNumbers,
     getUnlockedResourcesArray,
@@ -36,7 +38,10 @@ import {
 import { 
     sendNotificationIfActive
 } from "./ui.js";
-import { capitaliseString } from './utilityFunctions.js';
+
+import { 
+    capitaliseString
+ } from './utilityFunctions.js';
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -97,6 +102,7 @@ class Timer {
 
 //--------------------------------------------------------------------------------------------------------
 
+let renderChange = true;
 const timerManager = new TimerManager();
 let deferredActions = [];
 
@@ -148,9 +154,22 @@ export async function gameLoop() {
 
         updateAllSalePricePreviews();
 
-        while (deferredActions.length > 0) { //mainly for increasing storage at the moment
+        while (deferredActions.length > 0) {
             const runDeferredJobs = deferredActions.shift();
             runDeferredJobs();
+        }
+
+        
+        if (getCurrentOptionPane() === 'tech tree') {
+            updateClassesInRowsToRender();
+
+            const sortedRows = sortRowsByRenderPosition(getTemporaryRowsRepo('rows'), 'techs');
+            const containerToRenderTo = getTemporaryRowsRepo('container');
+        
+            if (renderChange) {
+                sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
+                renderChange = false;
+            }
         }
 
         formatAllNotationElements(getNotationType());
@@ -480,8 +499,10 @@ function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
         if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
+            renderChange = true;
         } else if (!getRevealedTechArray().includes(element.dataset.type) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.type, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
+            renderChange = true;
             setRevealedTechArray(element.dataset.type);
         }
     }
@@ -859,13 +880,6 @@ function formatAllNotationElements(notationType) {
 
     setOriginalFrameNumbers(originalNumbers);
 
-    const addedElements = Object.values(originalNumbers).filter(item => !existingSelectors.has(item.elementSelector));
-    if (addedElements.length > 0) {
-        console.log("Added elements:", addedElements);
-    } else {
-        console.log("No new elements added.");
-    }
-
     elements.forEach(element => {
         const originalContent = element.innerHTML;
         const formattedContent = originalContent.replace(/-?\d+(\.\d+)?/g, match => {
@@ -917,6 +931,50 @@ function formatAllNotationElements(notationType) {
         element.innerHTML = formattedContent;
     });
 }
+
+function sortRowsByRenderPosition(rows, mainKey) {
+    const adjustedPositions = [];
+
+    rows.forEach(item => {
+        const currentPos = getResourceDataObject(mainKey, [item.techName, 'idForRenderPosition']);
+        
+        if (item.row.classList.contains('invisible')) {
+            adjustedPositions.push({
+                ...item,
+                adjustedPos: currentPos + 1000
+            });
+        } else {
+            if (currentPos > 1000) {
+                adjustedPositions.push({
+                    ...item,
+                    adjustedPos: currentPos - 1000
+                });
+            } else {
+                adjustedPositions.push({
+                    ...item,
+                    adjustedPos: currentPos
+                });
+            }
+        }
+    });
+
+    return adjustedPositions.sort((b, a) => a.adjustedPos - b.adjustedPos);
+}
+
+function updateClassesInRowsToRender() {
+    const unsortedRows = getTemporaryRowsRepo('rows');
+
+    unsortedRows.forEach(rowObj => { 
+        const domElement = document.getElementById(rowObj.row.id);
+        if (domElement) {
+            const classList = domElement.classList;
+            rowObj.classList = Array.from(classList);
+        }
+    });
+
+    setTemporaryRowsRepo('noChange', unsortedRows);
+}
+
 
 
 // export function toggleTimer(key, buttonId) {

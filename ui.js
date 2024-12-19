@@ -1,4 +1,6 @@
 import {
+    getTemporaryRowsRepo,
+    setTemporaryRowsRepo,
     setTechSpecificUIItemsArray,
     getRevealedTechArray,
     setRevealedTechArray,
@@ -29,7 +31,8 @@ import {
     setLanguageSelected,
     setLanguage,
     setCurrencySymbol,
-    getCurrencySymbol
+    getCurrencySymbol,
+    getCurrentOptionPane
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -644,82 +647,98 @@ function drawTab2Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(researchScienceClubRow);
     } else if (heading === 'Tech Tree') {
-        const techKnowledgeSharingRow = createOptionRow(
-            'techKnowledgeSharingRow',
-            null,
-            'Knowledge Sharing:',
-            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs')
-                event.currentTarget.classList.add('unlocked-tech');
-                setTechUnlockedArray('knowledgeSharing');
-            }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
-            null,
-            null,
-            null,
-            null,
-            `${getResourceDataObject('techs', ['knowledgeSharing', 'price']) + ' Research'}`,
-            '',
-            'techUnlock',
-            'knowledgeSharing',
-            null,
-            'research',
-            null,
-            false,
-            null
-        );
-        optionContentElement.appendChild(techKnowledgeSharingRow);
+        const rows = [
+            {
+                techName: 'knowledgeSharing',
+                row: createOptionRow(
+                    'techKnowledgeSharingRow',
+                    null,
+                    'Knowledge Sharing:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('knowledgeSharing');
+                    }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['knowledgeSharing', 'price']) + ' Research'}`,
+                    '',
+                    'techUnlock',
+                    'knowledgeSharing',
+                    null,
+                    'research',
+                    null,
+                    false,
+                    null
+                )
+            },
+            {
+                techName: 'fusionTheory',
+                row: createOptionRow(
+                    'techFusionTheoryRow',
+                    null,
+                    'Fusion Theory:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('fusionTheory');
+                    }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['fusionTheory', 'price']) + ' Research'}`,
+                    '',
+                    'techUnlock',
+                    'fusionTheory',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'hydrogenFusion',
+                row: createOptionRow(
+                    'techHydrogenFusionRow',
+                    null,
+                    'Hydrogen Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('hydrogenFusion');
+                        setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
+                        updateDescriptionRow('hydrogenSellRow', 'content2');
+                    }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['hydrogenFusion', 'price'])} Research, <span id="hydrogenFusionPrereq" class="red-disabled-text">Fusion Theory</span>`,
+                    '',
+                    'techUnlock',
+                    'hydrogenFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            }
+        ];
 
-        const techFusionTheoryRow = createOptionRow(
-            'techFusionTheoryRow',
-            null,
-            'Fusion Theory:',
-            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs')
-                event.currentTarget.classList.add('unlocked-tech');
-                setTechUnlockedArray('fusionTheory');
-            }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
-            null,
-            null,
-            null,
-            null,
-            `${getResourceDataObject('techs', ['fusionTheory', 'price']) + ' Research'}`,
-            '',
-            'techUnlock',
-            'fusionTheory',
-            null,
-            'research',
-            null,
-            ['research', 'researchPoints'],
-            null
-        );
-        optionContentElement.appendChild(techFusionTheoryRow);
-
-        const techHydrogenFusionRow = createOptionRow(
-            'techHydrogenFusionRow',
-            null,
-            'Hydrogen Fusion:',
-            createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs')
-                event.currentTarget.classList.add('unlocked-tech');
-                setTechUnlockedArray('hydrogenFusion');
-                setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
-                updateDescriptionRow('hydrogenSellRow', 'content2');
-            }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null),
-            null,
-            null,
-            null,
-            null,
-            `${getResourceDataObject('techs', ['hydrogenFusion', 'price'])} Research, <span id="hydrogenFusionPrereq" class="red-disabled-text">Fusion Theory</span>`,
-            '',
-            'techUnlock',
-            'hydrogenFusion',
-            null,
-            'research',
-            null,
-            ['research', 'researchPoints'],
-            null
-        );
-        optionContentElement.appendChild(techHydrogenFusionRow);
+        rows.forEach(item => {
+            const rowElement = item.row;
+            if (rowElement) {
+                optionContentElement.appendChild(rowElement);
+            }
+        });
+        
+        const container = optionContentElement;
+        setTemporaryRowsRepo(container, rows);
     }
 }
 

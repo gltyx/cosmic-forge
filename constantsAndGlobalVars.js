@@ -30,6 +30,7 @@ let techUnlockedArray = [];
 let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
+let temporaryRowsRepo = null;
 
 let originalFrameNumbers = {
 };
@@ -479,3 +480,19 @@ export function getOriginalFrameNumbers() {
 export function setOriginalFrameNumbers(value) {
     originalFrameNumbers = value;
 }
+
+export function getTemporaryRowsRepo(key) {
+    return temporaryRowsRepo[key];
+}
+
+export function setTemporaryRowsRepo(containerValue, rowsValue) {
+    if (!temporaryRowsRepo) {
+        temporaryRowsRepo = {};
+    }
+    if (containerValue !== 'noChange') {
+        temporaryRowsRepo.container = containerValue;
+    }
+    
+    temporaryRowsRepo.rows = rowsValue;
+}
+
