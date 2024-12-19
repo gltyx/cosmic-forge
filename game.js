@@ -691,7 +691,6 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
-        console.log(currentResourceQuantity);
     }
 
     if (ABOrTechPurchase) {
@@ -772,79 +771,48 @@ export function revealElement(elementId) {
     element.classList.remove('invisible');
 }
 
-export function startUpdateAutoBuyerTimersAndRates(timerName) {
-    if (timerName === 'hydrogenAB1') {
-        const rateHydrogenAB1 = getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']);
-        const hydrogenRate = getResourceDataObject('resources', ['hydrogen', 'rate']) + rateHydrogenAB1;
-        setResourceDataObject(hydrogenRate, 'resources', ['hydrogen', 'rate']);
+export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
+    if (elementName.startsWith('science')) {
+        startUpdateScienceTimers(elementName);
+        return;
+    }
 
-        getElements().hydrogenRate.textContent = `${(getResourceDataObject('resources', ['hydrogen', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
-        if (!timerManager.getTimer('hydrogenAB1')) {
-            timerManager.addTimer('hydrogenAB1', getTimerUpdateInterval(), () => {
-                const currentHydrogen = getResourceDataObject('resources', ['hydrogen', 'quantity']);
-                const currentHydrogenRate = getResourceDataObject('resources', ['hydrogen', 'rate']);
-                const hydrogenStorage = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentHydrogen + currentHydrogenRate, hydrogenStorage), 'resources', ['hydrogen', 'quantity']);
-            });
-        }
-    } else if (timerName === 'heliumAB1') {
-        const rateHeliumAB1 = getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']);
-        const heliumRate = getResourceDataObject('resources', ['helium', 'rate']) + rateHeliumAB1;
-        setResourceDataObject(heliumRate, 'resources', ['helium', 'rate']);
+    const rate = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+    const newRate = getResourceDataObject('resources', [elementName, 'rate']) + rate;
+    setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
 
-        getElements().heliumRate.textContent = `${(getResourceDataObject('resources', ['helium', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
-        if (!timerManager.getTimer('heliumAB1')) {
-            timerManager.addTimer('heliumAB1', getTimerUpdateInterval(), () => {
-                const currentHelium = getResourceDataObject('resources', ['helium', 'quantity']);
-                const currentHeliumRate = getResourceDataObject('resources', ['helium', 'rate']);
-                const heliumStorage = getResourceDataObject('resources', ['helium', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentHelium + currentHeliumRate, heliumStorage), 'resources', ['helium', 'quantity']);
-            });
-        }
-    } else if (timerName === 'carbonAB1') {
-        const rateCarbonAB1 = getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']);
-        const carbonRate = getResourceDataObject('resources', ['carbon', 'rate']) + rateCarbonAB1;
-        setResourceDataObject(carbonRate, 'resources', ['carbon', 'rate']);
+    getElements()[`${elementName}Rate`].textContent = `${(newRate * getTimerRateRatio()).toFixed(1)} / s`;
 
-        getElements().carbonRate.textContent = `${(getResourceDataObject('resources', ['carbon', 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
-        if (!timerManager.getTimer('carbonAB1')) {
-            timerManager.addTimer('carbonAB1', getTimerUpdateInterval(), () => {
-                const currentCarbon = getResourceDataObject('resources', ['carbon', 'quantity']);
-                const currentCarbonRate = getResourceDataObject('resources', ['carbon', 'rate']);
-                const carbonStorage = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
-                setResourceDataObject(Math.min(currentCarbon + currentCarbonRate, carbonStorage), 'resources', ['carbon', 'quantity']);
-            });
-        }
-    } else if (timerName === 'scienceKit') {
-        const rateScienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']);
-        const researchRate = getResourceDataObject('research', ['rate']) + rateScienceKit;
-        setResourceDataObject(researchRate, 'research', ['rate']);
-        
-        getElements().researchRate.textContent = `${(getResourceDataObject('research', ['rate']) * getTimerRateRatio()).toFixed(1)} / s`;
+    const timerName = `${elementName}AB${tier}`;
+    if (!timerManager.getTimer(timerName)) {
+        timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+            const currentQuantity = getResourceDataObject('resources', [elementName, 'quantity']);
+            const currentRate = getResourceDataObject('resources', [elementName, 'rate']);
+            const storageCapacity = getResourceDataObject('resources', [elementName, 'storageCapacity']);
+            setResourceDataObject(Math.min(currentQuantity + currentRate, storageCapacity), 'resources', [elementName, 'quantity']);
+        });
+    }
+}
+
+function startUpdateScienceTimers(elementName) {
+    if (elementName.startsWith('science')) {
+
+        const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
+        const newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
+
+        setResourceDataObject(newResearchRate, 'research', ['rate']);
+        getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
+
         if (!timerManager.getTimer('research')) {
             timerManager.addTimer('research', getTimerUpdateInterval(), () => {
                 const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
                 const currentResearchRate = getResourceDataObject('research', ['rate']);
-                setResourceDataObject((currentResearchQuantity + currentResearchRate), 'research', ['quantity']);
+                setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
             });
-        }
-    } else if (timerName === 'scienceClub') {
-        const rateScienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']);
-        const researchRate = getResourceDataObject('research', ['rate']) + rateScienceClub;
-        setResourceDataObject(researchRate, 'research', ['rate']);
-
-        getElements().researchRate.textContent = `${(getResourceDataObject('research', ['rate']) * getTimerRateRatio()).toFixed(1)} / s`;
-        if (!timerManager.getTimer('research')) {
-            timerManager.addTimer('research', getTimerUpdateInterval(), () => {
-                const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
-                const currentResearchRate = getResourceDataObject('research', ['rate']);
-                setResourceDataObject((currentResearchQuantity + currentResearchRate), 'research', ['quantity']);
-            });
-        } else {
-
         }
     }
 }
+
 
 // export function toggleTimer(key, buttonId) {
 //     const timer = timerManager.getTimer(key);
