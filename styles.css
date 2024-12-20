@@ -391,12 +391,9 @@ body {
     height: 100%;
     transform: translateY(0);
 }
+
 .invisible {
-    background-color: var(--tab-invisible-bg-color);
-    color: var(--tab-invisible-text-color);
-    border: none;
-    border-radius: 0;
-    pointer-events: none;
+    display: none !important;
 }
 
 .option-button:hover,
@@ -718,7 +715,7 @@ body {
     display: inline-block;
     font-size: 1rem;
     text-align: center;
-    transition: background-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+    transition: background-color 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .option-button:hover {

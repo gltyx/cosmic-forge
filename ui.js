@@ -1236,6 +1236,33 @@ function drawTab2Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'quantumComputing',
+                row: createOptionRow(
+                    'techQuantumComputingRow',
+                    null,
+                    'Quantum Computing:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('quantumComputing', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('quantumComputing');
+                        showNotification('Quantum Computing Researched\n\nMore advanced Machinery is now available!', 'info');
+                    }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['quantumComputing', 'price'])} Research`,
+                    '',
+                    'techUnlock',
+                    'quantumComputing',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
                 techName: 'nanoTubeTechnology',
                 row: createOptionRow(
                     'techNanoTubeTechnologyRow',

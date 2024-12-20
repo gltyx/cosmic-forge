@@ -121,7 +121,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techQuantumComputingRow: {
-        content1: "Unlock Quantum Computing to enhance computational power and enable advanced automation.",
+        content1: "Unlock Quantum Computing to enhance computational power and enable more advanced machinery.",
         content2: "",
         updateAt: ""
     },

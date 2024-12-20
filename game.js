@@ -51,6 +51,8 @@ import {
 
 //---------------------------------------------------------------------------------------------------------
 
+let techSortingRenderCounter = 0;
+
 class TimerManager {
     constructor() {
         this.timers = new Map();
@@ -172,8 +174,13 @@ export async function gameLoop() {
             const containerToRenderTo = getTemporaryRowsRepo('container');
         
             if (techRenderChange) {
-                sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
-                techRenderChange = false;
+                techSortingRenderCounter++;
+            
+                if (techSortingRenderCounter >= 150) { //minimise interactin disruptions while sorting rows
+                    sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
+                    techRenderChange = false;
+                    techSortingRenderCounter = 0;
+                }
             }
         }
 
@@ -620,6 +627,7 @@ function monitorResourceCostChecks(element) {
                 element.textContent = 'Researched';
                 //updateOriginalValue(element, 'Researched');
                 element.style.pointerEvents = 'none';
+                techRenderChange = true;
             }
             return;
         }        
@@ -965,36 +973,49 @@ function sortRowsByRenderPosition(rows, mainKey) {
     const adjustedPositions = [];
 
     rows.forEach(item => {
+        let alreadyAdjusted = false;
         const currentPos = getResourceDataObject(mainKey, [item.techName, 'idForRenderPosition']);
 
         if (mainKey === 'techs') {
-            const researchButtonText = item.row.querySelector('.input-container button').textContent;
-            if (researchButtonText === "Researched" && currentPos < 1000) {
+            const researchButton = item.row.querySelector('.input-container button');
+            if (researchButton.textContent === "Researched" && currentPos < 1000) {
                 adjustedPositions.push({
                     ...item,
                     adjustedPos: currentPos + 1000
                 });
+                alreadyAdjusted = true;
             }
-        }
 
-        if (item.row.classList.contains('invisible')) {
-            adjustedPositions.push({
-                ...item,
-                adjustedPos: currentPos + 1000
-            });
-        } else {
-            if (currentPos > 1000) {
+            if (!researchButton.classList.contains('red-disabled-text')) {
                 adjustedPositions.push({
                     ...item,
                     adjustedPos: currentPos - 1000
                 });
-            } else {
-                adjustedPositions.push({
-                    ...item,
-                    adjustedPos: currentPos
-                });
+                alreadyAdjusted = true;
             }
         }
+
+        if (!alreadyAdjusted) {
+            if (item.row.classList.contains('invisible')) {
+                adjustedPositions.push({
+                    ...item,
+                    adjustedPos: currentPos + 1000
+                });
+            } else {
+                if (currentPos > 1000) {
+                    adjustedPositions.push({
+                        ...item,
+                        adjustedPos: currentPos - 1000
+                    });
+                } else {
+                    adjustedPositions.push({
+                        ...item,
+                        adjustedPos: currentPos
+                    });
+                }
+            }
+        }
+
     });
 
     return adjustedPositions.sort((a, b) => a.adjustedPos - b.adjustedPos);
