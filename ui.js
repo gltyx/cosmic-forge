@@ -123,6 +123,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'oxygen');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab2', 'research');
@@ -594,6 +604,116 @@ function drawTab1Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer1Row);        
+    } else if (heading === 'Oxygen') {
+        let storagePrice = getResourceDataObject('resources', ['oxygen', 'storageCapacity']);
+        let autobuyer1Price = getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+    
+        const oxygenSellRow = createOptionRow(
+            'oxygenSellRow',
+            null,
+            'Sell Oxygen:',
+            createDropdown('oxygenSellSelectQuantity', [
+                { value: 'all', text: 'All Stock' },
+                { value: 'threeQuarters', text: '75% Stock' },
+                { value: 'twoThirds', text: '67% Stock' },
+                { value: 'half', text: '50% Stock' },
+                { value: 'oneThird', text: '33% Stock' },
+                { value: '100000', text: '100,000' },
+                { value: '10000', text: '10,000' },
+                { value: '1000', text: '1,000' },
+                { value: '100', text: '100' },
+                { value: '10', text: '10' },
+                { value: '1', text: '1' },
+            ], 'all', (value) => {
+                setSalePreview('oxygen', value, 'nextElementsWillExpandOutHere');
+            }),
+            createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
+                sellResource('oxygen')
+            }, 'sellResource', null, null, null, 'oxygen', true, null),
+            null,
+            null,
+            null,
+            `${getResourceSalePreview('oxygen')}`,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(oxygenSellRow);
+    
+        const oxygenGainRow = createOptionRow(
+            'oxygenGainRow',
+            null,
+            'Gain 1 Oxygen:',
+            createButton('Gain', ['option-button'], () => {
+                gain(1, 'oxygenQuantity', null, false, null, 'oxygen')
+            }, null, null, null, null, null, false, null),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(oxygenGainRow);
+    
+        const oxygenIncreaseStorageRow = createOptionRow(
+            'oxygenIncreaseStorageRow',
+            null,
+            'Increase Container Size:',
+            createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                increaseResourceStorage('oxygenQuantity','oxygen');
+            }, 'upgradeCheck', '', 'storage', null, 'oxygen', true, null),
+            null,
+            null,
+            null,
+            null,
+            `${storagePrice + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'storage',
+            null,
+            'oxygen',
+            null,
+            false,
+            'oxygen'
+        );
+        optionContentElement.appendChild(oxygenIncreaseStorageRow);
+    
+        const oxygenAutoBuyer1Row = createOptionRow(
+            'oxygenAutoBuyer1Row',
+            getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Oxygen Auto Buyer Tier 1:',
+            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'oxygenAB1Quantity', 'autoBuyer', true, 'tier1', 'oxygen'),
+                startUpdateAutoBuyerTimersAndRates('oxygen', 1);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier1'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer1Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'oxygen',
+            'tier1',
+            false,
+            null
+        );
+        optionContentElement.appendChild(oxygenAutoBuyer1Row);        
     }
 }
 

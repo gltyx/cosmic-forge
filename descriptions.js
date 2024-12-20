@@ -4,7 +4,8 @@ export const headerDescriptions = {
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
     helium: "Lighter than air this one will make you float away!",
-    carbon: "This is the first stable solid element, made from fused Helium"
+    carbon: "This is the first stable solid element, made from fused Helium",
+    oxygen: "Finally a breathable element, this is massive for progression!"
 };
 
 export const optionDescriptions = {
@@ -67,7 +68,27 @@ export const optionDescriptions = {
         content1: "Buy a miner to automate the collection of Carbon.",
         content2: "",
         updateAt: ""
-    },    
+    },
+    oxygenSellRow: {
+        content1: "Here you can sell Oxygen for cash",
+        content2: "Here you can sell Oxygen for cash or fuse it into Neon",
+        updateAt: "oxygenFusion"
+    },
+    oxygenGainRow: {
+        content1: "Manually gain one unit of Oxygen.",
+        content2: "",
+        updateAt: ""
+    },
+    oxygenIncreaseStorageRow: {
+        content1: "Upgrade your Oxygen storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    oxygenAutoBuyer1Row: {
+        content1: "Add an Oxygen Extractor to automate Oxygen generation.",
+        content2: "",
+        updateAt: ""
+    },  
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",

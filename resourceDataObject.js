@@ -60,8 +60,29 @@ export const resourceData = {
             },
             revealedBy: "heliumFusion",
             canFuseTech: 'carbonFusion',
-            fuseTo1: 'nextElement',
+            fuseTo1: 'oxygen',
             fuseToRatio1: 0.5
+        },    
+        oxygen: {
+            nameResource: 'Oxygen',
+            screenName: 'oxygen',
+            saleValue: 0.02,
+            salePreviewElement: 'sellOxygenDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'oxygenAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'oxygenAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'oxygenAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'oxygenAB4Price' }
+                }
+            },
+            revealedBy: "carbonFusion",
+            canFuseTech: 'oxygenFusion',
+            fuseTo1: 'neon',
+            fuseToRatio1: 0.2
         },
     },
     research: {
