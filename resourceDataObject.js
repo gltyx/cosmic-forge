@@ -98,14 +98,14 @@ export const resourceData = {
         knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 1 },
         fusionTheory: { appearsAt: [500, null], price: 750, idForRenderPosition: 2 },
         hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500, idForRenderPosition: 3 },
-        stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 7 }, //tab3 unlock
-        fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 999 }, //fusing + 20%
+        stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 7 },
+        fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 997 },
         quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 8 }, //autobuyer2
         heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 5000, idForRenderPosition: 9 }, //unlock carbon fusing from helium
-        fusionEfficiencyII: { appearsAt: [3500, 'fusionEfficiencyI'], price: 5000, idForRenderPosition: 998 }, //fusing + 20%
+        fusionEfficiencyII: { appearsAt: [3500, 'fusionEfficiencyI'], price: 5000, idForRenderPosition: 998 },
         nanoTubeTechnology: { appearsAt: [4000, 'carbonSynthesis'], price: 10000, idForRenderPosition: 11 }, //carbon autobuyerratex2
         carbonFusion: { appearsAt: [4000, 'nanoTubeTechnology'], price: 8000, idForRenderPosition: 12 }, //unlock oxygen fusing from carbon
-        fusionEfficiencyIII: { appearsAt: [5500, 'fusionEfficiencyII'], price: 10000, idForRenderPosition: 997 }, //fusing 100% efficient
+        fusionEfficiencyIII: { appearsAt: [5500, 'fusionEfficiencyII'], price: 10000, idForRenderPosition: 999 },
     },
     currency: {
         cash: 100000,

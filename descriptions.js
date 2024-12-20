@@ -141,17 +141,17 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techFusionEfficiencyIRow: {
-        content1: "Unlock Fusion Efficiency I to enhance the efficiency of your fusion reactors.",
+        content1: "Unlock Fusion Efficiency I to enhance fusion efficieny.",
         content2: "",
         updateAt: ""
     },
     techFusionEfficiencyIIRow: {
-        content1: "Unlock Fusion Efficiency II to further enhance the efficiency of your fusion reactors.",
+        content1: "Unlock Fusion Efficiency II to further enhance fusion efficiency.",
         content2: "",
         updateAt: ""
     },
     techFusionEfficiencyIIIRow: {
-        content1: "Unlock Fusion Efficiency III to achieve 100% efficiency in your fusion reactors.",
+        content1: "Unlock Fusion Efficiency III to realise 100% efficient fusion.",
         content2: "",
         updateAt: ""
     },

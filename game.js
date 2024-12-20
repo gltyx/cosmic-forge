@@ -39,7 +39,7 @@ import {
 } from "./resourceDataObject.js";
 
 import { 
-    sendNotificationIfActive,
+    showNotification,
     showTabsUponUnlock
 } from "./ui.js";
 
@@ -213,7 +213,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
         amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
         const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
 
-        sendNotificationIfActive(
+        showNotification(
             `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
             'info'
         );
@@ -241,7 +241,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
 
             if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
-                sendNotificationIfActive(
+                showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
                     'info'
                 );
@@ -249,7 +249,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
                 const availableStorageFuseTo = fuseToStorageCapacity - fuseToQuantity; 
                 lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
 
-                sendNotificationIfActive(
+                showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
                     'warning'
                 );
