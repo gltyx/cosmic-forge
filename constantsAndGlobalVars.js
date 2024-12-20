@@ -21,6 +21,8 @@ export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
 
 //GLOBAL VARIABLES
+export const deferredActions = [];
+
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
 let salePreviews = {};
@@ -31,6 +33,7 @@ let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 let temporaryRowsRepo = null;
+let canAffordDeferred = null;
 
 let originalFrameNumbers = {
 };
@@ -499,3 +502,10 @@ export function setTemporaryRowsRepo(containerValue, rowsValue) {
     temporaryRowsRepo.rows = rowsValue;
 }
 
+export function getCanAffordDeferred() {
+    return canAffordDeferred;
+}
+
+export function setCanAffordDeferred(value) {
+    canAffordDeferred = value;
+}

@@ -51,14 +51,14 @@
 
     <!-- Tabs Container -->
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
-        <div class="tab selected" id="tab1">Resources</div>
-        <div class="tab" id="tab2">Technology</div>
-        <div class="tab" id="tab3">Tab 3</div>
-        <div class="tab" id="tab4">Tab 4</div>
-        <div class="tab" id="tab5">Tab 5</div>
-        <div class="tab" id="tab6">Tab 6</div>
-        <div class="tab" id="tab7">Tab 7</div>
-        <div class="tab" id="tab8">☰</div>
+        <div class="tab selected" data-tab="" id="tab1">Resources</div>
+        <div class="tab" data-tab="" id="tab2">Technology</div>
+        <div class="tab invisible" data-tab="stellarCartography" id="tab3">Star Map</div>
+        <div class="tab invisible" data-tab="" id="tab4">Tab 4</div>
+        <div class="tab invisible" data-tab="" id="tab5">Tab 5</div>
+        <div class="tab invisible" data-tab="" id="tab6">Tab 6</div>
+        <div class="tab invisible" data-tab="" id="tab7">Tab 7</div>
+        <div class="tab invisible" data-tab="" id="tab8">☰</div>
     </div>
 
     <div id="mainContainer" class="d-flex main-container">
@@ -96,7 +96,7 @@
                                     <p id="heliumQuantity" class="notation">0/100</p>
                                 </div>
                             </div>
-                            <div class="row-side-menu d-flex">
+                            <div class="row-side-menu d-flex invisible">
                                 <div class="row-side-menu-item">
                                     <p id="oxygenOption" class="tab1.option4">Oxygen</p>
                                 </div>
@@ -109,13 +109,13 @@
                             </div>
                         </div>
                     </div>
-                    <div id="simpleSolids" class="collapsible">
+                    <div id="simpleSolids" class="collapsible invisible">
                         <div class="collapsible-header">
                             <span>Simple Solids</span>
                             <span class="collapsible-arrow">▼</span>
                         </div>
                         <div class="collapsible-content">
-                            <div class="row-side-menu d-flex">
+                            <div class="row-side-menu d-flex invisible">
                                 <div class="row-side-menu-item">
                                     <p id="carbonOption" class="tab1.option3">Carbon</p>
                                 </div>
@@ -197,7 +197,7 @@
                 <div class="container-item-menu-body tab-3">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="option1" class="tab3.option1"></p>
+                            <p id="option1" class="tab3.option1">Star Map</p>
                         </div>
                         <div class="row-side-menu-item right-align">
                             <p id="option2"></p>

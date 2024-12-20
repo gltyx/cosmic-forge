@@ -1,4 +1,7 @@
 import {
+    deferredActions,
+    getCanAffordDeferred,
+    setCanAffordDeferred,
     getTemporaryRowsRepo,
     setTemporaryRowsRepo,
     setOriginalFrameNumbers,
@@ -36,7 +39,8 @@ import {
 } from "./resourceDataObject.js";
 
 import { 
-    sendNotificationIfActive
+    sendNotificationIfActive,
+    showTabsUponUnlock
 } from "./ui.js";
 
 import { 
@@ -104,7 +108,6 @@ class Timer {
 
 let techRenderChange = true;
 const timerManager = new TimerManager();
-let deferredActions = [];
 
 export function startGame() {
     if (getBeginGameStatus()) {
@@ -117,17 +120,7 @@ export function startGame() {
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
-
-        //Check and update what can afford to buy
-        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
-        elementsResourcesCheck.forEach((elementResourceCheck) => {
-            monitorResourceCostChecks(elementResourceCheck);
-        });
-
-        const revealRowsCheck = document.querySelectorAll('.option-row');
-        revealRowsCheck.forEach((revealRowCheck) => {
-            monitorRevealRowsChecks(revealRowCheck);
-        });
+        showTabsUponUnlock();
 
         const resourceNames = Object.keys(getResourceDataObject('resources'));
         const resourceTierPairs = [];
@@ -151,6 +144,16 @@ export async function gameLoop() {
         if (getResourcesToIncreasePrice() && Object.keys(getResourcesToIncreasePrice()).length > 0) {
             checkAndIncreasePrices();
         }
+
+        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
+        elementsResourcesCheck.forEach((elementResourceCheck) => {
+            monitorResourceCostChecks(elementResourceCheck);
+        });
+
+        const revealRowsCheck = document.querySelectorAll('.option-row');
+        revealRowsCheck.forEach((revealRowCheck) => {
+            monitorRevealRowsChecks(revealRowCheck);
+        });
 
         updateAllSalePricePreviews();
 
@@ -218,14 +221,14 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
         setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
         return;
     } else {
-        let randomEnergyLossFactor = 1;
+        let fusionEfficiency = 1; //1 full efficiency then reduced based on tech below
 
         if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
-            randomEnergyLossFactor = Math.random() * (0.30 - 0.20) + 0.30;
+            fusionEfficiency = Math.random() * (0.30 - 0.20) + 0.30;
         } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
-            randomEnergyLossFactor = Math.random() * (0.60 - 0.40) + 0.60;
+            fusionEfficiency = Math.random() * (0.60 - 0.40) + 0.60;
         } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
-            randomEnergyLossFactor = Math.random() * (0.80 - 0.60) + 0.80;
+            fusionEfficiency = Math.random() * (0.80 - 0.60) + 0.80;
         }
 
         if (getUnlockedResourcesArray().includes(fuseTo)) {
@@ -234,7 +237,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
             amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
             amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
 
-            realAmountToAdd = Math.floor(amountToAddToResource * randomEnergyLossFactor);
+            realAmountToAdd = Math.floor(amountToAddToResource * fusionEfficiency);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
 
             if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
@@ -298,12 +301,14 @@ function checkAndIncreasePrices() {
 
     for (const resource in priceIncreaseObject) {
         if (priceIncreaseObject.hasOwnProperty(resource)) {
-            const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
-            if (setPriceTarget.startsWith('science')) {
-                setNewResourcePrice(currentPrice, setPriceTarget, '');
-            } else {
-                for (let tier = 1; tier <= 4; tier++) {
-                    setNewResourcePrice(currentPrice, setPriceTarget, tier);
+            if (getCanAffordDeferred()) {
+                const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
+                if (setPriceTarget.startsWith('science')) {
+                    setNewResourcePrice(currentPrice, setPriceTarget, '');
+                } else {
+                    for (let tier = 1; tier <= 4; tier++) {
+                        setNewResourcePrice(currentPrice, setPriceTarget, tier);
+                    }
                 }
             }
         }
@@ -333,28 +338,36 @@ function checkAndDeductResources() {
 
     for (const resource in deductObject) {
         if (deductObject.hasOwnProperty(resource)) {
-            const { deductQuantity } = deductObject[resource];
-
-            if (typeof deductQuantity === 'function') {
-                deductAmount = deductQuantity();
-            } else {
-                deductAmount = deductQuantity;
-            }
-
             let currentQuantity;
+            deductAmount = deductObject[resource].deductQuantity;
 
             if (resource === 'cash') {
                 mainKey = 'currency';
                 currentQuantity = getResourceDataObject(mainKey, [resource]);
-                setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource]);
+                if (deductAmount >  currentQuantity) {
+                    setCanAffordDeferred(false);
+                } else {
+                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource]);
+                    setCanAffordDeferred(true);
+                }
             } else if (resource === 'research') {
                 mainKey = 'research';
                 currentQuantity = getResourceDataObject(mainKey, ['quantity']);
-                setResourceDataObject(currentQuantity - deductAmount, mainKey, ['quantity']);
+                if (deductAmount >  currentQuantity) {
+                    setCanAffordDeferred(false);
+                } else {
+                    setResourceDataObject(currentQuantity - deductAmount, mainKey, ['quantity']);
+                    setCanAffordDeferred(true);
+                }
             } else {
                 mainKey = 'resources';
                 currentQuantity = getResourceDataObject(mainKey, [resource, 'quantity']);
-                setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource, 'quantity']);
+                if (deductAmount >  currentQuantity) {
+                    setCanAffordDeferred(false);
+                } else {
+                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource, 'quantity']);
+                    setCanAffordDeferred(true);
+                }  
             }
         }
     }
@@ -515,6 +528,9 @@ function monitorResourceCostChecks(element) {
         const type = element.dataset.type;
         const resourceToFuseTo = element.dataset.resourceToFuseTo;
 
+        //so far just for science upgrades
+        const scienceUpgradeType = element.dataset.resource;
+
         if (resource === 'storage' || resource === 'autoBuyer') {
             resource = element.dataset.argumentCheckQuantity;
         }
@@ -605,12 +621,15 @@ function monitorResourceCostChecks(element) {
             mainKey = 'resources';
             const autoBuyerTier = element.dataset.autoBuyerTier;
             price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+        } else if (type === 'scienceUpgrade') {
+            mainKey = 'research';
+            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
         } else {
             if (element.dataset.type === "research") {
                 mainKey = 'research';
                 price = getResourceDataObject(mainKey, ['quantity']);
             } else if (element.dataset.type === "storage") {
-                mainKey = 'resources' //.storageCapacity
+                mainKey = 'resources' //storageCapacity
                 price = getResourceDataObject(mainKey, [resource, 'storageCapacity']);
             }
         }

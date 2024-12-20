@@ -5,7 +5,8 @@ export const headerDescriptions = {
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
-    oxygen: "Finally a breathable element, this is massive for progression!"
+    oxygen: "Finally a breathable element, this is massive for progression!",
+    starMap: "This is a map of the known galaxy, more will appear as you discover them!",
 };
 
 export const optionDescriptions = {
@@ -111,6 +112,46 @@ export const optionDescriptions = {
     },
     techHydrogenFusionRow: {
         content1: "Unlock Hydrogen Fusion to experiment with fusing Hydrogen atoms.",
+        content2: "",
+        updateAt: ""
+    },
+    techStellarCartographyRow: {
+        content1: "Unlock Stellar Cartography to map the stars.",
+        content2: "",
+        updateAt: ""
+    },
+    techQuantumComputingRow: {
+        content1: "Unlock Quantum Computing to enhance computational power and enable advanced automation.",
+        content2: "",
+        updateAt: ""
+    },
+    techHeliumFusionRow: {
+        content1: "Unlock Helium Fusion to enable the fusion of helium atoms.",
+        content2: "",
+        updateAt: ""
+    },
+    techNanoTubeTechnologyRow: {
+        content1: "Unlock NanoTube Technology to manufacture new machines to extract resources more efficiently.",
+        content2: "",
+        updateAt: ""
+    },
+    techCarbonFusionRow: {
+        content1: "Unlock Carbon Fusion to experiment with the fusion of carbon atoms.",
+        content2: "",
+        updateAt: ""
+    },
+    techFusionEfficiencyIRow: {
+        content1: "Unlock Fusion Efficiency I to enhance the efficiency of your fusion reactors.",
+        content2: "",
+        updateAt: ""
+    },
+    techFusionEfficiencyIIRow: {
+        content1: "Unlock Fusion Efficiency II to further enhance the efficiency of your fusion reactors.",
+        content2: "",
+        updateAt: ""
+    },
+    techFusionEfficiencyIIIRow: {
+        content1: "Unlock Fusion Efficiency III to achieve 100% efficiency in your fusion reactors.",
         content2: "",
         updateAt: ""
     },

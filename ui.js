@@ -1,4 +1,7 @@
 import {
+    deferredActions,
+    getCanAffordDeferred,
+    setCanAffordDeferred,
     getTemporaryRowsRepo,
     setTemporaryRowsRepo,
     setTechSpecificUIItemsArray,
@@ -725,8 +728,13 @@ function drawTab2Content(heading, optionContentElement) {
             'Science Kit:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade'),
-                startUpdateAutoBuyerTimersAndRates('scienceKit');
-            }, 'upgradeCheck', '', 'research', 'scienceKit', 'cash', false, null),
+                deferredActions.push(() => {
+                    if (getCanAffordDeferred()) {
+                        startUpdateAutoBuyerTimersAndRates('scienceKit');
+                    }
+                    setCanAffordDeferred(null);
+                });
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceKit', 'cash', false, null),
             null,
             null,
             null,
@@ -748,9 +756,14 @@ function drawTab2Content(heading, optionContentElement) {
             null,
             'Open Science Club:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade')
-                startUpdateAutoBuyerTimersAndRates('scienceClub');
-            }, 'upgradeCheck', '', 'research', 'scienceClub', 'cash', false, null),
+                gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade');
+                deferredActions.push(() => {
+                    if (getCanAffordDeferred()) {
+                        startUpdateAutoBuyerTimersAndRates('scienceClub');
+                    }
+                    setCanAffordDeferred(null);
+                });
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceClub', 'cash', false, null),
             null,
             null,
             null,
@@ -841,6 +854,33 @@ function drawTab2Content(heading, optionContentElement) {
                     '',
                     'techUnlock',
                     'hydrogenFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'stellarCartography',
+                row: createOptionRow(
+                    'techStellarCartographyRow',
+                    null,
+                    'Stellar Cartography:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('stellarCartography', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('stellarCartography');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'stellarCartography');
+                    }, 'techUnlock', '', 'stellarCartography', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['stellarCartography', 'price'])} Research`,
+                    '',
+                    'techUnlock',
+                    'stellarCartography',
                     null,
                     'research',
                     null,
@@ -1202,7 +1242,6 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.type = objectSectionArgument1;
             button.dataset.resourceToFuseTo = objectSectionArgument2;
-
         } else if (dataConditionCheck === 'techUnlock') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentCheckQuantity = quantityArgument;
@@ -1211,6 +1250,7 @@ function createButton(text, classNames, onClick, dataConditionCheck, resourcePri
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.resourcePriceObject = resourcePriceObject;
             button.dataset.type = objectSectionArgument1;
+            button.dataset.resource = objectSectionArgument2;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.autoBuyerTier = autoBuyerTier;
         }
@@ -1330,4 +1370,17 @@ export function updateDescriptionRow(rowKey, targetProperty) {
     } else {
         console.error(`Invalid row key or property: ${rowKey}, ${targetProperty}`);
     }
+}
+
+export function showTabsUponUnlock() {
+    const tabs = document.querySelectorAll('.tab');
+    const unlockedTechs = getTechUnlockedArray();
+
+    tabs.forEach(tab => {
+        const tabTech = tab.getAttribute('data-tab');
+
+        if (unlockedTechs.includes(tabTech)) {
+            tab.classList.remove('invisible');
+        }
+    });
 }
