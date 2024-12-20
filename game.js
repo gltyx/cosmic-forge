@@ -191,7 +191,7 @@ function updateStats() {
     }
 }
 
-export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
+export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categoryToShow) {
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
 
@@ -208,6 +208,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow) {
 
     if (!getUnlockedResourcesArray().includes(fuseTo)) {
         resourceRowToShow.classList.remove('invisible');
+        categoryToShow.classList.remove('invisible');
         setUnlockedResourcesArray(fuseTo);
         fuseData = getResourceSalePreview(resource);
         amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);

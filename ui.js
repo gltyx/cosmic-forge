@@ -296,7 +296,7 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource('hydrogen')
             }, 'sellResource', null, null, null, 'hydrogen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('.row-side-menu:nth-child(2)'));
+                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('simpleGases'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null),
@@ -411,11 +411,15 @@ function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('helium')
             }, 'sellResource', null, null, null, 'helium', true, null),
+            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
+                fuseResource('helium', getResourceDataObject('resources', ['helium', 'fuseTo1']), getResourceDataObject('resources', ['helium', 'fuseToRatio1']), document.querySelector('#simpleSolids .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('simpleSolids'));
+                event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
+                event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
+            }, 'fuseResource', null, 'helium', 'carbon', 'helium', true, null),
             null,
             null,
             null,
             `${getResourceSalePreview('helium')}`,
-            null,
             null,
             null,
             null,
@@ -523,11 +527,15 @@ function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('carbon')
             }, 'sellResource', null, null, null, 'carbon', true, null),
+            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
+                fuseResource('helium', getResourceDataObject('resources', ['carbon', 'fuseTo1']), getResourceDataObject('resources', ['carbon', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'), document.getElementById('simpleGases'));
+                event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
+                event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
+            }, 'fuseResource', null, 'carbon', 'oxygen', 'carbon', true, null),
             null,
             null,
             null,
-            `${getResourceSalePreview('carbon')}`,
-            null,
+            `${getResourceSalePreview('oxygen')}`,
             null,
             null,
             null,
@@ -633,11 +641,15 @@ function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('oxygen')
             }, 'sellResource', null, null, null, 'oxygen', true, null),
+            createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
+                fuseResource('oxygen', getResourceDataObject('resources', ['oxygen', 'fuseTo1']), getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']), document.querySelector('.row-side-menu:nth-child(2)'), document.querySelector('.'));
+                event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
+                event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
+            }, 'fuseResource', null, 'oxygen', 'neon', 'oxygen', true, null),
             null,
             null,
             null,
             `${getResourceSalePreview('oxygen')}`,
-            null,
             null,
             null,
             null,
@@ -885,6 +897,35 @@ function drawTab2Content(heading, optionContentElement) {
                     '',
                     'techUnlock',
                     'stellarCartography',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'heliumFusion',
+                row: createOptionRow(
+                    'techHeliumFusionRow',
+                    null,
+                    'Helium Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('heliumFusion');
+                        setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'heliumFusion');
+                        updateDescriptionRow('hydrogenSellRow', 'content2');
+                        showNotification('Helium Fusion Researched\n\nYou can now fuse Helium!', 'info');
+                    }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['heliumFusion', 'price'])} Research, <span id="heliumFusionPrereq" class="red-disabled-text">Hydrogen Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'heliumFusion',
                     null,
                     'research',
                     null,

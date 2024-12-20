@@ -31,9 +31,9 @@ export const optionDescriptions = {
         updateAt: ""
     },
     heliumSellRow: {
-        content1: "Sell Carbon to earn cash, or fuse it.",
-        content2: "",
-        updateAt: ""
+        content1: "Here you can sell Helium for cash",
+        content2: "Here you can sell Helium for cash or fuse it into Carbon",
+        updateAt: "heliumFusion"
     },
     heliumGainRow: {
         content1: "Manually scrape one unit of Helium.",
@@ -51,9 +51,9 @@ export const optionDescriptions = {
         updateAt: ""
     },
     carbonSellRow: {
-        content1: "Sell Carbon to earn cash, or fuse it.",
-        content2: "",
-        updateAt: ""
+        content1: "Here you can sell Carbon for cash",
+        content2: "Here you can sell Carbon for cash or fuse it into Oxygen",
+        updateAt: "carbonFusion"
     },
     carbonGainRow: {
         content1: "Extract Carbon manually from the environment.",
