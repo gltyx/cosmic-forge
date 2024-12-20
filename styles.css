@@ -370,11 +370,11 @@ body {
     justify-content: space-around;
     padding: 0;
     margin-top: 30px;
-    border-bottom: 5px solid var(--tab-border-color);
+    border-bottom: 4px solid var(--tab-border-color);
     overflow: visible;
     width: 100%;
     opacity: 1;
-    z-index: 2000 !important;
+    z-index: 5000 !important;
 }
 
 .tab {
@@ -385,10 +385,11 @@ body {
     color: var(--text-color);
     cursor: pointer;
     border: 1px solid var(--tab-border-color);
+    border-bottom: 4px solid var(--tab-border-color);
     border-radius: 8px 8px 0 0;
     transition: background-color 0.3s ease, color 0.3s ease, height 0.3s ease;
     height: 100%;
-    transform: translateY(5px);
+    transform: translateY(4px);
 }
 
 .tab.selected {
@@ -396,7 +397,8 @@ body {
     color: var(--text-focus-color);
     font-weight: bold;
     height: 100%;
-    transform: translateY(0);
+    transform: translateY(1px);
+    border-bottom: 1px solid var(--tab-border-color);
 }
 
 .invisible {
@@ -404,11 +406,7 @@ body {
 }
 
 .tab-invisible {
-    background-color: var(--tab-invisible-bg-color);
-    color: var(--tab-invisible-bg-color);
-    border: none;
-    border-radius: 0;
-    pointer-events: none;
+    visibility: hidden;
 }
 
 .option-button:hover,
