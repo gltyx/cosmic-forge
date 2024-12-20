@@ -205,7 +205,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 setCurrentOptionPane(lastOpenOptionPane);
             }
         });
-    });   
+    });
+    
+    window.addEventListener('resize', () => {
+        if (getCurrentOptionPane()) {
+            const starContainer = document.querySelector('#optionContentTab3');
+            starContainer.innerHTML = '';
+            generateStarfield(starContainer, 100, 80);
+        }
+    });
 });
 
 export function updateContent(heading, tab) {
@@ -353,7 +361,7 @@ function drawTab1Content(heading, optionContentElement) {
         const hydrogenIncreaseStorageRow = createOptionRow(
             'hydrogenIncreaseStorageRow',
             null,
-            'Increase Container Size:',
+            'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('hydrogenQuantity', 'hydrogen');
             }, 'upgradeCheck', '', 'storage', null, 'hydrogen', true, null),
@@ -543,7 +551,7 @@ function drawTab1Content(heading, optionContentElement) {
         const heliumIncreaseStorageRow = createOptionRow(
             'heliumIncreaseStorageRow',
             null,
-            'Increase Container Size:',
+            'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('heliumQuantity', 'helium');
             }, 'upgradeCheck', '', 'storage', null, 'helium', true, null),
@@ -734,7 +742,7 @@ function drawTab1Content(heading, optionContentElement) {
         const carbonIncreaseStorageRow = createOptionRow(
             'carbonIncreaseStorageRow',
             null,
-            'Increase Container Size:',
+            'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('carbonQuantity','carbon');
             }, 'upgradeCheck', '', 'storage', null, 'carbon', true, null),
@@ -923,7 +931,7 @@ function drawTab1Content(heading, optionContentElement) {
         const oxygenIncreaseStorageRow = createOptionRow(
             'oxygenIncreaseStorageRow',
             null,
-            'Increase Container Size:',
+            'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('oxygenQuantity','oxygen');
             }, 'upgradeCheck', '', 'storage', null, 'oxygen', true, null),
@@ -1425,7 +1433,6 @@ function drawTab2Content(heading, optionContentElement) {
 }
 
 function drawTab3Content(heading, optionContentElement) {
-
     const starContainer = document.querySelector('#optionContentTab3');
     generateStarfield(starContainer, 100, 80);
 }
@@ -1910,8 +1917,7 @@ export function showTabsUponUnlock() {
     });
 }
 
-
-function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
+export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
     const minSize = 2;
     const maxSize = 6;
 
@@ -1975,6 +1981,3 @@ function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
         return x - Math.floor(x);
     }
 }
-
-
-

@@ -42,7 +42,8 @@ import {
 
 import { 
     showNotification,
-    showTabsUponUnlock
+    showTabsUponUnlock,
+    generateStarfield
 } from "./ui.js";
 
 import { 
