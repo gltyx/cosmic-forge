@@ -419,6 +419,7 @@ body {
     width: 100%;
     height: auto;
     border: 1px solid var(--container-border-color);
+    border-top: none;
     margin-top: 80px;
     background-color: var(--container-bg-color);
 }
