@@ -6,7 +6,7 @@ export const headerDescriptions = {
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
     oxygen: "Finally a breathable element, this is massive for progression!",
-    starMap: "This is a map of the known galaxy, more will appear as you discover them!",
+    'star map': "This is a map of the known galaxy",
 };
 
 export const optionDescriptions = {

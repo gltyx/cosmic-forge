@@ -166,7 +166,6 @@ export async function gameLoop() {
             runDeferredJobs();
         }
 
-        
         if (getCurrentOptionPane() === 'tech tree') {
             updateClassesInRowsToRender();
 
@@ -176,7 +175,7 @@ export async function gameLoop() {
             if (techRenderChange) {
                 techSortingRenderCounter++;
             
-                if (techSortingRenderCounter >= 150) { //minimise interactin disruptions while sorting rows
+                if (techSortingRenderCounter >= 150) { //minimise interaction disruptions while sorting rows
                     sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
                     techRenderChange = false;
                     techSortingRenderCounter = 0;
@@ -931,35 +930,47 @@ function formatAllNotationElements(notationType) {
                 return number;
             } else if (notationType === 'normalCondensed') {
                 if (element.id === 'cashStat') {
+                    const formatNumber = (num, divisor) => {
+                        const result = num / divisor;
+                        const fraction = result % 1;
+                        return (fraction === 0 || fraction === 0.1 || fraction === 0.9) 
+                            ? result.toFixed(0) 
+                            : result.toFixed(1);
+                    };
+                
                     if (number >= 1e13) {
                         let exponent = Math.floor(Math.log10(number));
-                        return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                        const scaledNumber = number / Math.pow(10, exponent);
+                        const fraction = scaledNumber % 1;
+                        return `${(fraction === 0 || fraction === 0.1 || fraction === 0.9 
+                            ? scaledNumber.toFixed(0) 
+                            : scaledNumber.toFixed(1))}e${exponent}`;
                     } else if (number >= 1e12) {
-                        return `${(number / 1e12).toFixed(1)}e12`;
+                        return `${formatNumber(number, 1e12)}e12`;
                     } else if (number >= 1e9) {
-                        return `${(number / 1e9).toFixed(1)}B`;
+                        return `${formatNumber(number, 1e9)}B`;
                     } else if (number >= 1e6) {
-                        return `${(number / 1e6).toFixed(1)}M`;
+                        return `${formatNumber(number, 1e6)}M`;
                     } else if (number >= 1e3) {
-                        return `${(number / 1e3).toFixed(1)}K`;
+                        return `${formatNumber(number, 1e3)}K`;
                     } else {
-                        return Math.round(number).toLocaleString();
+                        return Math.round(number).toFixed(0);
                     }
-                }
+                }                
             
                 if (number >= 1e13) {
                     let exponent = Math.floor(Math.log10(number));
                     return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
                 } else if (number >= 1e12) {
-                    return `${(number / 1e12).toFixed(2)}e12`;
+                    return `${(number / 1e12).toFixed(1)}e12`;
                 } else if (number >= 1e9) {
-                    return `${(number / 1e9).toFixed(2)}B`;
+                    return `${(number / 1e9).toFixed(1)}B`;
                 } else if (number >= 1e6) {
-                    return `${(number / 1e6).toFixed(2)}M`;
+                    return `${(number / 1e6).toFixed(1)}M`;
                 } else if (number >= 1e3) {
-                    return `${(number / 1e3).toFixed(2)}K`;
+                    return `${(number / 1e3).toFixed(1)}K`;
                 } else {
-                    return number.toFixed(2);
+                    return number.toFixed(0);
                 }
             }                       
              

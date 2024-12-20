@@ -153,6 +153,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             updateContent(this.textContent, 'tab2');
         });
     });
+
+    document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab3', 'star map');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab3');
+        });
+    });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
@@ -1245,6 +1253,7 @@ function drawTab2Content(heading, optionContentElement) {
                         gain('quantumComputing', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('quantumComputing');
+                        setAutoBuyerTierLevel(2);
                         showNotification('Quantum Computing Researched\n\nMore advanced Machinery is now available!', 'info');
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null),
                     null,
@@ -1416,7 +1425,9 @@ function drawTab2Content(heading, optionContentElement) {
 }
 
 function drawTab3Content(heading, optionContentElement) {
-    // Your logic for tab 3
+
+    const starContainer = document.querySelector('#optionContentTab3');
+    generateStarfield(starContainer, 100, 80);
 }
 
 function drawTab4Content(heading, optionContentElement) {
@@ -1894,7 +1905,76 @@ export function showTabsUponUnlock() {
         const tabTech = tab.getAttribute('data-tab');
 
         if (unlockedTechs.includes(tabTech)) {
-            tab.classList.remove('invisible');
+            tab.classList.remove('tab-invisible');
         }
     });
 }
+
+
+function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
+    const minSize = 2;
+    const maxSize = 6;
+
+    const containerRect = starfieldContainer.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+    const containerLeft = containerRect.left;
+    const containerTop = containerRect.top;
+
+    const starNames= ["Absolutno","Acamar","Achernar","Achird","Acrab","Acrux","Acubens","Adhafera","Adhara","Adhil","Ain","Ainalrami","Aiolos","Aladfar","Alasia","Alathfar†","Albaldah","Albali","Albireo","Alchiba","Alcor","Alcyone","Aldebaran","Alderamin","Aldhanab","Aldhibah","Aldulfin","Alfirk","Algedi","Algenib","Algieba","Algol","Algorab","Alhena","Alioth","Aljanah","Alkaid","Alkalurops","Alkaphrah","Alkarab","Alkes","Almaaz","Almach","Alnair","Alnasl","Alnilam","Alnitak","Alniyat","Alphard","Alphecca","Alpheratz","Alpherg","Alrakis","Alrescha","Alruba","Alsafi","Alsciaukat","Alsephina","Alshain","Alshat","Altair","Altais","Alterf","Aludra","Alula Australis","Alula Borealis","Alya","Alzirr","Amadioha","Amansinaya","Anadolu","Añañuca","Ancha","Angetenar","Aniara","Ankaa","Anser","Antares","Arcalís","Arcturus","Arkab Posterior","Arkab Prior","Arneb","Ascella","Asellus Australis","Asellus Borealis","Ashlesha","Asellus Primus†","Asellus Secundus†","Asellus Tertius†","Aspidiske","Asterope","Atakoraka","Athebyne","Atik","Atlas","Atria","Avior","Axólotl","Ayeyarwady","Azelfafage","Azha","Azmidi","Baekdu","Barnard's Star","Baten Kaitos","Batsũ̀","Beemim","Beid","Belel","Bélénos","Bellatrix","Berehynia","Betelgeuse","Bharani","Bibhā","Biham","Bosona","Botein","Brachium","Bubup","Buna","Bunda","Canopus","Capella","Caph","Castor","Castula","Cebalrai","Ceibo","Celaeno","Cervantes","Chalawan","Chamukuy","Chaophraya","Chara","Chasoň","Chechia","Chertan","Citadelle","Citalá","Cocibolca","Copernicus","Cor Caroli","Cujam","Cursa","Dabih","Dalim","Danfeng","Deneb","Deneb Algedi","Denebola","Diadem","Dilmun","Dingolay","Diphda","Dìwö","Diya","Dofida","Dombay","Dschubba","Dubhe","Dziban","Ebla","Edasich","Electra","Elgafar","Elkurud","Elnath","Eltanin","Emiw","Enif","Errai","Fafnir","Fang","Fawaris","Felis","Felixvarela","Filetdor","Flegetonte","Fomalhaut","Formosa","Franz","Fulu","Fumalsamakah","Funi","Furud","Fuyue","Gacrux","Gakyid","Gar","Garnet Star†","Geminga","Giausar","Gienah","Ginan","Gloas","Gnomon","Gomeisa","Graffias†","Guahayona","Grumium","Gudja","Gumala","Guniibuu","Hadar","Haedus","Hamal","Hassaleh","Hatysa","Helvetios","Heze","Hoggar","Homam","Horna","Hunahpú","Hunor","Iklil","Illyrian","Imai","Inquill","Intan","Intercrus","Irena","Itonda","Izar","Jabbah","Jishui","Kaffaljidhma","Kaewkosin","Kalausi","Kamuy","Kang","Karaka","Kaus Australis","Kaus Borealis","Kaus Media","Kaveh","Keid","Khambalia","Kitalpha","Kochab","Koeia","Koit","Komondor","Kornephoros","Kosjenka","Kraz","Kuma†","Kurhah","La Superba","Larawag","Lerna","Lesath","Libertas","Lich","Liesma","Lilii Borea","Lionrock","Lucilinburhuc","Lusitânia","Maasym","Macondo","Mago","Mahasim","Mahsati","Maia","Malmok","Marfik","Markab","Markeb","Márohu","Marsic","Matar","Matza","Maru","Mazaalai","Mebsuta","Megrez","Meissa","Mekbuda","Meleph","Menkalinan","Menkar","Menkent","Menkib","Merak","Merga","Meridiana","Merope","Mesarthim","Miaplacidus","Mimosa","Minchir","Minelauva","Mintaka","Mira","Mirach","Miram","Mirfak","Mirzam","Misam","Mizar","Moldoveanu","Mönch","Montuno","Morava","Moriah","Mothallah","Mouhoun","Mpingo","Muliphein","Muphrid","Muscida","Musica","Muspelheim","Nahn","Naledi","Naos","Nashira","Násti","Natasha","Navi†","Nekkar","Nembus","Nenque","Nervia","Nihal","Nikawiy","Noquisi","Nosaxa","Nunki","Nusakan","Nushagak","Nyamien","Ogma","Okab","Orkaria","Paikauhale","Parumleo","Peacock","Petra","Phact","Phecda","Pherkad","Phoenicia","Piautos","Pincoya","Pipirima","Pipoltr","Pleione","Poerava","Polaris","Polaris Australis","Polis","Pollux","Porrima","Praecipua","Prima Hyadum","Procyon","Propus","Proxima Centauri","Ran","Rana","Rapeto","Rasalas","Rasalgethi","Rasalhague","Rastaban","Regor†","Regulus","Revati","Rigel","Rigil Kentaurus","Rosalíadecastro","Rotanev","Ruchbah","Rukbat","Sabik","Saclateni","Sadachbia","Sadalbari","Sadalmelik","Sadalsuud","Sadr","Sagarmatha","Saiph","Salm","Sāmaya","Sansuna","Sargas","Sarin","Sceptrum","Scheat","Schedar","Secunda Hyadum","Segin","Seginus","Sham","Shama","Sharjah","Shaula","Sheliak","Sheratan","Sika","Sirius","Situla","Skat","Solaris","Spica","Sterrennacht","Stribor","Sualocin","Subra","Suhail","Sulafat","Syrma","Tabit","Taika","Taiyangshou","Taiyi","Talitha","Tangra","Tania Australis","Tania Borealis","Tapecue","Tarazed","Tarf","Taygeta","Tegmine","Tejat","Terebellum","Tevel","Thabit†","Theemin","Thuban","Tiaki","Tianguan","Tianyi","Timir","Tislit","Titawin","Tojil","Toliman","Tonatiuh","Torcular","Tuiren","Tupã","Tupi","Tureis","Ukdah","Uklun","Unukalhai","Unurgunite","Uruk","Uúba","Vega","Veritate","Vindemiatrix","Wasat","Wattle","Wazn","Wezen","Wouri","Wurren","Xamidimura","Xihe","Xuange","Yed Posterior","Yed Prior","Yildun","Zaniah","Zaurak","Zembra","Zhang","Zibal","Zosma","Zubenelgenubi","Zubenelhakrabi","Zubeneschamali"];
+    
+    const usedNames = new Set();
+
+    for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+
+        const size = getSeededRandomInRange(seed + i, minSize, maxSize);
+        console.log('start size: ' + size);
+                const x = getSeededRandomInRange(seed + i + numberOfStars, 0, containerWidth) + containerLeft;
+        const y = getSeededRandomInRange(seed + i + numberOfStars * 2, 0, containerHeight) + containerTop;
+
+        let name;
+        if (size > maxSize - 0.4) {
+            star.classList.add('star');
+
+            if (starNames.length > 0) {
+                const index = Math.floor(seededRandom(seed - i * 1.2) * starNames.length);
+                name = starNames[index];
+                starNames.splice(index, 1);
+                usedNames.add(name);
+            } else {
+                name = `Star${i}`;
+            }
+    
+            star.id = name;
+            star.style.width = `${size * 1.6}px`;
+            star.style.height = `${size * 1.6}px`;
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
+    
+            star.title = name;
+        } else {
+            star.id = `noneInterestingStar${i}`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${x}px`;
+            star.style.top = `${y}px`;
+
+            star.classList.add('star-uninteresting');
+            star.title = '';
+        }
+        starfieldContainer.appendChild(star);
+    }
+
+    function getSeededRandomInRange(seed, min, max) {
+        return seededRandom(seed) * (max - min) + min;
+    }
+
+    function seededRandom(seed) {
+        let x = Math.sin(seed++) * 9390;
+        return x - Math.floor(x);
+    }
+}
+
+
+
