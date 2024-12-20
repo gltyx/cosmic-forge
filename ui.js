@@ -809,7 +809,7 @@ function drawTab2Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('techs', ['knowledgeSharing', 'price']) + ' Research'}`,
+                    `${getResourceDataObject('techs', ['knowledgeSharing', 'price'])} Research`,
                     '',
                     'techUnlock',
                     'knowledgeSharing',
@@ -836,7 +836,7 @@ function drawTab2Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('techs', ['fusionTheory', 'price']) + ' Research'}`,
+                    `${getResourceDataObject('techs', ['fusionTheory', 'price'])} Research`,
                     '',
                     'techUnlock',
                     'fusionTheory',
@@ -877,6 +877,91 @@ function drawTab2Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'heliumFusion',
+                row: createOptionRow(
+                    'techHeliumFusionRow',
+                    null,
+                    'Helium Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('heliumFusion');
+                        setTechSpecificUIItemsArray('helium', 'fusionButton', 'heliumFusion');
+                        updateDescriptionRow('heliumSellRow', 'content2');
+                        showNotification('Helium Fusion Researched\n\nYou can now fuse Helium!', 'info');
+                    }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['heliumFusion', 'price'])} Research, <span id="heliumFusionPrereq" class="red-disabled-text">Hydrogen Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'heliumFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'carbonFusion',
+                row: createOptionRow(
+                    'techCarbonFusionRow',
+                    null,
+                    'Carbon Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('carbonFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('carbonFusion');
+                        setTechSpecificUIItemsArray('carbon', 'fusionButton', 'carbonFusion');
+                        updateDescriptionRow('carbonSellRow', 'content2');
+                        showNotification('Carbon Fusion Researched\n\nYou can now fuse Carbon!', 'info');
+                    }, 'techUnlock', '', 'carbonFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['carbonFusion', 'price'])} Research, <span id="carbonFusionPrereq" class="red-disabled-text">Nano Tube Technology</span>`,
+                    '',
+                    'techUnlock',
+                    'carbonFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'nanoTubeTechnology',
+                row: createOptionRow(
+                    'techNanoTubeTechnologyRow',
+                    null,
+                    'Nano Tube Technology:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('nanoTubeTechnology');
+                        showNotification('Nano Tube Technology Researched\n\nWith this we can experiment with fusing Carbon!', 'info');
+                    }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['nanoTubeTechnology', 'price'])} Research, <span id="nanoTubeTechnologyPrereq" class="red-disabled-text">Helium Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'nanoTubeTechnology',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
                 techName: 'stellarCartography',
                 row: createOptionRow(
                     'techStellarCartographyRow',
@@ -897,35 +982,6 @@ function drawTab2Content(heading, optionContentElement) {
                     '',
                     'techUnlock',
                     'stellarCartography',
-                    null,
-                    'research',
-                    null,
-                    ['research', 'researchPoints'],
-                    null
-                )
-            },
-            {
-                techName: 'heliumFusion',
-                row: createOptionRow(
-                    'techHeliumFusionRow',
-                    null,
-                    'Helium Fusion:',
-                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
-                        event.currentTarget.classList.add('unlocked-tech');
-                        setTechUnlockedArray('heliumFusion');
-                        setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'heliumFusion');
-                        updateDescriptionRow('hydrogenSellRow', 'content2');
-                        showNotification('Helium Fusion Researched\n\nYou can now fuse Helium!', 'info');
-                    }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null),
-                    null,
-                    null,
-                    null,
-                    null,
-                    `${getResourceDataObject('techs', ['heliumFusion', 'price'])} Research, <span id="heliumFusionPrereq" class="red-disabled-text">Hydrogen Fusion</span>`,
-                    '',
-                    'techUnlock',
-                    'heliumFusion',
                     null,
                     'research',
                     null,

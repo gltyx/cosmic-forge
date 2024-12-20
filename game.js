@@ -957,7 +957,17 @@ function sortRowsByRenderPosition(rows, mainKey) {
 
     rows.forEach(item => {
         const currentPos = getResourceDataObject(mainKey, [item.techName, 'idForRenderPosition']);
-        
+
+        if (mainKey === 'techs') {
+            const researchButtonText = item.row.querySelector('.input-container button').textContent;
+            if (researchButtonText === "Researched" && currentPos < 1000) {
+                adjustedPositions.push({
+                    ...item,
+                    adjustedPos: currentPos + 1000
+                });
+            }
+        }
+
         if (item.row.classList.contains('invisible')) {
             adjustedPositions.push({
                 ...item,
