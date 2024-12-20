@@ -34,6 +34,7 @@ let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
+let autoBuyerTierLevel = 1;
 
 let originalFrameNumbers = {
 };
@@ -508,4 +509,12 @@ export function getCanAffordDeferred() {
 
 export function setCanAffordDeferred(value) {
     canAffordDeferred = value;
+}
+
+export function getAutoBuyerTierLevel() {
+    return autoBuyerTierLevel;
+}
+
+export function setAutoBuyerTierLevel(value) {
+    autoBuyerTierLevel = value;
 }

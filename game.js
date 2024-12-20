@@ -1,4 +1,6 @@
 import {
+    getAutoBuyerTierLevel,
+    setAutoBuyerTierLevel,
     deferredActions,
     getCanAffordDeferred,
     setCanAffordDeferred,
@@ -510,7 +512,7 @@ function manageTabSpecificUi() {
 }
 
 function monitorRevealRowsChecks(element) {
-    if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //unrevealed techs
+    if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //reveal techs check
         if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
             techRenderChange = true;
@@ -518,6 +520,13 @@ function monitorRevealRowsChecks(element) {
             element.classList.remove('invisible');
             techRenderChange = true;
             setRevealedTechArray(element.dataset.type);
+        }
+    } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
+        const elementTier = parseInt(element.dataset.autoBuyerTier.slice(-1));
+        if (elementTier <= getAutoBuyerTierLevel()) {
+            element.classList.remove('invisible');
+        } else {
+            element.classList.add('invisible');
         }
     }
 }
