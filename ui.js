@@ -340,7 +340,7 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
-                gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen')
+                gain(200000, 'hydrogenQuantity', null, false, null, 'hydrogen')
             }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
@@ -364,6 +364,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('hydrogenQuantity', 'hydrogen');
+                storagePrice = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
             }, 'upgradeCheck', '', 'storage', null, 'hydrogen', true, null),
             null,
             null,
@@ -554,6 +555,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('heliumQuantity', 'helium');
+                storagePrice = getResourceDataObject('resources', ['helium', 'storageCapacity']);
             }, 'upgradeCheck', '', 'storage', null, 'helium', true, null),
             null,
             null,
@@ -745,6 +747,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('carbonQuantity','carbon');
+                storagePrice = getResourceDataObject('resources', ['carbon', 'storageCapacity']);
             }, 'upgradeCheck', '', 'storage', null, 'carbon', true, null),
             null,
             null,
@@ -934,6 +937,7 @@ function drawTab1Content(heading, optionContentElement) {
             'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 increaseResourceStorage('oxygenQuantity','oxygen');
+                storagePrice = getResourceDataObject('resources', ['oxygen', 'storageCapacity']);
             }, 'upgradeCheck', '', 'storage', null, 'oxygen', true, null),
             null,
             null,
@@ -1664,7 +1668,8 @@ function createOptionRow(
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
-    description.classList.add('notation');
+    description.classList.add('notation'); //if there are rounding errors or loads of decimal places on quantity of resource to sell its because of this
+
     description.id = generateElementId(labelText, resourceString);
     description.innerHTML = descriptionText;
 
@@ -1935,7 +1940,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         const star = document.createElement('div');
 
         const size = getSeededRandomInRange(seed + i, minSize, maxSize);
-        console.log('start size: ' + size);
+       // console.log('start size: ' + size);
                 const x = getSeededRandomInRange(seed + i + numberOfStars, 0, containerWidth) + containerLeft;
         const y = getSeededRandomInRange(seed + i + numberOfStars * 2, 0, containerHeight) + containerTop;
 

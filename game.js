@@ -1,4 +1,6 @@
 import {
+    setTempSellRowValue,
+    getTempSellRowValue,
     getAutoBuyerTierLevel,
     setAutoBuyerTierLevel,
     deferredActions,
@@ -649,6 +651,9 @@ function monitorResourceCostChecks(element) {
             } else if (element.dataset.type === "storage") {
                 mainKey = 'resources' //storageCapacity
                 price = getResourceDataObject(mainKey, [resource, 'storageCapacity']);
+                if (element.tagName.toLowerCase() !== 'button') {
+                    element.textContent = `${price} ${getResourceDataObject(mainKey, [resource, 'nameResource'])}`;
+                }
             }
         }
         
@@ -898,6 +903,7 @@ function startUpdateScienceTimers(elementName) {
 
 
 function formatAllNotationElements(notationType) {
+    let sellRowPresent = false;
     const elements = document.querySelectorAll('.notation');
     const originalNumbers = getOriginalFrameNumbers();
     const existingSelectors = new Set();
@@ -971,14 +977,69 @@ function formatAllNotationElements(notationType) {
                 } else if (number >= 1e3) {
                     return `${(number / 1e3).toFixed(1)}K`;
                 } else {
-                    return number.toFixed(0);
+                    if (element.classList.contains('sell-fuse-money')) {
+                        sellRowPresent = true;
+                        setTempSellRowValue(originalContent);
+                    }
+                    if (element.dataset.conditionCheck === 'techUnlock') {
+                        return number.toFixed(2);
+                    } else {
+                        return number.toFixed(0);
+                    }
                 }
             }                       
-             
         });
 
         element.innerHTML = formattedContent;
     });
+
+    if (sellRowPresent) { // workaround formatter for complex string on selling and fusing row
+        complexSellStringFormatter();
+    }   
+}
+
+function complexSellStringFormatter() {
+    const sellRowQuantityElement = document.querySelector('.sell-fuse-money').parentElement;
+    const match = sellRowQuantityElement.innerHTML.match(/>(.*?)</);
+
+    if (match) {
+        const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
+        const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
+        const newContent = getTempSellRowValue();
+        
+        sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
+
+        // workaround for string when fusing to another element
+        if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) {
+            const match = sellRowQuantityElement.innerHTML.match(/&gt; (-?\d+)(\s|$)/);
+            if (match) {
+                const capturedNumber = parseFloat(match[1]);
+                let formatted;
+                if (capturedNumber < 0) {
+                    formatted = 0;
+                } else {
+                    if (capturedNumber >= 1e13) {
+                        let exponent = Math.floor(Math.log10(capturedNumber));
+                        formatted = `${(capturedNumber / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                    } else if (capturedNumber >= 1e12) {
+                        formatted = `${(capturedNumber / 1e12).toFixed(1)}e12`;
+                    } else if (capturedNumber >= 1e9) {
+                        formatted = `${(capturedNumber / 1e9).toFixed(1)}B`;
+                    } else if (capturedNumber >= 1e6) {
+                        formatted = `${(capturedNumber / 1e6).toFixed(1)}M`;
+                    } else if (capturedNumber >= 1e3) {
+                        formatted = `${(capturedNumber / 1e3).toFixed(1)}K`;
+                    } else {
+                        formatted = capturedNumber.toFixed(0);
+                    }
+                }
+                const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 5);
+                const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
+                const updatedHTML = beforeMatch + formatted + afterMatch;
+                sellRowQuantityElement.innerHTML = updatedHTML;
+            }
+        }
+    }
 }
 
 function sortRowsByRenderPosition(rows, mainKey) {

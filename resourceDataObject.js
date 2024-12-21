@@ -87,7 +87,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 100,
+        quantity: 10000,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },
@@ -108,7 +108,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [5500, 'oxygenFusion'], price: 10000, idForRenderPosition: 903 },
     },
     currency: {
-        cash: 100000,
+        cash: 24.58,
     },
 };
 

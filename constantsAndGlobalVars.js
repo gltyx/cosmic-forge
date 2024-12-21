@@ -23,6 +23,7 @@ export const TIMER_RATE_RATIO = 100;
 //GLOBAL VARIABLES
 export const deferredActions = [];
 
+let tempSellRowValue = null;
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
 let salePreviews = {};
@@ -402,24 +403,24 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
     if (getCurrencySymbol() !== "€") {
         if (value <= resourceQuantity) {
             salePreviews[resource] =
-                `<span class="green-ready-text">${getCurrencySymbol()}${(value * resourceSaleValueFactor).toFixed(2)}</span>` +
+                `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(value * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
                 value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] =
-                `<span class="green-ready-text">${getCurrencySymbol()}${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}</span>` +
+                `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
                 resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         }
     } else {
         if (value <= resourceQuantity) {
             salePreviews[resource] =
-                `<span class="green-ready-text">${(value * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
+                `<span class="green-ready-text notation sell-fuse-money">${(value * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
                 value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
             salePreviews[resource] =
-                `<span class="green-ready-text">${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
+                `<span class="green-ready-text notation sell-fuse-money">${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
                 resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         }
@@ -517,4 +518,12 @@ export function getAutoBuyerTierLevel() {
 
 export function setAutoBuyerTierLevel(value) {
     autoBuyerTierLevel = value;
+}
+
+export function getTempSellRowValue() {
+    return tempSellRowValue;
+}
+
+export function setTempSellRowValue(value) {
+    tempSellRowValue = value;
 }
