@@ -340,7 +340,7 @@ function drawTab1Content(heading, optionContentElement) {
             null,
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
-                gain(200000, 'hydrogenQuantity', null, false, null, 'hydrogen')
+                gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen')
             }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
             null,
             null,

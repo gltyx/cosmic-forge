@@ -87,7 +87,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 10000,
+        quantity: 0,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },
@@ -100,7 +100,7 @@ export const resourceData = {
         hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500, idForRenderPosition: 3 },
         stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 7 },
         fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 900 },
-        quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 8 }, //autobuyer2
+        quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 8 },
         heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 3000, idForRenderPosition: 9 },
         fusionEfficiencyII: { appearsAt: [4000, 'carbonFusion'], price: 5000, idForRenderPosition: 901 },
         nanoTubeTechnology: { appearsAt: [7500, 'heliumFusion'], price: 10000, idForRenderPosition: 11 }, //carbon autobuyerratex2
@@ -108,7 +108,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [5500, 'oxygenFusion'], price: 10000, idForRenderPosition: 903 },
     },
     currency: {
-        cash: 24.58,
+        cash: 100,
     },
 };
 
