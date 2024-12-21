@@ -1009,7 +1009,6 @@ function complexSellStringFormatter() {
         
         sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
 
-        // workaround for string when fusing to another element
         if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) {
             const match = sellRowQuantityElement.innerHTML.match(/&gt; (-?\d+)(\s|$)/);
             if (match) {
