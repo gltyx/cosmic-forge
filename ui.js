@@ -237,7 +237,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (content === '☰') {
                 content = 'Settings';
             }
-            updateContent(content, `tab${index + 1}`, 'intro');
+            
+            if (!getLastScreenOpenRegister(`tab${index + 1}`)) {
+                updateContent(content, `tab${index + 1}`, 'intro');
+            }
+
             const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab());
             if (lastOpenOptionPane) {
                 setCurrentOptionPane(lastOpenOptionPane);

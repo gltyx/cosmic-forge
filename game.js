@@ -46,6 +46,7 @@ import {
 } from "./resourceDataObject.js";
 
 import { 
+    updateContent,
     sortTechRows,
     showNotification,
     showTabsUponUnlock,
@@ -121,7 +122,7 @@ export function startGame() {
         setBeginGameStatus(false);
     }
     setGameState(getGameVisibleActive());
-
+    updateContent('Resources', `tab1`, 'intro');
     gameLoop();
 }
 
