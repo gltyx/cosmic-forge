@@ -27,7 +27,8 @@ import {
     getLanguageSelected,
     setLanguageSelected,
     setLanguage,
-    getCurrentOptionPane
+    getCurrentOptionPane,
+    getAudioMuted
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -623,15 +624,17 @@ export function updateDescriptionRow(rowKey, targetProperty) {
     }
 }
 
-export function showTabsUponUnlock() {
+export function showTabsUponUnlock(tab) {
     const tabs = document.querySelectorAll('.tab');
     const unlockedTechs = getTechUnlockedArray();
 
     tabs.forEach(tab => {
         const tabTech = tab.getAttribute('data-tab');
+        const tabName = tab.getAttribute('data-name');
 
         if (unlockedTechs.includes(tabTech)) {
-            tab.classList.remove('tab-invisible');
+            tab.classList.remove('tab-not-yet');
+            tab.textContent = tabName;
         }
     });
 }

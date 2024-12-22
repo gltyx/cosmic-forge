@@ -404,6 +404,10 @@ body {
     visibility: hidden;
 }
 
+.tab-not-yet {
+    pointer-events: none;
+}
+
 .option-button:hover,
 .tab:hover {
     background-color: var(--tab-bg-hover) !important;
