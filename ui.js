@@ -53,6 +53,7 @@ import {
 import { 
     capitaliseString 
 } from './utilityFunctions.js';
+
 import { drawTab1Content } from './drawTab1Content.js';
 import { drawTab2Content } from './drawTab2Content.js';
 import { drawTab3Content } from './drawTab3Content.js';
@@ -112,6 +113,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'water');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2');
+        });
+    });
+
     document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'carbon');
@@ -132,27 +141,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
+    document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'research');
+            setLastScreenOpenRegister('tab3', 'research');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2');
+            updateContent(this.textContent, 'tab3');
         });
     });
     
-    document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
+    document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'tech tree');
+            setLastScreenOpenRegister('tab3', 'tech tree');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2');
+            updateContent(this.textContent, 'tab3');
         });
     });
 
-    document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
+    document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab3', 'star map');
+            setLastScreenOpenRegister('tab4', 'star map');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab3');
+            updateContent(this.textContent, 'tab4');
         });
     });
     
@@ -493,7 +502,7 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.resourcePriceObject = resourcePriceObject;
             button.dataset.type = objectSectionArgument1;
-            button.dataset.resource = objectSectionArgument2;
+            button.dataset.resourceToFuseTo = objectSectionArgument2;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.autoBuyerTier = autoBuyerTier;
         }

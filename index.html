@@ -54,9 +54,9 @@
     <!-- Tabs Container -->
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
         <div class="tab selected" data-tab="" id="tab1">Resources</div>
-        <div class="tab" data-tab="" id="tab2">Technology</div>
-        <div class="tab tab-invisible" data-tab="stellarCartography" id="tab3">StarMap</div>
-        <div class="tab tab-invisible" data-tab="" id="tab4">Tab 4</div>
+        <div class="tab" data-tab="" id="tab2">Compounds</div>
+        <div class="tab" data-tab="" id="tab3">Technology</div>
+        <div class="tab tab-invisible" data-tab="stellarCartography" id="tab4">Star Map</div>
         <div class="tab tab-invisible" data-tab="" id="tab5">Tab 5</div>
         <div class="tab tab-invisible" data-tab="" id="tab6">Tab 6</div>
         <div class="tab tab-invisible" data-tab="" id="tab7">Tab 7</div>
@@ -178,30 +178,37 @@
         <div id="tab2ContainerGroup" class="tab-2-container-group tab-2">
             <div class="container-item-menu tab-2">
                 <div class="container-item-menu-header tab-2">
-                    <h4>Technology</h4>
+                    <h4>Compounds</h4>
                 </div>
                 <div class="container-item-menu-body tab-2">
-                    <div class="row-side-menu d-flex">
-                        <div class="row-side-menu-item">
-                            <p id="researchOption" class="tab2.option1">Research</p>
+                    <!-- Outer Collapsible for Compounds -->
+                    <div id="liquidCompounds" class="collapsible">
+                        <div class="collapsible-header">
+                            <span class="main-category-text">Compounds</span>
+                            <span class="collapsible-arrow">▼</span>
                         </div>
-                        <div class="row-side-menu-item right-align">
-                            <p id="researchRate" class="notation">0 / s</p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p id="researchQuantity" class="notation">0</p>
-                        </div>
-                    </div>
-                    <div class="row-side-menu d-flex">
-                        <div class="row-side-menu-item">
-                            <p class="tab2.option2">Tech Tree</p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p></p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p></p>
-                        </div>
+                        <div class="collapsible-content">
+                            <!-- Liquids Collapsible -->
+                            <div id="simpleGases" class="collapsible">
+                                <div class="collapsible-header">
+                                    <span class="sub-category-text">&nbsp;Liquids</span>
+                                    <span class="collapsible-arrow">▼</span>
+                                </div>
+                                <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex">
+                                        <div class="row-side-menu-item">
+                                            <p id="waterOption" class="tab2.option1 inset-paragraph">Water</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="waterRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="waterQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                    
                     </div>
                 </div>
             </div>
@@ -227,21 +234,21 @@
                 <div class="container-item-menu-body tab-3">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="option1" class="tab3.option1">Star Map</p>
+                            <p id="researchOption" class="tab3.option1">Research</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="option2"></p>
+                            <p id="researchRate" class="notation">0 / s</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="quantity"></p>
+                            <p id="researchQuantity" class="notation">0</p>
                         </div>
                     </div>
-                    <div class="row-side-menu d-flex invisible">
+                    <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p class="tab3.option2"></p>
+                            <p class="tab3.option2">Tech Tree</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p class="placeholder"></p>
+                            <p></p>
                         </div>
                         <div class="row-side-menu-item right-align">
                             <p class="placeholder"></p>
@@ -271,13 +278,13 @@
                 <div class="container-item-menu-body tab-4">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="option1" class="tab4.option1"></p>
+                            <p id="starMap" class="tab4.option1">Star Map</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="option2"></p>
+                            <p id="starMap2"></p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="quantity"></p>
+                            <p id="starmap3"></p>
                         </div>
                     </div>
                     <div class="row-side-menu d-flex invisible">

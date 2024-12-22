@@ -567,7 +567,7 @@ function monitorResourceCostChecks(element) {
         const resourceToFuseTo = element.dataset.resourceToFuseTo;
 
         //so far just for science upgrades
-        const scienceUpgradeType = element.dataset.resource;
+        const scienceUpgradeType = element.dataset.resourceToFuseTo;
 
         if (resource === 'storage' || resource === 'autoBuyer') {
             resource = element.dataset.argumentCheckQuantity;
@@ -598,7 +598,6 @@ function monitorResourceCostChecks(element) {
         }
 
         if(element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
-
             if (getTechUnlockedArray().includes(resource + 'Fusion') && getUnlockedResourcesArray().includes(resourceToFuseTo)) {
                 element.classList.remove('invisible'); 
             }
@@ -662,7 +661,7 @@ function monitorResourceCostChecks(element) {
             price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
         } else if (type === 'scienceUpgrade') {
             mainKey = 'research';
-            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
+            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']); //yes correct but bad naming
         } else {
             if (element.dataset.type === "research") {
                 mainKey = 'research';
