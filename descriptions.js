@@ -5,7 +5,7 @@ export const headerDescriptions = {
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
-    neon: "Finally a breathable element, this is massive for progression!",
+    neon: "The first noble gas!  Very 'bright' of you to discover it!",
     'star map': "This is a map of the known galaxy",
 };
 
