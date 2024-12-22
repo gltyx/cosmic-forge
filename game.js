@@ -1,4 +1,8 @@
 import {
+    getTechRenderCounter,
+    setTechRenderCounter,
+    setTechRenderChange,
+    getTechRenderChange,
     setTempSellRowValue,
     getTempSellRowValue,
     getAutoBuyerTierLevel,
@@ -43,6 +47,7 @@ import {
 } from "./resourceDataObject.js";
 
 import { 
+    sortTechRows,
     showNotification,
     showTabsUponUnlock,
     generateStarfield
@@ -53,8 +58,6 @@ import {
  } from './utilityFunctions.js';
 
 //---------------------------------------------------------------------------------------------------------
-
-let techSortingRenderCounter = 0;
 
 class TimerManager {
     constructor() {
@@ -112,8 +115,6 @@ class Timer {
 }
 
 //--------------------------------------------------------------------------------------------------------
-
-let techRenderChange = true;
 const timerManager = new TimerManager();
 
 export function startGame() {
@@ -175,13 +176,13 @@ export async function gameLoop() {
             const sortedRows = sortRowsByRenderPosition(getTemporaryRowsRepo('rows'), 'techs');
             const containerToRenderTo = getTemporaryRowsRepo('container');
         
-            if (techRenderChange) {
-                techSortingRenderCounter++;
+            if (getTechRenderChange()) {
+                setTechRenderCounter(getTechRenderCounter() + 1);
             
-                if (techSortingRenderCounter >= 150) { //minimise interaction disruptions while sorting rows
+                if (getTechRenderCounter() >= 150) { //minimise interaction disruptions while sorting rows
                     sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
-                    techRenderChange = false;
-                    techSortingRenderCounter = 0;
+                    setTechRenderChange(false);
+                    setTechRenderCounter(0);
                 }
             }
         }
@@ -202,7 +203,7 @@ function updateStats() {
     }
 }
 
-export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categoryToShow) {
+export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categoryToShow, mainCategoryToShow) {
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
 
@@ -219,6 +220,7 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categor
 
     if (!getUnlockedResourcesArray().includes(fuseTo)) {
         resourceRowToShow.classList.remove('invisible');
+        mainCategoryToShow.classList.remove('invisible');
         categoryToShow.classList.remove('invisible');
         setUnlockedResourcesArray(fuseTo);
         fuseData = getResourceSalePreview(resource);
@@ -252,20 +254,37 @@ export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categor
             realAmountToAdd = Math.floor(amountToAddToResource * fusionEfficiency);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
 
-            if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
-                showNotification(
-                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
-                    'info'
-                );
-            } else { ;
-                const availableStorageFuseTo = fuseToStorageCapacity - fuseToQuantity; 
-                lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
-
-                showNotification(
-                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
-                    'warning'
-                );
-                
+            if (getTechUnlockedArray().includes("fusionEfficiencyIII")) {
+                if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
+                    showNotification(
+                        `Fused ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. no significant efficiency loss during fusion, receive ${realAmountToAdd} ${fuseToString}`,
+                        'info'
+                    );
+                } else { ;
+                    const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity); 
+                    lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
+    
+                    showNotification(
+                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
+                        'warning'
+                    );
+                    
+                }
+            } else {
+                if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
+                    showNotification(
+                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
+                        'info'
+                    );
+                } else { ;
+                    const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity); 
+                    lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
+    
+                    showNotification(
+                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
+                        'warning'
+                    );
+                }
             }
         }
     }
@@ -524,10 +543,10 @@ function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //reveal techs check
         if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
-            techRenderChange = true;
+            setTechRenderChange(true);
         } else if (!getRevealedTechArray().includes(element.dataset.type) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.type, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
-            techRenderChange = true;
+            setTechRenderChange(true);
             setRevealedTechArray(element.dataset.type);
         }
     } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
@@ -629,7 +648,7 @@ function monitorResourceCostChecks(element) {
                 element.textContent = 'Researched';
                 //updateOriginalValue(element, 'Researched');
                 element.style.pointerEvents = 'none';
-                techRenderChange = true;
+                setTechRenderChange(true);
             }
             return;
         }        
@@ -781,6 +800,7 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     if (resourceCategory === 'research') {
         resourceObject = getResourceDataObject('research', ['upgrades', resource]);
     } else if (resourceCategory === 'techs') {
+        sortTechRows(false);
         return;
     } else if (resourceCategory === 'scienceUpgrade') {
         resourceObject = getResourceDataObject('research', ['upgrades', resource]);

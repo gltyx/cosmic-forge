@@ -60,34 +60,34 @@ export const resourceData = {
             },
             revealedBy: "heliumFusion",
             canFuseTech: 'carbonFusion',
-            fuseTo1: 'oxygen',
+            fuseTo1: 'neon',
             fuseToRatio1: 2
         },    
-        oxygen: {
-            nameResource: 'Oxygen',
-            screenName: 'oxygen',
+        neon: {
+            nameResource: 'Neon',
+            screenName: 'neon',
             saleValue: 0.02,
-            salePreviewElement: 'sellOxygenDescription',
+            salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
-                    tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'oxygenAB1Price' },
-                    tier2: { nameUpgrade: 'Advanced Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'oxygenAB2Price' },
-                    tier3: { nameUpgrade: 'Industrial Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'oxygenAB3Price' },
-                    tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'oxygenAB4Price' }
+                    tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'neonAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Neon Extractor', screen: 'neon', place: 'neonAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'neonAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Neon Extractor', screen: 'neon', place: 'neonAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'neonAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Neon Extractor', screen: 'neon', place: 'neonAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'neonAB4Price' }
                 }
             },
             revealedBy: "carbonFusion",
-            canFuseTech: 'oxygenFusion',
-            fuseTo1: 'neon',
+            canFuseTech: 'neonFusion',
+            fuseTo1: 'silver',
             fuseToRatio1: 0.2
         },
     },
     research: {
         screenName: 'research',
-        quantity: 10000,
+        quantity: 25000,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },
@@ -102,10 +102,10 @@ export const resourceData = {
         fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 900 },
         quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 8 },
         heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 3000, idForRenderPosition: 9 },
-        fusionEfficiencyII: { appearsAt: [4000, 'carbonFusion'], price: 5000, idForRenderPosition: 901 },
+        fusionEfficiencyII: { appearsAt: [4000, 'fusionEfficiencyI'], price: 5000, idForRenderPosition: 901 },
         nanoTubeTechnology: { appearsAt: [7500, 'heliumFusion'], price: 10000, idForRenderPosition: 11 }, //carbon autobuyerratex2
         carbonFusion: { appearsAt: [7500, 'nanoTubeTechnology'], price: 5000, idForRenderPosition: 12 },
-        fusionEfficiencyIII: { appearsAt: [5500, 'oxygenFusion'], price: 10000, idForRenderPosition: 903 },
+        fusionEfficiencyIII: { appearsAt: [5500, 'fusionEfficiencyII'], price: 10000, idForRenderPosition: 903 },
     },
     currency: {
         cash: 100,

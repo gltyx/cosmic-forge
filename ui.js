@@ -1,4 +1,10 @@
 import {
+    READY_TO_SORT,
+    NOW,
+    getTechRenderCounter,
+    setTechRenderCounter,
+    setTechRenderChange,
+    getTechRenderChange,
     setAutoBuyerTierLevel,
     getAutoBuyerTierLevel,
     deferredActions,
@@ -130,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'oxygen');
+            setLastScreenOpenRegister('tab1', 'neon');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1');
             fuseButton = document.querySelector('button.fuse');
@@ -317,7 +323,7 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource('hydrogen')
             }, 'sellResource', null, null, null, 'hydrogen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('simpleGases'));
+                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('simpleGases'), document.getElementById('gases'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null),
@@ -508,7 +514,7 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource('helium')
             }, 'sellResource', null, null, null, 'helium', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('helium', getResourceDataObject('resources', ['helium', 'fuseTo1']), getResourceDataObject('resources', ['helium', 'fuseToRatio1']), document.querySelector('#simpleSolids .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('simpleSolids'));
+                fuseResource('helium', getResourceDataObject('resources', ['helium', 'fuseTo1']), getResourceDataObject('resources', ['helium', 'fuseToRatio1']), document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('nonFerrous'), document.getElementById('solids'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'helium', 'carbon', 'helium', true, null),
@@ -700,14 +706,14 @@ function drawTab1Content(heading, optionContentElement) {
                 sellResource('carbon')
             }, 'sellResource', null, null, null, 'carbon', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('helium', getResourceDataObject('resources', ['carbon', 'fuseTo1']), getResourceDataObject('resources', ['carbon', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'), document.getElementById('simpleGases'));
+                fuseResource('helium', getResourceDataObject('resources', ['carbon', 'fuseTo1']), getResourceDataObject('resources', ['carbon', 'fuseToRatio1']), document.querySelector('#nobleGases .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('nobleGases'), document.getElementById('gases'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
-            }, 'fuseResource', null, 'carbon', 'oxygen', 'carbon', true, null),
+            }, 'fuseResource', null, 'carbon', 'neon', 'carbon', true, null),
             null,
             null,
             null,
-            `${getResourceSalePreview('oxygen')}`,
+            `${getResourceSalePreview('neon')}`,
             null,
             null,
             null,
@@ -860,18 +866,18 @@ function drawTab1Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer4Row);
-    } else if (heading === 'Oxygen') {
-        let storagePrice = getResourceDataObject('resources', ['oxygen', 'storageCapacity']);
-        let autobuyer1Price = getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'price']);
-        let autobuyer2Price = getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'price']);
-        let autobuyer3Price = getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'price']);
-        let autobuyer4Price = getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'price']);
+    } else if (heading === 'Neon') {
+        let storagePrice = getResourceDataObject('resources', ['neon', 'storageCapacity']);
+        let autobuyer1Price = getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+        let autobuyer2Price = getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'price']);
+        let autobuyer3Price = getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'price']);
+        let autobuyer4Price = getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'price']);
     
-        const oxygenSellRow = createOptionRow(
-            'oxygenSellRow',
+        const neonSellRow = createOptionRow(
+            'neonSellRow',
             null,
-            'Sell Oxygen:',
-            createDropdown('oxygenSellSelectQuantity', [
+            'Sell Neon:',
+            createDropdown('neonSellSelectQuantity', [
                 { value: 'all', text: 'All Stock' },
                 { value: 'threeQuarters', text: '75% Stock' },
                 { value: 'twoThirds', text: '67% Stock' },
@@ -884,20 +890,20 @@ function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('oxygen', value, 'nextElementsWillExpandOutHere');
+                setSalePreview('neon', value, 'nextElementsWillExpandOutHere');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
-                sellResource('oxygen')
-            }, 'sellResource', null, null, null, 'oxygen', true, null),
+                sellResource('neon')
+            }, 'sellResource', null, null, null, 'neon', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('oxygen', getResourceDataObject('resources', ['oxygen', 'fuseTo1']), getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']), document.querySelector('.row-side-menu:nth-child(2)'), document.querySelector('.'));
+                fuseResource('neon', getResourceDataObject('resources', ['neon', 'fuseTo1']), getResourceDataObject('resources', ['neon', 'fuseToRatio1']), document.querySelector('.row-side-menu:nth-child(2)'), document.querySelector('.'));
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
-            }, 'fuseResource', null, 'oxygen', 'neon', 'oxygen', true, null),
+            }, 'fuseResource', null, 'neon', 'silver', 'neon', true, null),
             null,
             null,
             null,
-            `${getResourceSalePreview('oxygen')}`,
+            `${getResourceSalePreview('neon')}`,
             null,
             null,
             null,
@@ -906,14 +912,14 @@ function drawTab1Content(heading, optionContentElement) {
             false,
             null
         );
-        optionContentElement.appendChild(oxygenSellRow);
+        optionContentElement.appendChild(neonSellRow);
     
-        const oxygenGainRow = createOptionRow(
-            'oxygenGainRow',
+        const neonGainRow = createOptionRow(
+            'neonGainRow',
             null,
-            'Gain 1 Oxygen:',
+            'Gain 1 Neon:',
             createButton('Gain', ['option-button'], () => {
-                gain(1, 'oxygenQuantity', null, false, null, 'oxygen')
+                gain(1, 'neonQuantity', null, false, null, 'neon')
             }, null, null, null, null, null, false, null),
             null,
             null,
@@ -929,131 +935,132 @@ function drawTab1Content(heading, optionContentElement) {
             false,
             null
         );
-        optionContentElement.appendChild(oxygenGainRow);
+        optionContentElement.appendChild(neonGainRow);
     
-        const oxygenIncreaseStorageRow = createOptionRow(
-            'oxygenIncreaseStorageRow',
+        const neonIncreaseStorageRow = createOptionRow(
+            'neonIncreaseStorageRow',
             null,
             'Increase Storage:',
             createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                increaseResourceStorage('oxygenQuantity','oxygen');
-                storagePrice = getResourceDataObject('resources', ['oxygen', 'storageCapacity']);
-            }, 'upgradeCheck', '', 'storage', null, 'oxygen', true, null),
+                increaseResourceStorage('neonQuantity','neon');
+                storagePrice = getResourceDataObject('resources', ['neon', 'storageCapacity']);
+            }, 'upgradeCheck', '', 'storage', null, 'neon', true, null),
             null,
             null,
             null,
             null,
-            `${storagePrice + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            `${storagePrice + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
             '',
             'upgradeCheck',
             'storage',
             null,
-            'oxygen',
+            'neon',
             null,
             false,
-            'oxygen'
+            'neon'
         );
-        optionContentElement.appendChild(oxygenIncreaseStorageRow);
+        optionContentElement.appendChild(neonIncreaseStorageRow);
     
-        const oxygenAutoBuyer1Row = createOptionRow(
-            'oxygenAutoBuyer1Row',
-            getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
-            'Oxygen Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'oxygenAB1Quantity', 'autoBuyer', true, 'tier1', 'oxygen'),
-                startUpdateAutoBuyerTimersAndRates('oxygen', 1);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier1'),
+        const neonAutoBuyer1Row = createOptionRow(
+            'neonAutoBuyer1Row',
+            getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Neon Auto Buyer Tier 1:',
+            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'neonAB1Quantity', 'autoBuyer', true, 'tier1', 'neon'),
+                startUpdateAutoBuyerTimersAndRates('neon', 1);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier1'),
             null,
             null,
             null,
             null,
-            `${autobuyer1Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            `${autobuyer1Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
             '',
             'upgradeCheck',
             'autoBuyer',
             null,
-            'oxygen',
+            'neon',
             'tier1',
             false,
             null
         );
-        optionContentElement.appendChild(oxygenAutoBuyer1Row);
+        optionContentElement.appendChild(neonAutoBuyer1Row);
         
-        const oxygenAutoBuyer2Row = createOptionRow(
-            'oxygenAutoBuyer2Row',
-            getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
-            'Oxygen Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'oxygenAB2Quantity', 'autoBuyer', true, 'tier2', 'oxygen'),
-                startUpdateAutoBuyerTimersAndRates('oxygen', 2);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier2'),
+        const neonAutoBuyer2Row = createOptionRow(
+            'neonAutoBuyer2Row',
+            getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
+            'Neon Auto Buyer Tier 2:',
+            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'neonAB2Quantity', 'autoBuyer', true, 'tier2', 'neon'),
+                startUpdateAutoBuyerTimersAndRates('neon', 2);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier2'),
             null,
             null,
             null,
             null,
-            `${autobuyer2Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            `${autobuyer2Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
             '',
             'upgradeCheck',
             'autoBuyer',
             null,
-            'oxygen',
+            'neon',
             'tier2',
             false,
             null
         );
-        optionContentElement.appendChild(oxygenAutoBuyer2Row);
+        optionContentElement.appendChild(neonAutoBuyer2Row);
 
-        const oxygenAutoBuyer3Row = createOptionRow(
-            'oxygenAutoBuyer3Row',
-            getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
-            'Oxygen Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'oxygenAB3Quantity', 'autoBuyer', true, 'tier3', 'oxygen'),
-                startUpdateAutoBuyerTimersAndRates('oxygen', 3);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier3'),
+        const neonAutoBuyer3Row = createOptionRow(
+            'neonAutoBuyer3Row',
+            getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
+            'Neon Auto Buyer Tier 3:',
+            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'neonAB3Quantity', 'autoBuyer', true, 'tier3', 'neon'),
+                startUpdateAutoBuyerTimersAndRates('neon', 3);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier3'),
             null,
             null,
             null,
             null,
-            `${autobuyer3Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            `${autobuyer3Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
             '',
             'upgradeCheck',
             'autoBuyer',
             null,
-            'oxygen',
+            'neon',
             'tier3',
             false,
             null
         );
-        optionContentElement.appendChild(oxygenAutoBuyer3Row);
+        optionContentElement.appendChild(neonAutoBuyer3Row);
 
-        const oxygenAutoBuyer4Row = createOptionRow(
-            'oxygenAutoBuyer4Row',
-            getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
-            'Oxygen Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'oxygenAB4Quantity', 'autoBuyer', true, 'tier4', 'oxygen'),
-                startUpdateAutoBuyerTimersAndRates('oxygen', 4);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier4'),
+        const neonAutoBuyer4Row = createOptionRow(
+            'neonAutoBuyer4Row',
+            getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
+            'Neon Auto Buyer Tier 4:',
+            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'neonAB4Quantity', 'autoBuyer', true, 'tier4', 'neon'),
+                startUpdateAutoBuyerTimersAndRates('neon', 4);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier4'),
             null,
             null,
             null,
             null,
-            `${autobuyer4Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
+            `${autobuyer4Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
             '',
             'upgradeCheck',
             'autoBuyer',
             null,
-            'oxygen',
+            'neon',
             'tier4',
             false,
             null
         );
-        optionContentElement.appendChild(oxygenAutoBuyer4Row);
+        optionContentElement.appendChild(neonAutoBuyer4Row);
     }
 }
 
 function drawTab2Content(heading, optionContentElement) {
+    sortTechRows(true);
     if (heading === 'Research') {
         const researchScienceKitRow = createOptionRow(
             'researchScienceKitRow',
@@ -1293,7 +1300,7 @@ function drawTab2Content(heading, optionContentElement) {
                         gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoTubeTechnology');
-                        showNotification('Nano Tube Technology Researched\n\nWith this we can experiment with fusing Carbon!', 'info');
+                        showNotification('Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!', 'info');
                     }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', false, null),
                     null,
                     null,
@@ -1985,4 +1992,13 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         let x = Math.sin(seed++) * 9390;
         return x - Math.floor(x);
     }
+}
+
+export function sortTechRows(now) {
+    if (now) {
+        setTechRenderCounter(READY_TO_SORT + NOW);
+    } else {
+        setTechRenderCounter(READY_TO_SORT);
+    }
+    setTechRenderChange(true);
 }

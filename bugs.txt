@@ -1,1 +1,2 @@
 notifications show as info if should be warning but are pressed fast
+price calc for autobuyers beyond tier1

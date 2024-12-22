@@ -19,10 +19,13 @@ export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
+export const READY_TO_SORT = 120;
+export const NOW = 30; //READY TO SORT NOW needs total of 150
 
 //GLOBAL VARIABLES
 export const deferredActions = [];
 
+let techRenderCounter = 0;
 let tempSellRowValue = null;
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
@@ -61,6 +64,7 @@ let languageChangedFlag;
 let beginGameState = true;
 let gameInProgress = false;
 let notificationsToggle = true;
+let techRenderChange = false;
 
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
@@ -77,8 +81,11 @@ export function setElements() {
         statsContainer: document.getElementById('statsContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
         mainContainer: document.getElementById('mainContainer'),
-        simpleSolids: document.getElementById('simpleSolids'),
+        solidsMenu: document.getElementById('solids'),
+        gasesMenu: document.getElementById('gases'),
+        nonFerrous: document.getElementById('nonFerrous'),
         simpleGases: document.getElementById('simpleGases'),
+        nobleGases: document.getElementById('nobleGases'),
         hydrogenOption: document.getElementById('hydrogenOption'),
         hydrogenRate: document.getElementById('hydrogenRate'),
         hydrogenQuantity: document.getElementById('hydrogenQuantity'),
@@ -88,9 +95,9 @@ export function setElements() {
         carbonOption: document.getElementById('carbonOption'),
         carbonRate: document.getElementById('carbonRate'),
         carbonQuantity: document.getElementById('carbonQuantity'),
-        oxygenOption: document.getElementById('oxygenOption'),
-        oxygenRate: document.getElementById('oxygenRate'),
-        oxygenQuantity: document.getElementById('oxygenQuantity'),
+        neonOption: document.getElementById('neonOption'),
+        neonRate: document.getElementById('neonRate'),
+        neonQuantity: document.getElementById('neonQuantity'),
         researchRate: document.getElementById('researchRate'),
         researchQuantity: document.getElementById('researchQuantity'),
         scienceKitQuantity: document.getElementById('scienceKitQuantity'),
@@ -526,4 +533,20 @@ export function getTempSellRowValue() {
 
 export function setTempSellRowValue(value) {
     tempSellRowValue = value;
+}
+
+export function getTechRenderChange() {
+    return techRenderChange;
+}
+
+export function setTechRenderChange(value) {
+    techRenderChange = value;
+}
+
+export function getTechRenderCounter() {
+    return techRenderCounter;
+}
+
+export function setTechRenderCounter(value) {
+    techRenderCounter = value;
 }

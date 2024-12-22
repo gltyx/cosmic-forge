@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body data-theme="terminal">
     <div id="notificationContainer" class="notification-container"></div>
     <!-- Menu Container -->
@@ -47,13 +49,13 @@
             <span class="stat-label">Stat 7:</span>
             <span class="stat-value notation" id="stat7">0</span>
         </div>
-    </div>    
+    </div>
 
     <!-- Tabs Container -->
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
         <div class="tab selected" data-tab="" id="tab1">Resources</div>
         <div class="tab" data-tab="" id="tab2">Technology</div>
-        <div class="tab" data-tab="stellarCartography" id="tab3">StarMap</div>
+        <div class="tab tab-invisible" data-tab="stellarCartography" id="tab3">StarMap</div>
         <div class="tab tab-invisible" data-tab="" id="tab4">Tab 4</div>
         <div class="tab tab-invisible" data-tab="" id="tab5">Tab 5</div>
         <div class="tab tab-invisible" data-tab="" id="tab6">Tab 6</div>
@@ -68,68 +70,95 @@
                     <h4>Resources</h4>
                 </div>
                 <div class="container-item-menu-body tab-1">
-                    <div id="simpleGases" class="collapsible">
+                    <!-- Outer Collapsible for Gases -->
+                    <div id="gases" class="collapsible">
                         <div class="collapsible-header">
-                            <span>Simple Gases</span>
+                            <span class="main-category-text">Gases</span>
                             <span class="collapsible-arrow">▼</span>
                         </div>
                         <div class="collapsible-content">
-                            <div class="row-side-menu d-flex">
-                                <div class="row-side-menu-item">
-                                    <p id="hydrogenOption" class="tab1.option1">Hydrogen</p>
+                            <!-- Simple Gases Collapsible -->
+                            <div id="simpleGases" class="collapsible">
+                                <div class="collapsible-header">
+                                    <span class="sub-category-text">&nbsp;Simple Gases</span>
+                                    <span class="collapsible-arrow">▼</span>
                                 </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="hydrogenRate" class="notation">0 / s</p>
-                                </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="hydrogenQuantity" class="notation">0/100</p>
+                                <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex">
+                                        <div class="row-side-menu-item">
+                                            <p id="hydrogenOption" class="tab1.option1 inset-paragraph">Hydrogen</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="hydrogenRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="hydrogenQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
+                                    <div class="row-side-menu d-flex invisible">
+                                        <div class="row-side-menu-item">
+                                            <p id="heliumOption" class="tab1.option2 inset-paragraph">Helium</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="heliumRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="heliumQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row-side-menu d-flex invisible">
-                                <div class="row-side-menu-item">
-                                    <p id="heliumOption" class="tab1.option2">Helium</p>
+        
+                            <div id="nobleGases" class="collapsible invisible">
+                                <div class="collapsible-header">
+                                    <span class="sub-category-text">&nbsp;Noble Gases</span>
+                                    <span class="collapsible-arrow">▼</span>
                                 </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="heliumRate" class="notation">0 / s</p>
+                                <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex">
+                                        <div class="row-side-menu-item">
+                                            <p id="neonOption" class="tab1.option1 inset-paragraph">Neon</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="neonRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="neonQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="heliumQuantity" class="notation">0/100</p>
+                            </div>  
+                        </div>                    
+                    </div>
+        
+                    <div id="solids" class="collapsible invisible">
+                        <div class="collapsible-header main-category-header">
+                            <span class="main-category-text">Solids</span>
+                            <span class="collapsible-arrow">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div id="nonFerrous" class="collapsible invisible">
+                                <div class="collapsible-header">
+                                    <span class="sub-category-text">&nbsp;Non Ferrous</span>
+                                    <span class="collapsible-arrow">▼</span>
                                 </div>
-                            </div>
-                            <div class="row-side-menu d-flex invisible">
-                                <div class="row-side-menu-item">
-                                    <p id="oxygenOption" class="tab1.option4">Oxygen</p>
-                                </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="oxygenRate" class="notation">0 / s</p>
-                                </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="oxygenQuantity" class="notation">0/100</p>
+                                <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex invisible">
+                                        <div class="row-side-menu-item">
+                                            <p id="carbonOption" class="tab1.option3 inset-paragraph">Carbon</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="carbonRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="carbonQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="simpleSolids" class="collapsible invisible">
-                        <div class="collapsible-header">
-                            <span>Simple Solids</span>
-                            <span class="collapsible-arrow">▼</span>
-                        </div>
-                        <div class="collapsible-content">
-                            <div class="row-side-menu d-flex invisible">
-                                <div class="row-side-menu-item">
-                                    <p id="carbonOption" class="tab1.option3">Carbon</p>
-                                </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="carbonRate" class="notation">0 / s</p>
-                                </div>
-                                <div class="row-side-menu-item right-align">
-                                    <p id="carbonQuantity" class="notation">0/100</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
                 </div>
-                
             </div>
             <div class="container-item-content tab-1">
                 <div class="container-item-menu-header tab-1">
@@ -144,6 +173,7 @@
                 </div>
             </div>
         </div>
+        
 
         <div id="tab2ContainerGroup" class="tab-2-container-group tab-2">
             <div class="container-item-menu tab-2">
@@ -320,7 +350,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="tab6ContainerGroup" class="tab-6-container-group tab-6">
             <div class="container-item-menu tab-6">
                 <div class="container-item-menu-header tab-6">
@@ -407,7 +437,7 @@
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
 
         <div id="tab8ContainerGroup" class="tab-8-container-group tab-8">
             <div class="container-item-menu tab-8">
@@ -449,4 +479,5 @@
     <script type="module" src="utilityFunctions.js"></script>
     <script type="module" src="ui.js"></script>
 </body>
+
 </html>

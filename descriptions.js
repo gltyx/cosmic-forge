@@ -5,7 +5,7 @@ export const headerDescriptions = {
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
-    oxygen: "Finally a breathable element, this is massive for progression!",
+    neon: "Finally a breathable element, this is massive for progression!",
     'star map': "This is a map of the known galaxy",
 };
 
@@ -52,7 +52,7 @@ export const optionDescriptions = {
     },
     carbonSellRow: {
         content1: "Here you can sell Carbon for cash",
-        content2: "Here you can sell Carbon for cash or fuse it into Oxygen",
+        content2: "Here you can sell Carbon for cash or fuse it into Neon",
         updateAt: "carbonFusion"
     },
     carbonGainRow: {
@@ -70,23 +70,23 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
-    oxygenSellRow: {
-        content1: "Here you can sell Oxygen for cash",
-        content2: "Here you can sell Oxygen for cash or fuse it into Neon",
-        updateAt: "oxygenFusion"
+    neonSellRow: {
+        content1: "Here you can sell Neon for cash",
+        content2: "Here you can sell Neon for cash or fuse it into Silver",
+        updateAt: "neonFusion"
     },
-    oxygenGainRow: {
-        content1: "Manually gain one unit of Oxygen.",
+    neonGainRow: {
+        content1: "Manually gain one unit of Neon.",
         content2: "",
         updateAt: ""
     },
-    oxygenIncreaseStorageRow: {
-        content1: "Upgrade your Oxygen storage capacity to hold more resources.",
+    neonIncreaseStorageRow: {
+        content1: "Upgrade your Neon storage capacity to hold more resources.",
         content2: "",
         updateAt: ""
     },
-    oxygenAutoBuyer1Row: {
-        content1: "Add an Oxygen Extractor to automate Oxygen generation.",
+    neonAutoBuyer1Row: {
+        content1: "Add an Neon Extractor to automate Neon generation.",
         content2: "",
         updateAt: ""
     },  
