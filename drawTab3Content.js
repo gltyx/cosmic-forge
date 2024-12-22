@@ -1,6 +1,6 @@
-import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setAutoBuyerTierLevel, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
+import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
 import { gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
-import { getResourceDataObject } from './resourceDataObject.js';
+import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -216,7 +216,12 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('quantumComputing', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('quantumComputing');
-                        setAutoBuyerTierLevel(2);
+                        const resourceObject = getResourceDataObject('resources');
+                        Object.keys(resourceObject).forEach(key => {
+                            if (getResourceDataObject('resources', [key, 'upgrades', 'autoBuyer', 'normalProgression']) === true) {
+                                setAutoBuyerTierLevel(key, 2, false);
+                            }
+                        });
                         showNotification('Quantum Computing Researched\n\nMore advanced Machinery is now available!', 'info');
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null),
                     null,

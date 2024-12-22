@@ -5,11 +5,13 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.012,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 600,
+            quantity: 0,
             rate: 0,
-            storageCapacity: 800,
+            storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 65, rate: 0.01, quantity: 0, setPrice: 'hydrogenAB1Price' },
                     tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 500, rate: 25, quantity: 0, setPrice: 'hydrogenAB2Price' },
                     tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2500, rate: 125, quantity: 0, setPrice: 'hydrogenAB3Price' },
@@ -31,6 +33,8 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer1Row', price: 75, rate: 0.01, quantity: 0, setPrice: 'heliumAB1Price' },
                     tier2: { nameUpgrade: 'Advanced Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer2Row', price: 575, rate: 25, quantity: 0, setPrice: 'heliumAB2Price' },
                     tier3: { nameUpgrade: 'Industrial Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer3Row', price: 2875, rate: 125, quantity: 0, setPrice: 'heliumAB3Price' },
@@ -52,6 +56,8 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Burner', screen: 'carbon', place: 'carbonAutoBuyer1Row', price: 55, rate: 0.01, quantity: 0, setPrice: 'carbonAB1Price' },
                     tier2: { nameUpgrade: 'Advanced Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer2Row', price: 425, rate: 25, quantity: 0, setPrice: 'carbonAB2Price' },
                     tier3: { nameUpgrade: 'Industrial Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer3Row', price: 2125, rate: 125, quantity: 0, setPrice: 'carbonAB3Price' },
@@ -73,6 +79,8 @@ export const resourceData = {
             storageCapacity: 100,
             upgrades: {
                 autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
                     tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'neonAB1Price' },
                     tier2: { nameUpgrade: 'Advanced Neon Extractor', screen: 'neon', place: 'neonAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'neonAB2Price' },
                     tier3: { nameUpgrade: 'Industrial Neon Extractor', screen: 'neon', place: 'neonAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'neonAB3Price' },
@@ -155,4 +163,14 @@ export function setResourceDataObject(value, key, subKeys = []) {
             current = current[subKey] || (current[subKey] = {});
         }
     }
+}
+
+export function setAutoBuyerTierLevel(key, value, override = false) {
+    if (resourceData.resources[key].upgrades.autoBuyer.normalProgression === true || override) {
+        resourceData.resources[key].upgrades.autoBuyer.currentTierLevel = value;
+    }
+}
+
+export function getAutoBuyerTierLevel(key) {
+    return resourceData.resources[key].upgrades.autoBuyer.currentTierLevel;
 }

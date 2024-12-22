@@ -5,7 +5,6 @@ import {
     setTechRenderCounter,
     setTechRenderChange,
     getTechRenderChange,
-    getAutoBuyerTierLevel,
     getTemporaryRowsRepo,
     getRevealedTechArray,
     setRevealedTechArray,

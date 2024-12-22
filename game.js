@@ -5,8 +5,6 @@ import {
     getTechRenderChange,
     setTempSellRowValue,
     getTempSellRowValue,
-    getAutoBuyerTierLevel,
-    setAutoBuyerTierLevel,
     deferredActions,
     getCanAffordDeferred,
     setCanAffordDeferred,
@@ -42,6 +40,7 @@ import {
 } from './constantsAndGlobalVars.js';
 
 import {
+    getAutoBuyerTierLevel,
     getResourceDataObject,
     setResourceDataObject,
 } from "./resourceDataObject.js";
@@ -553,10 +552,16 @@ function monitorRevealRowsChecks(element) {
         }
     } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
         const elementTier = parseInt(element.dataset.autoBuyerTier.slice(-1));
-        if (elementTier <= getAutoBuyerTierLevel()) {
-            element.classList.remove('invisible');
-        } else {
-            element.classList.add('invisible');
+        if (getCurrentTab() === 1)  {
+            if (elementTier > 0 ) {
+                if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane())) {
+                    element.classList.remove('invisible');
+                } else {
+                    element.classList.add('invisible');
+                }
+            } else {
+                element.classList.add('invisible');
+            }
         }
     }
 }
@@ -660,6 +665,7 @@ function monitorResourceCostChecks(element) {
         if (type === 'autoBuyer') {
             mainKey = 'resources';
             const autoBuyerTier = element.dataset.autoBuyerTier;
+            if (autoBuyerTier === 'tier0') return;
             price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
         } else if (type === 'scienceUpgrade') {
             mainKey = 'research';

@@ -679,7 +679,7 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'neonAB1Quantity', 'autoBuyer', true, 'tier1', 'neon'),
                     startUpdateAutoBuyerTimersAndRates('neon', 1);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier1'),
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier0'),
             null,
             null,
             null,
@@ -690,7 +690,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'autoBuyer',
             null,
             'neon',
-            'tier1',
+            'tier0',
             false,
             null
         );
