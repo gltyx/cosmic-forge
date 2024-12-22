@@ -93,11 +93,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let fuseButton;
 
+    document.getElementById('tab1Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab1', 'tab1Intro');
+        setCurrentOptionPane('tab1intro');
+        updateContent('Resources', 'tab1', 'intro');
+    });
+
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'hydrogen');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1');
+            updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -107,17 +113,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'helium');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1');
+            updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'water');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2');
         });
     });
 
@@ -125,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'carbon');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1');
+            updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -135,17 +133,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'neon');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1');
+            updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
+    });
+
+    document.getElementById('tab2Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab2', 'tab2Intro');
+        setCurrentOptionPane('tab2intro');
+        updateContent('Compounds', 'tab2', 'intro');
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'water');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2', 'content');
+        });
+    });
+
+    document.getElementById('tab3Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab3', 'tab3Intro');
+        setCurrentOptionPane('tab3intro');
+        updateContent('Technology', 'tab3', 'intro');
     });
 
     document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'research');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab3');
+            updateContent(this.textContent, 'tab3', 'content');
         });
     });
     
@@ -153,23 +171,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'tech tree');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab3');
+            updateContent(this.textContent, 'tab3', 'content');
         });
+    });
+
+    document.getElementById('tab4Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab4', 'tab4Intro');
+        setCurrentOptionPane('tab4intro');
+        updateContent('Star Map', 'tab4', 'intro');
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'star map');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4');
+            updateContent(this.textContent, 'tab4', 'content');
         });
+    });
+
+    document.getElementById('tab8Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab8', 'tab8Intro');
+        setCurrentOptionPane('tab8intro');
+        updateContent('Settings', 'tab8', 'intro');
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'visual');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8');
+            updateContent(this.textContent, 'tab8', 'content');
         });
     });
     
@@ -177,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'option2');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8');
+            updateContent(this.textContent, 'tab8', 'content');
         });
     });
     
@@ -185,7 +215,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'option3');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent,'tab8');
+            updateContent(this.textContent,'tab8', 'content');
         });
     });
     
@@ -193,7 +223,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'option4');
             setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8');
+            updateContent(this.textContent, 'tab8', 'content');
         });
     });
 
@@ -203,6 +233,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentTab(index + 1);
             highlightActiveTab(index);
             setGameState(getGameVisibleActive());
+            let content = tab.textContent;
+            if (content === '☰') {
+                content = 'Settings';
+            }
+            updateContent(content, `tab${index + 1}`, 'intro');
             const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab());
             if (lastOpenOptionPane) {
                 setCurrentOptionPane(lastOpenOptionPane);
@@ -212,16 +247,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     window.addEventListener('resize', () => {
         if (getCurrentOptionPane()) {
-            const starContainer = document.querySelector('#optionContentTab3');
+            const starContainer = document.querySelector('#optionContentTab4');
             starContainer.innerHTML = '';
             generateStarfield(starContainer, 100, 80);
         }
     });
 });
 
-export function updateContent(heading, tab) {
+export function updateContent(heading, tab, type) {
     const optionDescriptionElements = getElements().optionPaneDescriptions;
-    const optionDescription = getHeaderDescriptions([heading.toLowerCase()]);
+    let optionDescription;
 
     let headerContentElement;
     let optionContentElement;
@@ -233,60 +268,69 @@ export function updateContent(heading, tab) {
 
     headerContentElement.innerText = heading;
     optionContentElement.innerHTML = '';
-        
-    switch (tab) {
-        case 'tab1':
-            optionDescriptionElement = optionDescriptionElements[0];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab1Content(heading, optionContentElement);
-            break;
-        case 'tab2':
-            optionDescriptionElement = optionDescriptionElements[1];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab2Content(heading, optionContentElement);
-            break;
-        case 'tab3':
-            optionDescriptionElement = optionDescriptionElements[2];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab3Content(heading, optionContentElement);
-            break;
-        case 'tab4':
-            optionDescriptionElement = optionDescriptionElements[3];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab4Content(heading, optionContentElement);
-            break;
-        case 'tab5':
-            optionDescriptionElement = optionDescriptionElements[4];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab5Content(heading, optionContentElement);
-            break;
-        case 'tab6':
-            optionDescriptionElement = optionDescriptionElements[5];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab6Content(heading, optionContentElement);
-            break;
-        case 'tab7':
-            optionDescriptionElement = optionDescriptionElements[6];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab7Content(heading, optionContentElement);
-            break;
-        case 'tab8':
-            optionDescriptionElement = optionDescriptionElements[7];
-            optionDescriptionElement.textContent = optionDescription;
-            optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-            drawTab8Content(heading, optionContentElement);
-            break;
-        default:
-            console.error('Invalid tab:', tab);
-            break;
-    }   
+       
+    if (type === 'intro') {
+        optionDescription = getHeaderDescriptions([heading]);
+        optionDescriptionElement = optionDescriptionElements[tabNumber - 1];
+        optionDescriptionElement.textContent = optionDescription;
+        optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+        return;
+    } else {
+        optionDescription = getHeaderDescriptions([heading.toLowerCase()]);
+        switch (tab) {
+            case 'tab1':
+                optionDescriptionElement = optionDescriptionElements[0];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab1Content(heading, optionContentElement);
+                break;
+            case 'tab2':
+                optionDescriptionElement = optionDescriptionElements[1];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab2Content(heading, optionContentElement);
+                break;
+            case 'tab3':
+                optionDescriptionElement = optionDescriptionElements[2];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab3Content(heading, optionContentElement);
+                break;
+            case 'tab4':
+                optionDescriptionElement = optionDescriptionElements[3];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab4Content(heading, optionContentElement);
+                break;
+            case 'tab5':
+                optionDescriptionElement = optionDescriptionElements[4];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab5Content(heading, optionContentElement);
+                break;
+            case 'tab6':
+                optionDescriptionElement = optionDescriptionElements[5];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab6Content(heading, optionContentElement);
+                break;
+            case 'tab7':
+                optionDescriptionElement = optionDescriptionElements[6];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab7Content(heading, optionContentElement);
+                break;
+            case 'tab8':
+                optionDescriptionElement = optionDescriptionElements[7];
+                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+                drawTab8Content(heading, optionContentElement);
+                break;
+            default:
+                console.error('Invalid tab:', tab);
+                break;
+        }
+    }
 }
 
 export function createOptionRow(
@@ -320,7 +364,6 @@ export function createOptionRow(
     if(getOptionDescription(labelId)) {
         descriptionRowContainer.textContent = getOptionDescription(labelId).content1;
     }
-
 
     // Main row container
     const mainRow = document.createElement('div');
@@ -413,7 +456,6 @@ export function createOptionRow(
 
     return wrapper;
 }
-
 
 function generateElementId(labelText, resource) {
 
@@ -557,7 +599,6 @@ function sendNotificationIfActive(message, type, duration) {
         }, duration);
     }
 }
-
 
 function hideNotification(notification) {
     notification.style.opacity = '0';

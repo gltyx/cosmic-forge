@@ -1,4 +1,12 @@
 export const headerDescriptions = {
+    'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
+    'Compounds': 'Here you can gain and sell compounds.',
+    'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
+    'Technology': 'In the Technology section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
+    tab5intro: '',
+    tab6intro: '',
+    tab7intro: '',
+    'Settings': 'Change the game settings to your liking.',
     visual: "Change the visual settings of the game.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
