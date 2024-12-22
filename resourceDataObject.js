@@ -3,7 +3,7 @@ export const resourceData = {
         hydrogen: {
             nameResource: 'Hydrogen',
             screenName: 'hydrogen',
-            saleValue: 0.005,
+            saleValue: 0.012,
             salePreviewElement: 'sellHydrogenDescription',
             quantity: 0,
             rate: 0,
@@ -87,7 +87,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 0,
+        quantity: 10000,
         rate: 0,
         upgrades: {
             scienceKit: { requirementQty: 1, price: 5, rate: 0.003, quantity: 0, setPrice: 'scienceKitPrice' },

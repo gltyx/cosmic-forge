@@ -982,7 +982,7 @@ function formatAllNotationElements(notationType) {
                         setTempSellRowValue(originalContent);
                     }
                     if (element.dataset.conditionCheck === 'techUnlock') {
-                        return number.toFixed(2);
+                        return number;
                     } else {
                         return number.toFixed(0);
                     }
