@@ -5,9 +5,9 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.012,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 0,
+            quantity: 600,
             rate: 0,
-            storageCapacity: 100,
+            storageCapacity: 800,
             upgrades: {
                 autoBuyer: {
                     tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 65, rate: 0.01, quantity: 0, setPrice: 'hydrogenAB1Price' },
@@ -98,13 +98,14 @@ export const resourceData = {
         knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 1 },
         fusionTheory: { appearsAt: [500, null], price: 750, idForRenderPosition: 2 },
         hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500, idForRenderPosition: 3 },
-        stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 7 },
+        stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 4 },
+        quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 5 },
+        heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 3000, idForRenderPosition: 6 },
+        nanoTubeTechnology: { appearsAt: [7500, 'heliumFusion'], price: 10000, idForRenderPosition: 7 }, //carbon autobuyerratex2
+        carbonFusion: { appearsAt: [7500, 'nanoTubeTechnology'], price: 5000, idForRenderPosition: 8 },
+        
         fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 900 },
-        quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 8 },
-        heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 3000, idForRenderPosition: 9 },
         fusionEfficiencyII: { appearsAt: [4000, 'fusionEfficiencyI'], price: 5000, idForRenderPosition: 901 },
-        nanoTubeTechnology: { appearsAt: [7500, 'heliumFusion'], price: 10000, idForRenderPosition: 11 }, //carbon autobuyerratex2
-        carbonFusion: { appearsAt: [7500, 'nanoTubeTechnology'], price: 5000, idForRenderPosition: 12 },
         fusionEfficiencyIII: { appearsAt: [5500, 'fusionEfficiencyII'], price: 10000, idForRenderPosition: 903 },
     },
     currency: {

@@ -337,7 +337,9 @@ function checkAndIncreasePrices() {
                 if (setPriceTarget.startsWith('science')) {
                     setNewResourcePrice(currentPrice, setPriceTarget, '');
                 } else {
-                    for (let tier = 1; tier <= 4; tier++) {
+                    const tierMatch = setPriceTarget.match(new RegExp(`${resource}AB(\\d+)Price`));
+                    if (tierMatch && tierMatch[1]) {
+                        const tier = parseInt(tierMatch[1], 10);
                         setNewResourcePrice(currentPrice, setPriceTarget, tier);
                     }
                 }

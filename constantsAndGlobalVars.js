@@ -38,7 +38,7 @@ let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
-let autoBuyerTierLevel = 1;
+let autoBuyerTierLevel = 2;
 
 let originalFrameNumbers = {
 };
