@@ -34,7 +34,22 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('hydrogen');
             }, 'sellResource', null, null, null, 'hydrogen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('hydrogen', getResourceDataObject('resources', ['hydrogen', 'fuseTo1']), getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('simpleGases'), document.getElementById('gases'));
+                fuseResource("hydrogen", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['hydrogen', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'),
+                        categoryToShow: document.getElementById('simpleGases'),
+                        mainCategoryToShow: document.getElementById('gases')
+                    },
+                    {
+                        fuseTo: getResourceDataObject('resources', ['hydrogen', 'fuseTo2']),
+                        ratio: getResourceDataObject('resources', ['hydrogen', 'fuseToRatio2']),
+                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('nonFerrous'),
+                        mainCategoryToShow: document.getElementById('solids')
+                    }
+                ]);                
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null),

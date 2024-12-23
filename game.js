@@ -203,93 +203,72 @@ function updateStats() {
     }
 }
 
-export function fuseResource(resource, fuseTo, ratio, resourceRowToShow, categoryToShow, mainCategoryToShow) {
+export function fuseResource(resource, fuseTargets) {
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+    let totalDeducted = 0;
 
-    const fuseToString = getResourceDataObject('resources', [fuseTo, 'nameResource']);
-    const fuseToStorageCapacity = getResourceDataObject('resources', [fuseTo, 'storageCapacity']);
-    const fuseToQuantity = getResourceDataObject('resources', [fuseTo, 'quantity']);
+    for (let target of fuseTargets) {
+        const { fuseTo, ratio, resourceRowToShow, categoryToShow, mainCategoryToShow } = target;
 
-    let amountToDeductFromResource;
-    let amountToAddToResource;
-    let fuseData;
-    let realAmountToAdd = 0;
+        const fuseToString = getResourceDataObject('resources', [fuseTo, 'nameResource']);
+        const fuseToStorageCapacity = getResourceDataObject('resources', [fuseTo, 'storageCapacity']);
+        const fuseToQuantity = getResourceDataObject('resources', [fuseTo, 'quantity']);
+        
+        let fuseData, amountToDeductFromResource, amountToAddToResource, realAmountToAdd = 0, lostQuantity = 0;
 
-    let lostQuantity = 0;
-
-    if (!getUnlockedResourcesArray().includes(fuseTo)) {
-        resourceRowToShow.classList.remove('invisible');
-        mainCategoryToShow.classList.remove('invisible');
-        categoryToShow.classList.remove('invisible');
-        setUnlockedResourcesArray(fuseTo);
-        fuseData = getResourceSalePreview(resource);
-        amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
-        const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
-
-        showNotification(
-            `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
-            'info'
-        );
-        setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
-        setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
-        return;
-    } else {
-        let fusionEfficiency = 1; //1 full efficiency then reduced based on tech below
-
-        if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
-            fusionEfficiency = Math.random() * (0.30 - 0.20) + 0.30;
-        } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
-            fusionEfficiency = Math.random() * (0.60 - 0.40) + 0.60;
-        } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
-            fusionEfficiency = Math.random() * (0.80 - 0.60) + 0.80;
-        }
-
-        if (getUnlockedResourcesArray().includes(fuseTo)) {
+        if (!getUnlockedResourcesArray().includes(fuseTo)) {
+            resourceRowToShow.classList.remove('invisible');
+            mainCategoryToShow.classList.remove('invisible');
+            categoryToShow.classList.remove('invisible');
+            setUnlockedResourcesArray(fuseTo);
             fuseData = getResourceSalePreview(resource);
+            amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
+            const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
 
+            showNotification(
+                `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
+                'info'
+            );
+            setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
+            setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
+            totalDeducted = amountToDeductFromResource;
+        } else {
+            let fusionEfficiency = 1; // Default full efficiency
+
+            if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
+                fusionEfficiency = Math.random() * (0.30 - 0.20) + 0.20;
+            } else if (!getTechUnlockedArray().includes("fusionEfficiencyII")) {
+                fusionEfficiency = Math.random() * (0.60 - 0.40) + 0.40;
+            } else if (!getTechUnlockedArray().includes("fusionEfficiencyIII")) {
+                fusionEfficiency = Math.random() * (0.80 - 0.60) + 0.60;
+            }
+
+            fuseData = getResourceSalePreview(resource);
             amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
             amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
 
             realAmountToAdd = Math.floor(amountToAddToResource * fusionEfficiency);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
 
-            if (getTechUnlockedArray().includes("fusionEfficiencyIII")) {
-                if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
-                    showNotification(
-                        `Fused ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. no significant efficiency loss during fusion, receive ${realAmountToAdd} ${fuseToString}`,
-                        'info'
-                    );
-                } else { ;
-                    const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity); 
-                    lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
-    
-                    showNotification(
-                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
-                        'warning'
-                    );
-                    
-                }
-            } else {
-                if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
-                    showNotification(
-                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
-                        'info'
-                    );
-                } else { ;
-                    const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity); 
-                    lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
-    
-                    showNotification(
-                        `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
-                        'warning'
-                    );
-                }
-            }
+            const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity);
+            lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
+
+            const finalAmountToAdd = Math.min(realAmountToAdd - lostQuantity, availableStorageFuseTo);
+
+            showNotification(
+                `Fused ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. ${
+                    lostQuantity > 0 ? `Lost ${lostQuantity} ${fuseToString} due to storage capacity.` : ""
+                } Received ${finalAmountToAdd} ${fuseToString}.`,
+                lostQuantity > 0 ? 'warning' : 'info'
+            );
+
+            setResourceDataObject(fuseToQuantity + finalAmountToAdd, 'resources', [fuseTo, 'quantity']);
+            totalDeducted = amountToDeductFromResource;
         }
     }
-    setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
-    setResourceDataObject(fuseToQuantity + Math.min(fuseToStorageCapacity - fuseToQuantity, realAmountToAdd - lostQuantity), 'resources', [fuseTo, 'quantity']);
+
+    setResourceDataObject(resourceQuantity - totalDeducted, 'resources', [resource, 'quantity']);
 }
 
 export function sellResource(resource) {
@@ -310,15 +289,17 @@ function updateAllSalePricePreviews() {
     const resources = getResourceDataObject('resources');
 
     for (const resource in resources) {
-        const fuseTo = resources[resource]?.['fuseTo1'];
+        const fuseTo1 = resources[resource]?.['fuseTo1'];
+        const fuseTo2 = resources[resource]?.['fuseTo2'];
     
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";
-            if (fuseTo !== 'none') {
-                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo);
+            if (fuseTo1 !== 'none') {
+                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
             } else {
-                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, '');
+                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, '', '');
             }
+            
     
             const salePreviewString = getResourceSalePreview(resource);
             const salePreviewElementId = resources[resource]?.salePreviewElement;

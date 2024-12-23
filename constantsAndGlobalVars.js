@@ -336,7 +336,7 @@ export function getResourcesToIncreasePrice() {
     return resourcesToIncreasePrice;
 }
 
-export function setSalePreview(resource, amount, fusionTo) {
+export function setSalePreview(resource, amount, fusionTo1, fusionTo2) {
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
 
     let calculatedAmount;
@@ -379,12 +379,13 @@ export function setSalePreview(resource, amount, fusionTo) {
             calculatedAmount = 0;
             break;
     }
-    setResourceSalePreview(resource, calculatedAmount, fusionTo);
+    setResourceSalePreview(resource, calculatedAmount, fusionTo1, fusionTo2);
 }
 
-export function setResourceSalePreview(resource, value, fuseToResource) {
+export function setResourceSalePreview(resource, value, fuseToResource1, fuseToResource2) {
     let fusionFlag = false;
-    let tooManyToStore = 0;
+    let tooManyToStore1 = 0;
+    let tooManyToStore2 = 0;
     let suffixFusion = '';
 
     const resourceCapitalised = getResourceDataObject('resources', [resource, 'nameResource']);
@@ -392,33 +393,52 @@ export function setResourceSalePreview(resource, value, fuseToResource) {
     const resourceSaleValueFactor = getResourceDataObject('resources', [resource, 'saleValue']);
 
     if (getTechUnlockedArray().includes(getResourceDataObject('resources', [resource, 'canFuseTech']))) {
-        const fuseToCapitalised = getResourceDataObject('resources', [fuseToResource, 'nameResource']);
-        const fuseToQuantity = getResourceDataObject('resources', [fuseToResource, 'quantity']);
-        const fuseToStorage = getResourceDataObject('resources', [fuseToResource, 'storageCapacity']);
-        const fuseToRatio = getResourceDataObject('resources', [resource, 'fuseToRatio1']);
+        const fuseToCapitalised1 = getResourceDataObject('resources', [fuseToResource1, 'nameResource']);
+        const fuseToQuantity1 = getResourceDataObject('resources', [fuseToResource1, 'quantity']);
+        const fuseToStorage1 = getResourceDataObject('resources', [fuseToResource1, 'storageCapacity']);
+        const fuseToRatio1 = getResourceDataObject('resources', [resource, 'fuseToRatio1']);
+
+        const fuseToCapitalised2 = getResourceDataObject('resources', [fuseToResource2, 'nameResource']);
+        const fuseToQuantity2 = getResourceDataObject('resources', [fuseToResource2, 'quantity']);
+        const fuseToStorage2 = getResourceDataObject('resources', [fuseToResource2, 'storageCapacity']);
+        const fuseToRatio2 = getResourceDataObject('resources', [resource, 'fuseToRatio2']);
 
         fusionFlag = true;
         
-        if (Math.floor(value * fuseToRatio) > fuseToStorage - fuseToQuantity) {
-            tooManyToStore = 1;
+        if (Math.floor(value * fuseToRatio1) > fuseToStorage1 - fuseToQuantity1) {
+            tooManyToStore1 = 1;
         }
-        if (fuseToStorage === fuseToQuantity) {
-            tooManyToStore = 2;
+        if (fuseToStorage1 === fuseToQuantity1) {
+            tooManyToStore1 = 2;
+        }
+
+        if (Math.floor(value * fuseToRatio2) > fuseToStorage2 - fuseToQuantity2) {
+            tooManyToStore2 = 1;
+        }
+        if (fuseToStorage1 === fuseToQuantity1) {
+            tooManyToStore2 = 2;
         }
         
-        const quantityToAddFuseTo = Math.min(
-            Math.floor(value * fuseToRatio),
-            Math.floor(fuseToStorage - fuseToQuantity)
+        const quantityToAddFuseTo1 = Math.min(
+            Math.floor(value * fuseToRatio1),
+            Math.floor(fuseToStorage1 - fuseToQuantity1)
+        );
+
+        const quantityToAddFuseTo2 = Math.min(
+            Math.floor(value * fuseToRatio2),
+            Math.floor(fuseToStorage2 - fuseToQuantity2)
         );
         
         const suffix =
-            tooManyToStore === 0 ? '' :
-            tooManyToStore === 1 ? '!' :
-            '!!';
+        tooManyToStore1 === 0 && tooManyToStore2 === 0 ? '' :
+        tooManyToStore1 > 0 || tooManyToStore2 > 0 ? '!' :
+        tooManyToStore1 === 1 || tooManyToStore2 === 1 ? '!' :
+        tooManyToStore1 === 2 || tooManyToStore2 === 2 ? '!!' :
+        '';    
         
-        suffixFusion = ` -> ${quantityToAddFuseTo} ${fuseToCapitalised}${suffix}`;
+        suffixFusion = ` -> ${quantityToAddFuseTo1} ${fuseToCapitalised1}, ${quantityToAddFuseTo2} ${fuseToCapitalised2}${suffix}`;
 
-        if (!getUnlockedResourcesArray().includes(fuseToResource)) {
+        if (!getUnlockedResourcesArray().includes(fuseToResource1) && !getUnlockedResourcesArray().includes(fuseToResource2)) {
             suffixFusion = '';
         }
     }

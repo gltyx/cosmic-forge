@@ -21,7 +21,9 @@ export const resourceData = {
             revealedBy: "",
             canFuseTech: 'hydrogenFusion',
             fuseTo1: 'helium',
-            fuseToRatio1: 0.5
+            fuseTo2: 'carbon',
+            fuseToRatio1: 0.5,
+            fuseToRatio2: 0.5
         },
         helium: {
             nameResource: 'Helium',
@@ -44,7 +46,9 @@ export const resourceData = {
             revealedBy: "hydrogenFusion",
             canFuseTech: 'heliumFusion',
             fuseTo1: 'carbon',
-            fuseToRatio1: 0.3
+            fuseTo2: '',
+            fuseToRatio1: 0.3,
+            fuseToRatio2: 0
         },
         carbon: {
             nameResource: 'Carbon',
@@ -64,10 +68,12 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer4Row', price: 10625, rate: 625, quantity: 0, setPrice: 'carbonAB4Price' }
                 }
             },
-            revealedBy: "heliumFusion",
+            revealedBy: "hydrogenFusion",
             canFuseTech: 'carbonFusion',
             fuseTo1: 'neon',
-            fuseToRatio1: 2
+            fuseTo2: '',
+            fuseToRatio1: 2,
+            fuseToRatio2: 0
         },    
         neon: {
             nameResource: 'Neon',
@@ -90,7 +96,9 @@ export const resourceData = {
             revealedBy: "carbonFusion",
             canFuseTech: 'neonFusion',
             fuseTo1: 'oxygen',
-            fuseToRatio1: 0.3
+            fuseTo2: '',
+            fuseToRatio1: 0.3,
+            fuseToRatio2: 0
         },
         oxygen: {
             nameResource: 'Oxygen',
@@ -113,7 +121,9 @@ export const resourceData = {
             revealedBy: "neonFusion",
             canFuseTech: 'oxygenFusion',
             fuseTo1: 'silicon',
-            fuseToRatio1: 0.2
+            fuseTo2: '',
+            fuseToRatio1: 0.2,
+            fuseToRatio2: 0
         },
         silicon: {
             nameResource: 'Silicon',
@@ -136,7 +146,9 @@ export const resourceData = {
             revealedBy: "oxygenFusion",
             canFuseTech: 'siliconFusion',
             fuseTo1: 'iron',
-            fuseToRatio1: 0.2
+            fuseTo2: '',
+            fuseToRatio1: 0.2,
+            fuseToRatio2: 0
         },
         iron: {
             nameResource: 'Iron',
@@ -159,7 +171,9 @@ export const resourceData = {
             revealedBy: "siliconFusion",
             canFuseTech: 'none',
             fuseTo1: 'none',
-            fuseToRatio1: 0.3
+            fuseTo2: '',
+            fuseToRatio1: 0.3,
+            fuseToRatio2: 0
         },
         sodium: {  //needs logic as it is a second branch off from carbon
             nameResource: 'Sodium',
@@ -182,7 +196,9 @@ export const resourceData = {
             revealedBy: "carbonFusion",
             canFuseTech: 'none',
             fuseTo1: 'none',
-            fuseToRatio1: 0.5
+            fuseTo2: '',
+            fuseToRatio1: 0.5,
+            fuseToRatio2: 0
         },
     },
     research: {
