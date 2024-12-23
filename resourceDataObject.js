@@ -90,7 +90,99 @@ export const resourceData = {
             revealedBy: "carbonFusion",
             canFuseTech: 'neonFusion',
             fuseTo1: 'oxygen',
+            fuseToRatio1: 0.3
+        },
+        oxygen: {
+            nameResource: 'Oxygen',
+            screenName: 'oxygen',
+            saleValue: 0.02,
+            salePreviewElement: 'sellOxygenDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'oxygenAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'oxygenAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'oxygenAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'oxygenAB4Price' }
+                }
+            },
+            revealedBy: "neonFusion",
+            canFuseTech: 'oxygenFusion',
+            fuseTo1: 'silicon',
             fuseToRatio1: 0.2
+        },
+        silicon: {
+            nameResource: 'Silicon',
+            screenName: 'silicon',
+            saleValue: 0.02,
+            salePreviewElement: 'sellSiliconDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'siliconAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'siliconAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'siliconAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'siliconAB4Price' }
+                }
+            },
+            revealedBy: "oxygenFusion",
+            canFuseTech: 'siliconFusion',
+            fuseTo1: 'iron',
+            fuseToRatio1: 0.2
+        },
+        iron: {
+            nameResource: 'Iron',
+            screenName: 'iron',
+            saleValue: 0.02,
+            salePreviewElement: 'sellIronDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Iron Extractor', screen: 'iron', place: 'ironAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'ironAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Iron Extractor', screen: 'iron', place: 'ironAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'ironAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Iron Extractor', screen: 'iron', place: 'ironAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'ironAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Iron Extractor', screen: 'iron', place: 'ironAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'ironAB4Price' }
+                }
+            },
+            revealedBy: "siliconFusion",
+            canFuseTech: 'none',
+            fuseTo1: 'none',
+            fuseToRatio1: 0.3
+        },
+        sodium: {  //needs logic as it is a second branch off from carbon
+            nameResource: 'Sodium',
+            screenName: 'sodium',
+            saleValue: 0.02,
+            salePreviewElement: 'sellSodiumDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 100,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer1Row', price: 100, rate: 0.02, quantity: 0, setPrice: 'sodiumAB1Price' },
+                    tier2: { nameUpgrade: 'Advanced Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer2Row', price: 800, rate: 50, quantity: 0, setPrice: 'sodiumAB2Price' },
+                    tier3: { nameUpgrade: 'Industrial Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer3Row', price: 4000, rate: 250, quantity: 0, setPrice: 'sodiumAB3Price' },
+                    tier4: { nameUpgrade: 'Quantum Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer4Row', price: 20000, rate: 1250, quantity: 0, setPrice: 'sodiumAB4Price' }
+                }
+            },
+            revealedBy: "carbonFusion",
+            canFuseTech: 'none',
+            fuseTo1: 'none',
+            fuseToRatio1: 0.5
         },
     },
     research: {

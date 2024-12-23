@@ -150,6 +150,46 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.querySelectorAll('[class*="tab1"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'oxygen');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option6"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'sodium');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option7"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'silicon');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option8"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'iron');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
     document.getElementById('tab2Intro').addEventListener('click', function() {
         setLastScreenOpenRegister('tab2', 'tab2Intro');
         setCurrentOptionPane('tab2intro');

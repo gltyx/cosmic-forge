@@ -17,6 +17,10 @@ export const headerDescriptions = {
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
     neon: "The first noble gas!  Very 'bright' of you to discover it!",
+    oxygen: "A vital element for most, oxygen is highly reactive and essential for combustion and respiration.",
+    sodium: "A soft, silvery metal",
+    silicon: "The backbone of modern technology, it is a crucial component in electronics and solar panels.",
+    iron: "A strong and versatile metal, iron is the foundation of construction and industry.",
     'star map': "This is a map of the known galaxy",
 };
 
@@ -120,7 +124,87 @@ export const optionDescriptions = {
         content1: "Add an Neon Extractor to automate Neon generation.",
         content2: "",
         updateAt: ""
-    },  
+    },
+    oxygenSellRow: {
+        content1: "Here you can sell Oxygen for cash.",
+        content2: "Here you can sell Oxygen for cash or fuse it into Silicon.",
+        updateAt: "oxygenFusion"
+    },
+    oxygenGainRow: {
+        content1: "Manually gain one unit of Oxygen.",
+        content2: "",
+        updateAt: ""
+    },
+    oxygenIncreaseStorageRow: {
+        content1: "Upgrade your Oxygen storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    oxygenAutoBuyer1Row: {
+        content1: "Add an Oxygen Extractor to automate Oxygen generation.",
+        content2: "",
+        updateAt: ""
+    },
+    sodiumSellRow: {
+        content1: "Here you can sell Sodium for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    sodiumGainRow: {
+        content1: "Manually gain one unit of Sodium.",
+        content2: "",
+        updateAt: ""
+    },
+    sodiumIncreaseStorageRow: {
+        content1: "Upgrade your Sodium storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    sodiumAutoBuyer1Row: {
+        content1: "Add a Sodium Extractor to automate Sodium generation.",
+        content2: "",
+        updateAt: ""
+    },
+    siliconSellRow: {
+        content1: "Here you can sell Silicon for cash.",
+        content2: "Here you can sell Silicon for cash or fuse it into Iron.",
+        updateAt: "siliconFusion"
+    },
+    siliconGainRow: {
+        content1: "Manually gain one unit of Silicon.",
+        content2: "",
+        updateAt: ""
+    },
+    siliconIncreaseStorageRow: {
+        content1: "Upgrade your Silicon storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    siliconAutoBuyer1Row: {
+        content1: "Add a Silicon Extractor to automate Silicon generation.",
+        content2: "",
+        updateAt: ""
+    },
+    ironSellRow: {
+        content1: "Here you can sell Iron for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    ironGainRow: {
+        content1: "Manually gain one unit of Iron.",
+        content2: "",
+        updateAt: ""
+    },
+    ironIncreaseStorageRow: {
+        content1: "Upgrade your Iron storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    ironAutoBuyer1Row: {
+        content1: "Add an Iron Extractor to automate Iron generation.",
+        content2: "",
+        updateAt: ""
+    },       
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",
