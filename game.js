@@ -1135,8 +1135,6 @@ function updateClassesInRowsToRender() {
     setTemporaryRowsRepo('noChange', unsortedRows);
 }
 
-
-
 // export function toggleTimer(key, buttonId) {
 //     const timer = timerManager.getTimer(key);
 //     if (timer) {

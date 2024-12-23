@@ -52,28 +52,28 @@ export function drawTab1Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(hydrogenSellRow);
 
-        const hydrogenGainRow = createOptionRow(
-            'hydrogenGainRow',
-            null,
-            'Gain 1 Hydrogen:',
-            createButton('Gain', ['option-button'], () => {
-                gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen');
-            }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null
-        );
-        optionContentElement.appendChild(hydrogenGainRow);
+        // const hydrogenGainRow = createOptionRow(
+        //     'hydrogenGainRow',
+        //     null,
+        //     'Gain 1 Hydrogen:',
+        //     createButton('Gain', ['option-button'], () => {
+        //         gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen');
+        //     }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     false,
+        //     null
+        // );
+        // optionContentElement.appendChild(hydrogenGainRow);
 
         const hydrogenIncreaseStorageRow = createOptionRow(
             'hydrogenIncreaseStorageRow',
@@ -720,29 +720,29 @@ export function drawTab1Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(neonAutoBuyer2Row);
 
-        const neonAutoBuyer3Row = createOptionRow(
-            'neonAutoBuyer3Row',
-            getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
-            'Neon Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'neonAB3Quantity', 'autoBuyer', true, 'tier3', 'neon'),
-                    startUpdateAutoBuyerTimersAndRates('neon', 3);
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier3'),
-            null,
-            null,
-            null,
-            null,
-            `${autobuyer3Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
-            '',
-            'upgradeCheck',
-            'autoBuyer',
-            null,
-            'neon',
-            'tier3',
-            false,
-            null
-        );
-        optionContentElement.appendChild(neonAutoBuyer3Row);
+        // const neonAutoBuyer3Row = createOptionRow(
+        //     'neonAutoBuyer3Row',
+        //     getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
+        //     'Neon Auto Buyer Tier 3:',
+        //     createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+        //         gain(1, 'neonAB3Quantity', 'autoBuyer', true, 'tier3', 'neon'),
+        //             startUpdateAutoBuyerTimersAndRates('neon', 3);
+        //     }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier3'),
+        //     null,
+        //     null,
+        //     null,
+        //     null,
+        //     `${autobuyer3Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
+        //     '',
+        //     'upgradeCheck',
+        //     'autoBuyer',
+        //     null,
+        //     'neon',
+        //     'tier3',
+        //     false,
+        //     null
+        // );
+        // optionContentElement.appendChild(neonAutoBuyer3Row);
 
         const neonAutoBuyer4Row = createOptionRow(
             'neonAutoBuyer4Row',

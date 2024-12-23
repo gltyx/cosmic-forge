@@ -20,6 +20,29 @@ export const headerDescriptions = {
     'star map': "This is a map of the known galaxy",
 };
 
+export const techNotificationMessages = {
+    knowledgeSharing: 'Knowledge Sharing Researched\n\nYou can now open Science Clubs!',
+    fusionTheory: 'Fusion Theory Researched\n\nUseful for future experiments!',
+    hydrogenFusion: 'Hydrogen Fusion Researched\n\nYou can now fuse Hydrogen!',
+    heliumFusion: 'Helium Fusion Researched\n\nYou can now fuse Helium!',
+    carbonFusion: 'Carbon Fusion Researched\n\nYou can now fuse Carbon!',
+    neonFusion: 'Neon Fusion Researched\n\nYou can now fuse Neon!',
+    oxygenFusion: 'Oxygen Fusion Researched\n\nYou can now fuse Oxygen!',
+    siliconFusion: 'Silicon Fusion Researched\n\nYou can now fuse Silicon!',
+    nobleGasCollection: 'Noble Gas Collection Researched\n\nWe can now store Noble Gases when fused!',
+    glassManufacture: 'Glass Manufacture Researched\n\nWe can now produce Glass compounds!',
+    neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Gold, modern day Alchemy, we will be rich beyond belief!',
+    quantumComputing: 'Quantum Computing Researched\n\nMore advanced Machinery is now available!',
+    nanoTubeTechnology: 'Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!',
+    stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked The Star Map!',
+    fusionEfficiencyI: 'Fusion Efficiency Stage I Researched\n\n20% Boost to Fusion returns!',
+    fusionEfficiencyII: 'Fusion Efficiency Stage II Researched\n\nFurther 20% Boost to Fusion returns!',
+    fusionEfficiencyIII: 'Fusion Efficiency Stage III Researched\n\n100% Fusion returns!',
+};
+
+
+
+
 export const optionDescriptions = {
     hydrogenSellRow: {
         content1: "Here you can sell Hydrogen for cash",

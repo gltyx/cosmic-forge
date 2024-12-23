@@ -2,6 +2,7 @@ import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordD
 import { gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
     sortTechRows(true);
@@ -75,7 +76,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('knowledgeSharing');
-                        showNotification('Knowledge Sharing Researched\n\nYou can now open Science Clubs!', 'info');
+                        showNotification(techNotificationMessages.knowledgeSharing, 'info');
                     }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
                     null,
                     null,
@@ -102,7 +103,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionTheory');
-                        showNotification('Fusion Theory Researched\n\nUseful for future experiments!', 'info');
+                        showNotification(techNotificationMessages.fusionTheory, 'info');
                     }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
                     null,
                     null,
@@ -131,7 +132,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('hydrogenFusion');
                         setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
                         updateDescriptionRow('hydrogenSellRow', 'content2');
-                        showNotification('Hydrogen Fusion Researched\n\nYou can now fuse Hydrogen!', 'info');
+                        showNotification(techNotificationMessages.hydrogenFusion, 'info');
                     }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null),
                     null,
                     null,
@@ -160,7 +161,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('heliumFusion');
                         setTechSpecificUIItemsArray('helium', 'fusionButton', 'heliumFusion');
                         updateDescriptionRow('heliumSellRow', 'content2');
-                        showNotification('Helium Fusion Researched\n\nYou can now fuse Helium!', 'info');
+                        showNotification(techNotificationMessages.heliumFusion, 'info');
                     }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null),
                     null,
                     null,
@@ -189,7 +190,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('carbonFusion');
                         setTechSpecificUIItemsArray('carbon', 'fusionButton', 'carbonFusion');
                         updateDescriptionRow('carbonSellRow', 'content2');
-                        showNotification('Carbon Fusion Researched\n\nYou can now fuse Carbon!', 'info');
+                        showNotification(techNotificationMessages.carbonFusion, 'info');
                     }, 'techUnlock', '', 'carbonFusion', null, 'research', false, null),
                     null,
                     null,
@@ -207,6 +208,174 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'neonFusion',
+                row: createOptionRow(
+                    'techNeonFusionRow',
+                    null,
+                    'Neon Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('neonFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('neonFusion');
+                        setTechSpecificUIItemsArray('neon', 'fusionButton', 'neonFusion');
+                        updateDescriptionRow('neonSellRow', 'content2');
+                        showNotification(techNotificationMessages.neonFusion, 'info');
+                    }, 'techUnlock', '', 'neonFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['neonFusion', 'price'])} Research, <span id="neonFusionPrereq" class="red-disabled-text">Noble Gas Collection</span>`,
+                    '',
+                    'techUnlock',
+                    'neonFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },            
+            {
+                techName: 'oxygenFusion',
+                row: createOptionRow(
+                    'techOxygenFusionRow',
+                    null,
+                    'Oxygen Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('oxygenFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('oxygenFusion');
+                        setTechSpecificUIItemsArray('oxygen', 'fusionButton', 'oxygenFusion');
+                        updateDescriptionRow('oxygenSellRow', 'content2');
+                        showNotification(techNotificationMessages.oxygenFusion, 'info');
+                    }, 'techUnlock', '', 'oxygenFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['oxygenFusion', 'price'])} Research, <span id="oxygenFusionPrereq" class="red-disabled-text">Neon Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'oxygenFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },            
+            {
+                techName: 'siliconFusion',
+                row: createOptionRow(
+                    'techSiliconFusionRow',
+                    null,
+                    'Silicon Fusion:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('siliconFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('siliconFusion');
+                        setTechSpecificUIItemsArray('silicon', 'fusionButton', 'siliconFusion');
+                        updateDescriptionRow('siliconSellRow', 'content2');
+                        showNotification(techNotificationMessages.siliconFusion, 'info');
+                    }, 'techUnlock', '', 'siliconFusion', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['siliconFusion', 'price'])} Research, <span id="siliconFusionPrereq" class="red-disabled-text">Oxygen Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'siliconFusion',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },    
+            {
+                techName: 'nobleGasCollection',
+                row: createOptionRow(
+                    'techNobleGasCollectionRow',
+                    null,
+                    'Noble Gas Collection:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('nobleGasCollection', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('nobleGasCollection');
+                        showNotification(techNotificationMessages.nobleGasCollection, 'info');
+                    }, 'techUnlock', '', 'nobleGasCollection', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['nobleGasCollection', 'price'])} Research, <span id="nobleGasCollectionPrereq" class="red-disabled-text">Nano Tube Technology</span>`,
+                    '',
+                    'techUnlock',
+                    'nobleGasCollection',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'glassManufacture',
+                row: createOptionRow(
+                    'techGlassManufactureRow',
+                    null,
+                    'Glass Manufacture:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('glassManufacture', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('glassManufacture');
+                        showNotification(techNotificationMessages.glassManufacture, 'info');
+                    }, 'techUnlock', '', 'glassManufacture', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['glassManufacture', 'price'])} Research, <span id="glassManufacturePrereq" class="red-disabled-text">Oxygen Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'glassManufacture',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },
+            {
+                techName: 'neutronCapture',
+                row: createOptionRow(
+                    'techNeutronCaptureRow',
+                    null,
+                    'Neutron Capture:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('neutronCapture', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('neutronCapture');
+                        showNotification(techNotificationMessages.neutronCapture, 'info');
+                    }, 'techUnlock', '', 'neutronCapture', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['neutronCapture', 'price'])} Research, <span id="neutronCapturePrereq" class="red-disabled-text">Silicon Fusion</span>`,
+                    '',
+                    'techUnlock',
+                    'neutronCapture',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null
+                )
+            },                               
+            {
                 techName: 'quantumComputing',
                 row: createOptionRow(
                     'techQuantumComputingRow',
@@ -222,7 +391,7 @@ export function drawTab3Content(heading, optionContentElement) {
                                 setAutoBuyerTierLevel(key, 2, false);
                             }
                         });
-                        showNotification('Quantum Computing Researched\n\nMore advanced Machinery is now available!', 'info');
+                        showNotification(techNotificationMessages.quantumComputing, 'info');
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null),
                     null,
                     null,
@@ -249,7 +418,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoTubeTechnology');
-                        showNotification('Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!', 'info');
+                        showNotification(techNotificationMessages.nanoTubeTechnology, 'info');
                     }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', false, null),
                     null,
                     null,
@@ -277,7 +446,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('stellarCartography');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'stellarCartography');
-                        showNotification('Stellar Cartography Researched\n\nYou unlocked The Star Map!', 'info');
+                        showNotification(techNotificationMessages.stellarCartography, 'info');
                     }, 'techUnlock', '', 'stellarCartography', null, 'research', false, null),
                     null,
                     null,
@@ -305,7 +474,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyI');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyI');
-                        showNotification('Fusion Efficiency Stage I Researched\n\n20% Boost to Fusion returns!', 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyI, 'info');
                     }, 'techUnlock', '', 'fusionEfficiencyI', null, 'research', false, null),
                     null,
                     null,
@@ -333,7 +502,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyII');
-                        showNotification('Fusion Efficiency Stage II Researched\n\nFurther 20% Boost to Fusion returns!', 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyII, 'info');
                     }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', false, null),
                     null,
                     null,
@@ -361,7 +530,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyIII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyIII');
-                        showNotification('Fusion Efficiency Stage III Researched\n\n100% Fusion returns!', 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyIII, 'info');
                     }, 'techUnlock', '', 'fusionEfficiencyIII', null, 'research', false, null),
                     null,
                     null,
