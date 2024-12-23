@@ -1,3 +1,6 @@
+export const gameIntroHeader = 'Welcome to the Cosmic Forge!';
+export const gameIntroText = 'Embark on an epic journey from the simplest element to the building blocks of the cosmos.<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies, unlock powerful compounds, and automate your processes to reshape entire planets.<br> Craft water, glass, and steel to terraform worlds, and discover the secrets of the stars with interstellar exploration.<br>With each click, fusion, and discovery, you edge closer to becoming the architect of a vibrant galaxy.<br><br>Good Luck!';
+
 export const headerDescriptions = {
     'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
     'Compounds': 'Here you can gain and sell compounds.',

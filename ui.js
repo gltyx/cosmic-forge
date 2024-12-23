@@ -36,6 +36,8 @@ import {
 import {
     getHeaderDescriptions,
     getOptionDescription,
+    gameIntroHeader,
+    gameIntroText,
 } from "./descriptions.js";
 
 import {
@@ -68,6 +70,10 @@ let notificationContainer;
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
 
+    getElements().modalOKButton.addEventListener('click', () => {
+        showHideModal();
+    });
+
     notificationContainer = getElements().notificationContainer;
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', async () => {
@@ -76,6 +82,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             setGameInProgress(true);
         }
         setGameState(getGameVisibleActive());
+        const headerText = gameIntroHeader;
+        const content = gameIntroText;
+        populateModal(headerText, content);
+        getElements().modalContainer.style.display = 'flex';
+        getElements().overlay.style.display = 'flex';
         //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
         startGame();
     });
@@ -756,4 +767,22 @@ export function sortTechRows(now) {
         setTechRenderCounter(READY_TO_SORT);
     }
     setTechRenderChange(true);
+}
+
+function showHideModal() {
+    if (getElements().modalContainer.style.display === 'flex') {
+        getElements().modalContainer.style.display = 'none';
+        getElements().overlay.style.display = 'none';
+    } else {
+        getElements().modalContainer.style.display = 'flex';
+        getElements().overlay.style.display = 'flex';
+    }
+}
+
+function populateModal(headerText, content) {
+    const modalTitle = getElements().modalHeader;
+    modalTitle.textContent = headerText;
+
+    const modalContent = getElements().modalContent;
+    modalContent.innerHTML = content;
 }

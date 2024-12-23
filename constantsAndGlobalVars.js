@@ -104,6 +104,11 @@ export function setElements() {
         cashStat: document.getElementById('cashStat'),
         optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
         notificationContainer: document.getElementById('notificationContainer'),
+        modalContainer: document.getElementById('modal'),
+        modalHeader: document.querySelector('.modal-header h4'),
+        modalContent: document.querySelector('.modal-content p'),
+        modalOKButton: document.getElementById('modalButton'),
+        overlay: document.getElementById('overlay'),
     };
 }
 
