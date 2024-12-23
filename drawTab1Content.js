@@ -1342,4 +1342,192 @@ export function drawTab1Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(siliconAutoBuyer4Row);
     }
+
+    else if (heading === 'Iron') {
+        let storagePrice = getResourceDataObject('resources', ['iron', 'storageCapacity']);
+        let autobuyer1Price = getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+        let autobuyer2Price = getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'price']);
+        let autobuyer3Price = getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'price']);
+        let autobuyer4Price = getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'price']);
+
+        const ironSellRow = createOptionRow(
+            'ironSellRow',
+            null,
+            'Sell Iron:',
+            createDropdown('ironSellSelectQuantity', [
+                { value: 'all', text: 'All Stock' },
+                { value: 'threeQuarters', text: '75% Stock' },
+                { value: 'twoThirds', text: '67% Stock' },
+                { value: 'half', text: '50% Stock' },
+                { value: 'oneThird', text: '33% Stock' },
+                { value: '100000', text: '100,000' },
+                { value: '10000', text: '10,000' },
+                { value: '1000', text: '1,000' },
+                { value: '100', text: '100' },
+                { value: '10', text: '10' },
+                { value: '1', text: '1' },
+            ], 'all', (value) => {
+                setSalePreview('iron', value, 'iron');
+            }),
+            createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
+                sellResource('iron');
+            }, 'sellResource', null, null, null, 'iron', true, null),
+            null,
+            null,
+            null,
+            null,
+            `${getResourceSalePreview('iron')}`,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironSellRow);
+
+        const ironGainRow = createOptionRow(
+            'ironGainRow',
+            null,
+            'Gain 1 Iron:',
+            createButton('Gain', ['option-button'], () => {
+                gain(1, 'ironQuantity', null, false, null, 'iron');
+            }, null, null, null, null, null, false, null), //set false to true out of development to stop fast gains by holding enter
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironGainRow);
+
+        const ironIncreaseStorageRow = createOptionRow(
+            'ironIncreaseStorageRow',
+            null,
+            'Increase Storage:',
+            createButton('Increase Storage', ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                increaseResourceStorage('ironQuantity', 'iron');
+                storagePrice = getResourceDataObject('resources', ['iron', 'storageCapacity']);
+            }, 'upgradeCheck', '', 'storage', null, 'iron', true, null),
+            null,
+            null,
+            null,
+            null,
+            `${storagePrice + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'storage',
+            null,
+            'iron',
+            null,
+            false,
+            'iron'
+        );
+        optionContentElement.appendChild(ironIncreaseStorageRow);
+
+        const ironAutoBuyer1Row = createOptionRow(
+            'ironAutoBuyer1Row',
+            getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Iron Auto Buyer Tier 1:',
+            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'ironAB1Quantity', 'autoBuyer', true, 'tier1', 'iron'),
+                    startUpdateAutoBuyerTimersAndRates('iron', 1);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier1'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer1Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'iron',
+            'tier1',
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironAutoBuyer1Row);
+
+        const ironAutoBuyer2Row = createOptionRow(
+            'ironAutoBuyer2Row',
+            getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
+            'Iron Auto Buyer Tier 2:',
+            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'ironAB2Quantity', 'autoBuyer', true, 'tier2', 'iron'),
+                    startUpdateAutoBuyerTimersAndRates('iron', 2);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier2'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer2Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'iron',
+            'tier2',
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironAutoBuyer2Row);
+
+        const ironAutoBuyer3Row = createOptionRow(
+            'ironAutoBuyer3Row',
+            getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
+            'Iron Auto Buyer Tier 3:',
+            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'ironAB3Quantity', 'autoBuyer', true, 'tier3', 'iron'),
+                    startUpdateAutoBuyerTimersAndRates('iron', 3);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier3'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer3Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'iron',
+            'tier3',
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironAutoBuyer3Row);
+
+        const ironAutoBuyer4Row = createOptionRow(
+            'ironAutoBuyer4Row',
+            getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
+            'Iron Auto Buyer Tier 4:',
+            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'ironAB4Quantity', 'autoBuyer', true, 'tier4', 'iron'),
+                    startUpdateAutoBuyerTimersAndRates('iron', 4);
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier4'),
+            null,
+            null,
+            null,
+            null,
+            `${autobuyer4Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'iron',
+            'tier4',
+            false,
+            null
+        );
+        optionContentElement.appendChild(ironAutoBuyer4Row);
+    }
 }

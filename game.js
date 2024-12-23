@@ -314,7 +314,11 @@ function updateAllSalePricePreviews() {
     
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";
-            setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo);
+            if (fuseTo !== 'none') {
+                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo);
+            } else {
+                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, '');
+            }
     
             const salePreviewString = getResourceSalePreview(resource);
             const salePreviewElementId = resources[resource]?.salePreviewElement;

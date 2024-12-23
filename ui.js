@@ -165,8 +165,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             setLastScreenOpenRegister('tab1', 'sodium');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -185,8 +183,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             setLastScreenOpenRegister('tab1', 'iron');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
