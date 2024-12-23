@@ -40,9 +40,6 @@ export const techNotificationMessages = {
     fusionEfficiencyIII: 'Fusion Efficiency Stage III Researched\n\n100% Fusion returns!',
 };
 
-
-
-
 export const optionDescriptions = {
     hydrogenSellRow: {
         content1: "Here you can sell Hydrogen for cash",
@@ -174,8 +171,38 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    techNeonFusionRow: {
+        content1: "Unlock Neon Fusion to explore and harness fusion reactions of neon.",
+        content2: "",
+        updateAt: ""
+    },
+    techOxygenFusionRow: {
+        content1: "Unlock Oxygen Fusion to experiment with fusing oxygen atoms.",
+        content2: "",
+        updateAt: ""
+    },
+    techSiliconFusionRow: {
+        content1: "Unlock Silicon Fusion to experiment fusing silicon.",
+        content2: "",
+        updateAt: ""
+    },
+    techNeutronCaptureRow: {
+        content1: "Unlock Neutron Capture to collect fusion by-products.",
+        content2: "",
+        updateAt: ""
+    },
+    techGlassManufactureRow: {
+        content1: "Unlock Glass Manufacture to produce advanced glass compounds from silicon and oxygen.",
+        content2: "",
+        updateAt: ""
+    },
+    techNobleGasCollectionRow: {
+        content1: "Unlock Noble Gas Collection to store rare noble gases.",
+        content2: "",
+        updateAt: ""
+    },
     techFusionEfficiencyIRow: {
-        content1: "Unlock Fusion Efficiency I to enhance fusion efficieny.",
+        content1: "Unlock Fusion Efficiency I to enhance fusion efficiency.",
         content2: "",
         updateAt: ""
     },

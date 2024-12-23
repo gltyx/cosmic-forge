@@ -466,7 +466,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'fusionEfficiencyI',
                 row: createOptionRow(
-                    'techfusionEfficiencyIRow',
+                    'techFusionEfficiencyIRow',
                     null,
                     'Fusion Efficiency Stage I:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
@@ -494,7 +494,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'fusionEfficiencyII',
                 row: createOptionRow(
-                    'techfusionEfficiencyIIRow',
+                    'techFusionEfficiencyIIRow',
                     null,
                     'Fusion Efficiency Stage II:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
@@ -522,7 +522,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'fusionEfficiencyIII',
                 row: createOptionRow(
-                    'techfusionEfficiencyIIIRow',
+                    'techFusionEfficiencyIIIRow',
                     null,
                     'Fusion Efficiency Stage III:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
