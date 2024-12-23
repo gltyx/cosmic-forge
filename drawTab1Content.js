@@ -41,13 +41,6 @@ export function drawTab1Content(heading, optionContentElement) {
                         resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'),
                         categoryToShow: document.getElementById('simpleGases'),
                         mainCategoryToShow: document.getElementById('gases')
-                    },
-                    {
-                        fuseTo: getResourceDataObject('resources', ['hydrogen', 'fuseTo2']),
-                        ratio: getResourceDataObject('resources', ['hydrogen', 'fuseToRatio2']),
-                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'),
-                        categoryToShow: document.getElementById('nonFerrous'),
-                        mainCategoryToShow: document.getElementById('solids')
                     }
                 ]);                
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
@@ -240,7 +233,15 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('helium');
             }, 'sellResource', null, null, null, 'helium', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('helium', getResourceDataObject('resources', ['helium', 'fuseTo1']), getResourceDataObject('resources', ['helium', 'fuseToRatio1']), document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('nonFerrous'), document.getElementById('solids'));
+                fuseResource("helium", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['helium', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['helium', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('nonFerrous'),
+                        mainCategoryToShow: document.getElementById('solids')
+                    }
+                ]); 
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'helium', 'carbon', 'helium', true, null),
@@ -432,7 +433,22 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('carbon');
             }, 'sellResource', null, null, null, 'carbon', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('carbon', getResourceDataObject('resources', ['carbon', 'fuseTo1']), getResourceDataObject('resources', ['carbon', 'fuseToRatio1']), document.querySelector('#nobleGases .collapsible-content .row-side-menu:nth-child(1)'), document.getElementById('nobleGases'), document.getElementById('gases'));
+                fuseResource("carbon", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['carbon', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['carbon', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#nobleGases .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('nobleGases'),
+                        mainCategoryToShow: document.getElementById('gases')
+                    },
+                    {
+                        fuseTo: getResourceDataObject('resources', ['sodium', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['sodium', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('metals'),
+                        mainCategoryToShow: document.getElementById('solids')
+                    }
+                ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'carbon', 'neon', 'carbon', true, null),
@@ -624,7 +640,15 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('neon');
             }, 'sellResource', null, null, null, 'neon', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('neon', getResourceDataObject('resources', ['neon', 'fuseTo1']), getResourceDataObject('resources', ['neon', 'fuseToRatio1']), document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'), document.getElementById('simpleGases'), document.getElementById('gases'));
+                fuseResource("neon", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['oxygen', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'),
+                        categoryToShow: document.getElementById('simpleGases'),
+                        mainCategoryToShow: document.getElementById('gases')
+                    }
+                ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'neon', 'silver', 'neon', true, null),
@@ -816,7 +840,15 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('oxygen');
             }, 'sellResource', null, null, null, 'oxygen', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('oxygen', getResourceDataObject('resources', ['oxygen', 'fuseTo1']), getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']), document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('nonFerrous'), document.getElementById('solids'));
+                fuseResource("oxygen", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['silicon', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['silicon', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(2)'),
+                        categoryToShow: document.getElementById('nonFerrous'),
+                        mainCategoryToShow: document.getElementById('solids')
+                    }
+                ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'oxygen', 'silicon', 'oxygen', true, null),
@@ -1196,7 +1228,15 @@ export function drawTab1Content(heading, optionContentElement) {
                 sellResource('silicon');
             }, 'sellResource', null, null, null, 'silicon', true, null),
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
-                fuseResource('silicon', getResourceDataObject('resources', ['silicon', 'fuseTo1']), getResourceDataObject('resources', ['silicon', 'fuseToRatio1']), document.querySelector('#metals .collapsible-content .row-side-menu:nth-child(2)'), document.getElementById('metals'), document.getElementById('solids'));
+                fuseResource("silicon", [
+                    {
+                        fuseTo: getResourceDataObject('resources', ['iron', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['iron', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#metals .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('metals'),
+                        mainCategoryToShow: document.getElementById('solids')
+                    }
+                ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'silicon', 'iron', 'silicon', true, null),

@@ -21,9 +21,9 @@ export const resourceData = {
             revealedBy: "",
             canFuseTech: 'hydrogenFusion',
             fuseTo1: 'helium',
-            fuseTo2: 'carbon',
+            fuseTo2: '',
             fuseToRatio1: 0.5,
-            fuseToRatio2: 0.5
+            fuseToRatio2: 0
         },
         helium: {
             nameResource: 'Helium',
@@ -68,12 +68,12 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer4Row', price: 10625, rate: 625, quantity: 0, setPrice: 'carbonAB4Price' }
                 }
             },
-            revealedBy: "hydrogenFusion",
+            revealedBy: "heliumFusion",
             canFuseTech: 'carbonFusion',
             fuseTo1: 'neon',
-            fuseTo2: '',
-            fuseToRatio1: 2,
-            fuseToRatio2: 0
+            fuseTo2: 'sodium',
+            fuseToRatio1: 0.3,
+            fuseToRatio2: 0.2
         },    
         neon: {
             nameResource: 'Neon',

@@ -207,8 +207,10 @@ export function fuseResource(resource, fuseTargets) {
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
     let totalDeducted = 0;
+    let iterationCounter = 0;
 
     for (let target of fuseTargets) {
+        iterationCounter++;
         const { fuseTo, ratio, resourceRowToShow, categoryToShow, mainCategoryToShow } = target;
 
         const fuseToString = getResourceDataObject('resources', [fuseTo, 'nameResource']);
@@ -246,7 +248,7 @@ export function fuseResource(resource, fuseTargets) {
 
             fuseData = getResourceSalePreview(resource);
             amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
-            amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10);
+            iterationCounter === 1 ? amountToAddToResource = parseInt(fuseData.match(/->\s*(\d+)/)[1], 10) : amountToAddToResource = parseInt(fuseData.match(/(?<=,\s)\d+/)[0], 10)
 
             realAmountToAdd = Math.floor(amountToAddToResource * fusionEfficiency);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
