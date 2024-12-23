@@ -398,11 +398,6 @@ export function setResourceSalePreview(resource, value, fuseToResource1, fuseToR
         const fuseToStorage1 = getResourceDataObject('resources', [fuseToResource1, 'storageCapacity']);
         const fuseToRatio1 = getResourceDataObject('resources', [resource, 'fuseToRatio1']);
 
-        const fuseToCapitalised2 = getResourceDataObject('resources', [fuseToResource2, 'nameResource']);
-        const fuseToQuantity2 = getResourceDataObject('resources', [fuseToResource2, 'quantity']);
-        const fuseToStorage2 = getResourceDataObject('resources', [fuseToResource2, 'storageCapacity']);
-        const fuseToRatio2 = getResourceDataObject('resources', [resource, 'fuseToRatio2']);
-
         fusionFlag = true;
         
         if (Math.floor(value * fuseToRatio1) > fuseToStorage1 - fuseToQuantity1) {
@@ -412,23 +407,33 @@ export function setResourceSalePreview(resource, value, fuseToResource1, fuseToR
             tooManyToStore1 = 2;
         }
 
-        if (Math.floor(value * fuseToRatio2) > fuseToStorage2 - fuseToQuantity2) {
-            tooManyToStore2 = 1;
-        }
-        if (fuseToStorage1 === fuseToQuantity1) {
-            tooManyToStore2 = 2;
-        }
-        
         const quantityToAddFuseTo1 = Math.min(
             Math.floor(value * fuseToRatio1),
             Math.floor(fuseToStorage1 - fuseToQuantity1)
         );
 
-        const quantityToAddFuseTo2 = Math.min(
-            Math.floor(value * fuseToRatio2),
-            Math.floor(fuseToStorage2 - fuseToQuantity2)
-        );
-        
+        let quantityToAddFuseTo2 = 0;
+        let fuseToCapitalised2 = '';
+
+        if (fuseToResource2 !== '') {
+            fuseToCapitalised2 = getResourceDataObject('resources', [fuseToResource2, 'nameResource']);
+            const fuseToQuantity2 = getResourceDataObject('resources', [fuseToResource2, 'quantity']);
+            const fuseToStorage2 = getResourceDataObject('resources', [fuseToResource2, 'storageCapacity']);
+            const fuseToRatio2 = getResourceDataObject('resources', [resource, 'fuseToRatio2']);
+    
+            if (Math.floor(value * fuseToRatio2) > fuseToStorage2 - fuseToQuantity2) {
+                tooManyToStore2 = 1;
+            }
+            if (fuseToStorage2 === fuseToQuantity2) {
+                tooManyToStore2 = 2;
+            }
+    
+            quantityToAddFuseTo2 = Math.min(
+                Math.floor(value * fuseToRatio2),
+                Math.floor(fuseToStorage2 - fuseToQuantity2)
+            );
+        }
+
         const suffix =
         tooManyToStore1 === 0 && tooManyToStore2 === 0 ? '' :
         tooManyToStore1 > 0 || tooManyToStore2 > 0 ? '!' :

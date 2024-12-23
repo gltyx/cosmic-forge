@@ -18,7 +18,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 12500, rate: 625, quantity: 0, setPrice: 'hydrogenAB4Price' }
                 },
             },
-            revealedBy: "",
+            revealedBy: '',
             canFuseTech: 'hydrogenFusion',
             fuseTo1: 'helium',
             fuseTo2: '',
@@ -169,13 +169,13 @@ export const resourceData = {
                 }
             },
             revealedBy: "siliconFusion",
-            canFuseTech: 'none',
-            fuseTo1: 'none',
+            canFuseTech: '',
+            fuseTo1: '',
             fuseTo2: '',
             fuseToRatio1: 0.3,
             fuseToRatio2: 0
         },
-        sodium: {  //needs logic as it is a second branch off from carbon
+        sodium: {
             nameResource: 'Sodium',
             screenName: 'sodium',
             saleValue: 0.02,
@@ -194,8 +194,8 @@ export const resourceData = {
                 }
             },
             revealedBy: "carbonFusion",
-            canFuseTech: 'none',
-            fuseTo1: 'none',
+            canFuseTech: '',
+            fuseTo1: '',
             fuseTo2: '',
             fuseToRatio1: 0.5,
             fuseToRatio2: 0

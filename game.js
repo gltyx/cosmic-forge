@@ -304,11 +304,19 @@ function updateAllSalePricePreviews() {
             
     
             const salePreviewString = getResourceSalePreview(resource);
+            let cleanedString;
+
+            if (salePreviewString.includes("NaN")) {
+                cleanedString = salePreviewString.split(",")[0] + ")";
+            } else {
+                cleanedString = salePreviewString;
+            }
+
             const salePreviewElementId = resources[resource]?.salePreviewElement;
             const salePreviewElement = document.getElementById(salePreviewElementId);
     
             if (salePreviewElement) {
-                salePreviewElement.innerHTML = salePreviewString;
+                salePreviewElement.innerHTML = cleanedString;
             }
         }
     }    
