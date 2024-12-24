@@ -442,9 +442,9 @@ export function drawTab1Content(heading, optionContentElement) {
                         mainCategoryToShow: document.getElementById('gases')
                     },
                     {
-                        fuseTo: getResourceDataObject('resources', ['sodium', 'fuseTo1']),
-                        ratio: getResourceDataObject('resources', ['sodium', 'fuseToRatio1']),
-                        resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(1)'),
+                        fuseTo: getResourceDataObject('resources', ['carbon', 'fuseTo2']),
+                        ratio: getResourceDataObject('resources', ['sodium', 'fuseToRatio2']),
+                        resourceRowToShow: document.querySelector('#metals .collapsible-content .row-side-menu:nth-child(1)'),
                         categoryToShow: document.getElementById('metals'),
                         mainCategoryToShow: document.getElementById('solids')
                     }
@@ -642,8 +642,8 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
                 fuseResource("neon", [
                     {
-                        fuseTo: getResourceDataObject('resources', ['oxygen', 'fuseTo1']),
-                        ratio: getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']),
+                        fuseTo: getResourceDataObject('resources', ['neon', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['neon', 'fuseToRatio1']),
                         resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'),
                         categoryToShow: document.getElementById('simpleGases'),
                         mainCategoryToShow: document.getElementById('gases')
@@ -651,7 +651,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
-            }, 'fuseResource', null, 'neon', 'silver', 'neon', true, null),
+            }, 'fuseResource', null, 'neon', 'oxygen', 'neon', true, null),
             null,
             null,
             null,
@@ -842,8 +842,8 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
                 fuseResource("oxygen", [
                     {
-                        fuseTo: getResourceDataObject('resources', ['silicon', 'fuseTo1']),
-                        ratio: getResourceDataObject('resources', ['silicon', 'fuseToRatio1']),
+                        fuseTo: getResourceDataObject('resources', ['oxygen', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['oxygen', 'fuseToRatio1']),
                         resourceRowToShow: document.querySelector('#nonFerrous .collapsible-content .row-side-menu:nth-child(2)'),
                         categoryToShow: document.getElementById('nonFerrous'),
                         mainCategoryToShow: document.getElementById('solids')
@@ -1230,9 +1230,9 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton('Fuse', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'fuse'], (event) => {
                 fuseResource("silicon", [
                     {
-                        fuseTo: getResourceDataObject('resources', ['iron', 'fuseTo1']),
-                        ratio: getResourceDataObject('resources', ['iron', 'fuseToRatio1']),
-                        resourceRowToShow: document.querySelector('#metals .collapsible-content .row-side-menu:nth-child(1)'),
+                        fuseTo: getResourceDataObject('resources', ['silicon', 'fuseTo1']),
+                        ratio: getResourceDataObject('resources', ['silicon', 'fuseToRatio1']),
+                        resourceRowToShow: document.querySelector('#metals .collapsible-content .row-side-menu:nth-child(2)'),
                         categoryToShow: document.getElementById('metals'),
                         mainCategoryToShow: document.getElementById('solids')
                     }

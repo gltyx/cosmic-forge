@@ -620,45 +620,61 @@ export function selectTheme(theme) {
     body.setAttribute('data-theme', theme);
 }
 
+let notificationQueue = [];
+let isNotificationActive = false;
+
 export function showNotification(message, type = 'info', time = 4000) {
     if (getNotificationsToggle()) {
+        notificationQueue.push({ message, type, time });
+
+        if (!isNotificationActive) {
+            processNotificationQueue();
+        }
+    }
+}
+
+function processNotificationQueue() {
+    if (notificationQueue.length > 0) {
+        isNotificationActive = true;
+
+        const { message, type, time } = notificationQueue.shift();
         sendNotificationIfActive(message, type, time);
+    } else {
+        isNotificationActive = false;
     }
 }
 
 function sendNotificationIfActive(message, type, duration) {
-    if (getNotificationsToggle()) {
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerText = message;
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerText = message;
 
-        const allNotifications = document.querySelectorAll('.notification');
+    const allNotifications = document.querySelectorAll('.notification');
+    allNotifications.forEach((notification, index) => {
+        notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
+    });
 
-        allNotifications.forEach((notification, index) => {
-            notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
-        });
+    notificationContainer.prepend(notification);
 
-        notificationContainer.prepend(notification);
+    setTimeout(() => {
+        notification.style.opacity = '1';
+        notification.style.transform = 'translateY(0)';
+    }, 50);
 
-        setTimeout(() => {
-            notification.style.opacity = '1';
-            notification.style.transform = 'translateY(0)';
-        }, 50);
-
-        setTimeout(() => {
-            hideNotification(notification);
-        }, duration);
-    }
+    setTimeout(() => {
+        hideNotification(notification);
+        processNotificationQueue();
+    }, duration);
 }
 
 function hideNotification(notification) {
     notification.style.opacity = '0';
     notification.style.transform = 'translateY(100px)';
-    
+
     setTimeout(() => {
         notification.remove();
     }, 500);
-} 
+}
 
 function highlightActiveTab(activeIndex) {
     const tabs = document.querySelectorAll('#tabsContainer .tab');

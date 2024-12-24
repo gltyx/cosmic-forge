@@ -199,7 +199,7 @@ export const resourceData = {
             fuseTo2: '',
             fuseToRatio1: 0.5,
             fuseToRatio2: 0
-        },
+        }
     },
     research: {
         screenName: 'research',

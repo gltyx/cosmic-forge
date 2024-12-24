@@ -252,19 +252,23 @@ export function fuseResource(resource, fuseTargets) {
 
             realAmountToAdd = Math.floor(amountToAddToResource * fusionEfficiency);
             const energyLossFuseToQuantity = Math.floor(amountToAddToResource - realAmountToAdd);
-
             const availableStorageFuseTo = Math.floor(fuseToStorageCapacity - fuseToQuantity);
-            lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
+
+            if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
+                showNotification(
+                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
+                    'info'
+                );
+            } else { ;
+                
+                lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
+                showNotification(
+                    `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
+                    'warning'
+                );
+            }
 
             const finalAmountToAdd = Math.min(realAmountToAdd - lostQuantity, availableStorageFuseTo);
-
-            showNotification(
-                `Fused ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. ${
-                    lostQuantity > 0 ? `Lost ${lostQuantity} ${fuseToString} due to storage capacity.` : ""
-                } Received ${finalAmountToAdd} ${fuseToString}.`,
-                lostQuantity > 0 ? 'warning' : 'info'
-            );
-
             setResourceDataObject(fuseToQuantity + finalAmountToAdd, 'resources', [fuseTo, 'quantity']);
             totalDeducted = amountToDeductFromResource;
         }
@@ -301,16 +305,9 @@ function updateAllSalePricePreviews() {
             } else {
                 setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, '', '');
             }
-            
-    
+        
             const salePreviewString = getResourceSalePreview(resource);
-            let cleanedString;
-
-            if (salePreviewString.includes("NaN")) {
-                cleanedString = salePreviewString.split(",")[0] + ")";
-            } else {
-                cleanedString = salePreviewString;
-            }
+            let cleanedString = cleanString(salePreviewString);
 
             const salePreviewElementId = resources[resource]?.salePreviewElement;
             const salePreviewElement = document.getElementById(salePreviewElementId);
@@ -320,6 +317,18 @@ function updateAllSalePricePreviews() {
             }
         }
     }    
+}
+
+function cleanString(string) {
+    if (string.includes("NaN") || string.includes(", 0 )")) { //clean string
+        return string.split(",")[0] + ")";
+    } else if (string.includes(', 0 !)')) {
+        return string.split(",")[0] + "!)";
+    } else if (string.includes(', 0 !!)')) {
+        return string.split(",")[0] + "!!)";
+    } else {
+        return string;
+    }
 }
 
 function checkAndIncreasePrices() {
