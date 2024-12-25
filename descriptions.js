@@ -6,13 +6,11 @@ export const headerDescriptions = {
     'Compounds': 'Here you can gain and sell compounds.',
     'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
     'Technology': 'In the Technology section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
-    tab5intro: '',
+    'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
     tab6intro: '',
     tab7intro: '',
     'Settings': 'Change the game settings to your liking.',
-    visual: "Change the visual settings of the game.",
-    research: "Here you can buy upgrades to generate research points for unlocking new technology.",
-    'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+    
     hydrogen: "The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.",
     helium: "Lighter than air this one will make you float away!",
     carbon: "This is the first stable solid element, made from fused Helium",
@@ -21,7 +19,15 @@ export const headerDescriptions = {
     sodium: "A soft, silvery metal",
     silicon: "The backbone of modern technology, it is a crucial component in electronics and solar panels.",
     iron: "A strong and versatile metal, iron is the foundation of construction and industry.",
+
+    energy: "Any buildings beyond the first level require power to operate, you can manage that here.",
+    'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
+    research: "Here you can buy upgrades to generate research points for unlocking new technology.",
+    'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+
     'star map': "This is a map of the known galaxy",
+    
+    visual: "Change the visual settings of the game.",
 };
 
 export const techNotificationMessages = {

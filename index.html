@@ -68,6 +68,9 @@
     </div>
 
     <div id="mainContainer" class="d-flex main-container">
+
+        <!-- RESOURCES -->
+
         <div id="tab1ContainerGroup" class="tab-1-container-group tab-1">
             <div class="container-item-menu tab-1">
                 <div class="container-item-menu-header tab-1">
@@ -230,7 +233,8 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- BUILDINGS -->
 
         <div id="tab2ContainerGroup" class="tab-2-container-group tab-2">
             <div class="container-item-menu tab-2">
@@ -239,19 +243,30 @@
                 </div>
                 <div class="container-item-menu-body tab-2">
                     <!-- Outer Collapsible for Buildings -->
-                    <div id="powerBuildings" class="collapsible">
+                    <div id="buildings" class="collapsible">
                         <div class="collapsible-header">
-                            <span class="main-category-text">Power</span>
+                            <span class="main-category-text">Buildings</span>
                             <span class="collapsible-arrow">▼</span>
                         </div>
                         <div class="collapsible-content">
-                            <!-- Power Collapsible -->
-                            <div id="power" class="collapsible">
+                            <!-- Energy Collapsible -->
+                            <div id="energy" class="collapsible">
                                 <div class="collapsible-header">
-                                    <span class="sub-category-text">&nbsp;Power</span>
+                                    <span class="sub-category-text">&nbsp;Energy</span>
                                     <span class="collapsible-arrow">▼</span>
                                 </div>
                                 <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex">
+                                        <div class="row-side-menu-item">
+                                            <p id="energyOption" class="tab2.option1 inset-paragraph">Energy</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="energyRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="energyQuantity" class="notation"></p>
+                                        </div>
+                                    </div>
                                     <div class="row-side-menu d-flex">
                                         <div class="row-side-menu-item">
                                             <p id="powerPlantOption" class="tab2.option1 inset-paragraph">Power Plant</p>
@@ -260,7 +275,7 @@
                                             <p id="powerPlantRate" class="notation">0 / s</p>
                                         </div>
                                         <div class="row-side-menu-item right-align">
-                                            <p id="powerPlantQuantity" class="notation">0/100</p>
+                                            <p id="powerPlantQuantity" class="notation">0</p>
                                         </div>
                                     </div>
                                 </div>
@@ -282,6 +297,8 @@
                 </div>
             </div>
         </div>
+        
+        <!-- RESEARCH -->
 
         <div id="tab3ContainerGroup" class="tab-3-container-group tab-3">
             <div class="container-item-menu tab-3">
@@ -326,6 +343,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- COMPOUNDS -->
 
         <div id="tab4ContainerGroup" class="tab-4-container-group tab-4">
             <div class="container-item-menu tab-4">
@@ -377,6 +396,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- STAR MAP -->
 
         <div id="tab5ContainerGroup" class="tab-5-container-group tab-5">
             <div class="container-item-menu tab-5">
