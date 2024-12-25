@@ -203,8 +203,9 @@ export const resourceData = {
     },
     buildings: {
         energy: {
+            batteryBoughtYet: false,
             nameResource: 'Energy',
-            screenName: 'oxygen',
+            screenName: 'energy',
             saleValue: 0,
             salePreviewElement: 'sellEnergyDescription',
             quantity: 0,
@@ -228,7 +229,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 0,
+        quantity: 2500,
         rate: 0,
         upgrades: {
             scienceKit: { 
@@ -274,7 +275,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [10000, 'fusionEfficiencyII'], price: 30000, idForRenderPosition: 903 },
     },
     currency: {
-        cash: 25,
+        cash: 100,
     },
 };
 

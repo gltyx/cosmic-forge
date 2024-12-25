@@ -354,7 +354,7 @@ function checkAndIncreasePrices() {
         if (priceIncreaseObject.hasOwnProperty(resource)) {
             if (getCanAffordDeferred()) {
                 const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
-                if (setPriceTarget.startsWith('science')) {
+                if (setPriceTarget.startsWith('science') || setPriceTarget.startsWith('power')) {
                     setNewResourcePrice(currentPrice, setPriceTarget, '');
                 } else {
                     const tierMatch = setPriceTarget.match(new RegExp(`${resource}AB(\\d+)Price`));
@@ -377,6 +377,9 @@ function setNewResourcePrice(currentPrice, elementName, tier) {
         if (elementName.startsWith('science')) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newPrice, 'research', ['upgrades', strippedElementName, 'price']);
+        } else if (elementName.startsWith('power')) {
+            const strippedElementName = elementName.slice(0, -5);        
+            setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
         } else {
             const resourceName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
             setResourceDataObject(newPrice, 'resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
@@ -437,6 +440,10 @@ function getAllQuantities() {
         allQuantities[resourceName] = getResourceDataObject('resources', [resourceName, 'quantity']);
     });
 
+    allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
+    allQuantities.powerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+    allQuantities.powerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
+
     allQuantities.research = getResourceDataObject('research', ['quantity']);
     allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
     allQuantities.scienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
@@ -452,6 +459,10 @@ function getAllStorages() {
         const resourceName = resource;
         allStorages[resourceName] = getResourceDataObject('resources', [resourceName, 'storageCapacity']);
     });
+
+    allStorages.energy = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
+    allStorages.powerPlant1 = null;
+    allStorages.powerPlant2 = null;
 
     allStorages.research = null;
     allStorages.scienceKit = null;
@@ -470,6 +481,10 @@ function getAllResourceElements(resourcesArray) {
             allResourceElements[resource[0]] = getElements()[`${resource[0]}Quantity`];
         }
     });
+
+    allResourceElements.energy = getElements().energyQuantity;
+    allResourceElements.powerPlant1 = getElements().powerPlant1Quantity;
+    allResourceElements.powerPlant2 = getElements().powerPlant2Quantity;
 
     allResourceElements.research = getElements().researchQuantity;
     allResourceElements.scienceKit = getElements().scienceKitQuantity;
@@ -493,7 +508,8 @@ function getAllDynamicResourceDescriptionElements(resourceTierPairs) {
     });
 
     const scienceElements = getScienceResourceDescriptionElements();
-    Object.assign(elements, scienceElements);
+    const buildingsElements = getBuildingResourceDescriptionElements();
+    Object.assign(elements, scienceElements, buildingsElements);
 
     return elements;
 }
@@ -508,6 +524,19 @@ function getScienceResourceDescriptionElements() {
     return {
         scienceKitBuy: { element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol() },
         scienceClubBuy: { element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol() },
+    };
+}
+
+function getBuildingResourceDescriptionElements() {
+    const powerPlant1BuyDescElement = document.getElementById('powerPlantDescription');
+    const powerPlant1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price']);
+
+    const powerPlant2BuyDescElement = document.getElementById('advancedPowerPlantDescription');
+    const powerPlant2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price']);
+
+    return {
+        powerPlant1Buy: { element: powerPlant1BuyDescElement, price: powerPlant1BuyPrice, string: getCurrencySymbol() },
+        powerPlant2Buy: { element: powerPlant2BuyDescElement, price: powerPlant2BuyPrice, string: getCurrencySymbol() },
     };
 }
 
@@ -594,8 +623,9 @@ function monitorResourceCostChecks(element) {
         const type = element.dataset.type;
         const resourceToFuseTo = element.dataset.resourceToFuseTo;
 
-        //so far just for science upgrades
+        //science / building upgrades
         const scienceUpgradeType = element.dataset.resourceToFuseTo;
+        const buildingUpgradeType = element.dataset.resourceToFuseTo;
 
         if (resource === 'storage' || resource === 'autoBuyer') {
             resource = element.dataset.argumentCheckQuantity;
@@ -625,7 +655,7 @@ function monitorResourceCostChecks(element) {
             return;
         }
 
-        if(element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
+        if (element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
             if (getTechUnlockedArray().includes(resource + 'Fusion') && getUnlockedResourcesArray().includes(resourceToFuseTo)) {
                 element.classList.remove('invisible'); 
             }
@@ -691,6 +721,9 @@ function monitorResourceCostChecks(element) {
         } else if (type === 'scienceUpgrade') {
             mainKey = 'research';
             price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']); //yes correct but bad naming
+        } else if (type === 'energy') {
+            mainKey = 'buildings';
+            price = getResourceDataObject(mainKey, [resource, 'upgrades', buildingUpgradeType, 'price']);
         } else {
             if (element.dataset.type === "research") {
                 mainKey = 'research';
@@ -721,7 +754,6 @@ export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
         accompanyingLabel.classList.add('unlocked-tech');
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
-        //updateOriginalValue(accompanyingLabel, 'Researched');
         accompanyingLabel.style.pointerEvents = 'none';
     } else if (type === 'fuse') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
@@ -746,22 +778,24 @@ const updateDisplay = (element, data1, data2, desc) => {
         if (element && data2) {
             if (data2 === '€') {
                 element.textContent = data1 + data2;
-                //updateOriginalValue(element, data1 + data2);
             } else if (data2 === getCurrencySymbol()) {
                 element.textContent = data2 + data1;
-                //updateOriginalValue(element, data2 + data1);
             } else {
                 element.textContent = data1 + ' ' + data2;
-                //updateOriginalValue(element, data1 + ' ' +data2);
             }
         }
     } else {
         if (element && data2) {
-            element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
-            //updateOriginalValue(element, Math.floor(data1) + '/' + Math.floor(data2));
+            if (element === getElements().energyQuantity) {
+                if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+                    element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
+                } else {
+                    element.textContent = Math.floor(data1);
+                }
+            }
+
         } else if (element) {
             element.textContent = Math.floor(data1);
-            //updateOriginalValue(element, Math.floor(data1));
         }
     
         if (element && data2 && data1 === data2) {
@@ -783,6 +817,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         resourceType = 'techs';
     } else if (resourceCategory === 'scienceUpgrade') { 
         resourceType = 'scienceUpgrade';
+    } else if (resourceCategory === 'energy') { 
+        resourceType = 'energy';
     } else {
         resourceType = 'resource'; 
     }
@@ -793,6 +829,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         currentResourceQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
     } else if (resource && resource.startsWith('science')) {
         currentResourceQuantity = getResourceDataObject('research', ['upgrades', resource, 'quantity']); 
+    } else if (resource && resource.startsWith('power')) {
+        currentResourceQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', resource, 'quantity']);
     } else if (resource && resource === 'autoBuyer') {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
@@ -808,6 +846,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     } else {
         if (resourceType === 'scienceUpgrade') {
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'research', ['upgrades', resource, 'quantity']); 
+        } else if (resourceType === 'energy') { 
+            setResourceDataObject(currentResourceQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', resource, 'quantity']);
         } else if (resourceType === 'resource' && currentResourceQuantity < getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
@@ -832,6 +872,8 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         return;
     } else if (resourceCategory === 'scienceUpgrade') {
         resourceObject = getResourceDataObject('research', ['upgrades', resource]);
+    } else if (resourceCategory === 'energy') {
+        resourceObject = getResourceDataObject('buildings', ['energy', 'upgrades', resource]);
     } else {
         resourceObject = getResourceDataObject('resources', [resourceCategory]);
     }
@@ -846,7 +888,7 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
 
     let resourceToDeductName;
 
-    if (resourceCategory === 'scienceUpgrade') {
+    if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy') {
         resourceToDeductName = 'cash';
     } else {
         resourceToDeductName = resourceObject.screenName;
@@ -884,12 +926,16 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
         return;
     }
 
+    if (elementName.startsWith('power')) {
+        startUpdateEnergyTimers(elementName, getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']));
+        return;
+    }
+
     const rate = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
     const newRate = getResourceDataObject('resources', [elementName, 'rate']) + rate;
     setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
 
     getElements()[`${elementName}Rate`].textContent = `${(newRate * getTimerRateRatio()).toFixed(1)} / s`;
-    //updateOriginalValue(getElements()[`${elementName}Rate`], `${(newRate * getTimerRateRatio()).toFixed(1)} / s`);
 
     const timerName = `${elementName}AB${tier}`;
     if (!timerManager.getTimer(timerName)) {
@@ -903,20 +949,42 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
 }
 
 function startUpdateScienceTimers(elementName) {
-    if (elementName.startsWith('science')) {
+    const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
+    const newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
 
-        const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
-        const newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
+    setResourceDataObject(newResearchRate, 'research', ['rate']);
+    getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
 
-        setResourceDataObject(newResearchRate, 'research', ['rate']);
-        getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
-        //updateOriginalValue(getElements().researchRate, `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`);
+    if (!timerManager.getTimer('research')) {
+        timerManager.addTimer('research', getTimerUpdateInterval(), () => {
+            const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+            const currentResearchRate = getResourceDataObject('research', ['rate']);
+            setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+        });
+    }
+}
 
-        if (!timerManager.getTimer('research')) {
-            timerManager.addTimer('research', getTimerUpdateInterval(), () => {
-                const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
-                const currentResearchRate = getResourceDataObject('research', ['rate']);
-                setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+function startUpdateEnergyTimers(elementName, batteryBought) {
+    if (elementName.startsWith('power')) {
+        const upgradeRatePerUnit = getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'rate']);
+        const newEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']) + upgradeRatePerUnit;
+
+        getElements()[elementName + 'Rate'].textContent = `${(getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'rate']) * getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'quantity']) * getTimerRateRatio())} kW / s`;
+        
+        const powerPlant1Rate = parseFloat(getElements()['powerPlant1Rate'].textContent);
+        const powerPlant2Rate = parseFloat(getElements()['powerPlant2Rate'].textContent);
+        const totalRate = (powerPlant1Rate + powerPlant2Rate);
+        getElements().energyRate.textContent = `${totalRate} kW / s`;
+
+        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
+        
+        if (!timerManager.getTimer('energy')) {
+            timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
+                const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+                const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
+                if (batteryBought) {
+                    setResourceDataObject(currentEnergyQuantity + currentEnergyRate, 'buildings', ['energy', 'quantity']);
+                }
             });
         }
     }
@@ -976,7 +1044,7 @@ function formatAllNotationElements(element, notationType) {
                 } else if (number >= 1e3) {
                     return `${(number / 1e3).toFixed(1)}K`;
                 } else {
-                    if (element.dataset.conditionCheck === 'techUnlock') {
+                    if (element.dataset.conditionCheck === 'techUnlock' || element.dataset.type === 'building' ) {
                         return number;
                     } else {
                         return number.toFixed(0);

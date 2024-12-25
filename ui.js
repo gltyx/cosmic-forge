@@ -387,7 +387,8 @@ export function createOptionRow(
     quantityArgument,
     autoBuyerTier,
     startInvisibleValue,
-    resourceString
+    resourceString,
+    optionalIterationParam
 ) {
     // Main wrapper container
     const wrapper = document.createElement('div');
@@ -465,7 +466,7 @@ export function createOptionRow(
     const description = document.createElement('label');
     description.classList.add('notation'); //if there are rounding errors or loads of decimal places on quantity of resource to sell its because of this
 
-    description.id = generateElementId(labelText, resourceString);
+    description.id = generateElementId(labelText, resourceString, optionalIterationParam);
     description.innerHTML = descriptionText;
 
     if (dataConditionCheck) {
@@ -494,7 +495,7 @@ export function createOptionRow(
     return wrapper;
 }
 
-function generateElementId(labelText, resource) {
+function generateElementId(labelText, resource, optionalIterationParam) {
 
     let id = labelText.replace(/:$/, '');
     id = id.replace(/(^\w|[A-Z]|\s+)(\w*)/g, (match, p1, p2, index) => {
@@ -505,7 +506,12 @@ function generateElementId(labelText, resource) {
         id = resource.toLowerCase() + capitaliseString(id);
     }
 
-    id += 'Description';
+    if (optionalIterationParam) {
+        id += optionalIterationParam + 'Description';
+    } else {
+        id += 'Description';
+    }
+
     id = id.replace(/\s+/g, '');
     
     return id;

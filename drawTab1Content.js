@@ -56,6 +56,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenSellRow);
@@ -79,6 +80,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenGainRow);
@@ -103,7 +105,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogen',
             null,
             false,
-            'hydrogen'
+            'hydrogen',
+            null
         );
         optionContentElement.appendChild(hydrogenIncreaseStorageRow);
 
@@ -127,6 +130,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogen',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenAutoBuyer1Row);
@@ -151,6 +155,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogen',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenAutoBuyer2Row);
@@ -175,6 +180,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogen',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenAutoBuyer3Row);
@@ -199,6 +205,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogen',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(hydrogenAutoBuyer4Row);
@@ -255,6 +262,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumSellRow);
@@ -278,6 +286,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumGainRow);
@@ -302,7 +311,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'helium',
             null,
             false,
-            'helium'
+            'helium',
+            null
         );
         optionContentElement.appendChild(heliumIncreaseStorageRow);
 
@@ -326,6 +336,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'helium',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumAutoBuyer1Row);
@@ -350,6 +361,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'helium',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumAutoBuyer2Row);
@@ -374,6 +386,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'helium',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumAutoBuyer3Row);
@@ -398,6 +411,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'helium',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(heliumAutoBuyer4Row);
@@ -462,6 +476,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonSellRow);
@@ -485,6 +500,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonGainRow);
@@ -509,7 +525,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbon',
             null,
             false,
-            'carbon'
+            'carbon',
+            null
         );
         optionContentElement.appendChild(carbonIncreaseStorageRow);
 
@@ -533,6 +550,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbon',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer1Row);
@@ -557,6 +575,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbon',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer2Row);
@@ -581,6 +600,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbon',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer3Row);
@@ -605,6 +625,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbon',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(carbonAutoBuyer4Row);
@@ -662,6 +683,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(neonSellRow);
@@ -685,6 +707,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(neonGainRow);
@@ -709,7 +732,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'neon',
             null,
             false,
-            'neon'
+            'neon',
+            null
         );
         optionContentElement.appendChild(neonIncreaseStorageRow);
 
@@ -733,6 +757,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neon',
             'tier0',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(neonAutoBuyer1Row);
@@ -757,6 +782,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neon',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(neonAutoBuyer2Row);
@@ -805,6 +831,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neon',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(neonAutoBuyer4Row);
@@ -862,6 +889,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenSellRow);
@@ -885,6 +913,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenGainRow);
@@ -909,7 +938,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygen',
             null,
             false,
-            'oxygen'
+            'oxygen',
+            null
         );
         optionContentElement.appendChild(oxygenIncreaseStorageRow);
 
@@ -933,6 +963,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygen',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenAutoBuyer1Row);
@@ -957,6 +988,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygen',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenAutoBuyer2Row);
@@ -981,6 +1013,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygen',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenAutoBuyer3Row);
@@ -1005,6 +1038,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygen',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(oxygenAutoBuyer4Row);
@@ -1050,6 +1084,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumSellRow);
@@ -1073,6 +1108,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumGainRow);
@@ -1097,7 +1133,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodium',
             null,
             false,
-            'sodium'
+            'sodium',
+            null
         );
         optionContentElement.appendChild(sodiumIncreaseStorageRow);
 
@@ -1121,6 +1158,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodium',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumAutoBuyer1Row);
@@ -1145,6 +1183,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodium',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumAutoBuyer2Row);
@@ -1169,6 +1208,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodium',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumAutoBuyer3Row);
@@ -1193,6 +1233,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodium',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(sodiumAutoBuyer4Row);
@@ -1250,6 +1291,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconSellRow);
@@ -1273,6 +1315,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconGainRow);
@@ -1297,7 +1340,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'silicon',
             null,
             false,
-            'silicon'
+            'silicon',
+            null
         );
         optionContentElement.appendChild(siliconIncreaseStorageRow);
 
@@ -1321,6 +1365,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'silicon',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconAutoBuyer1Row);
@@ -1345,6 +1390,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'silicon',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconAutoBuyer2Row);
@@ -1369,6 +1415,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'silicon',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconAutoBuyer3Row);
@@ -1393,6 +1440,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'silicon',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(siliconAutoBuyer4Row);
@@ -1438,6 +1486,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironSellRow);
@@ -1461,6 +1510,7 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironGainRow);
@@ -1485,7 +1535,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'iron',
             null,
             false,
-            'iron'
+            'iron',
+            null
         );
         optionContentElement.appendChild(ironIncreaseStorageRow);
 
@@ -1509,6 +1560,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'iron',
             'tier1',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironAutoBuyer1Row);
@@ -1533,6 +1585,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'iron',
             'tier2',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironAutoBuyer2Row);
@@ -1557,6 +1610,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'iron',
             'tier3',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironAutoBuyer3Row);
@@ -1581,6 +1635,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'iron',
             'tier4',
             false,
+            null,
             null
         );
         optionContentElement.appendChild(ironAutoBuyer4Row);

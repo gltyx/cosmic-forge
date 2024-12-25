@@ -32,6 +32,7 @@ export function drawTab3Content(heading, optionContentElement) {
             'cash',
             null,
             false,
+            null,
             null
         );
         optionContentElement.appendChild(researchScienceKitRow);
@@ -61,6 +62,7 @@ export function drawTab3Content(heading, optionContentElement) {
             'cash',
             null,
             ['tech', 'knowledgeSharing'],
+            null,
             null
         );
         optionContentElement.appendChild(researchScienceClubRow);
@@ -90,6 +92,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     false,
+                    null,
                     null
                 )
             },
@@ -117,6 +120,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -146,6 +150,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -175,6 +180,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -204,6 +210,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -233,6 +240,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },            
@@ -262,6 +270,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },            
@@ -291,6 +300,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },    
@@ -318,6 +328,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -345,6 +356,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -372,6 +384,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },                               
@@ -405,6 +418,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -432,6 +446,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -460,6 +475,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -488,6 +504,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -516,6 +533,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },
@@ -544,6 +562,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
                     null
                 )
             },

@@ -9,28 +9,29 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant1Row',
             null,
             'Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'building'),
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
                             startUpdateAutoBuyerTimersAndRates('powerPlant1');
                         }
                         setCanAffordDeferred(null);
                     });
-            }, 'upgradeCheck', '', 'building', 'powerPlant1', 'cash', false, null),
+            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null),
             null,
             null,
             null,
             null,
-            `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'powerPlant1', 'price'])}`,
+            `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price'])}`,
             '',
             'upgradeCheck',
-            'building',
+            'energy',
             'powerPlant1',
             'cash',
             null,
             false,
-            null
+            null,
+            null,
         );
         optionContentElement.appendChild(powerPlant1Row);
     }
@@ -40,28 +41,29 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant2Row',
             null,
             'Advanced Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'building'),
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
                             startUpdateAutoBuyerTimersAndRates('powerPlant2');
                         }
                         setCanAffordDeferred(null);
                     });
-            }, 'upgradeCheck', '', 'building', 'powerPlant2', 'cash', false, null),
+            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null),
             null,
             null,
             null,
             null,
-            `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'powerPlant2', 'price'])}`,
+            `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price'])}`,
             '',
             'upgradeCheck',
-            'building',
+            'energy',
             'powerPlant2',
             'cash',
             null,
             false,
-            null
+            null,
+            null,
         );
         optionContentElement.appendChild(powerPlant2Row);
     }
