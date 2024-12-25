@@ -22,6 +22,7 @@ export const headerDescriptions = {
 
     energy: "Any buildings beyond the first level require power to operate, you can manage that here.",
     'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
+    'advanced power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
 
@@ -303,6 +304,16 @@ export const optionDescriptions = {
     },
     techFusionEfficiencyIIIRow: {
         content1: "Unlock Fusion Efficiency III to realise 100% efficient fusion.",
+        content2: "",
+        updateAt: ""
+    },
+    powerPlantLevelI: {
+        content1: "This is the first building available to produce energy.",
+        content2: "",
+        updateAt: ""
+    },
+    powerPlantLevelII: {
+        content1: "This building produces significantly more power than its earlier iteration, but consumes more resources.",
         content2: "",
         updateAt: ""
     },

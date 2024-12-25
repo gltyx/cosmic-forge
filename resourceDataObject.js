@@ -43,7 +43,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer4Row', price: 15000, rate: 1.875, quantity: 0, setPrice: 'heliumAB4Price' }
                 }
             },
-            revealedBy: "hydrogenFusion",
+            revealedBy: 'hydrogenFusion',
             canFuseTech: 'heliumFusion',
             fuseTo1: 'carbon',
             fuseTo2: '',
@@ -68,7 +68,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer4Row', price: 16000, rate: 2.5, quantity: 0, setPrice: 'carbonAB4Price' }
                 }
             },
-            revealedBy: "heliumFusion",
+            revealedBy: 'heliumFusion',
             canFuseTech: 'carbonFusion',
             fuseTo1: 'neon',
             fuseTo2: 'sodium',
@@ -93,7 +93,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Neon Extractor', screen: 'neon', place: 'neonAutoBuyer4Row', price: 24000, rate: 3.125, quantity: 0, setPrice: 'neonAB4Price' }
                 }
             },
-            revealedBy: "carbonFusion",
+            revealedBy: 'carbonFusion',
             canFuseTech: 'neonFusion',
             fuseTo1: 'oxygen',
             fuseTo2: '',
@@ -118,7 +118,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 28000, rate: 3.75, quantity: 0, setPrice: 'oxygenAB4Price' }
                 }
             },
-            revealedBy: "neonFusion",
+            revealedBy: 'neonFusion',
             canFuseTech: 'oxygenFusion',
             fuseTo1: 'silicon',
             fuseTo2: '',
@@ -143,7 +143,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer4Row', price: 40000, rate: 4.375, quantity: 0, setPrice: 'siliconAB4Price' }
                 }
             },
-            revealedBy: "oxygenFusion",
+            revealedBy: 'oxygenFusion',
             canFuseTech: 'siliconFusion',
             fuseTo1: 'iron',
             fuseTo2: '',
@@ -168,7 +168,7 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Iron Extractor', screen: 'iron', place: 'ironAutoBuyer4Row', price: 50000, rate: 5, quantity: 0, setPrice: 'ironAB4Price' }
                 }
             },
-            revealedBy: "siliconFusion",
+            revealedBy: 'siliconFusion',
             canFuseTech: '',
             fuseTo1: '',
             fuseTo2: '',
@@ -193,14 +193,39 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer4Row', price: 60000, rate: 6.25, quantity: 0, setPrice: 'sodiumAB4Price' }
                 }
             },
-            revealedBy: "carbonFusion",
+            revealedBy: 'carbonFusion',
             canFuseTech: '',
             fuseTo1: '',
             fuseTo2: '',
             fuseToRatio1: 0.5,
             fuseToRatio2: 0
         }
-    },    
+    },
+    buildings: {
+        energy: {
+            nameResource: 'Energy',
+            screenName: 'oxygen',
+            saleValue: 0,
+            salePreviewElement: 'sellEnergyDescription',
+            quantity: 0,
+            rate: 0,
+            storageCapacity: 10000,
+            upgrades: {
+                powerPlant1: { 
+                    price: 300, 
+                    rate: 0.05,
+                    quantity: 0, 
+                    setPrice: 'powerPlant1Price' 
+                },
+                powerPlant2: { 
+                    price: 1200,
+                    rate: 0.25,
+                    quantity: 0, 
+                    setPrice: 'powerPlant2Price' 
+                }
+            }
+        }
+    },
     research: {
         screenName: 'research',
         quantity: 0,
@@ -208,23 +233,23 @@ export const resourceData = {
         upgrades: {
             scienceKit: { 
                 price: 5, 
-                rate: 0.005,  // Slightly increased from 0.003 for faster early-game progression
+                rate: 0.005,
                 quantity: 0, 
                 setPrice: 'scienceKitPrice' 
             },
             scienceClub: { 
-                price: 75, // Reduced from 100 to allow earlier access
-                rate: 0.06, // Maintained, as this provides a significant boost after scienceKit
+                price: 75,
+                rate: 0.06,
                 quantity: 0, 
                 setPrice: 'scienceClubPrice' 
             },
             scienceLab: { 
-                price: 300, // New upgrade to bridge the gap between scienceClub and tech costs
-                rate: 0.15,  // Introduces a noticeable increase in research rate
+                price: 300,
+                rate: 0.15,
                 quantity: 0, 
                 setPrice: 'scienceLabPrice' 
             }
-        },
+        }
     },    
     techs: {
         knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 1 },
