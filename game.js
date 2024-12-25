@@ -92,7 +92,7 @@ class TimerManager {
 
 class Timer {
     constructor(duration, onExpire) {
-        this.duration = duration;
+        this.duration = duration/4;
         this.onExpire = onExpire;
         this.timerId = null;
     }

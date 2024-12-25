@@ -189,12 +189,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('tab2Intro').addEventListener('click', function() {
         setLastScreenOpenRegister('tab2', 'tab2Intro');
         setCurrentOptionPane('tab2intro');
-        updateContent('Compounds', 'tab2', 'intro');
+        updateContent('Buildings', 'tab2', 'intro');
     });
 
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'water');
+            setLastScreenOpenRegister('tab2', 'powerPlant');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab2', 'content');
         });
@@ -225,14 +225,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('tab4Intro').addEventListener('click', function() {
         setLastScreenOpenRegister('tab4', 'tab4Intro');
         setCurrentOptionPane('tab4intro');
-        updateContent('Star Map', 'tab4', 'intro');
+        updateContent('Compounds', 'tab4', 'intro');
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'star map');
+            setLastScreenOpenRegister('tab4', 'water');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab4', 'content');
+        });
+    });
+
+    document.getElementById('tab5Intro').addEventListener('click', function() {
+        setLastScreenOpenRegister('tab5', 'tab5Intro');
+        setCurrentOptionPane('tab5intro');
+        updateContent('Star Map', 'tab5', 'intro');
+    });
+
+    document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'star map');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab5', 'content');
         });
     });
 
@@ -298,7 +312,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     window.addEventListener('resize', () => {
         if (getCurrentOptionPane()) {
-            const starContainer = document.querySelector('#optionContentTab4');
+            const starContainer = document.querySelector('#optionContentTab5');
             starContainer.innerHTML = '';
             generateStarfield(starContainer, 100, 80);
         }

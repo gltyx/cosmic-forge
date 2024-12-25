@@ -1,3 +1,6 @@
+import { generateStarfield } from './ui.js';
+
 export function drawTab5Content(heading, optionContentElement) {
-    // Your logic for tab 5
+    const starContainer = document.querySelector('#optionContentTab5');
+    generateStarfield(starContainer, 100, 80);
 }

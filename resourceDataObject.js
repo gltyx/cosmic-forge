@@ -203,7 +203,7 @@ export const resourceData = {
     },    
     research: {
         screenName: 'research',
-        quantity: 250000,
+        quantity: 0,
         rate: 0,
         upgrades: {
             scienceKit: { 
@@ -249,7 +249,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [10000, 'fusionEfficiencyII'], price: 30000, idForRenderPosition: 903 },
     },
     currency: {
-        cash: 200,
+        cash: 25,
     },
 };
 

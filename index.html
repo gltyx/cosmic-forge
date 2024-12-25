@@ -58,13 +58,13 @@
     <!-- Tabs Container -->
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
         <div class="tab selected" data-tab="" data-name ="Resources" id="tab1">Resources</div>
-        <div class="tab tab-not-yet" data-tab="" data-name ="Compounds" id="tab2">???</div>
+        <div class="tab" data-tab="" data-name ="Buildings" id="tab2">Buildings</div>
         <div class="tab" data-tab="" data-name ="Technology" id="tab3">Technology</div>
-        <div class="tab tab-not-yet" data-tab="stellarCartography" data-name ="Star Map" id="tab4">???</div>
-        <div class="tab tab-not-yet" data-tab="" data-name ="tab5" id="tab5">???</div>
+        <div class="tab tab-not-yet" data-tab="" data-name ="Compounds" id="tab4">???</div>
+        <div class="tab tab-not-yet" data-tab="stellarCartography" data-name ="tab5" id="tab5">???</div>
         <div class="tab tab-not-yet" data-tab="" data-name ="tab6" id="tab6">???</div>
         <div class="tab tab-not-yet" data-tab="" data-name ="tab7" id="tab7">???</div>
-        <div class="tab" data-tab="" data-name ="☰" id="tab8">☰</div>
+        <div class="tab tab-not-yet" data-tab="" data-name ="☰" id="tab8">☰</div>
     </div>
 
     <div id="mainContainer" class="d-flex main-container">
@@ -235,32 +235,32 @@
         <div id="tab2ContainerGroup" class="tab-2-container-group tab-2">
             <div class="container-item-menu tab-2">
                 <div class="container-item-menu-header tab-2">
-                    <h4 id="tab2Intro">Compounds</h4>
+                    <h4 id="tab2Intro">Buildings</h4>
                 </div>
                 <div class="container-item-menu-body tab-2">
-                    <!-- Outer Collapsible for Compounds -->
-                    <div id="liquidCompounds" class="collapsible">
+                    <!-- Outer Collapsible for Buildings -->
+                    <div id="powerBuildings" class="collapsible">
                         <div class="collapsible-header">
-                            <span class="main-category-text">Compounds</span>
+                            <span class="main-category-text">Power</span>
                             <span class="collapsible-arrow">▼</span>
                         </div>
                         <div class="collapsible-content">
-                            <!-- Liquids Collapsible -->
-                            <div id="simpleGases" class="collapsible">
+                            <!-- Power Collapsible -->
+                            <div id="power" class="collapsible">
                                 <div class="collapsible-header">
-                                    <span class="sub-category-text">&nbsp;Liquids</span>
+                                    <span class="sub-category-text">&nbsp;Power</span>
                                     <span class="collapsible-arrow">▼</span>
                                 </div>
                                 <div class="collapsible-content">
                                     <div class="row-side-menu d-flex">
                                         <div class="row-side-menu-item">
-                                            <p id="waterOption" class="tab2.option1 inset-paragraph">Water</p>
+                                            <p id="powerPlantOption" class="tab2.option1 inset-paragraph">Power Plant</p>
                                         </div>
                                         <div class="row-side-menu-item right-align">
-                                            <p id="waterRate" class="notation">0 / s</p>
+                                            <p id="powerPlantRate" class="notation">0 / s</p>
                                         </div>
                                         <div class="row-side-menu-item right-align">
-                                            <p id="waterQuantity" class="notation">0/100</p>
+                                            <p id="powerPlantQuantity" class="notation">0/100</p>
                                         </div>
                                     </div>
                                 </div>
@@ -330,30 +330,37 @@
         <div id="tab4ContainerGroup" class="tab-4-container-group tab-4">
             <div class="container-item-menu tab-4">
                 <div class="container-item-menu-header tab-4">
-                    <h4 id="tab4Intro">Star Map</h4>
+                    <h4 id="tab4Intro">Compounds</h4>
                 </div>
                 <div class="container-item-menu-body tab-4">
-                    <div class="row-side-menu d-flex">
-                        <div class="row-side-menu-item">
-                            <p id="starMap" class="tab4.option1">Star Map</p>
+                    <!-- Outer Collapsible for Compounds -->
+                    <div id="liquidCompounds" class="collapsible">
+                        <div class="collapsible-header">
+                            <span class="main-category-text">Compounds</span>
+                            <span class="collapsible-arrow">▼</span>
                         </div>
-                        <div class="row-side-menu-item right-align">
-                            <p id="starMap2"></p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p id="starmap3"></p>
-                        </div>
-                    </div>
-                    <div class="row-side-menu d-flex invisible">
-                        <div class="row-side-menu-item">
-                            <p class="tab4.option2"></p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p class="placeholder"></p>
-                        </div>
-                        <div class="row-side-menu-item right-align">
-                            <p class="placeholder"></p>
-                        </div>
+                        <div class="collapsible-content">
+                            <!-- Liquids Collapsible -->
+                            <div id="liquids" class="collapsible">
+                                <div class="collapsible-header">
+                                    <span class="sub-category-text">&nbsp;Liquids</span>
+                                    <span class="collapsible-arrow">▼</span>
+                                </div>
+                                <div class="collapsible-content">
+                                    <div class="row-side-menu d-flex">
+                                        <div class="row-side-menu-item">
+                                            <p id="waterOption" class="tab4.option1 inset-paragraph">Water</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="waterRate" class="notation">0 / s</p>
+                                        </div>
+                                        <div class="row-side-menu-item right-align">
+                                            <p id="waterQuantity" class="notation">0/100</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                    
                     </div>
                 </div>
             </div>
@@ -374,18 +381,18 @@
         <div id="tab5ContainerGroup" class="tab-5-container-group tab-5">
             <div class="container-item-menu tab-5">
                 <div class="container-item-menu-header tab-5">
-                    <h4 id="tab5Intro">???</h4>
+                    <h4 id="tab5Intro">Star Map</h4>
                 </div>
                 <div class="container-item-menu-body tab-5">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="option1" class="tab5.option1"></p>
+                            <p id="starMap" class="tab5.option1">Star Map</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="option2"></p>
+                            <p id="starMap2"></p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="quantity"></p>
+                            <p id="starmap3"></p>
                         </div>
                     </div>
                     <div class="row-side-menu d-flex invisible">
