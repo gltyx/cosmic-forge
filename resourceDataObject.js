@@ -213,12 +213,14 @@ export const resourceData = {
             storageCapacity: 10000,
             upgrades: {
                 powerPlant1: { 
+                    revealedBy: 'carbonFusion',
                     price: 300, 
                     rate: 0.05,
                     quantity: 0, 
-                    setPrice: 'powerPlant1Price' 
+                    setPrice: 'powerPlant1Price'
                 },
-                powerPlant2: { 
+                powerPlant2: {
+                    revealedBy: 'anotherTech',
                     price: 1200,
                     rate: 0.25,
                     quantity: 0, 

@@ -1,4 +1,5 @@
 import {
+    getBuildingTypes,
     getTechRenderCounter,
     setTechRenderCounter,
     setTechRenderChange,
@@ -165,6 +166,10 @@ export async function gameLoop() {
             monitorRevealRowsChecks(revealRowCheck);
         });
 
+        getBuildingTypes().forEach(type => {
+            checkAndRevealNewBuildings(type);
+        });
+
         updateAllSalePricePreviews();
 
         while (deferredActions.length > 0) {
@@ -203,6 +208,27 @@ export async function gameLoop() {
         });
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function checkAndRevealNewBuildings(type) {
+    let elements;
+
+    switch(type) {
+        case 'energy':
+            elements = getResourceDataObject('buildings', ['energy', 'upgrades']);
+            break;
+    }
+
+    for (const key in elements) {
+        if (elements.hasOwnProperty(key)) {
+            const upgrade = elements[key];
+            const revealedTech = upgrade.revealedBy;
+            if (getTechUnlockedArray().includes(revealedTech)) {
+                const elementUpgradeOptionElement = key + 'Option';
+                document.getElementById(elementUpgradeOptionElement).parentElement.parentElement.classList.remove('invisible');
+            }
+        }
     }
 }
 

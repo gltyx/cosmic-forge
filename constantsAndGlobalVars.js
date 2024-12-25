@@ -21,6 +21,7 @@ export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
 export const READY_TO_SORT = 120;
 export const NOW = 30; //READY TO SORT NOW needs total of 150
+export const BUILDING_TYPES = ['energy'];
 
 //GLOBAL VARIABLES
 export const deferredActions = [];
@@ -588,4 +589,8 @@ export function getTechRenderCounter() {
 
 export function setTechRenderCounter(value) {
     techRenderCounter = value;
+}
+
+export function getBuildingTypes() {
+    return BUILDING_TYPES;
 }
