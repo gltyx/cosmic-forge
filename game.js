@@ -50,7 +50,7 @@ import {
     sortTechRows,
     showNotification,
     showTabsUponUnlock,
-    generateStarfield
+    getTimeInStatCell
 } from "./ui.js";
 
 import { 
@@ -128,6 +128,8 @@ export function startGame() {
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
+        const elements = document.querySelectorAll('.notation');
+
         showTabsUponUnlock();
 
         const resourceNames = Object.keys(getResourceDataObject('resources'));
@@ -187,20 +189,34 @@ export async function gameLoop() {
             }
         }
 
-        formatAllNotationElements(getNotationType());
+        setAllOriginalFrameNumberValues();
+
+        elements.forEach(element => { //format numbers
+            if (document.body.contains(element)) {
+                if (element.classList.contains('sell-fuse-money')) {
+                    setTempSellRowValue(element.innerHTML);
+                    complexSellStringFormatter(element, getNotationType());
+                } else {
+                    formatAllNotationElements(element, getNotationType());
+                }
+            }
+        });
+
         requestAnimationFrame(gameLoop);
     }
 }
 
 function updateStats() {
+    //stat1
     const cash = getResourceDataObject('currency', ['cash']);
     if (getCurrencySymbol() !== "€") {
         getElements().cashStat.textContent = `${getCurrencySymbol()}${cash.toFixed(2)}`;
-        //updateOriginalValue(getElements().cashStat, `${getCurrencySymbol()}${cash.toFixed(2)}`);
     } else {
         getElements().cashStat.textContent = `${cash.toFixed(2) + getCurrencySymbol()}`;
-        //updateOriginalValue(getElements().cashStat, `${cash.toFixed(2) + getCurrencySymbol()}`);
     }
+
+    //stat8
+    getTimeInStatCell();
 }
 
 export function fuseResource(resource, fuseTargets) {
@@ -906,56 +922,7 @@ function startUpdateScienceTimers(elementName) {
     }
 }
 
-// export function updateOriginalValue(element, value) {
-//     let originalNumbers = getOriginalFrameNumbers();
-
-//     let elementSelector = '';
-//     if (element.id) {
-//         elementSelector = `#${element.id}`;
-//     } else if (element.classList.length > 0) {
-//         elementSelector = `.${Array.from(element.classList).join('.')}`;
-//     } else {
-//         console.error("Element must have an id or a class to create a selector.");
-//         return;
-//     }
-
-//     if (originalNumbers[elementSelector]) {
-//         originalNumbers[elementSelector].originalValue = value;
-//     } else if (element.classList.contains('notation')) {
-//         originalNumbers[elementSelector] = {
-//             originalValue: value,
-//             elementSelector: elementSelector
-//         };
-//         console.log(`Added new entry for selector: ${elementSelector}`);
-//     }
-    
-
-//     setOriginalFrameNumbers(originalNumbers);
-// }
-
-
-function formatAllNotationElements(notationType) {
-    let sellRowPresent = false;
-    const elements = document.querySelectorAll('.notation');
-    const originalNumbers = getOriginalFrameNumbers();
-    const existingSelectors = new Set();
-
-    elements.forEach(element => {
-        const originalContent = element.innerHTML;
-        const elementSelector = element.id ? `#${element.id}` : `.${element.className}`;
-
-        if (!(elementSelector in originalNumbers)) {
-            originalNumbers[elementSelector] = {
-                originalValue: originalContent,
-                elementSelector: elementSelector
-            };
-            existingSelectors.add(elementSelector);
-        }
-    });
-
-    setOriginalFrameNumbers(originalNumbers);
-
-    elements.forEach(element => {
+function formatAllNotationElements(element, notationType) {
         const originalContent = element.innerHTML;
         const formattedContent = originalContent.replace(/-?\d+(\.\d+)?/g, match => {
             let number = parseFloat(match);
@@ -1009,10 +976,6 @@ function formatAllNotationElements(notationType) {
                 } else if (number >= 1e3) {
                     return `${(number / 1e3).toFixed(1)}K`;
                 } else {
-                    if (element.classList.contains('sell-fuse-money')) {
-                        sellRowPresent = true;
-                        setTempSellRowValue(originalContent);
-                    }
                     if (element.dataset.conditionCheck === 'techUnlock') {
                         return number;
                     } else {
@@ -1023,54 +986,79 @@ function formatAllNotationElements(notationType) {
         });
 
         element.innerHTML = formattedContent;
-    });
-
-    if (sellRowPresent) { // workaround formatter for complex string on selling and fusing row
-        complexSellStringFormatter();
-    }   
 }
 
-function complexSellStringFormatter() {
-    const sellRowQuantityElement = document.querySelector('.sell-fuse-money').parentElement;
-    const match = sellRowQuantityElement.innerHTML.match(/>(.*?)</);
-
-    if (match) {
-        const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
-        const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
-        const newContent = getTempSellRowValue();
-        
-        sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
-
-        if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) {
-            const match = sellRowQuantityElement.innerHTML.match(/&gt; (-?\d+)(\s|$)/);
-            if (match) {
-                const capturedNumber = parseFloat(match[1]);
-                let formatted;
-                if (capturedNumber < 0) {
-                    formatted = 0;
-                } else {
-                    if (capturedNumber >= 1e13) {
-                        let exponent = Math.floor(Math.log10(capturedNumber));
-                        formatted = `${(capturedNumber / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
-                    } else if (capturedNumber >= 1e12) {
-                        formatted = `${(capturedNumber / 1e12).toFixed(1)}e12`;
-                    } else if (capturedNumber >= 1e9) {
-                        formatted = `${(capturedNumber / 1e9).toFixed(1)}B`;
-                    } else if (capturedNumber >= 1e6) {
-                        formatted = `${(capturedNumber / 1e6).toFixed(1)}M`;
-                    } else if (capturedNumber >= 1e3) {
-                        formatted = `${(capturedNumber / 1e3).toFixed(1)}K`;
-                    } else {
-                        formatted = capturedNumber.toFixed(0);
-                    }
-                }
-                const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 5);
-                const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
-                const updatedHTML = beforeMatch + formatted + afterMatch;
-                sellRowQuantityElement.innerHTML = updatedHTML;
+function complexSellStringFormatter(element, notationType) {
+    if (notationType === 'normalCondensed') {
+        const sellRowQuantityElement = element.parentElement;
+        const match = sellRowQuantityElement.innerHTML.match(/>(.*?)</); //resource fusing from
+    
+        if (match) {
+            const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
+            const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
+            const newContent = getTempSellRowValue();
+            
+            sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
+    
+            if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) { //first number to fuse to
+                formatSellStringCondensed(sellRowQuantityElement, /&gt; (-?\d+)(\s|$)/, 5, 1);
             }
+            
+            if (sellRowQuantityElement.innerHTML.includes(', ')) { //second number to fuse to
+                formatSellStringCondensed(sellRowQuantityElement, /, (\d+)\s/, 2, 1);
+            }   
         }
     }
+}
+
+function formatSellStringCondensed(element, regex, sliceOffsetBefore, sliceOffsetAfter) {
+    const match = element.innerHTML.match(regex);
+    if (match) {
+        const capturedNumber = parseFloat(match[1]);
+        let formatted;
+        if (capturedNumber < 0) {
+            formatted = 0;
+        } else {
+            if (capturedNumber >= 1e13) {
+                let exponent = Math.floor(Math.log10(capturedNumber));
+                formatted = `${(capturedNumber / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+            } else if (capturedNumber >= 1e12) {
+                formatted = `${(capturedNumber / 1e12).toFixed(1)}e12`;
+            } else if (capturedNumber >= 1e9) {
+                formatted = `${(capturedNumber / 1e9).toFixed(1)}B`;
+            } else if (capturedNumber >= 1e6) {
+                formatted = `${(capturedNumber / 1e6).toFixed(1)}M`;
+            } else if (capturedNumber >= 1e3) {
+                formatted = `${(capturedNumber / 1e3).toFixed(1)}K`;
+            } else {
+                formatted = capturedNumber.toFixed(0);
+            }
+        }
+        const beforeMatch = element.innerHTML.slice(0, match.index + sliceOffsetBefore);
+        const afterMatch = element.innerHTML.slice(match.index + match[0].length - sliceOffsetAfter);
+        element.innerHTML = beforeMatch + formatted + afterMatch;
+    }
+}
+
+function setAllOriginalFrameNumberValues() {
+    const elements = document.querySelectorAll('.notation');
+    const originalNumbers = getOriginalFrameNumbers();
+    const existingSelectors = new Set();
+
+    elements.forEach(element => {
+        const originalContent = element.innerHTML;
+        const elementSelector = element.id ? `#${element.id}` : `.${element.className}`;
+
+        if (!(elementSelector in originalNumbers)) {
+            originalNumbers[elementSelector] = {
+                originalValue: originalContent,
+                elementSelector: elementSelector
+            };
+            existingSelectors.add(elementSelector);
+        }
+    });
+
+    setOriginalFrameNumbers(originalNumbers);
 }
 
 function sortRowsByRenderPosition(rows, mainKey) {

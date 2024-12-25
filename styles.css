@@ -864,6 +864,10 @@ button.red-disabled-text {
     width: 100%;
 }
 
+.stat-cell {
+    text-align: center;
+}
+
 .stat-label {
     font-size: 0.8rem;
     font-weight: bold;

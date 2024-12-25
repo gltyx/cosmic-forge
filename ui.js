@@ -838,3 +838,51 @@ function populateModal(headerText, content) {
     const modalContent = getElements().modalContent;
     modalContent.innerHTML = content;
 }
+
+export function getTimeInStatCell() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timeZoneMap = {
+        "GMT": "GMT", // Greenwich Mean Time
+        "GMT+1": "CET", // Central European Time
+        "GMT+2": "EET", // Eastern European Time
+        "GMT+3": "MSK", // Moscow Standard Time
+        "GMT+4": "GST", // Gulf Standard Time
+        "GMT+5": "PKT", // Pakistan Standard Time
+        "GMT+5:30": "IST", // Indian Standard Time
+        "GMT+6": "BST", // Bangladesh Standard Time
+        "GMT+7": "ICT", // Indochina Time
+        "GMT+8": "CST", // China Standard Time
+        "GMT+9": "JST", // Japan Standard Time
+        "GMT+10": "AEST", // Australian Eastern Standard Time
+        "GMT+11": "SBT", // Solomon Islands Time
+        "GMT+12": "NZST", // New Zealand Standard Time
+        "GMT-1": "AZOT", // Azores Time
+        "GMT-2": "GST", // South Georgia Time
+        "GMT-3": "BRT", // Brasília Time
+        "GMT-4": "AST", // Atlantic Standard Time
+        "GMT-5": "EST", // Eastern Standard Time
+        "GMT-6": "CST", // Central Standard Time
+        "GMT-7": "MST", // Mountain Standard Time
+        "GMT-8": "PST", // Pacific Standard Time
+        "GMT-9": "AKST", // Alaska Standard Time
+        "GMT-10": "HST", // Hawaii Standard Time
+        "GMT-11": "NUT", // Niue Time
+        "GMT-12": "AoE", // Anywhere on Earth
+    };
+
+    const rawTimeZone = Intl.DateTimeFormat('en-US', { timeZoneName: 'short' })
+        .formatToParts(now)
+        .find(part => part.type === 'timeZoneName').value;
+
+    const timeZone = timeZoneMap[rawTimeZone] || rawTimeZone;
+
+    const timeString = `${hours}:${minutes} ${timeZone}`;
+
+    const statElement = document.getElementById('stat8');
+    if (statElement) {
+        statElement.textContent = timeString;
+    }
+}
