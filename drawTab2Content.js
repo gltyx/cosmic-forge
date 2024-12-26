@@ -67,4 +67,36 @@ export function drawTab2Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(powerPlant2Row);
     }
+
+    else if (heading === 'Advanced Power Plant') {  
+        const powerPlant3Row = createOptionRow(
+            'energyPowerPlant3Row',
+            null,
+            'Advanced Power Plant:',
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy'),
+                    deferredActions.push(() => {
+                        if (getCanAffordDeferred()) {
+                            startUpdateAutoBuyerTimersAndRates('powerPlant3');
+                        }
+                        setCanAffordDeferred(null);
+                    });
+            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null),
+            null,
+            null,
+            null,
+            null,
+            `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price'])}`,
+            '',
+            'upgradeCheck',
+            'energy',
+            'powerPlant3',
+            'cash',
+            null,
+            false,
+            null,
+            null,
+        );
+        optionContentElement.appendChild(powerPlant3Row);
+    }
 }

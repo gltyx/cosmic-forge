@@ -486,10 +486,12 @@ function getAllQuantities() {
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
     allQuantities.powerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
     allQuantities.powerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
+    allQuantities.powerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
 
     allQuantities.research = getResourceDataObject('research', ['quantity']);
     allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
     allQuantities.scienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
+    allQuantities.scienceLab = getResourceDataObject('research', ['upgrades', 'scienceLab', 'quantity']);
 
     return allQuantities;
 }
@@ -506,10 +508,12 @@ function getAllStorages() {
     allStorages.energy = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
     allStorages.powerPlant1 = null;
     allStorages.powerPlant2 = null;
+    allStorages.powerPlant3 = null;
 
     allStorages.research = null;
     allStorages.scienceKit = null;
     allStorages.scienceClub = null;
+    allStorages.scienceLab = null;
 
     return allStorages;
 }
@@ -528,10 +532,12 @@ function getAllResourceElements(resourcesArray) {
     allResourceElements.energy = getElements().energyQuantity;
     allResourceElements.powerPlant1 = getElements().powerPlant1Quantity;
     allResourceElements.powerPlant2 = getElements().powerPlant2Quantity;
+    allResourceElements.powerPlant3 = getElements().powerPlant3Quantity;
 
     allResourceElements.research = getElements().researchQuantity;
     allResourceElements.scienceKit = getElements().scienceKitQuantity;
     allResourceElements.scienceClub = getElements().scienceClubQuantity;
+    allResourceElements.scienceLab = getElements().scienceLabQuantity;
 
     return allResourceElements;
 }
@@ -564,9 +570,13 @@ function getScienceResourceDescriptionElements() {
     const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
     const scienceClubBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']);
 
+    const scienceLabBuyDescElement = document.getElementById('openScienceLabDescription');
+    const scienceLabBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceLab', 'price']);
+
     return {
         scienceKitBuy: { element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol() },
         scienceClubBuy: { element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol() },
+        scienceLabBuy: { element: scienceLabBuyDescElement, price: scienceLabBuyPrice, string: getCurrencySymbol() },
     };
 }
 
@@ -577,9 +587,13 @@ function getBuildingResourceDescriptionElements() {
     const powerPlant2BuyDescElement = document.getElementById('solarPowerPlantDescription');
     const powerPlant2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price']);
 
+    const powerPlant3BuyDescElement = document.getElementById('advancedPowerPlantDescription');
+    const powerPlant3BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price']);
+
     return {
         powerPlant1Buy: { element: powerPlant1BuyDescElement, price: powerPlant1BuyPrice, string: getCurrencySymbol() },
         powerPlant2Buy: { element: powerPlant2BuyDescElement, price: powerPlant2BuyPrice, string: getCurrencySymbol() },
+        powerPlant3Buy: { element: powerPlant3BuyDescElement, price: powerPlant3BuyPrice, string: getCurrencySymbol() },
     };
 }
 
@@ -1096,7 +1110,8 @@ function startUpdateEnergyTimers(elementName, batteryBought) {
         
         const powerPlant1Rate = parseFloat(getElements()['powerPlant1Rate'].textContent);
         const powerPlant2Rate = parseFloat(getElements()['powerPlant2Rate'].textContent);
-        const totalRate = (powerPlant1Rate + powerPlant2Rate) - (getTotalEnergyUse() * getTimerRateRatio());
+        const powerPlant3Rate = parseFloat(getElements()['powerPlant3Rate'].textContent);
+        const totalRate = (powerPlant1Rate + powerPlant2Rate + powerPlant3Rate) - (getTotalEnergyUse() * getTimerRateRatio());
         getElements().energyRate.textContent = `${totalRate} kW / s`;
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);

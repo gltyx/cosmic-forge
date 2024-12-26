@@ -356,6 +356,11 @@ export const optionDescriptions = {
         updateAt: ""
     },
     powerPlantLevelII: {
+        content1: "This building produces clean, renewable energy without using resources.",
+        content2: "",
+        updateAt: ""
+    },
+    powerPlantLevelIII: {
         content1: "This building produces significantly more power than its earlier iteration, but consumes more resources.",
         content2: "",
         updateAt: ""

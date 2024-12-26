@@ -198,6 +198,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.querySelectorAll('[class*="tab2"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'solar power plant');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'advanced power plant');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab2', 'content');
+        });
+    });
+
     document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'research');

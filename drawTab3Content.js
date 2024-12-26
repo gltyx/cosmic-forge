@@ -66,6 +66,37 @@ export function drawTab3Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(researchScienceClubRow);
+
+        const researchScienceLabRow = createOptionRow(
+            'researchScienceLabRow',
+            null,
+            'Open Science Lab:',
+            createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceLab', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade');
+                deferredActions.push(() => {
+                    if (getCanAffordDeferred()) {
+                        startUpdateAutoBuyerTimersAndRates('scienceLab');
+                    }
+                    setCanAffordDeferred(null);
+                });
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceLab', 'cash', false, null),
+            null,
+            null,
+            null,
+            null,
+            `${getResourceDataObject('research', ['upgrades', 'scienceLab', 'price']) + ' Research'}`,
+            '',
+            'upgradeCheck',
+            'scienceUpgrade',
+            'scienceLab',
+            'cash',
+            null,
+            ['tech', 'knowledgeSharing'], //change add new tech for scienceLabs
+            null,
+            null
+        );
+        optionContentElement.appendChild(researchScienceLabRow);
+
     } else if (heading === 'Tech Tree') {
         const rows = [
             {
