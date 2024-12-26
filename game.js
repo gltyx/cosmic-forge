@@ -133,6 +133,9 @@ export async function gameLoop() {
 
         showTabsUponUnlock();
 
+        const totalEnergy = getTotalEnergyUse();
+        console.log("Total Energy Use:", totalEnergy);
+
         const resourceNames = Object.keys(getResourceDataObject('resources'));
         const resourceTierPairs = [];
         resourceNames.forEach(resourceName => {
@@ -818,6 +821,8 @@ const updateDisplay = (element, data1, data2, desc) => {
                 } else {
                     element.textContent = Math.floor(data1);
                 }
+            } else {
+                element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
             }
 
         } else if (element) {
@@ -1219,6 +1224,33 @@ function updateClassesInRowsToRender() {
     });
 
     setTemporaryRowsRepo('noChange', unsortedRows);
+}
+
+function getTotalEnergyUse() {
+    const resourceData = getResourceDataObject('resources');
+    let totalEnergyUse = 0;
+
+    // Iterate through each element in the resource data
+    for (const resourceKey in resourceData) {
+        const resource = resourceData[resourceKey];
+        const autoBuyer = resource.upgrades?.autoBuyer;
+
+        if (autoBuyer) {
+            // Loop through all tiers of the autoBuyer
+            for (let tierKey of ['tier1', 'tier2', 'tier3', 'tier4']) {
+                const tier = autoBuyer[tierKey];
+
+                if (tier) {
+                    // Multiply energy use by quantity and add to total
+                    const energyUse = tier.energyUse || 0;
+                    const quantity = tier.quantity || 0;
+                    totalEnergyUse += energyUse * quantity;
+                }
+            }
+        }
+    }
+
+    return totalEnergyUse;
 }
 
 // export function toggleTimer(key, buttonId) {
