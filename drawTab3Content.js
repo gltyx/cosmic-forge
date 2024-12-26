@@ -570,7 +570,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'sodiumIonPowerStorage',
                 row: createOptionRow(
-                    'techsodiumIonPowerStorageRow',
+                    'techSodiumIonPowerStorageRow',
                     null,
                     'Sodium Ion Power Storage:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {

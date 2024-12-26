@@ -1,4 +1,6 @@
 import {
+    setPowerOnOff,
+    getPowerOnOff,
     setLosingEnergy,
     getLosingEnergy,
     setTotalEnergyUse,
@@ -97,7 +99,7 @@ class TimerManager {
 
 class Timer {
     constructor(duration, onExpire) {
-        this.duration = duration/4;
+        this.duration = duration;
         this.onExpire = onExpire;
         this.timerId = null;
     }
@@ -705,8 +707,19 @@ function checkStatusAndSetTextClasses(element) {
                 element.textContent = '• OFF';
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
+                setPowerOnOff(false);
             } else {
-                //if battery power greater than 0 then on else off
+                if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0) {
+                    element.textContent = '• ON';
+                    element.classList.remove('red-disabled-text');
+                    element.classList.add('green-ready-text');
+                    setPowerOnOff(true);
+                } else {
+                    element.textContent = '• OFF';
+                    element.classList.add('red-disabled-text');
+                    element.classList.remove('green-ready-text');
+                    setPowerOnOff(false);
+                }
             }
         } else if (getResourceDataObject('buildings', ['energy', 'rate']) === 0) {
             element.textContent = 'N/A';
@@ -716,6 +729,7 @@ function checkStatusAndSetTextClasses(element) {
             element.textContent = '• ON';
             element.classList.remove('red-disabled-text');
             element.classList.add('green-ready-text');
+            setPowerOnOff(true);
         }
         
         return;
@@ -1064,7 +1078,7 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
     }
 
     if (elementName.startsWith('power')) {
-        startUpdateEnergyTimers(elementName, getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']));
+        startUpdateEnergyTimers(elementName, getResourceDataObject('buildings', ['energy']));
         return;
     }
 
@@ -1101,7 +1115,7 @@ function startUpdateScienceTimers(elementName) {
     }
 }
 
-function startUpdateEnergyTimers(elementName, batteryBought) {
+function startUpdateEnergyTimers(elementName) {
     if (elementName.startsWith('power')) {
         const upgradeRatePerUnit = getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'rate']);
         const newEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']) + upgradeRatePerUnit;
@@ -1120,9 +1134,20 @@ function startUpdateEnergyTimers(elementName, batteryBought) {
             timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
                 const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
                 const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
-                if (batteryBought) {
-                    setResourceDataObject(currentEnergyQuantity + currentEnergyRate, 'buildings', ['energy', 'quantity']);
+                if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+                    setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
+                    getElements().energyQuantity.classList.remove('red-disabled-text');
+                    getElements().energyQuantity.classList.remove('green-ready-text');
                 }
+                if (getResourceDataObject('buildings', ['energy', 'quantity']) < 0) {
+                    setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
+                    getElements().energyQuantity.classList.add('red-disabled-text');
+                    getElements().energyQuantity.classList.remove('green-ready-text');
+                } else if (getResourceDataObject('buildings', ['energy', 'quantity']) === getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+                    getElements().energyQuantity.classList.add('green-ready-text');
+                    getElements().energyQuantity.classList.remove('red-disabled-text');
+                }
+            
             });
         }
     }

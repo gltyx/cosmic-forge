@@ -66,6 +66,7 @@ let gameInProgress = false;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
+let powerOnOff = false;
 
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
@@ -613,4 +614,12 @@ export function setLosingEnergy(value) {
 
 export function getLosingEnergy() {
     return losingEnergy;
+}
+
+export function setPowerOnOff(value) {
+    powerOnOff = value;
+}
+
+export function getPowerOnOff() {
+    return powerOnOff;
 }
