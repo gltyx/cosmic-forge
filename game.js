@@ -1,4 +1,6 @@
 import {
+    setTotalEnergyUse,
+    getTotalEnergyUse,
     getBuildingTypes,
     getTechRenderCounter,
     setTechRenderCounter,
@@ -132,9 +134,9 @@ export async function gameLoop() {
         const elements = document.querySelectorAll('.notation');
 
         showTabsUponUnlock();
-
-        const totalEnergy = getTotalEnergyUse();
-        console.log("Total Energy Use:", totalEnergy);
+        
+        setEnergyUse();
+        updateEnergyDisplay();
 
         const resourceNames = Object.keys(getResourceDataObject('resources'));
         const resourceTierPairs = [];
@@ -1004,7 +1006,7 @@ function startUpdateEnergyTimers(elementName, batteryBought) {
         
         const powerPlant1Rate = parseFloat(getElements()['powerPlant1Rate'].textContent);
         const powerPlant2Rate = parseFloat(getElements()['powerPlant2Rate'].textContent);
-        const totalRate = (powerPlant1Rate + powerPlant2Rate);
+        const totalRate = (powerPlant1Rate + powerPlant2Rate) - (getTotalEnergyUse() * getTimerRateRatio());
         getElements().energyRate.textContent = `${totalRate} kW / s`;
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
@@ -1226,22 +1228,19 @@ function updateClassesInRowsToRender() {
     setTemporaryRowsRepo('noChange', unsortedRows);
 }
 
-function getTotalEnergyUse() {
+function setEnergyUse() {
     const resourceData = getResourceDataObject('resources');
     let totalEnergyUse = 0;
 
-    // Iterate through each element in the resource data
     for (const resourceKey in resourceData) {
         const resource = resourceData[resourceKey];
         const autoBuyer = resource.upgrades?.autoBuyer;
 
         if (autoBuyer) {
-            // Loop through all tiers of the autoBuyer
             for (let tierKey of ['tier1', 'tier2', 'tier3', 'tier4']) {
                 const tier = autoBuyer[tierKey];
 
                 if (tier) {
-                    // Multiply energy use by quantity and add to total
                     const energyUse = tier.energyUse || 0;
                     const quantity = tier.quantity || 0;
                     totalEnergyUse += energyUse * quantity;
@@ -1249,8 +1248,14 @@ function getTotalEnergyUse() {
             }
         }
     }
+    setTotalEnergyUse(totalEnergyUse);
+}
 
-    return totalEnergyUse;
+function updateEnergyDisplay() {
+    if (getCurrentTab() === 2) {
+        const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
+        getElements().energyRate.textContent = `${totalRate}kW / s`;
+    }
 }
 
 // export function toggleTimer(key, buttonId) {

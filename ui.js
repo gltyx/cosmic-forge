@@ -1,4 +1,6 @@
 import {
+    setTotalEnergyUse,
+    getTotalEnergyUse,
     READY_TO_SORT,
     NOW,
     getTechRenderCounter,

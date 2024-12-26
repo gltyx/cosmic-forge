@@ -594,3 +594,11 @@ export function setTechRenderCounter(value) {
 export function getBuildingTypes() {
     return BUILDING_TYPES;
 }
+
+export function setTotalEnergyUse(value) {
+    setResourceDataObject(value, 'buildings', ['energy', 'consumption']);
+}
+
+export function getTotalEnergyUse() {
+    return getResourceDataObject('buildings', ['energy', 'consumption']);
+}
