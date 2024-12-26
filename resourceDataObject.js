@@ -250,13 +250,13 @@ export const resourceData = {
             },
             scienceClub: { 
                 price: 75,
-                rate: 0.06,
+                rate: 0.1,
                 quantity: 0, 
                 setPrice: 'scienceClubPrice' 
             },
             scienceLab: { 
                 price: 300,
-                rate: 0.15,
+                rate: 0.5,
                 quantity: 0, 
                 setPrice: 'scienceLabPrice' 
             }
