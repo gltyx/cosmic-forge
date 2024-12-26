@@ -314,14 +314,16 @@ export function fuseResource(resource, fuseTargets) {
             if (Math.abs(amountToDeductFromResource * ratio - amountToAddToResource) <= 1) {
                 showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
-                    'info'
+                    'info',
+                    5000
                 );
             } else { ;
                 
                 lostQuantity = Math.max(realAmountToAdd - availableStorageFuseTo, 0);
                 showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
-                    'warning'
+                    'warning',
+                    5000
                 );
             }
 
@@ -572,7 +574,7 @@ function getBuildingResourceDescriptionElements() {
     const powerPlant1BuyDescElement = document.getElementById('powerPlantDescription');
     const powerPlant1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price']);
 
-    const powerPlant2BuyDescElement = document.getElementById('advancedPowerPlantDescription');
+    const powerPlant2BuyDescElement = document.getElementById('solarPowerPlantDescription');
     const powerPlant2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price']);
 
     return {

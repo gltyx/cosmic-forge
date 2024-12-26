@@ -16,7 +16,7 @@ digraph {
 	steelFoundries [label=<<b>steelFoundries</b><br/>Price: 13000> shape=box]
 	giganticTurbines [label=<<b>giganticTurbines</b><br/>Price: 15000> shape=box]
 	nanoTubeTechnology [label=<<b>nanoTubeTechnology</b><br/>Price: 4000> shape=box]
-	stellarCartography [label=<<b>stellarCartography</b><br/>Price: 800<br/><font color="limegreen">Reveal Star Map Tab</font>> shape=box]
+	stellarCartography [label=<<b>stellarCartography</b><br/>Price: 800<br/><font color="limegreen">Unlock Star Map Tab</font>> shape=box]
 	quantumComputing [label=<<b>quantumComputing</b><br/>Price: 5750<br/><font color="limegreen">ABTier2</font>> shape=box]
 	nobleGasCollection [label=<<b>nobleGasCollection</b><br/>Price: 4500> shape=box]
 	neutronCapture [label=<<b>neutronCapture</b><br/>Price: 23000<br/><font color="limegreen">Reveal Gold</font>> shape=box]

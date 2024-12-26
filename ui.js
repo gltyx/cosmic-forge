@@ -617,7 +617,7 @@ export function selectTheme(theme) {
 let notificationQueue = [];
 let isNotificationActive = false;
 
-export function showNotification(message, type = 'info', time = 4000) {
+export function showNotification(message, type = 'info', time = 3000) {
     if (getNotificationsToggle()) {
         notificationQueue.push({ message, type, time });
 

@@ -36,11 +36,11 @@ export function drawTab2Content(heading, optionContentElement) {
         optionContentElement.appendChild(powerPlant1Row);
     }
 
-    else if (heading === 'Advanced Power Plant') {  
+    else if (heading === 'Solar Power Plant') {  
         const powerPlant2Row = createOptionRow(
             'energyPowerPlant2Row',
             null,
-            'Advanced Power Plant:',
+            'Solar Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy'),
                     deferredActions.push(() => {

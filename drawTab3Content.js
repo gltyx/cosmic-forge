@@ -480,6 +480,209 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'basicPowerGeneration',
+                row: createOptionRow(
+                    'techBasicPowerGenerationRow',
+                    null,
+                    'Basic Power Generation:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('basicPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('basicPowerGeneration');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'basicPowerGeneration');
+                        showNotification(techNotificationMessages.basicPowerGeneration, 'info');
+                    }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['basicPowerGeneration', 'price'])} Research${getResourceDataObject('techs', ['basicPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="basicPowerGenerationPrereq">${getResourceDataObject('techs', ['basicPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'basicPowerGeneration',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'advancedPowerGeneration',
+                row: createOptionRow(
+                    'techAdvancedPowerGenerationRow',
+                    null,
+                    'Advanced Power Generation:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('advancedPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('advancedPowerGeneration');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'advancedPowerGeneration');
+                        showNotification(techNotificationMessages.advancedPowerGeneration, 'info');
+                    }, 'techUnlock', '', 'advancedPowerGeneration', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['advancedPowerGeneration', 'price'])} Research${getResourceDataObject('techs', ['advancedPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="advancedPowerGenerationPrereq">${getResourceDataObject('techs', ['advancedPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'advancedPowerGeneration',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'solarPowerGeneration',
+                row: createOptionRow(
+                    'techSolarPowerGenerationRow',
+                    null,
+                    'Solar Power Generation:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('solarPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('solarPowerGeneration');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'solarPowerGeneration');
+                        showNotification(techNotificationMessages.solarPowerGeneration, 'info');
+                    }, 'techUnlock', '', 'solarPowerGeneration', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['solarPowerGeneration', 'price'])} Research${getResourceDataObject('techs', ['solarPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="solarPowerGenerationPrereq">${getResourceDataObject('techs', ['solarPowerGeneration', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'solarPowerGeneration',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'compounds',
+                row: createOptionRow(
+                    'techCompoundsRow',
+                    null,
+                    'Compounds:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('compounds', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('compounds');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'compounds');
+                        showNotification(techNotificationMessages.compounds, 'info');
+                    }, 'techUnlock', '', 'compounds', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['compounds', 'price'])} Research${getResourceDataObject('techs', ['compounds', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="compoundsPrereq">${getResourceDataObject('techs', ['compounds', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'compounds',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'steelFoundries',
+                row: createOptionRow(
+                    'techSteelFoundriesRow',
+                    null,
+                    'Steel Foundries:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('steelFoundries', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('steelFoundries');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'steelFoundries');
+                        showNotification(techNotificationMessages.steelFoundries, 'info');
+                    }, 'techUnlock', '', 'steelFoundries', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['steelFoundries', 'price'])} Research${getResourceDataObject('techs', ['steelFoundries', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="steelFoundriesPrereq">${getResourceDataObject('techs', ['steelFoundries', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'steelFoundries',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'giganticTurbines',
+                row: createOptionRow(
+                    'techGiganticTurbinesRow',
+                    null,
+                    'Gigantic Turbines:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('giganticTurbines', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('giganticTurbines');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'giganticTurbines');
+                        showNotification(techNotificationMessages.giganticTurbines, 'info');
+                    }, 'techUnlock', '', 'giganticTurbines', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['giganticTurbines', 'price'])} Research${getResourceDataObject('techs', ['giganticTurbines', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="giganticTurbinesPrereq">${getResourceDataObject('techs', ['giganticTurbines', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'giganticTurbines',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'atmosphericTelescopes',
+                row: createOptionRow(
+                    'techAtmosphericTelescopesRow',
+                    null,
+                    'Atmospheric Telescopes:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('atmosphericTelescopes', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('atmosphericTelescopes');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'atmosphericTelescopes');
+                        showNotification(techNotificationMessages.atmosphericTelescopes, 'info');
+                    }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['atmosphericTelescopes', 'price'])} Research${getResourceDataObject('techs', ['atmosphericTelescopes', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="atmosphericTelescopesPrereq">${getResourceDataObject('techs', ['atmosphericTelescopes', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'atmosphericTelescopes',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
                 techName: 'fusionEfficiencyI',
                 row: createOptionRow(
                     'techFusionEfficiencyIRow',

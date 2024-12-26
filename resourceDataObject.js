@@ -214,25 +214,32 @@ export const resourceData = {
             storageCapacity: 10000,
             upgrades: {
                 powerPlant1: { 
-                    revealedBy: 'carbonFusion',
+                    revealedBy: 'basicPowerGeneration',
                     price: 300, 
                     rate: 0.05,
                     quantity: 0, 
                     setPrice: 'powerPlant1Price'
                 },
                 powerPlant2: {
-                    revealedBy: 'anotherTech',
+                    revealedBy: 'solarPowerGeneration',
                     price: 1200,
                     rate: 0.25,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price' 
-                }
+                },
+                powerPlant3: {
+                    revealedBy: 'advancedPowerGeneration',
+                    price: 5000,
+                    rate: 2.5,
+                    quantity: 0, 
+                    setPrice: 'powerPlant3Price' 
+                },
             }
         }
     },
     research: {
         screenName: 'research',
-        quantity: 12000,
+        quantity: 120000,
         rate: 0,
         upgrades: {
             scienceKit: { 

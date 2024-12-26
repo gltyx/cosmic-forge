@@ -22,7 +22,8 @@ export const headerDescriptions = {
 
     energy: "Any buildings beyond the first level require power to operate, you can manage that here.",
     'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
-    'advanced power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
+    'advanced power plant': "These buildings provide high amounts of energy for powering a lot of machinery.",
+    'solar power plant': "Solar power plants provide renewable energy without using a lot of resources.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
 
@@ -49,6 +50,13 @@ export const techNotificationMessages = {
     fusionEfficiencyI: 'Fusion Efficiency Stage I Researched\n\n20% Boost to Fusion returns!',
     fusionEfficiencyII: 'Fusion Efficiency Stage II Researched\n\nFurther 20% Boost to Fusion returns!',
     fusionEfficiencyIII: 'Fusion Efficiency Stage III Researched\n\n100% Fusion returns!',
+    atmosphericTelescopes: 'Atmospheric Telescopes Researched\n\nYou can now get data from the local stellar neighborhood!',
+    giganticTurbines: 'Gigantic Turbines Researched\n\nThis opens up new research in power generation!',
+    steelFoundries: 'Steel Foundries Researched\n\nYou can now build Steel Foundries!',
+    advancedPowerGeneration: 'Advanced Power Generation Researched\n\nBuild Advanced Power Plants!',
+    basicPowerGeneration: 'Basic Power Generation Researched\n\nYou can now build basic Power Stations!',
+    solarPowerGeneration: 'Solar Power Generation Researched\n\nYou can now build Solar Panels to generate power!',
+    compounds: 'Compounds Researched\n\nUnlocks the Compounds tab!'
 };
 
 export const optionDescriptions = {
@@ -307,38 +315,38 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
-    techAtmosphericTelescopes: {
-        content1: "Deploy Atmospheric Telescopes to increase your observation range and gather valuable data.",
+    techAtmosphericTelescopesRow: {
+        content1: "Deploy Atmospheric Telescopes to get data about the surrounding stellar neighborhood.",
         content2: "",
         updateAt: ""
     },
-    techGiganticTurbines: {
-        content1: "Build Gigantic Turbines to generate massive amounts of renewable energy.",
+    techGiganticTurbinesRow: {
+        content1: "Gigantic Turbines allow the building of advanced power generators.",
         content2: "",
         updateAt: ""
     },
-    techSteelFoundries: {
-        content1: "Establish Steel Foundries to enhance material production and support advanced technologies.",
+    techSteelFoundriesRow: {
+        content1: "Build Steel Foundries to produce high strength steel compounds.",
         content2: "",
         updateAt: ""
     },
-    techCompounds: {
-        content1: "Unlock Compounds to expand your research capabilities and develop new technologies.",
+    techCompoundsRow: {
+        content1: "Unlock Compounds to expand the materials you have access to.",
         content2: "",
         updateAt: ""
     },
-    techAdvancedPowerGeneration: {
+    techAdvancedPowerGenerationRow: {
         content1: "Invest in Advanced Power Generation to boost energy production efficiency.",
         content2: "",
         updateAt: ""
     },
-    techBasicPowerGeneration: {
-        content1: "Enable Basic Power Generation to start producing energy for your growing infrastructure.",
+    techBasicPowerGenerationRow: {
+        content1: "Enable Basic Power Generation to start producing energy.",
         content2: "",
         updateAt: ""
     },
-    techSolarPowerGeneration: {
-        content1: "Utilize Solar Power Generation to harness clean, renewable energy from the sun.",
+    techSolarPowerGenerationRow: {
+        content1: "Utilize the local star to harness clean, renewable energy.",
         content2: "",
         updateAt: ""
     },    
