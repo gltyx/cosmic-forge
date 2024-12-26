@@ -1,0 +1,53 @@
+// Tech Relationships
+digraph {
+	node [color=black fillcolor=black fontcolor=white fontname=Arial style=filled]
+	knowledgeSharing [label=<<b>knowledgeSharing</b><br/>Price: 150<br/><font color="limegreen">scienceClub</font>> shape=box]
+	fusionTheory [label=<<b>fusionTheory</b><br/>Price: 750> shape=box]
+	hydrogenFusion [label=<<b>hydrogenFusion</b><br/>Price: 1150> shape=box]
+	heliumFusion [label=<<b>heliumFusion</b><br/>Price: 2300> shape=box]
+	carbonFusion [label=<<b>carbonFusion</b><br/>Price: 4000> shape=box]
+	basicPowerGeneration [label=<<b>basicPowerGeneration</b><br/>Price: 4000<br/><font color="limegreen">Power Plant</font>> shape=box]
+	solarPowerGeneration [label=<<b>solarPowerGeneration</b><br/>Price: 8000<br/><font color="limegreen">Solar Panels</font>> shape=box]
+	advancedPowerGeneration [label=<<b>advancedPowerGeneration</b><br/>Price: 4500<br/><font color="limegreen">Advanced Power Plant</font>> shape=box]
+	neonFusion [label=<<b>neonFusion</b><br/>Price: 5750> shape=box]
+	oxygenFusion [label=<<b>oxygenFusion</b><br/>Price: 8000> shape=box]
+	compounds [label=<<b>compounds</b><br/>Price: 9000<br/><font color="limegreen">Unlock Compounds Tab</font>> shape=box]
+	siliconFusion [label=<<b>siliconFusion</b><br/>Price: 11500> shape=box]
+	steelFoundries [label=<<b>steelFoundries</b><br/>Price: 13000> shape=box]
+	giganticTurbines [label=<<b>giganticTurbines</b><br/>Price: 15000> shape=box]
+	nanoTubeTechnology [label=<<b>nanoTubeTechnology</b><br/>Price: 4000> shape=box]
+	stellarCartography [label=<<b>stellarCartography</b><br/>Price: 800<br/><font color="limegreen">Reveal Star Map Tab</font>> shape=box]
+	quantumComputing [label=<<b>quantumComputing</b><br/>Price: 5750<br/><font color="limegreen">ABTier2</font>> shape=box]
+	nobleGasCollection [label=<<b>nobleGasCollection</b><br/>Price: 4500> shape=box]
+	neutronCapture [label=<<b>neutronCapture</b><br/>Price: 23000<br/><font color="limegreen">Reveal Gold</font>> shape=box]
+	glassManufacture [label=<<b>glassManufacture</b><br/>Price: 9000> shape=box]
+	atmosphericTelescopes [label=<<b>atmosphericTelescopes</b><br/>Price: 10000<br/><font color="limegreen">Reveal Star Data</font>> shape=box]
+	fusionEfficiencyI [label=<<b>fusionEfficiencyI</b><br/>Price: 1750<br/><font color="limegreen">+20% Fusion eff.</font>> shape=box]
+	fusionEfficiencyII [label=<<b>fusionEfficiencyII</b><br/>Price: 3500<br/><font color="limegreen">+20% Fusion eff.</font>> shape=box]
+	fusionEfficiencyIII [label=<<b>fusionEfficiencyIII</b><br/>Price: 10000<br/><font color="limegreen">100% Fusion eff.</font>> shape=box]
+	fusionTheory -> hydrogenFusion
+	hydrogenFusion -> heliumFusion
+	nanoTubeTechnology -> carbonFusion
+	nanoTubeTechnology -> basicPowerGeneration
+	steelFoundries -> solarPowerGeneration
+	glassManufacture -> solarPowerGeneration
+	giganticTurbines -> advancedPowerGeneration
+	basicPowerGeneration -> advancedPowerGeneration
+	nobleGasCollection -> neonFusion
+	neonFusion -> oxygenFusion
+	hydrogenFusion -> compounds
+	oxygenFusion -> compounds
+	oxygenFusion -> siliconFusion
+	siliconFusion -> steelFoundries
+	steelFoundries -> giganticTurbines
+	heliumFusion -> nanoTubeTechnology
+	nanoTubeTechnology -> quantumComputing
+	nanoTubeTechnology -> nobleGasCollection
+	siliconFusion -> neutronCapture
+	oxygenFusion -> glassManufacture
+	glassManufacture -> atmosphericTelescopes
+	stellarCartography -> atmosphericTelescopes
+	fusionTheory -> fusionEfficiencyI
+	fusionEfficiencyI -> fusionEfficiencyII
+	fusionEfficiencyII -> fusionEfficiencyIII
+}

@@ -232,7 +232,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 250000,
+        quantity: 12000,
         rate: 0,
         upgrades: {
             scienceKit: { 
@@ -256,27 +256,31 @@ export const resourceData = {
         }
     },    
     techs: {
-        knowledgeSharing: { appearsAt: [0, null], price: 5, idForRenderPosition: 1 },
-        fusionTheory: { appearsAt: [500, null], price: 750, idForRenderPosition: 2 },
-        
-        hydrogenFusion: { appearsAt: [750, 'fusionTheory'], price: 1500, idForRenderPosition: 3 },
-        heliumFusion: { appearsAt: [2500, 'hydrogenFusion'], price: 3000, idForRenderPosition: 4 },
-        carbonFusion: { appearsAt: [7500, 'nanoTubeTechnology'], price: 5000, idForRenderPosition: 5 },
-        neonFusion: { appearsAt: [10000, 'nobleGasCollection'], price: 15000, idForRenderPosition: 6 }, ////////
-        oxygenFusion: { appearsAt: [15000, 'neonFusion'], price: 20000, idForRenderPosition: 7 }, ////////
-        siliconFusion: { appearsAt: [20000, 'oxygenFusion'], price: 30000, idForRenderPosition: 7 }, ////////
-        
-        nanoTubeTechnology: { appearsAt: [7500, 'heliumFusion'], price: 10000, idForRenderPosition: 50 }, //carbon autobuyerratex2
-        stellarCartography: { appearsAt: [600, null], price: 4000, idForRenderPosition: 51 },
-        quantumComputing: { appearsAt: [2000, null], price: 3000, idForRenderPosition: 52 },
-        nobleGasCollection: { appearsAt: [7500, 'nanoTubeTechnology'], price: 10000, idForRenderPosition: 53 }, ////////
-        neutronCapture: { appearsAt: [20000, 'siliconFusion'], price: 50000, idForRenderPosition: 60 }, ////////
-        glassManufacture: { appearsAt: [15000, 'oxygenFusion'], price: 22000, idForRenderPosition: 70 }, ////////
-
-        fusionEfficiencyI: { appearsAt: [1500, 'fusionTheory'], price: 2000, idForRenderPosition: 900 },
-        fusionEfficiencyII: { appearsAt: [4000, 'fusionEfficiencyI'], price: 5000, idForRenderPosition: 901 },
-        fusionEfficiencyIII: { appearsAt: [10000, 'fusionEfficiencyII'], price: 30000, idForRenderPosition: 903 },
-    },
+        knowledgeSharing: { appearsAt: [100, null], prereqs: [null], price: 150, idForRenderPosition: 10 },
+        fusionTheory: { appearsAt: [500, null], prereqs: [null], price: 750, idForRenderPosition: 20 },
+        hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
+        heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },
+        carbonFusion: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4000, idForRenderPosition: 50 },
+        basicPowerGeneration: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4000, idForRenderPosition: 51 },
+        solarPowerGeneration: { appearsAt: [7000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 8000, idForRenderPosition: 52 },
+        advancedPowerGeneration: { appearsAt: [4000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 4500, idForRenderPosition: 51 },
+        neonFusion: { appearsAt: [5000, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 5750, idForRenderPosition: 60 },
+        oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
+        compounds: { appearsAt: [8000, "hydrogenFusion", "oxygenFusion"], prereqs: ['Hydrogen Fusion', 'Oxygen Fusion'], price: 9000, idForRenderPosition: 70 },
+        siliconFusion: { appearsAt: [10000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 11500, idForRenderPosition: 80 },
+        steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
+        giganticTurbines: { appearsAt: [13000, "steelFoundries", ""], prereqs: ['Steel Foundries'], price: 15000, idForRenderPosition: 82 },
+        nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 500 },
+        stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
+        quantumComputing: { appearsAt: [5000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
+        nobleGasCollection: { appearsAt: [4000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4500, idForRenderPosition: 530 },
+        neutronCapture: { appearsAt: [20000, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 23000, idForRenderPosition: 600 },
+        glassManufacture: { appearsAt: [8000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 9000, idForRenderPosition: 700 },
+        atmosphericTelescopes: { appearsAt: [9000, "glassManufacture", "stellarCartography"], prereqs: ['Glass Manufacture', 'Stellar Cartography'], price: 10000, idForRenderPosition: 700 },
+        fusionEfficiencyI: { appearsAt: [1500, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1750, idForRenderPosition: 9000 },
+        fusionEfficiencyII: { appearsAt: [3000, "fusionEfficiencyI", ""], prereqs: ['Fusion Efficiency Stage I'], price: 3500, idForRenderPosition: 9010 },
+        fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
+    },    
     currency: {
         cash: 100000,
     },

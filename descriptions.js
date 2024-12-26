@@ -307,6 +307,41 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    techAtmosphericTelescopes: {
+        content1: "Deploy Atmospheric Telescopes to increase your observation range and gather valuable data.",
+        content2: "",
+        updateAt: ""
+    },
+    techGiganticTurbines: {
+        content1: "Build Gigantic Turbines to generate massive amounts of renewable energy.",
+        content2: "",
+        updateAt: ""
+    },
+    techSteelFoundries: {
+        content1: "Establish Steel Foundries to enhance material production and support advanced technologies.",
+        content2: "",
+        updateAt: ""
+    },
+    techCompounds: {
+        content1: "Unlock Compounds to expand your research capabilities and develop new technologies.",
+        content2: "",
+        updateAt: ""
+    },
+    techAdvancedPowerGeneration: {
+        content1: "Invest in Advanced Power Generation to boost energy production efficiency.",
+        content2: "",
+        updateAt: ""
+    },
+    techBasicPowerGeneration: {
+        content1: "Enable Basic Power Generation to start producing energy for your growing infrastructure.",
+        content2: "",
+        updateAt: ""
+    },
+    techSolarPowerGeneration: {
+        content1: "Utilize Solar Power Generation to harness clean, renewable energy from the sun.",
+        content2: "",
+        updateAt: ""
+    },    
     powerPlantLevelI: {
         content1: "This is the first building available to produce energy.",
         content2: "",

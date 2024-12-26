@@ -1,0 +1,27 @@
+{
+    "knowledgeSharing": { "appearsAt": [100, null], "price": 150, "idForRenderPosition": 10 },
+    "fusionTheory": { "appearsAt": [500, null], "price": 750, "idForRenderPosition": 20 },
+    "hydrogenFusion": { "appearsAt": [1000, "fusionTheory", ""], "price": 1150, "idForRenderPosition": 30 },
+    "heliumFusion": { "appearsAt": [2000, "hydrogenFusion", ""], "price": 2300, "idForRenderPosition": 40 },
+    "carbonFusion": { "appearsAt": [3500, "nanoTubeTechnology", ""], "price": 4000, "idForRenderPosition": 50 },
+    "basicPowerGeneration": { "appearsAt": [3500, "nanoTubeTechnology", ""], "price": 4000, "idForRenderPosition": 51 },
+    "solarPowerGeneration": { "appearsAt": [7000, "steelFoundries", "glassManufacture"], "price": 8000, "idForRenderPosition": 52 },
+    "advancedPowerGeneration": { "appearsAt": [4000, "giganticTurbines", "basicPowerGeneration"], "price": 4500, "idForRenderPosition": 51 },
+    "neonFusion": { "appearsAt": [5000, "nobleGasCollection", ""], "price": 5750, "idForRenderPosition": 60 },
+    "oxygenFusion": { "appearsAt": [7000, "neonFusion", ""], "price": 8000, "idForRenderPosition": 70 },
+    "compounds": { "appearsAt": [8000, "hydrogenFusion", "oxygenFusion"], "price": 9000, "idForRenderPosition": 70 },
+    "siliconFusion": { "appearsAt": [10000, "oxygenFusion", ""], "price": 11500, "idForRenderPosition": 80 },
+    "steelFoundries": { "appearsAt": [11500, "siliconFusion", ""], "price": 13000, "idForRenderPosition": 81 },
+    "giganticTurbines": { "appearsAt": [13000, "steelFoundries", ""], "price": 15000, "idForRenderPosition": 82 },
+    "nanoTubeTechnology": { "appearsAt": [3500, "heliumFusion", ""], "price": 4000, "idForRenderPosition": 500 },
+    "stellarCartography": { "appearsAt": [700, null], "price": 800, "idForRenderPosition": 510 },
+    "quantumComputing": { "appearsAt": [5000, "nanoTubeTechnology", ""], "price": 5750, "idForRenderPosition": 520 },
+    "nobleGasCollection": { "appearsAt": [4000, "nanoTubeTechnology", ""], "price": 4500, "idForRenderPosition": 530 },
+    "neutronCapture": { "appearsAt": [20000, "siliconFusion", ""], "price": 23000, "idForRenderPosition": 600 },
+    "glassManufacture": { "appearsAt": [8000, "oxygenFusion", ""], "price": 9000, "idForRenderPosition": 700 },
+    "atmosphericTelescopes": { "appearsAt": [9000, "glassManufacture", "stellarCartography"], "price": 10000, "idForRenderPosition": 700 },
+    "fusionEfficiencyI": { "appearsAt": [1500, "fusionTheory", ""], "price": 1750, "idForRenderPosition": 9000 },
+    "fusionEfficiencyII": { "appearsAt": [3000, "fusionEfficiencyI", ""], "price": 3500, "idForRenderPosition": 9010 },
+    "fusionEfficiencyIII": { "appearsAt": [9000, "fusionEfficiencyII", ""], "price": 10000, "idForRenderPosition": 9030 }
+}
+

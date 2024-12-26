@@ -763,38 +763,69 @@ function checkStatusAndSetTextClasses(element) {
         }
 
         if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') { 
-            const prerequisite = getResourceDataObject('techs', [techName, 'appearsAt'])[1];  
-            const prerequisiteSpan = element.querySelector('span');
+            const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
             
-            if (getTechUnlockedArray().includes(prerequisite)) {
+            if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
+                element.classList.remove('red-disabled-text');
+            } else if (element) {
+                element.classList.add('red-disabled-text');
+            }
+
+            if (element.tagName.toLowerCase() === 'button') {
+                if (quantity >= getResourceDataObject('techs', [techName, 'price'])) {
+                    const allPrerequisitesUnlocked = prerequisiteArray.every(prerequisite => getTechUnlockedArray().includes(prerequisite));
+        
+                    if (allPrerequisitesUnlocked) {
+                        console.log("have all techs needed for " + techName);
+                        element.classList.remove('red-disabled-text');
+                    } else {
+                        console.log("DONT have all techs needed for " + techName);
+                        element.classList.add('red-disabled-text');
+                    }
+                }
+            } else { 
+                const prerequisiteSpan = element.querySelector('span');
                 
                 if (prerequisiteSpan) {
-                    prerequisiteSpan.classList.remove('red-disabled-text');
-                    prerequisiteSpan.classList.add('green-ready-text');
+                    const technologiesString = prerequisiteSpan.textContent.trim();
+                    if ((technologiesString !== "" && element.tagName.toLowerCase() !== 'button') || element.tagName.toLowerCase() === 'button') {
+                        const technologiesArray = technologiesString.split(', ');
+                        prerequisiteSpan.innerHTML = '';
+        
+                        technologiesArray.forEach((tech, index) => {
+
+                            const techSpan = document.createElement('span');
+                            techSpan.textContent = tech.trim();
+                            const techSpanArrayName = tech.charAt(0).toLowerCase() + tech.slice(1).replace(/\s+/g, '');
+
+                            if (getTechUnlockedArray().includes(techSpanArrayName)) {
+                                techSpan.classList.add('green-ready-text');
+                                techSpan.classList.remove('red-disabled-text');
+                            } else {
+                                techSpan.classList.remove('green-ready-text');
+                                techSpan.classList.add('red-disabled-text');
+                            }
+                            prerequisiteSpan.appendChild(techSpan);
+
+                            if (index < technologiesArray.length - 1) {
+                                prerequisiteSpan.appendChild(document.createTextNode(', '));
+                            }
+                        });
+                    }
                 }
             }
 
-            if (!element.classList.contains('unlocked-tech') && !getTechUnlockedArray().includes(techName)) {
-                if (quantity >= getResourceDataObject('techs', [techName, 'price'])) {
-                    if ((getTechUnlockedArray().includes(prerequisite) || prerequisite === null) && element.tagName.toLowerCase() === 'button') {
-                        element.classList.remove('red-disabled-text');
-                    } else if (element.tagName.toLowerCase() !== 'button') {
-                        element.classList.remove('red-disabled-text');
-                    }
-                } else {
-                    element.classList.add('red-disabled-text');
-                }
-            } else {
+            if (getTechUnlockedArray().includes(techName)) {
                 if (element.tagName.toLowerCase() === 'button') {
                     setTextDescriptionClassesBasedOnButtonStates(element, 'green');
                 }
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
                 element.textContent = 'Researched';
-                //updateOriginalValue(element, 'Researched');
                 element.style.pointerEvents = 'none';
                 setTechRenderChange(true);
             }
+
             return;
         }        
 
@@ -1228,10 +1259,10 @@ function sortRowsByRenderPosition(rows, mainKey) {
 
         if (mainKey === 'techs') {
             const researchButton = item.row.querySelector('.input-container button');
-            if (researchButton.textContent === "Researched" && currentPos < 1000) {
+            if (researchButton.textContent === "Researched" && currentPos < 10000) {
                 adjustedPositions.push({
                     ...item,
-                    adjustedPos: currentPos + 1000
+                    adjustedPos: currentPos + 10000
                 });
                 alreadyAdjusted = true;
             }
@@ -1239,7 +1270,7 @@ function sortRowsByRenderPosition(rows, mainKey) {
             if (!researchButton.classList.contains('red-disabled-text')) {
                 adjustedPositions.push({
                     ...item,
-                    adjustedPos: currentPos - 1000
+                    adjustedPos: currentPos - 10000
                 });
                 alreadyAdjusted = true;
             }
@@ -1249,13 +1280,13 @@ function sortRowsByRenderPosition(rows, mainKey) {
             if (item.row.classList.contains('invisible')) {
                 adjustedPositions.push({
                     ...item,
-                    adjustedPos: currentPos + 1000
+                    adjustedPos: currentPos + 10000
                 });
             } else {
-                if (currentPos > 1000) {
+                if (currentPos > 10000) {
                     adjustedPositions.push({
                         ...item,
-                        adjustedPos: currentPos - 1000
+                        adjustedPos: currentPos - 10000
                     });
                 } else {
                     adjustedPositions.push({
