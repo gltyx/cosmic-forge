@@ -65,6 +65,7 @@ let beginGameState = true;
 let gameInProgress = false;
 let notificationsToggle = true;
 let techRenderChange = false;
+let losingEnergy = false;
 
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
@@ -601,4 +602,12 @@ export function setTotalEnergyUse(value) {
 
 export function getTotalEnergyUse() {
     return getResourceDataObject('buildings', ['energy', 'consumption']);
+}
+
+export function setLosingEnergy(value) {
+    losingEnergy = value;
+}
+
+export function getLosingEnergy() {
+    return losingEnergy;
 }

@@ -1,4 +1,6 @@
 import {
+    setLosingEnergy,
+    getLosingEnergy,
     setTotalEnergyUse,
     getTotalEnergyUse,
     getBuildingTypes,
@@ -136,7 +138,7 @@ export async function gameLoop() {
         showTabsUponUnlock();
         
         setEnergyUse();
-        updateEnergyDisplay();
+        updateEnergyDisplays();
 
         const resourceNames = Object.keys(getResourceDataObject('resources'));
         const resourceTierPairs = [];
@@ -161,9 +163,17 @@ export async function gameLoop() {
             checkAndIncreasePrices();
         }
 
+        const elementsEnergy = document.querySelectorAll('.energy-check');
+        elementsEnergy.forEach((elementEnergyCheck) => {
+            checkStatusAndSetTextClasses(elementEnergyCheck);
+        });
+
+        const poweredCheckElement = document.getElementById('stat3');
+        checkStatusAndSetTextClasses(poweredCheckElement);
+
         const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
         elementsResourcesCheck.forEach((elementResourceCheck) => {
-            monitorResourceCostChecks(elementResourceCheck);
+            checkStatusAndSetTextClasses(elementResourceCheck);
         });
 
         const revealRowsCheck = document.querySelectorAll('.option-row');
@@ -647,7 +657,54 @@ function monitorRevealRowsChecks(element) {
     }
 }
 
-function monitorResourceCostChecks(element) {
+function checkStatusAndSetTextClasses(element) {
+    const totalEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']) * getTimerRateRatio();
+    const totalEnergyConsumption = getTotalEnergyUse() * getTimerRateRatio();
+
+    if (element.classList.contains('energy-check')) {
+
+        const valueText = element.textContent;
+        const match = valueText.match(/(-?\d+(\.\d+)?) kW \/ s/);
+    
+        if (match) {
+            const number = parseFloat(match[1]);
+            if (number < 0) {
+                element.classList.add('red-disabled-text');
+            } else {
+                element.classList.remove('red-disabled-text');
+            }
+        }
+
+        if (totalEnergyRate < totalEnergyConsumption) {
+            setLosingEnergy(true);
+        } else {
+            setLosingEnergy(false);
+        }
+        return;
+    }
+
+    if (element.classList.contains('powered-check')) {
+        if (getLosingEnergy()) {
+            if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+                element.textContent = '• OFF';
+                element.classList.add('red-disabled-text');
+                element.classList.remove('green-ready-text');
+            } else {
+                //if battery power greater than 0 then on else off
+            }
+        } else if (getResourceDataObject('buildings', ['energy', 'rate']) === 0) {
+            element.textContent = 'N/A';
+            element.classList.remove('red-disabled-text');
+            element.classList.remove('green-ready-text');
+        } else {
+            element.textContent = '• ON';
+            element.classList.remove('red-disabled-text');
+            element.classList.add('green-ready-text');
+        }
+        
+        return;
+    }
+    
     if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         let resource = element.dataset.type;
         const techName = element.dataset.type;
@@ -1251,10 +1308,11 @@ function setEnergyUse() {
     setTotalEnergyUse(totalEnergyUse);
 }
 
-function updateEnergyDisplay() {
+function updateEnergyDisplays() {
+    const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
+    document.getElementById('stat2').textContent = `${totalRate} kW / s`;
     if (getCurrentTab() === 2) {
-        const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
-        getElements().energyRate.textContent = `${totalRate}kW / s`;
+        getElements().energyRate.textContent = `${totalRate} kW / s`;
     }
 }
 

@@ -871,6 +871,7 @@ button.red-disabled-text {
 .stat-label {
     font-size: 0.8rem;
     font-weight: bold;
+    color: var(--text-color);
 }
 
 .stat-value {
@@ -878,9 +879,8 @@ button.red-disabled-text {
     color: var(--text-color);
 }
 
-.stat-value,
-.stat-label {
-    color: var(--text-color);
+.stat-value.red-disabled-text {
+    color: var(--disabled-text);
 }
 
 .collapsible {
