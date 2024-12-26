@@ -5,6 +5,7 @@
     "heliumFusion": ["", "", ""],
     "carbonFusion": ["", "", ""],
     "basicPowerGeneration": ["Power Plant", "", ""],
+    "sodiumIonPowerStorage": ["Unlock Batteries", "", ""],
     "solarPowerGeneration": ["Solar Panels", "", ""],
     "advancedPowerGeneration": ["Advanced Power Plant", "", ""],
     "neonFusion": ["", "", ""],

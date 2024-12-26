@@ -7,6 +7,7 @@ digraph {
 	heliumFusion [label=<<b>heliumFusion</b><br/>Price: 2300> shape=box]
 	carbonFusion [label=<<b>carbonFusion</b><br/>Price: 4000> shape=box]
 	basicPowerGeneration [label=<<b>basicPowerGeneration</b><br/>Price: 4000<br/><font color="limegreen">Power Plant</font>> shape=box]
+	sodiumIonPowerStorage [label=<<b>sodiumIonPowerStorage</b><br/>Price: 7000<br/><font color="limegreen">Unlock Batteries</font>> shape=box]
 	solarPowerGeneration [label=<<b>solarPowerGeneration</b><br/>Price: 8000<br/><font color="limegreen">Solar Panels</font>> shape=box]
 	advancedPowerGeneration [label=<<b>advancedPowerGeneration</b><br/>Price: 4500<br/><font color="limegreen">Advanced Power Plant</font>> shape=box]
 	neonFusion [label=<<b>neonFusion</b><br/>Price: 5750> shape=box]
@@ -30,6 +31,7 @@ digraph {
 	hydrogenFusion -> heliumFusion
 	nanoTubeTechnology -> carbonFusion
 	nanoTubeTechnology -> basicPowerGeneration
+	basicPowerGeneration -> sodiumIonPowerStorage
 	steelFoundries -> solarPowerGeneration
 	glassManufacture -> solarPowerGeneration
 	giganticTurbines -> advancedPowerGeneration

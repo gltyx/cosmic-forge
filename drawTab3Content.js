@@ -568,6 +568,35 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'sodiumIonPowerStorage',
+                row: createOptionRow(
+                    'techsodiumIonPowerStorageRow',
+                    null,
+                    'Sodium Ion Power Storage:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('sodiumIonPowerStorage', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('sodiumIonPowerStorage');
+                        setTechSpecificUIItemsArray('tab3', 'tab3', 'sodiumIonPowerStorage');
+                        showNotification(techNotificationMessages.sodiumIonPowerStorage, 'info');
+                    }, 'techUnlock', '', 'sodiumIonPowerStorage', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['sodiumIonPowerStorage', 'price'])} Research${getResourceDataObject('techs', ['sodiumIonPowerStorage', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="sodiumIonPowerStoragePrereq">${getResourceDataObject('techs', ['sodiumIonPowerStorage', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'sodiumIonPowerStorage',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
                 techName: 'advancedPowerGeneration',
                 row: createOptionRow(
                     'techAdvancedPowerGenerationRow',

@@ -20,7 +20,7 @@ export const headerDescriptions = {
     silicon: "The backbone of modern technology, it is a crucial component in electronics and solar panels.",
     iron: "A strong and versatile metal, iron is the foundation of construction and industry.",
 
-    energy: "Any buildings beyond the first level require power to operate, you can manage that here.",
+    energy: "Any buildings beyond the first level require power to operate, you can manage that here, as well as energy storage.",
     'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
     'advanced power plant': "These buildings provide high amounts of energy for powering a lot of machinery.",
     'solar power plant': "Solar power plants provide renewable energy without using a lot of resources.",
@@ -57,7 +57,8 @@ export const techNotificationMessages = {
     advancedPowerGeneration: 'Advanced Power Generation Researched\n\nBuild Advanced Power Plants!',
     basicPowerGeneration: 'Basic Power Generation Researched\n\nYou can now build basic Power Stations!',
     solarPowerGeneration: 'Solar Power Generation Researched\n\nYou can now build Solar Panels to generate power!',
-    compounds: 'Compounds Researched\n\nUnlocks the Compounds tab!'
+    compounds: 'Compounds Researched\n\nUnlocks the Compounds tab!',
+    sodiumIonPowerStorage: 'Sodium Ion Power Storage Researched\n\nYou can build batteries to store energy!'
 };
 
 export const optionDescriptions = {
@@ -358,6 +359,11 @@ export const optionDescriptions = {
     },
     techScienceLaboratoriesRow: {
         content1: "Unlock Science Laboratories to build huge labs for large scale, dedicated research.",
+        content2: "",
+        updateAt: "" 
+    },
+    techSodiumIonPowerStorageRow: {
+        content1: "Unlock the ability to build batteries to store energy that you generate.",
         content2: "",
         updateAt: "" 
     },
