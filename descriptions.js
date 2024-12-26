@@ -45,6 +45,7 @@ export const techNotificationMessages = {
     glassManufacture: 'Glass Manufacture Researched\n\nWe can now produce Glass compounds!',
     neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Gold, modern day Alchemy, we will be rich beyond belief!',
     quantumComputing: 'Quantum Computing Researched\n\nMore advanced Machinery is now available!',
+    scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
     nanoTubeTechnology: 'Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!',
     stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked The Star Map!',
     fusionEfficiencyI: 'Fusion Efficiency Stage I Researched\n\n20% Boost to Fusion returns!',
@@ -230,6 +231,11 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    researchScienceLabRow: {
+        content1: "Build a Science Lab to do large amounts of Research.",
+        content2: "",
+        updateAt: ""
+    },
     techKnowledgeSharingRow: {
         content1: "Unlock Knowledge Sharing to advance research capabilities.",
         content2: "",
@@ -316,17 +322,17 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techAtmosphericTelescopesRow: {
-        content1: "Deploy Atmospheric Telescopes to get data about the surrounding stellar neighborhood.",
+        content1: "Unlock Atmospheric Telescopes to get data about the surrounding stellar neighborhood.",
         content2: "",
         updateAt: ""
     },
     techGiganticTurbinesRow: {
-        content1: "Gigantic Turbines allow the building of advanced power generators.",
+        content1: "Unlock Gigantic Turbines to allow the building of advanced power generators.",
         content2: "",
         updateAt: ""
     },
     techSteelFoundriesRow: {
-        content1: "Build Steel Foundries to produce high strength steel compounds.",
+        content1: "Unlock Steel Foundries to produce high strength steel compounds.",
         content2: "",
         updateAt: ""
     },
@@ -336,20 +342,25 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techAdvancedPowerGenerationRow: {
-        content1: "Invest in Advanced Power Generation to boost energy production efficiency.",
+        content1: "Unlock Advanced Power Generation to boost energy production.",
         content2: "",
         updateAt: ""
     },
     techBasicPowerGenerationRow: {
-        content1: "Enable Basic Power Generation to start producing energy.",
+        content1: "Unlock Basic Power Generation to start producing energy.",
         content2: "",
         updateAt: ""
     },
     techSolarPowerGenerationRow: {
-        content1: "Utilize the local star to harness clean, renewable energy.",
+        content1: "Unlock the ability to utilize the local star to harness clean, renewable energy.",
         content2: "",
         updateAt: ""
-    },    
+    },
+    techScienceLaboratoriesRow: {
+        content1: "Unlock Science Laboratories to build huge labs for large scale, dedicated research.",
+        content2: "",
+        updateAt: "" 
+    },
     powerPlantLevelI: {
         content1: "This is the first building available to produce energy.",
         content2: "",

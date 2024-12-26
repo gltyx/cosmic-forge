@@ -91,7 +91,7 @@ export function drawTab3Content(heading, optionContentElement) {
             'scienceLab',
             'cash',
             null,
-            ['tech', 'knowledgeSharing'], //change add new tech for scienceLabs
+            ['tech', 'scienceLaboratories'],
             null,
             null
         );
@@ -449,6 +449,34 @@ export function drawTab3Content(heading, optionContentElement) {
                     'research',
                     null,
                     ['research', 'researchPoints'],
+                    null,
+                    null
+                )
+            },
+            {
+                techName: 'scienceLaboratories',
+                row: createOptionRow(
+                    'techScienceLaboratoriesRow',
+                    null,
+                    'Science Laboratories:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('scienceLaboratories', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('scienceLaboratories');
+                        showNotification(techNotificationMessages.scienceLaboratories, 'info');
+                    }, 'techUnlock', '', 'scienceLaboratories', null, 'research', false, null),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['scienceLaboratories', 'price'])} Research${getResourceDataObject('techs', ['scienceLaboratories', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="scienceLaboratoriesPrereq">${getResourceDataObject('techs', ['scienceLaboratories', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'scienceLaboratories',
+                    null,
+                    'research',
+                    null,
+                    false,
                     null,
                     null
                 )

@@ -246,19 +246,19 @@ export const resourceData = {
                 price: 5, 
                 rate: 0.005,
                 quantity: 0, 
-                setPrice: 'scienceKitPrice' 
+                setPrice: 'scienceKitPrice'
             },
             scienceClub: { 
                 price: 75,
                 rate: 0.1,
                 quantity: 0, 
-                setPrice: 'scienceClubPrice' 
+                setPrice: 'scienceClubPrice'
             },
             scienceLab: { 
                 price: 300,
                 rate: 0.5,
                 quantity: 0, 
-                setPrice: 'scienceLabPrice' 
+                setPrice: 'scienceLabPrice'
             }
         }
     },    
@@ -280,6 +280,7 @@ export const resourceData = {
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
         quantumComputing: { appearsAt: [5000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
+        scienceLaboratories: { appearsAt: [5750, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 7000, idForRenderPosition: 521 },
         nobleGasCollection: { appearsAt: [4000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4500, idForRenderPosition: 530 },
         neutronCapture: { appearsAt: [20000, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 23000, idForRenderPosition: 600 },
         glassManufacture: { appearsAt: [8000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 9000, idForRenderPosition: 700 },

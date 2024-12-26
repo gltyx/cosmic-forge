@@ -16,6 +16,7 @@
     "nanoTubeTechnology": { "appearsAt": [3500, "heliumFusion", ""], "price": 4000, "idForRenderPosition": 500 },
     "stellarCartography": { "appearsAt": [700, null], "price": 800, "idForRenderPosition": 510 },
     "quantumComputing": { "appearsAt": [5000, "nanoTubeTechnology", ""], "price": 5750, "idForRenderPosition": 520 },
+    "scienceLaboratories": { "appearsAt": [5750, "quantumComputing", ""], "price": 7000, "idForRenderPosition": 521 },
     "nobleGasCollection": { "appearsAt": [4000, "nanoTubeTechnology", ""], "price": 4500, "idForRenderPosition": 530 },
     "neutronCapture": { "appearsAt": [20000, "siliconFusion", ""], "price": 23000, "idForRenderPosition": 600 },
     "glassManufacture": { "appearsAt": [8000, "oxygenFusion", ""], "price": 9000, "idForRenderPosition": 700 },
