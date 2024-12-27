@@ -401,12 +401,12 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 }
 
-export function setAutoBuyerTierLevel(key, value, override = false) {
-    if (resourceData.resources[key].upgrades.autoBuyer.normalProgression === true || override) {
-        resourceData.resources[key].upgrades.autoBuyer.currentTierLevel = value;
+export function setAutoBuyerTierLevel(key, value, override = false, type) {
+    if (resourceData[type][key].upgrades.autoBuyer.normalProgression === true || override) {
+        resourceData[type][key].upgrades.autoBuyer.currentTierLevel = value;
     }
 }
 
-export function getAutoBuyerTierLevel(key) {
-    return resourceData.resources[key].upgrades.autoBuyer.currentTierLevel;
+export function getAutoBuyerTierLevel(key, type) {
+    return resourceData[type][key].upgrades.autoBuyer.currentTierLevel;
 }

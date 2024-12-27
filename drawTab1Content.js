@@ -1,4 +1,4 @@
-import { setSalePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
+import { setSaleResourcePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
 import { sellResource, fuseResource, gain, increaseResourceStorage, startUpdateAutoBuyerTimersAndRates } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createDropdown, createButton } from './ui.js';
@@ -28,7 +28,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('hydrogen', value, 'helium');
+                setSaleResourcePreview('hydrogen', value, 'helium');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('hydrogen');
@@ -57,7 +57,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenSellRow);
 
@@ -81,7 +82,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenGainRow);
 
@@ -106,7 +108,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'hydrogen',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenIncreaseStorageRow);
 
@@ -131,7 +134,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenAutoBuyer1Row);
 
@@ -156,7 +160,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenAutoBuyer2Row);
 
@@ -181,7 +186,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenAutoBuyer3Row);
 
@@ -206,7 +212,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(hydrogenAutoBuyer4Row);
     }
@@ -234,7 +241,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('helium', value, 'carbon');
+                setSaleResourcePreview('helium', value, 'carbon');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('helium');
@@ -263,7 +270,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumSellRow);
 
@@ -287,7 +295,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumGainRow);
 
@@ -312,7 +321,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'helium',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumIncreaseStorageRow);
 
@@ -337,7 +347,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumAutoBuyer1Row);
 
@@ -362,7 +373,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumAutoBuyer2Row);
 
@@ -387,7 +399,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumAutoBuyer3Row);
 
@@ -412,7 +425,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(heliumAutoBuyer4Row);
     }
@@ -441,7 +455,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('carbon', value, 'nextElementsWillExpandOutHere');
+                setSaleResourcePreview('carbon', value, 'nextElementsWillExpandOutHere');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('carbon');
@@ -477,7 +491,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonSellRow);
 
@@ -501,7 +516,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonGainRow);
 
@@ -526,7 +542,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'carbon',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonIncreaseStorageRow);
 
@@ -551,7 +568,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonAutoBuyer1Row);
 
@@ -576,7 +594,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonAutoBuyer2Row);
 
@@ -601,7 +620,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonAutoBuyer3Row);
 
@@ -626,7 +646,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(carbonAutoBuyer4Row);
     } 
@@ -655,7 +676,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('neon', value, 'nextElementsWillExpandOutHere');
+                setSaleResourcePreview('neon', value, 'nextElementsWillExpandOutHere');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('neon');
@@ -684,7 +705,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonSellRow);
 
@@ -708,7 +730,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonGainRow);
 
@@ -733,7 +756,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'neon',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonIncreaseStorageRow);
 
@@ -758,7 +782,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier0',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonAutoBuyer1Row);
 
@@ -783,7 +808,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonAutoBuyer2Row);
 
@@ -807,7 +833,8 @@ export function drawTab1Content(heading, optionContentElement) {
         //     'neon',
         //     'tier3',
         //     false,
-        //     null
+        //     null,
+        //     'resource'
         // );
         // optionContentElement.appendChild(neonAutoBuyer3Row);
 
@@ -832,7 +859,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(neonAutoBuyer4Row);
     }
@@ -861,7 +889,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('oxygen', value, 'silicon');
+                setSaleResourcePreview('oxygen', value, 'silicon');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('oxygen');
@@ -890,7 +918,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenSellRow);
 
@@ -914,7 +943,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenGainRow);
 
@@ -939,7 +969,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'oxygen',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenIncreaseStorageRow);
 
@@ -964,7 +995,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenAutoBuyer1Row);
 
@@ -989,7 +1021,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenAutoBuyer2Row);
 
@@ -1014,7 +1047,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenAutoBuyer3Row);
 
@@ -1039,7 +1073,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(oxygenAutoBuyer4Row);
     }
@@ -1068,7 +1103,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('sodium', value, '');
+                setSaleResourcePreview('sodium', value, '');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('sodium');
@@ -1085,7 +1120,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumSellRow);
 
@@ -1109,7 +1145,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumGainRow);
 
@@ -1134,7 +1171,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'sodium',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumIncreaseStorageRow);
 
@@ -1159,7 +1197,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumAutoBuyer1Row);
 
@@ -1184,7 +1223,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumAutoBuyer2Row);
 
@@ -1209,7 +1249,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumAutoBuyer3Row);
 
@@ -1234,7 +1275,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(sodiumAutoBuyer4Row);
     } 
@@ -1263,7 +1305,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('silicon', value, 'iron');
+                setSaleResourcePreview('silicon', value, 'iron');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('silicon');
@@ -1292,7 +1334,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconSellRow);
 
@@ -1316,7 +1359,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconGainRow);
 
@@ -1341,7 +1385,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'silicon',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconIncreaseStorageRow);
 
@@ -1366,7 +1411,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconAutoBuyer1Row);
 
@@ -1391,7 +1437,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconAutoBuyer2Row);
 
@@ -1416,7 +1463,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconAutoBuyer3Row);
 
@@ -1441,7 +1489,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(siliconAutoBuyer4Row);
     }
@@ -1470,7 +1519,7 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
             ], 'all', (value) => {
-                setSalePreview('iron', value, 'iron');
+                setSaleResourcePreview('iron', value, 'iron');
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('iron');
@@ -1487,7 +1536,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironSellRow);
 
@@ -1511,7 +1561,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironGainRow);
 
@@ -1536,7 +1587,8 @@ export function drawTab1Content(heading, optionContentElement) {
             null,
             false,
             'iron',
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironIncreaseStorageRow);
 
@@ -1561,7 +1613,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier1',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironAutoBuyer1Row);
 
@@ -1586,7 +1639,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier2',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironAutoBuyer2Row);
 
@@ -1611,7 +1665,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironAutoBuyer3Row);
 
@@ -1636,7 +1691,8 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier4',
             false,
             null,
-            null
+            null,
+            'resource'
         );
         optionContentElement.appendChild(ironAutoBuyer4Row);
     }

@@ -30,7 +30,8 @@ let techRenderCounter = 0;
 let tempSellRowValue = null;
 let currencySymbol = '$';
 let increaseStorageFactor = 2;
-let salePreviews = {};
+let saleResourcePreviews = {};
+let saleCompoundPreviews = {};
 let resourcesToDeduct = {};
 let resourcesToIncreasePrice = {};
 let techUnlockedArray = [];
@@ -351,7 +352,7 @@ export function getResourcesToIncreasePrice() {
     return resourcesToIncreasePrice;
 }
 
-export function setSalePreview(resource, amount, fusionTo1, fusionTo2) {
+export function setSaleResourcePreview(resource, amount, fusionTo1, fusionTo2) {
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
 
     let calculatedAmount;
@@ -395,6 +396,52 @@ export function setSalePreview(resource, amount, fusionTo1, fusionTo2) {
             break;
     }
     setResourceSalePreview(resource, calculatedAmount, fusionTo1, fusionTo2);
+}
+
+export function setSaleCompoundPreview(compound, amount) {
+    const compoundQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+
+    let calculatedAmount;
+
+    switch (amount) {
+        case 'all':
+            calculatedAmount = Math.floor(compoundQuantity);
+            break;
+        case 'threeQuarters':
+            calculatedAmount = Math.floor(compoundQuantity * 0.75);
+            break;
+        case 'twoThirds':
+            calculatedAmount = Math.floor(compoundQuantity * 2 / 3);
+            break;
+        case 'half':
+            calculatedAmount = Math.floor(compoundQuantity * 0.5);
+            break;
+        case 'oneThird':
+            calculatedAmount = Math.floor(compoundQuantity / 3);
+            break;
+        case '100000':
+            calculatedAmount = Math.min(100000, compoundQuantity);
+            break;
+        case '10000':
+            calculatedAmount = Math.min(10000, compoundQuantity);
+            break;
+        case '1000':
+            calculatedAmount = Math.min(1000, compoundQuantity);
+            break;
+        case '100':
+            calculatedAmount = Math.min(100, compoundQuantity);
+            break;
+        case '10':
+            calculatedAmount = Math.min(10, compoundQuantity);
+            break;
+        case '1':
+            calculatedAmount = Math.min(1, compoundQuantity);
+            break;
+        default:
+            calculatedAmount = 0;
+            break;
+    }
+    setCompoundSalePreview(compound, calculatedAmount);
 }
 
 export function setResourceSalePreview(resource, value, fuseToResource1, fuseToResource2) {
@@ -465,24 +512,24 @@ export function setResourceSalePreview(resource, value, fuseToResource1, fuseToR
 
     if (getCurrencySymbol() !== "€") {
         if (value <= resourceQuantity) {
-            salePreviews[resource] =
+            saleResourcePreviews[resource] =
                 `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(value * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
                 value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
-            salePreviews[resource] =
+            saleResourcePreviews[resource] =
                 `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}</span>` +
                 ' (' +
                 resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         }
     } else {
         if (value <= resourceQuantity) {
-            salePreviews[resource] =
+            saleResourcePreviews[resource] =
                 `<span class="green-ready-text notation sell-fuse-money">${(value * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
                 value + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
         } else {
-            salePreviews[resource] =
+            saleResourcePreviews[resource] =
                 `<span class="green-ready-text notation sell-fuse-money">${(resourceQuantity * resourceSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
                 ' (' +
                 resourceQuantity + ' ' + resourceCapitalised + (fusionFlag ? suffixFusion : '') + ')';
@@ -490,8 +537,44 @@ export function setResourceSalePreview(resource, value, fuseToResource1, fuseToR
     } 
 }
 
+export function setCompoundSalePreview(compound, value) {
+    const compoundCapitalised = getResourceDataObject('compounds', [compound, 'nameResource']);
+    const compoundQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+    const compoundSaleValueFactor = getResourceDataObject('compounds', [compound, 'saleValue']);
+
+    if (getCurrencySymbol() !== "€") {
+        if (value <= compoundQuantity) {
+            saleCompoundPreviews[compound] =
+                `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(value * compoundSaleValueFactor).toFixed(2)}</span>` +
+                ' (' +
+                value + ' ' + compoundCapitalised + ')';
+        } else {
+            saleCompoundPreviews[compound] =
+                `<span class="green-ready-text notation sell-fuse-money">${getCurrencySymbol()}${(compoundQuantity * compoundSaleValueFactor).toFixed(2)}</span>` +
+                ' (' +
+                compoundQuantity + ' ' + compoundCapitalised + ')';
+        }
+    } else {
+        if (value <= compoundQuantity) {
+            saleCompoundPreviews[compound] =
+                `<span class="green-ready-text notation sell-fuse-money">${(value * compoundSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
+                ' (' +
+                value + ' ' + compoundCapitalised + ')';
+        } else {
+            saleCompoundPreviews[compound] =
+                `<span class="green-ready-text notation sell-fuse-money">${(compoundQuantity * compoundSaleValueFactor).toFixed(2)}${getCurrencySymbol()}</span>` +
+                ' (' +
+                compoundQuantity + ' ' + compoundCapitalised + ')';
+        }
+    } 
+}
+
 export function getResourceSalePreview(key) {
-    return salePreviews[key];
+    return saleResourcePreviews[key];
+}
+
+export function getCompoundSalePreview(key) {
+    return saleCompoundPreviews[key];
 }
 
 export function getLastScreenOpenRegister(key) {

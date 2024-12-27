@@ -406,7 +406,8 @@ export function createOptionRow(
     autoBuyerTier,
     startInvisibleValue,
     resourceString,
-    optionalIterationParam
+    optionalIterationParam,
+    rowCategory
 ) {
     // Main wrapper container
     const wrapper = document.createElement('div');
@@ -427,6 +428,7 @@ export function createOptionRow(
     wrapper.dataset.conditionCheck = dataConditionCheck;
     wrapper.dataset.type = objectSectionArgument1;
     wrapper.dataset.autoBuyerTier = autoBuyerTier;
+    wrapper.dataset.rowCategory = rowCategory;
 
     // Visibility logic for mainRow
     if (dataConditionCheck === "techUnlock") {
@@ -488,7 +490,11 @@ export function createOptionRow(
     description.innerHTML = descriptionText;
 
     if (dataConditionCheck) {
-        description.classList.add('red-disabled-text', 'resource-cost-sell-check');
+        if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'science' || rowCategory === 'tech') {
+            description.classList.add('red-disabled-text', 'resource-cost-sell-check');
+        } else if (rowCategory === 'compound') {
+            description.classList.add('red-disabled-text', 'compound-cost-sell-check');
+        }
 
         if (dataConditionCheck === 'techUnlock') {
             description.dataset.conditionCheck = dataConditionCheck;
@@ -501,6 +507,7 @@ export function createOptionRow(
             description.dataset.resourceToFuseTo = objectSectionArgument2;
             description.dataset.argumentCheckQuantity = quantityArgument;
             description.dataset.autoBuyerTier = autoBuyerTier;
+            description.dataset.rowCategory = rowCategory;
         }
     }
 

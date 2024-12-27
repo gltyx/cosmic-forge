@@ -29,6 +29,7 @@ export function drawTab2Content(heading, optionContentElement) {
             ['tech', 'sodiumIonPowerStorage'],
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(battery1Row);
 
@@ -55,6 +56,7 @@ export function drawTab2Content(heading, optionContentElement) {
             ['tech', 'sodiumIonPowerStorage'],
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(battery2Row);
 
@@ -81,6 +83,7 @@ export function drawTab2Content(heading, optionContentElement) {
             ['tech', 'sodiumIonPowerStorage'],
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(battery3Row);
     }
@@ -112,6 +115,7 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(powerPlant1Row);
     }
@@ -144,6 +148,7 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(powerPlant2Row);
     }
@@ -176,6 +181,7 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
+            'building'
         );
         optionContentElement.appendChild(powerPlant3Row);
     }

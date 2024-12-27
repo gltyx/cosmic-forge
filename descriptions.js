@@ -3,7 +3,7 @@ export const gameIntroText = 'Embark on an epic journey from the simplest elemen
 
 export const headerDescriptions = {
     'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
-    'Compounds': 'Here you can gain and sell compounds.',
+    'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',
     'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
     'Technology': 'In the Technology section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
     'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
@@ -26,6 +26,8 @@ export const headerDescriptions = {
     'solar power plant': "Solar power plants provide renewable energy without using a lot of resources.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+
+    water: "The first compound created by your hands, it is vital to life, and pretty refreshing!",
 
     'star map': "This is a map of the known galaxy",
     
@@ -221,7 +223,27 @@ export const optionDescriptions = {
         content1: "Add an Iron Extractor to automate Iron generation.",
         content2: "",
         updateAt: ""
-    },       
+    },
+    waterCreateRow: {
+        content1: "Here you can create Water from its constituent parts, provided you have them.",
+        content2: "",
+        updateAt: ""
+    },
+    waterSellRow: {
+        content1: "Here you can sell Water for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    waterIncreaseStorageRow: {
+        content1: "Upgrade your Water storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    waterAutoBuyer1Row: {
+        content1: "Add an Atmospheric Condenser to harvest water from the atmosphere.",
+        content2: "",
+        updateAt: ""
+    },
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",

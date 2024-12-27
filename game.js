@@ -25,7 +25,7 @@ import {
     getTimerRateRatio,
     getTimerUpdateInterval,
     getCurrencySymbol,
-    setSalePreview,
+    setSaleResourcePreview,
     getResourcesToIncreasePrice,
     setResourcesToIncreasePrice,
     getResourcesToDeduct,
@@ -363,9 +363,9 @@ function updateAllSalePricePreviews() {
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";
             if (fuseTo1 !== 'none') {
-                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
+                setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
             } else {
-                setSalePreview(currentScreen, document.getElementById(dropDownElementId).value, '', '');
+                setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, '', '');
             }
         
             const salePreviewString = getResourceSalePreview(resource);
@@ -708,9 +708,19 @@ function monitorRevealRowsChecks(element) {
         }
     } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
         const elementTier = parseInt(element.dataset.autoBuyerTier.slice(-1));
-        if (getCurrentTab() === 1)  {
+        if (getCurrentTab() === 1 && element.dataset.rowCategory === 'resource')  {
             if (elementTier > 0 ) {
-                if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane())) {
+                if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane(), 'resources')) {
+                    element.classList.remove('invisible');
+                } else {
+                    element.classList.add('invisible');
+                }
+            } else {
+                element.classList.add('invisible');
+            }
+        } else if (getCurrentTab() === 4 && element.dataset.rowCategory === 'compound')  {
+            if (elementTier > 0 ) {
+                if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane(), 'compounds')) {
                     element.classList.remove('invisible');
                 } else {
                     element.classList.add('invisible');
@@ -781,8 +791,53 @@ function checkStatusAndSetTextClasses(element) {
         
         return;
     }
-    
-    if (element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
+
+    if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
+        let compound = element.dataset.type;
+        const type = element.dataset.type;
+
+        if (compound === 'storage' || compound === 'autoBuyer') {
+            compound = element.dataset.argumentCheckQuantity;
+        }
+
+        const checkQuantityString = element.dataset.argumentCheckQuantity;
+        let quantity = getResourceDataObject('compounds', [checkQuantityString, 'quantity']);
+
+        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellCompound') { //sell
+            if (quantity > 0) { 
+                element.classList.remove('red-disabled-text');
+            } else {
+                element.classList.add('red-disabled-text');
+            }
+
+            return;
+        }
+
+        let price;
+        let mainKey;
+
+        if (type === 'autoBuyer') {
+            mainKey = 'compounds';
+            const autoBuyerTier = element.dataset.autoBuyerTier;
+            if (autoBuyerTier === 'tier0') return;
+            price = getResourceDataObject(mainKey, [compound, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+        } else if (element.dataset.type === "storage") {
+            mainKey = 'compounds' //storageCapacity
+            price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
+            if (element.tagName.toLowerCase() !== 'button') {
+                element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
+            }
+        }
+
+        // Perform the check and update the element's class
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
+            element.classList.remove('red-disabled-text');
+        } else {
+            element.classList.add('red-disabled-text');
+        }
+    }
+
+    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         let resource = element.dataset.type;
         const techName = element.dataset.type;
         const type = element.dataset.type;
@@ -937,7 +992,6 @@ function checkStatusAndSetTextClasses(element) {
         } else {
             element.classList.add('red-disabled-text');
         }
-        
     }
 }
 

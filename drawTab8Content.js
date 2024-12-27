@@ -32,6 +32,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             false,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(settingsCurrencySymbolRow);
@@ -59,6 +60,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             false,
             null,
+            null,
             null
         );
         optionContentElement.appendChild(settingsNotationRow);
@@ -82,6 +84,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null,
             null
         );
@@ -114,6 +117,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             false,
+            null,
             null,
             null
         );
