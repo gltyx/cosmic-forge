@@ -209,6 +209,38 @@ export const resourceData = {
             fuseToRatio2: 0
         }
     },
+    compounds: {
+        water: {
+            nameResource: 'Water',
+            screenName: 'water',
+            saleValue: 0.1,
+            salePreviewElement: 'sellWaterDescription',
+            quantity: 0,
+            rate: 0,
+            ratePower: 0,
+            storageCapacity: 1000,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer1Row', price: 50000, rate: 0.02, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Advanced Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer2Row', price: 400000, rate: 0.1, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.03 },
+                    tier3: { nameUpgrade: 'Industrial Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer3Row', price: 2000000, rate: 0.5, quantity: 0, setPrice: 'waterAB3Price', energyUse: 0.12 },
+                    tier4: { nameUpgrade: 'Quantum Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer4Row', price: 10000000, rate: 2.5, quantity: 0, setPrice: 'waterAB4Price', energyUse: 0.6 }
+                },
+            },
+            revealedBy: 'compounds',
+            canCreateTech: 'compounds',
+            createsFrom1: 'hydrogen',
+            createsFrom2: 'oxygen',
+            createsFrom3: '',
+            createsFrom4: '',
+            createsFromRatio1: 2,
+            createsFromRatio2: 1,
+            createsFromRatio3: 0,
+            createsFromRatio4: 0
+        },
+    },
     buildings: {
         energy: {
             batteryBoughtYet: false,
