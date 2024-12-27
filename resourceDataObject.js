@@ -215,7 +215,7 @@ export const resourceData = {
             screenName: 'water',
             saleValue: 0.1,
             salePreviewElement: 'sellWaterDescription',
-            quantity: 0,
+            quantity: 1000,
             rate: 0,
             ratePower: 0,
             storageCapacity: 1500,
@@ -353,7 +353,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 10000000,
+        cash: 1000,
     },
 };
 

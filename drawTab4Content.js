@@ -1,5 +1,5 @@
 import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview } from './constantsAndGlobalVars.js';
-import { gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
+import { sellCompound, gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createDropdown, createButton } from './ui.js';
 

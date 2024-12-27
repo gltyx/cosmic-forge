@@ -363,6 +363,19 @@ export function sellResource(resource) {
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
 }
 
+export function sellCompound(compound) {
+    const resourceQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+    const saleData = getCompoundSalePreview(compound);
+
+    const currentCash = getResourceDataObject('currency', ['cash']);
+    const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
+    const cashRaised = parseFloat(extractedValue);
+    const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
+
+    setResourceDataObject(resourceQuantity - quantityToDeduct, 'compounds', [compound, 'quantity']);
+    setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
+}
+
 function updateAllSalePricePreviews() {
     const currentScreen = getCurrentOptionPane();
     const resources = getResourceDataObject('resources');
