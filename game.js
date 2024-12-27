@@ -507,12 +507,7 @@ function checkAndDeductResources() {
                     setCanAffordDeferred(true);
                 }
             } else {
-                if (typeOfResourceCompound === 'resource') {
-                    mainKey = 'resources';
-                } else if (typeOfResourceCompound === 'compound') {
-                    mainKey = 'compounds';
-                }
-
+                mainKey = typeOfResourceCompound;
                 currentQuantity = getResourceDataObject(mainKey, [itemToDeductType, 'quantity']);
                 if (deductAmount >  currentQuantity) {
                     setCanAffordDeferred(false);
@@ -1183,7 +1178,11 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
         currentResourceOrCompoundQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
     } else if (item && item === 'autoBuyer') {
-        currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
+        if (itemResourceOrCompound === 'resource') {
+            currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
+        } else if (itemResourceOrCompound === 'compound') {
+            currentResourceOrCompoundQuantity = getResourceDataObject('compounds', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
+        }
     } else {
         if (itemResourceOrCompound === 'resource') {
             currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
@@ -1265,22 +1264,22 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } 
 
     //set resource to deduct
-    setItemsToDeduct(itemToDeductName, amountToDeduct, itemResourceOrCompound);
+    setItemsToDeduct(itemToDeductName, amountToDeduct, itemResourceOrCompound === 'resource' ? 'resources' : 'compounds');
     setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct);
 }
 
-export function increaseResourceStorage(elementId, resource) {
+export function increaseResourceStorage(elementId, resource, itemType) {
     const increaseFactor = getIncreaseStorageFactor();
 
     const amountToDeduct = getResourceDataObject('resources', [resource, 'storageCapacity']);
     const resourceToDeductName = resource;
 
     //set resource to deduct
-    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemResourceOrCompound);
+    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemType);
 
     deferredActions.push(() => {
-        const updatedStorageSize = getResourceDataObject('resources', [resource, 'storageCapacity']) * increaseFactor;
-        setResourceDataObject(updatedStorageSize, 'resources', [resource, 'storageCapacity']);
+        const updatedStorageSize = getResourceDataObject(itemType, [resource, 'storageCapacity']) * increaseFactor;
+        setResourceDataObject(updatedStorageSize, itemType, [resource, 'storageCapacity']);
         getElements()[elementId].classList.remove('green-ready-text');
     });
 }
@@ -1290,7 +1289,7 @@ export function revealElement(elementId) {
     element.classList.remove('invisible');
 }
 
-export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
+export function startUpdateAutoBuyerTimersAndRates(elementName, tier, itemType) {
     if (elementName.startsWith('science')) {
         startUpdateScienceTimers(elementName);
         return;
@@ -1304,31 +1303,31 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
     //no battery condition needed
 
     let newExtractionRate;
-    let newExtractionRatePower = getResourceDataObject('resources', [elementName, 'ratePower']);
+    let newExtractionRatePower = getResourceDataObject(itemType, [elementName, 'ratePower']);
 
-    const upgradeRatePerUnit = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+    const upgradeRatePerUnit = getResourceDataObject(itemType, [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
     
-    if (getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'energyUse']) > 0) {
-        newExtractionRatePower = getResourceDataObject('resources', [elementName, 'ratePower']) + upgradeRatePerUnit;
+    if (getResourceDataObject(itemType, [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'energyUse']) > 0) {
+        newExtractionRatePower = getResourceDataObject(itemType, [elementName, 'ratePower']) + upgradeRatePerUnit;
     }
     
-    newExtractionRate = getResourceDataObject('resources', [elementName, 'rate']) + upgradeRatePerUnit;
+    newExtractionRate = getResourceDataObject(itemType, [elementName, 'rate']) + upgradeRatePerUnit;
 
-    setResourceDataObject(newExtractionRatePower, 'resources', [elementName, 'ratePower']);
-    setResourceDataObject(newExtractionRate, 'resources', [elementName, 'rate']);
+    setResourceDataObject(newExtractionRatePower, itemType, [elementName, 'ratePower']);
+    setResourceDataObject(newExtractionRate, itemType, [elementName, 'rate']);
     getElements()[`${elementName}Rate`].textContent = `${(newExtractionRate * getTimerRateRatio()).toFixed(1)} / s`;
 
     const timerName = `${elementName}AB${tier}`;
     if (!timerManager.getTimer(timerName)) {
         timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
-            const currentQuantity = getResourceDataObject('resources', [elementName, 'quantity']);
-            const storageCapacity = getResourceDataObject('resources', [elementName, 'storageCapacity']);
-            const currentExtractionRate = getResourceDataObject('resources', [elementName, 'rate']);
-            const currentExtractionRateUnpowered = getResourceDataObject('resources', [elementName, 'rate']) - getResourceDataObject('resources', [elementName, 'ratePower']);
+            const currentQuantity = getResourceDataObject(itemType, [elementName, 'quantity']);
+            const storageCapacity = getResourceDataObject(itemType, [elementName, 'storageCapacity']);
+            const currentExtractionRate = getResourceDataObject(itemType, [elementName, 'rate']);
+            const currentExtractionRateUnpowered = getResourceDataObject(itemType, [elementName, 'rate']) - getResourceDataObject(itemType, [elementName, 'ratePower']);
             if (getPowerOnOff()) {
-                setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'resources', [elementName, 'quantity']);
+                setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), itemType, [elementName, 'quantity']);
             } else {
-                setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), 'resources', [elementName, 'quantity']);
+                setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), itemType, [elementName, 'quantity']);
             }
         });
     }

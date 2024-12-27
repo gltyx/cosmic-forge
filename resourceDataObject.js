@@ -215,13 +215,13 @@ export const resourceData = {
             screenName: 'water',
             saleValue: 0.1,
             salePreviewElement: 'sellWaterDescription',
-            quantity: 1000,
+            quantity: 50000,
             rate: 0,
             ratePower: 0,
-            storageCapacity: 1500,
+            storageCapacity: 50500,
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 0,
+                    currentTierLevel: 2,
                     normalProgression: true,
                     tier1: { nameUpgrade: 'Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer1Row', price: 50000, rate: 0.02, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer2Row', price: 400000, rate: 0.1, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.03 },
@@ -353,7 +353,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 1000,
+        cash: 1000000,
     },
 };
 

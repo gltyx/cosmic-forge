@@ -14,7 +14,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resource'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery1');
-            }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', false, null),
+            }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', false, null, 'building'),
             null,
             null,
             null,
@@ -41,7 +41,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resource'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery2');
-            }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', false, null),
+            }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', false, null, 'building'),
             null,
             null,
             null,
@@ -68,7 +68,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resource'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery3');
-            }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', false, null),
+            }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', false, null, 'building'),
             null,
             null,
             null,
@@ -96,7 +96,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant1');
+                            startUpdateAutoBuyerTimersAndRates('powerPlant1', null, null, 'building');
                         }
                         setCanAffordDeferred(null);
                     });
@@ -129,7 +129,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant2');
+                            startUpdateAutoBuyerTimersAndRates('powerPlant2', null, null, 'building');
                         }
                         setCanAffordDeferred(null);
                     });
@@ -162,7 +162,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant3');
+                            startUpdateAutoBuyerTimersAndRates('powerPlant3', null, null, 'building');
                         }
                         setCanAffordDeferred(null);
                     });

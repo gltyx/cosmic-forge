@@ -15,11 +15,11 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('scienceKit');
+                            startUpdateAutoBuyerTimersAndRates('scienceKit', null, null);
                         }
                         setCanAffordDeferred(null);
                     });
-            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceKit', 'cash', false, null),
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceKit', 'cash', false, null, 'science'),
             null,
             null,
             null,
@@ -46,11 +46,11 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateAutoBuyerTimersAndRates('scienceClub');
+                        startUpdateAutoBuyerTimersAndRates('scienceClub', null, null);
                     }
                     setCanAffordDeferred(null);
                 });
-            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceClub', 'cash', false, null),
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceClub', 'cash', false, null, 'science'),
             null,
             null,
             null,
@@ -77,11 +77,11 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateAutoBuyerTimersAndRates('scienceLab');
+                        startUpdateAutoBuyerTimersAndRates('scienceLab', null, null);
                     }
                     setCanAffordDeferred(null);
                 });
-            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceLab', 'cash', false, null),
+            }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceLab', 'cash', false, null, 'science'),
             null,
             null,
             null,
@@ -113,7 +113,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('knowledgeSharing');
                         showNotification(techNotificationMessages.knowledgeSharing, 'info');
-                    }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null),
+                    }, 'techUnlock', '', 'knowledgeSharing', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -142,7 +142,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionTheory');
                         showNotification(techNotificationMessages.fusionTheory, 'info');
-                    }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null),
+                    }, 'techUnlock', '', 'fusionTheory', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -173,7 +173,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
                         updateDescriptionRow('hydrogenSellRow', 'content2');
                         showNotification(techNotificationMessages.hydrogenFusion, 'info');
-                    }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'hydrogenFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -204,7 +204,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('helium', 'fusionButton', 'heliumFusion');
                         updateDescriptionRow('heliumSellRow', 'content2');
                         showNotification(techNotificationMessages.heliumFusion, 'info');
-                    }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'heliumFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -235,7 +235,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('carbon', 'fusionButton', 'carbonFusion');
                         updateDescriptionRow('carbonSellRow', 'content2');
                         showNotification(techNotificationMessages.carbonFusion, 'info');
-                    }, 'techUnlock', '', 'carbonFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'carbonFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -266,7 +266,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('neon', 'fusionButton', 'neonFusion');
                         updateDescriptionRow('neonSellRow', 'content2');
                         showNotification(techNotificationMessages.neonFusion, 'info');
-                    }, 'techUnlock', '', 'neonFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'neonFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -297,7 +297,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('oxygen', 'fusionButton', 'oxygenFusion');
                         updateDescriptionRow('oxygenSellRow', 'content2');
                         showNotification(techNotificationMessages.oxygenFusion, 'info');
-                    }, 'techUnlock', '', 'oxygenFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'oxygenFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -328,7 +328,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechSpecificUIItemsArray('silicon', 'fusionButton', 'siliconFusion');
                         updateDescriptionRow('siliconSellRow', 'content2');
                         showNotification(techNotificationMessages.siliconFusion, 'info');
-                    }, 'techUnlock', '', 'siliconFusion', null, 'research', false, null),
+                    }, 'techUnlock', '', 'siliconFusion', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -357,7 +357,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nobleGasCollection');
                         showNotification(techNotificationMessages.nobleGasCollection, 'info');
-                    }, 'techUnlock', '', 'nobleGasCollection', null, 'research', false, null),
+                    }, 'techUnlock', '', 'nobleGasCollection', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -386,7 +386,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('glassManufacture');
                         showNotification(techNotificationMessages.glassManufacture, 'info');
-                    }, 'techUnlock', '', 'glassManufacture', null, 'research', false, null),
+                    }, 'techUnlock', '', 'glassManufacture', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -415,7 +415,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neutronCapture');
                         showNotification(techNotificationMessages.neutronCapture, 'info');
-                    }, 'techUnlock', '', 'neutronCapture', null, 'research', false, null),
+                    }, 'techUnlock', '', 'neutronCapture', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -450,7 +450,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             }
                         });
                         showNotification(techNotificationMessages.quantumComputing, 'info');
-                    }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null),
+                    }, 'techUnlock', '', 'quantumComputing', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -479,7 +479,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('scienceLaboratories');
                         showNotification(techNotificationMessages.scienceLaboratories, 'info');
-                    }, 'techUnlock', '', 'scienceLaboratories', null, 'research', false, null),
+                    }, 'techUnlock', '', 'scienceLaboratories', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -508,7 +508,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoTubeTechnology');
                         showNotification(techNotificationMessages.nanoTubeTechnology, 'info');
-                    }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', false, null),
+                    }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -538,7 +538,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('stellarCartography');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'stellarCartography');
                         showNotification(techNotificationMessages.stellarCartography, 'info');
-                    }, 'techUnlock', '', 'stellarCartography', null, 'research', false, null),
+                    }, 'techUnlock', '', 'stellarCartography', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -568,7 +568,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('basicPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'basicPowerGeneration');
                         showNotification(techNotificationMessages.basicPowerGeneration, 'info');
-                    }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', false, null),
+                    }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -598,7 +598,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('sodiumIonPowerStorage');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'sodiumIonPowerStorage');
                         showNotification(techNotificationMessages.sodiumIonPowerStorage, 'info');
-                    }, 'techUnlock', '', 'sodiumIonPowerStorage', null, 'research', false, null),
+                    }, 'techUnlock', '', 'sodiumIonPowerStorage', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -628,7 +628,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('advancedPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'advancedPowerGeneration');
                         showNotification(techNotificationMessages.advancedPowerGeneration, 'info');
-                    }, 'techUnlock', '', 'advancedPowerGeneration', null, 'research', false, null),
+                    }, 'techUnlock', '', 'advancedPowerGeneration', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -658,7 +658,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('solarPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'solarPowerGeneration');
                         showNotification(techNotificationMessages.solarPowerGeneration, 'info');
-                    }, 'techUnlock', '', 'solarPowerGeneration', null, 'research', false, null),
+                    }, 'techUnlock', '', 'solarPowerGeneration', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -688,7 +688,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('compounds');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'compounds');
                         showNotification(techNotificationMessages.compounds, 'info');
-                    }, 'techUnlock', '', 'compounds', null, 'research', false, null),
+                    }, 'techUnlock', '', 'compounds', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -718,7 +718,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('steelFoundries');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'steelFoundries');
                         showNotification(techNotificationMessages.steelFoundries, 'info');
-                    }, 'techUnlock', '', 'steelFoundries', null, 'research', false, null),
+                    }, 'techUnlock', '', 'steelFoundries', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -748,7 +748,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('giganticTurbines');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'giganticTurbines');
                         showNotification(techNotificationMessages.giganticTurbines, 'info');
-                    }, 'techUnlock', '', 'giganticTurbines', null, 'research', false, null),
+                    }, 'techUnlock', '', 'giganticTurbines', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -778,7 +778,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('atmosphericTelescopes');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'atmosphericTelescopes');
                         showNotification(techNotificationMessages.atmosphericTelescopes, 'info');
-                    }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', false, null),
+                    }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -808,7 +808,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('fusionEfficiencyI');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyI');
                         showNotification(techNotificationMessages.fusionEfficiencyI, 'info');
-                    }, 'techUnlock', '', 'fusionEfficiencyI', null, 'research', false, null),
+                    }, 'techUnlock', '', 'fusionEfficiencyI', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,
@@ -838,7 +838,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('fusionEfficiencyII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyII');
                         showNotification(techNotificationMessages.fusionEfficiencyII, 'info');
-                    }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', false, null),
+                    }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', false, null), 'tech',
                     null,
                     null,
                     null,
@@ -868,7 +868,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('fusionEfficiencyIII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyIII');
                         showNotification(techNotificationMessages.fusionEfficiencyIII, 'info');
-                    }, 'techUnlock', '', 'fusionEfficiencyIII', null, 'research', false, null),
+                    }, 'techUnlock', '', 'fusionEfficiencyIII', null, 'research', false, null, 'tech'),
                     null,
                     null,
                     null,

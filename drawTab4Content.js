@@ -1,5 +1,5 @@
 import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview } from './constantsAndGlobalVars.js';
-import { sellCompound, gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
+import { increaseResourceStorage, sellCompound, gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createDropdown, createButton } from './ui.js';
 
@@ -71,7 +71,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 }),
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('water');
-                }, 'sellCompound', null, null, null, 'water', true, null),
+                }, 'sellCompound', null, null, null, 'water', true, null, 'compound'),
                 null,
                 null,
                 null,
@@ -94,9 +94,9 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Increase Storage:',
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
-                    increaseCompoundStorage('waterQuantity', 'water');
+                    increaseResourceStorage('waterQuantity', 'water', 'compounds');
                     storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']);
-                }, 'upgradeCheck', '', 'storage', null, 'water', true, null),
+                }, 'upgradeCheck', '', 'storage', null, 'water', true, null, 'compound'),
                 null,
                 null,
                 null,
@@ -121,8 +121,8 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Water Auto Buyer Tier 1:',
                 createButton(`Add ${getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Water /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     gain(1, 'waterAB1Quantity', 'autoBuyer', true, 'tier1', 'water', 'compound'),
-                        startUpdateAutoBuyerTimersAndRates('water', 1);
-                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier1'),
+                        startUpdateAutoBuyerTimersAndRates('water', 1, 'compounds');
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier1', 'compound'),
                 null,
                 null,
                 null,
@@ -147,8 +147,8 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Water Auto Buyer Tier 2:',
                 createButton(`Add ${getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Water /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     gain(1, 'waterAB2Quantity', 'autoBuyer', true, 'tier2', 'water', 'compound'),
-                        startUpdateAutoBuyerTimersAndRates('water', 2);
-                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier2'),
+                        startUpdateAutoBuyerTimersAndRates('water', 2, 'compounds');
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier2', 'compound'),
                 null,
                 null,
                 null,
@@ -173,8 +173,8 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Water Auto Buyer Tier 3:',
                 createButton(`Add ${getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Water /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     gain(1, 'waterAB3Quantity', 'autoBuyer', true, 'tier3', 'water', 'compound'),
-                        startUpdateAutoBuyerTimersAndRates('water', 3);
-                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier3'),
+                        startUpdateAutoBuyerTimersAndRates('water', 3, 'compounds');
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier3', 'compound'),
                 null,
                 null,
                 null,
@@ -199,8 +199,8 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Water Auto Buyer Tier 4:',
                 createButton(`Add ${getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Water /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     gain(1, 'waterAB4Quantity', 'autoBuyer', true, 'tier4', 'water', 'compound'),
-                        startUpdateAutoBuyerTimersAndRates('water', 4);
-                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier4'),
+                        startUpdateAutoBuyerTimersAndRates('water', 4, 'compounds');
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'water', true, 'tier4', 'compound'),
                 null,
                 null,
                 null,

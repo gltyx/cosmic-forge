@@ -588,7 +588,7 @@ export function createToggleSwitch(id, isChecked, onChange) {
     return toggleContainer;
 }
 
-export function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument1, objectSectionArgument2, quantityArgument, disableKeyboardForButton, autoBuyerTier) {
+export function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument1, objectSectionArgument2, quantityArgument, disableKeyboardForButton, autoBuyerTier, rowCategory) {
     const button = document.createElement('button');
     button.innerText = text;
     
@@ -615,6 +615,7 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
             button.dataset.resourceToFuseTo = objectSectionArgument2;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.autoBuyerTier = autoBuyerTier;
+            button.dataset.rowCategory = rowCategory;
         }
     }
 
