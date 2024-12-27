@@ -150,12 +150,20 @@ export async function gameLoop() {
             }
         });
 
+        const compoundNames = Object.keys(getResourceDataObject('compounds'));
+        const compoundTierPairs = [];
+        compoundNames.forEach(compoundName => {
+            for (let tier = 1; tier <= 4; tier++) {
+                compoundTierPairs.push([compoundName, tier]);
+            }
+        });
+
         const allQuantities = getAllQuantities();
         const allStorages = getAllStorages();
-        const allResourceElements = getAllResourceElements(resourceTierPairs);
-        const allResourceDescElements = getAllDynamicResourceDescriptionElements(resourceTierPairs);
+        const allElements = getAllElements(resourceTierPairs, compoundTierPairs);
+        const allDescElements = getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs);
         updateRates();
-        updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescElements);
+        updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
         updateStats();
 
         if (getResourcesToDeduct() && Object.keys(getResourcesToDeduct()).length > 0) {
@@ -479,11 +487,18 @@ function checkAndDeductResources() {
 
 function getAllQuantities() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
+    const compoundKeys = Object.keys(getResourceDataObject('compounds'));
+
     const allQuantities = {};
 
     resourceKeys.forEach(resource => {
         const resourceName = resource;
         allQuantities[resourceName] = getResourceDataObject('resources', [resourceName, 'quantity']);
+    });
+
+    compoundKeys.forEach(compound => {
+        const compoundName = compound;
+        allQuantities[compoundName] = getResourceDataObject('compounds', [compoundName, 'quantity']);
     });
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
@@ -504,11 +519,18 @@ function getAllQuantities() {
 
 function getAllStorages() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
+    const compoundKeys = Object.keys(getResourceDataObject('compounds'));
+
     const allStorages = {};
 
     resourceKeys.forEach(resource => {
         const resourceName = resource;
         allStorages[resourceName] = getResourceDataObject('resources', [resourceName, 'storageCapacity']);
+    });
+
+    compoundKeys.forEach(compound => {
+        const compoundName = compound;
+        allStorages[compoundName] = getResourceDataObject('compounds', [compoundName, 'storageCapacity']);
     });
 
     allStorages.energy = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
@@ -527,34 +549,43 @@ function getAllStorages() {
     return allStorages;
 }
 
-function getAllResourceElements(resourcesArray) {
+function getAllElements(resourcesArray, compoundsArray) {
     const resourceNames = [];
-    const allResourceElements = {};
+    const compoundNames = [];
+
+    const allElements = {};
 
     resourcesArray.forEach(resource => {
         if (!resourceNames.includes(resource[0])) {
             resourceNames.push(resource[0]);
-            allResourceElements[resource[0]] = getElements()[`${resource[0]}Quantity`];
+            allElements[resource[0]] = getElements()[`${resource[0]}Quantity`];
         }
     });
 
-    allResourceElements.energy = getElements().energyQuantity;
-    allResourceElements.battery1 = getElements().battery1Quantity;
-    allResourceElements.battery2 = getElements().battery2Quantity;
-    allResourceElements.battery3 = getElements().battery3Quantity;
-    allResourceElements.powerPlant1 = getElements().powerPlant1Quantity;
-    allResourceElements.powerPlant2 = getElements().powerPlant2Quantity;
-    allResourceElements.powerPlant3 = getElements().powerPlant3Quantity;
+    compoundsArray.forEach(compound => {
+        if (!compoundNames.includes(compound[0])) {
+            compoundNames.push(compound[0]);
+            allElements[compound[0]] = getElements()[`${compound[0]}Quantity`];
+        }
+    });
 
-    allResourceElements.research = getElements().researchQuantity;
-    allResourceElements.scienceKit = getElements().scienceKitQuantity;
-    allResourceElements.scienceClub = getElements().scienceClubQuantity;
-    allResourceElements.scienceLab = getElements().scienceLabQuantity;
+    allElements.energy = getElements().energyQuantity;
+    allElements.battery1 = getElements().battery1Quantity;
+    allElements.battery2 = getElements().battery2Quantity;
+    allElements.battery3 = getElements().battery3Quantity;
+    allElements.powerPlant1 = getElements().powerPlant1Quantity;
+    allElements.powerPlant2 = getElements().powerPlant2Quantity;
+    allElements.powerPlant3 = getElements().powerPlant3Quantity;
 
-    return allResourceElements;
+    allElements.research = getElements().researchQuantity;
+    allElements.scienceKit = getElements().scienceKitQuantity;
+    allElements.scienceClub = getElements().scienceClubQuantity;
+    allElements.scienceLab = getElements().scienceLabQuantity;
+
+    return allElements;
 }
 
-function getAllDynamicResourceDescriptionElements(resourceTierPairs) {
+function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) {
     const elements = {};
 
     resourceTierPairs.forEach(([resourceName, tier]) => {
@@ -566,6 +597,17 @@ function getAllDynamicResourceDescriptionElements(resourceTierPairs) {
 
         elements[`${resourceName}IncreaseStorage`] = { element: resourceIncreaseStorageDescElement, price: resourceStoragePrice, string: `${capitaliseString(resourceName)}` };
         elements[`${resourceName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string: `${capitaliseString(resourceName)}` };
+    });
+
+    compoundTierPairs.forEach(([compoundName, tier]) => {
+        const compoundIncreaseStorageDescElement = document.getElementById(`${compoundName}IncreaseContainerSizeDescription`);
+        const compoundStoragePrice = getResourceDataObject('compounds', [compoundName, 'storageCapacity']);
+
+        const resourceAutoBuyerDescElement = document.getElementById(`${compoundName}AutoBuyerTier${tier}Description`);
+        const resourceAutoBuyerPrice = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
+
+        elements[`${compoundName}IncreaseStorage`] = { element: compoundIncreaseStorageDescElement, price: compoundStoragePrice, string: `${capitaliseString(compoundName)}` };
+        elements[`${compoundName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string: `${capitaliseString(compoundName)}` };
     });
 
     const scienceElements = getScienceResourceDescriptionElements();
@@ -623,19 +665,30 @@ function getBuildingResourceDescriptionElements() {
 
 function updateRates() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
+    const compoundKeys = Object.keys(getResourceDataObject('compounds'));
 
-    let rateType;
-    let currentActualRate;
+    let currentActualResourceRate;
+    let currentActualCompoundRate;
     let currentActualResearchRate;
 
     for (const resourceName of resourceKeys) {
         const resourceRateElement = document.getElementById(resourceName + 'Rate');
         if (getPowerOnOff()) {
-            currentActualRate = getResourceDataObject('resources', [resourceName, 'rate']) * getTimerRateRatio();
+            currentActualResourceRate = getResourceDataObject('resources', [resourceName, 'rate']) * getTimerRateRatio();
         } else {
-            currentActualRate = (getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
+            currentActualResourceRate = (getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
         }
-        resourceRateElement.textContent = currentActualRate + ' / s';
+        resourceRateElement.textContent = currentActualResourceRate + ' / s';
+    }
+
+    for (const compoundName of compoundKeys) {
+        const compoundRateElement = document.getElementById(compoundName + 'Rate');
+        if (getPowerOnOff()) {
+            currentActualCompoundRate = getResourceDataObject('resources', [compoundName, 'rate']) * getTimerRateRatio();
+        } else {
+            currentActualCompoundRate = (getResourceDataObject('resources', [compoundName, 'rate']) - getResourceDataObject('resources', [compoundName, 'ratePower'])) * getTimerRateRatio();
+        }
+        compoundRateElement.textContent = currentActualCompoundRate + ' / s';
     }
 
     if (getPowerOnOff()) {
@@ -646,24 +699,24 @@ function updateRates() {
     getElements().researchRate.textContent = currentActualResearchRate + ' / s'; 
 }
 
-function updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescriptionElements) {
-    for (const resource in allQuantities) {
-        if (allQuantities.hasOwnProperty(resource)) {
-            const quantity = allQuantities[resource];
-            const storage = allStorages[resource];
-            const element = allResourceElements[resource];
+function updateUIQuantities(allQuantities, allStorages, allElements, allDescriptionElements) {
+    for (const resourceOrCompound in allQuantities) {
+        if (allQuantities.hasOwnProperty(resourceOrCompound)) {
+            const quantity = allQuantities[resourceOrCompound];
+            const storage = allStorages[resourceOrCompound];
+            const element = allElements[resourceOrCompound];
 
             updateDisplay(element, quantity, storage, false);
         }
     }
 
-    for (const allResourceDescriptionElement in allResourceDescriptionElements) {
-        if (allResourceDescriptionElements.hasOwnProperty(allResourceDescriptionElement)) {
-            const price = allResourceDescriptionElements[allResourceDescriptionElement].price;
-            const costResourceName = allResourceDescriptionElements[allResourceDescriptionElement].string;
-            const element = allResourceDescriptionElements[allResourceDescriptionElement].element;
+    for (const allDescriptionElement in allDescriptionElements) {
+        if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) {
+            const price = allDescriptionElements[allDescriptionElement].price;
+            const costResourceOrCompoundName = allDescriptionElements[allDescriptionElement].string;
+            const element = allDescriptionElements[allDescriptionElement].element;
 
-            updateDisplay(element, price, costResourceName, true);
+            updateDisplay(element, price, costResourceOrCompoundName, true);
         }
     }
 }
@@ -1491,11 +1544,14 @@ function updateClassesInRowsToRender() {
 
 function setEnergyUse() {
     const resourceData = getResourceDataObject('resources');
+    const compoundData = getResourceDataObject('compounds');
     const researchData = getResourceDataObject('research', ['upgrades']);
+
     let totalEnergyUseResources = 0;
+    let totalEnergyUseCompounds = 0;
     let totalEnergyUseResearch = 0;
 
-    for (const resourceKey in resourceData) { //autobuyer upgrades
+    for (const resourceKey in resourceData) { //autobuyer resources upgrades
         const resource = resourceData[resourceKey];
         const autoBuyer = resource.upgrades?.autoBuyer;
 
@@ -1512,6 +1568,23 @@ function setEnergyUse() {
         }
     }
 
+    for (const compoundKey in compoundData) { //autobuyer compounds upgrades
+        const compound = compoundData[compoundKey];
+        const autoBuyer = compound.upgrades?.autoBuyer;
+
+        if (autoBuyer) {
+            for (let tierKey of ['tier1', 'tier2', 'tier3', 'tier4']) {
+                const tier = autoBuyer[tierKey];
+
+                if (tier) {
+                    const energyUse = tier.energyUse || 0;
+                    const quantity = tier.quantity || 0;
+                    totalEnergyUseCompounds += energyUse * quantity;
+                }
+            }
+        }
+    }
+
     for (const researchUpgradeKey in researchData) { //science upgrades
         const researchUpgrade = researchData[researchUpgradeKey];
 
@@ -1522,7 +1595,7 @@ function setEnergyUse() {
         }
     }
 
-    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseResearch);
+    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseCompounds + totalEnergyUseResearch);
 }
 
 export function setEnergyCapacity(battery) {
