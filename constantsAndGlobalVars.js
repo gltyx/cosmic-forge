@@ -32,8 +32,8 @@ let currencySymbol = '$';
 let increaseStorageFactor = 2;
 let saleResourcePreviews = {};
 let saleCompoundPreviews = {};
-let resourcesToDeduct = {};
-let resourcesToIncreasePrice = {};
+let itemsToDeduct = {};
+let itemsToIncreasePrice = {};
 let techUnlockedArray = [];
 let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
@@ -113,6 +113,9 @@ export function setElements() {
         ironOption: document.getElementById('ironOption'),
         ironRate: document.getElementById('ironRate'),
         ironQuantity: document.getElementById('ironQuantity'),
+        waterOption: document.getElementById('waterOption'),
+        waterRate: document.getElementById('waterRate'),
+        waterQuantity: document.getElementById('waterQuantity'),
         energyRate: document.getElementById('energyRate'),
         energyQuantity: document.getElementById('energyQuantity'),
         powerPlant1Quantity: document.getElementById('powerPlant1Quantity'),
@@ -317,39 +320,41 @@ export function setCurrentOptionPane(value) {
     currentOptionPane = value.toLowerCase();
 }
 
-export function setResourcesToDeduct(name, amount) {
+export function setItemsToDeduct(name, amount, itemResourceOrCompound) {
     if (name === 'clear') {
-        resourcesToDeduct = {};
+        itemsToDeduct = {};
         return;
     }
 
-    if (!resourcesToDeduct[name]) {
-        resourcesToDeduct[name] = {};
+    if (!itemsToDeduct[name]) {
+        itemsToDeduct[name] = {};
     }
 
-    resourcesToDeduct[name].deductQuantity = amount;
+    itemsToDeduct[name].deductQuantity = amount;
+    itemsToDeduct[name].typeOfResourceCompound = itemResourceOrCompound;
 }
 
-export function getResourcesToDeduct() {
-    return resourcesToDeduct;
+export function getItemsToDeduct() {
+    return itemsToDeduct;
 }
 
-export function setResourcesToIncreasePrice(name, setPriceTarget, currentPrice) {
+export function setItemsToIncreasePrice(name, setPriceTarget, currentPrice, itemResourceOrCompound) {
     if (name === 'clear') {
-        resourcesToIncreasePrice = {};
+        itemsToIncreasePrice = {};
         return;
     }
 
-    if (!resourcesToIncreasePrice[name]) {
-        resourcesToIncreasePrice[name] = {};
+    if (!itemsToIncreasePrice[name]) {
+        itemsToIncreasePrice[name] = {};
     }
 
-    resourcesToIncreasePrice[name].currentPrice = currentPrice;
-    resourcesToIncreasePrice[name].setPriceTarget = setPriceTarget;
+    itemsToIncreasePrice[name].currentPrice = currentPrice;
+    itemsToIncreasePrice[name].setPriceTarget = setPriceTarget;
+    itemsToIncreasePrice[name].typeOfResourceCompound = itemResourceOrCompound;
 }
 
-export function getResourcesToIncreasePrice() {
-    return resourcesToIncreasePrice;
+export function getItemsToIncreasePrice() {
+    return itemsToIncreasePrice;
 }
 
 export function setSaleResourcePreview(resource, amount, fusionTo1, fusionTo2) {

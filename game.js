@@ -26,10 +26,11 @@ import {
     getTimerUpdateInterval,
     getCurrencySymbol,
     setSaleResourcePreview,
-    getResourcesToIncreasePrice,
-    setResourcesToIncreasePrice,
-    getResourcesToDeduct,
-    setResourcesToDeduct,
+    setSaleCompoundPreview,
+    getItemsToIncreasePrice,
+    setItemsToIncreasePrice,
+    getItemsToDeduct,
+    setItemsToDeduct,
     getCurrentOptionPane,
     getIncreaseStorageFactor,
     setBeginGameStatus, 
@@ -43,6 +44,7 @@ import {
     getRevealedTechArray,
     getTechUnlockedArray,
     getResourceSalePreview,
+    getCompoundSalePreview,
     getNotationType
 } from './constantsAndGlobalVars.js';
 
@@ -166,11 +168,11 @@ export async function gameLoop() {
         updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
         updateStats();
 
-        if (getResourcesToDeduct() && Object.keys(getResourcesToDeduct()).length > 0) {
+        if (getItemsToDeduct() && Object.keys(getItemsToDeduct()).length > 0) {
             checkAndDeductResources();
         }
 
-        if (getResourcesToIncreasePrice() && Object.keys(getResourcesToIncreasePrice()).length > 0) {
+        if (getItemsToIncreasePrice() && Object.keys(getItemsToIncreasePrice()).length > 0) {
             checkAndIncreasePrices();
         }
 
@@ -182,10 +184,11 @@ export async function gameLoop() {
         const poweredCheckElement = document.getElementById('stat3');
         checkStatusAndSetTextClasses(poweredCheckElement);
 
-        const elementsResourcesCheck = document.querySelectorAll('.resource-cost-sell-check');
-        elementsResourcesCheck.forEach((elementResourceCheck) => {
-            checkStatusAndSetTextClasses(elementResourceCheck);
+        const elementsItemsCheck = document.querySelectorAll('.resource-cost-sell-check, .compound-cost-sell-check');
+        elementsItemsCheck.forEach((elementItemCheck) => {
+            checkStatusAndSetTextClasses(elementItemCheck);
         });
+        
 
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
@@ -363,6 +366,7 @@ export function sellResource(resource) {
 function updateAllSalePricePreviews() {
     const currentScreen = getCurrentOptionPane();
     const resources = getResourceDataObject('resources');
+    const compounds = getResourceDataObject('compounds');
 
     for (const resource in resources) {
         const fuseTo1 = resources[resource]?.['fuseTo1'];
@@ -370,12 +374,9 @@ function updateAllSalePricePreviews() {
     
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";
-            if (fuseTo1 !== 'none') {
-                setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
-            } else {
-                setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, '', '');
-            }
-        
+
+            setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
+                  
             const salePreviewString = getResourceSalePreview(resource);
             let cleanedString = cleanString(salePreviewString);
 
@@ -386,7 +387,25 @@ function updateAllSalePricePreviews() {
                 salePreviewElement.innerHTML = cleanedString;
             }
         }
-    }    
+    }
+    
+    for (const compound in compounds) {   
+        if (compound === currentScreen) {
+            const dropDownElementId = compound + "SellSelectQuantity";
+
+            setSaleCompoundPreview(currentScreen, document.getElementById(dropDownElementId).value);
+                  
+            const salePreviewString = getCompoundSalePreview(compound);
+            let cleanedString = cleanString(salePreviewString);
+
+            const salePreviewElementId = compounds[compound]?.salePreviewElement;
+            const salePreviewElement = document.getElementById(salePreviewElementId);
+    
+            if (salePreviewElement) {
+                salePreviewElement.innerHTML = cleanedString;
+            }
+        }
+    }
 }
 
 function cleanString(string) {
@@ -402,29 +421,29 @@ function cleanString(string) {
 }
 
 function checkAndIncreasePrices() {
-    const priceIncreaseObject = getResourcesToIncreasePrice();
+    const priceIncreaseObject = getItemsToIncreasePrice();
 
-    for (const resource in priceIncreaseObject) {
-        if (priceIncreaseObject.hasOwnProperty(resource)) {
+    for (const priceIncrease in priceIncreaseObject) {
+        if (priceIncreaseObject.hasOwnProperty(priceIncrease)) {
             if (getCanAffordDeferred()) {
-                const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
+                const { currentPrice, setPriceTarget, typeOfResourceCompound } = priceIncreaseObject[priceIncrease];
                 if (setPriceTarget.startsWith('science') || setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery')) {
-                    setNewResourcePrice(currentPrice, setPriceTarget, '');
+                    setNewItemPrice(currentPrice, setPriceTarget, '');
                 } else {
-                    const tierMatch = setPriceTarget.match(new RegExp(`${resource}AB(\\d+)Price`));
+                    const tierMatch = setPriceTarget.match(new RegExp(`${priceIncrease}AB(\\d+)Price`));
                     if (tierMatch && tierMatch[1]) {
                         const tier = parseInt(tierMatch[1], 10);
-                        setNewResourcePrice(currentPrice, setPriceTarget, tier);
+                        setNewItemPrice(currentPrice, setPriceTarget, tier, typeOfResourceCompound);
                     }
                 }
             }
         }
     }
 
-    setResourcesToIncreasePrice('clear');
+    setItemsToIncreasePrice('clear');
 }
 
-function setNewResourcePrice(currentPrice, elementName, tier) {
+function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound) {
     if (elementName) {
         const newPrice = Math.ceil(currentPrice * 1.15);
 
@@ -435,32 +454,37 @@ function setNewResourcePrice(currentPrice, elementName, tier) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
         } else {
-            const resourceName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
-            setResourceDataObject(newPrice, 'resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
+            const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
+            if (typeOfResourceCompound === 'resource') {
+                setResourceDataObject(newPrice, 'resources', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
+            } else if (typeOfResourceCompound === 'compound') {
+                setResourceDataObject(newPrice, 'compounds', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']); 
+            }            
         }
     }
 }
 
 function checkAndDeductResources() {
-    const deductObject = getResourcesToDeduct();
+    const deductObject = getItemsToDeduct();
     let deductAmount;
     let mainKey;
 
-    for (const resource in deductObject) {
-        if (deductObject.hasOwnProperty(resource)) {
+    for (const itemToDeductType in deductObject) {
+        if (deductObject.hasOwnProperty(itemToDeductType)) {
             let currentQuantity;
-            deductAmount = deductObject[resource].deductQuantity;
+            deductAmount = deductObject[itemToDeductType].deductQuantity;
+            const typeOfResourceCompound = deductObject[itemToDeductType].typeOfResourceCompound;
 
-            if (resource === 'cash') {
+            if (itemToDeductType === 'cash') {
                 mainKey = 'currency';
-                currentQuantity = getResourceDataObject(mainKey, [resource]);
+                currentQuantity = getResourceDataObject(mainKey, [itemToDeductType]);
                 if (deductAmount >  currentQuantity) {
                     setCanAffordDeferred(false);
                 } else {
-                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource]);
+                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [itemToDeductType]);
                     setCanAffordDeferred(true);
                 }
-            } else if (resource === 'research') {
+            } else if (itemToDeductType === 'research') {
                 mainKey = 'research';
                 currentQuantity = getResourceDataObject(mainKey, ['quantity']);
                 if (deductAmount >  currentQuantity) {
@@ -470,19 +494,24 @@ function checkAndDeductResources() {
                     setCanAffordDeferred(true);
                 }
             } else {
-                mainKey = 'resources';
-                currentQuantity = getResourceDataObject(mainKey, [resource, 'quantity']);
+                if (typeOfResourceCompound === 'resource') {
+                    mainKey = 'resources';
+                } else if (typeOfResourceCompound === 'compound') {
+                    mainKey = 'compounds';
+                }
+
+                currentQuantity = getResourceDataObject(mainKey, [itemToDeductType, 'quantity']);
                 if (deductAmount >  currentQuantity) {
                     setCanAffordDeferred(false);
                 } else {
-                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [resource, 'quantity']);
+                    setResourceDataObject(currentQuantity - deductAmount, mainKey, [itemToDeductType, 'quantity']);
                     setCanAffordDeferred(true);
-                }  
+                } 
             }
         }
     }
 
-    setResourcesToDeduct('clear');
+    setItemsToDeduct('clear');
 }
 
 function getAllQuantities() {
@@ -684,9 +713,9 @@ function updateRates() {
     for (const compoundName of compoundKeys) {
         const compoundRateElement = document.getElementById(compoundName + 'Rate');
         if (getPowerOnOff()) {
-            currentActualCompoundRate = getResourceDataObject('resources', [compoundName, 'rate']) * getTimerRateRatio();
+            currentActualCompoundRate = getResourceDataObject('compounds', [compoundName, 'rate']) * getTimerRateRatio();
         } else {
-            currentActualCompoundRate = (getResourceDataObject('resources', [compoundName, 'rate']) - getResourceDataObject('resources', [compoundName, 'ratePower'])) * getTimerRateRatio();
+            currentActualCompoundRate = (getResourceDataObject('compounds', [compoundName, 'rate']) - getResourceDataObject('compounds', [compoundName, 'ratePower'])) * getTimerRateRatio();
         }
         compoundRateElement.textContent = currentActualCompoundRate + ' / s';
     }
@@ -1113,7 +1142,7 @@ const updateDisplay = (element, data1, data2, desc) => {
     }   
 };
 
-export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tierAB, resourceCategory) {
+export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemResourceOrCompound) {
     let resourceType;
 
     if (resourceCategory === 'research') {
@@ -1125,83 +1154,106 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
     } else if (resourceCategory === 'energy') { 
         resourceType = 'energy';
     } else {
-        resourceType = 'resource'; 
+        if (itemResourceOrCompound === 'resource') {
+            resourceType = 'resource'; 
+        } else if (itemResourceOrCompound === 'compound') {
+            resourceType = 'compound'; 
+        }
     }
 
-    let currentResourceQuantity;
+    let currentResourceOrCompoundQuantity;
 
-    if (resource && resource === 'techUnlock') {
-        currentResourceQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
-    } else if (resource && resource.startsWith('science')) {
-        currentResourceQuantity = getResourceDataObject('research', ['upgrades', resource, 'quantity']); 
-    } else if ((resource && resource.startsWith('power')) || (resource && resource.startsWith('battery'))) {
-        currentResourceQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', resource, 'quantity']);
-    } else if (resource && resource === 'autoBuyer') {
-        currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
+    if (item && item === 'techUnlock') {
+        currentResourceOrCompoundQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
+    } else if (item && item.startsWith('science')) {
+        currentResourceOrCompoundQuantity = getResourceDataObject('research', ['upgrades', item, 'quantity']); 
+    } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
+        currentResourceOrCompoundQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
+    } else if (item && item === 'autoBuyer') {
+        currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
-        currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
+        if (itemResourceOrCompound === 'resource') {
+            currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
+        } else if (itemResourceOrCompound === 'compound') {
+            currentResourceOrCompoundQuantity = getResourceDataObject('compounds', [resourceCategory, 'quantity']);
+        }
     }
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
-            setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceQuantity, 'research', ['quantity']);
+            setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceOrCompoundQuantity, 'research', ['quantity']);
         } else {
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
+            if (itemResourceOrCompound === 'resource') {
+                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
+            } else if (itemResourceOrCompound === 'compound') {
+                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'compounds', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
+            }
         }
     } else {
         if (resourceType === 'scienceUpgrade') {
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'research', ['upgrades', resource, 'quantity']); 
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
         } else if (resourceType === 'energy') { 
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', resource, 'quantity']);
-        } else if (resourceType === 'resource' && currentResourceQuantity < getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
+        } else if (resourceType === 'resource' && currentResourceOrCompoundQuantity < getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
             getElements()[elementId].classList.remove('green-ready-text');
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
             return;
-        } else if (resourceType === 'resource' && currentResourceQuantity >= getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) {
+        } else if (resourceType === 'resource' && currentResourceOrCompoundQuantity >= getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) {
             setResourceDataObject(getResourceDataObject('resources', [resourceCategory, 'storageCapacity']), 'resources', [resourceCategory, 'quantity']);
+            return;
+        } else if (resourceType === 'compound' && currentResourceOrCompoundQuantity < getResourceDataObject('compounds', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
+            getElements()[elementId].classList.remove('green-ready-text');
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'compounds', [resourceCategory, 'quantity']);
+            return;
+        } else if (resourceType === 'compound' && currentResourceOrCompoundQuantity >= getResourceDataObject('compounds', [resourceCategory, 'storageCapacity'])) {
+            setResourceDataObject(getResourceDataObject('compounds', [resourceCategory, 'storageCapacity']), 'compounds', [resourceCategory, 'quantity']);
             return;
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
-            setResourceDataObject(currentResourceQuantity + incrementAmount, 'research', ['quantity']);
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['quantity']);
         }
     }
 
     let amountToDeduct;
-    let resourceSetNewPrice;
+    let itemSetNewPrice;
 
-    let resourceObject;
+    let itemObject;
     if (resourceCategory === 'research') {
-        resourceObject = getResourceDataObject('research', ['upgrades', resource]);
+        itemObject = getResourceDataObject('research', ['upgrades', item]);
     } else if (resourceCategory === 'techs') {
         sortTechRows(false);
         return;
     } else if (resourceCategory === 'scienceUpgrade') {
-        resourceObject = getResourceDataObject('research', ['upgrades', resource]);
+        itemObject = getResourceDataObject('research', ['upgrades', item]);
     } else if (resourceCategory === 'energy') {
-        resourceObject = getResourceDataObject('buildings', ['energy', 'upgrades', resource]);
+        itemObject = getResourceDataObject('buildings', ['energy', 'upgrades', item]);
     } else {
-        resourceObject = getResourceDataObject('resources', [resourceCategory]);
+        if (itemResourceOrCompound === 'resource') {
+            itemObject = getResourceDataObject('resources', [resourceCategory]);
+        } else if (itemResourceOrCompound === 'compound') {
+            itemObject = getResourceDataObject('compounds', [resourceCategory]); 
+        }
     }
     
     if (ABOrTechPurchase) {
-        amountToDeduct = resourceObject.upgrades.autoBuyer[tierAB].price;
-        resourceSetNewPrice = resourceObject.upgrades.autoBuyer[tierAB].setPrice;
+        amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
+        itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
     } else {
-        amountToDeduct = resourceObject.price;
-        resourceSetNewPrice = resourceObject.setPrice;
+        amountToDeduct = itemObject.price;
+        itemSetNewPrice = itemObject.setPrice;
     }
 
-    let resourceToDeductName;
+    let itemToDeductName;
 
     if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy') {
-        resourceToDeductName = 'cash';
+        itemToDeductName = 'cash';
     } else {
-        resourceToDeductName = resourceObject.screenName;
+        itemToDeductName = itemObject.screenName;
     } 
 
     //set resource to deduct
-    setResourcesToDeduct(resourceToDeductName, amountToDeduct);
-    setResourcesToIncreasePrice(resourceToDeductName, resourceSetNewPrice, amountToDeduct);
+    setItemsToDeduct(itemToDeductName, amountToDeduct, itemResourceOrCompound);
+    setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct);
 }
 
 export function increaseResourceStorage(elementId, resource) {
@@ -1211,7 +1263,7 @@ export function increaseResourceStorage(elementId, resource) {
     const resourceToDeductName = resource;
 
     //set resource to deduct
-    setResourcesToDeduct(resourceToDeductName, amountToDeduct);
+    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemResourceOrCompound);
 
     deferredActions.push(() => {
         const updatedStorageSize = getResourceDataObject('resources', [resource, 'storageCapacity']) * increaseFactor;

@@ -218,10 +218,10 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
-            storageCapacity: 1000,
+            storageCapacity: 1500,
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 1,
+                    currentTierLevel: 0,
                     normalProgression: true,
                     tier1: { nameUpgrade: 'Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer1Row', price: 50000, rate: 0.02, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer2Row', price: 400000, rate: 0.1, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.03 },

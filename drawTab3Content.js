@@ -12,7 +12,7 @@ export function drawTab3Content(heading, optionContentElement) {
             null,
             'Science Kit:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade'),
+                gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
                             startUpdateAutoBuyerTimersAndRates('scienceKit');
@@ -43,7 +43,7 @@ export function drawTab3Content(heading, optionContentElement) {
             null,
             'Open Science Club:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade');
+                gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateAutoBuyerTimersAndRates('scienceClub');
@@ -74,7 +74,7 @@ export function drawTab3Content(heading, optionContentElement) {
             null,
             'Open Science Lab:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceLab', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade');
+                gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateAutoBuyerTimersAndRates('scienceLab');
@@ -109,7 +109,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Knowledge Sharing:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('knowledgeSharing');
                         showNotification(techNotificationMessages.knowledgeSharing, 'info');
@@ -138,7 +138,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Fusion Theory:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionTheory');
                         showNotification(techNotificationMessages.fusionTheory, 'info');
@@ -167,7 +167,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Hydrogen Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('hydrogenFusion');
                         setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
@@ -198,7 +198,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Helium Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('heliumFusion');
                         setTechSpecificUIItemsArray('helium', 'fusionButton', 'heliumFusion');
@@ -229,7 +229,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Carbon Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('carbonFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('carbonFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('carbonFusion');
                         setTechSpecificUIItemsArray('carbon', 'fusionButton', 'carbonFusion');
@@ -260,7 +260,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Neon Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('neonFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('neonFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neonFusion');
                         setTechSpecificUIItemsArray('neon', 'fusionButton', 'neonFusion');
@@ -291,7 +291,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Oxygen Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('oxygenFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('oxygenFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('oxygenFusion');
                         setTechSpecificUIItemsArray('oxygen', 'fusionButton', 'oxygenFusion');
@@ -322,7 +322,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Silicon Fusion:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('siliconFusion', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('siliconFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('siliconFusion');
                         setTechSpecificUIItemsArray('silicon', 'fusionButton', 'siliconFusion');
@@ -353,7 +353,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Noble Gas Collection:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('nobleGasCollection', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('nobleGasCollection', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nobleGasCollection');
                         showNotification(techNotificationMessages.nobleGasCollection, 'info');
@@ -382,7 +382,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Glass Manufacture:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('glassManufacture', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('glassManufacture', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('glassManufacture');
                         showNotification(techNotificationMessages.glassManufacture, 'info');
@@ -411,7 +411,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Neutron Capture:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('neutronCapture', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('neutronCapture', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neutronCapture');
                         showNotification(techNotificationMessages.neutronCapture, 'info');
@@ -440,7 +440,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Quantum Computing:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('quantumComputing', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('quantumComputing', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('quantumComputing');
                         const resourceObject = getResourceDataObject('resources');
@@ -475,7 +475,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Science Laboratories:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('scienceLaboratories', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('scienceLaboratories', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('scienceLaboratories');
                         showNotification(techNotificationMessages.scienceLaboratories, 'info');
@@ -504,7 +504,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Nano Tube Technology:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoTubeTechnology');
                         showNotification(techNotificationMessages.nanoTubeTechnology, 'info');
@@ -533,7 +533,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Stellar Cartography:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('stellarCartography', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('stellarCartography', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('stellarCartography');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'stellarCartography');
@@ -563,7 +563,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Basic Power Generation:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('basicPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('basicPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('basicPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'basicPowerGeneration');
@@ -593,7 +593,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Sodium Ion Power Storage:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('sodiumIonPowerStorage', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('sodiumIonPowerStorage', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('sodiumIonPowerStorage');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'sodiumIonPowerStorage');
@@ -623,7 +623,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Advanced Power Generation:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('advancedPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('advancedPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('advancedPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'advancedPowerGeneration');
@@ -653,7 +653,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Solar Power Generation:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('solarPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('solarPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('solarPowerGeneration');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'solarPowerGeneration');
@@ -683,7 +683,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Compounds:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('compounds', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('compounds', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('compounds');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'compounds');
@@ -713,7 +713,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Steel Foundries:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('steelFoundries', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('steelFoundries', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('steelFoundries');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'steelFoundries');
@@ -743,7 +743,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Gigantic Turbines:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('giganticTurbines', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('giganticTurbines', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('giganticTurbines');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'giganticTurbines');
@@ -773,7 +773,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Atmospheric Telescopes:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('atmosphericTelescopes', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('atmosphericTelescopes', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('atmosphericTelescopes');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'atmosphericTelescopes');
@@ -803,7 +803,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Fusion Efficiency Stage I:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('fusionEfficiencyI', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('fusionEfficiencyI', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyI');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyI');
@@ -833,7 +833,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Fusion Efficiency Stage II:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('fusionEfficiencyII', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('fusionEfficiencyII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyII');
@@ -863,7 +863,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'Fusion Efficiency Stage III:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
-                        gain('fusionEfficiencyIII', null, 'techUnlock', 'techUnlock', false, 'techs');
+                        gain('fusionEfficiencyIII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyIII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyIII');
