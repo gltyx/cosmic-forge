@@ -399,7 +399,7 @@ function checkAndIncreasePrices() {
         if (priceIncreaseObject.hasOwnProperty(resource)) {
             if (getCanAffordDeferred()) {
                 const { currentPrice, setPriceTarget } = priceIncreaseObject[resource];
-                if (setPriceTarget.startsWith('science') || setPriceTarget.startsWith('power')) {
+                if (setPriceTarget.startsWith('science') || setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery')) {
                     setNewResourcePrice(currentPrice, setPriceTarget, '');
                 } else {
                     const tierMatch = setPriceTarget.match(new RegExp(`${resource}AB(\\d+)Price`));
@@ -422,7 +422,7 @@ function setNewResourcePrice(currentPrice, elementName, tier) {
         if (elementName.startsWith('science')) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newPrice, 'research', ['upgrades', strippedElementName, 'price']);
-        } else if (elementName.startsWith('power')) {
+        } else if (elementName.startsWith('power') || elementName.startsWith('battery')) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
         } else {
@@ -486,6 +486,9 @@ function getAllQuantities() {
     });
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
+    allQuantities.battery1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'quantity']);
+    allQuantities.battery2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'quantity']);
+    allQuantities.battery3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'quantity']);
     allQuantities.powerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
     allQuantities.powerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
     allQuantities.powerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
@@ -508,6 +511,9 @@ function getAllStorages() {
     });
 
     allStorages.energy = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
+    allStorages.battery1 = null;
+    allStorages.battery2 = null;
+    allStorages.battery3 = null;
     allStorages.powerPlant1 = null;
     allStorages.powerPlant2 = null;
     allStorages.powerPlant3 = null;
@@ -532,6 +538,9 @@ function getAllResourceElements(resourcesArray) {
     });
 
     allResourceElements.energy = getElements().energyQuantity;
+    allResourceElements.battery1 = getElements().battery1Quantity;
+    allResourceElements.battery2 = getElements().battery2Quantity;
+    allResourceElements.battery3 = getElements().battery3Quantity;
     allResourceElements.powerPlant1 = getElements().powerPlant1Quantity;
     allResourceElements.powerPlant2 = getElements().powerPlant2Quantity;
     allResourceElements.powerPlant3 = getElements().powerPlant3Quantity;
@@ -583,6 +592,15 @@ function getScienceResourceDescriptionElements() {
 }
 
 function getBuildingResourceDescriptionElements() {
+    const battery1BuyDescElement = document.getElementById('sodiumIonBatteryDescription');
+    const battery1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'price']);
+
+    const battery2BuyDescElement = document.getElementById('battery2Description');
+    const battery2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'price']);
+
+    const battery3BuyDescElement = document.getElementById('battery3Description');
+    const battery3BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'price']);
+
     const powerPlant1BuyDescElement = document.getElementById('powerPlantDescription');
     const powerPlant1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price']);
 
@@ -593,6 +611,9 @@ function getBuildingResourceDescriptionElements() {
     const powerPlant3BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price']);
 
     return {
+        battery1Buy: { element: battery1BuyDescElement, price: battery1BuyPrice, string: getCurrencySymbol() },
+        battery2Buy: { element: battery2BuyDescElement, price: battery2BuyPrice, string: getCurrencySymbol() },
+        battery3Buy: { element: battery3BuyDescElement, price: battery3BuyPrice, string: getCurrencySymbol() },
         powerPlant1Buy: { element: powerPlant1BuyDescElement, price: powerPlant1BuyPrice, string: getCurrencySymbol() },
         powerPlant2Buy: { element: powerPlant2BuyDescElement, price: powerPlant2BuyPrice, string: getCurrencySymbol() },
         powerPlant3Buy: { element: powerPlant3BuyDescElement, price: powerPlant3BuyPrice, string: getCurrencySymbol() },
@@ -806,10 +827,8 @@ function checkStatusAndSetTextClasses(element) {
                     const allPrerequisitesUnlocked = prerequisiteArray.every(prerequisite => getTechUnlockedArray().includes(prerequisite));
         
                     if (allPrerequisitesUnlocked) {
-                        console.log("have all techs needed for " + techName);
                         element.classList.remove('red-disabled-text');
                     } else {
-                        console.log("DONT have all techs needed for " + techName);
                         element.classList.add('red-disabled-text');
                     }
                 }
@@ -934,13 +953,15 @@ const updateDisplay = (element, data1, data2, desc) => {
             }
         }
     } else {
-        if (element && data2) {
+        if (element && data2 >= 0) {
             if (element === getElements().energyQuantity) {
                 if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
                     element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
                 } else {
                     element.textContent = Math.floor(data1);
                 }
+            } else if (element === getElements().researchQuantity) {
+                element.textContent = Math.floor(data1);
             } else {
                 element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
             }
@@ -980,7 +1001,7 @@ export function gain(incrementAmount, elementId, resource, ABOrTechPurchase, tie
         currentResourceQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
     } else if (resource && resource.startsWith('science')) {
         currentResourceQuantity = getResourceDataObject('research', ['upgrades', resource, 'quantity']); 
-    } else if (resource && resource.startsWith('power')) {
+    } else if ((resource && resource.startsWith('power')) || (resource && resource.startsWith('battery'))) {
         currentResourceQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', resource, 'quantity']);
     } else if (resource && resource === 'autoBuyer') {
         currentResourceQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
@@ -1082,6 +1103,8 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
         return;
     }
 
+    //no battery condition needed
+
     const rate = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
     const newRate = getResourceDataObject('resources', [elementName, 'rate']) + rate;
     setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
@@ -1150,7 +1173,7 @@ function startUpdateEnergyTimers(elementName) {
             
             });
         }
-    }
+    } //no battery condition needed
 }
 
 function formatAllNotationElements(element, notationType) {
@@ -1358,7 +1381,7 @@ function updateClassesInRowsToRender() {
     setTemporaryRowsRepo('noChange', unsortedRows);
 }
 
-function setEnergyUse() {
+function setEnergyUse() { //TODO add science lab and other buildings
     const resourceData = getResourceDataObject('resources');
     let totalEnergyUse = 0;
 
@@ -1379,6 +1402,30 @@ function setEnergyUse() {
         }
     }
     setTotalEnergyUse(totalEnergyUse);
+}
+
+export function setEnergyCapacity(battery) {
+    const currentEnergyCap = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
+
+    const battery1Cap = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity']);
+    const battery2Cap = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity']);
+    const battery3Cap = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity']);
+    
+    let newEnergyCap;
+
+    switch (battery) {
+        case 'battery1':
+            newEnergyCap = currentEnergyCap + battery1Cap;
+            break;
+        case 'battery2':
+            newEnergyCap = currentEnergyCap + battery2Cap;
+            break;
+        case 'battery3':
+            newEnergyCap = currentEnergyCap + battery3Cap;
+            break;
+    }
+    
+    setResourceDataObject(newEnergyCap, 'buildings', ['energy', 'storageCapacity']);
 }
 
 function updateEnergyDisplays() {

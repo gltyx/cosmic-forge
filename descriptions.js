@@ -367,18 +367,33 @@ export const optionDescriptions = {
         content2: "",
         updateAt: "" 
     },
-    powerPlantLevelI: {
+    energyPowerPlant1Row: {
         content1: "This is the first building available to produce energy.",
         content2: "",
         updateAt: ""
     },
-    powerPlantLevelII: {
+    energyPowerPlant2Row: {
         content1: "This building produces clean, renewable energy without using resources.",
         content2: "",
         updateAt: ""
     },
-    powerPlantLevelIII: {
+    energyPowerPlant3Row: {
         content1: "This building produces significantly more power than its earlier iteration, but consumes more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    energyBattery1Row: {
+        content1: "Store small amount of energy for use if power starts being used faster than it can be generated.",
+        content2: "",
+        updateAt: ""
+    },
+    energyBattery2Row: {
+        content1: "Store larger amount of energy for use if power starts being used faster than it can be generated.",
+        content2: "",
+        updateAt: ""
+    },
+    energyBattery3Row: {
+        content1: "Store a huge amount of energy for use if power starts being used faster than it can be generated.",
         content2: "",
         updateAt: ""
     },

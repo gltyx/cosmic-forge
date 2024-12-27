@@ -5,9 +5,9 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 600,
+            quantity: 0,
             rate: 0,
-            storageCapacity: 600,
+            storageCapacity: 150,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -203,7 +203,7 @@ export const resourceData = {
     },
     buildings: {
         energy: {
-            batteryBoughtYet: true,
+            batteryBoughtYet: false,
             nameResource: 'Energy',
             screenName: 'energy',
             saleValue: 0,
@@ -211,7 +211,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             consumption: 0,
-            storageCapacity: 10000,
+            storageCapacity: 0,
             upgrades: {
                 powerPlant1: { 
                     revealedBy: 'basicPowerGeneration',
@@ -234,6 +234,24 @@ export const resourceData = {
                     quantity: 0, 
                     setPrice: 'powerPlant3Price' 
                 },
+                battery1: {
+                    price: 5000,
+                    capacity: 15000,
+                    quantity: 0, 
+                    setPrice: 'battery1Price'
+                },
+                battery2: {
+                    price: 50000,
+                    capacity: 150000,
+                    quantity: 0, 
+                    setPrice: 'battery2Price'
+                },
+                battery3: {
+                    price: 500000,
+                    capacity: 1500000,
+                    quantity: 0, 
+                    setPrice: 'battery3Price'
+                }
             }
         }
     },
@@ -291,7 +309,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 100000,
+        cash: 10000000,
     },
 };
 
