@@ -5,10 +5,10 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 600,
+            quantity: 0,
             rate: 0,
             ratePower: 0,
-            storageCapacity: 600,
+            storageCapacity: 150,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,

@@ -154,6 +154,7 @@ export async function gameLoop() {
         const allStorages = getAllStorages();
         const allResourceElements = getAllResourceElements(resourceTierPairs);
         const allResourceDescElements = getAllDynamicResourceDescriptionElements(resourceTierPairs);
+        updateRates();
         updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescElements);
         updateStats();
 
@@ -618,6 +619,31 @@ function getBuildingResourceDescriptionElements() {
         powerPlant2Buy: { element: powerPlant2BuyDescElement, price: powerPlant2BuyPrice, string: getCurrencySymbol() },
         powerPlant3Buy: { element: powerPlant3BuyDescElement, price: powerPlant3BuyPrice, string: getCurrencySymbol() },
     };
+}
+
+function updateRates() {
+    const resourceKeys = Object.keys(getResourceDataObject('resources'));
+
+    let rateType;
+    let currentActualRate;
+    let currentActualResearchRate;
+
+    for (const resourceName of resourceKeys) {
+        const resourceRateElement = document.getElementById(resourceName + 'Rate');
+        if (getPowerOnOff()) {
+            currentActualRate = getResourceDataObject('resources', [resourceName, 'rate']) * getTimerRateRatio();
+        } else {
+            currentActualRate = (getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
+        }
+        resourceRateElement.textContent = currentActualRate + ' / s';
+    }
+
+    if (getPowerOnOff()) {
+        currentActualResearchRate = getResourceDataObject('research', ['rate']) * getTimerRateRatio();
+    } else {
+        currentActualResearchRate = (getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower'])) * getTimerRateRatio();
+    }
+    getElements().researchRate.textContent = currentActualResearchRate + ' / s'; 
 }
 
 function updateUIQuantities(allQuantities, allStorages, allResourceElements, allResourceDescriptionElements) {
