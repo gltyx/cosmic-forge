@@ -1105,27 +1105,50 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier) {
 
     //no battery condition needed
 
-    const rate = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
-    const newRate = getResourceDataObject('resources', [elementName, 'rate']) + rate;
-    setResourceDataObject(newRate, 'resources', [elementName, 'rate']);
+    let newExtractionRate;
+    let newExtractionRatePower = getResourceDataObject('resources', [elementName, 'ratePower']);
 
-    getElements()[`${elementName}Rate`].textContent = `${(newRate * getTimerRateRatio()).toFixed(1)} / s`;
+    const upgradeRatePerUnit = getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+    
+    if (getResourceDataObject('resources', [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'energyUse']) > 0) {
+        newExtractionRatePower = getResourceDataObject('resources', [elementName, 'ratePower']) + upgradeRatePerUnit;
+    }
+    
+    newExtractionRate = getResourceDataObject('resources', [elementName, 'rate']) + upgradeRatePerUnit;
+
+    setResourceDataObject(newExtractionRatePower, 'resources', [elementName, 'ratePower']);
+    setResourceDataObject(newExtractionRate, 'resources', [elementName, 'rate']);
+    getElements()[`${elementName}Rate`].textContent = `${(newExtractionRate * getTimerRateRatio()).toFixed(1)} / s`;
 
     const timerName = `${elementName}AB${tier}`;
     if (!timerManager.getTimer(timerName)) {
         timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
             const currentQuantity = getResourceDataObject('resources', [elementName, 'quantity']);
-            const currentRate = getResourceDataObject('resources', [elementName, 'rate']);
             const storageCapacity = getResourceDataObject('resources', [elementName, 'storageCapacity']);
-            setResourceDataObject(Math.min(currentQuantity + currentRate, storageCapacity), 'resources', [elementName, 'quantity']);
+            const currentExtractionRate = getResourceDataObject('resources', [elementName, 'rate']);
+            const currentExtractionRateUnpowered = getResourceDataObject('resources', [elementName, 'rate']) - getResourceDataObject('resources', [elementName, 'ratePower']);
+            if (getPowerOnOff()) {
+                setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'resources', [elementName, 'quantity']);
+            } else {
+                setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), 'resources', [elementName, 'quantity']);
+            }
         });
     }
 }
 
 function startUpdateScienceTimers(elementName) {
-    const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
-    const newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
+    let newResearchRate;
+    let newResearchRatePower = getResourceDataObject('research', ['ratePower']);
 
+    const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
+    
+    if (getResourceDataObject('research', ['upgrades', elementName, 'energyUse']) > 0) {
+        newResearchRatePower = getResourceDataObject('research', ['ratePower']) + upgradeRatePerUnit;
+    }
+        
+    newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
+
+    setResourceDataObject(newResearchRatePower, 'research', ['ratePower']);
     setResourceDataObject(newResearchRate, 'research', ['rate']);
     getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
 
@@ -1133,7 +1156,12 @@ function startUpdateScienceTimers(elementName) {
         timerManager.addTimer('research', getTimerUpdateInterval(), () => {
             const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
             const currentResearchRate = getResourceDataObject('research', ['rate']);
-            setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+            const currentResearchRateUnpowered = getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower']);
+            if (getPowerOnOff()) {
+                setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+            } else {
+                setResourceDataObject(currentResearchQuantity + currentResearchRateUnpowered, 'research', ['quantity']);
+            }
         });
     }
 }
@@ -1381,11 +1409,13 @@ function updateClassesInRowsToRender() {
     setTemporaryRowsRepo('noChange', unsortedRows);
 }
 
-function setEnergyUse() { //TODO add science lab and other buildings
+function setEnergyUse() {
     const resourceData = getResourceDataObject('resources');
-    let totalEnergyUse = 0;
+    const researchData = getResourceDataObject('research', ['upgrades']);
+    let totalEnergyUseResources = 0;
+    let totalEnergyUseResearch = 0;
 
-    for (const resourceKey in resourceData) {
+    for (const resourceKey in resourceData) { //autobuyer upgrades
         const resource = resourceData[resourceKey];
         const autoBuyer = resource.upgrades?.autoBuyer;
 
@@ -1396,12 +1426,23 @@ function setEnergyUse() { //TODO add science lab and other buildings
                 if (tier) {
                     const energyUse = tier.energyUse || 0;
                     const quantity = tier.quantity || 0;
-                    totalEnergyUse += energyUse * quantity;
+                    totalEnergyUseResources += energyUse * quantity;
                 }
             }
         }
     }
-    setTotalEnergyUse(totalEnergyUse);
+
+    for (const researchUpgradeKey in researchData) { //science upgrades
+        const researchUpgrade = researchData[researchUpgradeKey];
+
+        if (researchUpgrade) {
+            const energyUse = researchUpgrade.energyUse || 0;
+            const quantity = researchUpgrade.quantity || 0;
+            totalEnergyUseResearch += energyUse * quantity;
+        }
+    }
+
+    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseResearch);
 }
 
 export function setEnergyCapacity(battery) {

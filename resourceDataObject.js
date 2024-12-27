@@ -5,9 +5,10 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 0,
+            quantity: 600,
             rate: 0,
-            storageCapacity: 150,
+            ratePower: 0,
+            storageCapacity: 600,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -32,6 +33,7 @@ export const resourceData = {
             salePreviewElement: 'sellHeliumDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 120,
             upgrades: {
                 autoBuyer: {
@@ -57,6 +59,7 @@ export const resourceData = {
             salePreviewElement: 'sellCarbonDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 130,
             upgrades: {
                 autoBuyer: {
@@ -82,6 +85,7 @@ export const resourceData = {
             salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 200,
             upgrades: {
                 autoBuyer: {
@@ -107,6 +111,7 @@ export const resourceData = {
             salePreviewElement: 'sellOxygenDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 170,
             upgrades: {
                 autoBuyer: {
@@ -132,6 +137,7 @@ export const resourceData = {
             salePreviewElement: 'sellSiliconDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 150,
             upgrades: {
                 autoBuyer: {
@@ -157,6 +163,7 @@ export const resourceData = {
             salePreviewElement: 'sellIronDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 180,
             upgrades: {
                 autoBuyer: {
@@ -182,6 +189,7 @@ export const resourceData = {
             salePreviewElement: 'sellSodiumDescription',
             quantity: 0,
             rate: 0,
+            ratePower: 0,
             storageCapacity: 200,
             upgrades: {
                 autoBuyer: {
@@ -257,26 +265,30 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 120000,
+        quantity: 100000,
         rate: 0,
+        ratePower: 0,
         upgrades: {
             scienceKit: { 
                 price: 5, 
                 rate: 0.005,
                 quantity: 0, 
-                setPrice: 'scienceKitPrice'
+                setPrice: 'scienceKitPrice',
+                energyUse: 0
             },
             scienceClub: { 
                 price: 75,
                 rate: 0.1,
                 quantity: 0, 
-                setPrice: 'scienceClubPrice'
+                setPrice: 'scienceClubPrice',
+                energyUse: 0
             },
             scienceLab: { 
                 price: 300,
                 rate: 0.5,
                 quantity: 0, 
-                setPrice: 'scienceLabPrice'
+                setPrice: 'scienceLabPrice',
+                energyUse: 0.5
             }
         }
     },    
