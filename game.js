@@ -361,9 +361,27 @@ export function sellResource(resource) {
     const saleData = getResourceSalePreview(resource);
 
     const currentCash = getResourceDataObject('currency', ['cash']);
-    const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
-    const cashRaised = parseFloat(extractedValue);
+    const extractedValue = saleData.split('>')[1].split('<')[0].trim();
+    let cashRaised;
+
+    if (getCurrencySymbol() === "€") {
+        cashRaised = parseFloat(extractedValue.replace('€', '').replace(',', ''));
+    } else {
+        cashRaised = parseFloat(extractedValue.slice(1).replace(',', '')); // Remove the currency symbol and convert
+    }
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
+
+    if (getCurrencySymbol() === "€") {
+        showNotification(
+            `You sold ${quantityToDeduct} ${capitaliseString(resource)} for ${cashRaised}${getCurrencySymbol()}!`,
+            'info'
+        );
+    } else {
+        showNotification(
+            `You sold ${quantityToDeduct} ${capitaliseString(resource)} for ${getCurrencySymbol()}${cashRaised}!`,
+            'info'
+        );
+    }
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'resources', [resource, 'quantity']);
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
@@ -374,17 +392,24 @@ export function createCompound(compound) {
     const existingCompoundQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
     const compoundMaxStorage = getResourceDataObject('compounds', [compound, 'storageCapacity']);
 
-    if (constituentPartsObject.compoundToCreateQuantity > 0) {
-        const newQuantity = Math.min(existingCompoundQuantity + constituentPartsObject.compoundToCreateQuantity, compoundMaxStorage);
-        setResourceDataObject(newQuantity, 'compounds', [compound, 'quantity']);
+    let newQuantity = existingCompoundQuantity + constituentPartsObject.compoundToCreateQuantity;
+    let exceededDifference = 0;
+
+    if (newQuantity > compoundMaxStorage) {
+        exceededDifference = newQuantity - compoundMaxStorage;
+        newQuantity = compoundMaxStorage;
     }
+
+    setResourceDataObject(newQuantity, 'compounds', [compound, 'quantity']);
+
+    let notificationParts = [];
 
     for (let i = 1; i <= 4; i++) {
         const partNameKey = `constituentPartName${i}`;
         const partQuantityKey = `constituentPartQuantity${i}`;
         const partName = constituentPartsObject[partNameKey];
         const partQuantity = constituentPartsObject[partQuantityKey];
-        
+
         if (partName && partQuantity > 0) {
             let type;
 
@@ -403,21 +428,61 @@ export function createCompound(compound) {
                 type, 
                 [partName, 'quantity']
             );
+
+            notificationParts.push(`${partQuantity} ${capitaliseString(partName)}`);
         }
     }
+
+    const compoundCreatedQuantity = constituentPartsObject.compoundToCreateQuantity;
+    const compoundCreatedName = capitaliseString(compound);
+
+    if (exceededDifference > 0) {
+        showNotification(
+            `You created ${compoundCreatedQuantity} ${compoundCreatedName} from ${notificationParts.join(', ')} but ${exceededDifference} ${compoundCreatedName} was wasted due to storage limit being exceeded.`,
+            'warning'
+        );
+    } else {
+        showNotification(
+            `You created ${compoundCreatedQuantity} ${compoundCreatedName} from ${notificationParts.join(', ')}`,
+            'info'
+        );
+    }
 }
+
+
+
 
 export function sellCompound(compound) {
     const resourceQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
     const saleData = getCompoundSalePreview(compound);
 
     const currentCash = getResourceDataObject('currency', ['cash']);
-    const extractedValue = saleData.split('>')[1].split('<')[0].trim().slice(1);
-    const cashRaised = parseFloat(extractedValue);
+    let extractedValue = saleData.split('>')[1].split('<')[0].trim();
+
+    let cashRaised;
+
+    if (getCurrencySymbol() === "€") {
+        cashRaised = parseFloat(extractedValue.replace('€', '').replace(',', ''));
+    } else {
+        cashRaised = parseFloat(extractedValue.slice(1).replace(',', ''));
+    }
+
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'compounds', [compound, 'quantity']);
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
+
+    if (getCurrencySymbol() === "€") {
+        showNotification(
+            `You sold ${quantityToDeduct} ${capitaliseString(compound)} for ${cashRaised}${getCurrencySymbol()}!`,
+            'info'
+        );
+    } else {
+        showNotification(
+            `You sold ${quantityToDeduct} ${capitaliseString(compound)} for ${getCurrencySymbol()}${cashRaised}!`,
+            'info'
+        );
+    }
 }
 
 function updateAllCreatePreviews() {
