@@ -1,4 +1,6 @@
 import {
+    setConstituentPartsObject,
+    getConstituentPartsObject,
     setPowerOnOff,
     getPowerOnOff,
     setLosingEnergy,
@@ -365,6 +367,44 @@ export function sellResource(resource) {
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'resources', [resource, 'quantity']);
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
+}
+
+export function createCompound(compound) {
+    const constituentPartsObject = getConstituentPartsObject();
+    const existingCompoundQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+    const compoundMaxStorage = getResourceDataObject('compounds', [compound, 'storageCapacity']);
+
+    if (constituentPartsObject.compoundToCreateQuantity > 0) {
+        const newQuantity = Math.min(existingCompoundQuantity + constituentPartsObject.compoundToCreateQuantity, compoundMaxStorage);
+        setResourceDataObject(newQuantity, 'compounds', [compound, 'quantity']);
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        const partNameKey = `constituentPartName${i}`;
+        const partQuantityKey = `constituentPartQuantity${i}`;
+        const partName = constituentPartsObject[partNameKey];
+        const partQuantity = constituentPartsObject[partQuantityKey];
+        
+        if (partName && partQuantity > 0) {
+            let type;
+
+            if (getResourceDataObject('resources')[partName]) {
+                type = 'resources';
+            } 
+            else if (getResourceDataObject('compounds')[partName]) {
+                type = 'compounds';
+            } 
+            else {
+                type = 'error';
+            }
+
+            setResourceDataObject(
+                getResourceDataObject(type, [partName, 'quantity']) - partQuantity,
+                type, 
+                [partName, 'quantity']
+            );
+        }
+    }
 }
 
 export function sellCompound(compound) {
@@ -936,6 +976,7 @@ function checkStatusAndSetTextClasses(element) {
             const createCompoundDescriptionString = document.getElementById('create' + capitaliseString(checkQuantityString) + 'Description').innerHTML;
             let constituentComponents = getConstituentComponents(createCompoundDescriptionString);      
             constituentComponents = unpackConstituentPartsObject(constituentComponents);
+            setConstituentPartsObject(constituentComponents);
 
             let isDisabled = false;
 

@@ -34,6 +34,7 @@ let increaseStorageFactor = 2;
 let saleResourcePreviews = {};
 let saleCompoundPreviews = {};
 let createCompoundPreviews = {};
+let constituentPartsObject = {};
 let itemsToDeduct = {};
 let itemsToIncreasePrice = {};
 let techUnlockedArray = [];
@@ -876,4 +877,12 @@ export function setPowerOnOff(value) {
 
 export function getPowerOnOff() {
     return powerOnOff;
+}
+
+export function setConstituentPartsObject(value) {
+    constituentPartsObject = value;
+}
+
+export function getConstituentPartsObject() {
+    return constituentPartsObject;
 }
