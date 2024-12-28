@@ -838,7 +838,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('fusionEfficiencyII');
                         setTechSpecificUIItemsArray('', '', 'fusionEfficiencyII');
                         showNotification(techNotificationMessages.fusionEfficiencyII, 'info');
-                    }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', false, null), 'tech',
+                    }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', false, null, 'tech'), 
                     null,
                     null,
                     null,

@@ -225,7 +225,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     waterCreateRow: {
-        content1: "Here you can create Water from its constituent parts, provided you have them.",
+        content1: "Here you can create Water from its constituent parts, provided you have them, and the power is ON.",
         content2: "",
         updateAt: ""
     },

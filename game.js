@@ -10,8 +10,8 @@ import {
     setTechRenderCounter,
     setTechRenderChange,
     getTechRenderChange,
-    setTempSellRowValue,
-    getTempSellRowValue,
+    setTempRowValue,
+    getTempRowValue,
     deferredActions,
     getCanAffordDeferred,
     setCanAffordDeferred,
@@ -26,6 +26,7 @@ import {
     getTimerUpdateInterval,
     getCurrencySymbol,
     setSaleResourcePreview,
+    setCreateCompoundPreview,
     setSaleCompoundPreview,
     getItemsToIncreasePrice,
     setItemsToIncreasePrice,
@@ -45,6 +46,7 @@ import {
     getTechUnlockedArray,
     getResourceSalePreview,
     getCompoundSalePreview,
+    getCompoundCreatePreview,
     getNotationType
 } from './constantsAndGlobalVars.js';
 
@@ -200,6 +202,7 @@ export async function gameLoop() {
         });
 
         updateAllSalePricePreviews();
+        updateAllCreatePreviews();
 
         while (deferredActions.length > 0) {
             const runDeferredJobs = deferredActions.shift();
@@ -228,7 +231,7 @@ export async function gameLoop() {
         elements.forEach(element => { //format numbers
             if (document.body.contains(element)) {
                 if (element.classList.contains('sell-fuse-money')) {
-                    setTempSellRowValue(element.innerHTML);
+                    setTempRowValue(element.innerHTML);
                     complexSellStringFormatter(element, getNotationType());
                 } else {
                     formatAllNotationElements(element, getNotationType());
@@ -374,6 +377,28 @@ export function sellCompound(compound) {
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'compounds', [compound, 'quantity']);
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
+}
+
+function updateAllCreatePreviews() {
+    const currentScreen = getCurrentOptionPane();
+    const compounds = getResourceDataObject('compounds');
+   
+    for (const compound in compounds) {   
+        if (compound === currentScreen) {
+            const dropDownElementId = compound + "CreateSelectQuantity";
+
+            setCreateCompoundPreview(currentScreen, document.getElementById(dropDownElementId).value);
+                  
+            const stringFinal = getCompoundCreatePreview(compound);
+
+            const createPreviewElementId = compounds[compound]?.createPreviewElement;
+            const createPreviewElement = document.getElementById(createPreviewElementId);
+    
+            if (createPreviewElement) {
+                createPreviewElement.innerHTML = stringFinal;
+            }
+        }
+    }
 }
 
 function updateAllSalePricePreviews() {
@@ -1475,7 +1500,7 @@ function complexSellStringFormatter(element, notationType) {
         if (match) {
             const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
             const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
-            const newContent = getTempSellRowValue();
+            const newContent = getTempRowValue();
             
             sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
     

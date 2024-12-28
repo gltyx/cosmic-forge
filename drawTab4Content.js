@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview } from './constantsAndGlobalVars.js';
+import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, sellCompound, gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createDropdown, createButton } from './ui.js';
@@ -11,44 +11,44 @@ export function drawTab4Content(heading, optionContentElement) {
             let autobuyer3Price = getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier3', 'price']);
             let autobuyer4Price = getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier4', 'price']);
     
-            // const waterCreateRow = createOptionRow(
-            //     'waterCreateRow',
-            //     null,
-            //     'Create Water:',
-            //     createDropdown('waterCreateSelectQuantity', [
-            //         { value: 'max', text: 'Max Possible' },
-            //         { value: 'threeQuarters', text: 'Up to 75%' },
-            //         { value: 'twoThirds', text: 'Up to 67%' },
-            //         { value: 'half', text: 'Up to 50%' },
-            //         { value: 'oneThird', text: 'Up to 33%' },
-            //         { value: '50000', text: '100K Hyd. 50K Oxy' },
-            //         { value: '5000', text: '10K Hyd. 5K Oxy' },
-            //         { value: '500', text: '1K Hyd. 500 Oxy' },
-            //         { value: '50', text: '100 Hyd. 50 Oxy' },
-            //         { value: '5', text: '10 Hyd. 5 Oxy' },
-            //         { value: '1', text: '2 Hyd. 1 Oxy' },
-            //     ], 'all', (value) => {
-            //         setCreateCompoundPreview('water', value, 'hydrogen', 'oxygen', '', '');
-            //     }),
-            //     createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
-            //         createCompound('water');
-            //     }, 'createCompound', null, null, null, 'water', true, null),
-            //     null,
-            //     null,
-            //     null,
-            //     `${getCompoundCreatePreview('water')}`,
-            //     null,
-            //     null,
-            //     null,
-            //     null,
-            //     null,
-            //     null,
-            //     false,
-            //     null,
-            //     null,
-            //     'compound'
-            // );
-            // optionContentElement.appendChild(waterCreateRow);
+            const waterCreateRow = createOptionRow(
+                'waterCreateRow',
+                null,
+                'Create Water:',
+                createDropdown('waterCreateSelectQuantity', [
+                    { value: 'max', text: 'Max Possible' },
+                    { value: 'threeQuarters', text: 'Up to 75%' },
+                    { value: 'twoThirds', text: 'Up to 67%' },
+                    { value: 'half', text: 'Up to 50%' },
+                    { value: 'oneThird', text: 'Up to 33%' },
+                    { value: '50000', text: '50000 - 100K Hyd, 50K Oxy' },
+                    { value: '5000', text: '5000 - 10K Hyd, 5K Oxy' },
+                    { value: '500', text: '500 - 1K Hyd, 500 Oxy' },
+                    { value: '50', text: '50 - 100 Hyd, 50 Oxy' },
+                    { value: '5', text: '5 - 10 Hyd, 5 Oxy' },
+                    { value: '1', text: '1 - 2 Hyd, 1 Oxy' },
+                ], 'all', (value) => {
+                    setCreateCompoundPreview('water', value);
+                }),
+                createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
+                    createCompound('water');
+                }, 'createCompound', null, null, null, 'water', true, null),
+                null,
+                null,
+                null,
+                `${getCompoundCreatePreview('water')}`,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(waterCreateRow);
     
             const waterSellRow = createOptionRow(
                 'waterSellRow',
