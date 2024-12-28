@@ -974,6 +974,14 @@ function checkStatusAndSetTextClasses(element) {
 
         if (element.classList.contains('create') || element.dataset.conditionCheck === 'createCompound') { //sell           
             const createCompoundDescriptionString = document.getElementById('create' + capitaliseString(checkQuantityString) + 'Description').innerHTML;
+            const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+            if (accompanyingLabel.textContent.startsWith('0')) {
+                accompanyingLabel.classList.remove('warning-orange-text');
+                accompanyingLabel.classList.add('red-disabled-text');
+            } else {
+                accompanyingLabel.classList.remove('red-disabled-text'); 
+            }
+            
             let constituentComponents = getConstituentComponents(createCompoundDescriptionString);      
             constituentComponents = unpackConstituentPartsObject(constituentComponents);
             setConstituentPartsObject(constituentComponents);
@@ -995,14 +1003,23 @@ function checkStatusAndSetTextClasses(element) {
         
                 const currentQuantity = getResourceDataObject('resources', [requiredName, 'quantity']);
                 if (currentQuantity < requiredQuantity) {
+                    element.classList.remove('warning-orange-text');
                     element.classList.add('red-disabled-text');
+                    setTextDescriptionClassesBasedOnButtonStates(element, 'create');
                     isDisabled = true;
                     break;
                 }
             }
         
             if (!isDisabled) {
+                if (createCompoundDescriptionString.includes('!')) {
+                    element.classList.add('warning-orange-text');
+                }
+                if (!createCompoundDescriptionString.includes('!')) {
+                    element.classList.remove('warning-orange-text');
+                }
                 element.classList.remove('red-disabled-text');
+                setTextDescriptionClassesBasedOnButtonStates(element, 'create');
             }
             return;
         }
@@ -1190,13 +1207,19 @@ function checkStatusAndSetTextClasses(element) {
 }
 
 export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
-    if (type === 'green') {
+    if (type === 'create') {
+        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+        if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output compound
+            accompanyingLabel.classList.add('warning-orange-text');
+        } else {
+            accompanyingLabel.classList.remove('warning-orange-text');
+        }
+    } else if (type === 'green') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         accompanyingLabel.classList.remove('red-disabled-text');
         accompanyingLabel.classList.add('unlocked-tech');
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
-        accompanyingLabel.style.pointerEvents = 'none';
     } else if (type === 'fuse') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         if (accompanyingLabel.textContent.includes('!!')) {
