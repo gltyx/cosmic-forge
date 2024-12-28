@@ -1463,7 +1463,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
 export function increaseResourceStorage(elementId, resource, itemType) {
     const increaseFactor = getIncreaseStorageFactor();
 
-    const amountToDeduct = getResourceDataObject('resources', [resource, 'storageCapacity']);
+    const amountToDeduct = getResourceDataObject(itemType, [resource, 'storageCapacity']);
     const resourceToDeductName = resource;
 
     //set resource to deduct
