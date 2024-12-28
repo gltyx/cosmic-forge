@@ -162,7 +162,8 @@ export async function gameLoop() {
             }
         });
 
-        const allQuantities = getAllQuantities();
+        let allQuantities = getAllQuantities();
+        allQuantities = normalizeAllQuantities(allQuantities);
         const allStorages = getAllStorages();
         const allElements = getAllElements(resourceTierPairs, compoundTierPairs);
         const allDescElements = getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs);
@@ -389,13 +390,14 @@ function updateAllCreatePreviews() {
 
             setCreateCompoundPreview(currentScreen, document.getElementById(dropDownElementId).value);
                   
-            const stringFinal = getCompoundCreatePreview(compound);
+            const createPreviewString = getCompoundCreatePreview(compound);
+            let cleanedString = cleanString(createPreviewString);
 
             const createPreviewElementId = compounds[compound]?.createPreviewElement;
             const createPreviewElement = document.getElementById(createPreviewElementId);
     
             if (createPreviewElement) {
-                createPreviewElement.innerHTML = stringFinal;
+                createPreviewElement.innerHTML = cleanedString;
             }
         }
     }
@@ -453,6 +455,8 @@ function cleanString(string) {
         return string.split(",")[0] + "!)";
     } else if (string.includes(', 0 !!)')) {
         return string.split(",")[0] + "!!)";
+    } else if (string.includes(" ()")) {
+        return string.replace(" ()", "");
     } else {
         return string;
     }
@@ -925,6 +929,40 @@ function checkStatusAndSetTextClasses(element) {
                 element.classList.add('red-disabled-text');
             }
 
+            return;
+        }
+
+        if (element.classList.contains('create') || element.dataset.conditionCheck === 'createCompound') { //sell           
+            const createCompoundDescriptionString = document.getElementById('create' + capitaliseString(checkQuantityString) + 'Description').innerHTML;
+            let constituentComponents = getConstituentComponents(createCompoundDescriptionString);      
+            constituentComponents = unpackConstituentPartsObject(constituentComponents);
+
+            let isDisabled = false;
+
+            for (let i = 1; i <= 4; i++) {
+                const nameKey = `constituentPartName${i}`;
+                const quantityKey = `constituentPartQuantity${i}`;
+                const requiredName = constituentComponents[nameKey];
+                const requiredQuantity = constituentComponents[quantityKey];
+        
+                if (constituentComponents.compoundToCreateQuantity <= 0) {
+                    isDisabled = true;
+                    break;
+                }
+
+                if (!requiredName || requiredQuantity <= 0) continue;
+        
+                const currentQuantity = getResourceDataObject('resources', [requiredName, 'quantity']);
+                if (currentQuantity < requiredQuantity) {
+                    element.classList.add('red-disabled-text');
+                    isDisabled = true;
+                    break;
+                }
+            }
+        
+            if (!isDisabled) {
+                element.classList.remove('red-disabled-text');
+            }
             return;
         }
 
@@ -1718,6 +1756,146 @@ function updateEnergyDisplays() {
         getElements().energyRate.textContent = `${totalRate} kW / s`;
     }
 }
+
+function getConstituentComponents(createCompoundDescriptionString) {
+    let compoundToCreateQuantity = 0;
+    let constituentPartQuantity1 = 0;
+    let constituentPartName1 = '';
+    let constituentPartQuantity2 = 0;
+    let constituentPartName2 = '';
+    let constituentPartQuantity3 = 0;
+    let constituentPartName3 = '';
+    let constituentPartQuantity4 = 0;
+    let constituentPartName4 = '';
+
+    // Main compound quantity
+    const regexCompoundToCreate = /(\d+(?:\.\d+)?(?:[KMGTPE]?)?)\s*/;
+    const matchCompound = createCompoundDescriptionString.match(regexCompoundToCreate);
+    if (matchCompound) {
+        compoundToCreateQuantity = matchCompound[1];
+    } else {
+        console.log('No match found for compound quantity.');
+    }
+    
+    // Constituent Part 1
+    const regexConstituentPart1 = /\((\d+(?:\.\d+)?(?:[KMGTPE]?)?)\s*([a-zA-Z]+)/;
+
+    const matchConstituentPart1 = createCompoundDescriptionString.match(regexConstituentPart1);
+    if (matchConstituentPart1) {
+        constituentPartQuantity1 = matchConstituentPart1[1];
+        constituentPartName1 = matchConstituentPart1[2];
+    }
+    
+    // Constituent Part 2
+    const regexConstituentPart2 = /, (\d+(?:\.\d+)?(?:[KMGTPE]?)?)\s*([a-zA-Z]+)/
+    const matchConstituentPart2 = createCompoundDescriptionString.match(regexConstituentPart2);
+    if (matchConstituentPart2) {
+        constituentPartQuantity2 = matchConstituentPart2[1];
+        constituentPartName2 = matchConstituentPart2[2];
+    }
+    
+    // Constituent Part 3
+    const regexConstituentPart3 = /(?:, \d+(?:\.\d+)?(?:[KMGTPE]?)?\s*[a-zA-Z]+){1}\s*,\s*(\d+(?:\.\d+)?(?:[KMGTPE]?)?)\s*([a-zA-Z]+)/;
+                                    
+    const matchConstituentPart3 = createCompoundDescriptionString.match(regexConstituentPart3);
+    if (matchConstituentPart3) {
+        constituentPartQuantity3 = matchConstituentPart3[1];
+        constituentPartName3 = matchConstituentPart3[2];
+    }
+    
+    // Constituent Part 4
+    const regexConstituentPart4 = /(?:, \d+(?:\.\d+)?(?:[KMGTPE]?)?\s*[a-zA-Z]+){2}\s*,\s*(\d+(?:\.\d+)?(?:[KMGTPE]?)?)\s*([a-zA-Z]+)/;
+    const matchConstituentPart4 = createCompoundDescriptionString.match(regexConstituentPart4);
+    if (matchConstituentPart4) {
+        constituentPartQuantity4 = matchConstituentPart4[1];
+        constituentPartName4 = matchConstituentPart4[2];
+    }
+    
+    return {
+        compoundToCreateQuantity,
+        constituentPartQuantity1,
+        constituentPartName1,
+        constituentPartQuantity2,
+        constituentPartName2,
+        constituentPartQuantity3,
+        constituentPartName3,
+        constituentPartQuantity4,
+        constituentPartName4
+    };
+}
+
+function unpackConstituentPartsObject(constituentComponents) {
+    if (constituentComponents.compoundToCreateQuantity) {
+        constituentComponents.compoundToCreateQuantity = parseNumber(constituentComponents.compoundToCreateQuantity);
+    }
+
+    for (let i = 1; i <= 4; i++) {
+        let quantityKey = `constituentPartQuantity${i}`;
+        let quantityValue = constituentComponents[quantityKey];
+
+        if (quantityValue && quantityValue !== 0) {
+            // Convert the numeric string to a number
+            constituentComponents[quantityKey] = parseNumber(quantityValue);
+        }
+
+        let nameKey = `constituentPartName${i}`;
+        if (constituentComponents[nameKey]) {
+            constituentComponents[nameKey] = constituentComponents[nameKey].toLowerCase();
+        }
+    }
+
+    return constituentComponents;
+}
+
+function parseNumber(value) {
+    if (typeof value !== 'string') {
+        return value;
+    }
+
+    const unitMultipliers = {
+        K: 1e3,
+        M: 1e6,
+        B: 1e9,
+        T: 1e12,
+        E: 1e18,
+        P: 1e15
+    };
+
+    let match = value.match(/(\d+(?:\.\d+)?)([KMGTPE]?)?/);
+    if (match) {
+        let [_, numPart, unitPart] = match;
+        let number = parseFloat(numPart.replace(',', ''));
+        if (unitPart in unitMultipliers) {
+            number *= unitMultipliers[unitPart];
+        }
+        return number;
+    }
+
+    return value;
+}
+
+function normalizeAllQuantities(allQuantities) {
+    for (let key in allQuantities) {
+        if (allQuantities[key] < 0) {
+            let type = 'error';
+
+            const resources = getResourceDataObject('resources');
+            const compounds = getResourceDataObject('compounds');
+
+            if (key in resources) {
+                type = 'resources';
+            } else if (key in compounds) {
+                type = 'compounds';
+            }
+
+            allQuantities[key] = 0;
+            setResourceDataObject(0, type, [key, 'quantity']);
+        }
+    }
+    return allQuantities;
+}
+
+
 
 // export function toggleTimer(key, buttonId) {
 //     const timer = timerManager.getTimer(key);

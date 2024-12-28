@@ -467,11 +467,11 @@ export function setCreateCompoundPreview(compoundToCreate, amount) {
     const constituentPartsRatio3 = getResourceDataObject('compounds', [compoundToCreate, 'createsFromRatio3']) || 0;
     const constituentPartsRatio4 = getResourceDataObject('compounds', [compoundToCreate, 'createsFromRatio4']) || 0;
 
-    const constituentParts1Quantity = getResourceDataObject(type1, [constituentParts1, 'quantity']) || 0;
-    const constituentParts2Quantity = getResourceDataObject(type2, [constituentParts2, 'quantity']) || 0;
-    const constituentParts3Quantity = getResourceDataObject(type3, [constituentParts3, 'quantity']) || 0;
-    const constituentParts4Quantity = getResourceDataObject(type4, [constituentParts4, 'quantity']) || 0;
-
+    const constituentParts1Quantity = type1 ? getResourceDataObject(type1, [constituentParts1, 'quantity']) || 0 : 0;
+    const constituentParts2Quantity = type2 ? getResourceDataObject(type2, [constituentParts2, 'quantity']) || 0 : 0;
+    const constituentParts3Quantity = type3 ? getResourceDataObject(type3, [constituentParts3, 'quantity']) || 0 : 0;
+    const constituentParts4Quantity = type4 ? getResourceDataObject(type4, [constituentParts4, 'quantity']) || 0 : 0;
+    
     // Calculate max constituent parts that can be used
     const maxConstituentParts1 = constituentPartsRatio1 > 0 ? Math.floor(constituentParts1Quantity / constituentPartsRatio1) : Infinity;
     const maxConstituentParts2 = constituentPartsRatio2 > 0 ? Math.floor(constituentParts2Quantity / constituentPartsRatio2) : Infinity;
@@ -569,7 +569,6 @@ export function setCreateCompoundPreview(compoundToCreate, amount) {
             break;
     }
 
-    console.log('will create: ' + createAmount + ' ' + compoundToCreate);
     setCompoundCreatePreview(compoundToCreate, createAmount, 
         constituentPartsQuantityNeeded1, 
         constituentPartsQuantityNeeded2, 
