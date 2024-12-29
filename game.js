@@ -1457,6 +1457,11 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
         } else if (resourceType === 'energy') { 
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
+            const powerBuildingFuelType = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[0];
+            const powerBuildingFuelBurnRate = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[1];
+            const powerBuildingFuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[2];
+            const fuelObject = getResourceDataObject(powerBuildingFuelCategory, [powerBuildingFuelType]);
+            setResourceDataObject(fuelObject.usedForFuelPerSec + powerBuildingFuelBurnRate, powerBuildingFuelCategory, [powerBuildingFuelType, 'usedForFuelPerSec']);
         } else if (resourceType === 'resource' || resourceType === 'compound') {
             const storageCapacity = getResourceDataObject(itemType, [resourceCategory, 'storageCapacity']);
             if (currentResourceOrCompoundQuantity < storageCapacity) {
@@ -1531,7 +1536,7 @@ export function revealElement(elementId) {
     element.classList.remove('invisible');
 }
 
-export function startUpdateTimersAndRates(elementName, tier, itemType) {
+export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
     if (elementName.startsWith('science')) {
         startUpdateScienceTimers(elementName);
         return;
@@ -1543,7 +1548,7 @@ export function startUpdateTimersAndRates(elementName, tier, itemType) {
     }
 
     if (elementName.startsWith('fuel')) {
-        updateResourceRateForFuel(elementName);
+        updateResourceRateForFuel(elementName, action);
         return;
     }
 
@@ -1616,7 +1621,7 @@ function startInitialTimers() {
 }
 
 
-function updateResourceRateForFuel(elementName) {
+function updateResourceRateForFuel(elementName, action) {
     let newResourceRate;
     const elementNameString = elementName.replace(/^fuel/, '').replace(/^./, char => char.toLowerCase());
     const buildingFuelObject = getResourceDataObject('buildings', ['energy', 'upgrades', elementNameString, 'fuel']);
@@ -1625,9 +1630,14 @@ function updateResourceRateForFuel(elementName) {
     const fuelRate = buildingFuelObject[1];
     const fuelCategory = buildingFuelObject[2];
         
-    newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) - fuelRate;
+    // if (action === 'activating') {
+    //     newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) - fuelRate;
+    // } else {
+    //     newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) + fuelRate;  
+    // }
 
-    setResourceDataObject(newResourceRate, fuelCategory, [fuelType, 'rate']);
+
+    //setResourceDataObject(newResourceRate, fuelCategory, [fuelType, 'rate']);
     getElements()[fuelType + 'Rate'].textContent = `${(getResourceDataObject(fuelCategory, [fuelType, 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
 }
 
@@ -2128,6 +2138,43 @@ function normalizeAllQuantities(allQuantities) {
         }
     }
     return allQuantities;
+}
+
+export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory) {
+    let currentState;
+    let newState;
+
+    const totalFuelBurnForBuildingType = getResourceDataObject(fuelCategory, [fuelType, 'usedForFuelPerSec']);
+    const currentFuelRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']);
+
+    if (activateButtonElement) { //if clicked
+        switch(activateButtonElement.textContent) { //toggle text
+            case 'Activate':
+                currentState = false;
+                activateButtonElement.textContent = 'Deactivate';
+                activateButtonElement.classList.remove('red-disabled-text');
+                activateButtonElement.classList.add('green-ready-text');
+                newState = !currentState;
+                break;
+            case 'Deactivate':
+                currentState = true;
+                activateButtonElement.textContent = 'Activate';
+                activateButtonElement.classList.remove('green-ready-text');
+                newState = !currentState;
+                break;
+        }
+    } else { //if auto set text to Activate
+        activateButtonElement.textContent = 'Activate';
+        newState = false;
+    }
+
+    if (newState) { //if activating powerStations in category
+        setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+        return true;
+    } else { //if deactivating
+        setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+        return false;
+    }
 }
 
 
