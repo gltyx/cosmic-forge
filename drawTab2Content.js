@@ -12,7 +12,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Sodium Ion Battery:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resource'),
+                gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery1');
             }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', false, null, 'building'),
@@ -39,7 +39,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Battery 2:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resource'),
+                gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery2');
             }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', false, null, 'building'),
@@ -66,7 +66,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Battery 3:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resource'),
+                gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery3');
             }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', false, null, 'building'),
@@ -94,7 +94,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resource'),
+                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources'),
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateTimersAndRates('powerPlant1', null, null);
@@ -130,7 +130,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Solar Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resource'),
+                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources'),
                 deferredActions.push(() => {
                 if (getCanAffordDeferred()) {
                     startUpdateTimersAndRates('powerPlant2', null, null);
@@ -166,7 +166,7 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Advanced Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resource'),
+                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources'),
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateTimersAndRates('powerPlant3', null, null);

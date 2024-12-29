@@ -8,6 +8,7 @@ export const resourceData = {
             quantity: 7000,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 150,
             upgrades: {
                 autoBuyer: {
@@ -33,6 +34,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 120,
             upgrades: {
                 autoBuyer: {
@@ -58,6 +60,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 130,
             upgrades: {
                 autoBuyer: {
@@ -83,6 +86,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 200,
             upgrades: {
                 autoBuyer: {
@@ -108,6 +112,7 @@ export const resourceData = {
             quantity: 6000,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 170,
             upgrades: {
                 autoBuyer: {
@@ -133,6 +138,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 150,
             upgrades: {
                 autoBuyer: {
@@ -158,6 +164,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 180,
             upgrades: {
                 autoBuyer: {
@@ -183,6 +190,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 200,
             upgrades: {
                 autoBuyer: {
@@ -211,6 +219,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             ratePower: 0,
+            usedForFuelPerSec: 0,
             storageCapacity: 1000,
             upgrades: {
                 autoBuyer: {

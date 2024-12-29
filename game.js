@@ -1334,7 +1334,7 @@ function checkStatusAndSetTextClasses(element) {
             element.classList.add('red-disabled-text');
         }
 
-        if (resource !== 'energy') {
+        if (resource !== 'energy' && resource !== 'scienceUpgrade') {
             if (getResourceDataObject('resources', [resource, 'rate']) < 0) {
                 getElements()[resource + 'Rate'].classList.add('red-disabled-text');
             } else {
@@ -1417,7 +1417,7 @@ const updateDisplay = (element, data1, data2, desc) => {
     }   
 };
 
-export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemResourceOrCompound) {
+export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemType) {
     let resourceType;
 
     if (resourceCategory === 'research') {
@@ -1429,11 +1429,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } else if (resourceCategory === 'energy') { 
         resourceType = 'energy';
     } else {
-        if (itemResourceOrCompound === 'resource') {
-            resourceType = 'resource'; 
-        } else if (itemResourceOrCompound === 'compound') {
-            resourceType = 'compound'; 
-        }
+        resourceType = itemType.slice(0, -1);
     }
 
     let currentResourceOrCompoundQuantity;
@@ -1445,53 +1441,36 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
         currentResourceOrCompoundQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
     } else if (item && item === 'autoBuyer') {
-        if (itemResourceOrCompound === 'resource') {
-            currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
-        } else if (itemResourceOrCompound === 'compound') {
-            currentResourceOrCompoundQuantity = getResourceDataObject('compounds', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
-        }
+        currentResourceOrCompoundQuantity = getResourceDataObject(itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
-        if (itemResourceOrCompound === 'resource') {
-            currentResourceOrCompoundQuantity = getResourceDataObject('resources', [resourceCategory, 'quantity']);
-        } else if (itemResourceOrCompound === 'compound') {
-            currentResourceOrCompoundQuantity = getResourceDataObject('compounds', [resourceCategory, 'quantity']);
-        }
+        currentResourceOrCompoundQuantity = getResourceDataObject(itemType, [resourceCategory, 'quantity']);
     }
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
             setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceOrCompoundQuantity, 'research', ['quantity']);
         } else {
-            if (itemResourceOrCompound === 'resource') {
-                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'resources', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
-            } else if (itemResourceOrCompound === 'compound') {
-                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'compounds', [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
-            }
+            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
         }
     } else {
         if (resourceType === 'scienceUpgrade') {
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
         } else if (resourceType === 'energy') { 
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
-        } else if (resourceType === 'resource' && currentResourceOrCompoundQuantity < getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
-            getElements()[elementId].classList.remove('green-ready-text');
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'resources', [resourceCategory, 'quantity']);
-            return;
-        } else if (resourceType === 'resource' && currentResourceOrCompoundQuantity >= getResourceDataObject('resources', [resourceCategory, 'storageCapacity'])) {
-            setResourceDataObject(getResourceDataObject('resources', [resourceCategory, 'storageCapacity']), 'resources', [resourceCategory, 'quantity']);
-            return;
-        } else if (resourceType === 'compound' && currentResourceOrCompoundQuantity < getResourceDataObject('compounds', [resourceCategory, 'storageCapacity'])) { //buying upgrades affecting standard resources with storage like hydrogen
-            getElements()[elementId].classList.remove('green-ready-text');
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'compounds', [resourceCategory, 'quantity']);
-            return;
-        } else if (resourceType === 'compound' && currentResourceOrCompoundQuantity >= getResourceDataObject('compounds', [resourceCategory, 'storageCapacity'])) {
-            setResourceDataObject(getResourceDataObject('compounds', [resourceCategory, 'storageCapacity']), 'compounds', [resourceCategory, 'quantity']);
+        } else if (resourceType === 'resource' || resourceType === 'compound') {
+            const storageCapacity = getResourceDataObject(itemType, [resourceCategory, 'storageCapacity']);
+            if (currentResourceOrCompoundQuantity < storageCapacity) {
+                getElements()[elementId].classList.remove('green-ready-text');
+                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, itemType, [resourceCategory, 'quantity']);
+            } else {
+                setResourceDataObject(storageCapacity, itemType, [resourceCategory, 'quantity']);
+            }
             return;
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['quantity']);
         }
-    }
+    }    
 
     let amountToDeduct;
     let itemSetNewPrice;
@@ -1507,11 +1486,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } else if (resourceCategory === 'energy') {
         itemObject = getResourceDataObject('buildings', ['energy', 'upgrades', item]);
     } else {
-        if (itemResourceOrCompound === 'resource') {
-            itemObject = getResourceDataObject('resources', [resourceCategory]);
-        } else if (itemResourceOrCompound === 'compound') {
-            itemObject = getResourceDataObject('compounds', [resourceCategory]); 
-        }
+        itemObject = getResourceDataObject(itemType, [resourceCategory]);
     }
     
     if (ABOrTechPurchase) {
@@ -1531,7 +1506,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } 
 
     //set resource to deduct
-    setItemsToDeduct(itemToDeductName, amountToDeduct, itemResourceOrCompound === 'resource' ? 'resources' : 'compounds');
+    setItemsToDeduct(itemToDeductName, amountToDeduct, itemType);
     setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct);
 }
 

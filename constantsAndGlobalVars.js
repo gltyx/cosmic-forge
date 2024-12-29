@@ -324,7 +324,7 @@ export function setCurrentOptionPane(value) {
     currentOptionPane = value.toLowerCase();
 }
 
-export function setItemsToDeduct(name, amount, itemResourceOrCompound) {
+export function setItemsToDeduct(name, amount, itemType) {
     if (name === 'clear') {
         itemsToDeduct = {};
         return;
@@ -335,7 +335,7 @@ export function setItemsToDeduct(name, amount, itemResourceOrCompound) {
     }
 
     itemsToDeduct[name].deductQuantity = amount;
-    itemsToDeduct[name].typeOfResourceCompound = itemResourceOrCompound;
+    itemsToDeduct[name].typeOfResourceCompound = itemType;
 }
 
 export function getItemsToDeduct() {
