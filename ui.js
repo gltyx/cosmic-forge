@@ -636,6 +636,19 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
     return button;
 }
 
+export function createTextElement(text, id, classList) {
+    const div = document.createElement('div');
+    
+    div.id = id;
+    div.innerHTML = text;
+
+    if (Array.isArray(classList)) {
+        div.classList.add(...classList);
+    }
+
+    return div;
+}
+
 export function selectTheme(theme) {
     const body = document.body;
     body.setAttribute('data-theme', theme);

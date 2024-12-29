@@ -136,6 +136,7 @@ export function startGame() {
     }
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
+    startInitialTimers();
     gameLoop();
 }
 
@@ -184,6 +185,11 @@ export async function gameLoop() {
         const elementsEnergy = document.querySelectorAll('.energy-check');
         elementsEnergy.forEach((elementEnergyCheck) => {
             checkStatusAndSetTextClasses(elementEnergyCheck);
+        });
+
+        const elementsFuel = document.querySelectorAll('.fuel-check');
+        elementsFuel.forEach((elementFuelCheck) => {
+            checkStatusAndSetTextClasses(elementFuelCheck);
         });
 
         const poweredCheckElement = document.getElementById('stat3');
@@ -861,7 +867,7 @@ function updateRates() {
         } else {
             currentActualCompoundRate = (getResourceDataObject('compounds', [compoundName, 'rate']) - getResourceDataObject('compounds', [compoundName, 'ratePower'])) * getTimerRateRatio();
         }
-        compoundRateElement.textContent = currentActualCompoundRate + ' / s';
+        compoundRateElement.textContent = Math.floor(currentActualCompoundRate) + ' / s';
     }
 
     if (getPowerOnOff()) {
@@ -869,7 +875,7 @@ function updateRates() {
     } else {
         currentActualResearchRate = (getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower'])) * getTimerRateRatio();
     }
-    getElements().researchRate.textContent = currentActualResearchRate + ' / s'; 
+    getElements().researchRate.textContent = Math.floor(currentActualResearchRate) + ' / s'; 
 }
 
 function updateUIQuantities(allQuantities, allStorages, allElements, allDescriptionElements) {
@@ -976,6 +982,43 @@ function monitorRevealRowsChecks(element) {
 function checkStatusAndSetTextClasses(element) {
     const totalEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']) * getTimerRateRatio();
     const totalEnergyConsumption = getTotalEnergyUse() * getTimerRateRatio();
+
+    if (element.classList.contains('fuel-check')) {
+        if (element.tagName.toLowerCase() === 'button') {
+            const buildingNameString = element.dataset.toggleTarget;
+            const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'quantity']);
+
+            const fuelType = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[0];
+            const fuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[2];
+            const fuelQuantity = getResourceDataObject(fuelCategory, [fuelType, 'quantity']);
+
+            const fuelTypeElement = document.getElementById(buildingNameString + 'FuelType');
+            const fuelQuantityElement = document.getElementById(buildingNameString + 'FuelQuantity');
+
+            if (buildingQuantity > 0) {
+                element.classList.remove('invisible');
+                fuelTypeElement.classList.remove('invisible');
+                fuelQuantityElement.classList.remove('invisible');
+
+                if (fuelQuantity <= 0) {
+                    element.textContent = 'Activate';
+                    element.classList.add('red-disabled-text');
+                    fuelTypeElement.classList.add('red-disabled-text');
+                    fuelQuantityElement.classList.add('red-disabled-text');
+                    fuelTypeElement.classList.remove('green-ready-text');
+                    fuelQuantityElement.classList.remove('green-ready-text');
+                } else {
+                    element.classList.remove('red-disabled-text');
+                    fuelTypeElement.classList.remove('red-disabled-text');
+                    fuelQuantityElement.classList.remove('red-disabled-text');
+                    fuelTypeElement.classList.add('green-ready-text');
+                    fuelQuantityElement.classList.add('green-ready-text');
+                }
+                fuelQuantityElement.textContent = Math.floor(fuelQuantity);
+            } 
+        }
+        return;
+    }
 
     if (element.classList.contains('energy-check')) {
 
@@ -1561,6 +1604,42 @@ export function startUpdateTimersAndRates(elementName, tier, itemType) {
         });
     }
 }
+
+function startInitialTimers() {
+    const resources = getResourceDataObject('resources');
+    const compounds = getResourceDataObject('compounds');
+
+    for (const resource in resources) {
+        if (resources.hasOwnProperty(resource)) {
+            const timerName = `${resource}AB${1}`;
+            if (!timerManager.getTimer(timerName)) {
+                timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+                    const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+                    const storageCapacity = getResourceDataObject('resources', [resource, 'storageCapacity']);
+                    const currentExtractionRate = getResourceDataObject('resources', [resource, 'rate']);
+                    
+                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'resources', [resource, 'quantity']);
+                });
+            }
+        }
+    }
+
+    for (const compound in compounds) {
+        if (compounds.hasOwnProperty(compound)) {
+            const timerName = `${compound}AB${1}`;
+            if (!timerManager.getTimer(timerName)) {
+                timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+                    const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+                    const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
+                    const currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
+                    
+                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'compounds', [compound, 'quantity']);
+                });
+            }
+        }
+    }
+}
+
 
 function updateResourceRateForFuel(elementName) {
     let newResourceRate;
