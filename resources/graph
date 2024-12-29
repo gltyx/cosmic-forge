@@ -31,11 +31,11 @@ digraph {
 	fusionTheory -> hydrogenFusion
 	hydrogenFusion -> heliumFusion
 	nobleGasCollection -> carbonFusion
-	hydroCarbons -> basicPowerGeneration
+	heliumFusion -> basicPowerGeneration
 	basicPowerGeneration -> sodiumIonPowerStorage
 	steelFoundries -> solarPowerGeneration
 	glassManufacture -> solarPowerGeneration
-	giganticTurbines -> advancedPowerGeneration
+	hydroCarbons -> advancedPowerGeneration
 	basicPowerGeneration -> advancedPowerGeneration
 	carbonFusion -> neonFusion
 	neonFusion -> oxygenFusion
@@ -45,7 +45,7 @@ digraph {
 	siliconFusion -> steelFoundries
 	steelFoundries -> giganticTurbines
 	heliumFusion -> nanoTubeTechnology
-	heliumFusion -> hydroCarbons
+	basicPowerGeneration -> hydroCarbons
 	nanoTubeTechnology -> quantumComputing
 	quantumComputing -> scienceLaboratories
 	nanoTubeTechnology -> nobleGasCollection

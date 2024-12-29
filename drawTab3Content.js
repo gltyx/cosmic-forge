@@ -1,5 +1,5 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
-import { gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
+import { gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
@@ -15,7 +15,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resource'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('scienceKit', null, null);
+                            startUpdateTimersAndRates('scienceKit', null, null);
                         }
                         setCanAffordDeferred(null);
                     });
@@ -46,7 +46,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateAutoBuyerTimersAndRates('scienceClub', null, null);
+                        startUpdateTimersAndRates('scienceClub', null, null);
                     }
                     setCanAffordDeferred(null);
                 });
@@ -77,7 +77,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade', 'resource');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateAutoBuyerTimersAndRates('scienceLab', null, null);
+                        startUpdateTimersAndRates('scienceLab', null, null);
                     }
                     setCanAffordDeferred(null);
                 });

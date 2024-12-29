@@ -251,21 +251,24 @@ export const resourceData = {
                     price: 300, 
                     rate: 0.05,
                     quantity: 0, 
-                    setPrice: 'powerPlant1Price'
+                    setPrice: 'powerPlant1Price',
+                    fuel: ['carbon', 0.03, 'resources']
                 },
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
                     price: 1200,
-                    rate: 0.25,
+                    rate: 0.4,
                     quantity: 0, 
-                    setPrice: 'powerPlant2Price' 
+                    setPrice: 'powerPlant2Price',
+                    fuel: ''
                 },
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
-                    price: 5000,
-                    rate: 2.5,
+                    price: 2000,
+                    rate: 0.75,
                     quantity: 0, 
-                    setPrice: 'powerPlant3Price' 
+                    setPrice: 'powerPlant3Price',
+                    fuel: ['diesel', 0.001, 'compounds']
                 },
                 battery1: {
                     price: 5000,
@@ -323,10 +326,10 @@ export const resourceData = {
         hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
         heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },
         carbonFusion: { appearsAt: [3500, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 4000, idForRenderPosition: 50 },
-        basicPowerGeneration: { appearsAt: [3500, "hydroCarbons", ""], prereqs: ['HydroCarbons'], price: 4000, idForRenderPosition: 51 },
+        basicPowerGeneration: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 51 },
         sodiumIonPowerStorage: { appearsAt: [5000, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 7000, idForRenderPosition: 52 },
         solarPowerGeneration: { appearsAt: [7000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 8000, idForRenderPosition: 53 },
-        advancedPowerGeneration: { appearsAt: [4000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 4500, idForRenderPosition: 54 },
+        advancedPowerGeneration: { appearsAt: [4000, "hydroCarbons", "basicPowerGeneration"], prereqs: ['HydroCarbons', 'Basic Power Generation'], price: 4500, idForRenderPosition: 54 },
         neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
@@ -334,7 +337,7 @@ export const resourceData = {
         steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
         giganticTurbines: { appearsAt: [13000, "steelFoundries", ""], prereqs: ['Steel Foundries'], price: 15000, idForRenderPosition: 82 },
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
-        hydroCarbons: { appearsAt: [3200, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 3800, idForRenderPosition: 500 },
+        hydroCarbons: { appearsAt: [3200, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
         quantumComputing: { appearsAt: [5000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
         scienceLaboratories: { appearsAt: [5750, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 7000, idForRenderPosition: 521 },
@@ -347,7 +350,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 100,
+        cash: 30000,
     },
 };
 

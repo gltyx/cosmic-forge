@@ -608,6 +608,9 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.type = objectSectionArgument1;
+        }else if (dataConditionCheck === 'toggle') {
+            button.dataset.conditionCheck = dataConditionCheck;
+            button.dataset.toggleTarget = objectSectionArgument2;
         } else {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.resourcePriceObject = resourcePriceObject;

@@ -1,5 +1,5 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, getCurrencySymbol } from './constantsAndGlobalVars.js';
-import { setEnergyCapacity, gain, startUpdateAutoBuyerTimersAndRates } from './game.js';
+import { setEnergyCapacity, gain, startUpdateTimersAndRates } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createButton } from './ui.js';
 
@@ -94,14 +94,18 @@ export function drawTab2Content(heading, optionContentElement) {
             'Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resource'),
-                    deferredActions.push(() => {
-                        if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant1', null, null, 'building');
-                        }
-                        setCanAffordDeferred(null);
-                    });
-            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null),
-            null,
+                deferredActions.push(() => {
+                    if (getCanAffordDeferred()) {
+                        startUpdateTimersAndRates('powerPlant1', null, null);
+                        startUpdateTimersAndRates('fuelPowerPlant1', null, null);
+                    }
+                    setCanAffordDeferred(null);
+                });
+                document.querySelector('[data-resource-to-fuse-to="powerPlant1"]').nextElementSibling.classList.remove('invisible');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
+            createButton(`Activate`, ['option-button', 'toggle-timer', 'invisible'], () => {
+                console.log("Clicked Toggle PowerPlant")
+            }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             null,
             null,
             null,
@@ -127,14 +131,17 @@ export function drawTab2Content(heading, optionContentElement) {
             'Solar Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resource'),
-                    deferredActions.push(() => {
-                        if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant2', null, null, 'building');
-                        }
-                        setCanAffordDeferred(null);
-                    });
-            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null),
-            null,
+                deferredActions.push(() => {
+                if (getCanAffordDeferred()) {
+                    startUpdateTimersAndRates('powerPlant2', null, null);
+                }
+                setCanAffordDeferred(null);
+                });
+                document.querySelector('[data-resource-to-fuse-to="powerPlant2"]').nextElementSibling.classList.remove('invisible');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
+            createButton(`Activate`, ['option-button', 'toggle-timer', 'invisible'], () => {
+                console.log("Clicked Toggle PowerPlant")
+            }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
             null,
             null,
             null,
@@ -160,14 +167,17 @@ export function drawTab2Content(heading, optionContentElement) {
             'Advanced Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resource'),
-                    deferredActions.push(() => {
-                        if (getCanAffordDeferred()) {
-                            startUpdateAutoBuyerTimersAndRates('powerPlant3', null, null, 'building');
-                        }
-                        setCanAffordDeferred(null);
-                    });
-            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null),
-            null,
+                deferredActions.push(() => {
+                    if (getCanAffordDeferred()) {
+                        startUpdateTimersAndRates('powerPlant3', null, null);
+                    }
+                    setCanAffordDeferred(null);
+                });
+                document.querySelector('[data-resource-to-fuse-to="powerPlant3"]').nextElementSibling.classList.remove('invisible');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
+            createButton(`Activate`, ['option-button', 'toggle-timer', 'invisible'], () => {
+                console.log("Clicked Toggle PowerPlant")
+            }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
             null,
             null,
             null,

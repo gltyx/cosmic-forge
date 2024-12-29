@@ -22,8 +22,8 @@ export const headerDescriptions = {
 
     energy: "Any buildings beyond the first level require power to operate, you can manage that here, as well as energy storage.",
     'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
-    'advanced power plant': "These buildings provide high amounts of energy for powering a lot of machinery.",
-    'solar power plant': "Solar power plants provide renewable energy without using a lot of resources.",
+    'advanced power plant': "These buildings provide higher amounts of energy for powering a lot of machinery.",
+    'solar power plant': "Solar power plants provide renewable energy without using any resources.",
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
 

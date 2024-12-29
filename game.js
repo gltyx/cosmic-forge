@@ -1103,6 +1103,7 @@ function checkStatusAndSetTextClasses(element) {
                 element.classList.remove('red-disabled-text');
                 setTextDescriptionClassesBasedOnButtonStates(element, 'create');
             }
+
             return;
         }
 
@@ -1122,11 +1123,16 @@ function checkStatusAndSetTextClasses(element) {
             }
         }
 
-        // Perform the check and update the element's class
         if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
+        }
+
+        if (getResourceDataObject('compounds', [compound, 'rate']) < 0) {
+            getElements()[compound + 'Rate'].classList.add('red-disabled-text');
+        } else {
+            getElements()[compound + 'Rate'].classList.remove('red-disabled-text');
         }
     }
 
@@ -1279,11 +1285,18 @@ function checkStatusAndSetTextClasses(element) {
             }
         }
         
-        // Perform the check and update the element's class
         if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
+        }
+
+        if (resource !== 'energy') {
+            if (getResourceDataObject('resources', [resource, 'rate']) < 0) {
+                getElements()[resource + 'Rate'].classList.add('red-disabled-text');
+            } else {
+                getElements()[resource + 'Rate'].classList.remove('red-disabled-text');
+            }
         }
     }
 }
@@ -1340,6 +1353,8 @@ const updateDisplay = (element, data1, data2, desc) => {
                     element.textContent = Math.floor(data1);
                 }
             } else if (element === getElements().researchQuantity) {
+                element.textContent = Math.floor(data1);
+            } else if (element.id && element.id.includes('power')) {
                 element.textContent = Math.floor(data1);
             } else {
                 element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
@@ -1498,14 +1513,19 @@ export function revealElement(elementId) {
     element.classList.remove('invisible');
 }
 
-export function startUpdateAutoBuyerTimersAndRates(elementName, tier, itemType) {
+export function startUpdateTimersAndRates(elementName, tier, itemType) {
     if (elementName.startsWith('science')) {
         startUpdateScienceTimers(elementName);
         return;
     }
 
     if (elementName.startsWith('power')) {
-        startUpdateEnergyTimers(elementName, getResourceDataObject('buildings', ['energy']));
+        startUpdateEnergyTimers(elementName);
+        return;
+    }
+
+    if (elementName.startsWith('fuel')) {
+        updateResourceRateForFuel(elementName);
         return;
     }
 
@@ -1540,6 +1560,21 @@ export function startUpdateAutoBuyerTimersAndRates(elementName, tier, itemType) 
             }
         });
     }
+}
+
+function updateResourceRateForFuel(elementName) {
+    let newResourceRate;
+    const elementNameString = elementName.replace(/^fuel/, '').replace(/^./, char => char.toLowerCase());
+    const buildingFuelObject = getResourceDataObject('buildings', ['energy', 'upgrades', elementNameString, 'fuel']);
+    
+    const fuelType = buildingFuelObject[0];
+    const fuelRate = buildingFuelObject[1];
+    const fuelCategory = buildingFuelObject[2];
+        
+    newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) - fuelRate;
+
+    setResourceDataObject(newResourceRate, fuelCategory, [fuelType, 'rate']);
+    getElements()[fuelType + 'Rate'].textContent = `${(getResourceDataObject(fuelCategory, [fuelType, 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
 }
 
 function startUpdateScienceTimers(elementName) {
