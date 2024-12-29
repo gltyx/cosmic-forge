@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'water');
+            setLastScreenOpenRegister('tab4', 'diesel');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab4', 'content');
         });

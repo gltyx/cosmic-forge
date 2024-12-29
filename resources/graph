@@ -17,6 +17,7 @@ digraph {
 	steelFoundries [label=<<b>steelFoundries</b><br/>Price: 13000> shape=box]
 	giganticTurbines [label=<<b>giganticTurbines</b><br/>Price: 15000> shape=box]
 	nanoTubeTechnology [label=<<b>nanoTubeTechnology</b><br/>Price: 4000> shape=box]
+	hydroCarbons [label=<<b>hydroCarbons</b><br/>Price: 3800<br/><font color="limegreen">Diesel Fuel</font>> shape=box]
 	stellarCartography [label=<<b>stellarCartography</b><br/>Price: 800<br/><font color="limegreen">Unlock Star Map Tab</font>> shape=box]
 	quantumComputing [label=<<b>quantumComputing</b><br/>Price: 5750<br/><font color="limegreen">ABTier2</font>> shape=box]
 	scienceLaboratories [label=<<b>scienceLaboratories</b><br/>Price: 7000<br/><font color="limegreen">Unlock Science Lab</font>> shape=box]
@@ -29,21 +30,22 @@ digraph {
 	fusionEfficiencyIII [label=<<b>fusionEfficiencyIII</b><br/>Price: 10000<br/><font color="limegreen">100% Fusion eff.</font>> shape=box]
 	fusionTheory -> hydrogenFusion
 	hydrogenFusion -> heliumFusion
-	nanoTubeTechnology -> carbonFusion
-	nanoTubeTechnology -> basicPowerGeneration
+	nobleGasCollection -> carbonFusion
+	hydroCarbons -> basicPowerGeneration
 	basicPowerGeneration -> sodiumIonPowerStorage
 	steelFoundries -> solarPowerGeneration
 	glassManufacture -> solarPowerGeneration
 	giganticTurbines -> advancedPowerGeneration
 	basicPowerGeneration -> advancedPowerGeneration
-	nobleGasCollection -> neonFusion
+	carbonFusion -> neonFusion
 	neonFusion -> oxygenFusion
 	hydrogenFusion -> compounds
-	oxygenFusion -> compounds
+	carbonFusion -> compounds
 	oxygenFusion -> siliconFusion
 	siliconFusion -> steelFoundries
 	steelFoundries -> giganticTurbines
 	heliumFusion -> nanoTubeTechnology
+	heliumFusion -> hydroCarbons
 	nanoTubeTechnology -> quantumComputing
 	quantumComputing -> scienceLaboratories
 	nanoTubeTechnology -> nobleGasCollection

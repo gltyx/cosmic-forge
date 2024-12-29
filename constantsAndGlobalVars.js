@@ -41,6 +41,7 @@ let techUnlockedArray = [];
 let revealedTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
+let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
 
@@ -116,9 +117,9 @@ export function setElements() {
         ironOption: document.getElementById('ironOption'),
         ironRate: document.getElementById('ironRate'),
         ironQuantity: document.getElementById('ironQuantity'),
-        waterOption: document.getElementById('waterOption'),
-        waterRate: document.getElementById('waterRate'),
-        waterQuantity: document.getElementById('waterQuantity'),
+        dieselOption: document.getElementById('dieselOption'),
+        dieselRate: document.getElementById('dieselRate'),
+        dieselQuantity: document.getElementById('dieselQuantity'),
         energyRate: document.getElementById('energyRate'),
         energyQuantity: document.getElementById('energyQuantity'),
         powerPlant1Quantity: document.getElementById('powerPlant1Quantity'),
@@ -780,6 +781,14 @@ export function getUnlockedResourcesArray() {
 
 export function setUnlockedResourcesArray(value) {
     unlockedResourcesArray.unshift(value);
+}
+
+export function getUnlockedCompoundsArray() {
+    return unlockedCompoundsArray;
+}
+
+export function setUnlockedCompoundsArray(value) {
+    unlockedCompoundsArray.unshift(value);
 }
 
 export function setTechSpecificUIItemsArray(key, type, value) {

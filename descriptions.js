@@ -1,5 +1,5 @@
 export const gameIntroHeader = 'Welcome to the Cosmic Forge!';
-export const gameIntroText = 'Embark on an epic journey from the simplest element to the building blocks of the cosmos.<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies, unlock powerful compounds, and automate your processes to reshape entire planets.<br> Craft water, glass, and steel to terraform worlds, and discover the secrets of the stars with interstellar exploration.<br>With each click, fusion, and discovery, you edge closer to becoming the architect of a vibrant galaxy.<br><br>Good Luck!';
+export const gameIntroText = 'Embark on an epic journey from the simplest element to the building blocks of the cosmos.<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies, unlock powerful compounds, and automate your processes to reshape entire planets.<br> Craft advanced compounds with unique uses, and discover the secrets of the stars with interstellar exploration.<br>With each click, fusion, and discovery, you edge closer to becoming the architect of a vibrant galaxy.<br><br>Good Luck!';
 
 export const headerDescriptions = {
     'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
@@ -27,7 +27,7 @@ export const headerDescriptions = {
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
 
-    water: "The first compound created by your hands, it is vital to life, and pretty refreshing!",
+    diesel: "The first compound created by your hands, it is a useful early fuel!",
 
     'star map': "This is a map of the known galaxy",
     
@@ -48,6 +48,7 @@ export const techNotificationMessages = {
     neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Gold, modern day Alchemy, we will be rich beyond belief!',
     quantumComputing: 'Quantum Computing Researched\n\nMore advanced Machinery is now available!',
     scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
+    hydroCarbons: 'HydroCarbons Researched\n\nYou can gain access to Diesel Fuel once you have Compounds unlocked!',
     nanoTubeTechnology: 'Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!',
     stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked The Star Map!',
     fusionEfficiencyI: 'Fusion Efficiency Stage I Researched\n\n20% Boost to Fusion returns!',
@@ -224,23 +225,23 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
-    waterCreateRow: {
-        content1: "Here you can create Water from its constituent parts, provided you have them, and the power is ON.",
+    dieselCreateRow: {
+        content1: "Here you can create Diesel from its constituent parts, provided you have them, and the power is ON.",
         content2: "",
         updateAt: ""
     },
-    waterSellRow: {
-        content1: "Here you can sell Water for cash.",
+    dieselSellRow: {
+        content1: "Here you can sell Diesel for cash.",
         content2: "",
         updateAt: ""
     },
-    waterIncreaseStorageRow: {
-        content1: "Upgrade your Water storage capacity to hold more resources.",
+    dieselIncreaseStorageRow: {
+        content1: "Upgrade your Diesel storage capacity to hold more resources.",
         content2: "",
         updateAt: ""
     },
-    waterAutoBuyer1Row: {
-        content1: "Add an Atmospheric Condenser to harvest water from the atmosphere.",
+    dieselAutoBuyer1Row: {
+        content1: "Add an Extractor to collect oil and make diesel.",
         content2: "",
         updateAt: ""
     },
@@ -286,6 +287,11 @@ export const optionDescriptions = {
     },
     techHeliumFusionRow: {
         content1: "Unlock Helium Fusion to enable the fusion of helium atoms.",
+        content2: "",
+        updateAt: ""
+    },
+    techHydroCarbonsRow: {
+        content1: "Unlock HydroCarbons to produce early fuel for power generation.",
         content2: "",
         updateAt: ""
     },

@@ -15,6 +15,7 @@
     "steelFoundries": ["", "", ""],
     "giganticTurbines": ["", "", ""],
     "nanoTubeTechnology": ["", "", ""],
+    "hydroCarbons": ["Diesel Fuel", "", ""],
     "stellarCartography": ["Unlock Star Map Tab", "", ""],
     "quantumComputing": ["ABTier2", "", ""],
     "scienceLaboratories": ["Unlock Science Lab", "", ""],

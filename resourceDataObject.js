@@ -19,7 +19,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 10000, rate: 2.5, quantity: 0, setPrice: 'hydrogenAB4Price', energyUse: 0.6 }
                 },
             },
-            revealedBy: '',
             canFuseTech: 'hydrogenFusion',
             fuseTo1: 'helium',
             fuseTo2: '',
@@ -45,7 +44,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer4Row', price: 15000, rate: 1.875, quantity: 0, setPrice: 'heliumAB4Price', energyUse: 0.45 }
                 }
             },
-            revealedBy: 'hydrogenFusion',
             canFuseTech: 'heliumFusion',
             fuseTo1: 'carbon',
             fuseTo2: '',
@@ -71,7 +69,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Carbon Extractor', screen: 'carbon', place: 'carbonAutoBuyer4Row', price: 16000, rate: 2.5, quantity: 0, setPrice: 'carbonAB4Price', energyUse: 0.6 }
                 }
             },
-            revealedBy: 'heliumFusion',
             canFuseTech: 'carbonFusion',
             fuseTo1: 'neon',
             fuseTo2: 'sodium',
@@ -97,7 +94,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Neon Extractor', screen: 'neon', place: 'neonAutoBuyer4Row', price: 24000, rate: 3.125, quantity: 0, setPrice: 'neonAB4Price', energyUse: 0.75 }
                 }
             },
-            revealedBy: 'carbonFusion',
             canFuseTech: 'neonFusion',
             fuseTo1: 'oxygen',
             fuseTo2: '',
@@ -123,7 +119,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 28000, rate: 3.75, quantity: 0, setPrice: 'oxygenAB4Price', energyUse: 0.9 }
                 }
             },
-            revealedBy: 'neonFusion',
             canFuseTech: 'oxygenFusion',
             fuseTo1: 'silicon',
             fuseTo2: '',
@@ -149,7 +144,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer4Row', price: 40000, rate: 4.375, quantity: 0, setPrice: 'siliconAB4Price', energyUse: 1.05 }
                 }
             },
-            revealedBy: 'oxygenFusion',
             canFuseTech: 'siliconFusion',
             fuseTo1: 'iron',
             fuseTo2: '',
@@ -175,7 +169,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Iron Extractor', screen: 'iron', place: 'ironAutoBuyer4Row', price: 50000, rate: 5, quantity: 0, setPrice: 'ironAB4Price', energyUse: 1.35 }
                 }
             },
-            revealedBy: 'siliconFusion',
             canFuseTech: '',
             fuseTo1: '',
             fuseTo2: '',
@@ -201,7 +194,6 @@ export const resourceData = {
                     tier4: { nameUpgrade: 'Quantum Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer4Row', price: 60000, rate: 6.25, quantity: 0, setPrice: 'sodiumAB4Price', energyUse: 1.2 }
                 }
             },
-            revealedBy: 'carbonFusion',
             canFuseTech: '',
             fuseTo1: '',
             fuseTo2: '',
@@ -210,34 +202,34 @@ export const resourceData = {
         }
     },
     compounds: {
-        water: {
-            nameResource: 'Water',
-            screenName: 'water',
+        diesel: {
+            nameResource: 'Diesel',
+            screenName: 'diesel',
             saleValue: 0.1,
-            salePreviewElement: 'sellWaterDescription',
-            createPreviewElement: 'createWaterDescription',
-            quantity: 50000,
+            salePreviewElement: 'sellDieselDescription',
+            createPreviewElement: 'createDieselDescription',
+            quantity: 0,
             rate: 0,
             ratePower: 0,
-            storageCapacity: 50500,
+            storageCapacity: 1000,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
                     normalProgression: true,
-                    tier1: { nameUpgrade: 'Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer1Row', price: 50000, rate: 0.02, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
-                    tier2: { nameUpgrade: 'Advanced Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer2Row', price: 400000, rate: 0.1, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.03 },
-                    tier3: { nameUpgrade: 'Industrial Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer3Row', price: 2000000, rate: 0.5, quantity: 0, setPrice: 'waterAB3Price', energyUse: 0.12 },
-                    tier4: { nameUpgrade: 'Quantum Atmospheric Condenser', screen: 'water', place: 'waterAutoBuyer4Row', price: 10000000, rate: 2.5, quantity: 0, setPrice: 'waterAB4Price', energyUse: 0.6 }
+                    tier1: { nameUpgrade: 'Backyard Extractor', screen: 'diesel', place: 'dieselAutoBuyer1Row', price: 50000, rate: 0.02, quantity: 0, setPrice: 'dieselAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Advanced Extractor', screen: 'diesel', place: 'dieselAutoBuyer2Row', price: 400000, rate: 0.1, quantity: 0, setPrice: 'dieselAB2Price', energyUse: 0.03 },
+                    tier3: { nameUpgrade: 'Industrial Extractor', screen: 'diesel', place: 'dieselAutoBuyer3Row', price: 2000000, rate: 0.5, quantity: 0, setPrice: 'dieselAB3Price', energyUse: 0.12 },
+                    tier4: { nameUpgrade: 'Quantum Extractor', screen: 'diesel', place: 'dieselAutoBuyer4Row', price: 10000000, rate: 2.5, quantity: 0, setPrice: 'dieselAB4Price', energyUse: 0.6 }
                 },
             },
-            revealedBy: 'compounds',
+            revealedBy: 'hydroCarbons',
             canCreateTech: 'compounds',
             createsFrom1: ['hydrogen', 'resources'],
-            createsFrom2: ['oxygen', 'resources'],
+            createsFrom2: ['carbon', 'resources'],
             createsFrom3: '',
             createsFrom4: '',
-            createsFromRatio1: 2,
-            createsFromRatio2: 1,
+            createsFromRatio1: 26,
+            createsFromRatio2: 12,
             createsFromRatio3: 0,
             createsFromRatio4: 0
         },
@@ -330,18 +322,19 @@ export const resourceData = {
         fusionTheory: { appearsAt: [500, null], prereqs: [null], price: 750, idForRenderPosition: 20 },
         hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
         heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },
-        carbonFusion: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4000, idForRenderPosition: 50 },
-        basicPowerGeneration: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4000, idForRenderPosition: 51 },
+        carbonFusion: { appearsAt: [3500, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 4000, idForRenderPosition: 50 },
+        basicPowerGeneration: { appearsAt: [3500, "hydroCarbons", ""], prereqs: ['HydroCarbons'], price: 4000, idForRenderPosition: 51 },
         sodiumIonPowerStorage: { appearsAt: [5000, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 7000, idForRenderPosition: 52 },
         solarPowerGeneration: { appearsAt: [7000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 8000, idForRenderPosition: 53 },
         advancedPowerGeneration: { appearsAt: [4000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 4500, idForRenderPosition: 54 },
-        neonFusion: { appearsAt: [5000, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 5750, idForRenderPosition: 60 },
+        neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
-        compounds: { appearsAt: [8000, "hydrogenFusion", "oxygenFusion"], prereqs: ['Hydrogen Fusion', 'Oxygen Fusion'], price: 9000, idForRenderPosition: 70 },
+        compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
         siliconFusion: { appearsAt: [10000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 11500, idForRenderPosition: 80 },
         steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
         giganticTurbines: { appearsAt: [13000, "steelFoundries", ""], prereqs: ['Steel Foundries'], price: 15000, idForRenderPosition: 82 },
-        nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 500 },
+        nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
+        hydroCarbons: { appearsAt: [3200, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
         quantumComputing: { appearsAt: [5000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
         scienceLaboratories: { appearsAt: [5750, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 7000, idForRenderPosition: 521 },

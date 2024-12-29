@@ -498,6 +498,35 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'hydroCarbons',
+                row: createOptionRow(
+                    'techHydroCarbonsRow',
+                    null,
+                    'HydroCarbons:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('hydroCarbons', null, 'techUnlock', 'techUnlock', false, 'techs', 'resource');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('hydroCarbons');
+                        showNotification(techNotificationMessages.hydroCarbons, 'info');
+                    }, 'techUnlock', '', 'hydroCarbons', null, 'research', false, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['hydroCarbons', 'price'])} Research${getResourceDataObject('techs', ['hydroCarbons', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="hydroCarbonsPrereq">${getResourceDataObject('techs', ['hydroCarbons', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'hydroCarbons',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
                 techName: 'nanoTubeTechnology',
                 row: createOptionRow(
                     'techNanoTubeTechnologyRow',

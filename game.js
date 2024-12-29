@@ -204,6 +204,8 @@ export async function gameLoop() {
             checkAndRevealNewBuildings(type);
         });
 
+        monitorRevealCompoundsCheck();
+
         updateAllSalePricePreviews();
         updateAllCreatePreviews();
 
@@ -917,6 +919,21 @@ function manageTabSpecificUi() {
         console.log(`Showing UI for Tab ${currentTab}.`);
     } else {
         console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
+    }
+}
+
+function monitorRevealCompoundsCheck() {
+    let revealTech;
+    const compoundKeys = Object.keys(getResourceDataObject('compounds'));
+
+    for (const compound of compoundKeys) {
+        revealTech = getResourceDataObject('compounds', [compound, 'revealedBy']);
+        const compoundElementId = compound + "Option";
+        if (getTechUnlockedArray().includes(revealTech)) {
+            document.getElementById(compoundElementId).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('invisible');
+            document.getElementById(compoundElementId).parentElement.parentElement.parentElement.parentElement.classList.remove('invisible');
+            document.getElementById(compoundElementId).parentElement.parentElement.classList.remove('invisible');
+        }
     }
 }
 
