@@ -1,5 +1,5 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, getCurrencySymbol } from './constantsAndGlobalVars.js';
-import { addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates } from './game.js';
+import { addOrRemoveEnergyContributionPerSec, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -103,19 +103,8 @@ export function drawTab2Content(heading, optionContentElement) {
                 });
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(`Activate`, ['option-button', 'toggle-timer', 'fuel-check', 'invisible'], (event) => {
-                const activating = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources');
-                deferredActions.push(() => {
-                    if (activating) {
-                        if (getCanAffordDeferred()) {
-                            startUpdateTimersAndRates('fuelPowerPlant1', null, null, 'activating');
-                        }
-                    } else {
-                        if (getCanAffordDeferred()) {
-                            startUpdateTimersAndRates('fuelPowerPlant1', null, null, 'deactivating');
-                        }
-                    }
-                    setCanAffordDeferred(null);
-                });
+                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources');
+                addOrRemoveEnergyContributionPerSec('powerPlant1', activeState);
             }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),

@@ -1,4 +1,6 @@
 import {
+    setActivatedFuelBurnObject,
+    getActivatedFuelBurnObject,
     setConstituentPartsObject,
     getConstituentPartsObject,
     setPowerOnOff,
@@ -1457,11 +1459,18 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
         } else if (resourceType === 'energy') { 
             setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
-            const powerBuildingFuelType = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[0];
-            const powerBuildingFuelBurnRate = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[1];
-            const powerBuildingFuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[2];
-            const fuelObject = getResourceDataObject(powerBuildingFuelCategory, [powerBuildingFuelType]);
-            setResourceDataObject(fuelObject.usedForFuelPerSec + powerBuildingFuelBurnRate, powerBuildingFuelCategory, [powerBuildingFuelType, 'usedForFuelPerSec']);
+            if (item.startsWith('power')) {
+                const powerBuildingFuelType = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[0];
+                const powerBuildingFuelBurnRate = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[1];
+                const powerBuildingFuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[2];
+                const fuelObject = getResourceDataObject(powerBuildingFuelCategory, [powerBuildingFuelType]);
+                setResourceDataObject(fuelObject.usedForFuelPerSec + powerBuildingFuelBurnRate, powerBuildingFuelCategory, [powerBuildingFuelType, 'usedForFuelPerSec']);
+                
+                if (getActivatedFuelBurnObject(powerBuildingFuelType)) {
+                    const actualRateOfPowerBuildingFuel = getResourceDataObject(powerBuildingFuelCategory, [powerBuildingFuelType, 'rate']);
+                    setResourceDataObject(actualRateOfPowerBuildingFuel - powerBuildingFuelBurnRate, powerBuildingFuelCategory, [powerBuildingFuelType, 'rate']);
+                }
+            }
         } else if (resourceType === 'resource' || resourceType === 'compound') {
             const storageCapacity = getResourceDataObject(itemType, [resourceCategory, 'storageCapacity']);
             if (currentResourceOrCompoundQuantity < storageCapacity) {
@@ -1547,11 +1556,6 @@ export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
         return;
     }
 
-    if (elementName.startsWith('fuel')) {
-        updateResourceRateForFuel(elementName, action);
-        return;
-    }
-
     //no battery condition needed
 
     let newExtractionRate;
@@ -1588,6 +1592,7 @@ export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
 function startInitialTimers() {
     const resources = getResourceDataObject('resources');
     const compounds = getResourceDataObject('compounds');
+    const energy = getResourceDataObject('buildings', ['energy']);
 
     for (const resource in resources) {
         if (resources.hasOwnProperty(resource)) {
@@ -1618,27 +1623,17 @@ function startInitialTimers() {
             }
         }
     }
-}
 
+    timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
+        const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+        const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
 
-function updateResourceRateForFuel(elementName, action) {
-    let newResourceRate;
-    const elementNameString = elementName.replace(/^fuel/, '').replace(/^./, char => char.toLowerCase());
-    const buildingFuelObject = getResourceDataObject('buildings', ['energy', 'upgrades', elementNameString, 'fuel']);
-    
-    const fuelType = buildingFuelObject[0];
-    const fuelRate = buildingFuelObject[1];
-    const fuelCategory = buildingFuelObject[2];
+        setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
         
-    // if (action === 'activating') {
-    //     newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) - fuelRate;
-    // } else {
-    //     newResourceRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']) + fuelRate;  
-    // }
-
-
-    //setResourceDataObject(newResourceRate, fuelCategory, [fuelType, 'rate']);
-    getElements()[fuelType + 'Rate'].textContent = `${(getResourceDataObject(fuelCategory, [fuelType, 'rate']) * getTimerRateRatio()).toFixed(1)} / s`;
+        if (getResourceDataObject('buildings', ['energy', 'quantity']) < 0) {
+            setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
+        }
+    });
 }
 
 function startUpdateScienceTimers(elementName) {
@@ -2140,6 +2135,22 @@ function normalizeAllQuantities(allQuantities) {
     return allQuantities;
 }
 
+export function addOrRemoveEnergyContributionPerSec(powerBuilding, activeStatus) {
+    const powerBuildingObject = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding]);
+    const powerBuildingQuantity = powerBuildingObject['quantity'];
+    const powerBuildingEnergyRatePerUnit = powerBuildingObject['rate'];
+
+    let overallEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
+
+    if (activeStatus) { //if activating
+        //add the energy to the total
+        overallEnergyRate = Math.floor(overallEnergyRate + (powerBuildingQuantity * (powerBuildingEnergyRatePerUnit * getTimerRateRatio())));
+    } else { //if deactivating
+        overallEnergyRate = Math.floor(overallEnergyRate - (powerBuildingQuantity * (powerBuildingEnergyRatePerUnit * getTimerRateRatio())));
+    }
+    setResourceDataObject(overallEnergyRate, 'buildings', ['energy', 'rate']);
+}
+
 export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory) {
     let currentState;
     let newState;
@@ -2170,28 +2181,14 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
 
     if (newState) { //if activating powerStations in category
         setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+        setActivatedFuelBurnObject(fuelType, true);
         return true;
     } else { //if deactivating
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+        setActivatedFuelBurnObject(fuelType, false);
         return false;
     }
 }
-
-
-
-// export function toggleTimer(key, buttonId) {
-//     const timer = timerManager.getTimer(key);
-//     if (timer) {
-//         const button = document.getElementById(buttonId);
-//         if (timer.timerId) {
-//             timer.stop();
-//             button.textContent = `Resume ${capitaliseString(key)}`;
-//         } else {
-//             timer.start();
-//             button.textContent = `Pause ${capitaliseString(key)}`;
-//         }
-//     }
-// }
 
 //===============================================================================================================
 

@@ -44,9 +44,7 @@ let unlockedResourcesArray = ['hydrogen'];
 let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
-
-let originalFrameNumbers = {
-};
+let originalFrameNumbers = {};
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -57,6 +55,10 @@ let lastScreenOpenRegister = {
     tab6: null,
     tab7: null,
     tab8: null,
+};
+
+let activatedFuelBurnObject = {
+    carbon: false,
 };
 
 let currentTab = 1;
@@ -894,4 +896,12 @@ export function setConstituentPartsObject(value) {
 
 export function getConstituentPartsObject() {
     return constituentPartsObject;
+}
+
+export function getActivatedFuelBurnObject(fuelType) {
+    return activatedFuelBurnObject[fuelType];
+}
+
+export function setActivatedFuelBurnObject(fuelType, value) {
+    activatedFuelBurnObject[fuelType] = value;
 }
