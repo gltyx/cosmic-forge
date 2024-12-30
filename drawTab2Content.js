@@ -95,16 +95,22 @@ export function drawTab2Content(heading, optionContentElement) {
             'Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources'),
+                
+                //move this to the activate button
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateTimersAndRates('powerPlant1', null, null);
                     }
                     setCanAffordDeferred(null);
                 });
+                //
+
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(`Activate`, ['option-button', 'toggle-timer', 'fuel-check', 'invisible'], (event) => {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources');
-                addOrRemoveEnergyContributionPerSec('powerPlant1', activeState);
+                //change energy system so all energy purchases add to an unusedQuantity and when clicking activate we swap it around
+                //will need to change how the total displayed is shown and basically everything except batteries
+                //addOrRemoveEnergyContributionPerSec('powerPlant1', activeState);
             }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
