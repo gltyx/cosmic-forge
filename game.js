@@ -193,6 +193,8 @@ export async function gameLoop() {
             checkStatusAndSetTextClasses(elementEnergyCheck);
         });
 
+        checkPowerBuildingsFuelLevels();
+
         const elementsFuel = document.querySelectorAll('.fuel-check');
         elementsFuel.forEach((elementFuelCheck) => {
             checkStatusAndSetTextClasses(elementFuelCheck);
@@ -1007,11 +1009,6 @@ function checkStatusAndSetTextClasses(element) {
                 fuelQuantityElement.classList.remove('invisible');
 
                 if (fuelQuantity <= 0) {
-                    toggleBuildingTypeOnOff(buildingNameString, false);
-                    startUpdateTimersAndRates(buildingNameString, null, null, 'toggle');
-                    addOrRemoveUsedPerSecForFuelRate('carbon', element, 'resources', buildingNameString);
-                    setRanOutOfFuelWhenOn(buildingNameString, true);
-
                     element.textContent = 'Activate';
                     element.classList.add('red-disabled-text');
                     fuelTypeElement.classList.add('red-disabled-text');
@@ -1019,10 +1016,8 @@ function checkStatusAndSetTextClasses(element) {
                     fuelTypeElement.classList.remove('green-ready-text');
                     fuelQuantityElement.classList.remove('green-ready-text');
                 } else {
-                    if (getRanOutOfFuelWhenOn(buildingNameString)) {
-                        toggleBuildingTypeOnOff(buildingNameString, true);
-                        startUpdateTimersAndRates(buildingNameString, null, null, 'toggle');
-                        addOrRemoveUsedPerSecForFuelRate('carbon', element, 'resources', buildingNameString);
+                    if (getRanOutOfFuelWhenOn(buildingNameString)) {                
+                        element.textContent = 'Deactivate';
                     }
                     element.classList.remove('red-disabled-text');
                     fuelTypeElement.classList.remove('red-disabled-text');
@@ -2188,7 +2183,7 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
     const totalFuelBurnForBuildingType = getResourceDataObject(fuelCategory, [fuelType, 'usedForFuelPerSec']);
     const currentFuelRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']);
 
-    if (!buildingToCheck) { //if clicked
+    if (activateButtonElement) { //if clicked
         switch(activateButtonElement.textContent) { //toggle text
             case 'Activate':
                 currentState = false;
@@ -2204,7 +2199,7 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
                 newState = !currentState;
                 break;
         }
-    } else { //if ran out of fuel
+    } else {
         newState = 'fuelExhausted';
     }
 
@@ -2212,29 +2207,41 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
         setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, true);
         return true;
-    } else if (newState === 'fuelExhausted') {
+    } else if (newState === 'fuelExhausted') { //if just ran out of fuel
         if (getRanOutOfFuelWhenOn(buildingToCheck)) {
-            activateButtonElement.textContent = 'Activate';
             setResourceDataObject(0, fuelCategory, [fuelType, 'rate']);
             setActivatedFuelBurnObject(fuelType, false);
-            activateButtonElement.classList.add('red-disabled-text');
-            activateButtonElement.classList.remove('green-ready-text');
-
-            //////FIX IT SO CAN ADD CARBON RATE AND WORK AGAIN WHEN FUEL ADDED THIS INB WRONG PLACE
-            setRanOutOfFuelWhenOn(buildingNameString, false);
-        } else {
-            activateButtonElement.textContent = 'Deactivate';
-            setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+        } else { //if just gained some fuel after running out
+            setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
             setActivatedFuelBurnObject(fuelType, true);
-            activateButtonElement.classList.remove('red-disabled-text');
-            activateButtonElement.classList.add('green-ready-text');
-
         }
-    } else { //if deactivating
+    } else { //if deactivating by clicking button
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
         return false;
     }
+}
+
+export function checkPowerBuildingsFuelLevels() {
+    const powerBuildings = Object.fromEntries(Object.entries(getResourceDataObject('buildings', ['energy', 'upgrades'])).filter(([key]) => key.startsWith('power')));
+
+    Object.keys(powerBuildings).forEach(powerBuilding => {
+        const fuelType = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding, 'fuel'])[0];
+        const fuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding, 'fuel'])[2];
+        if (getResourceDataObject(fuelCategory, [fuelType, 'quantity']) <= 0) { //if out of fuel
+            toggleBuildingTypeOnOff(powerBuilding, false);
+            startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
+            setRanOutOfFuelWhenOn(powerBuilding, true);
+            addOrRemoveUsedPerSecForFuelRate(fuelType, null, 'resources', powerBuilding);
+        } else {
+            if (getRanOutOfFuelWhenOn(powerBuilding)) {
+                toggleBuildingTypeOnOff(powerBuilding, true);
+                startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
+                setRanOutOfFuelWhenOn(powerBuilding, false);
+                addOrRemoveUsedPerSecForFuelRate(fuelType, null, 'resources', powerBuilding);
+            }
+        }
+    });
 }
 
 //===============================================================================================================

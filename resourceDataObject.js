@@ -270,7 +270,7 @@ export const resourceData = {
                     rate: 0.4,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
-                    fuel: '',
+                    fuel: ['hydrogen', 0.03, 'resources'], //change
                     purchasedRate: 0 //rate * quantity
                 },
                 powerPlant3: {
