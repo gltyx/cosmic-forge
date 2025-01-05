@@ -1,5 +1,5 @@
-import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, getCurrencySymbol } from './constantsAndGlobalVars.js';
-import { addOrRemoveEnergyContributionPerSec, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates } from './game.js';
+import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, getCurrencySymbol, getBuildingTypeOnOff } from './constantsAndGlobalVars.js';
+import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -94,23 +94,16 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources'),
-                
-                //move this to the activate button
-                deferredActions.push(() => {
-                    if (getCanAffordDeferred()) {
-                        startUpdateTimersAndRates('powerPlant1', null, null);
-                    }
-                    setCanAffordDeferred(null);
-                });
-                //
-
+                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources')
+                addBuildingPotentialRate('powerPlant1');
+                if (getBuildingTypeOnOff('powerPlant1')) {
+                    startUpdateTimersAndRates('powerPlant1', null, null, 'buy');
+                }
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(`Activate`, ['option-button', 'toggle-timer', 'fuel-check', 'invisible'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources');
-                //change energy system so all energy purchases add to an unusedQuantity and when clicking activate we swap it around
-                //will need to change how the total displayed is shown and basically everything except batteries
-                //addOrRemoveEnergyContributionPerSec('powerPlant1', activeState);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null);
+                toggleBuildingTypeOnOff('powerPlant1', activeState);
+                startUpdateTimersAndRates('powerPlant1', null, null, 'toggle');
             }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),

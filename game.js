@@ -1,4 +1,8 @@
 import {
+    setRanOutOfFuelWhenOn,
+    getRanOutOfFuelWhenOn,
+    setBuildingTypeOnOff,
+    getBuildingTypeOnOff,
     setActivatedFuelBurnObject,
     getActivatedFuelBurnObject,
     setConstituentPartsObject,
@@ -1003,6 +1007,11 @@ function checkStatusAndSetTextClasses(element) {
                 fuelQuantityElement.classList.remove('invisible');
 
                 if (fuelQuantity <= 0) {
+                    toggleBuildingTypeOnOff(buildingNameString, false);
+                    startUpdateTimersAndRates(buildingNameString, null, null, 'toggle');
+                    addOrRemoveUsedPerSecForFuelRate('carbon', element, 'resources', buildingNameString);
+                    setRanOutOfFuelWhenOn(buildingNameString, true);
+
                     element.textContent = 'Activate';
                     element.classList.add('red-disabled-text');
                     fuelTypeElement.classList.add('red-disabled-text');
@@ -1010,6 +1019,12 @@ function checkStatusAndSetTextClasses(element) {
                     fuelTypeElement.classList.remove('green-ready-text');
                     fuelQuantityElement.classList.remove('green-ready-text');
                 } else {
+                    if (getRanOutOfFuelWhenOn(buildingNameString)) {
+                        toggleBuildingTypeOnOff(buildingNameString, true);
+                        startUpdateTimersAndRates(buildingNameString, null, null, 'toggle');
+                        addOrRemoveUsedPerSecForFuelRate('carbon', element, 'resources', buildingNameString);
+                    }
+                    setRanOutOfFuelWhenOn(buildingNameString, false);
                     element.classList.remove('red-disabled-text');
                     fuelTypeElement.classList.remove('red-disabled-text');
                     fuelQuantityElement.classList.remove('red-disabled-text');
@@ -1552,7 +1567,7 @@ export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
     }
 
     if (elementName.startsWith('power')) {
-        startUpdateEnergyTimers(elementName);
+        startUpdateEnergyTimers(elementName, action);
         return;
     }
 
@@ -1666,26 +1681,42 @@ function startUpdateScienceTimers(elementName) {
     }
 }
 
-function startUpdateEnergyTimers(elementName) {
+function startUpdateEnergyTimers(elementName, action) {
     if (elementName.startsWith('power')) {
-        const upgradeRatePerUnit = getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'rate']);
-        const newEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']) + upgradeRatePerUnit;
-
-        getElements()[elementName + 'Rate'].textContent = `${(getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'rate']) * getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'quantity']) * getTimerRateRatio())} kW / s`;
+        let newEnergyRate = 0;
+        const powerBuildingPotentialPower = getResourceDataObject('buildings', ['energy', 'upgrades', elementName, 'purchasedRate']);
         
-        const powerPlant1Rate = parseFloat(getElements()['powerPlant1Rate'].textContent);
-        const powerPlant2Rate = parseFloat(getElements()['powerPlant2Rate'].textContent);
-        const powerPlant3Rate = parseFloat(getElements()['powerPlant3Rate'].textContent);
-        const totalRate = (powerPlant1Rate + powerPlant2Rate + powerPlant3Rate) - (getTotalEnergyUse() * getTimerRateRatio());
-        getElements().energyRate.textContent = `${totalRate} kW / s`;
+        if (action === 'toggle') {
+            if (getBuildingTypeOnOff(elementName)) {
+                getElements()[elementName + 'Rate'].textContent = `${powerBuildingPotentialPower * getTimerRateRatio()} kW / s`;
+            } else {
+                getElements()[elementName + 'Rate'].textContent = `0 kW / s`;
+            }
+        } else if (action === 'buy') {
+            getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} kW / s`;
+        }
 
+        if (getBuildingTypeOnOff('powerPlant1')) {
+            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
+        }
+        if (getBuildingTypeOnOff('powerPlant2')) {
+            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
+        }
+        if (getBuildingTypeOnOff('powerPlant3')) {
+            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
+        }
+
+        getElements().energyRate.textContent = `${newEnergyRate} kW / s`;
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
+
+        //////////////////////////////////////////////    
         
         if (!timerManager.getTimer('energy')) {
             timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
                 const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
                 const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
                 if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+                    //if enough fuel
                     setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
                     getElements().energyQuantity.classList.remove('red-disabled-text');
                     getElements().energyQuantity.classList.remove('green-ready-text');
@@ -1698,7 +1729,6 @@ function startUpdateEnergyTimers(elementName) {
                     getElements().energyQuantity.classList.add('green-ready-text');
                     getElements().energyQuantity.classList.remove('red-disabled-text');
                 }
-            
             });
         }
     } //no battery condition needed
@@ -2135,30 +2165,31 @@ function normalizeAllQuantities(allQuantities) {
     return allQuantities;
 }
 
-export function addOrRemoveEnergyContributionPerSec(powerBuilding, activeStatus) {
+export function addBuildingPotentialRate(powerBuilding) {
     const powerBuildingObject = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding]);
     const powerBuildingQuantity = powerBuildingObject['quantity'];
     const powerBuildingEnergyRatePerUnit = powerBuildingObject['rate'];
 
-    let overallEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
+    const powerBuildingPotentialRate = powerBuildingQuantity * powerBuildingEnergyRatePerUnit;
 
-    if (activeStatus) { //if activating
-        //add the energy to the total
-        overallEnergyRate = Math.floor(overallEnergyRate + (powerBuildingQuantity * (powerBuildingEnergyRatePerUnit * getTimerRateRatio())));
-    } else { //if deactivating
-        overallEnergyRate = Math.floor(overallEnergyRate - (powerBuildingQuantity * (powerBuildingEnergyRatePerUnit * getTimerRateRatio())));
-    }
-    setResourceDataObject(overallEnergyRate, 'buildings', ['energy', 'rate']);
+    setResourceDataObject(powerBuildingPotentialRate, 'buildings', ['energy', 'upgrades', powerBuilding, 'purchasedRate']);
 }
 
-export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory) {
+export function toggleBuildingTypeOnOff(building, activeStatus) { //flag building as switched on or off
+    if (getBuildingTypeOnOff(building) !== activeStatus) {
+        setBuildingTypeOnOff(building, activeStatus);
+        console.log(building + 'switched on (true) or off (false): ' + activeStatus);
+    }
+}
+
+export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory, buildingToCheck) {
     let currentState;
     let newState;
 
     const totalFuelBurnForBuildingType = getResourceDataObject(fuelCategory, [fuelType, 'usedForFuelPerSec']);
     const currentFuelRate = getResourceDataObject(fuelCategory, [fuelType, 'rate']);
 
-    if (activateButtonElement) { //if clicked
+    if (!buildingToCheck) { //if clicked
         switch(activateButtonElement.textContent) { //toggle text
             case 'Activate':
                 currentState = false;
@@ -2174,15 +2205,26 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
                 newState = !currentState;
                 break;
         }
-    } else { //if auto set text to Activate
+    } else { //if ran out of fuel
         activateButtonElement.textContent = 'Activate';
-        newState = false;
+        newState = 'fuelExhausted';
     }
 
-    if (newState) { //if activating powerStations in category
+    if (newState && newState !== 'fuelExhausted') { //if activating by clicking button
         setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, true);
         return true;
+    } else if (newState === 'fuelExhausted') {
+        if (getRanOutOfFuelWhenOn(buildingToCheck)) {
+            activateButtonElement.textContent = 'Deactivate';
+            setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+            setActivatedFuelBurnObject(fuelType, false);
+        } else {
+            activateButtonElement.textContent = 'Activate';
+            setResourceDataObject(0, fuelCategory, [fuelType, 'rate']);
+            setActivatedFuelBurnObject(fuelType, false);
+        }
+        //if false deactivate fuel draw if true activate and set text on button to opposite
     } else { //if deactivating
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
