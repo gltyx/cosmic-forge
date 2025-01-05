@@ -1024,7 +1024,6 @@ function checkStatusAndSetTextClasses(element) {
                         startUpdateTimersAndRates(buildingNameString, null, null, 'toggle');
                         addOrRemoveUsedPerSecForFuelRate('carbon', element, 'resources', buildingNameString);
                     }
-                    setRanOutOfFuelWhenOn(buildingNameString, false);
                     element.classList.remove('red-disabled-text');
                     fuelTypeElement.classList.remove('red-disabled-text');
                     fuelQuantityElement.classList.remove('red-disabled-text');
@@ -2206,7 +2205,6 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
                 break;
         }
     } else { //if ran out of fuel
-        activateButtonElement.textContent = 'Activate';
         newState = 'fuelExhausted';
     }
 
@@ -2216,15 +2214,19 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
         return true;
     } else if (newState === 'fuelExhausted') {
         if (getRanOutOfFuelWhenOn(buildingToCheck)) {
-            activateButtonElement.textContent = 'Deactivate';
-            setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
-            setActivatedFuelBurnObject(fuelType, false);
-        } else {
             activateButtonElement.textContent = 'Activate';
             setResourceDataObject(0, fuelCategory, [fuelType, 'rate']);
             setActivatedFuelBurnObject(fuelType, false);
+            activateButtonElement.classList.add('red-disabled-text');
+            activateButtonElement.classList.remove('green-ready-text');
+        } else {
+            activateButtonElement.textContent = 'Deactivate';
+            setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
+            setActivatedFuelBurnObject(fuelType, true);
+            activateButtonElement.classList.remove('red-disabled-text');
+            activateButtonElement.classList.add('green-ready-text');
+            setRanOutOfFuelWhenOn(buildingNameString, false);
         }
-        //if false deactivate fuel draw if true activate and set text on button to opposite
     } else { //if deactivating
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
