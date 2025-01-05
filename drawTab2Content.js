@@ -5,6 +5,7 @@ import { createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab2Content(heading, optionContentElement) {
+    let toggleButtonText;
     if (heading === 'Energy') {
 
         const battery1Row = createOptionRow(
@@ -89,6 +90,13 @@ export function drawTab2Content(heading, optionContentElement) {
         optionContentElement.appendChild(battery3Row);
     }
     if (heading === 'Power Plant') {
+        const activeStatus = getBuildingTypeOnOff('powerPlant1');
+        if (activeStatus) {
+            toggleButtonText = 'Deactivate';
+        } else {
+            toggleButtonText = 'Activate';
+        }
+
         const powerPlant1Row = createOptionRow(
             'energyPowerPlant1Row',
             null,
@@ -100,7 +108,7 @@ export function drawTab2Content(heading, optionContentElement) {
                     startUpdateTimersAndRates('powerPlant1', null, null, 'buy');
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
-            createButton(`Activate`, ['option-button', 'toggle-timer', 'fuel-check', 'invisible'], (event) => {
+            createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible'], (event) => {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', null, null, 'toggle');
@@ -123,23 +131,29 @@ export function drawTab2Content(heading, optionContentElement) {
         optionContentElement.appendChild(powerPlant1Row);
     }
 
-    else if (heading === 'Solar Power Plant') {  
+    else if (heading === 'Solar Power Plant') {
+        const activeStatus = getBuildingTypeOnOff('powerPlant2');
+        if (activeStatus) {
+            toggleButtonText = 'Deactivate';
+        } else {
+            toggleButtonText = 'Activate';
+        }
+
         const powerPlant2Row = createOptionRow(
             'energyPowerPlant2Row',
             null,
             'Solar Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources'),
-                deferredActions.push(() => {
-                if (getCanAffordDeferred()) {
-                    startUpdateTimersAndRates('powerPlant2', null, null);
+                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources')
+                addBuildingPotentialRate('powerPlant2');
+                if (getBuildingTypeOnOff('powerPlant2')) {
+                    startUpdateTimersAndRates('powerPlant2', null, null, 'buy');
                 }
-                setCanAffordDeferred(null);
-                });
-                document.querySelector('[data-resource-to-fuse-to="powerPlant2"]').nextElementSibling.classList.remove('invisible');
             }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
-            createButton(`Activate`, ['option-button', 'toggle-timer', 'invisible'], () => {
-                console.log("Clicked Toggle PowerPlant")
+            createButton(toggleButtonText, ['option-button', 'toggle-timer', 'invisible'], (event) => {
+                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null);
+                toggleBuildingTypeOnOff('powerPlant2', activeState);
+                startUpdateTimersAndRates('powerPlant2', null, null, 'toggle');
             }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
             null,
             null,
@@ -159,23 +173,29 @@ export function drawTab2Content(heading, optionContentElement) {
         optionContentElement.appendChild(powerPlant2Row);
     }
 
-    else if (heading === 'Advanced Power Plant') {  
+    else if (heading === 'Advanced Power Plant') {
+        const activeStatus = getBuildingTypeOnOff('powerPlant3');
+        if (activeStatus) {
+            toggleButtonText = 'Deactivate';
+        } else {
+            toggleButtonText = 'Activate';
+        }
+
         const powerPlant3Row = createOptionRow(
             'energyPowerPlant3Row',
             null,
             'Advanced Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources'),
-                deferredActions.push(() => {
-                    if (getCanAffordDeferred()) {
-                        startUpdateTimersAndRates('powerPlant3', null, null);
-                    }
-                    setCanAffordDeferred(null);
-                });
-                document.querySelector('[data-resource-to-fuse-to="powerPlant3"]').nextElementSibling.classList.remove('invisible');
+                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources')
+                addBuildingPotentialRate('powerPlant3');
+                if (getBuildingTypeOnOff('powerPlant3')) {
+                    startUpdateTimersAndRates('powerPlant3', null, null, 'buy');
+                }
             }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
-            createButton(`Activate`, ['option-button', 'toggle-timer', 'invisible'], () => {
-                console.log("Clicked Toggle PowerPlant")
+            createButton(toggleButtonText, ['option-button', 'toggle-timer', 'invisible'], (event) => {
+                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null);
+                toggleBuildingTypeOnOff('powerPlant3', activeState);
+                startUpdateTimersAndRates('powerPlant3', null, null, 'toggle');
             }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
             null,
             null,

@@ -193,8 +193,6 @@ export async function gameLoop() {
             checkStatusAndSetTextClasses(elementEnergyCheck);
         });
 
-        checkPowerBuildingsFuelLevels();
-
         const elementsFuel = document.querySelectorAll('.fuel-check');
         elementsFuel.forEach((elementFuelCheck) => {
             checkStatusAndSetTextClasses(elementFuelCheck);
@@ -207,8 +205,9 @@ export async function gameLoop() {
         elementsItemsCheck.forEach((elementItemCheck) => {
             checkStatusAndSetTextClasses(elementItemCheck);
         });
-        
 
+        checkPowerBuildingsFuelLevels();
+        
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
             monitorRevealRowsChecks(revealRowCheck);
@@ -1073,9 +1072,9 @@ function checkStatusAndSetTextClasses(element) {
                     setPowerOnOff(false);
                 }
             }
-        } else if (getResourceDataObject('buildings', ['energy', 'rate']) === 0) {
-            element.textContent = 'N/A';
-            element.classList.remove('red-disabled-text');
+        } else if (getResourceDataObject('buildings', ['energy', 'rate']) <= 0) {
+            element.textContent = '• OFF';
+            element.classList.add('red-disabled-text');
             element.classList.remove('green-ready-text');
         } else {
             element.textContent = '• ON';
@@ -1700,7 +1699,7 @@ function startUpdateEnergyTimers(elementName, action) {
             newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
         }
 
-        getElements().energyRate.textContent = `${newEnergyRate} kW / s`;
+        getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
 
         //////////////////////////////////////////////    
@@ -2232,13 +2231,13 @@ export function checkPowerBuildingsFuelLevels() {
             toggleBuildingTypeOnOff(powerBuilding, false);
             startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
             setRanOutOfFuelWhenOn(powerBuilding, true);
-            addOrRemoveUsedPerSecForFuelRate(fuelType, null, 'resources', powerBuilding);
+            addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding);
         } else {
             if (getRanOutOfFuelWhenOn(powerBuilding)) {
                 toggleBuildingTypeOnOff(powerBuilding, true);
                 startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
                 setRanOutOfFuelWhenOn(powerBuilding, false);
-                addOrRemoveUsedPerSecForFuelRate(fuelType, null, 'resources', powerBuilding);
+                addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding);
             }
         }
     });
