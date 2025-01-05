@@ -2219,13 +2219,16 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
             setActivatedFuelBurnObject(fuelType, false);
             activateButtonElement.classList.add('red-disabled-text');
             activateButtonElement.classList.remove('green-ready-text');
+
+            //////FIX IT SO CAN ADD CARBON RATE AND WORK AGAIN WHEN FUEL ADDED THIS INB WRONG PLACE
+            setRanOutOfFuelWhenOn(buildingNameString, false);
         } else {
             activateButtonElement.textContent = 'Deactivate';
             setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
             setActivatedFuelBurnObject(fuelType, true);
             activateButtonElement.classList.remove('red-disabled-text');
             activateButtonElement.classList.add('green-ready-text');
-            setRanOutOfFuelWhenOn(buildingNameString, false);
+
         }
     } else { //if deactivating
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
