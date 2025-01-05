@@ -1,4 +1,4 @@
-import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, getCurrencySymbol, getBuildingTypeOnOff } from './constantsAndGlobalVars.js';
+import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createButton } from './ui.js';
