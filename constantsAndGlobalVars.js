@@ -61,6 +61,18 @@ let activatedFuelBurnObject = {
     carbon: false,
 };
 
+let buildingTypeOnOff = {
+    powerPlant1: false,
+    powerPlant2: false,
+    powerPlant3: false,
+}
+
+let ranOutOfFuelWhenOn = {
+    powerPlant1: false,
+    powerPlant2: false,
+    powerPlant3: false,
+}
+
 let currentTab = 1;
 let currentOptionPane = null;
 let notationType = 'normalCondensed';
@@ -904,4 +916,20 @@ export function getActivatedFuelBurnObject(fuelType) {
 
 export function setActivatedFuelBurnObject(fuelType, value) {
     activatedFuelBurnObject[fuelType] = value;
+}
+
+export function getBuildingTypeOnOff(building) {
+    return buildingTypeOnOff[building];
+}
+
+export function setBuildingTypeOnOff(building, value) {
+    buildingTypeOnOff[building] = value;
+}
+
+export function getRanOutOfFuelWhenOn(building) {
+    return ranOutOfFuelWhenOn[building];
+}
+
+export function setRanOutOfFuelWhenOn(building, value) {
+    ranOutOfFuelWhenOn[building] = value;
 }

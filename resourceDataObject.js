@@ -57,7 +57,7 @@ export const resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 0,
+            quantity: 5000,
             rate: 0,
             ratePower: 0,
             usedForFuelPerSec: 0,
@@ -261,7 +261,8 @@ export const resourceData = {
                     rate: 0.05,
                     quantity: 0, 
                     setPrice: 'powerPlant1Price',
-                    fuel: ['carbon', 0.03, 'resources']
+                    fuel: ['carbon', 0.03, 'resources'],
+                    purchasedRate: 0 //rate * quantity
                 },
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
@@ -269,7 +270,8 @@ export const resourceData = {
                     rate: 0.4,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
-                    fuel: ''
+                    fuel: ['hydrogen', 0.03, 'resources'], //change
+                    purchasedRate: 0 //rate * quantity
                 },
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
@@ -277,7 +279,8 @@ export const resourceData = {
                     rate: 0.75,
                     quantity: 0, 
                     setPrice: 'powerPlant3Price',
-                    fuel: ['diesel', 0.001, 'compounds']
+                    fuel: ['diesel', 0.001, 'compounds'],
+                    purchasedRate: 0 //rate * quantity
                 },
                 battery1: {
                     price: 5000,
