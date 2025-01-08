@@ -5,16 +5,16 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 7000,
+            quantity: 5000, //0
             rate: 0,
             ratePower: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 150,
+            storageCapacity: 5000, //150
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 1,
+                    currentTierLevel: 2,
                     normalProgression: true,
-                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0.03 },
+                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 400, rate: 0.1, quantity: 0, setPrice: 'hydrogenAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2000, rate: 0.5, quantity: 0, setPrice: 'hydrogenAB3Price', energyUse: 0.12 },
                     tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 10000, rate: 2.5, quantity: 0, setPrice: 'hydrogenAB4Price', energyUse: 0.6 }
@@ -57,11 +57,11 @@ export const resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 5000,
+            quantity: 5000, //0
             rate: 0,
             ratePower: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 130,
+            storageCapacity: 5000, //130
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
