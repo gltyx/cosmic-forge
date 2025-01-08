@@ -1043,45 +1043,36 @@ function checkStatusAndSetTextClasses(element) {
                 element.classList.remove('red-disabled-text');
             }
         }
-
-        if (totalEnergyRate < totalEnergyConsumption) {
-            setLosingEnergy(true);
-        } else {
-            setLosingEnergy(false);
-        }
         return;
     }
 
     if (element.classList.contains('powered-check')) {
-        if (getLosingEnergy()) {
-            if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+        if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+            // No battery purchased yet
+            if (getResourceDataObject('buildings', ['energy', 'rate']) > 0) {
+                element.textContent = '• ON';
+                element.classList.remove('red-disabled-text');
+                element.classList.add('green-ready-text');
+                setPowerOnOff(true);
+            } else {
                 element.textContent = '• OFF';
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
                 setPowerOnOff(false);
-            } else {
-                if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0) {
-                    element.textContent = '• ON';
-                    element.classList.remove('red-disabled-text');
-                    element.classList.add('green-ready-text');
-                    setPowerOnOff(true);
-                } else {
-                    element.textContent = '• OFF';
-                    element.classList.add('red-disabled-text');
-                    element.classList.remove('green-ready-text');
-                    setPowerOnOff(false);
-                }
             }
-        } else if (getResourceDataObject('buildings', ['energy', 'rate']) <= 0 && !getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
-            element.textContent = '• OFF';
-            element.classList.add('red-disabled-text');
-            element.classList.remove('green-ready-text');
-            setPowerOnOff(false);
         } else {
-            element.textContent = '• ON';
-            element.classList.remove('red-disabled-text');
-            element.classList.add('green-ready-text');
-            setPowerOnOff(true);
+            // Battery is purchased
+            if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0.00001) {
+                element.textContent = '• ON';
+                element.classList.remove('red-disabled-text');
+                element.classList.add('green-ready-text');
+                setPowerOnOff(true);
+            } else {
+                element.textContent = '• OFF';
+                element.classList.add('red-disabled-text');
+                element.classList.remove('green-ready-text');
+                setPowerOnOff(false);
+            }
         }
         
         return;
