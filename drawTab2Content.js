@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff } from './constantsAndGlobalVars.js';
+import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createButton } from './ui.js';
@@ -112,6 +112,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', null, null, 'toggle');
+                setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
@@ -154,6 +155,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', null, null, 'toggle');
+                setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
             null,
             null,
@@ -196,6 +198,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', null, null, 'toggle');
+                setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
             null,
             null,

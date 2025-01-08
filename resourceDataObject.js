@@ -14,7 +14,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: true,
-                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0.03 },
                     tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 400, rate: 0.1, quantity: 0, setPrice: 'hydrogenAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer3Row', price: 2000, rate: 0.5, quantity: 0, setPrice: 'hydrogenAB3Price', energyUse: 0.12 },
                     tier4: { nameUpgrade: 'Quantum Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer4Row', price: 10000, rate: 2.5, quantity: 0, setPrice: 'hydrogenAB4Price', energyUse: 0.6 }

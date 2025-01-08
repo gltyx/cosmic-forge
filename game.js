@@ -1072,10 +1072,11 @@ function checkStatusAndSetTextClasses(element) {
                     setPowerOnOff(false);
                 }
             }
-        } else if (getResourceDataObject('buildings', ['energy', 'rate']) <= 0) {
+        } else if (getResourceDataObject('buildings', ['energy', 'rate']) <= 0 && !getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
             element.textContent = '• OFF';
             element.classList.add('red-disabled-text');
             element.classList.remove('green-ready-text');
+            setPowerOnOff(false);
         } else {
             element.textContent = '• ON';
             element.classList.remove('red-disabled-text');
@@ -1632,14 +1633,40 @@ function startInitialTimers() {
     }
 
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
+        let newEnergyRate = 0;
         const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
         const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
-
-        setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
-        
-        if (getResourceDataObject('buildings', ['energy', 'quantity']) < 0) {
-            setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
+        if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+            //if enough fuel
+            if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) === true) {
+                setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
+                getElements().energyQuantity.classList.remove('red-disabled-text');
+                getElements().energyQuantity.classList.remove('green-ready-text');
+            }
         }
+        
+        if (getResourceDataObject('buildings', ['energy', 'quantity']) <= 0) {
+            if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+                
+                if (getBuildingTypeOnOff('powerPlant1')) {
+                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
+                }
+                if (getBuildingTypeOnOff('powerPlant2')) {
+                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
+                }
+                if (getBuildingTypeOnOff('powerPlant3')) {
+                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
+                }
+                getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
+            }
+            setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
+            getElements().energyQuantity.classList.add('red-disabled-text');
+            getElements().energyQuantity.classList.remove('green-ready-text');
+        } else if (getResourceDataObject('buildings', ['energy', 'quantity']) === getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+            getElements().energyQuantity.classList.add('green-ready-text');
+            getElements().energyQuantity.classList.remove('red-disabled-text');
+        }
+        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);  
     });
 }
 
@@ -1688,40 +1715,24 @@ function startUpdateEnergyTimers(elementName, action) {
             getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} kW / s`;
         }
 
-        if (getBuildingTypeOnOff('powerPlant1')) {
-            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
-        }
-        if (getBuildingTypeOnOff('powerPlant2')) {
-            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
-        }
-        if (getBuildingTypeOnOff('powerPlant3')) {
-            newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
+        if (getPowerOnOff()) {
+            if (getBuildingTypeOnOff('powerPlant1')) {
+                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
+            }
+            if (getBuildingTypeOnOff('powerPlant2')) {
+                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
+            }
+            if (getBuildingTypeOnOff('powerPlant3')) {
+                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
+            }
+            getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
+        } else {
+            newEnergyRate = 0;
+            getElements().energyRate.textContent = `${newEnergyRate} kW / s`;
         }
 
-        getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);  
-        
-        if (!timerManager.getTimer('energy')) {
-            timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
-                const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
-                const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
-                if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
-                    //if enough fuel
-                    setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
-                    getElements().energyQuantity.classList.remove('red-disabled-text');
-                    getElements().energyQuantity.classList.remove('green-ready-text');
-                }
-                if (getResourceDataObject('buildings', ['energy', 'quantity']) < 0) {
-                    setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
-                    getElements().energyQuantity.classList.add('red-disabled-text');
-                    getElements().energyQuantity.classList.remove('green-ready-text');
-                } else if (getResourceDataObject('buildings', ['energy', 'quantity']) === getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
-                    getElements().energyQuantity.classList.add('green-ready-text');
-                    getElements().energyQuantity.classList.remove('red-disabled-text');
-                }
-            });
-        }
-    } //no battery condition needed
+    }
 }
 
 function formatAllNotationElements(element, notationType) {
