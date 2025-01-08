@@ -153,7 +153,6 @@ export async function gameLoop() {
         showTabsUponUnlock();
         
         setEnergyUse();
-        updateEnergyDisplays();
 
         const resourceNames = Object.keys(getResourceDataObject('resources'));
         const resourceTierPairs = [];
@@ -178,6 +177,7 @@ export async function gameLoop() {
         const allDescElements = getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs);
         updateRates();
         updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
+        
         updateStats();
 
         if (getItemsToDeduct() && Object.keys(getItemsToDeduct()).length > 0) {
@@ -197,9 +197,6 @@ export async function gameLoop() {
         elementsFuel.forEach((elementFuelCheck) => {
             checkStatusAndSetTextClasses(elementFuelCheck);
         });
-
-        const poweredCheckElement = document.getElementById('stat3');
-        checkStatusAndSetTextClasses(poweredCheckElement);
 
         const elementsItemsCheck = document.querySelectorAll('.resource-cost-sell-check, .compound-cost-sell-check');
         elementsItemsCheck.forEach((elementItemCheck) => {
@@ -290,6 +287,12 @@ function updateStats() {
     } else {
         getElements().cashStat.textContent = `${cash.toFixed(2) + getCurrencySymbol()}`;
     }
+
+    //stat2
+    updateEnergyStat(document.getElementById('stat2'));
+
+    //stat3
+    checkStatusAndSetTextClasses(document.getElementById('stat3'));
 
     //stat8
     getTimeInStatCell();
@@ -1053,12 +1056,10 @@ function checkStatusAndSetTextClasses(element) {
                 element.textContent = '• ON';
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
-                setPowerOnOff(true);
             } else {
                 element.textContent = '• OFF';
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
-                setPowerOnOff(false);
             }
         } else {
             // Battery is purchased
@@ -1066,12 +1067,10 @@ function checkStatusAndSetTextClasses(element) {
                 element.textContent = '• ON';
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
-                setPowerOnOff(true);
             } else {
                 element.textContent = '• OFF';
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
-                setPowerOnOff(false);
             }
         }
         
@@ -1626,19 +1625,10 @@ function startInitialTimers() {
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
         let newEnergyRate = 0;
         const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
-        const currentEnergyRate = getResourceDataObject('buildings', ['energy', 'rate']);
-        if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
-            //if enough fuel
-            if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) === true) {
-                setResourceDataObject((currentEnergyQuantity + currentEnergyRate) - (getTotalEnergyUse()), 'buildings', ['energy', 'quantity']);
-                getElements().energyQuantity.classList.remove('red-disabled-text');
-                getElements().energyQuantity.classList.remove('green-ready-text');
-            }
-        }
+        const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
         
-        if (getResourceDataObject('buildings', ['energy', 'quantity']) <= 0) {
-            if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
-                
+        if (getResourceDataObject('buildings', ['energy', 'quantity']) <= getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+            if (getPowerOnOff()) {    
                 if (getBuildingTypeOnOff('powerPlant1')) {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
                 }
@@ -1648,16 +1638,42 @@ function startInitialTimers() {
                 if (getBuildingTypeOnOff('powerPlant3')) {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
                 }
+
+                getElements().energyQuantity.classList.add('red-disabled-text');
+                getElements().energyQuantity.classList.remove('green-ready-text');
                 getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
+            } else {
+                getElements().energyQuantity.classList.remove('red-disabled-text');
+                getElements().energyQuantity.classList.remove('green-ready-text');
+                getElements().energyRate.textContent = `0 kW / s`;
             }
-            setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
-            getElements().energyQuantity.classList.add('red-disabled-text');
-            getElements().energyQuantity.classList.remove('green-ready-text');
-        } else if (getResourceDataObject('buildings', ['energy', 'quantity']) === getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+        } else {
             getElements().energyQuantity.classList.add('green-ready-text');
             getElements().energyQuantity.classList.remove('red-disabled-text');
+        } 
+
+        if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+            if (batteryBought) {
+                const totalRate = newEnergyRate - getTotalEnergyUse();
+                setResourceDataObject(getResourceDataObject('buildings', ['energy', 'quantity']) + totalRate, 'buildings', ['energy', 'quantity']);
+                getElements().energyQuantity.classList.remove('red-disabled-text');
+                getElements().energyQuantity.classList.remove('green-ready-text');
+            }
         }
-        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);  
+
+        const energyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+
+        if (energyQuantity < 0) {
+            setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
+        }
+
+        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
+        
+        if (!batteryBought) {
+            setPowerOnOff(newEnergyRate > 0);
+        } else {
+            setPowerOnOff(energyQuantity > 0.00001);
+        }
     });
 }
 
@@ -1704,22 +1720,6 @@ function startUpdateEnergyTimers(elementName, action) {
             }
         } else if (action === 'buy') {
             getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} kW / s`;
-        }
-
-        if (getPowerOnOff()) {
-            if (getBuildingTypeOnOff('powerPlant1')) {
-                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
-            }
-            if (getBuildingTypeOnOff('powerPlant2')) {
-                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
-            }
-            if (getBuildingTypeOnOff('powerPlant3')) {
-                newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
-            }
-            getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
-        } else {
-            newEnergyRate = 0;
-            getElements().energyRate.textContent = `${newEnergyRate} kW / s`;
         }
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);  
@@ -2011,11 +2011,12 @@ export function setEnergyCapacity(battery) {
     setResourceDataObject(newEnergyCap, 'buildings', ['energy', 'storageCapacity']);
 }
 
-function updateEnergyDisplays() {
+function updateEnergyStat(element) {
     const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
-    document.getElementById('stat2').textContent = `${totalRate} kW / s`;
-    if (getCurrentTab() === 2) {
-        getElements().energyRate.textContent = `${totalRate} kW / s`;
+    if (getPowerOnOff()) {
+        element.textContent = `${totalRate} kW / s`;
+    } else {
+        element.textContent = `0 kW / s`;
     }
 }
 

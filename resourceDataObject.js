@@ -57,11 +57,11 @@ export const resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 5000, //0
+            quantity: 1000, //0
             rate: 0,
             ratePower: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 5000, //130
+            storageCapacity: 1000, //130
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -284,7 +284,7 @@ export const resourceData = {
                 },
                 battery1: {
                     price: 5000,
-                    capacity: 15000,
+                    capacity: 150, //15000
                     quantity: 0, 
                     setPrice: 'battery1Price'
                 },
