@@ -1599,7 +1599,13 @@ function startInitialTimers() {
                 timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
                     const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
                     const storageCapacity = getResourceDataObject('resources', [resource, 'storageCapacity']);
-                    const currentExtractionRate = getResourceDataObject('resources', [resource, 'rate']);
+                    let currentExtractionRate;
+                    if (getPowerOnOff()) {
+                        currentExtractionRate = getResourceDataObject('resources', [resource, 'rate']);
+                    } else {
+                        aB1Rate = getResourceDataObject('resources', [resource, 'upgrades', 'autobuyer', 'tier1', 'rate']) * getResourceDataObject('resources', [resource, 'upgrades', 'autobuyer', 'tier1', 'quantity']);
+                        currentExtractionRate = aB1Rate;
+                    }
                     
                     setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'resources', [resource, 'quantity']);
                 });
