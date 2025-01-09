@@ -593,7 +593,13 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
     button.innerText = text;
     
     if (Array.isArray(classNames)) {
-        classNames.forEach(className => button.classList.add(className));
+        classNames.forEach(className => {
+            if (className.startsWith('id_')) {
+                button.id = className.slice(3);
+            } else {
+                button.classList.add(className);
+            }
+        });
     } else if (typeof classNames === 'string') {
         button.classList.add(classNames);
     }

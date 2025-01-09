@@ -467,9 +467,6 @@ export function createCompound(compound) {
     }
 }
 
-
-
-
 export function sellCompound(compound) {
     const resourceQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
     const saleData = getCompoundSalePreview(compound);
@@ -867,7 +864,7 @@ function updateRates() {
         } else {
             currentActualResourceRate = (getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
         }
-        resourceRateElement.textContent = currentActualResourceRate + ' / s';
+        resourceRateElement.textContent = Math.floor(currentActualResourceRate) + ' / s';
     }
 
     for (const compoundName of compoundKeys) {
@@ -1658,7 +1655,7 @@ function startInitialTimers() {
             getElements().energyQuantity.classList.remove('red-disabled-text');
         } 
 
-        if (currentEnergyQuantity < getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
+        if (currentEnergyQuantity <= getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
             if (batteryBought) {
                 const totalRate = newEnergyRate - getTotalEnergyUse();
                 setResourceDataObject(getResourceDataObject('buildings', ['energy', 'quantity']) + totalRate, 'buildings', ['energy', 'quantity']);
@@ -1676,7 +1673,7 @@ function startInitialTimers() {
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
         
         if (!batteryBought) {
-            setPowerOnOff(newEnergyRate > 0);
+            setPowerOnOff(newEnergyRate - getTotalEnergyUse() > 0);
         } else {
             setPowerOnOff(energyQuantity > 0.00001);
         }
@@ -2020,7 +2017,7 @@ export function setEnergyCapacity(battery) {
 function updateEnergyStat(element) {
     const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
     if (getPowerOnOff()) {
-        element.textContent = `${totalRate} kW / s`;
+        element.textContent = `${Math.floor(totalRate)} kW / s`;
     } else {
         element.textContent = `0 kW / s`;
     }
@@ -2209,9 +2206,9 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
     }
 
     const fuelExtractionRateTier1 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
-    const fuelExtractionRateTier2 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'quantity']);
-    const fuelExtractionRateTier3 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
-    const fuelExtractionRateTier4 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
+    // const fuelExtractionRateTier2 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'quantity']);
+    // const fuelExtractionRateTier3 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
+    // const fuelExtractionRateTier4 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
 
     if (newState && newState !== 'fuelExhausted') { //if activating by clicking button
         setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);

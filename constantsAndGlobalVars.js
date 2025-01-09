@@ -896,6 +896,21 @@ export function getLosingEnergy() {
 
 export function setPowerOnOff(value) {
     powerOnOff = value;
+
+    if (!value) { //if power cuts off set all buttons to Activate mode ie deactivated.
+        const powerBuildings = getResourceDataObject('buildings', ['energy', 'upgrades']);
+
+        Object.keys(powerBuildings).forEach(powerBuilding => {
+            if (powerBuilding.startsWith('power')) {
+                const powerBuildingToggleButtonId = powerBuilding + 'Toggle';
+                if (document.getElementById(powerBuildingToggleButtonId)) {
+                    setBuildingTypeOnOff(powerBuilding, false);
+                    document.getElementById(powerBuildingToggleButtonId).textContent = 'Activate';
+                    console.log('setting button element to activate');
+                }
+            }
+        });
+    }
 }
 
 export function getPowerOnOff() {
