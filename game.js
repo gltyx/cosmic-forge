@@ -1603,7 +1603,7 @@ function startInitialTimers() {
                     if (getPowerOnOff()) {
                         currentExtractionRate = getResourceDataObject('resources', [resource, 'rate']);
                     } else {
-                        aB1Rate = getResourceDataObject('resources', [resource, 'upgrades', 'autobuyer', 'tier1', 'rate']) * getResourceDataObject('resources', [resource, 'upgrades', 'autobuyer', 'tier1', 'quantity']);
+                        const aB1Rate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
                         currentExtractionRate = aB1Rate;
                     }
                     
