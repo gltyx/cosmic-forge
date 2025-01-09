@@ -1627,11 +1627,12 @@ function startInitialTimers() {
 
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
         let newEnergyRate = 0;
-        const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+        let currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
         const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
+        const energyStorageCapacity = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
         
-        if (getResourceDataObject('buildings', ['energy', 'quantity']) <= getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
-            if (getPowerOnOff()) {    
+        if (Math.floor(currentEnergyQuantity) <= energyStorageCapacity) {
+            if (getPowerOnOff()) {   
                 if (getBuildingTypeOnOff('powerPlant1')) {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
                 }
@@ -1642,9 +1643,28 @@ function startInitialTimers() {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
                 }
 
-                getElements().energyQuantity.classList.add('red-disabled-text');
-                getElements().energyQuantity.classList.remove('green-ready-text');
-                getElements().energyRate.textContent = `${Math.floor((newEnergyRate * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio()))} kW / s`;
+                let totalRate = newEnergyRate - getTotalEnergyUse();
+
+                if (batteryBought) {
+                    if (Math.floor(currentEnergyQuantity) === energyStorageCapacity) {
+                        if (totalRate >= 0) { //max energy
+                            setResourceDataObject(currentEnergyQuantity, 'buildings', ['energy', 'quantity']);
+                            getElements().energyQuantity.classList.remove('red-disabled-text');
+                            getElements().energyQuantity.classList.add('green-ready-text');
+                            totalRate = 0;
+                        } else { //energy falling
+                            setResourceDataObject(currentEnergyQuantity + totalRate, 'buildings', ['energy', 'quantity']);
+                            getElements().energyQuantity.classList.add('red-disabled-text');
+                            getElements().energyQuantity.classList.remove('green-ready-text');
+                        }
+                    } else { //energy climbing
+                        setResourceDataObject(currentEnergyQuantity + totalRate, 'buildings', ['energy', 'quantity']);
+                        getElements().energyQuantity.classList.remove('red-disabled-text');
+                        getElements().energyQuantity.classList.remove('green-ready-text');
+                    }
+                } //maybe add cases for no battery
+
+                getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} kW / s`;
             } else {
                 getElements().energyQuantity.classList.remove('red-disabled-text');
                 getElements().energyQuantity.classList.remove('green-ready-text');
@@ -1653,29 +1673,21 @@ function startInitialTimers() {
         } else {
             getElements().energyQuantity.classList.add('green-ready-text');
             getElements().energyQuantity.classList.remove('red-disabled-text');
-        } 
-
-        if (currentEnergyQuantity <= getResourceDataObject('buildings', ['energy', 'storageCapacity'])) {
-            if (batteryBought) {
-                const totalRate = newEnergyRate - getTotalEnergyUse();
-                setResourceDataObject(getResourceDataObject('buildings', ['energy', 'quantity']) + totalRate, 'buildings', ['energy', 'quantity']);
-                getElements().energyQuantity.classList.remove('red-disabled-text');
-                getElements().energyQuantity.classList.remove('green-ready-text');
-            }
         }
 
-        const energyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+        currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
 
-        if (energyQuantity < 0) {
+        if (currentEnergyQuantity < 0) {
             setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
         }
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
         
         if (!batteryBought) {
-            setPowerOnOff(newEnergyRate - getTotalEnergyUse() > 0);
+            const totalRate = newEnergyRate - getTotalEnergyUse();
+            setPowerOnOff(totalRate > 0);
         } else {
-            setPowerOnOff(energyQuantity > 0.00001);
+            setPowerOnOff(currentEnergyQuantity > 0.00001);
         }
     });
 }
@@ -2015,7 +2027,7 @@ export function setEnergyCapacity(battery) {
 }
 
 function updateEnergyStat(element) {
-    const totalRate = (getResourceDataObject('buildings', ['energy', 'rate'])  * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
+    const totalRate = (getResourceDataObject('buildings', ['energy', 'rate']) * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
     if (getPowerOnOff()) {
         element.textContent = `${Math.floor(totalRate)} kW / s`;
     } else {
