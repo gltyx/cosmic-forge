@@ -109,7 +109,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant1Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', null, null, 'toggle');
                 setPowerOnOff(true);
@@ -152,7 +152,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant2Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', null, null, 'toggle');
                 setPowerOnOff(true);
@@ -195,7 +195,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant3Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', null, null, 'toggle');
                 setPowerOnOff(true);

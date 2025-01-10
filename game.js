@@ -615,13 +615,9 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
         } else if (elementName.startsWith('power') || elementName.startsWith('battery')) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
-        } else {
+        } else { //autoBuyer
             const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
-            if (typeOfResourceCompound === 'resources') {
-                setResourceDataObject(newPrice, 'resources', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
-            } else if (typeOfResourceCompound === 'compounds') {
-                setResourceDataObject(newPrice, 'compounds', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']); 
-            }            
+            setResourceDataObject(newPrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
         }
     }
 }
@@ -1617,8 +1613,14 @@ function startInitialTimers() {
                 timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
                     const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
                     const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
-                    const currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
-                    
+                    let currentExtractionRate;
+                    if (getPowerOnOff()) {
+                        currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
+                    } else {
+                        const aB1Rate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
+                        currentExtractionRate = aB1Rate;
+                    }
+
                     setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'compounds', [compound, 'quantity']);
                 });
             }
@@ -1682,12 +1684,29 @@ function startInitialTimers() {
         }
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
-        
+        const powerOnNow = getPowerOnOff();
+        let powerOnAfterSwitch;
+
         if (!batteryBought) {
             const totalRate = newEnergyRate - getTotalEnergyUse();
             setPowerOnOff(totalRate > 0);
+            powerOnAfterSwitch = getPowerOnOff();
         } else {
             setPowerOnOff(currentEnergyQuantity > 0.00001);
+            powerOnAfterSwitch = getPowerOnOff();
+        }
+
+        if (!getPowerOnOff() && powerOnNow !== powerOnAfterSwitch) {
+            const powerBuildings = Object.fromEntries(Object.entries(getResourceDataObject('buildings', ['energy', 'upgrades'])).filter(([key]) => key.startsWith('power')));
+
+            Object.keys(powerBuildings).forEach(powerBuilding => {
+                const fuelType = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding, 'fuel'])[0];
+                const fuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', powerBuilding, 'fuel'])[2];
+
+                toggleBuildingTypeOnOff(powerBuilding, false);
+                startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
+                addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true);
+            });
         }
     });
 }
@@ -2190,7 +2209,7 @@ export function toggleBuildingTypeOnOff(building, activeStatus) { //flag buildin
     }
 }
 
-export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory, buildingToCheck) {
+export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory, buildingToCheck, trippedStatus) {
     let currentState;
     let newState;
 
@@ -2214,15 +2233,16 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
                 break;
         }
     } else {
-        newState = 'fuelExhausted';
+        if (!trippedStatus) {
+            newState = 'fuelExhausted';
+        } else {
+            newState = 'tripped';
+        }
     }
 
     const fuelExtractionRateTier1 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
-    // const fuelExtractionRateTier2 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier2', 'quantity']);
-    // const fuelExtractionRateTier3 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
-    // const fuelExtractionRateTier4 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
 
-    if (newState && newState !== 'fuelExhausted') { //if activating by clicking button
+    if (newState && newState !== 'fuelExhausted' && newState !== 'tripped') { //if activating by clicking button
         setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, true);
         return true;
@@ -2234,6 +2254,9 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
             setResourceDataObject(currentFuelRate - totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
             setActivatedFuelBurnObject(fuelType, true);
         }
+    } else if (newState === 'tripped') { //if switches off when no battery and energy consumption becomes higher than generation ie purchase of autoBuyer
+        setResourceDataObject(0 + fuelExtractionRateTier1, fuelCategory, [fuelType, 'rate']);
+        setActivatedFuelBurnObject(fuelType, false);
     } else { //if deactivating by clicking button
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
@@ -2253,13 +2276,10 @@ export function checkPowerBuildingsFuelLevels() {
             toggleBuildingTypeOnOff(powerBuilding, false);
             startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
             setRanOutOfFuelWhenOn(powerBuilding, true);
-            addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding);
+            addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, false);
         } else if (powerBuildingQuantity > 0) {
             if (getRanOutOfFuelWhenOn(powerBuilding)) {
-                //toggleBuildingTypeOnOff(powerBuilding, true);
-                //startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
                 setRanOutOfFuelWhenOn(powerBuilding, false);
-                //addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding);
             }
         }
     });
