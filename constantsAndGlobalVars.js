@@ -86,6 +86,7 @@ let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
 let powerOnOff = false;
+let trippedStatus = false;
 
 let autoSaveOn = false;
 export let pauseAutoSaveCountdown = true;
@@ -906,7 +907,6 @@ export function setPowerOnOff(value) {
                 if (document.getElementById(powerBuildingToggleButtonId)) {
                     setBuildingTypeOnOff(powerBuilding, false);
                     document.getElementById(powerBuildingToggleButtonId).textContent = 'Activate';
-                    console.log('setting button element to activate');
                 }
             }
         });
@@ -938,6 +938,10 @@ export function getBuildingTypeOnOff(building) {
 }
 
 export function setBuildingTypeOnOff(building, value) {
+    if (value) {
+        setTrippedStatus(false);
+    }
+
     buildingTypeOnOff[building] = value;
 }
 
@@ -947,4 +951,12 @@ export function getRanOutOfFuelWhenOn(building) {
 
 export function setRanOutOfFuelWhenOn(building, value) {
     ranOutOfFuelWhenOn[building] = value;
+}
+
+export function getTrippedStatus() {
+    return trippedStatus;
+}
+
+export function setTrippedStatus(value) {
+    trippedStatus = value;
 }

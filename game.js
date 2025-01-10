@@ -1,4 +1,6 @@
 import {
+    getTrippedStatus,
+    setTrippedStatus,
     setRanOutOfFuelWhenOn,
     getRanOutOfFuelWhenOn,
     setBuildingTypeOnOff,
@@ -9,8 +11,6 @@ import {
     getConstituentPartsObject,
     setPowerOnOff,
     getPowerOnOff,
-    setLosingEnergy,
-    getLosingEnergy,
     setTotalEnergyUse,
     getTotalEnergyUse,
     getBuildingTypes,
@@ -147,6 +147,7 @@ export function startGame() {
 }
 
 export async function gameLoop() {
+    console.log('tripped status: ' + getTrippedStatus());
     if (gameState === getGameVisibleActive()) {
         const elements = document.querySelectorAll('.notation');
 
@@ -858,7 +859,8 @@ function updateRates() {
         if (getPowerOnOff()) {
             currentActualResourceRate = getResourceDataObject('resources', [resourceName, 'rate']) * getTimerRateRatio();
         } else {
-            currentActualResourceRate = (getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
+           //set actual rate corectly and leave this as it is
+           currentActualResourceRate = Math.max(0, getResourceDataObject('resources', [resourceName, 'rate']) - getResourceDataObject('resources', [resourceName, 'ratePower'])) * getTimerRateRatio();
         }
         resourceRateElement.textContent = Math.floor(currentActualResourceRate) + ' / s';
     }
@@ -1575,7 +1577,9 @@ export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
             if (getPowerOnOff()) {
                 setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), itemType, [elementName, 'quantity']);
             } else {
-                setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), itemType, [elementName, 'quantity']);
+                if (currentExtractionRateUnpowered >= 0) {
+                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), itemType, [elementName, 'quantity']);
+                }
             }
         });
     }
@@ -1706,6 +1710,7 @@ function startInitialTimers() {
                 toggleBuildingTypeOnOff(powerBuilding, false);
                 startUpdateTimersAndRates(powerBuilding, null, null, 'toggle');
                 addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true);
+                setTrippedStatus(true);
             });
         }
     });
