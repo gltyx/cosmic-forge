@@ -1549,85 +1549,81 @@ export function startUpdateTimersAndRates(elementName, tier, itemType, action) {
         startUpdateEnergyTimers(elementName, action);
         return;
     }
-
-    //no battery condition needed
-
-    let newExtractionRate;
-    let newExtractionRatePower = getResourceDataObject(itemType, [elementName, 'ratePower']);
-
-    const upgradeRatePerUnit = getResourceDataObject(itemType, [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
-    
-    if (getResourceDataObject(itemType, [elementName, 'upgrades', 'autoBuyer', `tier${tier}`, 'energyUse']) > 0) {
-        newExtractionRatePower = getResourceDataObject(itemType, [elementName, 'ratePower']) + upgradeRatePerUnit;
-    }
-    
-    newExtractionRate = getResourceDataObject(itemType, [elementName, 'rate']) + upgradeRatePerUnit;
-
-    setResourceDataObject(newExtractionRate, itemType, [elementName, 'rate']);
-    setResourceDataObject(newExtractionRatePower, itemType, [elementName, 'ratePower']);
-    getElements()[`${elementName}Rate`].textContent = `${(newExtractionRate * getTimerRateRatio()).toFixed(1)} / s`;
-
-    const timerName = `${elementName}AB${tier}`;
-    if (!timerManager.getTimer(timerName)) {
-        timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
-            const currentQuantity = getResourceDataObject(itemType, [elementName, 'quantity']);
-            const storageCapacity = getResourceDataObject(itemType, [elementName, 'storageCapacity']);
-            const currentExtractionRate = getResourceDataObject(itemType, [elementName, 'rate']);
-            const currentExtractionRateUnpowered = getResourceDataObject(itemType, [elementName, 'rate']) - getResourceDataObject(itemType, [elementName, 'ratePower']);
-            if (getPowerOnOff()) {
-                setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), itemType, [elementName, 'quantity']);
-            } else {
-                if (currentExtractionRateUnpowered >= 0) {
-                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRateUnpowered, storageCapacity), itemType, [elementName, 'quantity']);
-                }
-            }
-        });
-    }
 }
 
 function startInitialTimers() {
     const resources = getResourceDataObject('resources');
     const compounds = getResourceDataObject('compounds');
+    const tiers = [1, 2, 3, 4];
 
     for (const resource in resources) {
         if (resources.hasOwnProperty(resource)) {
-            const timerName = `${resource}AB${1}`;
-            if (!timerManager.getTimer(timerName)) {
-                timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
-                    const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
-                    const storageCapacity = getResourceDataObject('resources', [resource, 'storageCapacity']);
-                    let currentExtractionRate;
-                    if (getPowerOnOff()) {
-                        currentExtractionRate = getResourceDataObject('resources', [resource, 'rate']);
-                    } else {
-                        const aB1Rate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
-                        currentExtractionRate = aB1Rate;
-                    }
-                    
-                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'resources', [resource, 'quantity']);
-                });
-            }
+            tiers.forEach(tier => {
+                const timerName = `${resource}AB${tier}`;
+                if (!timerManager.getTimer(timerName)) {
+                    timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+                        const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+                        const storageCapacity = getResourceDataObject('resources', [resource, 'storageCapacity']);
+                        if (getPowerOnOff()) {
+                            const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+                            const currentTierAutoBuyerQuantity = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
+                            const calculatedResourceRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                            setResourceDataObject(Math.min(currentQuantity + calculatedResourceRate, storageCapacity), 'resources', [resource, 'quantity']);
+                            
+                            const allResourceRatesAddedTogether = 
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']) +
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * 
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier2', 'quantity']) +
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * 
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier3', 'quantity']) +
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
+                                getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
+
+                            setResourceDataObject(allResourceRatesAddedTogether, 'resources', [resource, 'rate']);
+                            getElements()[`${resource}Rate`].textContent = `${(allResourceRatesAddedTogether * getTimerRateRatio()).toFixed(1)} / s`;
+                        } else { //if power off
+                            if (tier === 1) {
+                                const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
+                                const currentTierAutoBuyerQuantity = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'quantity']);
+                                const calculatedResourceRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                                setResourceDataObject(Math.min(currentQuantity + calculatedResourceRate, storageCapacity), 'resources', [resource, 'quantity']);
+                                
+                                const resourceTier1Rate = 
+                                    getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
+                                    getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
+
+                                setResourceDataObject(resourceTier1Rate, 'resources', [resource, 'rate']);
+                                getElements()[`${resource}Rate`].textContent = `${(resourceTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
+                            }
+                        }
+                    });
+                }
+            });
         }
     }
 
     for (const compound in compounds) {
         if (compounds.hasOwnProperty(compound)) {
-            const timerName = `${compound}AB${1}`;
-            if (!timerManager.getTimer(timerName)) {
-                timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
-                    const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
-                    const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
-                    let currentExtractionRate;
-                    if (getPowerOnOff()) {
-                        currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
-                    } else {
-                        const aB1Rate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
-                        currentExtractionRate = aB1Rate;
-                    }
+            tiers.forEach(tier => {
+                const timerName = `${compound}AB${tier}`;
+                if (!timerManager.getTimer(timerName)) {
+                    timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+                        const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+                        const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
+                        let currentExtractionRate;
+                        if (getPowerOnOff()) {
+                            currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
+                        } else {
+                            const tierRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+                            const tierQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
+                            currentExtractionRate = tierRate * tierQuantity;
+                        }
 
-                    setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'compounds', [compound, 'quantity']);
-                });
-            }
+                        setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'compounds', [compound, 'quantity']);
+                    });
+                }
+            });
         }
     }
 

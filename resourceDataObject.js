@@ -5,7 +5,7 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 5000, //0
+            quantity: 650, //0
             rate: 0,
             ratePower: 0,
             usedForFuelPerSec: 0,
