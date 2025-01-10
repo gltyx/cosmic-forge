@@ -617,9 +617,9 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
         } else {
             const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
-            if (typeOfResourceCompound === 'resource') {
+            if (typeOfResourceCompound === 'resources') {
                 setResourceDataObject(newPrice, 'resources', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
-            } else if (typeOfResourceCompound === 'compound') {
+            } else if (typeOfResourceCompound === 'compounds') {
                 setResourceDataObject(newPrice, 'compounds', [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']); 
             }            
         }
@@ -1517,7 +1517,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
 
     //set resource to deduct
     setItemsToDeduct(itemToDeductName, amountToDeduct, itemType);
-    setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct);
+    setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct, itemType);
 }
 
 export function increaseResourceStorage(elementId, resource, itemType) {
