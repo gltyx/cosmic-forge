@@ -109,7 +109,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant1Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', 'toggle');
                 setPowerOnOff(true);
@@ -152,13 +152,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant2Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', 'toggle');
                 setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
-            null,
-            null,
+            createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0])}:`, 'powerPlant2FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
+            createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0], 'quantity'])}`, 'powerPlant2FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
             null,
             `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price'])}`,
             '',
@@ -195,13 +195,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant3Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null, false, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'compounds', null, false);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', 'toggle');
                 setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
-            null,
-            null,
+            createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0])}:`, 'powerPlant3FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
+            createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0], 'quantity'])}`, 'powerPlant3FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
             null,
             `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price'])}`,
             '',

@@ -147,7 +147,6 @@ export function startGame() {
 }
 
 export async function gameLoop() {
-    console.log('tripped status: ' + getTrippedStatus());
     if (gameState === getGameVisibleActive()) {
         const elements = document.querySelectorAll('.notation');
 
@@ -1593,21 +1592,55 @@ function startInitialTimers() {
                     timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
                         const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
                         const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
-                        let currentExtractionRate;
                         if (getPowerOnOff()) {
-                            currentExtractionRate = getResourceDataObject('compounds', [compound, 'rate']);
-                        } else {
-                            const tierRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
-                            const tierQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
-                            currentExtractionRate = tierRate * tierQuantity;
+                            const autoBuyerExtractionRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
+                            const currentTierAutoBuyerQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
+                            const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                            setResourceDataObject(Math.min(currentQuantity + calculatedCompoundRate, storageCapacity), 'compounds', [compound, 'quantity']);
+                            
+                            const allCompoundRatesAddedTogether = 
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']) +
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * 
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier2', 'quantity']) +
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * 
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier3', 'quantity']) +
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
+    
+                            const powerPlant3FuelType = 'diesel';                    
+                            const powerPlant3Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
+    
+                            let amountToDeductForConsumption = 0;
+    
+                            if (compound === powerPlant3FuelType) {
+                                amountToDeductForConsumption = powerPlant3Consumption;
+                                if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
+                                    setResourceDataObject(allCompoundRatesAddedTogether + amountToDeductForConsumption, 'compounds', [compound, 'rate']);
+                                    setResourceDataObject(Math.min(getResourceDataObject('compounds', [compound, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'compounds', [compound, 'quantity']);
+                                }
+                            }
+                            getElements()[`${compound}Rate`].textContent = `${((allCompoundRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
+                        } else { //if power off
+                            if (tier === 1) {
+                                const autoBuyerExtractionRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
+                                const currentTierAutoBuyerQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier1`, 'quantity']);
+                                const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                                setResourceDataObject(Math.min(currentQuantity + calculatedCompoundRate, storageCapacity), 'compounds', [compound, 'quantity']);
+                                
+                                const compoundTier1Rate = 
+                                    getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
+                                    getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
+    
+                                setResourceDataObject(compoundTier1Rate, 'compounds', [compound, 'rate']);
+                                getElements()[`${compound}Rate`].textContent = `${(compoundTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
+                            }
                         }
-
-                        setResourceDataObject(Math.min(currentQuantity + currentExtractionRate, storageCapacity), 'compounds', [compound, 'quantity']);
                     });
                 }
             });
         }
-    }
+    } 
 
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
         let newEnergyRate = 0;
@@ -1687,7 +1720,7 @@ function startInitialTimers() {
 
                 toggleBuildingTypeOnOff(powerBuilding, false);
                 startUpdateTimersAndRates(powerBuilding, 'toggle');
-                addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true, false);
+                addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true);
                 setTrippedStatus(true);
             });
         }
@@ -1739,7 +1772,7 @@ function startUpdateEnergyTimers(elementName, action) {
             getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} kW / s`;
         }
 
-        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);  
+        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
     }
 }
 
@@ -2192,7 +2225,7 @@ export function toggleBuildingTypeOnOff(building, activeStatus) { //flag buildin
     }
 }
 
-export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory, buildingToCheck, trippedStatus, regularUpdateStatus) {
+export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement, fuelCategory, buildingToCheck, trippedStatus) {
     let currentState;
     let newState;
 
@@ -2221,9 +2254,6 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
         } else {
             newState = 'tripped';
         }
-        if (regularUpdateStatus) {
-            newState = 'regularUpdate';
-        }
     }
 
     const fuelExtractionRateTier1 = getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getResourceDataObject(fuelCategory, [fuelType, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
@@ -2243,31 +2273,6 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
     } else if (newState === 'tripped') { //if switches off when no battery and energy consumption becomes higher than generation ie purchase of autoBuyer
         setResourceDataObject(fuelExtractionRateTier1, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
-    } else if (newState === 'regularUpdate') { //standard loop rate update for fuel use
-        // const powerPlant1FuelType = 'carbon';
-        // const powerPlant1FuelCategory = 'resources';
-        // const powerPlant2FuelType = 'diesel';
-        // const powerPlant2FuelCategory = 'compounds';
-        // const powerPlant3FuelType = '';
-        // const powerPlant3FuelCategory = '';
-
-        // const powerStation1Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
-        // const powerStation2Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
-        // //const powerStation3Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
-
-        // const powerStation1NewRate = getResourceDataObject(powerPlant1FuelCategory, [powerPlant1FuelType, 'rate']) - powerStation1Consumption;
-        // const powerStation2NewRate = getResourceDataObject(powerPlant2FuelCategory, [powerPlant2FuelType, 'rate']) - powerStation2Consumption;
-
-        // if (getBuildingTypeOnOff('powerPlant1')) {
-        //     setResourceDataObject(powerStation1NewRate, powerPlant1FuelCategory, [powerPlant1FuelType, 'rate']);
-        //     setResourceDataObject(getResourceDataObject(powerPlant1FuelCategory, [powerPlant1FuelType, 'quantity']) + powerStation1NewRate, powerPlant1FuelCategory, [powerPlant1FuelType, 'quantity']);
-        // }
-
-        // if (getBuildingTypeOnOff('powerPlant2')) {
-        //     setResourceDataObject(powerStation2NewRate, powerPlant2FuelCategory, [powerPlant2FuelType, 'rate']);
-        //     setResourceDataObject(getResourceDataObject(powerPlant2FuelCategory, [powerPlant2FuelType, 'quantity']) + powerStation2NewRate, powerPlant2FuelCategory, [powerPlant2FuelType, 'quantity']);
-        // }
-
     } else { //if deactivating by clicking button
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
@@ -2287,7 +2292,7 @@ export function checkPowerBuildingsFuelLevels() {
             toggleBuildingTypeOnOff(powerBuilding, false);
             startUpdateTimersAndRates(powerBuilding, 'toggle');
             setRanOutOfFuelWhenOn(powerBuilding, true);
-            addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, false, false);
+            addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, false);
         } else if (powerBuildingQuantity > 0) {
             if (getRanOutOfFuelWhenOn(powerBuilding)) {
                 setRanOutOfFuelWhenOn(powerBuilding, false);

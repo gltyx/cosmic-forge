@@ -5,13 +5,13 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 650, //0
+            quantity: 10000,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 5000, //150
+            storageCapacity: 10000, //150
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 2,
+                    currentTierLevel: 1,
                     normalProgression: true,
                     tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 400, rate: 0.1, quantity: 0, setPrice: 'hydrogenAB2Price', energyUse: 0.03 },
@@ -55,10 +55,10 @@ export const resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 1000, //0
+            quantity: 10000,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 1000, //130
+            storageCapacity: 10000, //130
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -253,7 +253,7 @@ export const resourceData = {
                     quantity: 0, 
                     setPrice: 'powerPlant1Price',
                     fuel: ['carbon', 0.03, 'resources'],
-                    purchasedRate: 0 //rate * quantity
+                    purchasedRate: 0
                 },
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
@@ -262,7 +262,7 @@ export const resourceData = {
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
                     fuel: ['hydrogen', 0.03, 'resources'], //change
-                    purchasedRate: 0 //rate * quantity
+                    purchasedRate: 0
                 },
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
@@ -270,8 +270,8 @@ export const resourceData = {
                     rate: 0.75,
                     quantity: 0, 
                     setPrice: 'powerPlant3Price',
-                    fuel: ['diesel', 0.001, 'compounds'],
-                    purchasedRate: 0 //rate * quantity
+                    fuel: ['diesel', 0.01, 'compounds'],
+                    purchasedRate: 0
                 },
                 battery1: {
                     price: 5000,
