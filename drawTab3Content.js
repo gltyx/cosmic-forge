@@ -15,7 +15,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resources'),
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
-                            startUpdateTimersAndRates('scienceKit', null, null);
+                            startUpdateTimersAndRates('scienceKit');
                         }
                         setCanAffordDeferred(null);
                     });
@@ -46,7 +46,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade', 'resources');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateTimersAndRates('scienceClub', null, null);
+                        startUpdateTimersAndRates('scienceClub');
                     }
                     setCanAffordDeferred(null);
                 });
@@ -77,7 +77,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade', 'resources');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
-                        startUpdateTimersAndRates('scienceLab', null, null);
+                        startUpdateTimersAndRates('scienceLab');
                     }
                     setCanAffordDeferred(null);
                 });

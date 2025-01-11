@@ -7,7 +7,6 @@ export const resourceData = {
             salePreviewElement: 'sellHydrogenDescription',
             quantity: 650, //0
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 5000, //150
             upgrades: {
@@ -33,7 +32,6 @@ export const resourceData = {
             salePreviewElement: 'sellHeliumDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 120,
             upgrades: {
@@ -59,7 +57,6 @@ export const resourceData = {
             salePreviewElement: 'sellCarbonDescription',
             quantity: 1000, //0
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 1000, //130
             upgrades: {
@@ -85,7 +82,6 @@ export const resourceData = {
             salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
             upgrades: {
@@ -111,7 +107,6 @@ export const resourceData = {
             salePreviewElement: 'sellOxygenDescription',
             quantity: 6000,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 170,
             upgrades: {
@@ -137,7 +132,6 @@ export const resourceData = {
             salePreviewElement: 'sellSiliconDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 150,
             upgrades: {
@@ -163,7 +157,6 @@ export const resourceData = {
             salePreviewElement: 'sellIronDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 180,
             upgrades: {
@@ -189,7 +182,6 @@ export const resourceData = {
             salePreviewElement: 'sellSodiumDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
             upgrades: {
@@ -218,7 +210,6 @@ export const resourceData = {
             createPreviewElement: 'createDieselDescription',
             quantity: 0,
             rate: 0,
-            ratePower: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 1000,
             upgrades: {

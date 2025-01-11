@@ -1,5 +1,5 @@
 import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
-import { increaseResourceStorage, createCompound, sellCompound, gain, startUpdateTimersAndRates } from './game.js';
+import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createOptionRow, createDropdown, createButton } from './ui.js';
 
@@ -120,8 +120,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
                 'Diesel Auto Buyer Tier 1:',
                 createButton(`Add ${getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Diesel /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
-                    gain(1, 'dieselAB1Quantity', 'autoBuyer', true, 'tier1', 'diesel', 'compounds'),
-                        startUpdateTimersAndRates('diesel', 1, 'compounds');
+                    gain(1, 'dieselAB1Quantity', 'autoBuyer', true, 'tier1', 'diesel', 'compounds')
                 }, 'upgradeCheck', '', 'autoBuyer', null, 'diesel', true, 'tier1', 'compound'),
                 null,
                 null,
@@ -146,8 +145,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
                 'Diesel Auto Buyer Tier 2:',
                 createButton(`Add ${getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Diesel /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
-                    gain(1, 'dieselAB2Quantity', 'autoBuyer', true, 'tier2', 'diesel', 'compounds'),
-                        startUpdateTimersAndRates('diesel', 2, 'compounds');
+                    gain(1, 'dieselAB2Quantity', 'autoBuyer', true, 'tier2', 'diesel', 'compounds')
                 }, 'upgradeCheck', '', 'autoBuyer', null, 'diesel', true, 'tier2', 'compound'),
                 null,
                 null,
@@ -172,8 +170,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
                 'Diesel Auto Buyer Tier 3:',
                 createButton(`Add ${getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Diesel /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
-                    gain(1, 'dieselAB3Quantity', 'autoBuyer', true, 'tier3', 'diesel', 'compounds'),
-                        startUpdateTimersAndRates('diesel', 3, 'compounds');
+                    gain(1, 'dieselAB3Quantity', 'autoBuyer', true, 'tier3', 'diesel', 'compounds')
                 }, 'upgradeCheck', '', 'autoBuyer', null, 'diesel', true, 'tier3', 'compound'),
                 null,
                 null,
@@ -198,8 +195,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
                 'Diesel Auto Buyer Tier 4:',
                 createButton(`Add ${getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Diesel /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
-                    gain(1, 'dieselAB4Quantity', 'autoBuyer', true, 'tier4', 'diesel', 'compounds'),
-                        startUpdateTimersAndRates('diesel', 4, 'compounds');
+                    gain(1, 'dieselAB4Quantity', 'autoBuyer', true, 'tier4', 'diesel', 'compounds')
                 }, 'upgradeCheck', '', 'autoBuyer', null, 'diesel', true, 'tier4', 'compound'),
                 null,
                 null,

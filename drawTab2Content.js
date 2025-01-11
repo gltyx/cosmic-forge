@@ -105,13 +105,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant1');
                 if (getBuildingTypeOnOff('powerPlant1')) {
-                    startUpdateTimersAndRates('powerPlant1', null, null, 'buy');
+                    startUpdateTimersAndRates('powerPlant1', 'buy');
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant1Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false, false);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
-                startUpdateTimersAndRates('powerPlant1', null, null, 'toggle');
+                startUpdateTimersAndRates('powerPlant1', 'toggle');
                 setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
@@ -148,13 +148,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant2');
                 if (getBuildingTypeOnOff('powerPlant2')) {
-                    startUpdateTimersAndRates('powerPlant2', null, null, 'buy');
+                    startUpdateTimersAndRates('powerPlant2', 'buy');
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant2Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false, false);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
-                startUpdateTimersAndRates('powerPlant2', null, null, 'toggle');
+                startUpdateTimersAndRates('powerPlant2', 'toggle');
                 setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
             null,
@@ -191,13 +191,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant3');
                 if (getBuildingTypeOnOff('powerPlant3')) {
-                    startUpdateTimersAndRates('powerPlant3', null, null, 'buy');
+                    startUpdateTimersAndRates('powerPlant3', 'buy');
                 }
             }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant3Toggle'], (event) => {
-                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null, false);
+                const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'resources', null, false, false);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
-                startUpdateTimersAndRates('powerPlant3', null, null, 'toggle');
+                startUpdateTimersAndRates('powerPlant3', 'toggle');
                 setPowerOnOff(true);
             }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
             null,
