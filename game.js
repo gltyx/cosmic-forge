@@ -1139,7 +1139,7 @@ function checkStatusAndSetTextClasses(element) {
             element.classList.add('red-disabled-text');
         }
 
-        if (getResourceDataObject('compounds', [compound, 'rate']) < 0) {
+        if (getElements()[compound + 'Rate'].textContent.includes('-')) {
             getElements()[compound + 'Rate'].classList.add('red-disabled-text');
         } else {
             getElements()[compound + 'Rate'].classList.remove('red-disabled-text');
@@ -1302,7 +1302,7 @@ function checkStatusAndSetTextClasses(element) {
         }
 
         if (resource !== 'energy' && resource !== 'scienceUpgrade') {
-            if (getResourceDataObject('resources', [resource, 'rate']) < 0) {
+            if (getElements()[resource + 'Rate'].textContent.includes('-')) {
                 getElements()[resource + 'Rate'].classList.add('red-disabled-text');
             } else {
                 getElements()[resource + 'Rate'].classList.remove('red-disabled-text');
