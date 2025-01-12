@@ -1550,19 +1550,21 @@ function startInitialTimers() {
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
 
-                            const powerPlant1FuelType = 'carbon';                    
+                            const powerPlant1FuelType = 'carbon';                  
                             const powerPlant1Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
 
                             let amountToDeductForConsumption = 0;
 
-                            if (resource === powerPlant1FuelType) {
-                                amountToDeductForConsumption = powerPlant1Consumption;
-                                if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
-                                    setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
-                                    setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
+                            if (getBuildingTypeOnOff('powerPlant1')) {
+                                if (resource === powerPlant1FuelType) {
+                                    amountToDeductForConsumption = powerPlant1Consumption;
+                                    if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
+                                        setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
+                                        setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
+                                    }
                                 }
+                                getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
                             }
-                            getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
                         } else { //if power off
                             if (tier === 1) {
                                 const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
@@ -1613,11 +1615,14 @@ function startInitialTimers() {
     
                             let amountToDeductForConsumption = 0;
     
-                            if (compound === powerPlant3FuelType) {
-                                amountToDeductForConsumption = powerPlant3Consumption;
-                                if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
-                                    setResourceDataObject(allCompoundRatesAddedTogether + amountToDeductForConsumption, 'compounds', [compound, 'rate']);
-                                    setResourceDataObject(Math.min(getResourceDataObject('compounds', [compound, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'compounds', [compound, 'quantity']);
+                            
+                            if (getBuildingTypeOnOff('powerPlant3')) {
+                                if (compound === powerPlant3FuelType) {
+                                    amountToDeductForConsumption = powerPlant3Consumption;
+                                    if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
+                                        setResourceDataObject(allCompoundRatesAddedTogether + amountToDeductForConsumption, 'compounds', [compound, 'rate']);
+                                        setResourceDataObject(Math.min(getResourceDataObject('compounds', [compound, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'compounds', [compound, 'quantity']);
+                                    }
                                 }
                             }
                             getElements()[`${compound}Rate`].textContent = `${((allCompoundRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
