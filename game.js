@@ -57,6 +57,7 @@ import {
     getCompoundCreatePreview,
     getNotationType
 } from './constantsAndGlobalVars.js';
+import { optionDescriptions } from './descriptions.js';
 
 import {
     getAutoBuyerTierLevel,
@@ -585,17 +586,30 @@ function cleanString(string) {
 function checkAndIncreasePrices() {
     const priceIncreaseObject = getItemsToIncreasePrice();
 
+    for (const key in priceIncreaseObject) {
+        if (key === "") {
+            delete priceIncreaseObject[key];
+        }
+    }
+
     for (const priceIncrease in priceIncreaseObject) {
         if (priceIncreaseObject.hasOwnProperty(priceIncrease)) {
+
             if (getCanAffordDeferred()) {
                 const { currentPrice, setPriceTarget, typeOfResourceCompound } = priceIncreaseObject[priceIncrease];
-                if (setPriceTarget.startsWith('science') || setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery')) {
-                    setNewItemPrice(currentPrice, setPriceTarget, '');
+                if (setPriceTarget.startsWith('science')) {
+                    setNewItemPrice(currentPrice, setPriceTarget, null, null, null);
+                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery')) { //add new building types if needed will have a bug here if add any more it will go to the else block
+                    if (priceIncrease === "cash") {
+                        setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncrease);
+                    } else {
+                        setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncreaseObject);
+                    }
                 } else {
                     const tierMatch = setPriceTarget.match(new RegExp(`${priceIncrease}AB(\\d+)Price`));
                     if (tierMatch && tierMatch[1]) {
                         const tier = parseInt(tierMatch[1], 10);
-                        setNewItemPrice(currentPrice, setPriceTarget, tier, typeOfResourceCompound);
+                        setNewItemPrice(currentPrice, setPriceTarget, tier, typeOfResourceCompound, null);
                     }
                 }
             }
@@ -605,19 +619,82 @@ function checkAndIncreasePrices() {
     setItemsToIncreasePrice('clear');
 }
 
-function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound) {
+function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound, optionalResource) {
+    let resource1Price = 0;
+    let resource2Price = 0;
+    let resource3Price = 0;
+
+    let resource1Name = '';
+    let resource2Name = '';
+    let resource3Name = '';
+
+    let resource1Category = '';
+    let resource2Category = '';
+    let resource3Category = '';
+
     if (elementName) {
-        const newPrice = Math.ceil(currentPrice * 1.15);
+        const newCurrencyPrice = Math.ceil(currentPrice * 1.15);
+
+        if (optionalResource && optionalResource !== 'cash') {
+            for (const item in optionalResource) {
+                if (optionalResource.hasOwnProperty(item) && item !== 'cash') {
+                    const resource = optionalResource[item];
+                    const resourceOrder = resource.resourceOrder;
+    
+                    if (resourceOrder === 'resource1Price') {
+                        resource1Price = resource.currentPrice;
+                        resource1Name = item;
+                        resource1Category = resource.typeOfResourceCompound;
+                    } else if (resourceOrder === 'resource2Price') {
+                        resource2Price = resource.currentPrice;;
+                        resource2Name = item;
+                        resource2Category = resource.typeOfResourceCompound;
+                    } else if (resourceOrder === 'resource3Price') {
+                        resource3Price = resource.currentPrice;;
+                        resource3Name = item;
+                        resource3Category = resource.typeOfResourceCompound;
+                    }
+                }
+            }
+        }
+
+        let newResource1Price = resource1Price > 0 ? Math.ceil(resource1Price * 1.15) : 0;
+        let newResource2Price = resource2Price > 0 ? Math.ceil(resource2Price * 1.15) : 0;
+        let newResource3Price = resource3Price > 0 ? Math.ceil(resource3Price * 1.15) : 0;
+
+        if (newResource1Price > 0) {
+            newResource1Price = [newResource1Price, resource1Name, resource1Category];
+        }
+
+        if (newResource2Price > 0) {
+            newResource2Price = [newResource2Price, resource2Name, resource2Category];
+        }
+
+        if (newResource3Price > 0) {
+            newResource3Price = [newResource3Price, resource3Name, resource3Category];
+        }
+        
 
         if (elementName.startsWith('science')) {
             const strippedElementName = elementName.slice(0, -5);        
-            setResourceDataObject(newPrice, 'research', ['upgrades', strippedElementName, 'price']);
+            setResourceDataObject(newCurrencyPrice, 'research', ['upgrades', strippedElementName, 'price']);
         } else if (elementName.startsWith('power') || elementName.startsWith('battery')) {
-            const strippedElementName = elementName.slice(0, -5);        
-            setResourceDataObject(newPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
+            const strippedElementName = elementName.slice(0, -5);
+            if (optionalResource === 'cash') {
+                setResourceDataObject(newCurrencyPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
+            }        
+            if (resource1Price > 0) {
+                setResourceDataObject(newResource1Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource1Price']);
+            }
+            if (resource2Price > 0) {
+                setResourceDataObject(newResource2Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource2Price']);
+            }
+            if (resource3Price > 0) {
+                setResourceDataObject(newResource3Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource3Price']);
+            }
         } else { //autoBuyer
             const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
-            setResourceDataObject(newPrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
+            setResourceDataObject(newCurrencyPrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
         }
     }
 }
@@ -1451,6 +1528,9 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     }    
 
     let amountToDeduct;
+    let resource1ToDeduct = 0;
+    let resource2ToDeduct = 0;
+    let resource3ToDeduct = 0;
     let itemSetNewPrice;
 
     let itemObject;
@@ -1470,22 +1550,49 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     if (ABOrTechPurchase) {
         amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
         itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
-    } else {
+    } else { //buildings
         amountToDeduct = itemObject.price;
+        if (resourceCategory === 'energy') {
+            resource1ToDeduct = itemObject.resource1Price[0];
+            resource2ToDeduct = itemObject.resource2Price[0];
+            resource3ToDeduct = itemObject.resource3Price[0];
+        }
         itemSetNewPrice = itemObject.setPrice;
     }
 
-    let itemToDeductName;
+    let itemToDeduct1Name;
+    let itemToDeduct2Name = '';
+    let itemToDeduct3Name = '';
+    let itemToDeduct4Name = '';
+
+    let itemCategory1 = '';
+    let itemCategory2 = '';
+    let itemCategory3 = '';
+
+    let resourcePrices = [[0,''],[0,''],[0,'']];
+    let resourceNames = ['','',''];
 
     if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy') {
-        itemToDeductName = 'cash';
+        itemToDeduct1Name = 'cash';
+        if (resourceCategory === 'energy') {
+            itemToDeduct2Name = itemObject.resource1Price[1];
+            itemToDeduct3Name = itemObject.resource2Price[1];
+            itemToDeduct4Name = itemObject.resource3Price[1];
+
+            itemCategory1 = itemObject.resource1Price[2];
+            itemCategory2 = itemObject.resource2Price[2];
+            itemCategory3 = itemObject.resource3Price[2];
+
+            resourceNames = [itemToDeduct2Name, itemToDeduct3Name, itemToDeduct4Name];
+        }
+        resourcePrices = [[resource1ToDeduct, itemToDeduct2Name, itemCategory1], [resource2ToDeduct, itemToDeduct3Name, itemCategory2], [resource3ToDeduct, itemToDeduct4Name, itemCategory3]];
     } else {
-        itemToDeductName = itemObject.screenName;
+        itemToDeduct1Name = itemObject.screenName;
     } 
 
     //set resource to deduct
-    setItemsToDeduct(itemToDeductName, amountToDeduct, itemType);
-    setItemsToIncreasePrice(itemToDeductName, itemSetNewPrice, amountToDeduct, itemType);
+    setItemsToDeduct(itemToDeduct1Name, amountToDeduct, itemType);
+    setItemsToIncreasePrice(itemToDeduct1Name, itemSetNewPrice, amountToDeduct, itemType, resourcePrices);
 }
 
 export function increaseResourceStorage(elementId, resource, itemType) {

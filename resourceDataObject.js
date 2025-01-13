@@ -248,7 +248,10 @@ export const resourceData = {
             upgrades: {
                 powerPlant1: { 
                     revealedBy: 'basicPowerGeneration',
-                    price: 300, 
+                    price: 300,
+                    resource1Price: [0, '', ''],
+                    resource2Price: [0, '', ''],
+                    resource3Price: [0, '', ''],
                     rate: 0.05,
                     quantity: 0, 
                     setPrice: 'powerPlant1Price',
@@ -258,6 +261,9 @@ export const resourceData = {
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
                     price: 1200,
+                    resource1Price: [0, '', ''],
+                    resource2Price: [0, '', ''],
+                    resource3Price: [0, '', ''],
                     rate: 0.4,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
@@ -267,6 +273,9 @@ export const resourceData = {
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
                     price: 2000,
+                    resource1Price: [0, '', ''],
+                    resource2Price: [0, '', ''],
+                    resource3Price: [0, '', ''],
                     rate: 0.75,
                     quantity: 0, 
                     setPrice: 'powerPlant3Price',
@@ -275,18 +284,27 @@ export const resourceData = {
                 },
                 battery1: {
                     price: 5000,
+                    resource1Price: [500, 'sodium', 'resources'],
+                    resource2Price: [1000, 'carbon', 'resources'],
+                    resource3Price: [0, '', ''],
                     capacity: 150, //15000
                     quantity: 0, 
                     setPrice: 'battery1Price'
                 },
                 battery2: {
                     price: 50000,
+                    resource1Price: [0, '', ''],
+                    resource2Price: [0, '', ''],
+                    resource3Price: [0, '', ''],
                     capacity: 150000,
                     quantity: 0, 
                     setPrice: 'battery2Price'
                 },
                 battery3: {
                     price: 500000,
+                    resource1Price: [0, '', ''],
+                    resource2Price: [0, '', ''],
+                    resource3Price: [0, '', ''],
                     capacity: 1500000,
                     quantity: 0, 
                     setPrice: 'battery3Price'
