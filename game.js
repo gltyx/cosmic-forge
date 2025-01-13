@@ -234,7 +234,7 @@ export async function gameLoop() {
             if (getTechRenderChange()) {
                 setTechRenderCounter(getTechRenderCounter() + 1);
             
-                if (getTechRenderCounter() >= 150) { //minimise interaction disruptions while sorting rows
+                if (getTechRenderCounter() >= 150) {
                     sortedRows.forEach(item => containerToRenderTo.appendChild(item.row));
                     setTechRenderChange(false);
                     setTechRenderCounter(0);
@@ -244,14 +244,14 @@ export async function gameLoop() {
 
         setAllOriginalFrameNumberValues();
 
-        elements.forEach(element => { //format numbers
+        elements.forEach(element => {
             if (document.body.contains(element)) {
                 if (element.classList.contains('sell-fuse-money')) {
                     setTempRowValue(element.innerHTML);
                     complexSellStringFormatter(element, getNotationType());
                 } else if (element.classList.contains('building-purchase')) {
                     setTempRowValue(element.innerHTML);
-                    complexPurchaseBuildingFormatter(element, getNotationType());
+                    complexPurchaseBuildingFormatter(element, getNotationType()); //TODO
                 } else {
                     formatAllNotationElements(element, getNotationType());
                 }
@@ -888,46 +888,164 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
 function getScienceResourceDescriptionElements() {
     const scienceKitBuyDescElement = document.getElementById('scienceKitDescription');
     const scienceKitBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']);
+    const scienceKitBuyResource1Price = getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource1Price'])[0];
+    const scienceKitBuyResource2Price = getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource2Price'])[0];
+    const scienceKitBuyResource3Price = getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource3Price'])[0];
 
     const scienceClubBuyDescElement = document.getElementById('openScienceClubDescription');
     const scienceClubBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']);
+    const scienceClubBuyResource1Price = getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource1Price'])[0];
+    const scienceClubBuyResource2Price = getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource2Price'])[0];
+    const scienceClubBuyResource3Price = getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource3Price'])[0];
 
     const scienceLabBuyDescElement = document.getElementById('openScienceLabDescription');
     const scienceLabBuyPrice = getResourceDataObject('research', ['upgrades', 'scienceLab', 'price']);
+    const scienceLabBuyResource1Price = getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource1Price'])[0];
+    const scienceLabBuyResource2Price = getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource2Price'])[0];
+    const scienceLabBuyResource3Price = getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource3Price'])[0];
 
     return {
-        scienceKitBuy: { element: scienceKitBuyDescElement, price: scienceKitBuyPrice, string: getCurrencySymbol() },
-        scienceClubBuy: { element: scienceClubBuyDescElement, price: scienceClubBuyPrice, string: getCurrencySymbol() },
-        scienceLabBuy: { element: scienceLabBuyDescElement, price: scienceLabBuyPrice, string: getCurrencySymbol() },
+        scienceKitBuy: { 
+            element: scienceKitBuyDescElement, 
+            price: scienceKitBuyPrice, 
+            resource1Price: scienceKitBuyResource1Price, 
+            resource2Price: scienceKitBuyResource2Price, 
+            resource3Price: scienceKitBuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceKit', 'resource3Price'])[1])
+        },
+        scienceClubBuy: { 
+            element: scienceClubBuyDescElement, 
+            price: scienceClubBuyPrice, 
+            resource1Price: scienceClubBuyResource1Price, 
+            resource2Price: scienceClubBuyResource2Price, 
+            resource3Price: scienceClubBuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceClub', 'resource3Price'])[1])
+        },
+        scienceLabBuy: { 
+            element: scienceLabBuyDescElement, 
+            price: scienceLabBuyPrice, 
+            resource1Price: scienceLabBuyResource1Price, 
+            resource2Price: scienceLabBuyResource2Price, 
+            resource3Price: scienceLabBuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('research', ['upgrades', 'scienceLab', 'resource3Price'])[1])
+        }
     };
 }
 
 function getBuildingResourceDescriptionElements() {
     const battery1BuyDescElement = document.getElementById('sodiumIonBatteryDescription');
     const battery1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'price']);
+    const battery1BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource1Price'])[0];
+    const battery1BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource2Price'])[0];
+    const battery1BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource3Price'])[0];
 
     const battery2BuyDescElement = document.getElementById('battery2Description');
     const battery2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'price']);
+    const battery2BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource1Price'])[0];
+    const battery2BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource2Price'])[0];
+    const battery2BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource3Price'])[0];
 
     const battery3BuyDescElement = document.getElementById('battery3Description');
     const battery3BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'price']);
+    const battery3BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource1Price'])[0];
+    const battery3BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource2Price'])[0];
+    const battery3BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource3Price'])[0];
 
     const powerPlant1BuyDescElement = document.getElementById('powerPlantDescription');
     const powerPlant1BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price']);
+    const powerPlant1BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource1Price'])[0];
+    const powerPlant1BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource2Price'])[0];
+    const powerPlant1BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource3Price'])[0];
 
     const powerPlant2BuyDescElement = document.getElementById('solarPowerPlantDescription');
     const powerPlant2BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price']);
+    const powerPlant2BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource1Price'])[0];
+    const powerPlant2BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource2Price'])[0];
+    const powerPlant2BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource3Price'])[0];
 
     const powerPlant3BuyDescElement = document.getElementById('advancedPowerPlantDescription');
     const powerPlant3BuyPrice = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price']);
+    const powerPlant3BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource1Price'])[0];
+    const powerPlant3BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource2Price'])[0];
+    const powerPlant3BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource3Price'])[0];
+
 
     return {
-        battery1Buy: { element: battery1BuyDescElement, price: battery1BuyPrice, string: getCurrencySymbol() },
-        battery2Buy: { element: battery2BuyDescElement, price: battery2BuyPrice, string: getCurrencySymbol() },
-        battery3Buy: { element: battery3BuyDescElement, price: battery3BuyPrice, string: getCurrencySymbol() },
-        powerPlant1Buy: { element: powerPlant1BuyDescElement, price: powerPlant1BuyPrice, string: getCurrencySymbol() },
-        powerPlant2Buy: { element: powerPlant2BuyDescElement, price: powerPlant2BuyPrice, string: getCurrencySymbol() },
-        powerPlant3Buy: { element: powerPlant3BuyDescElement, price: powerPlant3BuyPrice, string: getCurrencySymbol() },
+        battery1Buy: { 
+            element: battery1BuyDescElement, 
+            price: battery1BuyPrice, 
+            resource1Price: battery1BuyResource1Price, 
+            resource2Price: battery1BuyResource2Price, 
+            resource3Price: battery1BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'resource3Price'])[1]) 
+        },
+        battery2Buy: { 
+            element: battery2BuyDescElement, 
+            price: battery2BuyPrice, 
+            resource1Price: battery2BuyResource1Price, 
+            resource2Price: battery2BuyResource2Price, 
+            resource3Price: battery2BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'resource3Price'])[1]) 
+        },
+        battery3Buy: { 
+            element: battery3BuyDescElement, 
+            price: battery3BuyPrice, 
+            resource1Price: battery3BuyResource1Price, 
+            resource2Price: battery3BuyResource2Price, 
+            resource3Price: battery3BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'resource3Price'])[1]) 
+        },
+        powerPlant1Buy: { 
+            element: powerPlant1BuyDescElement, 
+            price: powerPlant1BuyPrice, 
+            resource1Price: powerPlant1BuyResource1Price, 
+            resource2Price: powerPlant1BuyResource2Price, 
+            resource3Price: powerPlant1BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'resource3Price'])[1]) 
+        },
+        powerPlant2Buy: { 
+            element: powerPlant2BuyDescElement, 
+            price: powerPlant2BuyPrice, 
+            resource1Price: powerPlant2BuyResource1Price, 
+            resource2Price: powerPlant2BuyResource2Price, 
+            resource3Price: powerPlant2BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'resource3Price'])[1]) 
+        },
+        powerPlant3Buy: { 
+            element: powerPlant3BuyDescElement, 
+            price: powerPlant3BuyPrice, 
+            resource1Price: powerPlant3BuyResource1Price, 
+            resource2Price: powerPlant3BuyResource2Price, 
+            resource3Price: powerPlant3BuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource3Price'])[1])  
+        }        
     };
 }
 
@@ -949,18 +1067,37 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
             const storage = allStorages[resourceOrCompound];
             const element = allElements[resourceOrCompound];
 
-            updateQuantityDisplays(element, quantity, storage, false);
+            updateQuantityDisplays(element, quantity, storage, null, null, null, false);
         }
     }
 
     for (const allDescriptionElement in allDescriptionElements) {
+        let resource1Price;
+        let resource2Price;
+        let resource3Price;
+
         if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) { //adapt this to write the resources and price string correctly
             const price = allDescriptionElements[allDescriptionElement].price;
-            const costResourceOrCompoundName = allDescriptionElements[allDescriptionElement].string;
+
+            if (allDescriptionElement.endsWith("Buy")) { //if cn cost cash or resources ie science or building
+                resource1Price = allDescriptionElements[allDescriptionElement].resource1Price;
+                resource2Price = allDescriptionElements[allDescriptionElement].resource2Price;
+                resource3Price = allDescriptionElements[allDescriptionElement].resource3Price;
+            }
+
+            const costResourceOrCompoundName1 = allDescriptionElements[allDescriptionElement].string1;
+            const costResourceOrCompoundName2 = allDescriptionElements[allDescriptionElement].string2;
+            const costResourceOrCompoundName3 = allDescriptionElements[allDescriptionElement].string3;
+            const costResourceOrCompoundName4 = allDescriptionElements[allDescriptionElement].string4;
+
             const element = allDescriptionElements[allDescriptionElement].element;
 
-            updateQuantityDisplays(element, price, costResourceOrCompoundName, true);
-        }
+            const resourceData1 = [resource1Price, costResourceOrCompoundName2];
+            const resourceData2 = [resource2Price, costResourceOrCompoundName3];
+            const resourceData3 = [resource3Price, costResourceOrCompoundName4];
+
+            updateQuantityDisplays(element, price, costResourceOrCompoundName1, resourceData1, resourceData2, resourceData3, true);
+        } 
     }
 }
 
@@ -1428,19 +1565,40 @@ export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
     }
 }
 
-const updateQuantityDisplays = (element, data1, data2, desc) => {
+const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceData2, resourceData3, desc) => {
+    const [resourcePrice1, resourceName1] = resourceData1 || [null, null];
+    const [resourcePrice2, resourceName2] = resourceData2 || [null, null];
+    const [resourcePrice3, resourceName3] = resourceData3 || [null, null];
+
     if (desc) {
         if (element && data2) {
+            let priceString = "";
+
             if (data2 === '€') {
-                element.textContent = data1 + data2;
+                priceString = data1 + data2;
             } else if (data2 === getCurrencySymbol()) {
-                element.textContent = data2 + data1;
+                priceString = data2 + data1;
             } else {
-                element.textContent = data1 + ' ' + data2;
+                priceString = data1 + ' ' + data2;
             }
-        }
-    } else {
-        if (element && data2 >= 0) {
+
+            const resourceParts = [];
+            if (resourcePrice1 != null && resourceName1) {
+                resourceParts.push(resourcePrice1 + " " + resourceName1);
+            }
+            if (resourcePrice2 != null && resourceName2) {
+                resourceParts.push(resourcePrice2 + " " + resourceName2);
+            }
+            if (resourcePrice3 != null && resourceName3) {
+                resourceParts.push(resourcePrice3 + " " + resourceName3);
+            }
+
+            const fullText = resourceParts.length > 0 
+                ? priceString + ", " + resourceParts.join(", ") 
+                : priceString;
+
+            element.textContent = fullText;
+        } else if (element && data2 >= 0) {
             if (element === getElements().energyQuantity) {
                 if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
                     element.textContent = Math.floor(data1) + '/' + Math.floor(data2);

@@ -321,7 +321,10 @@ export const resourceData = {
         ratePower: 0,
         upgrades: {
             scienceKit: { 
-                price: 5, 
+                price: 5,
+                resource1Price: [0, '', ''],
+                resource2Price: [0, '', ''],
+                resource3Price: [0, '', ''],
                 rate: 0.005,
                 quantity: 0, 
                 setPrice: 'scienceKitPrice',
@@ -329,6 +332,9 @@ export const resourceData = {
             },
             scienceClub: { 
                 price: 75,
+                resource1Price: [0, '', ''],
+                resource2Price: [0, '', ''],
+                resource3Price: [0, '', ''],
                 rate: 0.1,
                 quantity: 0, 
                 setPrice: 'scienceClubPrice',
@@ -336,6 +342,9 @@ export const resourceData = {
             },
             scienceLab: { 
                 price: 300,
+                resource1Price: [0, '', ''],
+                resource2Price: [0, '', ''],
+                resource3Price: [0, '', ''],
                 rate: 0.5,
                 quantity: 0, 
                 setPrice: 'scienceLabPrice',
