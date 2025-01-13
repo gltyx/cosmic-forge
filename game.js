@@ -249,6 +249,9 @@ export async function gameLoop() {
                 if (element.classList.contains('sell-fuse-money')) {
                     setTempRowValue(element.innerHTML);
                     complexSellStringFormatter(element, getNotationType());
+                } else if (element.classList.contains('building-purchase')) {
+                    setTempRowValue(element.innerHTML);
+                    complexPurchaseBuildingFormatter(element, getNotationType());
                 } else {
                     formatAllNotationElements(element, getNotationType());
                 }
@@ -705,6 +708,12 @@ function checkAndDeductResources() {
     let mainKey;
 
     for (const itemToDeductType in deductObject) {
+        if (itemToDeductType === "") {
+            delete deductObject[itemToDeductType];
+        }
+    }
+
+    for (const itemToDeductType in deductObject) {
         if (deductObject.hasOwnProperty(itemToDeductType)) {
             let currentQuantity;
             deductAmount = deductObject[itemToDeductType].deductQuantity;
@@ -945,7 +954,7 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
     }
 
     for (const allDescriptionElement in allDescriptionElements) {
-        if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) {
+        if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) { //adapt this to write the resources and price string correctly
             const price = allDescriptionElements[allDescriptionElement].price;
             const costResourceOrCompoundName = allDescriptionElements[allDescriptionElement].string;
             const element = allDescriptionElements[allDescriptionElement].element;
@@ -1354,7 +1363,7 @@ function checkStatusAndSetTextClasses(element) {
             price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
         } else if (type === 'scienceUpgrade') {
             mainKey = 'research';
-            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']); //yes correct but bad naming
+            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
         } else if (type === 'energy') {
             mainKey = 'buildings';
             price = getResourceDataObject(mainKey, [resource, 'upgrades', buildingUpgradeType, 'price']);
@@ -1371,7 +1380,7 @@ function checkStatusAndSetTextClasses(element) {
             }
         }
         
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { // add the new price checks here for more resources
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
@@ -1570,7 +1579,6 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     let itemCategory3 = '';
 
     let resourcePrices = [[0,''],[0,''],[0,'']];
-    let resourceNames = ['','',''];
 
     if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy') {
         itemToDeduct1Name = 'cash';
@@ -1582,8 +1590,6 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             itemCategory1 = itemObject.resource1Price[2];
             itemCategory2 = itemObject.resource2Price[2];
             itemCategory3 = itemObject.resource3Price[2];
-
-            resourceNames = [itemToDeduct2Name, itemToDeduct3Name, itemToDeduct4Name];
         }
         resourcePrices = [[resource1ToDeduct, itemToDeduct2Name, itemCategory1], [resource2ToDeduct, itemToDeduct3Name, itemCategory2], [resource3ToDeduct, itemToDeduct4Name, itemCategory3]];
     } else {
@@ -1591,7 +1597,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     } 
 
     //set resource to deduct
-    setItemsToDeduct(itemToDeduct1Name, amountToDeduct, itemType);
+    setItemsToDeduct(itemToDeduct1Name, amountToDeduct, itemType, resourcePrices);
     setItemsToIncreasePrice(itemToDeduct1Name, itemSetNewPrice, amountToDeduct, itemType, resourcePrices);
 }
 
@@ -1602,7 +1608,7 @@ export function increaseResourceStorage(elementId, resource, itemType) {
     const resourceToDeductName = resource;
 
     //set resource to deduct
-    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemType);
+    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemType, [[0,''],[0,''],[0,'']]);
 
     deferredActions.push(() => {
         const updatedStorageSize = getResourceDataObject(itemType, [resource, 'storageCapacity']) * increaseFactor;
@@ -1952,6 +1958,29 @@ function formatAllNotationElements(element, notationType) {
         });
 
         element.innerHTML = formattedContent;
+}
+
+function complexPurchaseBuildingFormatter(element, notationType) {
+    if (notationType === 'normalCondensed') {
+        const sellRowQuantityElement = element.parentElement;
+        const match = sellRowQuantityElement.innerHTML.match(/>(.*?)</); //resource fusing from
+    
+        if (match) {
+            const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
+            const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
+            const newContent = getTempRowValue();
+            
+            sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
+    
+            if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) { //first number to fuse to
+                formatSellStringCondensed(sellRowQuantityElement, /&gt; (-?\d+)(\s|$)/, 5, 1);
+            }
+            
+            if (sellRowQuantityElement.innerHTML.includes(', ')) { //second number to fuse to
+                formatSellStringCondensed(sellRowQuantityElement, /, (\d+)\s/, 2, 1);
+            }   
+        }
+    }
 }
 
 function complexSellStringFormatter(element, notationType) {

@@ -339,18 +339,44 @@ export function setCurrentOptionPane(value) {
     currentOptionPane = value.toLowerCase();
 }
 
-export function setItemsToDeduct(name, amount, itemType) {
+export function setItemsToDeduct(name, amount, itemType, resourcePrices) {
     if (name === 'clear') {
         itemsToDeduct = {};
         return;
     }
 
+    let optionalName1 = resourcePrices[0][1];
+    let optionalName2 = resourcePrices[1][1];
+    let optionalName3 = resourcePrices[2][1];
+
     if (!itemsToDeduct[name]) {
         itemsToDeduct[name] = {};
     }
 
+    if (!itemsToDeduct[optionalName1]) {
+        itemsToDeduct[optionalName1] = {};
+    }
+    if (!itemsToDeduct[optionalName2]) {
+        itemsToDeduct[optionalName2] = {};
+    }
+    if (!itemsToDeduct[optionalName3]) {
+        itemsToDeduct[optionalName3] = {};
+    }
+
     itemsToDeduct[name].deductQuantity = amount;
     itemsToDeduct[name].typeOfResourceCompound = itemType;
+
+    itemsToDeduct[optionalName1].deductQuantity = resourcePrices[0][0];
+    itemsToDeduct[optionalName1].typeOfResourceCompound = resourcePrices[0][2];
+    itemsToDeduct[optionalName1].resourceOrder = 'resource1Price';
+
+    itemsToDeduct[optionalName2].deductQuantity = resourcePrices[1][0];
+    itemsToDeduct[optionalName2].typeOfResourceCompound = resourcePrices[1][2];
+    itemsToDeduct[optionalName2].resourceOrder = 'resource2Price';
+
+    itemsToDeduct[optionalName3].deductQuantity = resourcePrices[2][0];
+    itemsToDeduct[optionalName3].typeOfResourceCompound = resourcePrices[2][2];
+    itemsToDeduct[optionalName3].resourceOrder = 'resource3Price';
 }
 
 export function getItemsToDeduct() {
@@ -362,7 +388,7 @@ export function setItemsToIncreasePrice(name, setPriceTarget, currentPrice, item
         itemsToIncreasePrice = {};
         return;
     }
-    
+
     let optionalName1 = resourcePrices[0][1];
     let optionalName2 = resourcePrices[1][1];
     let optionalName3 = resourcePrices[2][1];

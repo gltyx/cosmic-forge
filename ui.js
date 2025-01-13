@@ -484,7 +484,11 @@ export function createOptionRow(
     const descriptionContainer = document.createElement('div');
     descriptionContainer.classList.add('description-container');
     const description = document.createElement('label');
-    description.classList.add('notation'); //if there are rounding errors or loads of decimal places on quantity of resource to sell its because of this
+    description.classList.add('notation');
+
+    if (rowCategory === 'building') {
+        description.classList.add('building-purchase');
+    }
 
     description.id = generateElementId(labelText, resourceString, optionalIterationParam);
     description.innerHTML = descriptionText;
