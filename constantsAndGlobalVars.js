@@ -358,14 +358,14 @@ export function getItemsToDeduct() {
 }
 
 export function setItemsToIncreasePrice(name, setPriceTarget, currentPrice, itemResourceOrCompound, resourcePrices) {
-    let optionalName1 = resourcePrices[0][1];
-    let optionalName2 = resourcePrices[1][1];
-    let optionalName3 = resourcePrices[2][1];
-
     if (name === 'clear') {
         itemsToIncreasePrice = {};
         return;
     }
+    
+    let optionalName1 = resourcePrices[0][1];
+    let optionalName2 = resourcePrices[1][1];
+    let optionalName3 = resourcePrices[2][1];
 
     if (!itemsToIncreasePrice[name]) {
         itemsToIncreasePrice[name] = {};
