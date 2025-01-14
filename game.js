@@ -1610,8 +1610,9 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
                     element.appendChild(resourceSpan);
                 });
             }
-            
-        } else if (element && data2 >= 0) {
+        }     
+    } else {
+        if (element && data2 >= 0) {
             if (element === getElements().energyQuantity) {
                 if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
                     element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
@@ -1625,11 +1626,10 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
             } else {
                 element.textContent = Math.floor(data1) + '/' + Math.floor(data2);
             }
-
         } else if (element) {
             element.textContent = Math.floor(data1);
         }
-    
+
         if (element && data2 && data1 === data2) {
             element.classList.add('green-ready-text');
         }
@@ -1637,7 +1637,7 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
         if (element && element.classList.contains('green-ready-text') && data1 !== data2) {
             element.classList.remove('green-ready-text');
         }
-    }   
+    }
 };
 
 export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemType) {
