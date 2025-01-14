@@ -863,8 +863,8 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
         const resourceAutoBuyerDescElement = document.getElementById(`${resourceName}AutoBuyerTier${tier}Description`);
         const resourceAutoBuyerPrice = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
 
-        elements[`${resourceName}IncreaseStorage`] = { element: resourceIncreaseStorageDescElement, price: resourceStoragePrice, string: `${capitaliseString(resourceName)}` };
-        elements[`${resourceName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string: `${capitaliseString(resourceName)}` };
+        elements[`${resourceName}IncreaseStorage`] = { element: resourceIncreaseStorageDescElement, price: resourceStoragePrice, string1: `${capitaliseString(resourceName)}` };
+        elements[`${resourceName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string1: `${capitaliseString(resourceName)}` };
     });
 
     compoundTierPairs.forEach(([compoundName, tier]) => {
@@ -874,8 +874,8 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
         const resourceAutoBuyerDescElement = document.getElementById(`${compoundName}AutoBuyerTier${tier}Description`);
         const resourceAutoBuyerPrice = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
 
-        elements[`${compoundName}IncreaseStorage`] = { element: compoundIncreaseStorageDescElement, price: compoundStoragePrice, string: `${capitaliseString(compoundName)}` };
-        elements[`${compoundName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string: `${capitaliseString(compoundName)}` };
+        elements[`${compoundName}IncreaseStorage`] = { element: compoundIncreaseStorageDescElement, price: compoundStoragePrice, string1: `${capitaliseString(compoundName)}` };
+        elements[`${compoundName}AutoBuyerTier${tier}`] = { element: resourceAutoBuyerDescElement, price: resourceAutoBuyerPrice, string1: `${capitaliseString(compoundName)}` };
     });
 
     const scienceElements = getScienceResourceDescriptionElements();
@@ -1573,7 +1573,7 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
     if (desc) {
         if (element && data2) {
             let priceString = "";
-
+    
             if (data2 === '€') {
                 priceString = data1 + data2;
             } else if (data2 === getCurrencySymbol()) {
@@ -1581,23 +1581,36 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
             } else {
                 priceString = data1 + ' ' + data2;
             }
-
+    
             const resourceParts = [];
-            if (resourcePrice1 != null && resourceName1) {
+            if (resourcePrice1 != null && resourceName1 && resourceName1.trim() !== "") {
                 resourceParts.push(resourcePrice1 + " " + resourceName1);
             }
-            if (resourcePrice2 != null && resourceName2) {
+            if (resourcePrice2 != null && resourceName2 && resourceName2.trim() !== "") {
                 resourceParts.push(resourcePrice2 + " " + resourceName2);
             }
-            if (resourcePrice3 != null && resourceName3) {
+            if (resourcePrice3 != null && resourceName3 && resourceName3.trim() !== "") {
                 resourceParts.push(resourcePrice3 + " " + resourceName3);
             }
-
-            const fullText = resourceParts.length > 0 
-                ? priceString + ", " + resourceParts.join(", ") 
-                : priceString;
-
-            element.textContent = fullText;
+    
+            // Clear the element's content
+            element.innerHTML = "";
+    
+            // Create and append span for the price string
+            const priceSpan = document.createElement("span");
+            priceSpan.className = 'currency-price';
+            priceSpan.innerHTML = priceString;
+            element.appendChild(priceSpan);
+    
+            if (resourceParts.length > 0) {
+                resourceParts.forEach((resource, index) => {
+                    const resourceSpan = document.createElement("span");
+                    resourceSpan.className = `resource-price${index + 1}`;
+                    resourceSpan.innerHTML = `, ${resource}`;
+                    element.appendChild(resourceSpan);
+                });
+            }
+            
         } else if (element && data2 >= 0) {
             if (element === getElements().energyQuantity) {
                 if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
@@ -2120,26 +2133,56 @@ function formatAllNotationElements(element, notationType) {
 
 function complexPurchaseBuildingFormatter(element, notationType) {
     if (notationType === 'normalCondensed') {
-        const sellRowQuantityElement = element.parentElement;
-        const match = sellRowQuantityElement.innerHTML.match(/>(.*?)</); //resource fusing from
+        const spans = element.querySelectorAll("span");
     
-        if (match) {
-            const beforeMatch = sellRowQuantityElement.innerHTML.slice(0, match.index + 1);
-            const afterMatch = sellRowQuantityElement.innerHTML.slice(match.index + match[0].length - 1);
-            const newContent = getTempRowValue();
+        spans.forEach((span, index) => {
+            const content = span.textContent.trim();
+            const parts = content.split(' ');
+    
+            let numberPart;
             
-            sellRowQuantityElement.innerHTML = beforeMatch + newContent + afterMatch;
-    
-            if (sellRowQuantityElement.innerHTML.includes('-&gt; ')) { //first number to fuse to
-                formatSellStringCondensed(sellRowQuantityElement, /&gt; (-?\d+)(\s|$)/, 5, 1);
+            if (index !== 0) {
+                numberPart = parts[1]?.replace(/[^0-9.]/g, '');
+            } else {
+                numberPart = parts[0].replace(/[^0-9.]/g, '');
             }
             
-            if (sellRowQuantityElement.innerHTML.includes(', ')) { //second number to fuse to
-                formatSellStringCondensed(sellRowQuantityElement, /, (\d+)\s/, 2, 1);
-            }   
-        }
+            const formattedNumber = formatNumber(numberPart);
+    
+            if (index === 0) {
+                span.textContent = getCurrencySymbol() + formattedNumber;
+                if (parts.length > 1) {
+                    span.textContent += ' ' + parts.slice(1).join(' ');
+                }
+            } else {
+                const prefix = content.startsWith(",") ? ", " : "";
+                const remainingText = parts.slice(2).join(' ');
+                span.textContent = `${prefix}${formattedNumber}${remainingText ? " " + remainingText : ""}`;
+            }
+        });
+    }    
+}
+
+function formatNumber(value) {
+    const number = parseFloat(value);
+    if (isNaN(number)) return value;
+
+    if (number >= 1e13) {
+        let exponent = Math.floor(Math.log10(number));
+        return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+    } else if (number >= 1e12) {
+        return `${(number / 1e12).toFixed(1)}e12`;
+    } else if (number >= 1e9) {
+        return `${(number / 1e9).toFixed(1)}B`;
+    } else if (number >= 1e6) {
+        return `${(number / 1e6).toFixed(1)}M`;
+    } else if (number >= 1e3) {
+        return `${(number / 1e3).toFixed(1)}K`;
+    } else {
+        return number.toFixed(0);
     }
 }
+
 
 function complexSellStringFormatter(element, notationType) {
     if (notationType === 'normalCondensed') {
