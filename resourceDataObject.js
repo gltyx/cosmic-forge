@@ -264,6 +264,37 @@ export const resourceData = {
             createsFromRatio3: 1,
             createsFromRatio4: 0
         },
+        steel: {
+            nameResource: 'Steel',
+            screenName: 'steel',
+            saleValue: 1.8,
+            salePreviewElement: 'sellSteelDescription',
+            createPreviewElement: 'createSteelDescription',
+            quantity: 0,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 250,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Workshop Steel Fabricator', screen: 'steel', place: 'steelAutoBuyer1Row', price: 80000, rate: 0.02, quantity: 0, setPrice: 'steelAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Steel Factory', screen: 'steel', place: 'steelAutoBuyer2Row', price: 700000, rate: 0.1, quantity: 0, setPrice: 'steelAB2Price', energyUse: 0.1 },
+                    tier3: { nameUpgrade: 'Medium Steel Factory', screen: 'steel', place: 'steelAutoBuyer3Row', price: 3000000, rate: 0.5, quantity: 0, setPrice: 'steelAB3Price', energyUse: 0.35 },
+                    tier4: { nameUpgrade: 'Large Steel Factory', screen: 'steel', place: 'steelAutoBuyer4Row', price: 1500000, rate: 2, quantity: 0, setPrice: 'steelAB4Price', energyUse: 1.8 }
+                },
+            },
+            revealedBy: 'steelFoundries',
+            canCreateTech: 'compounds',
+            createsFrom1: ['iron', 'resources'],
+            createsFrom2: ['carbon', 'resources'],
+            createsFrom3: '',
+            createsFrom4: '',
+            createsFromRatio1: 4,
+            createsFromRatio2: 1,
+            createsFromRatio3: 0,
+            createsFromRatio4: 0
+        },        
     },
     buildings: {
         energy: {
@@ -292,8 +323,8 @@ export const resourceData = {
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
                     price: 1200,
-                    resource1Price: [0, '', ''],
-                    resource2Price: [0, '', ''],
+                    resource1Price: [150, 'glass', 'compounds'],
+                    resource2Price: [200, 'steel', 'compounds'],
                     resource3Price: [0, '', ''],
                     rate: 0.4,
                     quantity: 0, 
@@ -303,11 +334,11 @@ export const resourceData = {
                 },
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
-                    price: 2000,
+                    price: 800,
                     resource1Price: [0, '', ''],
                     resource2Price: [0, '', ''],
                     resource3Price: [0, '', ''],
-                    rate: 0.75,
+                    rate: 0.35,
                     quantity: 0, 
                     setPrice: 'powerPlant3Price',
                     fuel: ['diesel', 0.01, 'compounds'],
@@ -347,7 +378,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 100000,
+        quantity: 300000,
         rate: 0,
         ratePower: 0,
         upgrades: {
@@ -392,13 +423,13 @@ export const resourceData = {
         basicPowerGeneration: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 51 },
         sodiumIonPowerStorage: { appearsAt: [5000, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 7000, idForRenderPosition: 52 },
         solarPowerGeneration: { appearsAt: [7000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 8000, idForRenderPosition: 53 },
-        advancedPowerGeneration: { appearsAt: [4000, "hydroCarbons", "basicPowerGeneration"], prereqs: ['HydroCarbons', 'Basic Power Generation'], price: 4500, idForRenderPosition: 54 },
+        giganticTurbines: { appearsAt: [4200, "hydroCarbons", ""], prereqs: ['HydroCarbons'], price: 4800, idForRenderPosition: 54 },
+        advancedPowerGeneration: { appearsAt: [6000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 8000, idForRenderPosition: 55 },
         neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
         siliconFusion: { appearsAt: [10000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 11500, idForRenderPosition: 80 },
         steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
-        giganticTurbines: { appearsAt: [13000, "steelFoundries", ""], prereqs: ['Steel Foundries'], price: 15000, idForRenderPosition: 82 },
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
         hydroCarbons: { appearsAt: [3200, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
