@@ -27,7 +27,8 @@ export const headerDescriptions = {
     research: "Here you can buy upgrades to generate research points for unlocking new technology.",
     'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
 
-    diesel: "The first compound created by your hands, it is a useful early fuel!",
+    diesel: "The first compound created by your hands, it is a useful early fuel.",
+    glass: "This is reinforced specialist glass and is great for solar applications.",
 
     'star map': "This is a map of the known galaxy",
     
@@ -241,7 +242,27 @@ export const optionDescriptions = {
         updateAt: ""
     },
     dieselAutoBuyer1Row: {
-        content1: "Add an Extractor to collect oil and make diesel.",
+        content1: "Add an Extractor to collect oil and make Diesel.",
+        content2: "",
+        updateAt: ""
+    },
+    glassCreateRow: {
+        content1: "Here you can create Glass from its constituent parts, provided you have them, and the power is ON.",
+        content2: "",
+        updateAt: ""
+    },
+    glassSellRow: {
+        content1: "Here you can sell Glass for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    glassIncreaseStorageRow: {
+        content1: "Upgrade your Glass storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    glassAutoBuyer1Row: {
+        content1: "Add a Workshop Glass Fabricator to create glass.",
         content2: "",
         updateAt: ""
     },

@@ -211,7 +211,7 @@ export const resourceData = {
             quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 1000,
+            storageCapacity: 500,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -231,6 +231,37 @@ export const resourceData = {
             createsFromRatio1: 26,
             createsFromRatio2: 12,
             createsFromRatio3: 0,
+            createsFromRatio4: 0
+        },
+        glass: {
+            nameResource: 'Glass',
+            screenName: 'glass',
+            saleValue: 0.8,
+            salePreviewElement: 'sellGlassDescription',
+            createPreviewElement: 'createGlassDescription',
+            quantity: 0,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 200,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Workshop Glass Fabricator', screen: 'glass', place: 'glassAutoBuyer1Row', price: 70000, rate: 0.015, quantity: 0, setPrice: 'glassAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Glass Factory', screen: 'glass', place: 'glassAutoBuyer2Row', price: 600000, rate: 0.08, quantity: 0, setPrice: 'glassAB2Price', energyUse: 0.08 },
+                    tier3: { nameUpgrade: 'Medium Glass Factory', screen: 'glass', place: 'glassAutoBuyer3Row', price: 2500000, rate: 0.4, quantity: 0, setPrice: 'glassAB3Price', energyUse: 0.31 },
+                    tier4: { nameUpgrade: 'Large Glass Factory', screen: 'glass', place: 'glassAutoBuyer4Row', price: 1250000, rate: 1.5, quantity: 0, setPrice: 'glassAB4Price', energyUse: 1.5 }
+                },
+            },
+            revealedBy: 'glassManufacture',
+            canCreateTech: 'compounds',
+            createsFrom1: ['silicon', 'resources'],
+            createsFrom2: ['oxygen', 'resources'],
+            createsFrom3: ['sodium', 'resources'],
+            createsFrom4: '',
+            createsFromRatio1: 4,
+            createsFromRatio2: 2,
+            createsFromRatio3: 1,
             createsFromRatio4: 0
         },
     },
