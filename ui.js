@@ -44,7 +44,7 @@ import {
 
 import {
     //updateOriginalValue,
-    setTextDescriptionClassesBasedOnButtonStates,
+    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
     setGameState,
     startGame
 } from './game.js';
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
     
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
-            setTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
     });
 

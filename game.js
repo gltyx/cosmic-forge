@@ -1319,7 +1319,7 @@ function checkStatusAndSetTextClasses(element) {
                 if (currentQuantity < requiredQuantity) {
                     element.classList.remove('warning-orange-text');
                     element.classList.add('red-disabled-text');
-                    setTextDescriptionClassesBasedOnButtonStates(element, 'create');
+                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
                     isDisabled = true;
                     break;
                 }
@@ -1333,7 +1333,7 @@ function checkStatusAndSetTextClasses(element) {
                     element.classList.remove('warning-orange-text');
                 }
                 element.classList.remove('red-disabled-text');
-                setTextDescriptionClassesBasedOnButtonStates(element, 'create');
+                setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
             }
 
             return;
@@ -1414,7 +1414,7 @@ function checkStatusAndSetTextClasses(element) {
             if (getTechUnlockedArray().includes(resource + 'Fusion') && quantity > 0) {
                 element.classList.remove('red-disabled-text');
                 if (element.tagName.toLowerCase() === 'button') {
-                    setTextDescriptionClassesBasedOnButtonStates(element, 'fuse');
+                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'fuse');
                 }
             } else if (!getTechUnlockedArray().includes(resource + 'Fusion')) {
                 element.classList.add('invisible');
@@ -1478,7 +1478,7 @@ function checkStatusAndSetTextClasses(element) {
 
             if (getTechUnlockedArray().includes(techName)) {
                 if (element.tagName.toLowerCase() === 'button') {
-                    setTextDescriptionClassesBasedOnButtonStates(element, 'green');
+                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'green');
                 }
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
@@ -1516,12 +1516,92 @@ function checkStatusAndSetTextClasses(element) {
                 }
             }
         }
-        
+
+        let resourcePrices = [];
+        let resourceNames = [];
+        let resourceCategories = [];
+
+        if (element.classList.contains('building-purchase')) {
+            resourcePrices.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
+            );
+            resourceNames.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
+            );
+            resourceCategories.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
+            );
+        }
+
         if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { // add the new price checks here for more resources
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
         }
+        
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+            if (element.classList.contains('building-purchase')) {
+                element.querySelectorAll('span').forEach((span, index) => {
+                    if (index !== 0) {
+                        const category = resourceCategories[index-1];
+                        const name = resourceNames[index-1];
+                        const price = resourcePrices[index-1];
+    
+                        if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
+                            span.classList.remove('red-disabled-text');
+                            span.classList.add('green-ready-text');
+                        } else if (category) {
+                            span.classList.add('red-disabled-text');
+                            span.classList.remove('green-ready-text');
+                        }
+                    } else {
+                        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+                            span.classList.remove('red-disabled-text');
+                            span.classList.add('green-ready-text');  
+                        } else {
+                            span.classList.add('red-disabled-text');
+                            span.classList.remove('green-ready-text');
+                        }
+                    }
+                });
+            } else {
+                element.classList.remove('red-disabled-text');
+            }
+        } else {
+            if (element.classList.contains('building-purchase')) {
+                element.querySelectorAll('span').forEach((span, index) => {
+                    if (index !== 0) {
+                        const category = resourceCategories[index-1];
+                        const name = resourceNames[index-1];
+                        const price = resourcePrices[index-1];
+            
+                        if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
+                            span.classList.remove('red-disabled-text');
+                            span.classList.add('green-ready-text');
+                        } else if (category) {
+                            span.classList.add('red-disabled-text');
+                            span.classList.remove('green-ready-text');
+                        }
+                    } else {
+                        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+                            span.classList.remove('red-disabled-text');
+                            span.classList.add('green-ready-text');  
+                        } else {
+                            span.classList.add('red-disabled-text');
+                            span.classList.remove('green-ready-text');
+                        }
+                    }
+                });
+            } else {
+                element.classList.add('red-disabled-text');
+            }
+        }  
 
         if (resource !== 'energy' && resource !== 'scienceUpgrade') {
             if (getElements()[resource + 'Rate'].textContent.includes('-')) {
@@ -1533,10 +1613,10 @@ function checkStatusAndSetTextClasses(element) {
     }
 }
 
-export function setTextDescriptionClassesBasedOnButtonStates(element, type) {
+export function setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, type) {
     if (type === 'create') {
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-        if (accompanyingLabel.textContent.includes('!')) {  //over the storage limit for output compound
+        if (accompanyingLabel.textContent.includes('!')) {
             accompanyingLabel.classList.add('warning-orange-text');
         } else {
             accompanyingLabel.classList.remove('warning-orange-text');
