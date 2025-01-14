@@ -1539,7 +1539,7 @@ function checkStatusAndSetTextClasses(element) {
             );
         }
 
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { // add the new price checks here for more resources
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
@@ -1574,7 +1574,7 @@ function checkStatusAndSetTextClasses(element) {
                 element.classList.remove('red-disabled-text');
             }
         } else {
-            if (element.classList.contains('building-purchase')) {
+            if (element.classList.contains('building-purchase') && !element.classList.contains('building-purchase-button')) {
                 element.querySelectorAll('span').forEach((span, index) => {
                     if (index !== 0) {
                         const category = resourceCategories[index-1];
@@ -1601,7 +1601,30 @@ function checkStatusAndSetTextClasses(element) {
             } else {
                 element.classList.add('red-disabled-text');
             }
-        }  
+        } 
+
+        if (element.classList.contains('building-purchase')) {
+            const spans = element.querySelectorAll('span');
+
+            let hasRedDisabledText = false;
+            spans.forEach(span => {
+                if (span.classList.contains('red-disabled-text')) {
+                    hasRedDisabledText = true;
+                }
+            });
+
+            const buyButton = element.parentElement.parentElement.querySelector('button');
+
+            if (hasRedDisabledText) {
+                buyButton.classList.add('red-disabled-text');
+            } else {
+                buyButton.classList.remove('red-disabled-text');
+            }
+        }
+                
+        if (element.classList.contains('building-purchase-button')) {
+            return;
+        }        
 
         if (resource !== 'energy' && resource !== 'scienceUpgrade') {
             if (getElements()[resource + 'Rate'].textContent.includes('-')) {
