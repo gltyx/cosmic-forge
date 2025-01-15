@@ -1,5 +1,30 @@
 export const resourceData = {
     resources: {
+        solar: {
+            nameResource: 'Solar',
+            screenName: 'solar',
+            saleValue: 0,
+            salePreviewElement: 'sellSolarDescription',
+            quantity: 10000,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 10000,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Solar AB1', screen: 'solar', place: 'solarAutoBuyer1Row', price: 0, rate: 0, quantity: 0, setPrice: 'solarAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Solar AB2', screen: 'solar', place: 'solarAutoBuyer2Row', price: 0, rate: 0, quantity: 0, setPrice: 'solarAB2Price', energyUse: 0 },
+                    tier3: { nameUpgrade: 'Solar AB3', screen: 'solar', place: 'solarAutoBuyer3Row', price: 0, rate: 0, quantity: 0, setPrice: 'solarAB3Price', energyUse: 0 },
+                    tier4: { nameUpgrade: 'Solar AB4', screen: 'solar', place: 'solarAutoBuyer4Row', price: 0, rate: 0, quantity: 0, setPrice: 'solarAB4Price', energyUse: 0 }
+                },
+            },
+            canFuseTech: '',
+            fuseTo1: '',
+            fuseTo2: '',
+            fuseToRatio1: 0,
+            fuseToRatio2: 0
+        },
         hydrogen: {
             nameResource: 'Hydrogen',
             screenName: 'hydrogen',
@@ -239,7 +264,7 @@ export const resourceData = {
             saleValue: 0.8,
             salePreviewElement: 'sellGlassDescription',
             createPreviewElement: 'createGlassDescription',
-            quantity: 0,
+            quantity: 200,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
@@ -270,7 +295,7 @@ export const resourceData = {
             saleValue: 1.8,
             salePreviewElement: 'sellSteelDescription',
             createPreviewElement: 'createSteelDescription',
-            quantity: 0,
+            quantity: 250,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 250,
@@ -311,14 +336,15 @@ export const resourceData = {
                 powerPlant1: { 
                     revealedBy: 'basicPowerGeneration',
                     price: 300,
-                    resource1Price: [0, '', ''],
+                    resource1Price: [100, 'carbon', 'resources'],
                     resource2Price: [0, '', ''],
                     resource3Price: [0, '', ''],
                     rate: 0.05,
                     quantity: 0, 
                     setPrice: 'powerPlant1Price',
                     fuel: ['carbon', 0.03, 'resources'],
-                    purchasedRate: 0
+                    purchasedRate: 0,
+                    weatherAffects: false,
                 },
                 powerPlant2: {
                     revealedBy: 'solarPowerGeneration',
@@ -329,8 +355,9 @@ export const resourceData = {
                     rate: 0.4,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
-                    fuel: ['hydrogen', 0.03, 'resources'], //change
-                    purchasedRate: 0
+                    fuel: ['solar', 0, 'resources'], //change
+                    purchasedRate: 0,
+                    weatherAffects: true,
                 },
                 powerPlant3: {
                     revealedBy: 'advancedPowerGeneration',
@@ -342,7 +369,8 @@ export const resourceData = {
                     quantity: 0, 
                     setPrice: 'powerPlant3Price',
                     fuel: ['diesel', 0.01, 'compounds'],
-                    purchasedRate: 0
+                    purchasedRate: 0,
+                    weatherAffects: false,
                 },
                 battery1: {
                     price: 5000,
@@ -451,10 +479,10 @@ export const resourceData = {
 const starSystems = {
     spica: {
         weather: {
-            sunny: [30, '☀', 100],
-            cloudy: [47, '☁', 60],
-            rain: [20, '☂', 40],
-            volcano: [3, '⛰', 5]
+            sunny: [30, '☀', 1],
+            cloudy: [47, '☁', 0.6],
+            rain: [20, '☂', 0.4],
+            volcano: [3, '⛰', 0.05]
         }
     }
 };

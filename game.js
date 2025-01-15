@@ -1943,7 +1943,7 @@ function startInitialTimers() {
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
 
-                            const powerPlant1FuelType = 'carbon';                  
+                            const powerPlant1FuelType = 'carbon'; 
                             const powerPlant1Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
 
                             let amountToDeductForConsumption = 0;
@@ -1970,7 +1970,9 @@ function startInitialTimers() {
                                     getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
 
                                 setResourceDataObject(resourceTier1Rate, 'resources', [resource, 'rate']);
-                                getElements()[`${resource}Rate`].textContent = `${(resourceTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
+                                if (resource !== 'solar') {
+                                    getElements()[`${resource}Rate`].textContent = `${(resourceTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
+                                }
                             }
                         }
                     });
@@ -2052,7 +2054,7 @@ function startInitialTimers() {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
                 }
                 if (getBuildingTypeOnOff('powerPlant2')) {
-                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate'])
+                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']) * getCurrentStarSystemWeatherEfficiency()[1];
                 }
                 if (getBuildingTypeOnOff('powerPlant3')) {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
@@ -2152,7 +2154,7 @@ function startInitialTimers() {
             const statTitleSpan = statValueSpan.previousElementSibling;
     
             statTitleSpan.textContent = `${capitaliseString(getCurrentStarSystem())}:`;
-            statValueSpan.textContent = `${efficiencyWeather}% ${symbolWeather}`;
+            statValueSpan.textContent = `${Math.floor(efficiencyWeather * 100)}% ${symbolWeather}`;
             setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
         }
 

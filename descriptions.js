@@ -443,7 +443,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     energyPowerPlant2Row: {
-        content1: "This building produces clean, renewable energy without using resources.",
+        content1: "This building produces clean, renewable energy without using resources, but its efficiency is weather dependant!",
         content2: "",
         updateAt: ""
     },
