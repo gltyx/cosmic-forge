@@ -27,6 +27,8 @@ export const BUILDING_TYPES = ['energy'];
 //GLOBAL VARIABLES
 export const deferredActions = [];
 
+let currentStarSystem = 'spica';
+let currentStarSystemWeatherEfficiency = [];
 let techRenderCounter = 0;
 let tempRowValue = null;
 let currencySymbol = '$';
@@ -1019,4 +1021,20 @@ export function getTrippedStatus() {
 
 export function setTrippedStatus(value) {
     trippedStatus = value;
+}
+
+export function getCurrentStarSystem() {
+    return currentStarSystem;
+}
+
+export function setCurrentStarSystem(value) {
+    currentStarSystem = value;
+}
+
+export function getCurrentStarSystemWeatherEfficiency() {
+    return currentStarSystemWeatherEfficiency;
+}
+
+export function setCurrentStarSystemWeatherEfficiency(value) {
+    currentStarSystemWeatherEfficiency = value;
 }

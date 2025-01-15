@@ -448,8 +448,29 @@ export const resourceData = {
     },
 };
 
+const starSystems = {
+    spica: {
+        weather: {
+            sunny: [30, '☀', 100],
+            cloudy: [47, '☁', 60],
+            rain: [20, '☂', 40],
+            volcano: [3, '⛰', 5]
+        }
+    }
+};
+
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function getStarSystemWeather(starSystem) {
+    return starSystems[starSystem]?.weather || null;
+}
+
+export function setStarSystemWeather(starSystem, weatherData) {
+    if (starSystems[starSystem]) {
+        starSystems[starSystem].weather = weatherData;
+    }
+}
 
 export function getResourceDataObject(key, subKeys) {
     let current = resourceData[key];

@@ -1,4 +1,8 @@
 import {
+    getCurrentStarSystemWeatherEfficiency,
+    setCurrentStarSystemWeatherEfficiency,
+    getCurrentStarSystem,
+    setCurrentStarSystem,
     getTrippedStatus,
     setTrippedStatus,
     setRanOutOfFuelWhenOn,
@@ -63,6 +67,8 @@ import {
     getAutoBuyerTierLevel,
     getResourceDataObject,
     setResourceDataObject,
+    getStarSystemWeather,
+    setStarSystemWeather,
 } from "./resourceDataObject.js";
 
 import { 
@@ -2117,7 +2123,55 @@ function startInitialTimers() {
             });
         }
     });
-}
+
+    let weatherTimerName = 'weatherTimer';
+
+    function startWeatherTimer() {
+        function selectWeather() {
+            const weatherCurrentStarSystemObject = getStarSystemWeather(getCurrentStarSystem());
+    
+            const weatherTypes = Object.keys(weatherCurrentStarSystemObject);
+            const weatherProbabilities = weatherTypes.map(weatherType => weatherCurrentStarSystemObject[weatherType][0]);
+            const totalProbability = weatherProbabilities.reduce((acc, val) => acc + val, 0);
+            const randomSelection = Math.random() * totalProbability;
+            
+            let cumulativeProbability = 0;
+            let selectedWeatherType = '';
+            
+            for (let i = 0; i < weatherTypes.length; i++) {
+                cumulativeProbability += weatherProbabilities[i];
+                if (randomSelection <= cumulativeProbability) {
+                    selectedWeatherType = weatherTypes[i];
+                    break;
+                }
+            }
+    
+            const [probability, symbolWeather, efficiencyWeather] = weatherCurrentStarSystemObject[selectedWeatherType];
+    
+            const statValueSpan = document.getElementById('stat7');
+            const statTitleSpan = statValueSpan.previousElementSibling;
+    
+            statTitleSpan.textContent = `${capitaliseString(getCurrentStarSystem())}:`;
+            statValueSpan.textContent = `${efficiencyWeather}% ${symbolWeather}`;
+            setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
+        }
+
+        selectWeather();
+    
+        const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+    
+        if (timerManager.getTimer(weatherTimerName)) {
+            timerManager.removeTimer(weatherTimerName);
+        }
+    
+        timerManager.addTimer(weatherTimerName, randomDurationInMs, () => {
+            selectWeather();
+            startWeatherTimer();
+        });
+    }
+    startWeatherTimer();
+}  
 
 function startUpdateScienceTimers(elementName) {
     let newResearchRate;
