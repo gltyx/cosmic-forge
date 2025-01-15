@@ -854,7 +854,6 @@ export function drawTab4Content(heading, optionContentElement) {
         
         if (heading === 'Water') {
             let storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']);
-            let extraResourceStoragePrice;
             let extraResourceName;
 
             let autobuyer1Price = getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier1', 'price']);
@@ -947,14 +946,13 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['waterQuantity', 'concreteQuantity'], ['water', 'concrete'], ['compounds', 'compounds']);
                     storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']);
-                    extraResourceStoragePrice = Math.floor(storagePrice * 0.3);
                     extraResourceName = 'Concrete';
                 }, 'upgradeCheck', '', 'storage', null, 'water', true, null, 'compound'),
                 null,
                 null,
                 null,
                 null,
-                `${storagePrice + " " + getResourceDataObject('compounds', ['water', 'nameResource'])}, ${getResourceDataObject('compounds', ['concrete', 'currentSecondaryIncreasePrice'])} ${getResourceDataObject('compounds', ['concrete', 'nameResource'])}`, //will invariably end up back here for the individual component colors for affordability
+                `${storagePrice + " " + getResourceDataObject('compounds', ['water', 'nameResource'])}, ${getResourceDataObject('compounds', ['concrete', 'currentSecondaryIncreasePrice'])} ${getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
                 '',
                 'upgradeCheck',
                 'storage',

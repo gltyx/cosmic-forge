@@ -257,7 +257,7 @@ export async function gameLoop() {
                     complexSellStringFormatter(element, getNotationType());
                 } else if (element.classList.contains('building-purchase')) {
                     setTempRowValue(element.innerHTML);
-                    complexPurchaseBuildingFormatter(element, getNotationType()); //TODO
+                    complexPurchaseBuildingFormatter(element, getNotationType());
                 } else {
                     formatAllNotationElements(element, getNotationType());
                 }
@@ -1366,7 +1366,7 @@ function checkStatusAndSetTextClasses(element) {
             mainKey = 'compounds' //storageCapacity
             price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
             if (element.tagName.toLowerCase() !== 'button') {
-                price2 = compound2 ? getResourceDataObject(mainKey, [compound2, 'storageCapacity']) : 0;
+                price2 = compound2 ? Math.floor(getResourceDataObject(mainKey, [compound, 'storageCapacity']) * 0.3) : 0;
                 const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
                 const secondaryCompoundPriceText = price2 > 0 ? `, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}` : '';
             
@@ -1970,8 +1970,11 @@ export function increaseResourceStorage(elementIds, resource, itemTypeArray) {
     setItemsToDeduct(resourceToDeductNamesArray, amountToDeductArray, itemTypeArray, [[0,''],[0,''],[0,'']]);
 
     deferredActions.push(() => {
-        const updatedStorageSize = getResourceDataObject(itemTypeArray, [resource, 'storageCapacity']) * increaseFactor;
-        setResourceDataObject(updatedStorageSize, itemTypeArray, [resource, 'storageCapacity']);
+        const updatedStorageSize = getResourceDataObject(itemTypeArray[0], [resource[0], 'storageCapacity']) * increaseFactor;
+        setResourceDataObject(updatedStorageSize, itemTypeArray[0], [resource[0], 'storageCapacity']);
+        if (resource.length > 1) {
+            setResourceDataObject(updatedStorageSize * 0.3, itemTypeArray[1], [resource[1], 'currentSecondaryIncreasePrice']);
+        }
         elementIds.forEach(elementId => {
             getElements()[elementId].classList.remove('green-ready-text');
         });
