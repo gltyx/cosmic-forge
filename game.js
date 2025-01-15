@@ -1273,14 +1273,21 @@ function checkStatusAndSetTextClasses(element) {
 
     if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         let compound = element.dataset.type;
+        let compound2;
+
         const type = element.dataset.type;
 
         if (compound === 'storage' || compound === 'autoBuyer') {
             compound = element.dataset.argumentCheckQuantity;
+            compound2 = element.dataset.argumentCheckQuantity2;
         }
 
         const checkQuantityString = element.dataset.argumentCheckQuantity;
+        const checkQuantityString2 = element.dataset.argumentCheckQuantity2;
+
         let quantity = getResourceDataObject('compounds', [checkQuantityString, 'quantity']);
+        let quantity2;
+        compound2 ? quantity2 = getResourceDataObject('compounds', [checkQuantityString2, 'quantity']) : -1;
 
         if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellCompound') { //sell
             if (quantity > 0) { 
@@ -1346,6 +1353,7 @@ function checkStatusAndSetTextClasses(element) {
         }
 
         let price;
+        let price2;
         let mainKey;
 
         if (type === 'autoBuyer') {
@@ -1353,15 +1361,28 @@ function checkStatusAndSetTextClasses(element) {
             const autoBuyerTier = element.dataset.autoBuyerTier;
             if (autoBuyerTier === 'tier0') return;
             price = getResourceDataObject(mainKey, [compound, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+            price2 = 0;
         } else if (element.dataset.type === "storage") {
             mainKey = 'compounds' //storageCapacity
             price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
             if (element.tagName.toLowerCase() !== 'button') {
-                element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
+                if (compound2) {
+                    price2 = getResourceDataObject(mainKey, [compound2, 'storageCapacity']); //if increase storage uses more than one ingredient, that other ingredient must be a compound or will have problems in the code
+                } else {
+                    price2 = 0;
+                }
+                
+                if (price2 > 0) {
+                    element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}`;
+                } else {
+                    element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
+                }
+            } else {
+                price2 = 0;
             }
         }
 
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) { 
+        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price && quantity2 >= price2) { //reason for quantity2 being -1 higher up
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
@@ -1374,7 +1395,7 @@ function checkStatusAndSetTextClasses(element) {
         }
     }
 
-    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
+    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') { //will need to add price2 and quantity2 if ever need a
         let resource = element.dataset.type;
         const techName = element.dataset.type;
         const type = element.dataset.type;

@@ -537,11 +537,14 @@ export function createOptionRow(
             description.dataset.argumentCheckQuantity = quantityArgument;
             description.dataset.type = objectSectionArgument1;
         } else {
+            const quantityArgument2 = descriptionText.includes(',') && objectSectionArgument1.includes('storage') ? descriptionText.split(',').pop().trim().split(' ').pop().toLowerCase() : '';            
+            
             description.dataset.conditionCheck = dataConditionCheck;
             description.dataset.resourcePriceObject = resourcePriceObject;
             description.dataset.type = objectSectionArgument1;
             description.dataset.resourceToFuseTo = objectSectionArgument2;
             description.dataset.argumentCheckQuantity = quantityArgument;
+            description.dataset.argumentCheckQuantity2 = quantityArgument2;
             description.dataset.autoBuyerTier = autoBuyerTier;
             description.dataset.rowCategory = rowCategory;
         }

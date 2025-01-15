@@ -9,6 +9,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 10000,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -34,6 +35,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 10000, //150
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -59,6 +61,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 120,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -84,6 +87,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 10000, //130
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -109,6 +113,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -134,6 +139,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 170,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -159,6 +165,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 150,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -184,6 +191,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 180,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -209,6 +217,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -237,6 +246,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 500,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -268,6 +278,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -299,6 +310,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 250,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -330,6 +342,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 50,
+            currentSecondaryIncreasePrice: 15,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -361,6 +374,7 @@ export const resourceData = {
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 50,
+            currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
