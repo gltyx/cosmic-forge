@@ -12,7 +12,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyBattery1Row',
             null,
             'Sodium Ion Battery:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery1');
@@ -42,7 +42,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyBattery2Row',
             null,
             'Battery 2:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery2');
@@ -69,7 +69,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyBattery3Row',
             null,
             'Battery 3:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity'])} kwH`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 setEnergyCapacity('battery3');
@@ -104,7 +104,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant1Row',
             null,
             'Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'building-purchase-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'building-purchase-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant1');
                 if (getBuildingTypeOnOff('powerPlant1')) {
@@ -147,7 +147,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant2Row',
             null,
             'Solar Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant2');
                 if (getBuildingTypeOnOff('powerPlant2')) {
@@ -190,7 +190,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant3Row',
             null,
             'Advanced Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} kw /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant3');
                 if (getBuildingTypeOnOff('powerPlant3')) {

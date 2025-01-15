@@ -1230,7 +1230,7 @@ function checkStatusAndSetTextClasses(element) {
     if (element.classList.contains('energy-check')) {
 
         const valueText = element.textContent;
-        const match = valueText.match(/(-?\d+(\.\d+)?) kW \/ s/);
+        const match = valueText.match(/(-?\d+(\.\d+)?) KW \/ s/);
     
         if (match) {
             const number = parseFloat(match[1]);
@@ -2079,11 +2079,11 @@ function startInitialTimers() {
                     }
                 } //maybe add cases for no battery
 
-                getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} kW / s`;
+                getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} KW / s`;
             } else {
                 getElements().energyQuantity.classList.remove('red-disabled-text');
                 getElements().energyQuantity.classList.remove('green-ready-text');
-                getElements().energyRate.textContent = `0 kW / s`;
+                getElements().energyRate.textContent = `0 KW / s`;
             }
         } else {
             getElements().energyQuantity.classList.add('green-ready-text');
@@ -2229,12 +2229,12 @@ function startUpdateEnergyTimers(elementName, action) {
         
         if (action === 'toggle') {
             if (getBuildingTypeOnOff(elementName)) {
-                getElements()[elementName + 'Rate'].textContent = `${powerBuildingPotentialPower * getTimerRateRatio()} kW / s`;
+                getElements()[elementName + 'Rate'].textContent = `${powerBuildingPotentialPower * getTimerRateRatio()} KW / s`;
             } else {
-                getElements()[elementName + 'Rate'].textContent = `0 kW / s`;
+                getElements()[elementName + 'Rate'].textContent = `0 KW / s`;
             }
         } else if (action === 'buy') {
-            getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} kW / s`;
+            getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} KW / s`;
         }
 
         setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
@@ -2587,9 +2587,9 @@ export function setEnergyCapacity(battery) {
 function updateEnergyStat(element) {
     const totalRate = (getResourceDataObject('buildings', ['energy', 'rate']) * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
     if (getPowerOnOff()) {
-        element.textContent = `${Math.floor(totalRate)} kW / s`;
+        element.textContent = `${Math.floor(totalRate)} KW / s`;
     } else {
-        element.textContent = `0 kW / s`;
+        element.textContent = `0 KW / s`;
     }
 }
 
