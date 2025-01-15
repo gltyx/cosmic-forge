@@ -1701,11 +1701,9 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
             if (resourcePrice3 != null && resourceName3 && resourceName3.trim() !== "") {
                 resourceParts.push(resourcePrice3 + " " + resourceName3);
             }
-    
-            // Clear the element's content
+
             element.innerHTML = "";
-    
-            // Create and append span for the price string
+
             const priceSpan = document.createElement("span");
             priceSpan.className = 'currency-price';
             priceSpan.innerHTML = priceString;
@@ -2152,6 +2150,25 @@ function startInitialTimers() {
     
             const statValueSpan = document.getElementById('stat7');
             const statTitleSpan = statValueSpan.previousElementSibling;
+
+            switch (selectedWeatherType) {
+                case 'sunny':
+                    statValueSpan.classList.add('green-ready-text');
+                    statValueSpan.classList.remove('warning-orange-text');
+                    statValueSpan.classList.remove('red-disabled-text');
+                    break;
+                case 'cloudy':
+                case 'rain':
+                    statValueSpan.classList.remove('green-ready-text');
+                    statValueSpan.classList.add('warning-orange-text');
+                    statValueSpan.classList.remove('red-disabled-text');
+                    break;
+                case 'volcano':
+                    statValueSpan.classList.remove('green-ready-text');
+                    statValueSpan.classList.remove('warning-orange-text');
+                    statValueSpan.classList.add('red-disabled-text');
+                    break;  
+            }
     
             statTitleSpan.textContent = `${capitaliseString(getCurrentStarSystem())}:`;
             statValueSpan.textContent = `${Math.floor(efficiencyWeather * 100)}% ${symbolWeather}`;
@@ -2309,7 +2326,12 @@ function complexPurchaseBuildingFormatter(element, notationType) {
             const formattedNumber = formatNumber(numberPart);
     
             if (index === 0) {
-                span.textContent = getCurrencySymbol() + formattedNumber;
+                if (getCurrencySymbol() === '€') {
+                    span.textContent = formattedNumber + getCurrencySymbol();
+                } else {
+                    span.textContent = getCurrencySymbol() + formattedNumber;
+                }
+                
                 if (parts.length > 1) {
                     span.textContent += ' ' + parts.slice(1).join(' ');
                 }

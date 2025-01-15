@@ -352,10 +352,10 @@ export const resourceData = {
                     resource1Price: [150, 'glass', 'compounds'],
                     resource2Price: [200, 'steel', 'compounds'],
                     resource3Price: [0, '', ''],
-                    rate: 0.4,
+                    rate: 0.2,
                     quantity: 0, 
                     setPrice: 'powerPlant2Price',
-                    fuel: ['solar', 0, 'resources'], //change
+                    fuel: ['solar', 0, 'resources'],
                     purchasedRate: 0,
                     weatherAffects: true,
                 },
