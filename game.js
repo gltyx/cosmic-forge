@@ -1366,20 +1366,67 @@ function checkStatusAndSetTextClasses(element) {
             mainKey = 'compounds' //storageCapacity
             price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
             if (element.tagName.toLowerCase() !== 'button') {
-                const price2 = compound2 ? getResourceDataObject(mainKey, [compound2, 'storageCapacity']) : 0;
+                price2 = compound2 ? getResourceDataObject(mainKey, [compound2, 'storageCapacity']) : 0;
                 const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
                 const secondaryCompoundPriceText = price2 > 0 ? `, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}` : '';
             
-                element.textContent = mainCompoundPriceText + secondaryCompoundPriceText;
-            } else {
+                const mainCompoundSpan = document.createElement('span');
+                mainCompoundSpan.id = 'mainCompoundPriceText';
+                mainCompoundSpan.textContent = mainCompoundPriceText;
+            
+                const secondaryCompoundSpan = document.createElement('span');
+                secondaryCompoundSpan.id = 'secondaryCompoundPriceText';
+                secondaryCompoundSpan.textContent = secondaryCompoundPriceText;
+            
+                element.textContent = '';
+                element.appendChild(mainCompoundSpan);
+                element.appendChild(secondaryCompoundSpan);
+            }
+             else {
                 price2 = 0;
             }
         }
 
         if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price && quantity2 >= price2) { //reason for quantity2 being -1 higher up
+            if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
+                document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
+                document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
+                document.getElementById('mainCompoundPriceText').classList.remove('red-disabled-text');
+                document.getElementById('secondaryCompoundPriceText').classList.remove('red-disabled-text');
+            }
             element.classList.remove('red-disabled-text');
         } else {
-            element.classList.add('red-disabled-text');
+            if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
+                if (quantity < price) {
+                    document.getElementById('mainCompoundPriceText').classList.add('red-disabled-text');
+                    document.getElementById('mainCompoundPriceText').classList.remove('green-ready-text');
+                    element.classList.add('red-disabled-text');
+                } else {
+                    document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
+                }
+                if (quantity2 < price2) {
+                    document.getElementById('secondaryCompoundPriceText').classList.add('red-disabled-text');
+                    document.getElementById('secondaryCompoundPriceText').classList.remove('green-ready-text'); 
+                    element.classList.add('red-disabled-text');
+                } else {
+                    document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
+                }
+                if (quantity >= price && quantity2 >= price2) {
+                    element.classList.remove('red-disabled-text');
+                }
+            } else if (element.tagName.toLowerCase() !== 'button') {
+                if (quantity < price) {
+                    element.classList.add('red-disabled-text');
+                } else {
+                    element.classList.remove('red-disabled-text');
+                }
+            } else { //buttons
+                if (element.parentElement.parentElement.querySelector('.description-container').firstChild.classList.contains('red-disabled-text')) { //could cause problems with compound autobuyers if introduced, even when this is working as intended
+                    element.classList.add('red-disabled-text');
+                } else {
+                    element.classList.remove('red-disabled-text');
+                }
+            }
         }
 
         if (getElements()[compound + 'Rate'].textContent.includes('-')) {
