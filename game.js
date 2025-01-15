@@ -1872,26 +1872,47 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         resourcePrices = [[resource1ToDeduct, itemToDeduct2Name, itemCategory1], [resource2ToDeduct, itemToDeduct3Name, itemCategory2], [resource3ToDeduct, itemToDeduct4Name, itemCategory3]];
     } else {
         itemToDeduct1Name = itemObject.screenName;
-    } 
+    }
+
+    let itemToDeduct1NameArray = [itemToDeduct1Name];
+    let amountToDeductArray = [amountToDeduct];
+    let itemTypeArray = [itemType];
 
     //set resource to deduct
-    setItemsToDeduct(itemToDeduct1Name, amountToDeduct, itemType, resourcePrices);
+    setItemsToDeduct(itemToDeduct1NameArray, amountToDeductArray, itemTypeArray, resourcePrices);
     setItemsToIncreasePrice(itemToDeduct1Name, itemSetNewPrice, amountToDeduct, itemType, resourcePrices);
 }
 
-export function increaseResourceStorage(elementId, resource, itemType) {
+export function increaseResourceStorage(elementIds, resource, itemTypeArray) {
+    let amountToDeductArray = [];
+    let resourceToDeductNamesArray;
     const increaseFactor = getIncreaseStorageFactor();
 
-    const amountToDeduct = getResourceDataObject(itemType, [resource, 'storageCapacity']);
-    const resourceToDeductName = resource;
+    if (resource[0] === 'water') {
+        resourceToDeductNamesArray = resource;
+        const firstResourceStorage = getResourceDataObject(itemTypeArray[0], [resource[0], 'storageCapacity']);
+
+        for (let index = 0; index < resourceToDeductNamesArray.length; index++) {
+            if (index > 0) {
+                amountToDeductArray.push(firstResourceStorage * 0.3);
+            } else {
+                amountToDeductArray.push(firstResourceStorage);
+            }
+        }
+    } else {
+        resourceToDeductNamesArray = [resource[0]];
+        amountToDeductArray[0] = getResourceDataObject(itemTypeArray[0], [resourceToDeductNamesArray, 'storageCapacity']);
+    }
 
     //set resource to deduct
-    setItemsToDeduct(resourceToDeductName, amountToDeduct, itemType, [[0,''],[0,''],[0,'']]);
+    setItemsToDeduct(resourceToDeductNamesArray, amountToDeductArray, itemTypeArray, [[0,''],[0,''],[0,'']]);
 
     deferredActions.push(() => {
-        const updatedStorageSize = getResourceDataObject(itemType, [resource, 'storageCapacity']) * increaseFactor;
-        setResourceDataObject(updatedStorageSize, itemType, [resource, 'storageCapacity']);
-        getElements()[elementId].classList.remove('green-ready-text');
+        const updatedStorageSize = getResourceDataObject(itemTypeArray, [resource, 'storageCapacity']) * increaseFactor;
+        setResourceDataObject(updatedStorageSize, itemTypeArray, [resource, 'storageCapacity']);
+        elementIds.forEach(elementId => {
+            getElements()[elementId].classList.remove('green-ready-text');
+        });
     });
 }
 

@@ -30,7 +30,7 @@ export const headerDescriptions = {
     diesel: "The first compound created by your hands, it is a useful early fuel.",
     glass: "This is reinforced specialist glass and is great for solar applications.",
     steel: "This is reinforced steel, highly durable and used in construction and manufacturing.",
-    concrete: "Concrete is a versatile material widely used in construction for its strength and durability.",
+    water: "Water is an essential resource, crucial for life and widely utilized in various industrial and construction processes.",
 
     'star map': "This is a map of the known galaxy",
     
@@ -289,23 +289,23 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
-    concreteCreateRow: {
-        content1: "Here you can create Concrete, provided you have the materials, and the power is ON.",
+    waterCreateRow: {
+        content1: "Here you can manage the production of Water, provided you have the materials, and the power is ON.",
         content2: "",
         updateAt: ""
     },
-    concreteSellRow: {
-        content1: "Here you can sell Concrete for cash.",
+    waterSellRow: {
+        content1: "Here you can sell Water for cash.",
         content2: "",
         updateAt: ""
     },
-    concreteIncreaseStorageRow: {
-        content1: "Upgrade your Concrete storage capacity to hold more resources.",
+    waterIncreaseStorageRow: {
+        content1: "Upgrade your Water reservoir capacity to hold more resources.",
         content2: "",
         updateAt: ""
     },
-    concreteAutoBuyer1Row: {
-        content1: "Add a Concrete Mixer to create concrete.",
+    waterAutoBuyer1Row: {
+        content1: "Add a Water Mixer to facilitate water processing.",
         content2: "",
         updateAt: ""
     },

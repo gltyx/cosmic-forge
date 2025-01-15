@@ -137,6 +137,9 @@ export function setElements() {
         dieselOption: document.getElementById('dieselOption'),
         dieselRate: document.getElementById('dieselRate'),
         dieselQuantity: document.getElementById('dieselQuantity'),
+        waterOption: document.getElementById('waterOption'),
+        waterRate: document.getElementById('waterRate'),
+        waterQuantity: document.getElementById('waterQuantity'),
         glassOption: document.getElementById('glassOption'),
         glassRate: document.getElementById('glassRate'),
         glassQuantity: document.getElementById('glassQuantity'),
@@ -350,8 +353,8 @@ export function setCurrentOptionPane(value) {
     currentOptionPane = value.toLowerCase();
 }
 
-export function setItemsToDeduct(name, amount, itemType, resourcePrices) {
-    if (name === 'clear') {
+export function setItemsToDeduct(nameArray, amountArray, itemTypeArray, resourcePrices) {
+    if (nameArray === 'clear') {
         itemsToDeduct = {};
         return;
     }
@@ -360,8 +363,8 @@ export function setItemsToDeduct(name, amount, itemType, resourcePrices) {
     let optionalName2 = resourcePrices[1][1];
     let optionalName3 = resourcePrices[2][1];
 
-    if (!itemsToDeduct[name]) {
-        itemsToDeduct[name] = {};
+    if (!itemsToDeduct[nameArray]) {
+        itemsToDeduct[nameArray] = {};
     }
 
     if (!itemsToDeduct[optionalName1]) {
@@ -374,8 +377,12 @@ export function setItemsToDeduct(name, amount, itemType, resourcePrices) {
         itemsToDeduct[optionalName3] = {};
     }
 
-    itemsToDeduct[name].deductQuantity = amount;
-    itemsToDeduct[name].typeOfResourceCompound = itemType;
+    nameArray.forEach((name, index) => {
+        itemsToDeduct[name] = {
+            deductQuantity: amountArray[index],
+            typeOfResourceCompound: itemTypeArray[index],
+        };
+    });    
 
     itemsToDeduct[optionalName1].deductQuantity = resourcePrices[0][0];
     itemsToDeduct[optionalName1].typeOfResourceCompound = resourcePrices[0][2];

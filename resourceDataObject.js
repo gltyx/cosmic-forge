@@ -111,7 +111,7 @@ export const resourceData = {
             storageCapacity: 200,
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 1,
+                    currentTierLevel: 0,
                     normalProgression: false,
                     tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 120, rate: 0.025, quantity: 0, setPrice: 'neonAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Neon Extractor', screen: 'neon', place: 'neonAutoBuyer2Row', price: 960, rate: 0.125, quantity: 0, setPrice: 'neonAB2Price', energyUse: 0.03 },
@@ -326,7 +326,7 @@ export const resourceData = {
             saleValue: 2.5,
             salePreviewElement: 'sellConcreteDescription',
             createPreviewElement: 'createConcreteDescription',
-            quantity: 0,
+            quantity: 50,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 50,
@@ -350,7 +350,38 @@ export const resourceData = {
             createsFromRatio2: 2,
             createsFromRatio3: 3,
             createsFromRatio4: 0
-        },               
+        },   
+        water: {
+            nameResource: 'Water',
+            screenName: 'water',
+            saleValue: 2.5,
+            salePreviewElement: 'sellWaterDescription',
+            createPreviewElement: 'createWaterDescription',
+            quantity: 50,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 50,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Basic Water Pump', screen: 'water', place: 'waterAutoBuyer1Row', price: 95000, rate: 0.01, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer2Row', price: 800000, rate: 0.08, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.2 },
+                    tier3: { nameUpgrade: 'Medium Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer3Row', price: 4200000, rate: 0.5, quantity: 0, setPrice: 'waterAB3Price', energyUse: 0.7 },
+                    tier4: { nameUpgrade: 'Large Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer4Row', price: 1800000, rate: 2, quantity: 0, setPrice: 'waterAB4Price', energyUse: 3.6 }
+                },
+            },
+            revealedBy: 'neonFusion',
+            canCreateTech: 'compounds',
+            createsFrom1: ['hydrogen', 'resources'],
+            createsFrom2: ['oxygen', 'resources'],
+            createsFrom3: '',
+            createsFrom4: '',
+            createsFromRatio1: 20,
+            createsFromRatio2: 10,
+            createsFromRatio3: 0,
+            createsFromRatio4: 0
+        },                   
     },
     buildings: {
         energy: {
