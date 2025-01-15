@@ -1366,17 +1366,11 @@ function checkStatusAndSetTextClasses(element) {
             mainKey = 'compounds' //storageCapacity
             price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
             if (element.tagName.toLowerCase() !== 'button') {
-                if (compound2) {
-                    price2 = getResourceDataObject(mainKey, [compound2, 'storageCapacity']); //if increase storage uses more than one ingredient, that other ingredient must be a compound or will have problems in the code
-                } else {
-                    price2 = 0;
-                }
-                
-                if (price2 > 0) {
-                    element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}`;
-                } else {
-                    element.textContent = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
-                }
+                const price2 = compound2 ? getResourceDataObject(mainKey, [compound2, 'storageCapacity']) : 0;
+                const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
+                const secondaryCompoundPriceText = price2 > 0 ? `, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}` : '';
+            
+                element.textContent = mainCompoundPriceText + secondaryCompoundPriceText;
             } else {
                 price2 = 0;
             }
