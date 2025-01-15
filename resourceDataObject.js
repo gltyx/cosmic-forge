@@ -319,7 +319,38 @@ export const resourceData = {
             createsFromRatio2: 1,
             createsFromRatio3: 0,
             createsFromRatio4: 0
-        },        
+        },
+        concrete: {
+            nameResource: 'Concrete',
+            screenName: 'concrete',
+            saleValue: 2.5,
+            salePreviewElement: 'sellConcreteDescription',
+            createPreviewElement: 'createConcreteDescription',
+            quantity: 0,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 50,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Back Yard Concrete Mixer', screen: 'concrete', place: 'concreteAutoBuyer1Row', price: 95000, rate: 0.01, quantity: 0, setPrice: 'concreteAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Concrete Factory', screen: 'concrete', place: 'concreteAutoBuyer2Row', price: 800000, rate: 0.08, quantity: 0, setPrice: 'concreteAB2Price', energyUse: 0.2 },
+                    tier3: { nameUpgrade: 'Medium Concrete Factory', screen: 'concrete', place: 'concreteAutoBuyer3Row', price: 4200000, rate: 0.5, quantity: 0, setPrice: 'concreteAB3Price', energyUse: 0.7 },
+                    tier4: { nameUpgrade: 'Large Concrete Factory', screen: 'concrete', place: 'concreteAutoBuyer4Row', price: 1800000, rate: 2, quantity: 0, setPrice: 'concreteAB4Price', energyUse: 3.6 }
+                },
+            },
+            revealedBy: 'aggregateMixing',
+            canCreateTech: 'compounds',
+            createsFrom1: ['silicon', 'resources'],
+            createsFrom2: ['sodium', 'resources'],
+            createsFrom3: ['hydrogen', 'resources'],
+            createsFrom4: '',
+            createsFromRatio1: 5,
+            createsFromRatio2: 2,
+            createsFromRatio3: 3,
+            createsFromRatio4: 0
+        },               
     },
     buildings: {
         energy: {
@@ -457,7 +488,8 @@ export const resourceData = {
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
         siliconFusion: { appearsAt: [10000, "oxygenFusion", ""], prereqs: ['Oxygen Fusion'], price: 11500, idForRenderPosition: 80 },
-        steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
+        aggregateMixing: { appearsAt: [12000, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
+        steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 82 },
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
         hydroCarbons: { appearsAt: [3200, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },

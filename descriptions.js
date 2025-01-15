@@ -1,5 +1,5 @@
 export const gameIntroHeader = 'Welcome to the Cosmic Forge!';
-export const gameIntroText = 'Embark on an epic journey from the simplest element to the building blocks of the cosmos.<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies, unlock powerful compounds, and automate your processes to reshape entire planets.<br> Craft advanced compounds with unique uses, and discover the secrets of the stars with interstellar exploration.<br>With each click, fusion, and discovery, you edge closer to becoming the architect of a vibrant galaxy.<br><br>Good Luck!';
+export const gameIntroText = 'You find yourself with advanced knowledge but on a world with almost no material!<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies to unlock powerful compounds, and one by one recreate the materials to create<br>a craft to explore and discover the secrets of the interstellar medium!<br><br>With each click, fusion, and discovery, you edge closer to fulfilling your destiny!<br><br>Good Luck!';
 
 export const headerDescriptions = {
     'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
@@ -30,6 +30,7 @@ export const headerDescriptions = {
     diesel: "The first compound created by your hands, it is a useful early fuel.",
     glass: "This is reinforced specialist glass and is great for solar applications.",
     steel: "This is reinforced steel, highly durable and used in construction and manufacturing.",
+    concrete: "Concrete is a versatile material widely used in construction for its strength and durability.",
 
     'star map': "This is a map of the known galaxy",
     
@@ -45,8 +46,9 @@ export const techNotificationMessages = {
     neonFusion: 'Neon Fusion Researched\n\nYou can now fuse Neon!',
     oxygenFusion: 'Oxygen Fusion Researched\n\nYou can now fuse Oxygen!',
     siliconFusion: 'Silicon Fusion Researched\n\nYou can now fuse Silicon!',
-    nobleGasCollection: 'Noble Gas Collection Researched\n\nWe can now store Noble Gases when fused!',
-    glassManufacture: 'Glass Manufacture Researched\n\nWe can now produce Glass compounds!',
+    nobleGasCollection: 'Noble Gas Collection Researched\n\nYou can now store Noble Gases when fused!',
+    glassManufacture: 'Glass Manufacture Researched\n\nYou can now produce Glass compounds!',
+    aggregateMixing: 'Aggregate Mixing Researched\n\nYou can now produce Concrete compounds!',
     neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Gold, modern day Alchemy, we will be rich beyond belief!',
     quantumComputing: 'Quantum Computing Researched\n\nMore advanced Machinery is now available!',
     scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
@@ -287,6 +289,26 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    concreteCreateRow: {
+        content1: "Here you can create Concrete, provided you have the materials, and the power is ON.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteSellRow: {
+        content1: "Here you can sell Concrete for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteIncreaseStorageRow: {
+        content1: "Upgrade your Concrete storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteAutoBuyer1Row: {
+        content1: "Add a Concrete Mixer to create concrete.",
+        content2: "",
+        updateAt: ""
+    },
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",
@@ -372,6 +394,11 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    techAggregateMixingRow: {
+        content1: "Unlock Aggregate Mixing to produce concrete compounds from silicon, sodium and hydrogen.",
+        content2: "",
+        updateAt: ""
+    },
     techNobleGasCollectionRow: {
         content1: "Unlock Noble Gas Collection to store rare noble gases.",
         content2: "",
@@ -403,7 +430,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techSteelFoundriesRow: {
-        content1: "Unlock Steel Foundries to produce high strength steel compounds.",
+        content1: "Unlock Steel Foundries to produce high strength steel alloys from iron.",
         content2: "",
         updateAt: ""
     },

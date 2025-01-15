@@ -405,6 +405,35 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'aggregateMixing',
+                row: createOptionRow(
+                    'techAggregateMixingRow',
+                    null,
+                    'Aggregate Mixing:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('aggregateMixing', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('aggregateMixing');
+                        showNotification(techNotificationMessages.aggregateMixing, 'info');
+                    }, 'techUnlock', '', 'aggregateMixing', null, 'research', false, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['aggregateMixing', 'price'])} Research${getResourceDataObject('techs', ['aggregateMixing', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="aggregateMixingPrereq">${getResourceDataObject('techs', ['aggregateMixing', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'aggregateMixing',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },            
+            {
                 techName: 'neutronCapture',
                 row: createOptionRow(
                     'techNeutronCaptureRow',

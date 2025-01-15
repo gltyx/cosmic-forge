@@ -638,5 +638,217 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(steelAutoBuyer4Row);
+        } 
+        
+        if (heading === 'Concrete') {
+            let storagePrice = getResourceDataObject('compounds', ['concrete', 'storageCapacity']);
+            let autobuyer1Price = getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+            let autobuyer2Price = getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier2', 'price']);
+            let autobuyer3Price = getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier3', 'price']);
+            let autobuyer4Price = getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier4', 'price']);
+        
+            const concreteCreateRow = createOptionRow(
+                'concreteCreateRow',
+                null,
+                'Create Concrete:',
+                createDropdown('concreteCreateSelectQuantity', [
+                    { value: 'max', text: 'Max Possible' },
+                    { value: 'threeQuarters', text: 'Up to 75%' },
+                    { value: 'twoThirds', text: 'Up to 67%' },
+                    { value: 'half', text: 'Up to 50%' },
+                    { value: 'oneThird', text: 'Up to 33%' },
+                    { value: '50000', text: '50000 - 250K Sil, 100K Sod, 150K Hyd' },
+                    { value: '5000', text: '5000 - 25K Sil, 10K Sod, 15K Hyd' },
+                    { value: '500', text: '500 - 2.5K Sil, 1K Sod, 1.5K Hyd' },
+                    { value: '50', text: '50 - 250 Sil, 100 Sod, 150 Hyd' },
+                    { value: '5', text: '5 - 25 Sil, 10 Sod, 15 Hyd' },
+                    { value: '1', text: '1 - 5 Sil, 2 Sod, 3 Hyd' },
+                ], 'all', (value) => {
+                    setCreateCompoundPreview('concrete', value);
+                }),
+                createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
+                    createCompound('concrete');
+                }, 'createCompound', null, null, null, 'concrete', true, null, 'compound'),
+                null,
+                null,
+                null,
+                `${getCompoundCreatePreview('concrete')}`,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteCreateRow);
+        
+            const concreteSellRow = createOptionRow(
+                'concreteSellRow',
+                null,
+                'Sell Concrete:',
+                createDropdown('concreteSellSelectQuantity', [
+                    { value: 'all', text: 'All Stock' },
+                    { value: 'threeQuarters', text: '75% Stock' },
+                    { value: 'twoThirds', text: '67% Stock' },
+                    { value: 'half', text: '50% Stock' },
+                    { value: 'oneThird', text: '33% Stock' },
+                    { value: '100000', text: '100,000' },
+                    { value: '10000', text: '10,000' },
+                    { value: '1000', text: '1,000' },
+                    { value: '100', text: '100' },
+                    { value: '10', text: '10' },
+                    { value: '1', text: '1' },
+                ], 'all', (value) => {
+                    setSaleCompoundPreview('concrete', value);
+                }),
+                createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
+                    sellCompound('concrete');
+                }, 'sellCompound', null, null, null, 'concrete', true, null, 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${getCompoundSalePreview('concrete')}`,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteSellRow);
+        
+            const concreteIncreaseStorageRow = createOptionRow(
+                'concreteIncreaseStorageRow',
+                null,
+                'Increase Storage:',
+                createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    increaseResourceStorage('concreteQuantity', 'concrete', 'compounds');
+                    storagePrice = getResourceDataObject('compounds', ['concrete', 'storageCapacity']);
+                }, 'upgradeCheck', '', 'storage', null, 'concrete', true, null, 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${storagePrice + " " + getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'storage',
+                null,
+                'concrete',
+                null,
+                false,
+                'concrete',
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteIncreaseStorageRow);
+        
+            const concreteAutoBuyer1Row = createOptionRow(
+                'concreteAutoBuyer1Row',
+                getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
+                'Concrete Auto Buyer Tier 1:',
+                createButton(`Add ${getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Concrete /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'concreteAB1Quantity', 'autoBuyer', true, 'tier1', 'concrete', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'concrete', true, 'tier1', 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${autobuyer1Price + " " + getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'concrete',
+                'tier1',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteAutoBuyer1Row);
+        
+            const concreteAutoBuyer2Row = createOptionRow(
+                'concreteAutoBuyer2Row',
+                getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
+                'Concrete Auto Buyer Tier 2:',
+                createButton(`Add ${getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Concrete /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'concreteAB2Quantity', 'autoBuyer', true, 'tier2', 'concrete', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'concrete', true, 'tier2', 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${autobuyer2Price + " " + getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'concrete',
+                'tier2',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteAutoBuyer2Row);
+        
+            const concreteAutoBuyer3Row = createOptionRow(
+                'concreteAutoBuyer3Row',
+                getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
+                'Concrete Auto Buyer Tier 3:',
+                createButton(`Add ${getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Concrete /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'concreteAB3Quantity', 'autoBuyer', true, 'tier3', 'concrete', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'concrete', true, 'tier3', 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${autobuyer3Price + " " + getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'concrete',
+                'tier3',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteAutoBuyer3Row);
+        
+            const concreteAutoBuyer4Row = createOptionRow(
+                'concreteAutoBuyer4Row',
+                getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
+                'Concrete Auto Buyer Tier 4:',
+                createButton(`Add ${getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Concrete /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'concreteAB4Quantity', 'autoBuyer', true, 'tier4', 'concrete', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'concrete', true, 'tier4', 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${autobuyer4Price + " " + getResourceDataObject('compounds', ['concrete', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'concrete',
+                'tier4',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(concreteAutoBuyer4Row);
         }        
 }

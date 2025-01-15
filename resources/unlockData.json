@@ -13,6 +13,7 @@
     "compounds": ["Unlock Compounds Tab", "", ""],
     "siliconFusion": ["", "", ""],
     "steelFoundries": ["Steel Compound", "", ""],
+    "aggregateMixing": ["Concrete Compound", "", ""],
     "giganticTurbines": ["", "", ""],
     "nanoTubeTechnology": ["", "", ""],
     "hydroCarbons": ["Diesel Compound", "", ""],

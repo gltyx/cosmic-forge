@@ -254,6 +254,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    document.querySelectorAll('[class*="tab4"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'concrete');
+            setCurrentOptionPane(this.textContent);
+            updateContent(this.textContent, 'tab4', 'content');
+        });
+    });
+
     document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab5', 'star map');
