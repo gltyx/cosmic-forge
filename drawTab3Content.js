@@ -1,7 +1,7 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
 import { gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
-import { sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -20,7 +20,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setCanAffordDeferred(null);
                     });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceKit', 'cash', false, null, 'science'),
-            null,
+            createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity'])}`, 'scienceKitQuantity', ['science-building-quantity']),
             null,
             null,
             null,
@@ -51,7 +51,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     setCanAffordDeferred(null);
                 });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceClub', 'cash', false, null, 'science'),
-            null,
+            createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity'])}`, 'scienceClubQuantity', ['science-building-quantity']),
             null,
             null,
             null,
@@ -82,7 +82,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     setCanAffordDeferred(null);
                 });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceLab', 'cash', false, null, 'science'),
-            null,
+            createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceLab', 'quantity'])}`, 'scienceLabQuantity', ['science-building-quantity']),
             null,
             null,
             null,
