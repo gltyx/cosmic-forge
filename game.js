@@ -1087,24 +1087,21 @@ function updateRates() {
 }
 
 function updateUIQuantities(allQuantities, allStorages, allElements, allDescriptionElements) {
-    //update science quantities
-    for (const scienceBuildingQuantity in allQuantities) {
-        if (scienceBuildingQuantity.startsWith('science')) {
-            const quantityScienceBuilding = allQuantities[scienceBuildingQuantity];
-            const element = document.getElementById(`${scienceBuildingQuantity}Quantity`);
+    for (const item in allQuantities) {
+        if (allQuantities.hasOwnProperty(item)) {
+            const quantity = allQuantities[item];
+            const storage = allStorages[item];
+            const element = allElements[item];
+
+            updateQuantityDisplays(element, quantity, storage, null, null, null, false);
+        }
+
+        if (item.startsWith('science')) {
+            const quantityScienceBuilding = allQuantities[item];
+            const element = document.getElementById(`${item}Quantity`);
             if (element && quantityScienceBuilding) {
                 element.textContent = `Quantity: ${quantityScienceBuilding}`;
             }
-        }
-    }
-
-    for (const resourceOrCompound in allQuantities) {
-        if (allQuantities.hasOwnProperty(resourceOrCompound)) {
-            const quantity = allQuantities[resourceOrCompound];
-            const storage = allStorages[resourceOrCompound];
-            const element = allElements[resourceOrCompound];
-
-            updateQuantityDisplays(element, quantity, storage, null, null, null, false);
         }
     }
 
