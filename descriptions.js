@@ -309,6 +309,26 @@ export const optionDescriptions = {
         content2: "",
         updateAt: ""
     },
+    concreteCreateRow: {
+        content1: "Here you can create Concrete, provided you have the materials, and the power is ON.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteSellRow: {
+        content1: "Here you can sell Concrete for cash.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteIncreaseStorageRow: {
+        content1: "Upgrade your Concrete storage capacity to hold more resources.",
+        content2: "",
+        updateAt: ""
+    },
+    concreteAutoBuyer1Row: {
+        content1: "Add a Concrete Mixer to create concrete.",
+        content2: "",
+        updateAt: ""
+    },    
     researchScienceKitRow: {
         content1: "Purchase a Science Kit to start generating Research points.",
         content2: "",

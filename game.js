@@ -1365,7 +1365,11 @@ function checkStatusAndSetTextClasses(element) {
                 if (!createCompoundDescriptionString.includes('!')) {
                     element.classList.remove('warning-orange-text');
                 }
-                element.classList.remove('red-disabled-text');
+                if (getPowerOnOff()) {
+                    element.classList.remove('red-disabled-text');
+                } else {
+                    element.classList.add('red-disabled-text');
+                }
                 setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
             }
 
