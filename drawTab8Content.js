@@ -1,5 +1,6 @@
-import { getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle } from './constantsAndGlobalVars.js';
-import { createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle } from './constantsAndGlobalVars.js';
+import { createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Visual') {
@@ -122,5 +123,114 @@ export function drawTab8Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(settingsThemeRow);
+    }
+
+    if (heading === 'Saving / Loading') {
+        const exportSaveRow = createOptionRow(
+            'exportSaveRow',
+            null,
+            'Export Save:',
+            createTextFieldArea('exportSaveArea', ['export-save'], 'Save Data should appear here'),
+            createButton(`Export`, ['option-button', 'save-load-button'], () => {
+                copySaveStringToClipBoard();
+            }),
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(exportSaveRow);
+
+        const importSaveRow = createOptionRow(
+            'importSaveRow',
+            null,
+            'Import Save:',
+            createTextFieldArea('importSaveArea', ['import-save'], 'Please paste your Save Data here...'),
+            createButton(`Import`, ['option-button', 'save-load-button'], () => {
+                loadGame();
+            }),
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(importSaveRow);
+
+        const exportCloudSaveRow = createOptionRow(
+            'exportCloudSaveRow',
+            null,
+            'Export Cloud Save:',
+            createButton(`Export Cloud Save`, ['option-button', 'save-load-button'], () => {
+                if (getSaveData()) {
+                    saveGame();
+                    saveGameToCloud(getSaveData());
+                }
+                setSaveData(null);
+            }),
+            null,
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(exportCloudSaveRow);
+
+        const importCloudSaveRow = createOptionRow(
+            'importCloudSaveRow',
+            null,
+            'Import Recent Cloud Save:',
+            createButton(`Import Cloud Save`, ['option-button', 'save-load-button'], () => {
+                loadGameFromCloud();
+            }),
+            null,
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(importCloudSaveRow);
+
+        saveGame();
+
     }
 }

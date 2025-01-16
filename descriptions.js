@@ -38,6 +38,7 @@ export const headerDescriptions = {
     'star map': "This is a map of the known galaxy",
     
     visual: "Change the visual settings of the game.",
+    'saving / loading': "Save and Load your progress in the game.",
 };
 
 export const techNotificationMessages = {

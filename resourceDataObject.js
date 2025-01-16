@@ -495,21 +495,21 @@ export const resourceData = {
                 energyUse: 0
             },
             scienceClub: { 
-                price: 75,
+                price: 700,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
                 resource3Price: [0, '', ''],
-                rate: 0.1,
+                rate: 0.08,
                 quantity: 0, 
                 setPrice: 'scienceClubPrice',
                 energyUse: 0
             },
             scienceLab: { 
-                price: 300,
+                price: 1500,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
                 resource3Price: [0, '', ''],
-                rate: 0.5,
+                rate: 0.2,
                 quantity: 0, 
                 setPrice: 'scienceLabPrice',
                 energyUse: 0.5
@@ -551,7 +551,7 @@ export const resourceData = {
     },
 };
 
-const starSystems = {
+export const starSystems = {
     spica: {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',

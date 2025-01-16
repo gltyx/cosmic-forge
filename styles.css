@@ -1,3 +1,31 @@
+.text-area-height {
+    height: 10vh;
+}
+
+.text-area-width {
+    width: 50vw;
+}
+
+.text-area-style {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    border: 2px solid var(--container-border-color);
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+}
+
+.export-save {
+    pointer-events: none;
+}
+
+.import-save {
+    pointer-events: auto !important;
+}
+
 h4 {
     font-weight: 700;
 }
@@ -814,23 +842,13 @@ body {
     cursor: pointer; /* Changes the cursor to a pointer for these elements */
 }
 
-.sell {
-    margin-left: 30px;
-}
-
-.create {
-    margin-left: 30px;
-}
-
-.fuse {
-    margin-left: 30px;
-}
-
-.toggle-timer {
-    margin-left: 30px;
-}
-
-.fuel-type {
+.sell,
+.create,
+.fuse,
+.toggle-timer,
+.fuel-type,
+.science-building-quantity
+{
     margin-left: 30px;
 }
 
@@ -838,8 +856,8 @@ body {
     margin-left: 5px;
 }
 
-.science-building-quantity {
-    margin-left: 30px;
+.save-load-button {
+    margin-left: 50px;
 }
 
 button.red-disabled-text {

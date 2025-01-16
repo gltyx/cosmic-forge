@@ -1,4 +1,4 @@
-import { getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
+import { resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseString } from "./utilityFunctions.js";
 
 //DEBUG
@@ -9,10 +9,11 @@ export const debugVisibilityArray = ['settingsNotificationTestRow'];
 
 //ELEMENTS
 let elements;
-let localization = {};
-let language = 'en';
-let languageSelected = 'en';
-let oldLanguage = 'en';
+let saveData = null;
+// let localization = {};
+// let language = 'en';
+// let languageSelected = 'en';
+// let oldLanguage = 'en';
 
 //CONSTANTS
 export let gameState;
@@ -81,16 +82,16 @@ let currentOptionPane = null;
 let notationType = 'normalCondensed';
 
 //FLAGS
-let audioMuted;
-let languageChangedFlag;
+// let audioMuted;
+// let languageChangedFlag;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
 let powerOnOff = false;
 let trippedStatus = false;
 
-let autoSaveOn = false;
-export let pauseAutoSaveCountdown = true;
+// let autoSaveOn = false;
+// export let pauseAutoSaveCountdown = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -187,13 +188,13 @@ export function getElements() {
     return elements;
 }
 
-export function getLanguageChangedFlag() {
-    return languageChangedFlag;
-}
+// export function getLanguageChangedFlag() {
+//     return languageChangedFlag;
+// }
 
-export function setLanguageChangedFlag(value) {
-    languageChangedFlag = value;
-}
+// export function setLanguageChangedFlag(value) {
+//     languageChangedFlag = value;
+// }
 
 export function resetAllVariables() {
     // GLOBAL VARIABLES
@@ -204,26 +205,50 @@ export function resetAllVariables() {
 export function captureGameStatusForSaving() {
     let gameState = {};
 
-    // Game variables
+    // Large objects directly
+    gameState.resourceData = JSON.parse(JSON.stringify(resourceData));
+    gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
+
+    // Global variables
+    gameState.currentStarSystem = getCurrentStarSystem();
+    gameState.currentStarSystemWeatherEfficiency = getCurrentStarSystemWeatherEfficiency();
+    gameState.currentPrecipitationRate = getCurrentPrecipitationRate();
+    gameState.currencySymbol = getCurrencySymbol();
+    gameState.constituentPartsObject = getConstituentPartsObject();
+    gameState.techUnlockedArray = getTechUnlockedArray();
+    gameState.revealedTechArray = getRevealedTechArray();
+    gameState.techSpecificUIItemsArray = getTechSpecificUIItemsArray();
+    gameState.unlockedResourcesArray = getUnlockedResourcesArray();
+    gameState.unlockedCompoundsArray = getUnlockedCompoundsArray();
+    gameState.activatedFuelBurnObject = activatedFuelBurnObject;
+    gameState.buildingTypeOnOff = buildingTypeOnOff;
+    gameState.ranOutOfFuelWhenOn = getRanOutOfFuelWhenOn();
+    gameState.notationType = getNotationType();
 
     // Flags
-
-    // UI elements
-
-    gameState.language = getLanguage();
+    gameState.flags = {
+        notificationsToggle: getNotificationsToggle(),
+        techRenderChange: getTechRenderChange(),
+        losingEnergy: getLosingEnergy(),
+        powerOnOff: getPowerOnOff(),
+        trippedStatus: getTrippedStatus(),
+    };
 
     return gameState;
 }
+
 export function restoreGameStatus(gameState) {
     return new Promise((resolve, reject) => {
         try {
+            console.log('data loaded:');
+            console.log(gameState);
             // Game variables
 
             // Flags
 
             // UI elements
 
-            setLanguage(gameState.language);
+            
 
             resolve();
         } catch (error) {
@@ -232,37 +257,37 @@ export function restoreGameStatus(gameState) {
     });
 }
 
-export function setLocalization(value) {
-    localization = value;
-}
+// export function setLocalization(value) {
+//     localization = value;
+// }
 
-export function getLocalization() {
-    return localization;
-}
+// export function getLocalization() {
+//     return localization;
+// }
 
-export function setLanguage(value) {
-    language = value;
-}
+// export function setLanguage(value) {
+//     language = value;
+// }
 
-export function getLanguage() {
-    return language;
-}
+// export function getLanguage() {
+//     return language;
+// }
 
-export function setOldLanguage(value) {
-    oldLanguage = value;
-}
+// export function setOldLanguage(value) {
+//     oldLanguage = value;
+// }
 
-export function getOldLanguage() {
-    return oldLanguage;
-}
+// export function getOldLanguage() {
+//     return oldLanguage;
+// }
 
-export function setAudioMuted(value) {
-    audioMuted = value;
-}
+// export function setAudioMuted(value) {
+//     audioMuted = value;
+// }
 
-export function getAudioMuted() {
-    return audioMuted;
-}
+// export function getAudioMuted() {
+//     return audioMuted;
+// }
 
 export function getMenuState() {
     return MENU_STATE;
@@ -272,13 +297,13 @@ export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
 }
 
-export function getLanguageSelected() {
-    return languageSelected;
-}
+// export function getLanguageSelected() {
+//     return languageSelected;
+// }
 
-export function setLanguageSelected(value) {
-    languageSelected = value;
-}
+// export function setLanguageSelected(value) {
+//     languageSelected = value;
+// }
 
 export function getTimerUpdateInterval() {
     return TIMER_UPDATE_INTERVAL;
@@ -1038,4 +1063,12 @@ export function getCurrentPrecipitationRate() {
 
 export function setCurrentPrecipitationRate(value) {
     currentPrecipitationRate = value;
+}
+
+export function getSaveData() {
+    return saveData;
+}
+
+export function setSaveData(value) {
+    saveData = value;
 }

@@ -32,6 +32,8 @@ import {
     gameIntroText,
 } from "./descriptions.js";
 
+import { saveGame } from './saveLoadGame.js';
+
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
     setGameState,
@@ -274,7 +276,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'option2');
+            setLastScreenOpenRegister('tab8', 'saving / loading');
             setCurrentOptionPane(this.textContent);
             updateContent(this.textContent, 'tab8', 'content');
         });
@@ -398,6 +400,7 @@ export function updateContent(heading, tab, type) {
                 optionDescriptionElement.textContent = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab8Content(heading, optionContentElement);
+                saveGame();
                 break;
             default:
                 console.error('Invalid tab:', tab);
@@ -679,6 +682,26 @@ export function createTextElement(text, id, classList) {
 
     return div;
 }
+
+export function createTextFieldArea(id, classList = [], placeholder = '') {
+    const textArea = document.createElement('textarea');
+    
+    textArea.id = id;
+    textArea.placeholder = placeholder;
+
+    // Apply default classes for dimensions and styling
+    textArea.classList.add('text-area-height', 'text-area-width', 'text-area-style'); 
+
+    // Apply additional classes if provided
+    if (Array.isArray(classList)) {
+        textArea.classList.add(...classList);
+    } else if (typeof classList === 'string') {
+        textArea.classList.add(classList);
+    }
+
+    return textArea;
+}
+
 
 export function selectTheme(theme) {
     const body = document.body;
