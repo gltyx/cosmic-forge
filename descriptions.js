@@ -1,3 +1,6 @@
+import { getTimerRateRatio } from "./constantsAndGlobalVars.js";
+import { getResourceDataObject } from "./resourceDataObject.js";
+
 export const gameIntroHeader = 'Welcome to the Cosmic Forge!';
 export const gameIntroText = 'You find yourself with advanced knowledge but on a world with almost no material!<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies to unlock powerful compounds, and one by one recreate the materials to create<br>a craft to explore and discover the secrets of the interstellar medium!<br><br>With each click, fusion, and discovery, you edge closer to fulfilling your destiny!<br><br>Good Luck!';
 
@@ -340,7 +343,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     researchScienceLabRow: {
-        content1: "Build a Science Lab to do large amounts of Research.",
+        content1: `Build a Science Lab to do large amounts of Research - Power: ${Math.floor(getResourceDataObject('research', ['upgrades', 'scienceLab', 'rate']) * getTimerRateRatio())}KW / s`,
         content2: "",
         updateAt: ""
     },
