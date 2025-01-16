@@ -1,4 +1,6 @@
 import {
+    setCurrentPrecipitationRate,
+    getCurrentPrecipitationRate,
     getCurrentStarSystemWeatherEfficiency,
     setCurrentStarSystemWeatherEfficiency,
     getCurrentStarSystem,
@@ -64,6 +66,8 @@ import {
 import { optionDescriptions } from './descriptions.js';
 
 import {
+    getStarSystemDataObject,
+    setStarSystemDataObject,
     getAutoBuyerTierLevel,
     getResourceDataObject,
     setResourceDataObject,
@@ -177,6 +181,8 @@ export async function gameLoop() {
             }
         });
 
+        addPrecipitationResource();
+
         let allQuantities = getAllQuantities();
         allQuantities = normalizeAllQuantities(allQuantities);
         const allStorages = getAllStorages();
@@ -268,10 +274,24 @@ export async function gameLoop() {
     }
 }
 
+function addPrecipitationResource() {
+    const currentStarSystemPrecipitationCategory = getStarSystemDataObject(getCurrentStarSystem(), ['precipitationResourceCategory']);
+    const currentStarSystemPrecipitationType = getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType']);
+    const precipitationTypeRevealedYet = getTechUnlockedArray().includes(getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'revealedBy']));
+
+    let currentStarSystemPrecipitationTypeQuantity = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
+    let precipitationStorageAvailable = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'storageCapacity']) > currentStarSystemPrecipitationTypeQuantity;
+
+    if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && precipitationTypeRevealedYet && precipitationStorageAvailable) {
+        setResourceDataObject(currentStarSystemPrecipitationTypeQuantity + getCurrentPrecipitationRate(), currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
+        getElements().waterQuantity.textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
+    }
+}
+
 function checkAndRevealNewBuildings(type) {
     let elements;
 
-    switch(type) {
+    switch (type) {
         case 'energy':
             elements = getResourceDataObject('buildings', ['energy', 'upgrades']);
             break;
@@ -714,7 +734,7 @@ function checkAndDeductResources() {
     let mainKey;
 
     for (const itemToDeductType in deductObject) {
-        if (itemToDeductType === "") {
+        if (itemToDeductType === "" || itemToDeductType.includes(',')) {
             delete deductObject[itemToDeductType];
         }
     }
@@ -2087,13 +2107,16 @@ function startInitialTimers() {
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier3', 'rate']) * 
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier3', 'quantity']) +
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
-                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
+                                getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'quantity'])
+
+                            if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                                allCompoundRatesAddedTogether += getCurrentPrecipitationRate();
+                            }
     
                             const powerPlant3FuelType = 'diesel';                    
                             const powerPlant3Consumption = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[1] * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
     
                             let amountToDeductForConsumption = 0;
-    
                             
                             if (getBuildingTypeOnOff('powerPlant3')) {
                                 if (compound === powerPlant3FuelType) {
@@ -2115,9 +2138,18 @@ function startInitialTimers() {
                                 const compoundTier1Rate = 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
-    
+                                
+                                if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                                    compoundTier1Rate += getCurrentPrecipitationRate();
+                                }
+
                                 setResourceDataObject(compoundTier1Rate, 'compounds', [compound, 'rate']);
                                 getElements()[`${compound}Rate`].textContent = `${(compoundTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
+                            } else {
+                                if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                                    setResourceDataObject(getCurrentPrecipitationRate(), 'compounds', [compound, 'rate']);
+                                    getElements()[`${compound}Rate`].textContent = `${(getCurrentPrecipitationRate() * getTimerRateRatio()).toFixed(1)} / s`;
+                                }
                             }
                         }
                     });
@@ -2220,10 +2252,10 @@ function startInitialTimers() {
             const weatherProbabilities = weatherTypes.map(weatherType => weatherCurrentStarSystemObject[weatherType][0]);
             const totalProbability = weatherProbabilities.reduce((acc, val) => acc + val, 0);
             const randomSelection = Math.random() * totalProbability;
-            
+    
             let cumulativeProbability = 0;
             let selectedWeatherType = '';
-            
+    
             for (let i = 0; i < weatherTypes.length; i++) {
                 cumulativeProbability += weatherProbabilities[i];
                 if (randomSelection <= cumulativeProbability) {
@@ -2236,7 +2268,7 @@ function startInitialTimers() {
     
             const statValueSpan = document.getElementById('stat7');
             const statTitleSpan = statValueSpan.previousElementSibling;
-
+    
             switch (selectedWeatherType) {
                 case 'sunny':
                     statValueSpan.classList.add('green-ready-text');
@@ -2260,23 +2292,46 @@ function startInitialTimers() {
             statValueSpan.textContent = `${Math.floor(efficiencyWeather * 100)}% ${symbolWeather}`;
             setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
         }
-
+    
         selectWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        // const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = 10000;
+        const durationInSeconds = randomDurationInMs / 1000;
     
         if (timerManager.getTimer(weatherTimerName)) {
             timerManager.removeTimer(weatherTimerName);
         }
     
+        let timeLeft = durationInSeconds;
+
+        let precipitationRate = 0;
+        let precipitationRateSet = false;
+        setCurrentPrecipitationRate(0);
+
+        const countdownInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && !precipitationRateSet) {
+                    precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
+                    setCurrentPrecipitationRate(precipitationRate);
+                    precipitationRateSet = true;
+                }
+                timeLeft -= 1;
+            } else {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+
         timerManager.addTimer(weatherTimerName, randomDurationInMs, () => {
+            clearInterval(countdownInterval);
             selectWeather();
             startWeatherTimer();
         });
     }
+    
     startWeatherTimer();
-}  
+}     
 
 function startUpdateScienceTimers(elementName) {
     let newResearchRate;

@@ -942,8 +942,8 @@ export function drawTab4Content(heading, optionContentElement) {
             const waterIncreaseStorageRow = createOptionRow(
                 'waterIncreaseStorageRow',
                 null,
-                'Build Reservoir:',
-                createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                'Enlarge Reservoir:',
+                createButton('Enlarge Reservoir', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['waterQuantity', 'concreteQuantity'], ['water', 'concrete'], ['compounds', 'compounds']);
                     storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']);
                     extraResourceName = 'Concrete';

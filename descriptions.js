@@ -30,7 +30,7 @@ export const headerDescriptions = {
     diesel: "The first compound created by your hands, it is a useful early fuel.",
     glass: "This is reinforced specialist glass and is great for solar applications.",
     steel: "This is reinforced steel, highly durable and used in construction and manufacturing.",
-    water: "Water is an essential resource, crucial for life and widely utilized in various industrial and construction processes.",
+    water: "Water is an essential resource which can be produced, or collected from rain in your reservoir.",
 
     'star map': "This is a map of the known galaxy",
     
@@ -300,7 +300,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     waterIncreaseStorageRow: {
-        content1: "Upgrade your Water reservoir capacity to hold more resources.",
+        content1: "Upgrade your Water reservoir capacity to store more water.",
         content2: "",
         updateAt: ""
     },

@@ -555,6 +555,8 @@ export const resourceData = {
 
 const starSystems = {
     spica: {
+        precipitationResourceCategory: 'compounds',
+        precipitationType: 'water',
         weather: {
             sunny: [30, '☀', 1],
             cloudy: [47, '☁', 0.6],
@@ -605,6 +607,47 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 
     let current = resourceData;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
+    }
+}
+
+export function getStarSystemDataObject(key, subKeys) {
+    let current = starSystems[key];
+
+    if (!current) {
+        console.warn(`Resource data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined) {
+                console.warn(`Missing subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+export function setStarSystemDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
+
+    let current = starSystems;
     current = current[key] || (current[key] = {});
 
     for (let i = 0; i < subKeys.length; i++) {

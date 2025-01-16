@@ -29,6 +29,7 @@ export const deferredActions = [];
 
 let currentStarSystem = 'spica';
 let currentStarSystemWeatherEfficiency = [];
+let currentPrecipitationRate = 0;
 let techRenderCounter = 0;
 let tempRowValue = null;
 let currencySymbol = '$';
@@ -1047,4 +1048,12 @@ export function getCurrentStarSystemWeatherEfficiency() {
 
 export function setCurrentStarSystemWeatherEfficiency(value) {
     currentStarSystemWeatherEfficiency = value;
+}
+
+export function getCurrentPrecipitationRate() {
+    return currentPrecipitationRate;
+}
+
+export function setCurrentPrecipitationRate(value) {
+    currentPrecipitationRate = value;
 }
