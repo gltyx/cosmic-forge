@@ -2058,7 +2058,11 @@ function startInitialTimers() {
                                         setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
                                     }
                                 }
-                                getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
+
+                                if (resource !== 'solar') {
+                                    getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
+                                }
+
                             }
                         } else { //if power off
                             if (tier === 1) {
@@ -2097,7 +2101,7 @@ function startInitialTimers() {
                             const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
                             setResourceDataObject(Math.min(currentQuantity + calculatedCompoundRate, storageCapacity), 'compounds', [compound, 'quantity']);
                             
-                            const allCompoundRatesAddedTogether = 
+                            let allCompoundRatesAddedTogether = 
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']) +
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier2', 'rate']) * 
@@ -2133,7 +2137,7 @@ function startInitialTimers() {
                                 const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
                                 setResourceDataObject(Math.min(currentQuantity + calculatedCompoundRate, storageCapacity), 'compounds', [compound, 'quantity']);
                                 
-                                const compoundTier1Rate = 
+                                let compoundTier1Rate = 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
                                 
