@@ -31,10 +31,10 @@ export const resourceData = {
             screenName: 'hydrogen',
             saleValue: 0.02,
             salePreviewElement: 'sellHydrogenDescription',
-            quantity: 10000,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 10000, //150
+            storageCapacity: 150, 
             currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
@@ -66,7 +66,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: true,
-                    tier1: { nameUpgrade: 'Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer1Row', price: 75, rate: 0.015, quantity: 0, setPrice: 'heliumAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer1Row', price: 75, rate: 0.02, quantity: 0, setPrice: 'heliumAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer2Row', price: 600, rate: 0.075, quantity: 0, setPrice: 'heliumAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer3Row', price: 3000, rate: 0.375, quantity: 0, setPrice: 'heliumAB3Price', energyUse: 0.09 },
                     tier4: { nameUpgrade: 'Quantum Helium Extractor', screen: 'helium', place: 'heliumAutoBuyer4Row', price: 15000, rate: 1.875, quantity: 0, setPrice: 'heliumAB4Price', energyUse: 0.45 }
@@ -83,10 +83,10 @@ export const resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 10000,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 10000, //130
+            storageCapacity: 130,
             currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
@@ -118,7 +118,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 0,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 120, rate: 0.025, quantity: 0, setPrice: 'neonAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 120, rate: 0.02, quantity: 0, setPrice: 'neonAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Neon Extractor', screen: 'neon', place: 'neonAutoBuyer2Row', price: 960, rate: 0.125, quantity: 0, setPrice: 'neonAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Neon Extractor', screen: 'neon', place: 'neonAutoBuyer3Row', price: 4800, rate: 0.625, quantity: 0, setPrice: 'neonAB3Price', energyUse: 0.15 },
                     tier4: { nameUpgrade: 'Quantum Neon Extractor', screen: 'neon', place: 'neonAutoBuyer4Row', price: 24000, rate: 3.125, quantity: 0, setPrice: 'neonAB4Price', energyUse: 0.75 }
@@ -135,7 +135,7 @@ export const resourceData = {
             screenName: 'oxygen',
             saleValue: 0.02,
             salePreviewElement: 'sellOxygenDescription',
-            quantity: 6000,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 170,
@@ -144,7 +144,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 140, rate: 0.03, quantity: 0, setPrice: 'oxygenAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 140, rate: 0.02, quantity: 0, setPrice: 'oxygenAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer2Row', price: 1120, rate: 0.15, quantity: 0, setPrice: 'oxygenAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer3Row', price: 5600, rate: 0.75, quantity: 0, setPrice: 'oxygenAB3Price', energyUse: 0.18 },
                     tier4: { nameUpgrade: 'Quantum Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer4Row', price: 28000, rate: 3.75, quantity: 0, setPrice: 'oxygenAB4Price', energyUse: 0.9 }
@@ -170,7 +170,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer1Row', price: 200, rate: 0.035, quantity: 0, setPrice: 'siliconAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer1Row', price: 200, rate: 0.02, quantity: 0, setPrice: 'siliconAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer2Row', price: 1600, rate: 0.175, quantity: 0, setPrice: 'siliconAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer3Row', price: 8000, rate: 0.875, quantity: 0, setPrice: 'siliconAB3Price', energyUse: 0.21 },
                     tier4: { nameUpgrade: 'Quantum Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer4Row', price: 40000, rate: 4.375, quantity: 0, setPrice: 'siliconAB4Price', energyUse: 1.05 }
@@ -196,7 +196,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Iron Extractor', screen: 'iron', place: 'ironAutoBuyer1Row', price: 250, rate: 0.04, quantity: 0, setPrice: 'ironAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Iron Extractor', screen: 'iron', place: 'ironAutoBuyer1Row', price: 250, rate: 0.02, quantity: 0, setPrice: 'ironAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Iron Extractor', screen: 'iron', place: 'ironAutoBuyer2Row', price: 2000, rate: 0.2, quantity: 0, setPrice: 'ironAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Iron Extractor', screen: 'iron', place: 'ironAutoBuyer3Row', price: 10000, rate: 1, quantity: 0, setPrice: 'ironAB3Price', energyUse: 0.27 },
                     tier4: { nameUpgrade: 'Quantum Iron Extractor', screen: 'iron', place: 'ironAutoBuyer4Row', price: 50000, rate: 5, quantity: 0, setPrice: 'ironAB4Price', energyUse: 1.35 }
@@ -222,7 +222,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer1Row', price: 300, rate: 0.05, quantity: 0, setPrice: 'sodiumAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer1Row', price: 300, rate: 0.02, quantity: 0, setPrice: 'sodiumAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer2Row', price: 2400, rate: 0.25, quantity: 0, setPrice: 'sodiumAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer3Row', price: 12000, rate: 1.25, quantity: 0, setPrice: 'sodiumAB3Price', energyUse: 0.24 },
                     tier4: { nameUpgrade: 'Quantum Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer4Row', price: 60000, rate: 6.25, quantity: 0, setPrice: 'sodiumAB4Price', energyUse: 1.2 }
@@ -274,7 +274,7 @@ export const resourceData = {
             saleValue: 0.8,
             salePreviewElement: 'sellGlassDescription',
             createPreviewElement: 'createGlassDescription',
-            quantity: 200,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 200,
@@ -283,7 +283,7 @@ export const resourceData = {
                 autoBuyer: {
                     currentTierLevel: 0,
                     normalProgression: true,
-                    tier1: { nameUpgrade: 'Workshop Glass Fabricator', screen: 'glass', place: 'glassAutoBuyer1Row', price: 70000, rate: 0.015, quantity: 0, setPrice: 'glassAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Workshop Glass Fabricator', screen: 'glass', place: 'glassAutoBuyer1Row', price: 70000, rate: 0.02, quantity: 0, setPrice: 'glassAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Small Glass Factory', screen: 'glass', place: 'glassAutoBuyer2Row', price: 600000, rate: 0.08, quantity: 0, setPrice: 'glassAB2Price', energyUse: 0.08 },
                     tier3: { nameUpgrade: 'Medium Glass Factory', screen: 'glass', place: 'glassAutoBuyer3Row', price: 2500000, rate: 0.4, quantity: 0, setPrice: 'glassAB3Price', energyUse: 0.31 },
                     tier4: { nameUpgrade: 'Large Glass Factory', screen: 'glass', place: 'glassAutoBuyer4Row', price: 1250000, rate: 1.5, quantity: 0, setPrice: 'glassAB4Price', energyUse: 1.5 }
@@ -306,7 +306,7 @@ export const resourceData = {
             saleValue: 1.8,
             salePreviewElement: 'sellSteelDescription',
             createPreviewElement: 'createSteelDescription',
-            quantity: 250,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
             storageCapacity: 250,
@@ -370,16 +370,16 @@ export const resourceData = {
             saleValue: 2.5,
             salePreviewElement: 'sellWaterDescription',
             createPreviewElement: 'createWaterDescription',
-            quantity: 100,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 50,
+            storageCapacity: 100,
             currentSecondaryIncreasePrice: 0,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Basic Water Pump', screen: 'water', place: 'waterAutoBuyer1Row', price: 95000, rate: 0.01, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
+                    tier1: { nameUpgrade: 'Basic Water Pump', screen: 'water', place: 'waterAutoBuyer1Row', price: 95000, rate: 0.02, quantity: 0, setPrice: 'waterAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Small Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer2Row', price: 800000, rate: 0.08, quantity: 0, setPrice: 'waterAB2Price', energyUse: 0.2 },
                     tier3: { nameUpgrade: 'Medium Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer3Row', price: 4200000, rate: 0.5, quantity: 0, setPrice: 'waterAB3Price', energyUse: 0.7 },
                     tier4: { nameUpgrade: 'Large Water Treatment Plant', screen: 'water', place: 'waterAutoBuyer4Row', price: 1800000, rate: 2, quantity: 0, setPrice: 'waterAB4Price', energyUse: 3.6 }
@@ -450,10 +450,8 @@ export const resourceData = {
                 },
                 battery1: {
                     price: 5000,
-                    resource1Price: [5000, 'hydrogen', 'resources'],
-                    resource2Price: [0, '', ''],
-                    // resource1Price: [500, 'sodium', 'resources'],
-                    // resource2Price: [1000, 'carbon', 'resources'],
+                    resource1Price: [500, 'sodium', 'resources'],
+                    resource2Price: [1000, 'carbon', 'resources'],
                     resource3Price: [0, '', ''],
                     capacity: 15000,
                     quantity: 0, 
@@ -482,7 +480,7 @@ export const resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 300000,
+        quantity: 0,
         rate: 0,
         ratePower: 0,
         upgrades: {
@@ -538,7 +536,7 @@ export const resourceData = {
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
         hydroCarbons: { appearsAt: [3200, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
-        quantumComputing: { appearsAt: [5000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
+        quantumComputing: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
         scienceLaboratories: { appearsAt: [5750, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 7000, idForRenderPosition: 521 },
         nobleGasCollection: { appearsAt: [4000, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 4500, idForRenderPosition: 530 },
         neutronCapture: { appearsAt: [20000, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 23000, idForRenderPosition: 600 },
@@ -549,7 +547,7 @@ export const resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 30000,
+        cash: 4,
     },
 };
 

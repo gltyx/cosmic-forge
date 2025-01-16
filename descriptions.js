@@ -373,7 +373,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techHeliumFusionRow: {
-        content1: "Unlock Helium Fusion to enable the fusion of helium atoms.",
+        content1: "Unlock Helium Fusion to enable the fusion of Helium atoms.",
         content2: "",
         updateAt: ""
     },
@@ -383,27 +383,27 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techNanoTubeTechnologyRow: {
-        content1: "Unlock NanoTube Technology to manufacture new machines to extract resources more efficiently.",
+        content1: "Unlock NanoTube Technology to learn the first step about the fusion of Carbon.",
         content2: "",
         updateAt: ""
     },
     techCarbonFusionRow: {
-        content1: "Unlock Carbon Fusion to experiment with the fusion of carbon atoms.",
+        content1: "Unlock Carbon Fusion to finalise knowledge about the fusion of Carbon atoms.",
         content2: "",
         updateAt: ""
     },
     techNeonFusionRow: {
-        content1: "Unlock Neon Fusion to explore and harness fusion reactions of neon.",
+        content1: "Unlock Neon Fusion to explore and harness fusion reactions of Neon.",
         content2: "",
         updateAt: ""
     },
     techOxygenFusionRow: {
-        content1: "Unlock Oxygen Fusion to experiment with fusing oxygen atoms.",
+        content1: "Unlock Oxygen Fusion to experiment with fusing Oxygen atoms.",
         content2: "",
         updateAt: ""
     },
     techSiliconFusionRow: {
-        content1: "Unlock Silicon Fusion to experiment fusing silicon.",
+        content1: "Unlock Silicon Fusion to experiment fusing Silicon.",
         content2: "",
         updateAt: ""
     },
@@ -413,12 +413,12 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techGlassManufactureRow: {
-        content1: "Unlock Glass Manufacture to produce advanced glass compounds from silicon and oxygen.",
+        content1: "Unlock Glass Manufacture to produce advanced Glass compounds from Silicon and Oxygen.",
         content2: "",
         updateAt: ""
     },
     techAggregateMixingRow: {
-        content1: "Unlock Aggregate Mixing to produce concrete compounds from silicon, sodium and hydrogen.",
+        content1: "Unlock Aggregate Mixing to produce concrete compounds from Silicon, Sodium and Hydrogen.",
         content2: "",
         updateAt: ""
     },
@@ -453,7 +453,7 @@ export const optionDescriptions = {
         updateAt: ""
     },
     techSteelFoundriesRow: {
-        content1: "Unlock Steel Foundries to produce high strength steel alloys from iron.",
+        content1: "Unlock Steel Foundries to produce high strength steel alloys from Iron.",
         content2: "",
         updateAt: ""
     },
