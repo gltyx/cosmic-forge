@@ -1,13 +1,8 @@
 import {
-    setTotalEnergyUse,
-    getTotalEnergyUse,
     READY_TO_SORT,
     NOW,
-    getTechRenderCounter,
     setTechRenderCounter,
     setTechRenderChange,
-    getTechRenderChange,
-    getTemporaryRowsRepo,
     getRevealedTechArray,
     setRevealedTechArray,
     getDebugVisibilityArray,
@@ -18,19 +13,14 @@ import {
     getNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    getLanguage,
+    // getLanguage,
     setElements,
     getElements,
-    setBeginGameStatus,
-    getGameInProgress,
-    setGameInProgress,
     getGameVisibleActive,
-    getMenuState,
-    getLanguageSelected,
-    setLanguageSelected,
-    setLanguage,
+    // getLanguageSelected,
+    // setLanguageSelected,
+    // setLanguage,
     getCurrentOptionPane,
-    getAudioMuted
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -43,16 +33,15 @@ import {
 } from "./descriptions.js";
 
 import {
-    //updateOriginalValue,
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
     setGameState,
     startGame
 } from './game.js';
 
-import {
-    initLocalization,
-    localize
-} from './localization.js';
+// import {
+//     initLocalization,
+//     localize
+// } from './localization.js';
 
 import { 
     capitaliseString 
@@ -72,6 +61,15 @@ let notificationContainer;
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
 
+    setGameState(getGameVisibleActive());
+    const headerText = gameIntroHeader;
+    const content = gameIntroText;
+    populateModal(headerText, content);
+    getElements().modalContainer.style.display = 'flex';
+    getElements().overlay.style.display = 'flex';
+    //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
+    startGame();
+
     getElements().modalOKButton.addEventListener('click', () => {
         showHideModal();
     });
@@ -79,18 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     notificationContainer = getElements().notificationContainer;
     // Event listeners
     getElements().newGameMenuButton.addEventListener('click', async () => {
-        setBeginGameStatus(true);
-        if (!getGameInProgress()) {
-            setGameInProgress(true);
-        }
-        setGameState(getGameVisibleActive());
-        const headerText = gameIntroHeader;
-        const content = gameIntroText;
-        populateModal(headerText, content);
-        getElements().modalContainer.style.display = 'flex';
-        getElements().overlay.style.display = 'flex';
-        //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
-        startGame();
+
     });
 
     document.querySelectorAll('.collapsible-header').forEach(header => {
@@ -101,8 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
-    setGameState(getMenuState());
-    handleLanguageChange(getLanguageSelected());
+    //handleLanguageChange(getLanguageSelected()); //if we are using localise later on
 
     let fuseButton;
 
@@ -766,21 +752,21 @@ function highlightActiveTab(activeIndex) {
     });
 }
 
-async function setElementsLanguageText() {
-    getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage())}</h2>`;
-    getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage())}`;
-}
+// async function setElementsLanguageText() {
+//     getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage())}</h2>`;
+//     getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage())}`;
+// }
 
-export async function handleLanguageChange(languageCode) {
-    setLanguageSelected(languageCode);
-    await setupLanguageAndLocalization();
-    setElementsLanguageText();
-}
+// export async function handleLanguageChange(languageCode) {
+//     setLanguageSelected(languageCode);
+//     await setupLanguageAndLocalization();
+//     setElementsLanguageText();
+// }
 
-async function setupLanguageAndLocalization() {
-    setLanguage(getLanguageSelected());
-    await initLocalization(getLanguage());
-}
+// async function setupLanguageAndLocalization() {
+//     setLanguage(getLanguageSelected());
+//     await initLocalization(getLanguage());
+// }
 
 export function disableActivateButton(button, action, activeClass) {
     switch (action) {

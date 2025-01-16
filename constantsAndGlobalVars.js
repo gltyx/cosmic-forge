@@ -83,8 +83,6 @@ let notationType = 'normalCondensed';
 //FLAGS
 let audioMuted;
 let languageChangedFlag;
-let beginGameState = true;
-let gameInProgress = false;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
@@ -280,22 +278,6 @@ export function getLanguageSelected() {
 
 export function setLanguageSelected(value) {
     languageSelected = value;
-}
-
-export function getBeginGameStatus() {
-    return beginGameState;
-}
-
-export function setBeginGameStatus(value) {
-    beginGameState = value;
-}
-
-export function getGameInProgress() {
-    return gameInProgress;
-}
-
-export function setGameInProgress(value) {
-    gameInProgress = value;
 }
 
 export function getTimerUpdateInterval() {

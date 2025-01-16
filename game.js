@@ -48,9 +48,7 @@ import {
     setItemsToDeduct,
     getCurrentOptionPane,
     getIncreaseStorageFactor,
-    setBeginGameStatus, 
-    setGameStateVariable, 
-    getBeginGameStatus, 
+    setGameStateVariable,  
     getMenuState, 
     getGameVisibleActive, 
     getElements, 
@@ -63,7 +61,6 @@ import {
     getCompoundCreatePreview,
     getNotationType
 } from './constantsAndGlobalVars.js';
-import { optionDescriptions } from './descriptions.js';
 
 import {
     getStarSystemDataObject,
@@ -148,10 +145,6 @@ class Timer {
 const timerManager = new TimerManager();
 
 export function startGame() {
-    if (getBeginGameStatus()) {
-        setBeginGameStatus(false);
-    }
-    setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     startInitialTimers();
     gameLoop();
