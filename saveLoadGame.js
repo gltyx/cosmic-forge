@@ -8,12 +8,15 @@ import {
     // getLanguageChangedFlag 
 } from './constantsAndGlobalVars.js';
 
+import { startGame } from './game.js';
+
 //import {localize} from './localization.js';
 //import { handleLanguageChange } from './ui.js';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+import { showNotification } from './ui.js';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCLctkVcwY2hQ-zeZsSbAjCR1VcwuRi0Kg",
@@ -33,12 +36,26 @@ export async function saveGameToCloud(gameData) {
     try {
         const userId = "guest";
         const saveRef = doc(db, "cosmicForgeSaves", userId);
+
         await setDoc(saveRef, { saveData: gameData });
-        console.log("Game saved to the cloud!");
+        showNotification('Game saved to the cloud!', 'info');
+
+        const timestamp = new Date().toISOString().split('T');
+        const datePart = timestamp[0].replace(/-/g, '_');
+        const timePart = timestamp[1].split('.')[0].replace(/:/g, '_');
+        const backupSaveName = `${datePart}_${timePart}_BackupSave`;
+
+        const backupSaveRef = doc(db, "cosmicForgeSaves", backupSaveName);
+
+        await setDoc(backupSaveRef, { saveData: gameData });
+        showNotification('Backup saved to the cloud!', 'info');
+
     } catch (error) {
+        showNotification('Error saving game to cloud!', 'error');
         console.error("Error saving game to cloud:", error);
     }
 }
+
 
 export function saveGame() {
     const gameState = captureGameStatusForSaving();
@@ -61,16 +78,17 @@ export function copySaveStringToClipBoard() {
     try {
         navigator.clipboard.writeText(textArea.value)
             .then(() => {
-                alert('Text copied to clipboard!');
+                showNotification('Data copied to clipboard!', 'info');
             })
             .catch(err => {
-                alert(err);
+                showNotification('Error copying data!', 'error');
+                console.log('Error copying data! ' + err);
             })
             .finally(() => {
                 textArea.setSelectionRange(0, 0);
             })
     } catch (err) {
-        alert(err);
+        console.log('Error copying data! ' + err);
     }
 }
 
@@ -87,13 +105,13 @@ export async function loadGameFromCloud() {
             const gameState = JSON.parse(decompressedJson);
 
             await initialiseLoadedGame(gameState);
-            alert('Game loaded successfully!');
+            showNotification('Game loaded successfully!', 'info');
         } else {
-            alert('No saved game data found.');
+            showNotification('No saved game data found.', 'warning');
         }
     } catch (error) {
         console.error("Error loading game from cloud:", error);
-        alert('Error loading game data from the cloud.');
+        showNotification('Error loading game data from the cloud.', 'error');
     }
 }
 
@@ -109,7 +127,7 @@ export function loadGame() {
 
             // Validate the compressed string before processing
             if (!validateSaveString(compressed)) {
-                alert('Invalid game data string. Please check and try again.');
+                showNotification('Invalid game data string. Please check and try again.', 'warning');
                 return reject('Invalid game data string');
             }
 
@@ -118,18 +136,19 @@ export function loadGame() {
 
             initialiseLoadedGame(gameState)
                 .then(() => {
-                    alert('Game loaded successfully!');
+                    startGame();
+                    showNotification('Game loaded successfully!', 'info');
                     resolve();
                 })
                 .catch(error => {
                     console.error('Error initializing game:', error);
-                    alert('Error initializing game. Please make sure the data is correct.');
+                    showNotification('Error initializing game. Please make sure the data is correct.', 'error');
                     reject(error);
                 });
 
         } catch (error) {
             console.error('Error loading game:', error);
-            alert('Error loading game. Please make sure the string contains valid game data.');
+            showNotification('Error loading game. Please make sure the string contains valid game data.', 'error');
             reject(error);
         }
     });
@@ -148,167 +167,3 @@ function validateSaveString(compressed) {
 async function initialiseLoadedGame(gameState) {
     await restoreGameStatus(gameState);
 }
-
-// export function loadGame(string) {
-//     if (!string) {
-//         return new Promise((resolve, reject) => {
-//             const input = document.createElement('input');
-//             input.type = 'file';
-//             input.accept = '.txt';
-
-//             input.addEventListener('change', (event) => {
-//                 handleFileSelectAndInitialiseLoadedGame(event, false, null)
-//                     .then(() => {
-//                         resolve();
-//                     })
-//                     .catch(reject);
-//             });
-
-//             input.click();
-//         });
-//     } else {
-//         const textArea = document.getElementById('loadSaveGameStringTextArea');
-//         if (textArea) {
-//             const string = {
-//                 target: {
-//                     result: textArea.value
-//                 }
-//             };
-//             return handleFileSelectAndInitialiseLoadedGame(null, true, string);
-//         } else {
-//             return Promise.reject("Text area not found.");
-//         }
-//     }
-// }
-
-// function handleFileSelectAndInitialiseLoadedGame(event, stringLoad, string) {
-//     return new Promise((resolve, reject) => {
-//         const processGameData = (compressed) => {
-//             try {
-//                 // Validate the compressed string before processing
-//                 if (!validateSaveString(compressed)) {
-//                     alert('Invalid game data string. Please check and try again.');
-//                     return reject('Invalid game data string');
-//                 }
-
-//                 let decompressedJson = LZString.decompressFromEncodedURIComponent(compressed);
-//                 let gameState = JSON.parse(decompressedJson);
-
-//                 getElements().overlay.classList.add('d-none');
-
-//                 initialiseLoadedGame(gameState).then(() => {
-//                     setLanguageChangedFlag(true);
-//                     checkForLanguageChange();
-//                     alert('Game loaded successfully!');
-//                     resolve();
-//                 }).catch(error => {
-//                     console.error('Error initializing game:', error);
-//                     alert('Error initializing game. Please make sure the data is correct.');
-//                     reject(error);
-//                 });
-
-//             } catch (error) {
-//                 console.error('Error loading game:', error);
-//                 alert('Error loading game. Please make sure the file contains valid game data.');
-//                 reject(error);
-//             }
-//         };
-
-//         if (stringLoad) {
-//             try {
-//                 processGameData(string.target.result);
-//             } catch (error) {
-//                 console.error('Error processing string:', error);
-//                 alert('Error processing string. Please make sure the string is valid.');
-//                 reject(error);
-//             }
-//         } else {
-//             const file = event.target.files[0];
-//             if (!file) {
-//                 return reject('No file selected');
-//             }
-
-//             const reader = new FileReader();
-//             reader.onload = function(e) {
-//                 try {
-//                     processGameData(e.target.result);
-//                 } catch (error) {
-//                     console.error('Error reading file:', error);
-//                     alert('Error reading file. Please make sure the file contains valid game data.');
-//                     reject(error);
-//                 }
-//             };
-
-//             reader.onerror = () => {
-//                 reject('Error reading file');
-//             };
-
-//             reader.readAsText(file);
-//         }
-//     });
-// }
-
-// function validateSaveString(compressed) {
-//     let decompressedJson = LZString.decompressFromEncodedURIComponent(compressed);
-//     JSON.parse(decompressedJson);
-//     return decompressedJson !== null;
-// }
-
-// async function initialiseLoadedGame(gameState) {    
-//     await restoreGameStatus(gameState);
-// }
-
-// export function checkForLanguageChange() {
-//     if (getLanguageChangedFlag()) {
-//         handleLanguageChange(getLanguage());
-//     }
-//     setLanguageChangedFlag(false);
-// }
-
-// export function saveGame(isManualSave) {
-//     const gameState = captureGameStatusForSaving();
-//     const serializedGameState = JSON.stringify(gameState);
-//     let compressed = LZString.compressToEncodedURIComponent(serializedGameState);
-//     const blob = new Blob([compressed], {
-//         type: 'text/plain'
-//     });
-//     const url = URL.createObjectURL(blob);
-
-//     if (isManualSave) {
-//         document.querySelector('.save-load-header').innerHTML = `${localize('headerStringSave', getLanguage())}`;
-//         document.getElementById('copyButtonSavePopup').classList.remove('d-none');
-//         document.getElementById('loadStringButton').classList.add('d-none');
-//         getElements().saveLoadPopup.classList.remove('d-none');
-//         //document.getElementById('overlay').classList.remove('d-none');
-
-//         const reader = new FileReader();
-//         reader.onload = function(event) {
-//             getElements().loadSaveGameStringTextArea.value = `${event.target.result}`;
-//             getElements().loadSaveGameStringTextArea.readOnly = true;
-//         };
-//         reader.readAsText(blob);
-//     } else {
-//         const a = document.createElement('a');
-//         // Generate the filename with "AUTO_" prefix for auto save
-//         const timestamp = getCurrentTimestamp();
-//         const prefix = isManualSave ? "" : "AUTO_";
-//         a.href = url;
-//         a.download = `${prefix}ChipShopSave_${timestamp}.txt`;
-//         a.style.display = 'none';
-
-//         document.body.appendChild(a);
-//         a.click();
-//         URL.revokeObjectURL(url);
-//         a.remove();
-//     }
-// }
-
-
-// function getCurrentTimestamp() {
-//     const now = new Date();
-//     return `${now.getFullYear()}_${padZero(now.getMonth() + 1)}_${padZero(now.getDate())}_${padZero(now.getHours())}_${padZero(now.getMinutes())}_${padZero(now.getSeconds())}`;
-// }
-
-// function padZero(num) {
-//     return num.toString().padStart(2, '0');
-// }

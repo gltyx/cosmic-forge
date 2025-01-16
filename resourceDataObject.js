@@ -1,4 +1,4 @@
-export const resourceData = {
+export let resourceData = {
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -495,7 +495,7 @@ export const resourceData = {
                 energyUse: 0
             },
             scienceClub: { 
-                price: 700,
+                price: 200,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
                 resource3Price: [0, '', ''],
@@ -551,7 +551,7 @@ export const resourceData = {
     },
 };
 
-export const starSystems = {
+export let starSystems = {
     spica: {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',
@@ -566,6 +566,14 @@ export const starSystems = {
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function restoreResourceDataObject(value) {
+    resourceData = value;
+}
+
+export function restoreStarSystemsDataObject(value) {
+    starSystems = value;
+}
 
 export function getStarSystemWeather(starSystem) {
     return starSystems[starSystem]?.weather || null;

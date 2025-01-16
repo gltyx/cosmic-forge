@@ -145,6 +145,7 @@ class Timer {
 const timerManager = new TimerManager();
 
 export function startGame() {
+    setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     startInitialTimers();
     gameLoop();
@@ -2165,6 +2166,17 @@ function startInitialTimers() {
         }
     } 
 
+    timerManager.addTimer('research', getTimerUpdateInterval(), () => {
+        const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+        const currentResearchRate = getResourceDataObject('research', ['rate']);
+        const currentResearchRateUnpowered = getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower']);
+        if (getPowerOnOff()) {
+            setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+        } else {
+            setResourceDataObject(currentResearchQuantity + currentResearchRateUnpowered, 'research', ['quantity']);
+        }
+    });
+    
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
         let newEnergyRate = 0;
         let currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
@@ -2355,19 +2367,6 @@ function startUpdateScienceTimers(elementName) {
     setResourceDataObject(newResearchRatePower, 'research', ['ratePower']);
     setResourceDataObject(newResearchRate, 'research', ['rate']);
     getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
-
-    if (!timerManager.getTimer('research')) {
-        timerManager.addTimer('research', getTimerUpdateInterval(), () => {
-            const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
-            const currentResearchRate = getResourceDataObject('research', ['rate']);
-            const currentResearchRateUnpowered = getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower']);
-            if (getPowerOnOff()) {
-                setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
-            } else {
-                setResourceDataObject(currentResearchQuantity + currentResearchRateUnpowered, 'research', ['quantity']);
-            }
-        });
-    }
 }
 
 function startUpdateEnergyTimers(elementName, action) {

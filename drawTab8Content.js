@@ -181,8 +181,8 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             'Export Cloud Save:',
             createButton(`Export Cloud Save`, ['option-button', 'save-load-button'], () => {
+                saveGame();
                 if (getSaveData()) {
-                    saveGame();
                     saveGameToCloud(getSaveData());
                 }
                 setSaveData(null);

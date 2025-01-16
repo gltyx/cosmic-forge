@@ -1,4 +1,4 @@
-import { resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
+import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseString } from "./utilityFunctions.js";
 
 //DEBUG
@@ -215,14 +215,14 @@ export function captureGameStatusForSaving() {
     gameState.currentPrecipitationRate = getCurrentPrecipitationRate();
     gameState.currencySymbol = getCurrencySymbol();
     gameState.constituentPartsObject = getConstituentPartsObject();
-    gameState.techUnlockedArray = getTechUnlockedArray();
-    gameState.revealedTechArray = getRevealedTechArray();
-    gameState.techSpecificUIItemsArray = getTechSpecificUIItemsArray();
-    gameState.unlockedResourcesArray = getUnlockedResourcesArray();
-    gameState.unlockedCompoundsArray = getUnlockedCompoundsArray();
+    gameState.techUnlockedArray = techUnlockedArray;
+    gameState.revealedTechArray = revealedTechArray;
+    gameState.techSpecificUIItemsArray = techSpecificUIItemsArray;
+    gameState.unlockedResourcesArray = unlockedResourcesArray;
+    gameState.unlockedCompoundsArray = unlockedResourcesArray;
     gameState.activatedFuelBurnObject = activatedFuelBurnObject;
     gameState.buildingTypeOnOff = buildingTypeOnOff;
-    gameState.ranOutOfFuelWhenOn = getRanOutOfFuelWhenOn();
+    gameState.ranOutOfFuelWhenOn = ranOutOfFuelWhenOn;
     gameState.notationType = getNotationType();
 
     // Flags
@@ -236,26 +236,47 @@ export function captureGameStatusForSaving() {
 
     return gameState;
 }
-
 export function restoreGameStatus(gameState) {
     return new Promise((resolve, reject) => {
         try {
             console.log('data loaded:');
             console.log(gameState);
+
             // Game variables
+            restoreResourceDataObject(JSON.parse(JSON.stringify(gameState.resourceData)));
+            restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
+
+            // Global variables
+            setCurrentStarSystem(gameState.currentStarSystem);
+            setCurrentStarSystemWeatherEfficiency(gameState.currentStarSystemWeatherEfficiency);
+            setCurrentPrecipitationRate(gameState.currentPrecipitationRate);
+            setCurrencySymbol(gameState.currencySymbol);
+            setConstituentPartsObject(gameState.constituentPartsObject);
+            techUnlockedArray = gameState.techUnlockedArray;
+            revealedTechArray = gameState.revealedTechArray;
+            techSpecificUIItemsArray = gameState.techSpecificUIItemsArray;
+            unlockedResourcesArray = gameState.unlockedResourcesArray;
+            unlockedCompoundsArray = gameState.unlockedCompoundsArray;
+            activatedFuelBurnObject = gameState.activatedFuelBurnObject;
+            buildingTypeOnOff = gameState.buildingTypeOnOff;
+            ranOutOfFuelWhenOn =gameState.ranOutOfFuelWhenOn;
+            setNotationType(gameState.notationType);
 
             // Flags
+            setNotificationsToggle(gameState.flags.notificationsToggle);
+            setTechRenderChange(gameState.flags.techRenderChange);
+            setLosingEnergy(gameState.flags.losingEnergy);
+            setPowerOnOff(gameState.flags.powerOnOff);
+            setTrippedStatus(gameState.flags.trippedStatus);
 
-            // UI elements
-
-            
-
+            // Resolve after restoring the state
             resolve();
         } catch (error) {
             reject(error);
         }
     });
 }
+
 
 // export function setLocalization(value) {
 //     localization = value;
