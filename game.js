@@ -1960,7 +1960,6 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     let amountToDeductArray = [amountToDeduct];
     let itemTypeArray = [itemType];
 
-    //set resource to deduct
     setItemsToDeduct(itemToDeduct1NameArray, amountToDeductArray, itemTypeArray, resourcePrices);
     setItemsToIncreasePrice(itemToDeduct1Name, itemSetNewPrice, amountToDeduct, itemType, resourcePrices);
 }
@@ -1986,7 +1985,6 @@ export function increaseResourceStorage(elementIds, resource, itemTypeArray) {
         amountToDeductArray[0] = getResourceDataObject(itemTypeArray[0], [resourceToDeductNamesArray, 'storageCapacity']);
     }
 
-    //set resource to deduct
     setItemsToDeduct(resourceToDeductNamesArray, amountToDeductArray, itemTypeArray, [[0,''],[0,''],[0,'']]);
 
     deferredActions.push(() => {
@@ -2296,8 +2294,8 @@ function startInitialTimers() {
         selectWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        // const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-        const randomDurationInMs = 10000;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+
         const durationInSeconds = randomDurationInMs / 1000;
     
         if (timerManager.getTimer(weatherTimerName)) {
