@@ -99,11 +99,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        hydrogenAutoBuyer1Row: {
-            content1: "Add a Hydrogen Compressor to automate Hydrogen generation.",
-            content2: "",
-            updateAt: ""
-        },
         heliumSellRow: {
             content1: "Here you can sell Helium for cash",
             content2: "Here you can sell Helium for cash or fuse it into Carbon",
@@ -116,11 +111,6 @@ function initialiseDescriptions() {
         },
         heliumIncreaseStorageRow: {
             content1: "Increase your Helium storage capacity to store more Helium.",
-            content2: "",
-            updateAt: ""
-        },
-        heliumAutoBuyer1Row: {
-            content1: "Helium seems lighter than air, so fill balloons, and add an Atmosphere Scraper to automate Helium collection.",
             content2: "",
             updateAt: ""
         },
@@ -139,11 +129,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        carbonAutoBuyer1Row: {
-            content1: "Buy a miner to automate the collection of Carbon.",
-            content2: "",
-            updateAt: ""
-        },
         neonSellRow: {
             content1: "Here you can sell Neon for cash",
             content2: "Here you can sell Neon for cash or fuse it into Silver",
@@ -156,11 +141,6 @@ function initialiseDescriptions() {
         },
         neonIncreaseStorageRow: {
             content1: "Upgrade your Neon storage capacity to hold more resources.",
-            content2: "",
-            updateAt: ""
-        },
-        neonAutoBuyer1Row: {
-            content1: "Add an Neon Extractor to automate Neon generation.",
             content2: "",
             updateAt: ""
         },
@@ -179,11 +159,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        oxygenAutoBuyer1Row: {
-            content1: "Add an Oxygen Extractor to automate Oxygen generation.",
-            content2: "",
-            updateAt: ""
-        },
         sodiumSellRow: {
             content1: "Here you can sell Sodium for cash.",
             content2: "",
@@ -196,11 +171,6 @@ function initialiseDescriptions() {
         },
         sodiumIncreaseStorageRow: {
             content1: "Upgrade your Sodium storage capacity to hold more resources.",
-            content2: "",
-            updateAt: ""
-        },
-        sodiumAutoBuyer1Row: {
-            content1: "Add a Sodium Extractor to automate Sodium generation.",
             content2: "",
             updateAt: ""
         },
@@ -219,11 +189,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        siliconAutoBuyer1Row: {
-            content1: "Add a Silicon Extractor to automate Silicon generation.",
-            content2: "",
-            updateAt: ""
-        },
         ironSellRow: {
             content1: "Here you can sell Iron for cash.",
             content2: "",
@@ -236,11 +201,6 @@ function initialiseDescriptions() {
         },
         ironIncreaseStorageRow: {
             content1: "Upgrade your Iron storage capacity to hold more resources.",
-            content2: "",
-            updateAt: ""
-        },
-        ironAutoBuyer1Row: {
-            content1: "Add an Iron Extractor to automate Iron generation.",
             content2: "",
             updateAt: ""
         },
@@ -259,11 +219,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        dieselAutoBuyer1Row: {
-            content1: "Add an Extractor to collect oil and make Diesel.",
-            content2: "",
-            updateAt: ""
-        },
         glassCreateRow: {
             content1: "Here you can create Glass from its constituent parts, provided you have them, and the power is ON.",
             content2: "",
@@ -276,11 +231,6 @@ function initialiseDescriptions() {
         },
         glassIncreaseStorageRow: {
             content1: "Upgrade your Glass storage capacity to hold more resources.",
-            content2: "",
-            updateAt: ""
-        },
-        glassAutoBuyer1Row: {
-            content1: "Add a Workshop Glass Fabricator to create glass.",
             content2: "",
             updateAt: ""
         },
@@ -299,11 +249,6 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        steelAutoBuyer1Row: {
-            content1: "Add a Back Yard Steel Foundry to create steel.",
-            content2: "",
-            updateAt: ""
-        },
         waterCreateRow: {
             content1: "Here you can manage the production of Water, provided you have the materials, and the power is ON.",
             content2: "",
@@ -316,11 +261,6 @@ function initialiseDescriptions() {
         },
         waterIncreaseStorageRow: {
             content1: "Upgrade your Water reservoir capacity to store more water.",
-            content2: "",
-            updateAt: ""
-        },
-        waterAutoBuyer1Row: {
-            content1: "Add a Water Mixer to facilitate water processing.",
             content2: "",
             updateAt: ""
         },
@@ -339,11 +279,266 @@ function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        concreteAutoBuyer1Row: {
-            content1: "Add a Concrete Mixer to create concrete.",
+        hydrogenAutoBuyer1Row: {
+            content1: `Add a Hydrogen Compressor to automate Hydrogen generation.`,
             content2: "",
             updateAt: ""
-        },    
+        },
+        hydrogenAutoBuyer2Row: {
+            content1: `Add an Advanced Hydrogen Compressor for enhanced automation - Power: ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        hydrogenAutoBuyer3Row: {
+            content1: `Install a Hydrogen Refinery to maximize efficiency in Hydrogen generation - Power: ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        hydrogenAutoBuyer4Row: {
+            content1: `Add a Quantum Hydrogen Synthesizer for cutting-edge Hydrogen production - Power: ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        heliumAutoBuyer1Row: {
+            content1: `Helium seems lighter than air - add an Atmosphere Scraper to automate Helium collection.`,
+            content2: "",
+            updateAt: ""
+        },
+        heliumAutoBuyer2Row: {
+            content1: `Add an Advanced Helium Scraper for enhanced Helium collection - Power: ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        heliumAutoBuyer3Row: {
+            content1: `Install a Helium Refinery to improve automation of Helium generation - Power: ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        heliumAutoBuyer4Row: {
+            content1: `Add a Quantum Helium Synthesizer for cutting-edge Helium production - Power: ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        carbonAutoBuyer1Row: {
+            content1: `Buy a miner to automate the collection of Carbon.`,
+            content2: "",
+            updateAt: ""
+        },
+        carbonAutoBuyer2Row: {
+            content1: `Install an Advanced Carbon Miner for improved Carbon extraction - Power: ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        carbonAutoBuyer3Row: {
+            content1: `Add a Carbon Refinery to maximize automated Carbon collection - Power: ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        carbonAutoBuyer4Row: {
+            content1: `Add a Quantum Carbon Synthesizer for cutting-edge Carbon generation - Power: ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        neonAutoBuyer1Row: {
+            content1: `Add an Neon Extractor to automate Neon generation.`,
+            content2: "",
+            updateAt: ""
+        },
+        neonAutoBuyer2Row: {
+            content1: `Add an Advanced Neon Extractor to improve automation of Neon collection - Power: ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        neonAutoBuyer3Row: {
+            content1: `Install a Neon Refinery to enhance Neon collection - Power: ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        neonAutoBuyer4Row: {
+            content1: `Add a Quantum Neon Synthesizer for cutting-edge Neon production - Power: ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        oxygenAutoBuyer1Row: {
+            content1: `Add an Oxygen Extractor to automate Oxygen generation.`,
+            content2: "",
+            updateAt: ""
+        },
+        oxygenAutoBuyer2Row: {
+            content1: `Install an Advanced Oxygen Extractor for improved Oxygen generation - Power: ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        oxygenAutoBuyer3Row: {
+            content1: `Add an Oxygen Refinery to maximize automation of Oxygen production - Power: ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        oxygenAutoBuyer4Row: {
+            content1: `Add a Quantum Oxygen Synthesizer for advanced Oxygen generation - Power: ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        sodiumAutoBuyer1Row: {
+            content1: `Add a Sodium Extractor to automate Sodium generation.`,
+            content2: "",
+            updateAt: ""
+        },
+        sodiumAutoBuyer2Row: {
+            content1: `Add an Advanced Sodium Extractor for better Sodium automation - Power: ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        sodiumAutoBuyer3Row: {
+            content1: `Install a Sodium Refinery to boost Sodium production - Power: ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        sodiumAutoBuyer4Row: {
+            content1: `Add a Quantum Sodium Synthesizer for advanced Sodium generation - Power: ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        siliconAutoBuyer1Row: {
+            content1: `Add a Silicon Extractor to automate Silicon generation.`,
+            content2: "",
+            updateAt: ""
+        },
+        siliconAutoBuyer2Row: {
+            content1: `Add an Advanced Silicon Extractor for improved Silicon collection - Power: ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        siliconAutoBuyer3Row: {
+            content1: `Install a Silicon Refinery to maximize Silicon automation - Power: ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        siliconAutoBuyer4Row: {
+            content1: `Add a Quantum Silicon Synthesizer for cutting-edge Silicon production - Power: ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        ironAutoBuyer1Row: {
+            content1: `Add an Iron Extractor to automate Iron generation.`,
+            content2: "",
+            updateAt: ""
+        },
+        ironAutoBuyer2Row: {
+            content1: `Add an Advanced Iron Extractor for enhanced Iron collection - Power: ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        ironAutoBuyer3Row: {
+            content1: `Install an Iron Refinery to maximize Iron production automation - Power: ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        ironAutoBuyer4Row: {
+            content1: `Add a Quantum Iron Synthesizer for advanced Iron generation - Power: ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        dieselAutoBuyer1Row: {
+            content1: `Add an Extractor to collect oil and make Diesel.`,
+            content2: "",
+            updateAt: ""
+        },
+        dieselAutoBuyer2Row: {
+            content1: `Add an Advanced Diesel Refinery for enhanced Diesel production - Power: ${Math.floor(getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        dieselAutoBuyer3Row: {
+            content1: `Install a Diesel Synthesizer for improved Diesel automation - Power: ${Math.floor(getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        dieselAutoBuyer4Row: {
+            content1: `Add a Quantum Diesel Synthesizer for cutting-edge Diesel generation - Power: ${Math.floor(getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        glassAutoBuyer1Row: {
+            content1: `Add a Workshop Glass Fabricator to create glass.`,
+            content2: "",
+            updateAt: ""
+        },
+        glassAutoBuyer2Row: {
+            content1: `Install an Advanced Glass Fabricator for better Glass production - Power: ${Math.floor(getResourceDataObject('compounds', ['glass', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        glassAutoBuyer3Row: {
+            content1: `Add a Glass Refinery to enhance Glass automation - Power: ${Math.floor(getResourceDataObject('compounds', ['glass', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        glassAutoBuyer4Row: {
+            content1: `Add a Quantum Glass Synthesizer for cutting-edge Glass production - Power: ${Math.floor(getResourceDataObject('compounds', ['glass', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        steelAutoBuyer1Row: {
+            content1: `Add a Back Yard Steel Foundry to create steel.`,
+            content2: "",
+            updateAt: ""
+        },
+        steelAutoBuyer2Row: {
+            content1: `Add an Advanced Steel Foundry for enhanced Steel production - Power: ${Math.floor(getResourceDataObject('compounds', ['steel', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        steelAutoBuyer3Row: {
+            content1: `Install a Steel Refinery to improve Steel automation - Power: ${Math.floor(getResourceDataObject('compounds', ['steel', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        steelAutoBuyer4Row: {
+            content1: `Add a Quantum Steel Synthesizer for advanced Steel generation - Power: ${Math.floor(getResourceDataObject('compounds', ['steel', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        waterAutoBuyer1Row: {
+            content1: `Add a Water Mixer to facilitate water processing.`,
+            content2: "",
+            updateAt: ""
+        },
+        waterAutoBuyer2Row: {
+            content1: `Add an Advanced Water Mixer for better Water production - Power: ${Math.floor(getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        waterAutoBuyer3Row: {
+            content1: `Install a Water Refinery to maximize Water automation - Power: ${Math.floor(getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        waterAutoBuyer4Row: {
+            content1: `Add a Quantum Water Synthesizer for advanced Water generation - Power: ${Math.floor(getResourceDataObject('compounds', ['water', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        concreteAutoBuyer1Row: {
+            content1: `Add a Concrete Mixer to automate Concrete production.`,
+            content2: "",
+            updateAt: ""
+        },
+        concreteAutoBuyer2Row: {
+            content1: `Install an Advanced Concrete Mixer for enhanced Concrete production - Power: ${Math.floor(getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        concreteAutoBuyer3Row: {
+            content1: `Add a Concrete Refinery to maximize Concrete automation - Power: ${Math.floor(getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        concreteAutoBuyer4Row: {
+            content1: `Add a Quantum Concrete Synthesizer for cutting-edge Concrete production - Power: ${Math.floor(getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },             
         researchScienceKitRow: {
             content1: "Purchase a Science Kit to start generating Research points.",
             content2: "",
