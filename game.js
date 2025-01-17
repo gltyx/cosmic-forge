@@ -84,6 +84,9 @@ import {
     capitaliseString
  } from './utilityFunctions.js';
 
+
+ import { initializeAutoSave } from './saveLoadGame.js';
+
 //---------------------------------------------------------------------------------------------------------
 
 class TimerManager {
@@ -147,6 +150,7 @@ const timerManager = new TimerManager();
 export function startGame() {
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
+    initializeAutoSave();
     startInitialTimers();
     gameLoop();
 }

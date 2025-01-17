@@ -1,4 +1,6 @@
 import {
+    getCurrentTheme,
+    setCurrentTheme,
     READY_TO_SORT,
     NOW,
     setTechRenderCounter,
@@ -32,7 +34,7 @@ import {
     gameIntroText,
 } from "./descriptions.js";
 
-import { saveGame } from './saveLoadGame.js';
+import { saveGame, loadGameFromCloud } from './saveLoadGame.js';
 
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
@@ -74,6 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     getElements().modalOKButton.addEventListener('click', () => {
         showHideModal();
+        loadGameFromCloud();
     });
 
     notificationContainer = getElements().notificationContainer;
@@ -594,7 +597,7 @@ export function createDropdown(id, options, selectedValue, onChange) {
     return selectContainer;
 }
 
-export function createToggleSwitch(id, isChecked, onChange) {
+export function createToggleSwitch(id, isChecked, onChange, extraClasses) {
     const toggleContainer = document.createElement('div');
     toggleContainer.classList.add('toggle-container');
 
@@ -611,10 +614,17 @@ export function createToggleSwitch(id, isChecked, onChange) {
     const toggleLabel = document.createElement('label');
     toggleLabel.htmlFor = id;
 
+    if (Array.isArray(extraClasses)) {
+        extraClasses.forEach(className => {
+            toggleContainer.classList.add(className);
+        });
+    }
+
     toggleContainer.appendChild(toggle);
     toggleContainer.appendChild(toggleLabel);
     return toggleContainer;
 }
+
 
 export function createButton(text, classNames, onClick, dataConditionCheck, resourcePriceObject, objectSectionArgument1, objectSectionArgument2, quantityArgument, disableKeyboardForButton, autoBuyerTier, rowCategory) {
     const button = document.createElement('button');
@@ -706,6 +716,7 @@ export function createTextFieldArea(id, classList = [], placeholder = '') {
 export function selectTheme(theme) {
     const body = document.body;
     body.setAttribute('data-theme', theme);
+    setCurrentTheme(theme);
 }
 
 let notificationQueue = [];

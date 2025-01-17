@@ -1,6 +1,6 @@
-import { getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle } from './constantsAndGlobalVars.js';
+import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle } from './constantsAndGlobalVars.js';
 import { createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
-import { saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
+import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Visual') {
@@ -8,7 +8,7 @@ export function drawTab8Content(heading, optionContentElement) {
             'settingsCurrencySymbolRow',
             null,
             'Currency:',
-            createDropdown('notationSelect', [
+            createDropdown('currencySelect', [
                 { value: '$', text: 'Dollar ($)' },
                 { value: '€', text: 'Euro (€)' },
                 { value: '£', text: 'Pound (£)' },
@@ -72,7 +72,7 @@ export function drawTab8Content(heading, optionContentElement) {
             'Toggle Notifications:',
             createToggleSwitch('notificationsToggle', true, (isEnabled) => {
                 setNotificationsToggle(isEnabled);
-            }),
+            }, null),
             null,
             null,
             null,
@@ -123,9 +123,65 @@ export function drawTab8Content(heading, optionContentElement) {
             null
         );
         optionContentElement.appendChild(settingsThemeRow);
+
+        const notificationsToggleElement = document.getElementById('notificationsToggle');
+        if (notificationsToggleElement) {
+            notificationsToggleElement.checked = getNotificationsToggle();
+        }
+        
+        const currencyDropdownElement = document.getElementById('currencySelect');
+        if (currencyDropdownElement) {
+            currencyDropdownElement.value = getCurrencySymbol();
+        }
+        
+        const notationDropdownElement = document.getElementById('notationSelect');
+        if (notationDropdownElement) {
+            notationDropdownElement.value = getNotationType();
+        }
+        
+        const themeDropdownElement = document.getElementById('themeSelect');
+        if (themeDropdownElement) {
+            themeDropdownElement.value = getCurrentTheme();
+        }     
     }
 
-    if (heading === 'Saving / Loading') {
+    if (heading === 'Saving / Loading') {   
+        const autoSaveConfigRow = createOptionRow(
+            'autoSaveConfigRow',
+            null,
+            'Auto Save:',
+            createDropdown('autoSaveFrequency', [
+                { value: 30000, text: '30 Seconds' },
+                { value: 60000, text: '60 Seconds' },
+                { value: 120000, text: '2 Minutes' },
+                { value: 180000, text: '3 Minutes' },
+                { value: 300000, text: '5 Minutes' },
+                { value: 600000, text: '10 Minutes' },
+            ], getAutoSaveFrequency(), (value) => {
+                setAutoSaveFrequency(value);
+                initializeAutoSave();
+            }),
+            createToggleSwitch('autoSaveToggle', false, (isEnabled) => {
+                setAutoSaveToggle(isEnabled),
+                initializeAutoSave();
+            }, ['toggle-switch-spacing']),
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(autoSaveConfigRow);
+
         const exportSaveRow = createOptionRow(
             'exportSaveRow',
             null,
@@ -230,7 +286,16 @@ export function drawTab8Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(importCloudSaveRow);
 
-        saveGame();
+        const autoSaveToggleElement = document.getElementById('autoSaveToggle');
+        if (autoSaveToggleElement) {
+            autoSaveToggleElement.checked = getAutoSaveToggle();
+        }
+        
+        const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
+        if (autoSaveFrequencyElement) {
+            autoSaveFrequencyElement.value = getAutoSaveFrequency();
+        }  
 
+        saveGame();
     }
 }

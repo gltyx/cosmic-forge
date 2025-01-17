@@ -2,7 +2,10 @@ import {
     setSaveData, 
     captureGameStatusForSaving, 
     restoreGameStatus, 
-    getElements, 
+    getElements,
+    getAutoSaveFrequency,
+    getAutoSaveToggle,
+    getSaveData, 
     // getLanguage, 
     // setLanguageChangedFlag, 
     // getLanguageChangedFlag 
@@ -32,6 +35,27 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
+let autoSaveTimer = null;
+
+export function initializeAutoSave() {
+    if (autoSaveTimer) {
+        clearTimeout(autoSaveTimer);
+    }
+
+    const autoSaveHandler = () => {
+        if (getAutoSaveToggle()) {
+            saveGame();
+            if (getSaveData()) {
+                saveGameToCloud(getSaveData());
+            }
+            setSaveData(null);
+        }
+        autoSaveTimer = setTimeout(autoSaveHandler, getAutoSaveFrequency());
+    };
+
+    autoSaveTimer = setTimeout(autoSaveHandler, getAutoSaveFrequency());
+}
+
 export async function saveGameToCloud(gameData) {
     try {
         const userId = "guest";
@@ -55,7 +79,6 @@ export async function saveGameToCloud(gameData) {
         console.error("Error saving game to cloud:", error);
     }
 }
-
 
 export function saveGame() {
     const gameState = captureGameStatusForSaving();

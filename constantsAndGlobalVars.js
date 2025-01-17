@@ -1,5 +1,8 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
-import { capitaliseString } from "./utilityFunctions.js";
+import { initializeAutoSave } from './saveLoadGame.js';
+import { selectTheme } from "./ui.js";
+import { capitaliseString } from './utilityFunctions.js';
+
 
 //DEBUG
 export let debugFlag = false;
@@ -16,7 +19,6 @@ let saveData = null;
 // let oldLanguage = 'en';
 
 //CONSTANTS
-export let gameState;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
@@ -24,10 +26,13 @@ export const TIMER_RATE_RATIO = 100;
 export const READY_TO_SORT = 120;
 export const NOW = 30; //READY TO SORT NOW needs total of 150
 export const BUILDING_TYPES = ['energy'];
-
-//GLOBAL VARIABLES
 export const deferredActions = [];
 
+//GLOBAL VARIABLES
+export let gameState;
+
+let currentTheme = 'terminal';
+let autoSaveFrequency = 300000;
 let currentStarSystem = 'spica';
 let currentStarSystemWeatherEfficiency = [];
 let currentPrecipitationRate = 0;
@@ -84,6 +89,7 @@ let notationType = 'normalCondensed';
 //FLAGS
 // let audioMuted;
 // let languageChangedFlag;
+let autoSaveToggle = false;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
@@ -210,6 +216,8 @@ export function captureGameStatusForSaving() {
     gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
 
     // Global variables
+    gameState.currentTheme = getCurrentTheme();
+    gameState.autoSaveFrequency = getAutoSaveFrequency();
     gameState.currentStarSystem = getCurrentStarSystem();
     gameState.currentStarSystemWeatherEfficiency = getCurrentStarSystemWeatherEfficiency();
     gameState.currentPrecipitationRate = getCurrentPrecipitationRate();
@@ -227,6 +235,7 @@ export function captureGameStatusForSaving() {
 
     // Flags
     gameState.flags = {
+        autoSaveToggle: getAutoSaveToggle(),
         notificationsToggle: getNotificationsToggle(),
         techRenderChange: getTechRenderChange(),
         losingEnergy: getLosingEnergy(),
@@ -247,6 +256,8 @@ export function restoreGameStatus(gameState) {
             restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
 
             // Global variables
+            setCurrentTheme(gameState.currentTheme);
+            setAutoSaveFrequency(gameState.autoSaveFrequency);
             setCurrentStarSystem(gameState.currentStarSystem);
             setCurrentStarSystemWeatherEfficiency(gameState.currentStarSystemWeatherEfficiency);
             setCurrentPrecipitationRate(gameState.currentPrecipitationRate);
@@ -259,17 +270,32 @@ export function restoreGameStatus(gameState) {
             unlockedCompoundsArray = gameState.unlockedCompoundsArray;
             activatedFuelBurnObject = gameState.activatedFuelBurnObject;
             buildingTypeOnOff = gameState.buildingTypeOnOff;
-            ranOutOfFuelWhenOn =gameState.ranOutOfFuelWhenOn;
+            ranOutOfFuelWhenOn = gameState.ranOutOfFuelWhenOn;
             setNotationType(gameState.notationType);
 
             // Flags
+            setAutoSaveToggle(gameState.flags.autoSaveToggle);
             setNotificationsToggle(gameState.flags.notificationsToggle);
             setTechRenderChange(gameState.flags.techRenderChange);
             setLosingEnergy(gameState.flags.losingEnergy);
             setPowerOnOff(gameState.flags.powerOnOff);
             setTrippedStatus(gameState.flags.trippedStatus);
 
-            // Resolve after restoring the state
+            initializeAutoSave();
+            selectTheme(getCurrentTheme());
+
+            
+            const autoSaveToggleElement = document.getElementById('autoSaveToggle');
+            const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
+
+            if (autoSaveFrequencyElement) {
+                autoSaveFrequencyElement.value = getAutoSaveFrequency();
+            }
+            
+            if (autoSaveToggleElement) {
+                autoSaveToggleElement.checked = getAutoSaveToggle();
+            }
+
             resolve();
         } catch (error) {
             reject(error);
@@ -356,6 +382,14 @@ export function getNotificationsToggle() {
 
 export function setNotificationsToggle(value) {
     notificationsToggle = value;
+}
+
+export function getAutoSaveToggle() {
+    return autoSaveToggle;
+}
+
+export function setAutoSaveToggle(value) {
+    autoSaveToggle = value;
 }
 
 export function getNotationType() {
@@ -1092,4 +1126,20 @@ export function getSaveData() {
 
 export function setSaveData(value) {
     saveData = value;
+}
+
+export function getAutoSaveFrequency() {
+    return autoSaveFrequency;
+}
+
+export function setAutoSaveFrequency(value) {
+    autoSaveFrequency = value;
+}
+
+export function getCurrentTheme() {
+    return currentTheme;
+}
+
+export function setCurrentTheme(value) {
+    currentTheme = value;
 }
