@@ -227,6 +227,7 @@ export async function gameLoop() {
             checkAndRevealNewBuildings(type);
         });
 
+        monitorRevealResourcesCheck();
         monitorRevealCompoundsCheck();
 
         updateAllSalePricePreviews();
@@ -328,7 +329,26 @@ function updateStats() {
     getTimeInStatCell();
 }
 
+function setRevealedForResource(resource) {
+    const resourcePairs = [
+        ['hydrogen', 'helium'],
+        ['helium', 'carbon'],
+        ['carbon', 'neon'],
+        ['carbon', 'sodium'],
+        ['neon', 'oxygen'],
+        ['oxygen', 'silicon'],
+        ['silicon', 'iron']
+    ];
+
+    resourcePairs.forEach(pair => {
+        if (pair[0] === resource) {
+            setResourceDataObject(true, 'resources', [pair[1], 'revealedYet']);
+        }
+    });
+}
+
 export function fuseResource(resource, fuseTargets) {
+    setRevealedForResource(resource);
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
     let totalDeducted = 0;
@@ -1160,6 +1180,23 @@ function manageTabSpecificUi() {
         console.log(`Showing UI for Tab ${currentTab}.`);
     } else {
         console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
+    }
+}
+
+function monitorRevealResourcesCheck() {
+    let revealStatus;
+    let resourceElementId;
+
+    const resourceKeys = Object.keys(getResourceDataObject('resources'));
+
+    for (const resource of resourceKeys) {
+        revealStatus = getResourceDataObject('resources', [resource, 'revealedYet']);
+        resourceElementId = resource + "Option";
+        if (revealStatus) {
+            document.getElementById(resourceElementId).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('invisible');
+            document.getElementById(resourceElementId).parentElement.parentElement.parentElement.parentElement.classList.remove('invisible');
+            document.getElementById(resourceElementId).parentElement.parentElement.classList.remove('invisible');
+        }
     }
 }
 
@@ -3005,7 +3042,7 @@ export function offlineGains(switchedFocus) {
         };
     });
 
-    const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtyet']);
+    const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
     energyValues.energy = {
         rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) : 0,
         quantity: getResourceDataObject('buildings', ['energy', 'quantity']),

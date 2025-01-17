@@ -10,6 +10,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 10000,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -36,6 +37,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 150, 
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -62,6 +64,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 120,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -88,6 +91,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 130,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -114,6 +118,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 200,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 0,
@@ -140,6 +145,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 170,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -166,6 +172,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 150,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -192,6 +199,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 180,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -218,6 +226,7 @@ export let resourceData = {
             usedForFuelPerSec: 0,
             storageCapacity: 200,
             currentSecondaryIncreasePrice: 0,
+            revealedYet: false,
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
@@ -480,7 +489,7 @@ export let resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 0,
+        quantity: 10000,
         rate: 0,
         ratePower: 0,
         upgrades: {
@@ -547,7 +556,7 @@ export let resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 4,
+        cash: 4000,
     },
 };
 
