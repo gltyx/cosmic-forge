@@ -13,6 +13,8 @@ import {
     // getLanguageChangedFlag 
 } from './constantsAndGlobalVars.js';
 
+import { API_KEY } from './googleAPIKey.js';
+
 import { startGame, offlineGains } from './game.js';
 
 //import {localize} from './localization.js';
@@ -24,7 +26,7 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 import { showNotification } from './ui.js';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCLctkVcwY2hQ-zeZsSbAjCR1VcwuRi0Kg",
+    apiKey: API_KEY,
     authDomain: "cosmic-forge-1981.firebaseapp.com",
     projectId: "cosmic-forge-1981",
     storageBucket: "cosmic-forge-1981.firebasestorage.app",
