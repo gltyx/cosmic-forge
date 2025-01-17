@@ -1,4 +1,6 @@
 import {
+    setLastSavedTimeStamp,
+    getLastSavedTimeStamp,
     setSaveData, 
     captureGameStatusForSaving, 
     restoreGameStatus, 
@@ -11,7 +13,7 @@ import {
     // getLanguageChangedFlag 
 } from './constantsAndGlobalVars.js';
 
-import { startGame } from './game.js';
+import { startGame, offlineGains } from './game.js';
 
 //import {localize} from './localization.js';
 //import { handleLanguageChange } from './ui.js';
@@ -82,6 +84,8 @@ export async function saveGameToCloud(gameData) {
 
 export function saveGame() {
     const gameState = captureGameStatusForSaving();
+    gameState.timeStamp = new Date().toISOString();
+
     const serializedGameState = JSON.stringify(gameState);
     const compressedSaveData = LZString.compressToEncodedURIComponent(serializedGameState);
 
@@ -92,6 +96,7 @@ export function saveGame() {
         saveGameArea.readOnly = true;
     }
 }
+
 
 export function copySaveStringToClipBoard() {
     const textArea = document.getElementById('exportSaveArea');

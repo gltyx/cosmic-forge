@@ -2,6 +2,7 @@ import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, 
 import { initializeAutoSave } from './saveLoadGame.js';
 import { selectTheme } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
+import { offlineGains } from './game.js';
 
 
 //DEBUG
@@ -31,6 +32,7 @@ export const deferredActions = [];
 //GLOBAL VARIABLES
 export let gameState;
 
+let lastSavedTimeStamp = null;
 let currentTheme = 'terminal';
 let autoSaveFrequency = 300000;
 let currentStarSystem = 'spica';
@@ -248,9 +250,6 @@ export function captureGameStatusForSaving() {
 export function restoreGameStatus(gameState) {
     return new Promise((resolve, reject) => {
         try {
-            console.log('data loaded:');
-            console.log(gameState);
-
             // Game variables
             restoreResourceDataObject(JSON.parse(JSON.stringify(gameState.resourceData)));
             restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
@@ -283,7 +282,8 @@ export function restoreGameStatus(gameState) {
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
-
+            setLastSavedTimeStamp(gameState.timeStamp);
+            offlineGains();
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
@@ -1143,3 +1143,12 @@ export function getCurrentTheme() {
 export function setCurrentTheme(value) {
     currentTheme = value;
 }
+
+export function getLastSavedTimeStamp() {
+    return lastSavedTimeStamp;
+}
+
+export function setLastSavedTimeStamp(value) {
+    lastSavedTimeStamp = value;
+}
+

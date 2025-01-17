@@ -1,4 +1,6 @@
 import {
+    setLastSavedTimeStamp,
+    getLastSavedTimeStamp,
     setCurrentPrecipitationRate,
     getCurrentPrecipitationRate,
     getCurrentStarSystemWeatherEfficiency,
@@ -2974,6 +2976,107 @@ export function checkPowerBuildingsFuelLevels() {
         }
     });
 }
+
+export function offlineGains() {
+    const resourcesObject = getResourceDataObject('resources');
+    const compoundsObject = getResourceDataObject('compounds');
+
+    const resources = Object.keys(resourcesObject);
+    const compounds = Object.keys(compoundsObject);
+
+    const resourceValues = {};
+    const compoundValues = {};
+    const energyValues = {};
+    const researchValues = {};
+
+    resources.forEach(resource => {
+        resourceValues[resource] = {
+            rate: getResourceDataObject('resources', [resource, 'rate']),
+            quantity: getResourceDataObject('resources', [resource, 'quantity']),
+            storageCapacity: getResourceDataObject('resources', [resource, 'storageCapacity']),
+        };
+    });
+
+    compounds.forEach(compound => {
+        compoundValues[compound] = {
+            rate: getResourceDataObject('compounds', [compound, 'rate']),
+            quantity: getResourceDataObject('compounds', [compound, 'quantity']),
+            storageCapacity: getResourceDataObject('compounds', [compound, 'storageCapacity']),
+        };
+    });
+
+    const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtyet']);
+    energyValues.energy = {
+        rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) : 0,
+        quantity: getResourceDataObject('buildings', ['energy', 'quantity']),
+    };
+
+    researchValues.research = {
+        rate: getResourceDataObject('research', ['rate']),
+        quantity: getResourceDataObject('research', ['quantity']),
+    };
+
+    const combinedValues = {
+        rate: {
+            resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.rate])),
+            compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.rate])),
+            energy: energyValues.energy.rate,
+            research: researchValues.research.rate,
+        },
+        quantity: {
+            resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.quantity])),
+            compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.quantity])),
+            energy: energyValues.energy.quantity,
+            research: researchValues.research.quantity,
+        },
+    };
+
+    const lastSavedTimeStamp = getLastSavedTimeStamp();
+    const currentTimeStamp = new Date().toISOString();
+
+    const timeDifferenceInSeconds = Math.floor(
+        (new Date(currentTimeStamp).getTime() - new Date(lastSavedTimeStamp).getTime()) / 1000
+    );
+
+    const calculateOfflineGains = (data, multiplier = 1) => {
+        return Object.fromEntries(
+            Object.entries(data).map(([key, rate]) => [key, rate * multiplier * timeDifferenceInSeconds])
+        );
+    };
+
+    const offlineGains = {
+        resources: calculateOfflineGains(combinedValues.rate.resources, getTimerRateRatio()),
+        compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
+        energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
+        research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
+    };
+
+    Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
+        const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+        const storageCapacity = resourceValues[resource].storageCapacity;
+        const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
+        setResourceDataObject(finalQuantity, 'resources', [resource, 'quantity']);
+    });
+
+    Object.entries(offlineGains.compounds).forEach(([compound, gain]) => {
+        const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+        const storageCapacity = compoundValues[compound].storageCapacity;
+        const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
+        setResourceDataObject(finalQuantity, 'compounds', [compound, 'quantity']);
+    });
+
+    const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+    setResourceDataObject(currentEnergyQuantity + offlineGains.energy, 'buildings', ['energy', 'quantity']);
+
+    const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+    setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
+    
+    showNotification('Offline Gains Added!', 'info');
+
+    console.log('Offline Gains:', offlineGains);
+    console.log('Time Offline (seconds):', timeDifferenceInSeconds);
+}
+
 
 //===============================================================================================================
 
