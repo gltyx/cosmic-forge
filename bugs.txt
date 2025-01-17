@@ -1,3 +1,0 @@
-notifications show as info if should be warning but are pressed fast
-neon shows 3rd ab when it shouldnt show any of them
-energy added is too much after offline gains it jumps

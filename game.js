@@ -3098,7 +3098,7 @@ export function offlineGains(switchedFocus) {
 
     const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
     energyValues.energy = {
-        rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) : 0,
+        rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) - getResourceDataObject('buildings', ['energy', 'consumption']) : 0,
         quantity: getResourceDataObject('buildings', ['energy', 'quantity']),
     };
 
@@ -3177,7 +3177,6 @@ export function setAllCompoundsToZeroQuantity() {
         setResourceDataObject(0, 'compounds', [compound, 'quantity']);
     });
 }
-
 
 //===============================================================================================================
 
