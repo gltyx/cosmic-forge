@@ -1,3 +1,3 @@
 notifications show as info if should be warning but are pressed fast
-add power fields to autobuyers like for science lab and quantity owned also
+add power fields to autobuyers
 energy added is too much after offline gains it jumps
