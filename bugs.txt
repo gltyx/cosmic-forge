@@ -1,4 +1,3 @@
 notifications show as info if should be warning but are pressed fast
 add power fields to autobuyers like for science lab and quantity owned also
-disable sell when 0 quantity of resource or compound
-energy added is too much after online gains it jumps
+energy added is too much after offline gains it jumps

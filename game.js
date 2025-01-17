@@ -453,6 +453,11 @@ export function sellResource(resource) {
     }
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'resources', [resource, 'quantity']);
+
+    if (getResourceDataObject('resources', [resource, 'quantity']) < 1) {
+        setResourceDataObject(0, 'resources', [resource, 'quantity']);
+    }
+
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
 }
 
@@ -536,6 +541,11 @@ export function sellCompound(compound) {
     const quantityToDeduct = parseInt(saleData.match(/\((\d+)/)[1], 10);
 
     setResourceDataObject(resourceQuantity - quantityToDeduct, 'compounds', [compound, 'quantity']);
+
+    if (getResourceDataObject('compounds', [compound, 'quantity']) < 1) {
+        setResourceDataObject(0, 'compounds', [compound, 'quantity']);
+    }
+
     setResourceDataObject(currentCash + cashRaised, 'currency', ['cash']);
 
     if (getCurrencySymbol() === "€") {
@@ -809,11 +819,19 @@ function getAllQuantities() {
     resourceKeys.forEach(resource => {
         const resourceName = resource;
         allQuantities[resourceName] = getResourceDataObject('resources', [resourceName, 'quantity']);
+        allQuantities[`${resourceName}AB1Quantity`] = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
+        allQuantities[`${resourceName}AB2Quantity`] = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', 'tier2', 'quantity']);
+        allQuantities[`${resourceName}AB3Quantity`] = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
+        allQuantities[`${resourceName}AB4Quantity`] = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
     });
 
     compoundKeys.forEach(compound => {
         const compoundName = compound;
         allQuantities[compoundName] = getResourceDataObject('compounds', [compoundName, 'quantity']);
+        allQuantities[`${compoundName}AB1Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
+        allQuantities[`${compoundName}AB2Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier2', 'quantity']);
+        allQuantities[`${compoundName}AB3Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
+        allQuantities[`${compoundName}AB4Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
     });
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
@@ -874,6 +892,10 @@ function getAllElements(resourcesArray, compoundsArray) {
         if (!resourceNames.includes(resource[0])) {
             resourceNames.push(resource[0]);
             allElements[resource[0]] = getElements()[`${resource[0]}Quantity`];
+            allElements[`${resource[0]}AB1Quantity`] = document.getElementById(`${resource[0]}AB1Quantity`);
+            allElements[`${resource[0]}AB2Quantity`] = document.getElementById(`${resource[0]}AB2Quantity`);
+            allElements[`${resource[0]}AB3Quantity`] = document.getElementById(`${resource[0]}AB3Quantity`);
+            allElements[`${resource[0]}AB4Quantity`] = document.getElementById(`${resource[0]}AB4Quantity`);
         }
     });
 
@@ -881,6 +903,10 @@ function getAllElements(resourcesArray, compoundsArray) {
         if (!compoundNames.includes(compound[0])) {
             compoundNames.push(compound[0]);
             allElements[compound[0]] = getElements()[`${compound[0]}Quantity`];
+            allElements[`${compound[0]}AB1Quantity`] = document.getElementById(`${compound[0]}AB1Quantity`);
+            allElements[`${compound[0]}AB2Quantity`] = document.getElementById(`${compound[0]}AB2Quantity`);
+            allElements[`${compound[0]}AB3Quantity`] = document.getElementById(`${compound[0]}AB3Quantity`);
+            allElements[`${compound[0]}AB4Quantity`] = document.getElementById(`${compound[0]}AB4Quantity`);
         }
     });
 
@@ -1122,6 +1148,23 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
             const element = document.getElementById(`${item}Quantity`);
             if (element && quantityScienceBuilding) {
                 element.textContent = `Quantity: ${quantityScienceBuilding}`;
+            }
+        }
+
+        if (item.includes('AB')) {
+            let tier;
+            const quantityAutoBuyer = allQuantities[item];
+
+            const match = item.match(/AB(\d+)/);
+            if (match) {
+                tier = parseInt(match[1], 10);
+            } else {
+                return null;
+            }
+
+            const element = document.getElementById(item);
+            if (element) {
+                element.textContent = `Quantity: ${quantityAutoBuyer}`;
             }
         }
     }
@@ -2366,7 +2409,7 @@ function startInitialTimers() {
         selectWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = 10000; //randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
         const durationInSeconds = randomDurationInMs / 1000;
     
@@ -2386,9 +2429,11 @@ function startInitialTimers() {
                     precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
                     setCurrentPrecipitationRate(precipitationRate);
                     precipitationRateSet = true;
+                } else if (!precipitationRateSet) {
+                    setCurrentPrecipitationRate(0);
+                    precipitationRateSet = true;
                 }
-                setCurrentPrecipitationRate(precipitationRate);
-                precipitationRateSet = true;
+
                 timeLeft -= 1;
             } else {
                 clearInterval(countdownInterval);

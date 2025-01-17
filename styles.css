@@ -848,6 +848,7 @@ body {
 .toggle-timer,
 .fuel-type,
 .science-building-quantity,
+.autoBuyer-building-quantity,
 .toggle-switch-spacing
 {
     margin-left: 30px;
