@@ -819,6 +819,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'tier3',
             false,
             null,
+            null,
             'resource'
         );
         optionContentElement.appendChild(neonAutoBuyer3Row);

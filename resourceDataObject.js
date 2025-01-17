@@ -40,7 +40,7 @@ export let resourceData = {
             revealedYet: false,
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 4,
+                    currentTierLevel: 1,
                     normalProgression: true,
                     tier1: { nameUpgrade: 'Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer1Row', price: 50, rate: 0.02, quantity: 0, setPrice: 'hydrogenAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Hydrogen Compressor', screen: 'hydrogen', place: 'hydrogenAutoBuyer2Row', price: 400, rate: 0.1, quantity: 0, setPrice: 'hydrogenAB2Price', energyUse: 0.03 },
