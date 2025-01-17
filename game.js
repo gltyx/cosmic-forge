@@ -2977,7 +2977,7 @@ export function checkPowerBuildingsFuelLevels() {
     });
 }
 
-export function offlineGains() {
+export function offlineGains(switchedFocus) {
     const resourcesObject = getResourceDataObject('resources');
     const compoundsObject = getResourceDataObject('compounds');
 
@@ -3071,7 +3071,9 @@ export function offlineGains() {
     const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
     setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
     
-    showNotification('Offline Gains Added!', 'info');
+    if (!switchedFocus) {
+        showNotification('Offline Gains Added!', 'info');
+    }
 
     console.log('Offline Gains:', offlineGains);
     console.log('Time Offline (seconds):', timeDifferenceInSeconds);

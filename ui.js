@@ -1,4 +1,5 @@
 import {
+    setLastSavedTimeStamp,
     getCurrentTheme,
     setCurrentTheme,
     READY_TO_SORT,
@@ -39,7 +40,8 @@ import { saveGame, loadGameFromCloud } from './saveLoadGame.js';
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
     setGameState,
-    startGame
+    startGame,
+    offlineGains
 } from './game.js';
 
 // import {
@@ -328,6 +330,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const starContainer = document.querySelector('#optionContentTab5');
             starContainer.innerHTML = '';
             generateStarfield(starContainer, 100, 80);
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            setLastSavedTimeStamp(new Date().toISOString());
+        } else {
+            offlineGains(true);
         }
     });
 });

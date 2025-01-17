@@ -97,7 +97,6 @@ export function saveGame() {
     }
 }
 
-
 export function copySaveStringToClipBoard() {
     const textArea = document.getElementById('exportSaveArea');
     textArea.select();

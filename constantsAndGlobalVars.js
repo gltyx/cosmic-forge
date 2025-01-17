@@ -283,7 +283,7 @@ export function restoreGameStatus(gameState) {
             initializeAutoSave();
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
-            offlineGains();
+            offlineGains(false);
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
