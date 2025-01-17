@@ -95,7 +95,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Increase Storage:',
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['dieselQuantity'], ['diesel'], ['compounds']);
-                    storagePrice = getResourceDataObject('compounds', ['diesel', 'storageCapacity']);
+                    storagePrice = getResourceDataObject('compounds', ['diesel', 'storageCapacity']) - 1;
                 }, 'upgradeCheck', '', 'storage', null, 'diesel', true, null, 'compound'),
                 null,
                 null,
@@ -307,7 +307,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Increase Storage:',
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['glassQuantity'], ['glass'], ['compounds']);
-                    storagePrice = getResourceDataObject('compounds', ['glass', 'storageCapacity']);
+                    storagePrice = getResourceDataObject('compounds', ['glass', 'storageCapacity']) - 1;
                 }, 'upgradeCheck', '', 'storage', null, 'glass', true, null, 'compound'),
                 null,
                 null,
@@ -519,7 +519,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Increase Storage:',
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['steelQuantity'], ['steel'], ['compounds']);
-                    storagePrice = getResourceDataObject('compounds', ['steel', 'storageCapacity']);
+                    storagePrice = getResourceDataObject('compounds', ['steel', 'storageCapacity']) - 1;
                 }, 'upgradeCheck', '', 'storage', null, 'steel', true, null, 'compound'),
                 null,
                 null,
@@ -731,7 +731,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Increase Storage:',
                 createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['concreteQuantity'], ['concrete'], ['compounds']);
-                    storagePrice = getResourceDataObject('compounds', ['concrete', 'storageCapacity']);
+                    storagePrice = getResourceDataObject('compounds', ['concrete', 'storageCapacity']) - 1;
                 }, 'upgradeCheck', '', 'storage', null, 'concrete', true, null, 'compound'),
                 null,
                 null,
@@ -945,7 +945,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 'Enlarge Reservoir:',
                 createButton('Enlarge Reservoir', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
                     increaseResourceStorage(['waterQuantity', 'concreteQuantity'], ['water', 'concrete'], ['compounds', 'compounds']);
-                    storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']);
+                    storagePrice = getResourceDataObject('compounds', ['water', 'storageCapacity']) - 1;
                     extraResourceName = 'Concrete';
                 }, 'upgradeCheck', '', 'storage', null, 'water', true, null, 'compound'),
                 null,

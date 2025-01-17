@@ -1,9 +1,4 @@
 notifications show as info if should be warning but are pressed fast
-sodium ab2 where is it
-why not adding last quantity to make storage full when power on?
 add power fields to autobuyers like for science lab and quantity owned also
-water is filling before compounds tab is available because rate is 1 even when cloudy so check that
-math.floor needed on individual power buildings rate
 disable sell when 0 quantity of resource or compound
-change increase storage to 1 quantity insead of 0 so power can stay on if in surplus
 energy added is too much after online gains it jumps

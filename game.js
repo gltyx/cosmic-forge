@@ -905,7 +905,7 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
 
     resourceTierPairs.forEach(([resourceName, tier]) => {
         const resourceIncreaseStorageDescElement = document.getElementById(`${resourceName}IncreaseContainerSizeDescription`);
-        const resourceStoragePrice = getResourceDataObject('resources', [resourceName, 'storageCapacity']);
+        const resourceStoragePrice = getResourceDataObject('resources', [resourceName, 'storageCapacity'] - 1); //to allow power to stay on we leave 1 if upgrading storage
 
         const resourceAutoBuyerDescElement = document.getElementById(`${resourceName}AutoBuyerTier${tier}Description`);
         const resourceAutoBuyerPrice = getResourceDataObject('resources', [resourceName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
@@ -916,7 +916,7 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
 
     compoundTierPairs.forEach(([compoundName, tier]) => {
         const compoundIncreaseStorageDescElement = document.getElementById(`${compoundName}IncreaseContainerSizeDescription`);
-        const compoundStoragePrice = getResourceDataObject('compounds', [compoundName, 'storageCapacity']);
+        const compoundStoragePrice = getResourceDataObject('compounds', [compoundName, 'storageCapacity'] - 1); //to allow power to stay on we leave 1 if upgrading storage
 
         const resourceAutoBuyerDescElement = document.getElementById(`${compoundName}AutoBuyerTier${tier}Description`);
         const resourceAutoBuyerPrice = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);
@@ -1434,7 +1434,7 @@ function checkStatusAndSetTextClasses(element) {
             price2 = 0;
         } else if (element.dataset.type === "storage") {
             mainKey = 'compounds' //storageCapacity
-            price = getResourceDataObject(mainKey, [compound, 'storageCapacity']);
+            price = getResourceDataObject(mainKey, [compound, 'storageCapacity']) - 1;
             if (element.tagName.toLowerCase() !== 'button') {
                 price2 = compound2 ? Math.floor(getResourceDataObject(mainKey, [compound, 'storageCapacity']) * 0.3) : 0;
                 const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
@@ -1648,7 +1648,7 @@ function checkStatusAndSetTextClasses(element) {
                 price = getResourceDataObject(mainKey, ['quantity']);
             } else if (element.dataset.type === "storage") {
                 mainKey = 'resources' //storageCapacity
-                price = getResourceDataObject(mainKey, [resource, 'storageCapacity']);
+                price = getResourceDataObject(mainKey, [resource, 'storageCapacity']) - 1;
                 if (element.tagName.toLowerCase() !== 'button') {
                     element.textContent = `${price} ${getResourceDataObject(mainKey, [resource, 'nameResource'])}`;
                 }
@@ -2027,12 +2027,12 @@ export function increaseResourceStorage(elementIds, resource, itemTypeArray) {
             if (index > 0) {
                 amountToDeductArray.push(firstResourceStorage * 0.3);
             } else {
-                amountToDeductArray.push(firstResourceStorage);
+                amountToDeductArray.push(firstResourceStorage - 1); //to leave power on if increasing storage
             }
         }
     } else {
         resourceToDeductNamesArray = [resource[0]];
-        amountToDeductArray[0] = getResourceDataObject(itemTypeArray[0], [resourceToDeductNamesArray, 'storageCapacity']);
+        amountToDeductArray[0] = getResourceDataObject(itemTypeArray[0], [resourceToDeductNamesArray, 'storageCapacity']) - 1; //to leave power on if increasing storage
     }
 
     setItemsToDeduct(resourceToDeductNamesArray, amountToDeductArray, itemTypeArray, [[0,''],[0,''],[0,'']]);
@@ -2104,8 +2104,15 @@ function startInitialTimers() {
                                 if (resource === powerPlant1FuelType) {
                                     amountToDeductForConsumption = powerPlant1Consumption;
                                     if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
-                                        setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
-                                        setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
+                                        setCanAffordDeferred(true);
+                                        //FIX HERE
+                                        deferredActions.push(() => {
+                                            if (getCanAffordDeferred()) { 
+                                                setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
+                                                setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
+                                            }
+                                            setCanAffordDeferred(null);
+                                        });
                                     }
                                 }
 
@@ -2359,7 +2366,7 @@ function startInitialTimers() {
         selectWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = 10000; //randomDurationInMinutes * 60 * 1000;
 
         const durationInSeconds = randomDurationInMs / 1000;
     
@@ -2380,6 +2387,8 @@ function startInitialTimers() {
                     setCurrentPrecipitationRate(precipitationRate);
                     precipitationRateSet = true;
                 }
+                setCurrentPrecipitationRate(precipitationRate);
+                precipitationRateSet = true;
                 timeLeft -= 1;
             } else {
                 clearInterval(countdownInterval);
@@ -2420,7 +2429,7 @@ function startUpdateEnergyTimers(elementName, action) {
         
         if (action === 'toggle') {
             if (getBuildingTypeOnOff(elementName)) {
-                getElements()[elementName + 'Rate'].textContent = `${powerBuildingPotentialPower * getTimerRateRatio()} KW / s`;
+                getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} KW / s`;
             } else {
                 getElements()[elementName + 'Rate'].textContent = `0 KW / s`;
             }
@@ -2476,22 +2485,22 @@ function formatAllNotationElements(element, notationType) {
             
                 if (number >= 1e13) {
                     let exponent = Math.floor(Math.log10(number));
-                    return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                    return `${Math.floor(number / Math.pow(10, exponent) * 10) / 10}e${exponent}`;
                 } else if (number >= 1e12) {
-                    return `${(number / 1e12).toFixed(1)}e12`;
+                    return `${(Math.floor(number / 1e12 * 10) / 10).toFixed(1)}e12`;
                 } else if (number >= 1e9) {
-                    return `${(number / 1e9).toFixed(1)}B`;
+                    return `${(Math.floor(number / 1e9 * 10) / 10).toFixed(1)}B`;
                 } else if (number >= 1e6) {
-                    return `${(number / 1e6).toFixed(1)}M`;
+                    return `${(Math.floor(number / 1e6 * 10) / 10).toFixed(1)}M`;
                 } else if (number >= 1e3) {
-                    return `${(number / 1e3).toFixed(1)}K`;
+                    return `${(Math.floor(number / 1e3 * 10) / 10).toFixed(1)}K`;
                 } else {
-                    if (element.dataset.conditionCheck === 'techUnlock' || element.dataset.type === 'building' ) {
-                        return number;
+                    if (element.dataset.conditionCheck === 'techUnlock' || element.dataset.type === 'building') {
+                        return number; // Return the raw number for these conditions
                     } else {
-                        return number.toFixed(0);
+                        return number.toFixed(0); // Default formatting for other cases
                     }
-                }
+                }                               
             }                       
         });
 
@@ -2541,20 +2550,19 @@ function formatNumber(value) {
 
     if (number >= 1e13) {
         let exponent = Math.floor(Math.log10(number));
-        return `${(number / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+        return `${(Math.floor(number / Math.pow(10, exponent) * 10) / 10).toFixed(1)}e${exponent}`;
     } else if (number >= 1e12) {
-        return `${(number / 1e12).toFixed(1)}e12`;
+        return `${(Math.floor(number / 1e12 * 10) / 10).toFixed(1)}e12`;
     } else if (number >= 1e9) {
-        return `${(number / 1e9).toFixed(1)}B`;
+        return `${(Math.floor(number / 1e9 * 10) / 10).toFixed(1)}B`;
     } else if (number >= 1e6) {
-        return `${(number / 1e6).toFixed(1)}M`;
+        return `${(Math.floor(number / 1e6 * 10) / 10).toFixed(1)}M`;
     } else if (number >= 1e3) {
-        return `${(number / 1e3).toFixed(1)}K`;
+        return `${(Math.floor(number / 1e3 * 10) / 10).toFixed(1)}K`;
     } else {
         return number.toFixed(0);
     }
 }
-
 
 function complexSellStringFormatter(element, notationType) {
     if (notationType === 'normalCondensed') {
@@ -2586,22 +2594,22 @@ function formatSellStringCondensed(element, regex, sliceOffsetBefore, sliceOffse
         let formatted;
         if (capturedNumber < 0) {
             formatted = 0;
-        } else {
+        }else {
             if (capturedNumber >= 1e13) {
                 let exponent = Math.floor(Math.log10(capturedNumber));
-                formatted = `${(capturedNumber / Math.pow(10, exponent)).toFixed(1)}e${exponent}`;
+                formatted = `${(Math.floor(capturedNumber / Math.pow(10, exponent) * 10) / 10).toFixed(1)}e${exponent}`;
             } else if (capturedNumber >= 1e12) {
-                formatted = `${(capturedNumber / 1e12).toFixed(1)}e12`;
+                formatted = `${(Math.floor(capturedNumber / 1e12 * 10) / 10).toFixed(1)}e12`;
             } else if (capturedNumber >= 1e9) {
-                formatted = `${(capturedNumber / 1e9).toFixed(1)}B`;
+                formatted = `${(Math.floor(capturedNumber / 1e9 * 10) / 10).toFixed(1)}B`;
             } else if (capturedNumber >= 1e6) {
-                formatted = `${(capturedNumber / 1e6).toFixed(1)}M`;
+                formatted = `${(Math.floor(capturedNumber / 1e6 * 10) / 10).toFixed(1)}M`;
             } else if (capturedNumber >= 1e3) {
-                formatted = `${(capturedNumber / 1e3).toFixed(1)}K`;
+                formatted = `${(Math.floor(capturedNumber / 1e3 * 10) / 10).toFixed(1)}K`;
             } else {
                 formatted = capturedNumber.toFixed(0);
             }
-        }
+        }        
         const beforeMatch = element.innerHTML.slice(0, match.index + sliceOffsetBefore);
         const afterMatch = element.innerHTML.slice(match.index + match[0].length - sliceOffsetAfter);
         element.innerHTML = beforeMatch + formatted + afterMatch;
@@ -3115,6 +3123,14 @@ export function offlineGains(switchedFocus) {
 
     console.log('Offline Gains:', offlineGains);
     console.log('Time Offline (seconds):', timeDifferenceInSeconds);
+}
+
+export function setAllCompoundsToZeroQuantity() {
+    const compoundKeys = Object.keys(getResourceDataObject('compounds'));
+
+    compoundKeys.forEach(compound => {
+        setResourceDataObject(0, 'compounds', [compound, 'quantity']);
+    });
 }
 
 

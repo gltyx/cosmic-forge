@@ -1,5 +1,5 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
-import { gain, startUpdateTimersAndRates } from './game.js';
+import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
@@ -746,6 +746,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('compounds');
                         setTechSpecificUIItemsArray('tab3', 'tab3', 'compounds');
                         showNotification(techNotificationMessages.compounds, 'info');
+                        setAllCompoundsToZeroQuantity();
                     }, 'techUnlock', '', 'compounds', null, 'research', false, null, 'tech'),
                     null,
                     null,

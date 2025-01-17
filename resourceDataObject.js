@@ -149,7 +149,7 @@ export let resourceData = {
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
-                    normalProgression: false,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer1Row', price: 140, rate: 0.02, quantity: 0, setPrice: 'oxygenAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer2Row', price: 1120, rate: 0.15, quantity: 0, setPrice: 'oxygenAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Oxygen Extractor', screen: 'oxygen', place: 'oxygenAutoBuyer3Row', price: 5600, rate: 0.75, quantity: 0, setPrice: 'oxygenAB3Price', energyUse: 0.18 },
@@ -176,7 +176,7 @@ export let resourceData = {
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
-                    normalProgression: false,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer1Row', price: 200, rate: 0.02, quantity: 0, setPrice: 'siliconAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer2Row', price: 1600, rate: 0.175, quantity: 0, setPrice: 'siliconAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Silicon Extractor', screen: 'silicon', place: 'siliconAutoBuyer3Row', price: 8000, rate: 0.875, quantity: 0, setPrice: 'siliconAB3Price', energyUse: 0.21 },
@@ -203,7 +203,7 @@ export let resourceData = {
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
-                    normalProgression: false,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Iron Extractor', screen: 'iron', place: 'ironAutoBuyer1Row', price: 250, rate: 0.02, quantity: 0, setPrice: 'ironAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Iron Extractor', screen: 'iron', place: 'ironAutoBuyer2Row', price: 2000, rate: 0.2, quantity: 0, setPrice: 'ironAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Iron Extractor', screen: 'iron', place: 'ironAutoBuyer3Row', price: 10000, rate: 1, quantity: 0, setPrice: 'ironAB3Price', energyUse: 0.27 },
@@ -230,7 +230,7 @@ export let resourceData = {
             upgrades: {
                 autoBuyer: {
                     currentTierLevel: 1,
-                    normalProgression: false,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer1Row', price: 300, rate: 0.02, quantity: 0, setPrice: 'sodiumAB1Price', energyUse: 0 },
                     tier2: { nameUpgrade: 'Advanced Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer2Row', price: 2400, rate: 0.25, quantity: 0, setPrice: 'sodiumAB2Price', energyUse: 0.03 },
                     tier3: { nameUpgrade: 'Industrial Sodium Extractor', screen: 'sodium', place: 'sodiumAutoBuyer3Row', price: 12000, rate: 1.25, quantity: 0, setPrice: 'sodiumAB3Price', energyUse: 0.24 },
@@ -489,7 +489,7 @@ export let resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 10000,
+        quantity: 100000,
         rate: 0,
         ratePower: 0,
         upgrades: {
