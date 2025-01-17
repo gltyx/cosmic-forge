@@ -329,7 +329,7 @@ function updateStats() {
     getTimeInStatCell();
 }
 
-function setRevealedForResource(resource) {
+function setRevealedResources(resource) {
     const resourcePairs = [
         ['hydrogen', 'helium'],
         ['helium', 'carbon'],
@@ -348,7 +348,8 @@ function setRevealedForResource(resource) {
 }
 
 export function fuseResource(resource, fuseTargets) {
-    setRevealedForResource(resource);
+    setRevealedResources(resource);
+    
     const resourceString = getResourceDataObject('resources', [resource, 'nameResource']);
     const resourceQuantity = getResourceDataObject('resources', [resource, 'quantity']);
     let totalDeducted = 0;
