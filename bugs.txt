@@ -1,0 +1,1 @@
+if loading a game via import text during an existing game it wont work, doesnt reset all variables for exmple will say 23 hydogen but in the sale preview row it will say whatever it said before but doesnt break the save if refresh game and load it - doesnt happen on cloud save
