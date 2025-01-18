@@ -489,7 +489,7 @@ export let resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 100000,
+        quantity: 0,
         rate: 0,
         ratePower: 0,
         upgrades: {
@@ -556,7 +556,7 @@ export let resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 4000,
+        cash: 1,
     },
 };
 
