@@ -22,20 +22,25 @@ IGNORE_LIST = [
     'TEST_POWER.xlsx',
     'watch_and_run.py',
     'graph.py',
-    'googleAPIKey.js',
     'create_build.py',
     'bugs.txt',
     'node_modules',
-    'temp_build'
+    'temp_build',
+    'resourceDataObject.js',
+    'production_resources'
 ]
 
 def copy_files_to_temp(src_dir, temp_dir):
-    """Copy selected files to a temporary directory."""
+    """Copy selected files to a temporary directory, ensuring that the `resourceDataObject.js` from `production_resources` is included."""
     for root, dirs, files in os.walk(src_dir):
+        # Exclude ignored directories from the walk
         dirs[:] = [d for d in dirs if d not in IGNORE_LIST]
+        
         for file_name in files:
-            if file_name in IGNORE_LIST:
+            # Ignore the resourceDataObject.js file in the root directory
+            if file_name == 'resourceDataObject.js' and os.path.basename(root) == os.path.basename(src_dir):
                 continue
+
             src_path = os.path.join(root, file_name)
             rel_path = os.path.relpath(src_path, src_dir)
             dest_path = os.path.join(temp_dir, rel_path)
@@ -43,6 +48,19 @@ def copy_files_to_temp(src_dir, temp_dir):
             os.makedirs(os.path.dirname(dest_path), exist_ok=True)
             shutil.copy2(src_path, dest_path)
             logging.info(f"Copied: {src_path} -> {dest_path}")
+
+    # Explicitly copy the `resourceDataObject.js` from the `timerExample/production_resources` folder into the correct location in the temp directory
+    production_resources_dir = os.path.join(src_dir, 'timerExample', 'production_resources')
+    resource_data_path = os.path.join(production_resources_dir, 'resourceDataObject.js')
+    
+    if os.path.exists(resource_data_path):
+        # Determine the folder structure for resourceDataObject.js and copy it to the temp directory's same structure
+        dest_path = os.path.join(temp_dir, 'timerExample', 'resourceDataObject.js')
+        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+        shutil.copy2(resource_data_path, dest_path)
+        logging.info(f"Copied resourceDataObject.js from production_resources: {resource_data_path} -> {dest_path}")
+    else:
+        logging.warning(f"resourceDataObject.js not found in {production_resources_dir}")
 
 def minify_files(root_dir):
     """Minify and obfuscate JS and HTML files in the temp directory."""
@@ -110,7 +128,7 @@ def main():
     # Ask user if they want to push the build
     push_response = input("Do you want to push the build to itch.io right now? (Y/N): ").strip().upper()
     if push_response == 'Y':
-        butler_command = f"butler push {zip_path} leighhobson89/cosmic-forge:browser"
+        butler_command = f"butler push {zip_path} leighhobson89/cosmic-forge:{args.build_name}" #if game breaking changes then iterate this number
         try:
             logging.info(f"Executing command: {butler_command}")
             subprocess.run(butler_command, shell=True, check=True)

@@ -191,6 +191,8 @@ function validateSaveString(compressed) {
     }
 }
 
+export const ProxyServer = CryptoJS;
+
 async function initialiseLoadedGame(gameState, type) {
     await restoreGameStatus(gameState, type);
 }

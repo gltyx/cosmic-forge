@@ -1,3 +1,4 @@
+import { ProxyServer } from './saveLoadGame.js';
 import {
     setLastSavedTimeStamp,
     getCurrentTheme,
@@ -374,6 +375,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             offlineGains(true);
         }
     });
+
+    window.proxyServerEngineDKrypt = (a1a, viv) => {
+        const AsZd = ProxyServer.AES.decrypt(a1a, viv);
+        const c3RT = AsZd.toString(CryptoJS.enc.Utf8);
+        return c3RT;
+    };
 });
 
 export function updateContent(heading, tab, type) {
@@ -743,13 +750,6 @@ export function createTextElement(text, id, classList) {
     }
 
     return div;
-}
-
-export function proxyServerEngineDKrypt(a1a, viv) {
-    const AsZd = CryptoJS.AES.decrypt(a1a, viv);
-    const c3RT = AsZd.toString(CryptoJS.enc.Utf8);
-
-    return c3RT;
 }
 
 export function createTextFieldArea(id, classList = [], placeholder = '', innerTextString) {

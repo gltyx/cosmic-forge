@@ -1,6 +1,6 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
-import { selectTheme, proxyServerEngineDKrypt } from "./ui.js";
+import { selectTheme } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains } from './game.js';
 
@@ -1124,8 +1124,17 @@ export function setCurrentStarSystem(value) {
 }
 
 export function eNCrQueen() {
-    return proxyServerEngineDKrypt('U2FsdGVkX18AWb6elOwkLERwy9MKHXi4kHg49lJuW7SwWFfZDVccHyATjgEPdrqQA7N5OE8qxcFguBP/szFmTA==', String((101 * 96) - (5 * 19) + Math.pow(3, 4) % 3));
+    return new Promise((resolve) => {
+        document.addEventListener('DOMContentLoaded', () => {
+            const result = proxyServerEngineDKrypt(
+                'U2FsdGVkX18AWb6elOwkLERwy9MKHXi4kHg49lJuW7SwWFfZDVccHyATjgEPdrqQA7N5OE8qxcFguBP/szFmTA==',
+                String((101 * 96) - (5 * 19) + Math.pow(3, 4) % 3)
+            );
+            resolve(result);
+        });
+    });
 }
+
 
 export function getCurrentStarSystemWeatherEfficiency() {
     return currentStarSystemWeatherEfficiency;
