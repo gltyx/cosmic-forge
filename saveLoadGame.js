@@ -26,21 +26,11 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
 
-const firebaseConfig = {
-    apiKey: eNCrQueen(),
-    authDomain: "cosmic-forge-1981.firebaseapp.com",
-    projectId: "cosmic-forge-1981",
-    storageBucket: "cosmic-forge-1981.firebasestorage.app",
-    messagingSenderId: "155017224771",
-    appId: "1:155017224771:web:c4cb2d9f468c0571b9aaf6",
-    measurementId: "G-82DCH5GJ0P"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getFirestore(app);
-
 let autoSaveTimer = null;
+let firebaseConfig;
+let app;
+let analytics;
+let db;
 
 export function initializeAutoSave() {
     if (autoSaveTimer) {
@@ -96,6 +86,8 @@ export function saveGame(type) {
         setSaveData(compressedSaveData);
     }
 }
+
+export const ProxyServer = CryptoJS;
 
 export function copySaveStringToClipBoard() {
     const textArea = document.getElementById('exportSaveArea');
@@ -181,6 +173,24 @@ export function loadGame() {
     });
 }
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const vcx = await eNCrQueen();
+
+    firebaseConfig = {
+        apiKey: vcx,
+        authDomain: "cosmic-forge-1981.firebaseapp.com",
+        projectId: "cosmic-forge-1981",
+        storageBucket: "cosmic-forge-1981.firebasestorage.app",
+        messagingSenderId: "155017224771",
+        appId: "1:155017224771:web:c4cb2d9f468c0571b9aaf6",
+        measurementId: "G-82DCH5GJ0P"
+    };
+    
+    app = initializeApp(firebaseConfig);
+    analytics = getAnalytics(app);
+    db = getFirestore(app);
+});
+
 function validateSaveString(compressed) {
     try {
         const decompressedJson = LZString.decompressFromEncodedURIComponent(compressed);
@@ -191,11 +201,15 @@ function validateSaveString(compressed) {
     }
 }
 
-export const ProxyServer = CryptoJS;
-
 async function initialiseLoadedGame(gameState, type) {
     await restoreGameStatus(gameState, type);
 }
+
+window.proxyServerEngineDKrypt = (a1a, viv) => {
+    const AsZd = ProxyServer.AES.decrypt(a1a, viv);
+    const c3RT = AsZd.toString(ProxyServer.enc.Utf8);
+    return c3RT;
+};
 
 export function generateRandomPioneerName() {
     const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

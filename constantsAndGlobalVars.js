@@ -1125,16 +1125,15 @@ export function setCurrentStarSystem(value) {
 
 export function eNCrQueen() {
     return new Promise((resolve) => {
-        document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
             const result = proxyServerEngineDKrypt(
                 'U2FsdGVkX18AWb6elOwkLERwy9MKHXi4kHg49lJuW7SwWFfZDVccHyATjgEPdrqQA7N5OE8qxcFguBP/szFmTA==',
                 String((101 * 96) - (5 * 19) + Math.pow(3, 4) % 3)
             );
-            resolve(result);
-        });
+            resolve(result);  // Resolve the promise after the delay
+        }, 100); // 1-second delay
     });
 }
-
 
 export function getCurrentStarSystemWeatherEfficiency() {
     return currentStarSystemWeatherEfficiency;
