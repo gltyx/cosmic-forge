@@ -239,7 +239,7 @@ export function drawTab8Content(heading, optionContentElement) {
             createButton(`Export Cloud Save`, ['option-button', 'save-load-button'], () => {
                 saveGame('manualExportCloud');
                 if (getSaveData()) {
-                    saveGameToCloud(getSaveData());
+                    saveGameToCloud(getSaveData(), 'manualExportCloud');
                 }
                 setSaveData(null);
             }),

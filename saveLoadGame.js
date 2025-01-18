@@ -51,7 +51,7 @@ export function initializeAutoSave() {
         if (getAutoSaveToggle()) {
             saveGame('autoSave');
             if (getSaveData()) {
-                saveGameToCloud(getSaveData());
+                saveGameToCloud(getSaveData(), 'autosave');
             }
             setSaveData(null);
         }
@@ -61,13 +61,17 @@ export function initializeAutoSave() {
     autoSaveTimer = setTimeout(autoSaveHandler, getAutoSaveFrequency());
 }
 
-export async function saveGameToCloud(gameData) {
+export async function saveGameToCloud(gameData, type) {
     try {
         const userId = getSaveName();
         const saveRef = doc(db, "cosmicForgeSaves", userId);
 
         await setDoc(saveRef, { saveData: gameData });
-        showNotification('Game saved to the cloud!', 'info');
+
+        if (type !== 'initialise') {
+            showNotification('Game saved to the cloud!', 'info');
+        }
+
     } catch (error) {
         showNotification('Error saving game to cloud!', 'error');
         console.error("Error saving game to cloud:", error);

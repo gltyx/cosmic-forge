@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await loadGameFromCloud(); 
     
                 saveGame('initialise');
-                saveGameToCloud(getSaveData());
+                saveGameToCloud(getSaveData(), 'initialise');
             } catch (error) {
                 console.error("Error during game loading:", error);
             }
