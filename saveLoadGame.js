@@ -155,7 +155,6 @@ export function loadGame() {
 
             initialiseLoadedGame(gameState, 'textImport')
                 .then(() => {
-                    startGame();
                     showNotification('Game loaded successfully!', 'info');
                     resolve();
                 })
