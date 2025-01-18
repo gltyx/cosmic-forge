@@ -32,6 +32,7 @@ export const deferredActions = [];
 //GLOBAL VARIABLES
 export let gameState;
 
+let saveName = null;
 let lastSavedTimeStamp = null;
 let currentTheme = 'terminal';
 let autoSaveFrequency = 300000;
@@ -97,6 +98,7 @@ let techRenderChange = false;
 let losingEnergy = false;
 let powerOnOff = false;
 let trippedStatus = false;
+let savedYetSinceOpeningSaveDialogue = false;
 
 // let autoSaveOn = false;
 // export let pauseAutoSaveCountdown = true;
@@ -180,6 +182,7 @@ export function setElements() {
         modalHeader: document.querySelector('.modal-header h4'),
         modalContent: document.querySelector('.modal-content p'),
         modalOKButton: document.getElementById('modalButton'),
+        modalSaveButton: document.getElementById('modalSaveButton'),
         overlay: document.getElementById('overlay'),
     };
 }
@@ -210,14 +213,24 @@ export function resetAllVariables() {
     // FLAGS
 }
 
-export function captureGameStatusForSaving() {
+export function captureGameStatusForSaving(type) {
     let gameState = {};
+
+    if (type === 'manualExportCloud') {
+        setSaveName(document.getElementById('saveName').value);
+        localStorage.setItem('saveName', getSaveName());
+    }
+
+    if (type === 'initialise') {
+        localStorage.setItem('saveName', getSaveName());
+    }
 
     // Large objects directly
     gameState.resourceData = JSON.parse(JSON.stringify(resourceData));
     gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
 
     // Global variables
+    gameState.saveName = getSaveName();
     gameState.currentTheme = getCurrentTheme();
     gameState.autoSaveFrequency = getAutoSaveFrequency();
     gameState.currentStarSystem = getCurrentStarSystem();
@@ -247,7 +260,7 @@ export function captureGameStatusForSaving() {
 
     return gameState;
 }
-export function restoreGameStatus(gameState) {
+export function restoreGameStatus(gameState, type) {
     return new Promise((resolve, reject) => {
         try {
             // Game variables
@@ -255,6 +268,12 @@ export function restoreGameStatus(gameState) {
             restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
 
             // Global variables
+            if (type === 'cloud') {
+                if (gameState.saveName) {
+                    setSaveName(gameState.saveName);
+                }
+            }
+
             setCurrentTheme(gameState.currentTheme);
             setAutoSaveFrequency(gameState.autoSaveFrequency);
             setCurrentStarSystem(gameState.currentStarSystem);
@@ -1155,4 +1174,22 @@ export function getLastSavedTimeStamp() {
 export function setLastSavedTimeStamp(value) {
     lastSavedTimeStamp = value;
 }
+
+export function getSaveName() {
+    return saveName;
+}
+
+export function setSaveName(value) {
+    saveName = value;
+}
+
+export function getSavedYetSinceOpeningSaveDialogue() {
+    return savedYetSinceOpeningSaveDialogue;
+}
+
+export function setSavedYetSinceOpeningSaveDialogue(value) {
+    savedYetSinceOpeningSaveDialogue = value;
+}
+
+
 

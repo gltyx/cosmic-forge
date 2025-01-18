@@ -12,10 +12,47 @@
     font-family: var(--font-family);
     border: 2px solid var(--container-border-color);
     border-radius: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+}
+
+.save-name-height {
+    height: 5vh;
+}
+
+.save-name-width {
+    width: 10vw;
+}
+
+.save-name-modal-width {
+    padding-top: 3px;
+    padding-left: 10px !important;
+    width: 30vw;
+}
+
+.save-name-modal-button-width {
+    width: 30vw;
+}
+
+.save-name {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    border: 2px solid var(--container-border-color);
+    border-radius: 5px;
     padding: 10px;
     box-sizing: border-box;
     resize: none;
     outline: none;
+    resize: none;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+    line-height: 1.5;
+    padding: 0;
 }
 
 .export-save {
@@ -231,7 +268,9 @@ button {
     line-height: 1.8;
 }
   
-#modalButton {
+#modalButton,
+#modalSaveButton 
+{
     position: fixed;
     bottom: 10%;
     left: 50%;
@@ -849,7 +888,8 @@ body {
 .fuel-type,
 .science-building-quantity,
 .autoBuyer-building-quantity,
-.toggle-switch-spacing
+.toggle-switch-spacing,
+.save-name-margin
 {
     margin-left: 30px;
 }

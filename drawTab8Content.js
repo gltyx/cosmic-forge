@@ -1,4 +1,4 @@
-import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle } from './constantsAndGlobalVars.js';
+import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName } from './constantsAndGlobalVars.js';
 import { createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
@@ -186,7 +186,7 @@ export function drawTab8Content(heading, optionContentElement) {
             'exportSaveRow',
             null,
             'Export Save:',
-            createTextFieldArea('exportSaveArea', ['export-save'], 'Save Data should appear here'),
+            createTextFieldArea('exportSaveArea', ['export-save'], 'Save Data should appear here', null),
             createButton(`Export`, ['option-button', 'save-load-button'], () => {
                 copySaveStringToClipBoard();
             }),
@@ -211,7 +211,7 @@ export function drawTab8Content(heading, optionContentElement) {
             'importSaveRow',
             null,
             'Import Save:',
-            createTextFieldArea('importSaveArea', ['import-save'], 'Please paste your Save Data here...'),
+            createTextFieldArea('importSaveArea', ['import-save'], 'Please paste your Save Data here...', null),
             createButton(`Import`, ['option-button', 'save-load-button'], () => {
                 loadGame();
             }),
@@ -237,14 +237,14 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             'Export Cloud Save:',
             createButton(`Export Cloud Save`, ['option-button', 'save-load-button'], () => {
-                saveGame();
+                saveGame('manualExportCloud');
                 if (getSaveData()) {
                     saveGameToCloud(getSaveData());
                 }
                 setSaveData(null);
             }),
-            null,
-            null,
+            Object.assign(document.createElement('span'), { innerHTML: 'Pioneer Name:', className: 'save-name-margin' }),
+            createTextFieldArea('saveName', ['save-name', 'save-name-width', 'save-name-height', 'save-name-margin'], '', getSaveName()),
             null,
             null,
             '',
@@ -257,14 +257,15 @@ export function drawTab8Content(heading, optionContentElement) {
             false,
             null,
             null,
-            null
+            null,
+            [true, '25%', '80%']
         );
         optionContentElement.appendChild(exportCloudSaveRow);
 
         const importCloudSaveRow = createOptionRow(
             'importCloudSaveRow',
             null,
-            'Import Recent Cloud Save:',
+            'Import Cloud Save:',
             createButton(`Import Cloud Save`, ['option-button', 'save-load-button'], () => {
                 loadGameFromCloud();
             }),
@@ -282,7 +283,8 @@ export function drawTab8Content(heading, optionContentElement) {
             false,
             null,
             null,
-            null
+            null,
+            [true, '25%', '80%']
         );
         optionContentElement.appendChild(importCloudSaveRow);
 
@@ -294,8 +296,6 @@ export function drawTab8Content(heading, optionContentElement) {
         const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
         if (autoSaveFrequencyElement) {
             autoSaveFrequencyElement.value = getAutoSaveFrequency();
-        }  
-
-        saveGame();
+        }
     }
 }

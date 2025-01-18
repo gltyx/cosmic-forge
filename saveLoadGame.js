@@ -1,4 +1,6 @@
 import {
+    setSaveName,
+    getSaveName,
     setLastSavedTimeStamp,
     getLastSavedTimeStamp,
     setSaveData, 
@@ -47,7 +49,7 @@ export function initializeAutoSave() {
 
     const autoSaveHandler = () => {
         if (getAutoSaveToggle()) {
-            saveGame();
+            saveGame('autoSave');
             if (getSaveData()) {
                 saveGameToCloud(getSaveData());
             }
@@ -61,30 +63,19 @@ export function initializeAutoSave() {
 
 export async function saveGameToCloud(gameData) {
     try {
-        const userId = "guest";
+        const userId = getSaveName();
         const saveRef = doc(db, "cosmicForgeSaves", userId);
 
         await setDoc(saveRef, { saveData: gameData });
         showNotification('Game saved to the cloud!', 'info');
-
-        const timestamp = new Date().toISOString().split('T');
-        const datePart = timestamp[0].replace(/-/g, '_');
-        const timePart = timestamp[1].split('.')[0].replace(/:/g, '_');
-        const backupSaveName = `${datePart}_${timePart}_BackupSave`;
-
-        const backupSaveRef = doc(db, "cosmicForgeSaves", backupSaveName);
-
-        await setDoc(backupSaveRef, { saveData: gameData });
-        showNotification('Backup saved to the cloud!', 'info');
-
     } catch (error) {
         showNotification('Error saving game to cloud!', 'error');
         console.error("Error saving game to cloud:", error);
     }
 }
 
-export function saveGame() {
-    const gameState = captureGameStatusForSaving();
+export function saveGame(type) {
+    const gameState = captureGameStatusForSaving(type);
     gameState.timeStamp = new Date().toISOString();
 
     const serializedGameState = JSON.stringify(gameState);
@@ -95,6 +86,10 @@ export function saveGame() {
         setSaveData(compressedSaveData);
         saveGameArea.value = compressedSaveData;
         saveGameArea.readOnly = true;
+    }
+
+    if (type === 'initialise') {
+        setSaveData(compressedSaveData);
     }
 }
 
@@ -122,7 +117,7 @@ export function copySaveStringToClipBoard() {
 
 export async function loadGameFromCloud() {
     try {
-        const userId = "guest";
+        const userId = localStorage.getItem('saveName') || getSaveName();
         const saveRef = doc(db, "cosmicForgeSaves", userId);
         const docSnapshot = await getDoc(saveRef);
 
@@ -132,7 +127,7 @@ export async function loadGameFromCloud() {
             const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
             const gameState = JSON.parse(decompressedJson);
 
-            await initialiseLoadedGame(gameState);
+            await initialiseLoadedGame(gameState, 'cloud');
             showNotification('Game loaded successfully!', 'info');
         } else {
             showNotification('No saved game data found.', 'warning');
@@ -162,7 +157,7 @@ export function loadGame() {
             const decompressedJson = LZString.decompressFromEncodedURIComponent(compressed);
             const gameState = JSON.parse(decompressedJson);
 
-            initialiseLoadedGame(gameState)
+            initialiseLoadedGame(gameState, 'textImport')
                 .then(() => {
                     startGame();
                     showNotification('Game loaded successfully!', 'info');
@@ -192,6 +187,18 @@ function validateSaveString(compressed) {
     }
 }
 
-async function initialiseLoadedGame(gameState) {
-    await restoreGameStatus(gameState);
+async function initialiseLoadedGame(gameState, type) {
+    await restoreGameStatus(gameState, type);
+}
+
+export function generateRandomPioneerName() {
+    const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+
+    for (let i = 0; i < 8; i++) {
+        randomString += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+
+    const pioneerName = `Pioneer-${randomString}`;
+    setSaveName(pioneerName);
 }

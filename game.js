@@ -1,4 +1,6 @@
 import {
+    getSavedYetSinceOpeningSaveDialogue,
+    setSavedYetSinceOpeningSaveDialogue,
     setLastSavedTimeStamp,
     getLastSavedTimeStamp,
     setCurrentPrecipitationRate,
@@ -87,7 +89,7 @@ import {
  } from './utilityFunctions.js';
 
 
- import { initializeAutoSave } from './saveLoadGame.js';
+ import { initializeAutoSave, saveGame } from './saveLoadGame.js';
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -98,7 +100,6 @@ class TimerManager {
 
     addTimer(key, duration, onExpire) {
         if (this.timers.has(key)) {
-            console.error(`Timer with key "${key}" already exists.`);
             return;
         }
         const timer = new Timer(duration, onExpire);
@@ -270,6 +271,15 @@ export async function gameLoop() {
                 }
             }
         });
+
+        if (!getSavedYetSinceOpeningSaveDialogue() && getCurrentOptionPane() === 'saving / loading') {
+            saveGame('onSaveScreen');
+            setSavedYetSinceOpeningSaveDialogue(true);
+        }
+
+        if (getSavedYetSinceOpeningSaveDialogue && getCurrentOptionPane() !== 'saving / loading') {
+            setSavedYetSinceOpeningSaveDialogue(false);
+        }
 
         requestAnimationFrame(gameLoop);
     }
@@ -1221,9 +1231,9 @@ function manageTabSpecificUi() {
             element.classList.add('d-flex');
         });
 
-        console.log(`Showing UI for Tab ${currentTab}.`);
+        //console.log(`Showing UI for Tab ${currentTab}.`);
     } else {
-        console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
+        //console.log(`No tab-specific UI to show for Tab ${currentTab}, but other tabs are hidden.`);
     }
 }
 
@@ -2854,7 +2864,7 @@ function getConstituentComponents(createCompoundDescriptionString) {
     if (matchCompound) {
         compoundToCreateQuantity = matchCompound[1];
     } else {
-        console.log('No match found for compound quantity.');
+        //console.log('No match found for compound quantity.');
     }
     
     // Constituent Part 1
@@ -2988,7 +2998,7 @@ export function addBuildingPotentialRate(powerBuilding) {
 export function toggleBuildingTypeOnOff(building, activeStatus) { //flag building as switched on or off
     if (getBuildingTypeOnOff(building) !== activeStatus) {
         setBuildingTypeOnOff(building, activeStatus);
-        console.log(building + 'switched on (true) or off (false): ' + activeStatus);
+        //console.log(building + 'switched on (true) or off (false): ' + activeStatus);
     }
 }
 
@@ -3166,8 +3176,8 @@ export function offlineGains(switchedFocus) {
         showNotification('Offline Gains Added!', 'info');
     }
 
-    console.log('Offline Gains:', offlineGains);
-    console.log('Time Offline (seconds):', timeDifferenceInSeconds);
+    //console.log('Offline Gains:', offlineGains);
+    //console.log('Time Offline (seconds):', timeDifferenceInSeconds);
 }
 
 export function setAllCompoundsToZeroQuantity() {

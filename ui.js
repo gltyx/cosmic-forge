@@ -24,6 +24,9 @@ import {
     // setLanguageSelected,
     // setLanguage,
     getCurrentOptionPane,
+    setSaveName,
+    getSaveName,
+    getSaveData
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -33,9 +36,11 @@ import {
     getOptionDescription,
     gameIntroHeader,
     gameIntroText,
+    gameSaveNameCollect,
+    initialiseDescriptions,
 } from "./descriptions.js";
 
-import { saveGame, loadGameFromCloud } from './saveLoadGame.js';
+import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
 
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
@@ -65,21 +70,50 @@ import { drawTab8Content } from './drawTab8Content.js';
 let notificationContainer;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    let saveNameSet = false;
     setElements();
 
     setGameState(getGameVisibleActive());
+
+    generateRandomPioneerName();
+
+    if (localStorage.getItem('saveName')) {
+        setSaveName(localStorage.getItem('saveName'));
+    }
+
+    initialiseDescriptions();
+
     const headerText = gameIntroHeader;
-    const content = gameIntroText;
+    let content = gameSaveNameCollect;
     populateModal(headerText, content);
     getElements().modalContainer.style.display = 'flex';
     getElements().overlay.style.display = 'flex';
-    //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
-    startGame();
+
+    await getUserSaveName();
+
+    content = gameIntroText;
+    populateModal(headerText, content);
+    getElements().modalContainer.style.display = 'flex';
+    getElements().overlay.style.display = 'flex';
 
     getElements().modalOKButton.addEventListener('click', () => {
-        showHideModal();
-        loadGameFromCloud();
+        const handleClick = async () => {
+            showHideModal();
+            try {
+                await loadGameFromCloud(); 
+    
+                saveGame('initialise');
+                saveGameToCloud(getSaveData());
+            } catch (error) {
+                console.error("Error during game loading:", error);
+            }
+        };
+        handleClick();
     });
+    
+
+    //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
+    startGame();
 
     notificationContainer = getElements().notificationContainer;
     // Event listeners
@@ -413,7 +447,6 @@ export function updateContent(heading, tab, type) {
                 optionDescriptionElement.textContent = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab8Content(heading, optionContentElement);
-                saveGame();
                 break;
             default:
                 console.error('Invalid tab:', tab);
@@ -441,7 +474,8 @@ export function createOptionRow(
     startInvisibleValue,
     resourceString,
     optionalIterationParam,
-    rowCategory
+    rowCategory,
+    noDescriptionContainer
 ) {
     // Main wrapper container
     const wrapper = document.createElement('div');
@@ -497,6 +531,9 @@ export function createOptionRow(
     // Create the label container
     const labelContainer = document.createElement('div');
     labelContainer.classList.add('label-container');
+    if (noDescriptionContainer) {
+        labelContainer.style.width = noDescriptionContainer[1];
+    }
     const label = document.createElement('label');
     objectSectionArgument1 === 'autoBuyer' ? label.innerText = renderNameABs + ':' : label.innerText = labelText;
     labelContainer.appendChild(label);
@@ -505,6 +542,9 @@ export function createOptionRow(
     // Create the input container
     const inputContainer = document.createElement('div');
     inputContainer.classList.add('input-container');
+    if (noDescriptionContainer) {
+        inputContainer.style.width = noDescriptionContainer[2];
+    }
 
     if (inputElement1) inputContainer.appendChild(inputElement1);
     if (inputElement2) inputContainer.appendChild(inputElement2);
@@ -515,45 +555,47 @@ export function createOptionRow(
     mainRow.appendChild(inputContainer);
 
     // Create the description container that contains prices of upgrades etc
-    const descriptionContainer = document.createElement('div');
-    descriptionContainer.classList.add('description-container');
-    const description = document.createElement('label');
-    description.classList.add('notation');
-
-    if (rowCategory === 'building') {
-        description.classList.add('building-purchase');
-    }
-
-    description.id = generateElementId(labelText, resourceString, optionalIterationParam);
-    description.innerHTML = descriptionText;
-
-    if (dataConditionCheck) {
-        if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'science' || rowCategory === 'tech') {
-            description.classList.add('red-disabled-text', 'resource-cost-sell-check');
-        } else if (rowCategory === 'compound') {
-            description.classList.add('red-disabled-text', 'compound-cost-sell-check');
+    if (!noDescriptionContainer) {
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.classList.add('description-container');
+        const description = document.createElement('label');
+        description.classList.add('notation');
+    
+        if (rowCategory === 'building') {
+            description.classList.add('building-purchase');
         }
-
-        if (dataConditionCheck === 'techUnlock') {
-            description.dataset.conditionCheck = dataConditionCheck;
-            description.dataset.argumentCheckQuantity = quantityArgument;
-            description.dataset.type = objectSectionArgument1;
-        } else {
-            const quantityArgument2 = descriptionText.includes(',') && objectSectionArgument1.includes('storage') ? descriptionText.split(',').pop().trim().split(' ').pop().toLowerCase() : '';            
-            
-            description.dataset.conditionCheck = dataConditionCheck;
-            description.dataset.resourcePriceObject = resourcePriceObject;
-            description.dataset.type = objectSectionArgument1;
-            description.dataset.resourceToFuseTo = objectSectionArgument2;
-            description.dataset.argumentCheckQuantity = quantityArgument;
-            description.dataset.argumentCheckQuantity2 = quantityArgument2;
-            description.dataset.autoBuyerTier = autoBuyerTier;
-            description.dataset.rowCategory = rowCategory;
+    
+        description.id = generateElementId(labelText, resourceString, optionalIterationParam);
+        description.innerHTML = descriptionText;
+    
+        if (dataConditionCheck) {
+            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'science' || rowCategory === 'tech') {
+                description.classList.add('red-disabled-text', 'resource-cost-sell-check');
+            } else if (rowCategory === 'compound') {
+                description.classList.add('red-disabled-text', 'compound-cost-sell-check');
+            }
+    
+            if (dataConditionCheck === 'techUnlock') {
+                description.dataset.conditionCheck = dataConditionCheck;
+                description.dataset.argumentCheckQuantity = quantityArgument;
+                description.dataset.type = objectSectionArgument1;
+            } else {
+                const quantityArgument2 = descriptionText.includes(',') && objectSectionArgument1.includes('storage') ? descriptionText.split(',').pop().trim().split(' ').pop().toLowerCase() : '';            
+                
+                description.dataset.conditionCheck = dataConditionCheck;
+                description.dataset.resourcePriceObject = resourcePriceObject;
+                description.dataset.type = objectSectionArgument1;
+                description.dataset.resourceToFuseTo = objectSectionArgument2;
+                description.dataset.argumentCheckQuantity = quantityArgument;
+                description.dataset.argumentCheckQuantity2 = quantityArgument2;
+                description.dataset.autoBuyerTier = autoBuyerTier;
+                description.dataset.rowCategory = rowCategory;
+            }
         }
+    
+        descriptionContainer.appendChild(description);
+        mainRow.appendChild(descriptionContainer);
     }
-
-    descriptionContainer.appendChild(description);
-    mainRow.appendChild(descriptionContainer);
 
     wrapper.appendChild(descriptionRowContainer);
     wrapper.appendChild(mainRow);
@@ -710,11 +752,15 @@ export function proxyServerEngineDKrypt(a1a, viv) {
     return c3RT;
 }
 
-export function createTextFieldArea(id, classList = [], placeholder = '') {
+export function createTextFieldArea(id, classList = [], placeholder = '', innerTextString) {
     const textArea = document.createElement('textarea');
     
     textArea.id = id;
     textArea.placeholder = placeholder;
+
+    if (innerTextString) {
+        textArea.value = innerTextString;
+    }
 
     // Apply default classes for dimensions and styling
     textArea.classList.add('text-area-height', 'text-area-width', 'text-area-style'); 
@@ -953,6 +999,26 @@ function populateModal(headerText, content) {
 
     const modalContent = getElements().modalContent;
     modalContent.innerHTML = content;
+}
+
+async function getUserSaveName() {
+    return new Promise((resolve) => {
+        const saveNameButton = getElements().modalSaveButton;
+        const saveNameField = document.getElementById('pioneerCodeName');
+
+        saveNameButton.addEventListener('click', () => {
+            const userName = saveNameField.value.trim();
+            if (userName) {
+                setSaveName(userName);
+                localStorage.setItem('saveName', getSaveName());
+                getElements().modalSaveButton.classList.add('invisible');
+                getElements().modalOKButton.classList.remove('invisible');
+                resolve();
+            } else {
+                alert("Please enter a valid code name!");
+            }
+        });
+    });
 }
 
 export function getTimeInStatCell() {

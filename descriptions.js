@@ -1,18 +1,21 @@
-import { getTimerRateRatio } from "./constantsAndGlobalVars.js";
+import { getTimerRateRatio, getSaveName } from "./constantsAndGlobalVars.js";
 import { getResourceDataObject } from "./resourceDataObject.js";
 
 export let gameIntroHeader;
 export let gameIntroText;
+export let gameSaveNameCollect;
 export let headerDescriptions;
 export let techNotificationMessages;
 export let optionDescriptions;
 
-document.addEventListener('DOMContentLoaded', async () => {
-    initialiseDescriptions();
-});
-
-function initialiseDescriptions() {
+export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
+    gameSaveNameCollect = `
+        Welcome Pioneer! Please enter your code name!<br><br>
+        <textarea 
+            id="pioneerCodeName"  
+            class="save-name save-name-height save-name-modal-width">${getSaveName()}</textarea><br><br>You can load a previous game by changing this name to a previous one.
+    `;
     gameIntroText = 'You find yourself with advanced knowledge but on a world with almost no material!<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies to unlock powerful compounds, and one by one recreate the materials to create<br>a craft to explore and discover the secrets of the interstellar medium!<br><br>With each click, fusion, and discovery, you edge closer to fulfilling your destiny!<br><br>Good Luck!';
 
     headerDescriptions = {
