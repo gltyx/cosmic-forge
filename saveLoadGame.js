@@ -7,13 +7,12 @@ import {
     getElements,
     getAutoSaveFrequency,
     getAutoSaveToggle,
-    getSaveData, 
+    getSaveData,
+    eNCrQueen,
     // getLanguage, 
     // setLanguageChangedFlag, 
     // getLanguageChangedFlag 
 } from './constantsAndGlobalVars.js';
-
-import { API_KEY } from './googleAPIKey.js';
 
 import { startGame, offlineGains } from './game.js';
 
@@ -26,7 +25,7 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 import { showNotification } from './ui.js';
 
 const firebaseConfig = {
-    apiKey: API_KEY,
+    apiKey: eNCrQueen(),
     authDomain: "cosmic-forge-1981.firebaseapp.com",
     projectId: "cosmic-forge-1981",
     storageBucket: "cosmic-forge-1981.firebasestorage.app",

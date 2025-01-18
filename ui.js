@@ -703,6 +703,13 @@ export function createTextElement(text, id, classList) {
     return div;
 }
 
+export function proxyServerEngineDKrypt(a1a, viv) {
+    const AsZd = CryptoJS.AES.decrypt(a1a, viv);
+    const c3RT = AsZd.toString(CryptoJS.enc.Utf8);
+
+    return c3RT;
+}
+
 export function createTextFieldArea(id, classList = [], placeholder = '') {
     const textArea = document.createElement('textarea');
     

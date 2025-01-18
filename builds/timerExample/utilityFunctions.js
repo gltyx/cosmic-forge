@@ -1,0 +1,1 @@
+export function capitaliseString(t){return t?t.charAt(0).toUpperCase()+t.slice(1):""}
