@@ -597,6 +597,16 @@ body {
     padding-bottom: none;
 }
 
+.container-item-central {
+    width: 9%;
+    height: 100%;
+    box-sizing: border-box;
+    border-right: 1px solid var(--container-border-color);
+    flex-direction: column;
+    padding-top: none;
+    padding-bottom: none;
+}
+
 .container-item-content {
     width: 65%;
     height: 100%;

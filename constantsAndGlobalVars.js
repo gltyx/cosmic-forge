@@ -1096,6 +1096,16 @@ export function setBuildingTypeOnOff(building, value) {
         setTrippedStatus(false);
     }
 
+    const powerPlant1PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate']);
+    const powerPlant2PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+    const powerPlant3PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate']);
+    
+    const totalRate = powerPlant1PurchasedRate + powerPlant2PurchasedRate + powerPlant3PurchasedRate;
+
+    if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) && getResourceDataObject('buildings', ['energy', 'consumption']) > totalRate) {
+        setTrippedStatus(true);
+    }
+
     buildingTypeOnOff[building] = value;
 }
 

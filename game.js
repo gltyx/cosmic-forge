@@ -162,6 +162,7 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         const elements = document.querySelectorAll('.notation');
 
+        showHideDynamicColumns();
         showTabsUponUnlock();
         
         setEnergyUse();
@@ -282,6 +283,14 @@ export async function gameLoop() {
         }
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function showHideDynamicColumns() {
+    if (getCurrentOptionPane() === 'energy' || getCurrentOptionPane() === 'power plant' || getCurrentOptionPane() === 'solar power plant' || getCurrentOptionPane() === 'advanced power plant') {
+        document.getElementById('energyConsumptionStats').classList.remove('invisible');
+    } else {
+        document.getElementById('energyConsumptionStats').classList.add('invisible');
     }
 }
 
@@ -1369,10 +1378,17 @@ function checkStatusAndSetTextClasses(element) {
                 element.textContent = '• ON';
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
+                element.classList.remove('warning-orange-text');
+            } else if (getTrippedStatus()) { 
+                element.textContent = '• TRIPPED';
+                element.classList.add('warning-orange-text');
+                element.classList.remove('green-ready-text');
+                element.classList.remove('red-disabled-text');
             } else {
                 element.textContent = '• OFF';
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
+                element.classList.remove('warning-orange-text');
             }
         } else {
             // Battery is purchased
@@ -2360,7 +2376,6 @@ function startInitialTimers() {
                 toggleBuildingTypeOnOff(powerBuilding, false);
                 startUpdateTimersAndRates(powerBuilding, 'toggle');
                 addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true);
-                setTrippedStatus(true);
             });
         }
     });

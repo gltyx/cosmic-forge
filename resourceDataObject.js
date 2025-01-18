@@ -86,10 +86,10 @@ export let resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 0,
+            quantity: 1300,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 130,
+            storageCapacity: 1300,
             currentSecondaryIncreasePrice: 0,
             revealedYet: false,
             upgrades: {
@@ -489,7 +489,7 @@ export let resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 0,
+        quantity: 100000,
         rate: 0,
         ratePower: 0,
         upgrades: {

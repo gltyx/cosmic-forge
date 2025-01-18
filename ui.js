@@ -137,8 +137,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'hydrogen');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('hydrogen');
+            updateContent('Hydrogen', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -147,8 +147,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'helium');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('helium');
+            updateContent('Helium', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -157,8 +157,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'carbon');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('carbon');
+            updateContent('Carbon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -167,8 +167,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'neon');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('neon');
+            updateContent('Neon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -177,8 +177,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'oxygen');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('oxygen');
+            updateContent('Oxygen', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -187,16 +187,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'sodium');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('sodium');
+            updateContent('Sodium', 'tab1', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab1"][class*="option7"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'silicon');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('silicon');
+            updateContent('Silicon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
         });
@@ -205,136 +205,120 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('[class*="tab1"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab1', 'iron');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab1', 'content');
+            setCurrentOptionPane('iron');
+            updateContent('Iron', 'tab1', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab2', 'energy');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2', 'content');
+            setCurrentOptionPane('energy');
+            updateContent('Energy', 'tab2', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab2', 'power plant');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2', 'content');
+            setCurrentOptionPane('power plant');
+            updateContent('Power Plant', 'tab2', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab2"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab2', 'solar power plant');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2', 'content');
+            setCurrentOptionPane('solar power plant');
+            updateContent('Solar Power Plant', 'tab2', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab2"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab2', 'advanced power plant');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab2', 'content');
+            setCurrentOptionPane('advanced power plant');
+            updateContent('Advanced Power Plant', 'tab2', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'research');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab3', 'content');
+            setCurrentOptionPane('research');
+            updateContent('Research', 'tab3', 'content');
         });
     });
     
     document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'tech tree');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab3', 'content');
+            setCurrentOptionPane('tech tree');
+            updateContent('Tech Tree', 'tab3', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'diesel');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4', 'content');
+            setCurrentOptionPane('diesel');
+            updateContent('Diesel', 'tab4', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'glass');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4', 'content');
+            setCurrentOptionPane('glass');
+            updateContent('Glass', 'tab4', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'steel');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4', 'content');
+            setCurrentOptionPane('steel');
+            updateContent('Steel', 'tab4', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'concrete');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4', 'content');
+            setCurrentOptionPane('concrete');
+            updateContent('Concrete', 'tab4', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab4"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab4', 'water');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab4', 'content');
+            setCurrentOptionPane('water');
+            updateContent('Water', 'tab4', 'content');
         });
     });
 
     document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab5', 'star map');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab5', 'content');
+            setCurrentOptionPane('star map');
+            updateContent('Star Map', 'tab5', 'content');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'visual');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8', 'content');
+            setCurrentOptionPane('visual');
+            updateContent('Visual', 'tab8', 'content');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab8', 'saving / loading');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8', 'content');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'option3');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent,'tab8', 'content');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'option4');
-            setCurrentOptionPane(this.textContent);
-            updateContent(this.textContent, 'tab8', 'content');
+            setCurrentOptionPane('saving / loading');
+            updateContent('Saving / Loading', 'tab8', 'content');
         });
     });
 
