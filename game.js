@@ -81,7 +81,8 @@ import {
     sortTechRows,
     showNotification,
     showTabsUponUnlock,
-    getTimeInStatCell
+    getTimeInStatCell,
+    updateDynamicColumns
 } from "./ui.js";
 
 import { 
@@ -163,6 +164,8 @@ export async function gameLoop() {
         const elements = document.querySelectorAll('.notation');
 
         showHideDynamicColumns();
+        updateDynamicColumns();
+
         showTabsUponUnlock();
         
         setEnergyUse();

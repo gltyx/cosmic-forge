@@ -323,6 +323,8 @@ button {
     --button-bg-color: #444;
     --button-bg-active: #666;
     --star-color-prominent: #9da340;
+    --generation-colors: #4CAF50, #8BC34A, #CDDC39;
+    --consumption-colors: #F44336, #E91E63, #9C27B0;
 }
 
 [data-theme="light"] {
@@ -344,6 +346,8 @@ button {
     --button-bg-color: #e5e5e5;
     --button-bg-active: #bfbfbf;
     --star-color-prominent: #cac71d;
+    --generation-colors: #66bb6a, #a5d6a7, #dcedc8;
+    --consumption-colors: #ef5350, #f48fb1, #f8bbd0;
 }
 
 [data-theme="frosty"] {
@@ -365,6 +369,8 @@ button {
     --button-bg-color: #d8eff6;
     --button-bg-active: #c0e2eb;
     --star-color-prominent: #cac71d;
+    --generation-colors: #81d4fa, #4fc3f7, #29b6f6;
+    --consumption-colors: #e57373, #ef9a9a, #ffcdd2;
 }
 
 [data-theme="summer"] {
@@ -386,6 +392,8 @@ button {
     --button-bg-color: #e4c066;
     --button-bg-active: #ffdab0;
     --star-color-prominent: #471414;
+    --generation-colors: #ffcc80, #ffb74d, #ffa726;
+    --consumption-colors: #ff8a65, #ff7043, #d84315;
 }
 
 [data-theme="forest"] {
@@ -407,6 +415,8 @@ button {
     --button-bg-color: #b5f1b5;
     --button-bg-active: #c6f9c6;
     --star-color-prominent: #bdbf32;
+    --generation-colors: #66bb6a, #4caf50, #388e3c;
+    --consumption-colors: #d32f2f, #c62828, #b71c1c;
 }
 
 [data-theme="terminal"] {
@@ -428,6 +438,8 @@ button {
     --button-bg-color: #212121;
     --button-bg-active: #333;
     --star-color-prominent: #ffffff;
+    --generation-colors: lime, #0f0, #080;
+    --consumption-colors: red, #f00, #800;
 }
 
 [data-theme="dark"] {
@@ -449,7 +461,10 @@ button {
     --button-bg-color: #333;
     --button-bg-active: #555;
     --star-color-prominent: #ffffff;
+    --generation-colors: #2e7d32, #43a047, #66bb6a;
+    --consumption-colors: #c62828, #e53935, #ef5350;
 }
+
 /* Global Styles */
 body {
     margin: 0;
@@ -598,7 +613,7 @@ body {
 }
 
 .container-item-central {
-    width: 9%;
+    width: 8%;
     height: 100%;
     box-sizing: border-box;
     border-right: 1px solid var(--container-border-color);
@@ -1066,6 +1081,52 @@ button.red-disabled-text {
 .star:hover::after {
     visibility: visible;
     opacity: 1;
+}
+
+/* .power-generation-consumption-container {
+    width: 100%;
+    height: 300px;
+    border: 1px solid white;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+}
+
+canvas {
+    width: 90%;
+    height: 300px;
+    background-color: transparent;
+    box-shadow: none;
+    outline: none;
+    display: block;
+} */
+
+.power-generation-consumption-container {
+    width: 100%;
+    height: 250px !important;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+}
+
+canvas {
+    width: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    outline: none;
+    display: block;
+}
+
+.power-generation-consumption-chart {
+    border-radius: 0;
 }
 
 /* SCROLL BAR */

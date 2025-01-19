@@ -1052,3 +1052,92 @@ export function getTimeInStatCell() {
         statElement.textContent = timeString;
     }
 }
+
+function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = 800;
+
+    const height = canvas.height - 80;
+    const width = canvas.width;
+
+    const axisPadding = 50;
+    const maxBarHeight = height - axisPadding;
+
+    const maxValue = Math.max(
+        ...generationValues,
+        ...consumptionValues,
+        generationValues.reduce((a, b) => a + b, 0),
+        consumptionValues.reduce((a, b) => a + b, 0)
+    );
+
+    const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
+
+    ctx.clearRect(0, 0, width, height);
+
+    function drawBar(x, values, colors) {
+        let currentY = height - 11;
+        values.forEach((value, index) => {
+            const barHeight = (value / maxValue) * maxBarHeight;
+            if (currentY - barHeight < 0) {
+                console.log(`Bar out of bounds (Y): x=${x}, y=${currentY}, height=${barHeight}`);
+            }
+
+            ctx.fillStyle = colors[index];
+            ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
+            currentY -= barHeight;
+        });
+    }
+
+    const barWidth = width * 0.3;
+    const gap = 10;
+
+    const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
+    const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
+
+    drawBar((gap * 6), generationValues, generationColors);
+    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors);
+
+    ctx.beginPath();
+    ctx.moveTo(0, height - 10);
+    ctx.lineTo(width, height - 10);
+    ctx.strokeStyle = textColor;
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.font = '28px Arial';
+    ctx.fillStyle = textColor;
+
+    const labelSpacing = maxValue / 5;
+    for (let i = 0; i <= 5; i++) {
+        const labelValue = labelSpacing * i;
+        const yPosition = height - (labelValue / maxValue) * maxBarHeight;
+
+        // Make the label with value 0 invisible
+        if (labelValue === 0) {
+            ctx.fillStyle = 'transparent';  // Set the color to transparent for the label with value 0
+        } else {
+            ctx.fillStyle = textColor;  // Reset to the default text color for other labels
+        }
+
+        ctx.fillText(labelValue.toFixed(0), gap * 2, yPosition);
+    }
+
+    const genLabelX = (gap * 4) + barWidth / 2 - 10;
+    const consLabelX = (gap * 4) + barWidth * 1.5 + gap - 10;
+
+    ctx.fillText('Gen.', genLabelX, height + 20);
+    ctx.fillText('Con.', consLabelX, height + 20);
+}
+
+
+
+
+export function updateDynamicColumns() {
+    if (!document.getElementById('energyConsumptionStats').classList.contains('invisible')) {
+        const generationValues = [30, 20, 10];
+        const consumptionValues = [25, 15, 5];
+        drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
+    }
+}
