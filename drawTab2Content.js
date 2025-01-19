@@ -130,7 +130,8 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'building'
+            'building',
+            [true, '25%', '80%']
         );
         optionContentElement.appendChild(powerPlant1Row);
     }
@@ -173,7 +174,8 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'building'
+            'building',
+            [true, '25%', '80%']
         );
         optionContentElement.appendChild(powerPlant2Row);
     }
@@ -216,7 +218,8 @@ export function drawTab2Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'building'
+            'building',
+            [true, '25%', '80%']
         );
         optionContentElement.appendChild(powerPlant3Row);
     }
