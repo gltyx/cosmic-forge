@@ -27,7 +27,9 @@ import {
     getCurrentOptionPane,
     setSaveName,
     getSaveName,
-    getSaveData
+    getSaveData,
+    getTimerRateRatio,
+    getBuildingTypeOnOff
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1057,7 +1059,11 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
 
-    canvas.height = 800;
+    const powerPlant1Status = getBuildingTypeOnOff('powerPlant1');
+    const powerPlant2Status = getBuildingTypeOnOff('powerPlant2');
+    const powerPlant3Status = getBuildingTypeOnOff('powerPlant3');
+
+    canvas.height = 1200;
 
     const height = canvas.height - 80;
     const width = canvas.width;
@@ -1073,19 +1079,45 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     );
 
     const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
+    const bgColor = getComputedStyle(canvas).getPropertyValue('--bg-color').trim();
 
     ctx.clearRect(0, 0, width, height);
 
-    function drawBar(x, values, colors) {
+    const powerPlantStatus = [powerPlant1Status, powerPlant2Status, powerPlant3Status];
+    const generationData = generationValues.map((value, index) => ({
+        value,
+        status: powerPlantStatus[index],
+        originalIndex: index
+    }));
+
+    generationData.sort((a, b) => {
+        if (a.status === b.status) {
+            return a.originalIndex - b.originalIndex;
+        }
+        return a.status ? -1 : 1;
+    });
+
+    const sortedGenerationValues = generationData.map(data => data.value);
+    const sortedGenerationStatuses = generationData.map(data => data.status);
+
+    function drawBar(x, values, colors, status) {
         let currentY = height - 11;
+
         values.forEach((value, index) => {
             const barHeight = (value / maxValue) * maxBarHeight;
-            if (currentY - barHeight < 0) {
-                console.log(`Bar out of bounds (Y): x=${x}, y=${currentY}, height=${barHeight}`);
+
+            ctx.fillStyle = (status[index] === false) ? bgColor : colors[index];
+            ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
+
+            if (status[index] === false) {
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.strokeStyle = 'orange';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(x, currentY - barHeight, barWidth, barHeight);
+                ctx.restore();
             }
 
-            ctx.fillStyle = colors[index];
-            ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
             currentY -= barHeight;
         });
     }
@@ -1096,8 +1128,8 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
     const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
 
-    drawBar((gap * 6), generationValues, generationColors);
-    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors);
+    drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses);
+    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true]);
 
     ctx.beginPath();
     ctx.moveTo(0, height - 10);
@@ -1106,7 +1138,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    ctx.font = '28px Arial';
+    ctx.font = '30px Arial';
     ctx.fillStyle = textColor;
 
     const labelSpacing = maxValue / 5;
@@ -1114,11 +1146,10 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
         const labelValue = labelSpacing * i;
         const yPosition = height - (labelValue / maxValue) * maxBarHeight;
 
-        // Make the label with value 0 invisible
         if (labelValue === 0) {
-            ctx.fillStyle = 'transparent';  // Set the color to transparent for the label with value 0
+            ctx.fillStyle = 'transparent';
         } else {
-            ctx.fillStyle = textColor;  // Reset to the default text color for other labels
+            ctx.fillStyle = textColor;
         }
 
         ctx.fillText(labelValue.toFixed(0), gap * 2, yPosition);
@@ -1131,13 +1162,16 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     ctx.fillText('Con.', consLabelX, height + 20);
 }
 
-
-
-
 export function updateDynamicColumns() {
     if (!document.getElementById('energyConsumptionStats').classList.contains('invisible')) {
-        const generationValues = [30, 20, 10];
-        const consumptionValues = [25, 15, 5];
+        const powerPlant1PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate']);
+        const powerPlant2PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+        const powerPlant3PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate']);
+
+        const powerConsumption = getResourceDataObject('buildings', ['energy', 'consumption']);
+        
+        const generationValues = [powerPlant1PurchasedRate * getTimerRateRatio(), powerPlant2PurchasedRate * getTimerRateRatio(), powerPlant3PurchasedRate * getTimerRateRatio()];
+        const consumptionValues = [powerConsumption * getTimerRateRatio()];
         drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
     }
 }
