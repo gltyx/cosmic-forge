@@ -1,6 +1,6 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
-import { selectTheme } from "./ui.js";
+import { drawTechTree, selectTheme } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains } from './game.js';
 
@@ -51,6 +51,7 @@ let itemsToDeduct = {};
 let itemsToIncreasePrice = {};
 let techUnlockedArray = [];
 let revealedTechArray = [];
+let upcomingTechArray = [];
 let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 let unlockedCompoundsArray = [];
@@ -99,6 +100,7 @@ let losingEnergy = false;
 let powerOnOff = false;
 let trippedStatus = false;
 let savedYetSinceOpeningSaveDialogue = false;
+let techTreeDrawnYet = false;
 
 // let autoSaveOn = false;
 // export let pauseAutoSaveCountdown = true;
@@ -240,6 +242,7 @@ export function captureGameStatusForSaving(type) {
     gameState.constituentPartsObject = getConstituentPartsObject();
     gameState.techUnlockedArray = techUnlockedArray;
     gameState.revealedTechArray = revealedTechArray;
+    gameState.upcomingTechArray = upcomingTechArray;
     gameState.techSpecificUIItemsArray = techSpecificUIItemsArray;
     gameState.unlockedResourcesArray = unlockedResourcesArray;
     gameState.unlockedCompoundsArray = unlockedResourcesArray;
@@ -283,6 +286,7 @@ export function restoreGameStatus(gameState, type) {
             setConstituentPartsObject(gameState.constituentPartsObject);
             techUnlockedArray = gameState.techUnlockedArray;
             revealedTechArray = gameState.revealedTechArray;
+            upcomingTechArray = gameState.upcomingTechArray;
             techSpecificUIItemsArray = gameState.techSpecificUIItemsArray;
             unlockedResourcesArray = gameState.unlockedResourcesArray;
             unlockedCompoundsArray = gameState.unlockedCompoundsArray;
@@ -944,6 +948,14 @@ export function setRevealedTechArray(value) {
     revealedTechArray.unshift(value);
 }
 
+export function getUpcomingTechArray() {
+    return upcomingTechArray;
+}
+
+export function setUpcomingTechArray(value) {
+    upcomingTechArray.unshift(value);
+}
+
 export function getUnlockedResourcesArray() {
     return unlockedResourcesArray;
 }
@@ -1207,6 +1219,32 @@ export function getSavedYetSinceOpeningSaveDialogue() {
 
 export function setSavedYetSinceOpeningSaveDialogue(value) {
     savedYetSinceOpeningSaveDialogue = value;
+}
+
+export function getTechTreeDrawnYet() {
+    return techTreeDrawnYet;
+}
+
+export function setTechTreeDrawnYet(value) {
+    techTreeDrawnYet = value;
+}
+
+export async function getTechTreeData() {
+    try {
+        let techData = getResourceDataObject('techs');
+        const unlockedTechs = getTechUnlockedArray();
+        const upcomingTechs = getUpcomingTechArray();
+    
+        techData = Object.fromEntries(
+            Object.entries(techData).filter(([key]) => 
+                unlockedTechs.includes(key) || upcomingTechs.includes(key)
+            )
+        );
+    
+        await drawTechTree(techData, '#techTreeSvg');
+    } catch (error) {
+        console.error('Error fetching tech data:', error);
+    }
 }
 
 

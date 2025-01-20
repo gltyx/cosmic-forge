@@ -1,4 +1,8 @@
 import {
+    setTechTreeDrawnYet,
+    getTechTreeDrawnYet,
+    setUpcomingTechArray,
+    getUpcomingTechArray,
     getSavedYetSinceOpeningSaveDialogue,
     setSavedYetSinceOpeningSaveDialogue,
     setLastSavedTimeStamp,
@@ -63,7 +67,8 @@ import {
     getResourceSalePreview,
     getCompoundSalePreview,
     getCompoundCreatePreview,
-    getNotationType
+    getNotationType,
+    getTechTreeData
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -222,6 +227,8 @@ export async function gameLoop() {
         });
 
         checkPowerBuildingsFuelLevels();
+
+        monitorTechTree();
         
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
@@ -1281,6 +1288,29 @@ function monitorRevealCompoundsCheck() {
     }
 }
 
+function monitorTechTree() {
+    const techs = getResourceDataObject('techs');
+    
+    Object.keys(techs).forEach(techKey => {
+        if (!getTechUnlockedArray().includes(techKey)) {
+            if (getResourceDataObject('research', ['quantity']) > techs[techKey].appearsAt[0] && !getRevealedTechArray().includes(techKey)) {
+                setRevealedTechArray(techKey);
+            }
+            if (getResourceDataObject('research', ['quantity']) > (techs[techKey].appearsAt[0] / 1.5) && !getUpcomingTechArray().includes(techKey)) {
+                setUpcomingTechArray(techKey);
+                if (getCurrentOptionPane() === 'tech tree') {
+                    const tooltip = document.getElementById('techTreeTooltip');
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                    getTechTreeData();
+                    setTechTreeDrawnYet(true);
+                }
+            }
+        }
+    });
+}
+
 function monitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //reveal techs check
         if (getRevealedTechArray().includes(element.dataset.type)) {
@@ -1289,7 +1319,6 @@ function monitorRevealRowsChecks(element) {
         } else if (!getRevealedTechArray().includes(element.dataset.type) && getResourceDataObject('research', ['quantity']) >= getResourceDataObject('techs', [element.dataset.type, 'appearsAt'])[0]) {
             element.classList.remove('invisible');
             setTechRenderChange(true);
-            setRevealedTechArray(element.dataset.type);
         }
     } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
         const elementTier = parseInt(element.dataset.autoBuyerTier.slice(-1));

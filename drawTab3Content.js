@@ -1,4 +1,4 @@
-import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
+import { getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo, setTechTreeDrawnYet } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createSvgElement, drawTechTree, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
@@ -982,11 +982,6 @@ export function drawTab3Content(heading, optionContentElement) {
     
         optionContentElement.appendChild(techTreeSvgRow);
 
-        try {
-            const techData = getResourceDataObject('techs');
-            drawTechTree(techData, '#techTreeSvg');
-        } catch (error) {
-            console.error('Error fetching tech data:', error);
-        }        
+        getTechTreeData();            
     }    
 }

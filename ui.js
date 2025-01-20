@@ -1,5 +1,9 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getTechTreeData,
+    setTechTreeDrawnYet,
+    getTechTreeDrawnYet,
+    getUpcomingTechArray,
     setLastSavedTimeStamp,
     getCurrentTheme,
     setCurrentTheme,
@@ -1202,6 +1206,13 @@ export function updateDynamicColumns() {
         const consumptionValues = [powerConsumption * getTimerRateRatio()];
         drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
     }
+
+    if (getCurrentOptionPane() === 'tech tree' && !getTechTreeDrawnYet()) {
+        getTechTreeData();
+        setTechTreeDrawnYet(true);
+    } else if (getCurrentOptionPane() !== 'tech tree') {
+        setTechTreeDrawnYet(false);
+    }
 }
 
 export async function drawTechTree(techData, svgElement) {
@@ -1209,24 +1220,38 @@ export async function drawTechTree(techData, svgElement) {
     const bgColor = getComputedStyle(container).getPropertyValue('--bg-color').trim();
     const textColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
 
+    const researchedBgColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
+    const researchedTextColor = getComputedStyle(container).getPropertyValue('--ready-text').trim();
+
+    const researchedTechs = getTechUnlockedArray();
+
     const svgWidth = container.clientWidth || container.parentNode.clientWidth;
     const svgHeight = container.clientHeight || container.parentNode.clientHeight;
 
     let graphDef = `digraph TechTree {
-        graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
-        node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
-        edge [color="${textColor}", fontcolor="${textColor}"];
-    `;
+            graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
+            node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
+            edge [color="${textColor}", fontcolor="${textColor}"];
+        `;
 
-    // Define nodes
     for (const [key, value] of Object.entries(techData)) {
+        const isResearched = researchedTechs.includes(key);
+        const nodeBgColor = isResearched ? researchedBgColor : bgColor;
+        const nodeTextColor = isResearched ? researchedTextColor : textColor;
+    
         const capitalisedTechName = capitaliseString(key);
         const separatedCapitalisedTechNames = capitalisedTechName.replace(/([a-z])([A-Z])/g, '$1 $2');
         const price = value.price;
-        const title = `<b>${separatedCapitalisedTechNames}</b><br/>Price: ${price}`;
-        graphDef += `${key} [label=<${title}> shape="box" style="rounded"];\n`;
+        let title;
+    
+        if (getUpcomingTechArray().includes(key) && !getRevealedTechArray().includes(key)) {
+            title = `<b>???</b><br/>Price: ${price}`;
+        } else {
+            title = `<b>${separatedCapitalisedTechNames}</b><br/>Price: ${price}`;
+        }
+        graphDef += `${key} [label=<${title}> shape="box" style="rounded,filled" fontcolor="${nodeTextColor}" fillcolor="${nodeBgColor}" fontname="Arial"];\n`;
     }
-
+        
     // Define edges
     for (const [key, value] of Object.entries(techData)) {
         const appearsAt = value.appearsAt || [];
@@ -1251,22 +1276,30 @@ export async function drawTechTree(techData, svgElement) {
     graphviz.renderDot(graphDef);
 
     const tooltip = d3.select('body').append('div')
-        .style('position', 'absolute')
-        .style('pointer-events', 'none')
-        .style('padding', '8px')
-        .style('background', 'rgba(0, 0, 0, 0.7)')
-        .style('color', '--text-color')
-        .style('border-radius', '5px')
-        .style('font-size', '12px')
-        .style('display', 'none')
-        .style('z-index', 1000);
+    .style('position', 'absolute')
+    .style('pointer-events', 'none')
+    .style('padding', '8px')
+    .style('background', 'rgba(0, 0, 0, 0.9)')
+    .style('color', 'var(--text-color)')
+    .style('border', '2px solid var(--text-color)')
+    .style('border-radius', '5px')
+    .style('font-size', '12px')
+    .style('display', 'none')
+    .style('z-index', 1000)
+    .attr('id', 'techTreeTooltip');
 
-    graphviz.on("end", function() {
+    graphviz.on("end", function () {
         d3.selectAll(`${svgElement} title`).remove();
-
+    
         d3.selectAll(`${svgElement} .node`)
             .on('mouseover', function (event, d) {
+                tooltip.style('display', 'none');
                 const nodeLabel = d3.select(this).select('text').text();
+    
+                if (nodeLabel.includes('???')) {
+                    return;
+                }
+    
                 const descriptionId = 'tech' + capitaliseString(nodeLabel).replace(/\s+/g, '') + 'Row';
                 const tooltipContent = `<br/>${optionDescriptions[descriptionId].content2}`;
                 tooltip.html(tooltipContent)
@@ -1281,10 +1314,5 @@ export async function drawTechTree(techData, svgElement) {
             .on('mouseout', function () {
                 tooltip.style('display', 'none');
             });
-    });
+    });    
 }
-
-
-
-
-
