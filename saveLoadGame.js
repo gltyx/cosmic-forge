@@ -54,7 +54,7 @@ export function initializeAutoSave() {
 export async function saveGameToCloud(gameData, type) {
     try {
         const userId = getSaveName();
-        const saveRef = doc(db, "cosmicForgeSaves", userId);
+        const saveRef = doc(db, "cosmicForgeSaves_0.17", userId);
 
         await setDoc(saveRef, { saveData: gameData });
 
@@ -114,7 +114,7 @@ export function copySaveStringToClipBoard() {
 export async function loadGameFromCloud() {
     try {
         const userId = localStorage.getItem('saveName') || getSaveName();
-        const saveRef = doc(db, "cosmicForgeSaves", userId);
+        const saveRef = doc(db, "cosmicForgeSaves_0.17", userId);
         const docSnapshot = await getDoc(saveRef);
 
         if (docSnapshot.exists()) {
