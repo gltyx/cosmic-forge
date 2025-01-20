@@ -1,7 +1,7 @@
 import { getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
-import { createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { createSvgElement, drawTechTree, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -100,7 +100,7 @@ export function drawTab3Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(researchScienceLabRow);
 
-    } else if (heading === 'Tech Tree') {
+    } else if (heading === 'Technology') {
         const rows = [
             {
                 techName: 'knowledgeSharing',
@@ -956,5 +956,37 @@ export function drawTab3Content(heading, optionContentElement) {
 
         const container = optionContentElement;
         setTemporaryRowsRepo(container, rows);
-    }
+    }if (heading === 'Tech Tree') {
+        const techTreeSvgRow = createOptionRow(
+            'techTreeSvgRow',
+            null,
+            '',
+            createSvgElement('techTreeSvg', '100%', '700px', ['tech-tree-svg']),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            'techTreeRender',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            'tech-tree',
+            [true, 'invisible', '100%']
+        );
+    
+        optionContentElement.appendChild(techTreeSvgRow);
+
+        try {
+            const techData = getResourceDataObject('techs');
+            drawTechTree(techData, '#techTreeSvg');
+        } catch (error) {
+            console.error('Error fetching tech data:', error);
+        }        
+    }    
 }

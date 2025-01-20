@@ -35,6 +35,7 @@ import {
     getResourceDataObject,
 } from "./resourceDataObject.js";
 import {
+    optionDescriptions,
     getHeaderDescriptions,
     getOptionDescription,
     gameIntroHeader,
@@ -253,6 +254,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab3', 'technology');
+            setCurrentOptionPane('technology');
+            updateContent('Technology', 'tab3', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab3"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab3', 'tech tree');
             setCurrentOptionPane('tech tree');
@@ -525,7 +534,12 @@ export function createOptionRow(
     const labelContainer = document.createElement('div');
     labelContainer.classList.add('label-container');
     if (noDescriptionContainer) {
-        labelContainer.style.width = noDescriptionContainer[1];
+        if (noDescriptionContainer[1] !== 'invisible') {
+            labelContainer.style.width = noDescriptionContainer[1];
+        } else {
+            labelContainer.classList.add('invisible');
+        }
+
     }
     const label = document.createElement('label');
     objectSectionArgument1 === 'autoBuyer' ? label.innerText = renderNameABs + ':' : label.innerText = labelText;
@@ -761,6 +775,20 @@ export function createTextFieldArea(id, classList = [], placeholder = '', innerT
     return textArea;
 }
 
+export function createSvgElement(id, width = "100%", height = "100%", additionalClasses = []) {
+    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgElement.id = id;
+    svgElement.setAttribute("width", width);
+    svgElement.setAttribute("height", height);
+
+    if (Array.isArray(additionalClasses)) {
+        svgElement.classList.add(...additionalClasses);
+    } else if (typeof additionalClasses === "string") {
+        svgElement.classList.add(additionalClasses);
+    }
+
+    return svgElement;
+}
 
 export function selectTheme(theme) {
     const body = document.body;
@@ -1175,3 +1203,88 @@ export function updateDynamicColumns() {
         drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
     }
 }
+
+export async function drawTechTree(techData, svgElement) {
+    const container = document.querySelector(svgElement);
+    const bgColor = getComputedStyle(container).getPropertyValue('--bg-color').trim();
+    const textColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
+
+    const svgWidth = container.clientWidth || container.parentNode.clientWidth;
+    const svgHeight = container.clientHeight || container.parentNode.clientHeight;
+
+    let graphDef = `digraph TechTree {
+        graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
+        node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
+        edge [color="${textColor}", fontcolor="${textColor}"];
+    `;
+
+    // Define nodes
+    for (const [key, value] of Object.entries(techData)) {
+        const capitalisedTechName = capitaliseString(key);
+        const separatedCapitalisedTechNames = capitalisedTechName.replace(/([a-z])([A-Z])/g, '$1 $2');
+        const price = value.price;
+        const title = `<b>${separatedCapitalisedTechNames}</b><br/>Price: ${price}`;
+        graphDef += `${key} [label=<${title}> shape="box" style="rounded"];\n`;
+    }
+
+    // Define edges
+    for (const [key, value] of Object.entries(techData)) {
+        const appearsAt = value.appearsAt || [];
+        if (appearsAt.length > 1) {
+            for (let i = 1; i < appearsAt.length; i++) {
+                const prereq = appearsAt[i];
+                if (prereq) {
+                    graphDef += `${prereq} -> ${key};\n`;
+                }
+            }
+        }
+    }
+
+    graphDef += "}";
+
+    const graphviz = d3.select(svgElement)
+        .graphviz()
+        .zoom(false)
+        .scale(0.7)
+        .fit(true);
+
+    graphviz.renderDot(graphDef);
+
+    const tooltip = d3.select('body').append('div')
+        .style('position', 'absolute')
+        .style('pointer-events', 'none')
+        .style('padding', '8px')
+        .style('background', 'rgba(0, 0, 0, 0.7)')
+        .style('color', '--text-color')
+        .style('border-radius', '5px')
+        .style('font-size', '12px')
+        .style('display', 'none')
+        .style('z-index', 1000);
+
+    graphviz.on("end", function() {
+        d3.selectAll(`${svgElement} title`).remove();
+
+        d3.selectAll(`${svgElement} .node`)
+            .on('mouseover', function (event, d) {
+                const nodeLabel = d3.select(this).select('text').text();
+                const descriptionId = 'tech' + capitaliseString(nodeLabel).replace(/\s+/g, '') + 'Row';
+                const tooltipContent = `<br/>${optionDescriptions[descriptionId].content2}`;
+                tooltip.html(tooltipContent)
+                    .style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY + 10) + 'px')
+                    .style('display', 'block');
+            })
+            .on('mousemove', function (event) {
+                tooltip.style('left', (event.pageX + 10) + 'px')
+                    .style('top', (event.pageY + 10) + 'px');
+            })
+            .on('mouseout', function () {
+                tooltip.style('display', 'none');
+            });
+    });
+}
+
+
+
+
+

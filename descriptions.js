@@ -22,7 +22,7 @@ export function initialiseDescriptions() {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
         'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',
         'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
-        'Technology': 'In the Technology section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
+        'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
         'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
         tab6intro: '',
         tab7intro: '',
@@ -42,7 +42,8 @@ export function initialiseDescriptions() {
         'advanced power plant': "These buildings provide higher amounts of energy for powering a lot of machinery.",
         'solar power plant': "Solar power plants provide renewable energy without using any resources.",
         research: "Here you can buy upgrades to generate research points for unlocking new technology.",
-        'tech tree': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+        'technology': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
+        'tech tree': 'Here you can see a visual representation of technologies and what they provide.',
 
         diesel: "The first compound created by your hands, it is a useful early fuel.",
         glass: "This is reinforced specialist glass and is great for solar applications.",
@@ -559,144 +560,144 @@ export function initialiseDescriptions() {
         },
         techKnowledgeSharingRow: {
             content1: "Unlock Knowledge Sharing to advance research capabilities.",
-            content2: "",
+            content2: "Unlock Knowledge Sharing to improve research capacity and make new technologies accessible.<br><br><span class='green-ready-text'>Build Science Club</span>",
             updateAt: ""
         },
         techFusionTheoryRow: {
             content1: "Unlock Fusion Theory to pave the way for advanced fusion technologies.",
-            content2: "",
+            content2: "Unlock Fusion Theory to unlock the potential of advanced fusion technologies for greater energy production.<br><br><span class='green-ready-text'>Prerequisite for Fusion technologies</span>",
             updateAt: ""
         },
         techHydrogenFusionRow: {
             content1: "Unlock Hydrogen Fusion to experiment with fusing Hydrogen atoms.",
-            content2: "",
+            content2: "Unlock Hydrogen Fusion to explore the potential of fusing Hydrogen atoms for sustainable energy.<br><br><span class='green-ready-text'>Unlock Helium resource</span>",
             updateAt: ""
         },
         techStellarCartographyRow: {
             content1: "Unlock Stellar Cartography to map the stars.",
-            content2: "",
+            content2: "Unlock Stellar Cartography to map distant stars and unlock new astronomical research capabilities.<br><br><span class='green-ready-text'>Unlock Star Map</span>",
             updateAt: ""
         },
         techQuantumComputingRow: {
             content1: "Unlock Quantum Computing to enhance computational power and enable more advanced machinery.",
-            content2: "",
+            content2: "Unlock Quantum Computing to drive technological advancements through enhanced computational capabilities.<br><br><span class='green-ready-text'>Unlock Tier 2 AutoBuyers</span>",
             updateAt: ""
         },
         techHeliumFusionRow: {
             content1: "Unlock Helium Fusion to enable the fusion of Helium atoms.",
-            content2: "",
+            content2: "Unlock Helium Fusion to develop methods for fusing Helium and generate more energy.<br><br><span class='green-ready-text'>Unlock Carbon resource</span>",
             updateAt: ""
         },
         techHydroCarbonsRow: {
             content1: "Unlock HydroCarbons to produce early fuel for power generation.",
-            content2: "",
+            content2: "Unlock HydroCarbons to start generating energy by using early forms of fuel.<br><br><span class='green-ready-text'>Create Diesel (with Compounds Tab)</span>",
             updateAt: ""
         },
         techNanoTubeTechnologyRow: {
             content1: "Unlock NanoTube Technology to learn the first step about the fusion of Carbon.",
-            content2: "",
+            content2: "Unlock NanoTube Technology to advance material science, focusing on carbon-based nanotubes.<br><br><span class='green-ready-text'>Prerequisite for Carbon technologies</span>",
             updateAt: ""
         },
         techCarbonFusionRow: {
-            content1: "Unlock Carbon Fusion to finalise knowledge about the fusion of Carbon atoms.",
-            content2: "",
+            content1: "Unlock Carbon Fusion to finalize knowledge about the fusion of Carbon atoms.",
+            content2: "Unlock Carbon Fusion to explore and harness the power of Carbon atom fusion for more efficient energy.<br><br><span class='green-ready-text'>Unlock Sodium and Neon resources</span>",
             updateAt: ""
         },
         techNeonFusionRow: {
             content1: "Unlock Neon Fusion to explore and harness fusion reactions of Neon.",
-            content2: "",
+            content2: "Unlock Neon Fusion to investigate and utilize the fusion of Neon atoms for advanced energy solutions.<br><br><span class='green-ready-text'>Unlock Oxygen resource</span>",
             updateAt: ""
         },
         techOxygenFusionRow: {
             content1: "Unlock Oxygen Fusion to experiment with fusing Oxygen atoms.",
-            content2: "",
+            content2: "Unlock Oxygen Fusion to explore the process of Oxygen atom fusion and boost energy efficiency.<br><br><span class='green-ready-text'>Unlock Silicon resource</span>",
             updateAt: ""
         },
         techSiliconFusionRow: {
             content1: "Unlock Silicon Fusion to experiment fusing Silicon.",
-            content2: "",
+            content2: "Unlock Silicon Fusion to examine the fusion process of Silicon atoms for advanced applications.<br><br><span class='green-ready-text'>Unlock Iron resource</span>",
             updateAt: ""
         },
         techNeutronCaptureRow: {
             content1: "Unlock Neutron Capture to collect fusion by-products.",
-            content2: "",
+            content2: "Unlock Neutron Capture to gather and study by-products from fusion reactions for advanced technologies.<br><br><span class='green-ready-text'>Unlock Gold resource</span>",
             updateAt: ""
         },
         techGlassManufactureRow: {
             content1: "Unlock Glass Manufacture to produce advanced Glass compounds from Silicon and Oxygen.",
-            content2: "",
+            content2: "Unlock Glass Manufacture to produce advanced glass compounds from Silicon and Oxygen for various industrial uses.<br><br><span class='green-ready-text'>Create Glass compound</span>",
             updateAt: ""
         },
         techAggregateMixingRow: {
             content1: "Unlock Aggregate Mixing to produce concrete compounds from Silicon, Sodium and Hydrogen.",
-            content2: "",
+            content2: "Unlock Aggregate Mixing to produce concrete and construction materials using Silicon, Sodium, and Hydrogen.<br><br><span class='green-ready-text'>Create Concrete compound</span>",
             updateAt: ""
-        },
+        },        
         techNobleGasCollectionRow: {
             content1: "Unlock Noble Gas Collection to store rare noble gases.",
-            content2: "",
+            content2: "Unlock Noble Gas Collection to store and manage rare noble gases, essential for high-end applications.<br><br><span class='green-ready-text'>Prerequisite for Neon Fusion (with Carbon Fusion)</span>",
             updateAt: ""
         },
         techFusionEfficiencyIRow: {
             content1: "Unlock Fusion Efficiency I to enhance fusion efficiency.",
-            content2: "",
+            content2: "Unlock Fusion Efficiency I to improve the performance and energy output of fusion reactions.<br><br><span class='green-ready-text'>Fusion Efficiency +20%</span>",
             updateAt: ""
         },
         techFusionEfficiencyIIRow: {
             content1: "Unlock Fusion Efficiency II to further enhance fusion efficiency.",
-            content2: "",
+            content2: "Unlock Fusion Efficiency II to maximize fusion efficiency, leading to higher energy yields and lower waste.<br><br><span class='green-ready-text'>Fusion Efficiency +20%</span>",
             updateAt: ""
         },
         techFusionEfficiencyIIIRow: {
             content1: "Unlock Fusion Efficiency III to realise 100% efficient fusion.",
-            content2: "",
+            content2: "Unlock Fusion Efficiency III to achieve fully optimized, 100% efficient fusion energy generation.<br><br><span class='green-ready-text'>100% Fusion Efficiency</span>",
             updateAt: ""
         },
         techAtmosphericTelescopesRow: {
             content1: "Unlock Atmospheric Telescopes to get data about the surrounding stellar neighborhood.",
-            content2: "",
+            content2: "Unlock Atmospheric Telescopes to gather data and insights about nearby stars and cosmic bodies.<br><br><span class='green-ready-text'>Reveal Star Data</span>",
             updateAt: ""
         },
         techGiganticTurbinesRow: {
             content1: "Unlock Gigantic Turbines to allow the building of advanced power generators.",
-            content2: "",
+            content2: "Unlock Gigantic Turbines to build massive, high-efficiency turbines for advanced power generation.<br><br><span class='green-ready-text'>Prerequisite for Advanced Power Plant</span>",
             updateAt: ""
         },
         techSteelFoundriesRow: {
             content1: "Unlock Steel Foundries to produce high strength steel alloys from Iron.",
-            content2: "",
+            content2: "Unlock Steel Foundries to produce high-strength steel alloys from iron, enabling advanced manufacturing and construction.<br><br><span class='green-ready-text'>Unlock Steel compound</span>",
             updateAt: ""
         },
         techCompoundsRow: {
             content1: "Unlock Compounds to expand the materials you have access to.",
-            content2: "",
+            content2: "Unlock Compounds to gain access to new materials and enhance your manufacturing capabilities.<br><br><span class='green-ready-text'>Unlock Compounds Tab</span>",
             updateAt: ""
         },
         techAdvancedPowerGenerationRow: {
             content1: "Unlock Advanced Power Generation to boost energy production.",
-            content2: "",
+            content2: "Unlock Advanced Power Generation to increase energy output, powering more complex systems and facilities.<br><br><span class='green-ready-text'>Build Advanced Power Plant</span>",
             updateAt: ""
         },
         techBasicPowerGenerationRow: {
             content1: "Unlock Basic Power Generation to start producing energy.",
-            content2: "",
+            content2: "Unlock Basic Power Generation to lay the foundation for generating energy and powering essential systems.<br><br><span class='green-ready-text'>Build Power Plant</span>",
             updateAt: ""
         },
         techSolarPowerGenerationRow: {
             content1: "Unlock the ability to utilize the local star to harness clean, renewable energy.",
-            content2: "",
+            content2: "Unlock Solar Power Generation to harness renewable solar energy, reducing reliance on non-renewable resources.<br><br><span class='green-ready-text'>Build Solar Power Plant</span>",
             updateAt: ""
-        },
+        },        
         techScienceLaboratoriesRow: {
             content1: "Unlock Science Laboratories to build huge labs for large scale, dedicated research.",
-            content2: "",
+            content2: "Unlock Science Laboratories to establish large-scale labs dedicated to conducting cutting-edge research.<br><br><span class='green-ready-text'>Build Science Laboratory</span>",
             updateAt: "" 
         },
         techSodiumIonPowerStorageRow: {
             content1: "Unlock the ability to build batteries to store energy that you generate.",
-            content2: "",
+            content2: "Unlock Sodium-Ion Power Storage to build advanced batteries for storing energy generated by your systems.<br><br><span class='green-ready-text'>Build Tier 1 Battery</span>",
             updateAt: "" 
-        },
+        },        
         energyPowerPlant1Row: {
             content1: "This is the first building available to produce energy.",
             content2: "",

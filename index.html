@@ -60,7 +60,7 @@
     <div id="tabsContainer" class="d-flex justify-content-between align-items-center fixed-top" style="z-index: 10; width: 100%;">
         <div class="tab selected" data-tab="" data-name ="Resources" id="tab1">Resources</div>
         <div class="tab" data-tab="" data-name ="Buildings" id="tab2">Buildings</div>
-        <div class="tab" data-tab="" data-name ="Technology" id="tab3">Technology</div>
+        <div class="tab" data-tab="" data-name ="Research" id="tab3">Research</div>
         <div class="tab tab-not-yet" data-tab="compounds" data-name ="Compounds" id="tab4">???</div>
         <div class="tab tab-not-yet" data-tab="stellarCartography" data-name ="Star Map" id="tab5">???</div>
         <div class="tab tab-not-yet" data-tab="" data-name ="tab6" id="tab6">???</div>
@@ -332,7 +332,7 @@
         <div id="tab3ContainerGroup" class="tab-3-container-group tab-3">
             <div class="container-item-menu tab-3">
                 <div class="container-item-menu-header tab-3">
-                    <h4 id="tab3Intro">Technology</h4>
+                    <h4 id="tab3Intro">Research</h4>
                 </div>
                 <div class="container-item-menu-body tab-3">
                     <div class="row-side-menu d-flex">
@@ -348,7 +348,18 @@
                     </div>
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p class="tab3.option2">Tech Tree</p>
+                            <p class="tab3.option2">Technology</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p></p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p class="placeholder"></p>
+                        </div>
+                    </div>
+                    <div class="row-side-menu d-flex">
+                        <div class="row-side-menu-item">
+                            <p class="tab3.option3">Tech Tree</p>
                         </div>
                         <div class="row-side-menu-item right-align">
                             <p></p>
@@ -666,6 +677,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-graphviz/5.6.0/d3-graphviz.min.js"></script>
     
     <script type="module" src="game.js"></script>
     <script type="module" src="localization.js"></script>

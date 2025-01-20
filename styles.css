@@ -1129,6 +1129,31 @@ canvas {
     border-radius: 0;
 }
 
+.tech-tree-svg {
+    background-color: var(--bg-color);
+    border: 2px solid var(--text-color);
+    border-radius: 20px;
+    padding: 20px;
+  }
+  
+  .tech-tree-svg svg {
+    width: 100%;   /* Ensure the SVG fits its container */
+    height: 100%;
+  }
+
+  svg title {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    padding: 10px;
+    border: 2px solid var(--text-color);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
 /* SCROLL BAR */
 ::-webkit-scrollbar {
     width: 12px;

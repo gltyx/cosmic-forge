@@ -526,8 +526,8 @@ export let resourceData = {
         }
     },    
     techs: {
-        knowledgeSharing: { appearsAt: [100, null], prereqs: [null], price: 150, idForRenderPosition: 10 },
-        fusionTheory: { appearsAt: [500, null], prereqs: [null], price: 750, idForRenderPosition: 20 },
+        knowledgeSharing: { appearsAt: [100, null, null], prereqs: [null], price: 150, idForRenderPosition: 10 },
+        fusionTheory: { appearsAt: [500, "knowledgeSharing", ""], prereqs: ['Knowledge Sharing'], price: 750, idForRenderPosition: 20 },
         hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
         heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },
         carbonFusion: { appearsAt: [3500, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 4000, idForRenderPosition: 50 },
@@ -553,7 +553,7 @@ export let resourceData = {
         atmosphericTelescopes: { appearsAt: [9000, "glassManufacture", "stellarCartography"], prereqs: ['Glass Manufacture', 'Stellar Cartography'], price: 10000, idForRenderPosition: 700 },
         fusionEfficiencyI: { appearsAt: [1500, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1750, idForRenderPosition: 9000 },
         fusionEfficiencyII: { appearsAt: [3000, "fusionEfficiencyI", ""], prereqs: ['Fusion Efficiency Stage I'], price: 3500, idForRenderPosition: 9010 },
-        fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficienmcy Stage II'], price: 10000, idForRenderPosition: 9030 }
+        fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficiency Stage II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
         cash: 1000,

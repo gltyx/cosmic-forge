@@ -243,7 +243,7 @@ export async function gameLoop() {
             runDeferredJobs();
         }
 
-        if (getCurrentOptionPane() === 'tech tree') {
+        if (getCurrentOptionPane() === 'technology') {
             updateClassesInRowsToRender();
 
             const sortedRows = sortRowsByRenderPosition(getTemporaryRowsRepo('rows'), 'techs');
