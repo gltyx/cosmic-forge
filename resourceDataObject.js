@@ -489,7 +489,7 @@ export let resourceData = {
     },
     research: {
         screenName: 'research',
-        quantity: 500,
+        quantity: 50,
         rate: 0,
         ratePower: 0,
         upgrades: {
@@ -526,7 +526,7 @@ export let resourceData = {
         }
     },    
     techs: {
-        knowledgeSharing: { appearsAt: [100, null, null], prereqs: [null], price: 150, idForRenderPosition: 10 },
+        knowledgeSharing: { appearsAt: [0, null, null], prereqs: [null], price: 150, idForRenderPosition: 10 },
         fusionTheory: { appearsAt: [500, "knowledgeSharing", ""], prereqs: ['Knowledge Sharing'], price: 750, idForRenderPosition: 20 },
         hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
         heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },

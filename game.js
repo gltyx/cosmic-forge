@@ -1295,6 +1295,14 @@ function monitorTechTree() {
         if (!getTechUnlockedArray().includes(techKey)) {
             if (getResourceDataObject('research', ['quantity']) > techs[techKey].appearsAt[0] && !getRevealedTechArray().includes(techKey)) {
                 setRevealedTechArray(techKey);
+                if (getCurrentOptionPane() === 'tech tree') {
+                    const tooltip = document.getElementById('techTreeTooltip');
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                    getTechTreeData();
+                    setTechTreeDrawnYet(true);
+                }
             }
             if (getResourceDataObject('research', ['quantity']) > (techs[techKey].appearsAt[0] / 1.5) && !getUpcomingTechArray().includes(techKey)) {
                 setUpcomingTechArray(techKey);
