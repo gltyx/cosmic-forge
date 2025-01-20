@@ -411,7 +411,7 @@ export function fuseResource(resource, fuseTargets) {
             setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
             totalDeducted = amountToDeductFromResource;
         } else {
-            let fusionEfficiency = 1; // Default full efficiency
+            let fusionEfficiency = 1;
 
             if (!getTechUnlockedArray().includes("fusionEfficiencyI")) {
                 fusionEfficiency = Math.random() * (0.30 - 0.20) + 0.20;

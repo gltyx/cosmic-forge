@@ -1,7 +1,7 @@
 import { getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo, setTechTreeDrawnYet } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
-import { createSvgElement, drawTechTree, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -982,6 +982,12 @@ export function drawTab3Content(heading, optionContentElement) {
     
         optionContentElement.appendChild(techTreeSvgRow);
 
-        getTechTreeData();            
+        const tooltip = document.getElementById('techTreeTooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+        getTechTreeData();
+        setTechTreeDrawnYet(true);   
+
     }    
 }

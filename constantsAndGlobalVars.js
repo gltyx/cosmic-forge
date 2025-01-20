@@ -32,6 +32,7 @@ export const deferredActions = [];
 //GLOBAL VARIABLES
 export let gameState;
 
+let cachedRenderedTechTree = null;
 let saveName = null;
 let lastSavedTimeStamp = null;
 let currentTheme = 'terminal';
@@ -1229,23 +1230,26 @@ export function setTechTreeDrawnYet(value) {
     techTreeDrawnYet = value;
 }
 
-export async function getTechTreeData() {
-    try {
-        let techData = getResourceDataObject('techs');
-        const unlockedTechs = getTechUnlockedArray();
-        const upcomingTechs = getUpcomingTechArray();
-    
-        techData = Object.fromEntries(
-            Object.entries(techData).filter(([key]) => 
-                unlockedTechs.includes(key) || upcomingTechs.includes(key)
-            )
-        );
-    
-        await drawTechTree(techData, '#techTreeSvg');
-    } catch (error) {
-        console.error('Error fetching tech data:', error);
-    }
+export function setRenderedTechTree(renderedTree) {
+    cachedRenderedTechTree = renderedTree;
 }
 
+export function getRenderedTechTree() {
+    return cachedRenderedTechTree;
+}
 
+export async function getTechTreeData() {
 
+    let techData = getResourceDataObject('techs');
+    const unlockedTechs = getTechUnlockedArray();
+    const upcomingTechs = getUpcomingTechArray();
+
+    techData = Object.fromEntries(
+        Object.entries(techData).filter(([key]) => 
+            unlockedTechs.includes(key) || upcomingTechs.includes(key)
+        )
+    );
+
+    await drawTechTree(techData, '#techTreeSvg');
+
+}

@@ -1,6 +1,8 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
-    getTechTreeData,
+    deferredActions,
+    setRenderedTechTree,
+    getRenderedTechTree,
     setTechTreeDrawnYet,
     getTechTreeDrawnYet,
     getUpcomingTechArray,
@@ -566,7 +568,7 @@ export function createOptionRow(
     mainRow.appendChild(inputContainer);
 
     // Create the description container that contains prices of upgrades etc
-    if (!noDescriptionContainer) {
+    if (!noDescriptionContainer || getCurrentOptionPane() === 'energy' || getCurrentOptionPane() === 'power plant' || getCurrentOptionPane() === 'advanced power plant' || getCurrentOptionPane() === 'solar power plant') {
         const descriptionContainer = document.createElement('div');
         descriptionContainer.classList.add('description-container');
         const description = document.createElement('label');
@@ -1207,16 +1209,67 @@ export function updateDynamicColumns() {
         drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
     }
 
-    if (getCurrentOptionPane() === 'tech tree' && !getTechTreeDrawnYet()) {
-        getTechTreeData();
-        setTechTreeDrawnYet(true);
-    } else if (getCurrentOptionPane() !== 'tech tree') {
+    if (getCurrentOptionPane() !== 'tech tree') {
         setTechTreeDrawnYet(false);
     }
 }
 
+function setupTooltip(svgElement) {
+    d3.selectAll('#techTreeTooltip').remove();
+
+    d3.select('body').append('div')
+        .style('position', 'absolute')
+        .style('pointer-events', 'none')
+        .style('padding', '8px')
+        .style('background', 'rgba(0, 0, 0, 0.9)')
+        .style('color', 'var(--text-color)')
+        .style('border', '2px solid var(--text-color)')
+        .style('border-radius', '5px')
+        .style('font-size', '12px')
+        .style('display', 'none')
+        .style('z-index', 1000)
+        .attr('id', 'techTreeTooltip');
+
+    d3.selectAll(`${svgElement} title`).remove();
+
+    d3.selectAll(`${svgElement} .node`)
+        .on('mouseover', function (event, d) {
+            const tooltipElement = d3.select('#techTreeTooltip');
+            const nodeLabel = d3.select(this).select('text').text();
+
+            if (nodeLabel.includes('???')) {
+                tooltipElement.style('display', 'none');
+                return;
+            }
+
+            const descriptionId = 'tech' + capitaliseString(nodeLabel).replace(/\s+/g, '') + 'Row';
+            const tooltipContent = `<br/>${optionDescriptions[descriptionId].content2}`;
+            tooltipElement.html(tooltipContent)
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY + 10) + 'px')
+                .style('display', 'block');
+        })
+        .on('mousemove', function (event) {
+            d3.select('#techTreeTooltip')
+                .style('left', (event.pageX + 10) + 'px')
+                .style('top', (event.pageY + 10) + 'px');
+        })
+        .on('mouseout', function () {
+            d3.select('#techTreeTooltip').style('display', 'none');
+        });
+}
+
 export async function drawTechTree(techData, svgElement) {
+    // const cachedTree = getRenderedTechTree();
     const container = document.querySelector(svgElement);
+
+    // if (cachedTree && !renew) {
+    //     container.innerHTML = '';
+    //     container.appendChild(cachedTree.cloneNode(true));
+    //     setupTooltip(svgElement);
+    //     return;
+    // }
+
     const bgColor = getComputedStyle(container).getPropertyValue('--bg-color').trim();
     const textColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
 
@@ -1229,21 +1282,21 @@ export async function drawTechTree(techData, svgElement) {
     const svgHeight = container.clientHeight || container.parentNode.clientHeight;
 
     let graphDef = `digraph TechTree {
-            graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
-            node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
-            edge [color="${textColor}", fontcolor="${textColor}"];
-        `;
+        graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
+        node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
+        edge [color="${textColor}", fontcolor="${textColor}"];
+    `;
 
     for (const [key, value] of Object.entries(techData)) {
         const isResearched = researchedTechs.includes(key);
         const nodeBgColor = isResearched ? researchedBgColor : bgColor;
         const nodeTextColor = isResearched ? researchedTextColor : textColor;
-    
+
         const capitalisedTechName = capitaliseString(key);
         const separatedCapitalisedTechNames = capitalisedTechName.replace(/([a-z])([A-Z])/g, '$1 $2');
         const price = value.price;
         let title;
-    
+
         if (getUpcomingTechArray().includes(key) && !getRevealedTechArray().includes(key)) {
             title = `<b>???</b><br/>Price: ${price}`;
         } else {
@@ -1251,8 +1304,7 @@ export async function drawTechTree(techData, svgElement) {
         }
         graphDef += `${key} [label=<${title}> shape="box" style="rounded,filled" fontcolor="${nodeTextColor}" fillcolor="${nodeBgColor}" fontname="Arial"];\n`;
     }
-        
-    // Define edges
+
     for (const [key, value] of Object.entries(techData)) {
         const appearsAt = value.appearsAt || [];
         if (appearsAt.length > 1) {
@@ -1273,46 +1325,9 @@ export async function drawTechTree(techData, svgElement) {
         .scale(0.7)
         .fit(true);
 
-    graphviz.renderDot(graphDef);
+    await graphviz.renderDot(graphDef);
 
-    const tooltip = d3.select('body').append('div')
-    .style('position', 'absolute')
-    .style('pointer-events', 'none')
-    .style('padding', '8px')
-    .style('background', 'rgba(0, 0, 0, 0.9)')
-    .style('color', 'var(--text-color)')
-    .style('border', '2px solid var(--text-color)')
-    .style('border-radius', '5px')
-    .style('font-size', '12px')
-    .style('display', 'none')
-    .style('z-index', 1000)
-    .attr('id', 'techTreeTooltip');
-
-    graphviz.on("end", function () {
-        d3.selectAll(`${svgElement} title`).remove();
-    
-        d3.selectAll(`${svgElement} .node`)
-            .on('mouseover', function (event, d) {
-                tooltip.style('display', 'none');
-                const nodeLabel = d3.select(this).select('text').text();
-    
-                if (nodeLabel.includes('???')) {
-                    return;
-                }
-    
-                const descriptionId = 'tech' + capitaliseString(nodeLabel).replace(/\s+/g, '') + 'Row';
-                const tooltipContent = `<br/>${optionDescriptions[descriptionId].content2}`;
-                tooltip.html(tooltipContent)
-                    .style('left', (event.pageX + 10) + 'px')
-                    .style('top', (event.pageY + 10) + 'px')
-                    .style('display', 'block');
-            })
-            .on('mousemove', function (event) {
-                tooltip.style('left', (event.pageX + 10) + 'px')
-                    .style('top', (event.pageY + 10) + 'px');
-            })
-            .on('mouseout', function () {
-                tooltip.style('display', 'none');
-            });
-    });    
+    setTimeout(() => {
+        setupTooltip(svgElement);
+    }, 50);
 }

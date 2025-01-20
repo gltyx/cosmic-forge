@@ -1,0 +1,3 @@
+- check if need to update save folder on firebase if game breaking and released
+- update production_resources file
+- python create_build.py cosmicForge_vx.xx
