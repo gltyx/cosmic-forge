@@ -87,7 +87,8 @@ import {
     showNotification,
     showTabsUponUnlock,
     getTimeInStatCell,
-    updateDynamicColumns
+    updateDynamicColumns,
+    checkOrderOfTabs
 } from "./ui.js";
 
 import { 
@@ -170,8 +171,8 @@ export async function gameLoop() {
 
         showHideDynamicColumns();
         updateDynamicColumns();
-
         showTabsUponUnlock();
+        checkOrderOfTabs();
         
         setEnergyUse();
 
@@ -1300,7 +1301,7 @@ function monitorTechTree() {
                     if (tooltip) {
                         tooltip.remove();
                     }
-                    getTechTreeData();
+                    getTechTreeData(true);
                     setTechTreeDrawnYet(true);
                 }
             }
@@ -1311,7 +1312,7 @@ function monitorTechTree() {
                     if (tooltip) {
                         tooltip.remove();
                     }
-                    getTechTreeData();
+                    getTechTreeData(true);
                     setTechTreeDrawnYet(true);
                 }
             }
@@ -1330,7 +1331,7 @@ function monitorRevealRowsChecks(element) {
         }
     } else if (element.dataset.conditionCheck === 'upgradeCheck' && element.dataset.type === 'autoBuyer') { //autobuyer reveal check
         const elementTier = parseInt(element.dataset.autoBuyerTier.slice(-1));
-        if (getCurrentTab() === 1 && element.dataset.rowCategory === 'resource')  {
+        if (getCurrentTab()[1] === 'Resources' && element.dataset.rowCategory === 'resource')  {
             if (elementTier > 0 ) {
                 if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane(), 'resources')) {
                     element.classList.remove('invisible');
@@ -1340,7 +1341,7 @@ function monitorRevealRowsChecks(element) {
             } else {
                 element.classList.add('invisible');
             }
-        } else if (getCurrentTab() === 4 && element.dataset.rowCategory === 'compound')  {
+        } else if (getCurrentTab()[1] === 'Compounds' && element.dataset.rowCategory === 'compound')  {
             if (elementTier > 0 ) {
                 if (elementTier <= getAutoBuyerTierLevel(getCurrentOptionPane(), 'compounds')) {
                     element.classList.remove('invisible');

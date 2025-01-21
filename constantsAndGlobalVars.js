@@ -87,7 +87,7 @@ let ranOutOfFuelWhenOn = {
     powerPlant3: false,
 }
 
-let currentTab = 1;
+let currentTab = [1, 'Resources'];
 let currentOptionPane = null;
 let notationType = 'normalCondensed';
 
@@ -1238,7 +1238,7 @@ export function getRenderedTechTree() {
     return cachedRenderedTechTree;
 }
 
-export async function getTechTreeData() {
+export async function getTechTreeData(renew) {
 
     let techData = getResourceDataObject('techs');
     const unlockedTechs = getTechUnlockedArray();
@@ -1250,6 +1250,5 @@ export async function getTechTreeData() {
         )
     );
 
-    await drawTechTree(techData, '#techTreeSvg');
-
+    await drawTechTree(techData, '#techTreeSvg', renew);
 }

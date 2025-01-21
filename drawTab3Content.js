@@ -986,7 +986,7 @@ export function drawTab3Content(heading, optionContentElement) {
         if (tooltip) {
             tooltip.remove();
         }
-        getTechTreeData();
+        getTechTreeData(false);
         setTechTreeDrawnYet(true);   
 
     }    

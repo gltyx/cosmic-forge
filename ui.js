@@ -80,7 +80,6 @@ import { drawTab8Content } from './drawTab8Content.js';
 let notificationContainer;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    let saveNameSet = false;
     setElements();
 
     setGameState(getGameVisibleActive());
@@ -141,225 +140,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //handleLanguageChange(getLanguageSelected()); //if we are using localise later on
 
-    let fuseButton;
-
-    document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'hydrogen');
-            setCurrentOptionPane('hydrogen');
-            updateContent('Hydrogen', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'helium');
-            setCurrentOptionPane('helium');
-            updateContent('Helium', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'carbon');
-            setCurrentOptionPane('carbon');
-            updateContent('Carbon', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'neon');
-            setCurrentOptionPane('neon');
-            updateContent('Neon', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option5"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'oxygen');
-            setCurrentOptionPane('oxygen');
-            updateContent('Oxygen', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option6"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'sodium');
-            setCurrentOptionPane('sodium');
-            updateContent('Sodium', 'tab1', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option7"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'silicon');
-            setCurrentOptionPane('silicon');
-            updateContent('Silicon', 'tab1', 'content');
-            fuseButton = document.querySelector('button.fuse');
-            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab1"][class*="option8"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab1', 'iron');
-            setCurrentOptionPane('iron');
-            updateContent('Iron', 'tab1', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'energy');
-            setCurrentOptionPane('energy');
-            updateContent('Energy', 'tab2', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'power plant');
-            setCurrentOptionPane('power plant');
-            updateContent('Power Plant', 'tab2', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab2"][class*="option3"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'solar power plant');
-            setCurrentOptionPane('solar power plant');
-            updateContent('Solar Power Plant', 'tab2', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab2"][class*="option4"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'advanced power plant');
-            setCurrentOptionPane('advanced power plant');
-            updateContent('Advanced Power Plant', 'tab2', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab3', 'research');
-            setCurrentOptionPane('research');
-            updateContent('Research', 'tab3', 'content');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab3', 'technology');
-            setCurrentOptionPane('technology');
-            updateContent('Technology', 'tab3', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab3"][class*="option3"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab3', 'tech tree');
-            setCurrentOptionPane('tech tree');
-            updateContent('Tech Tree', 'tab3', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'diesel');
-            setCurrentOptionPane('diesel');
-            updateContent('Diesel', 'tab4', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab4"][class*="option2"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'glass');
-            setCurrentOptionPane('glass');
-            updateContent('Glass', 'tab4', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab4"][class*="option3"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'steel');
-            setCurrentOptionPane('steel');
-            updateContent('Steel', 'tab4', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab4"][class*="option4"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'concrete');
-            setCurrentOptionPane('concrete');
-            updateContent('Concrete', 'tab4', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab4"][class*="option5"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab4', 'water');
-            setCurrentOptionPane('water');
-            updateContent('Water', 'tab4', 'content');
-        });
-    });
-
-    document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab5', 'star map');
-            setCurrentOptionPane('star map');
-            updateContent('Star Map', 'tab5', 'content');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'visual');
-            setCurrentOptionPane('visual');
-            updateContent('Visual', 'tab8', 'content');
-        });
-    });
-    
-    document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
-        element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'saving / loading');
-            setCurrentOptionPane('saving / loading');
-            updateContent('Saving / Loading', 'tab8', 'content');
-        });
-    });
-
-    const tabs = document.querySelectorAll('#tabsContainer .tab');
-    tabs.forEach((tab, index) => {
-        tab.addEventListener('click', () => {
-            setCurrentTab(index + 1);
-            highlightActiveTab(index);
-            setGameState(getGameVisibleActive());
-            let content = tab.textContent;
-            if (content === '☰') {
-                content = 'Settings';
-            }
-            
-            if (!getLastScreenOpenRegister(`tab${index + 1}`)) {
-                updateContent(content, `tab${index + 1}`, 'intro');
-            }
-
-            const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab());
-            if (lastOpenOptionPane) {
-                setCurrentOptionPane(lastOpenOptionPane);
-            }
-        });
-    });
+    initializeTabEventListeners();
     
     window.addEventListener('resize', () => {
         if (getCurrentOptionPane()) {
@@ -914,21 +695,6 @@ export function updateDescriptionRow(rowKey, targetProperty) {
     }
 }
 
-export function showTabsUponUnlock(tab) {
-    const tabs = document.querySelectorAll('.tab');
-    const unlockedTechs = getTechUnlockedArray();
-
-    tabs.forEach(tab => {
-        const tabTech = tab.getAttribute('data-tab');
-        const tabName = tab.getAttribute('data-name');
-
-        if (unlockedTechs.includes(tabTech)) {
-            tab.classList.remove('tab-not-yet');
-            tab.textContent = tabName;
-        }
-    });
-}
-
 export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
     const minSize = 2;
     const maxSize = 6;
@@ -1097,7 +863,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const powerPlant2Status = getBuildingTypeOnOff('powerPlant2');
     const powerPlant3Status = getBuildingTypeOnOff('powerPlant3');
 
-    canvas.height = 1200;
+    canvas.height = 1000;
 
     const height = canvas.height - 80;
     const width = canvas.width;
@@ -1259,16 +1025,17 @@ function setupTooltip(svgElement) {
         });
 }
 
-export async function drawTechTree(techData, svgElement) {
-    // const cachedTree = getRenderedTechTree();
+export async function drawTechTree(techData, svgElement, renew) {
+    const cachedTree = getRenderedTechTree();
     const container = document.querySelector(svgElement);
+    container.innerHTML = '';
 
-    // if (cachedTree && !renew) {
-    //     container.innerHTML = '';
-    //     container.appendChild(cachedTree.cloneNode(true));
-    //     setupTooltip(svgElement);
-    //     return;
-    // }
+    if (cachedTree && !renew) {
+        container.innerHTML = '';
+        container.appendChild(cachedTree.cloneNode(true));
+        setupTooltip(svgElement);
+        return;
+    }
 
     const bgColor = getComputedStyle(container).getPropertyValue('--bg-color').trim();
     const textColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
@@ -1329,5 +1096,311 @@ export async function drawTechTree(techData, svgElement) {
 
     setTimeout(() => {
         setupTooltip(svgElement);
+        setRenderedTechTree(container);
     }, 50);
+}
+
+export function showTabsUponUnlock() {
+    const tabs = document.querySelectorAll('.tab');
+    const unlockedTechs = getTechUnlockedArray();
+
+    tabs.forEach(tab => {
+        const tabTech = tab.getAttribute('data-tab');
+        const tabName = tab.getAttribute('data-name');
+
+        if (unlockedTechs.includes(tabTech)) {
+            tab.classList.remove('tab-not-yet');
+            tab.textContent = tabName;
+        }
+    });
+}
+
+export function checkOrderOfTabs() {
+    const techArray = getTechUnlockedArray();
+
+    const tabPriorities = {
+        1: 1,
+        2: 4,
+        3: 3,
+        4: 2,
+        5: 5,
+        6: 6,
+        7: 7,
+        8: 8
+    };
+
+    let unlockedTabs = [1, 3];
+
+    if (techArray.includes('stellarCartography')) unlockedTabs.push(5);
+    if (techArray.includes('basicPowerGeneration')) unlockedTabs.push(2);
+    if (techArray.includes('compounds')) unlockedTabs.push(4);
+
+    unlockedTabs = unlockedTabs.sort((a, b) => tabPriorities[a] - tabPriorities[b]);
+
+    const allTabs = Array.from(document.getElementById('tabsContainer').children);
+    const tabsWithUnknown = allTabs.filter(tab => tab.textContent === '???');
+    
+    if (tabsWithUnknown.length > 0) {
+        unlockedTabs = unlockedTabs.filter(tab => !tabsWithUnknown.some(t => `tab${tab}` === t.id));
+        unlockedTabs.push(...tabsWithUnknown.map(tab => parseInt(tab.id.replace('tab', ''), 10)));
+    }
+
+    if (!unlockedTabs.includes(8)) {
+        unlockedTabs.push(8);
+    }
+
+    const currentOrder = Array.from(document.getElementById('tabsContainer').children).map(tab =>
+        parseInt(tab.id.replace('tab', ''), 10)
+    );
+
+    if (JSON.stringify(currentOrder) === JSON.stringify(unlockedTabs)) {
+        return;
+    }
+
+    reorderTabs(unlockedTabs);
+}
+
+function reorderTabs(newOrder) {
+    const tabsContainer = document.getElementById('tabsContainer');
+    const tabs = Array.from(tabsContainer.children);
+
+    newOrder.forEach(tabId => {
+        const tab = document.getElementById(`tab${tabId}`);
+        if (tab) {
+            tabsContainer.appendChild(tab);
+        }
+    });
+
+    initializeTabEventListeners();
+}
+
+
+function initializeTabEventListeners() {
+    let fuseButton;
+
+    document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'hydrogen');
+            setCurrentOptionPane('hydrogen');
+            updateContent('Hydrogen', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'helium');
+            setCurrentOptionPane('helium');
+            updateContent('Helium', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'carbon');
+            setCurrentOptionPane('carbon');
+            updateContent('Carbon', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'neon');
+            setCurrentOptionPane('neon');
+            updateContent('Neon', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'oxygen');
+            setCurrentOptionPane('oxygen');
+            updateContent('Oxygen', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option6"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'sodium');
+            setCurrentOptionPane('sodium');
+            updateContent('Sodium', 'tab1', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option7"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'silicon');
+            setCurrentOptionPane('silicon');
+            updateContent('Silicon', 'tab1', 'content');
+            fuseButton = document.querySelector('button.fuse');
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab1"][class*="option8"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab1', 'iron');
+            setCurrentOptionPane('iron');
+            updateContent('Iron', 'tab1', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'energy');
+            setCurrentOptionPane('energy');
+            updateContent('Energy', 'tab2', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'power plant');
+            setCurrentOptionPane('power plant');
+            updateContent('Power Plant', 'tab2', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'solar power plant');
+            setCurrentOptionPane('solar power plant');
+            updateContent('Solar Power Plant', 'tab2', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab2"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab2', 'advanced power plant');
+            setCurrentOptionPane('advanced power plant');
+            updateContent('Advanced Power Plant', 'tab2', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab3', 'research');
+            setCurrentOptionPane('research');
+            updateContent('Research', 'tab3', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab3', 'technology');
+            setCurrentOptionPane('technology');
+            updateContent('Technology', 'tab3', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab3"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab3', 'tech tree');
+            setCurrentOptionPane('tech tree');
+            updateContent('Tech Tree', 'tab3', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'diesel');
+            setCurrentOptionPane('diesel');
+            updateContent('Diesel', 'tab4', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab4"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'glass');
+            setCurrentOptionPane('glass');
+            updateContent('Glass', 'tab4', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab4"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'steel');
+            setCurrentOptionPane('steel');
+            updateContent('Steel', 'tab4', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab4"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'concrete');
+            setCurrentOptionPane('concrete');
+            updateContent('Concrete', 'tab4', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab4"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'water');
+            setCurrentOptionPane('water');
+            updateContent('Water', 'tab4', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'star map');
+            setCurrentOptionPane('star map');
+            updateContent('Star Map', 'tab5', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'visual');
+            setCurrentOptionPane('visual');
+            updateContent('Visual', 'tab8', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'saving / loading');
+            setCurrentOptionPane('saving / loading');
+            updateContent('Saving / Loading', 'tab8', 'content');
+        });
+    });
+
+    const tabsContainer = document.getElementById('tabsContainer');
+
+    if (tabsContainer) {
+        const tabs = Array.from(tabsContainer.children);
+    
+        tabs.forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const dynamicIndex = parseInt(tab.id.replace('tab', ''), 10);
+    
+                setCurrentTab([dynamicIndex, document.getElementById('tab' + dynamicIndex).textContent]);
+                highlightActiveTab(tab.textContent);
+                setGameState(getGameVisibleActive());
+    
+                let content = tab.textContent;
+                if (content === '☰') {
+                    content = 'Settings';
+                }
+    
+                if (!getLastScreenOpenRegister(`tab${dynamicIndex}`)) {
+                    updateContent(content, `tab${dynamicIndex}`, 'intro');
+                }
+    
+                const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab()[0]);
+                if (lastOpenOptionPane) {
+                    setCurrentOptionPane(lastOpenOptionPane);
+                }
+            });
+        });
+    }    
 }
