@@ -56,7 +56,8 @@ import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
     setGameState,
     startGame,
-    offlineGains
+    offlineGains,
+    startNewsTickerTimer
 } from './game.js';
 
 // import {
@@ -1402,5 +1403,95 @@ function initializeTabEventListeners() {
                 }
             });
         });
-    }    
+    }  
+}
+
+function calculateScrollDuration(message, containerWidth) {
+    const textLength = message.length;
+    const scrollSpeed = 60;
+    const estimatedTextWidth = textLength * 10;
+    return Math.max((estimatedTextWidth + containerWidth) / scrollSpeed, 20) * 1000;
+}
+
+export function showNewsTickerMessage(newsTickerContainer) {
+    const randomValue = Math.random();
+    let category;
+
+    if (randomValue < 0.01) {
+        category = "oneOff";
+    } else if (randomValue < 0.10) {
+        category = "prize";
+    } else {
+        category = "noPrize";
+    }
+
+    const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
+    let message = newsTickerContainer[category][randomIndex];
+
+    if (category === 'prize') {
+        message = specialMessageBuilder();
+    }
+    
+    //add any special info in the message not to be shown, or category conditions, and call events here
+
+    displayNewsTickerMessage(message);
+}
+
+function displayNewsTickerMessage(message) {
+    const newsTicker = document.querySelector('.news-ticker-content');
+    const container = document.querySelector('.news-ticker-container');
+
+    newsTicker.innerHTML = '';
+
+    const textElement = document.createElement('div');
+    textElement.classList.add('news-ticker-text');
+    textElement.textContent = message;
+
+    newsTicker.appendChild(textElement);
+
+    const containerWidth = container.offsetWidth;
+    const additionalOffset = containerWidth * 0.3;
+    const scrollDuration = calculateScrollDuration(message, containerWidth + additionalOffset);
+    console.log('scrollDuration: ' + scrollDuration);
+
+    textElement.style.animation = `scrollNews ${scrollDuration / 1000}s linear infinite`;
+    textElement.style.animationName = 'scrollNews';
+
+    const keyframes = `
+        @keyframes scrollNews {
+            0% {
+                transform: translateX(${containerWidth}px);
+            }
+            100% {
+                transform: translateX(-${containerWidth + additionalOffset}px);
+            }
+        }
+    `;
+
+    const styleTag = document.createElement('style');
+    styleTag.textContent = keyframes;
+    document.head.appendChild(styleTag);
+
+    let timeoutId;
+
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            newsTicker.classList.add('invisible');
+            clearTimeout(timeoutId);
+        } else {
+            startNewsTickerTimer();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    timeoutId = setTimeout(() => {
+        newsTicker.classList.add('invisible');
+        document.head.removeChild(styleTag);
+        startNewsTickerTimer();
+    }, scrollDuration);
+}
+
+function specialMessageBuilder() {
+    
 }

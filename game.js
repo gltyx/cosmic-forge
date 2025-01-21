@@ -88,13 +88,15 @@ import {
     showTabsUponUnlock,
     getTimeInStatCell,
     updateDynamicColumns,
-    checkOrderOfTabs
+    checkOrderOfTabs,
+    showNewsTickerMessage
 } from "./ui.js";
 
 import { 
     capitaliseString
  } from './utilityFunctions.js';
 
+ import { newsTickerContent } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
 
@@ -154,14 +156,16 @@ class Timer {
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
 const timerManager = new TimerManager();
+//--------------------------------------------------------------------------------------------------------
+
 
 export function startGame() {
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
     startInitialTimers();
+    startNewsTickerTimer();
     gameLoop();
 }
 
@@ -2514,7 +2518,22 @@ function startInitialTimers() {
     }
     
     startWeatherTimer();
-}     
+}  
+
+function getRandomNewsTickerInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min) * 1000;
+}
+
+export function startNewsTickerTimer() {
+    const randomDuration = getRandomNewsTickerInterval(1, 5);
+    const newsTicker = document.querySelector('.news-ticker-content');
+
+    timerManager.addTimer('newsTicker', randomDuration, () => {
+        newsTicker.classList.remove('invisible');
+        showNewsTickerMessage(newsTickerContent);
+        timerManager.removeTimer('newsTicker');
+    });
+}
 
 function startUpdateScienceTimers(elementName) {
     let newResearchRate;

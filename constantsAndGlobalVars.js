@@ -116,6 +116,7 @@ export function setElements() {
         canvas: document.getElementById('canvas'),
         testContainer: document.getElementById('testContainer'),
         statsContainer: document.getElementById('statsContainer'),
+        newsTickerContainer: document.getElementById('newsTickerContainer'),
         tabsContainer: document.getElementById('tabsContainer'),
         mainContainer: document.getElementById('mainContainer'),
         solidsMenu: document.getElementById('solids'),
@@ -647,8 +648,7 @@ export function setCreateCompoundPreview(compoundToCreate, amount) {
     const constituentParts2Quantity = type2 ? getResourceDataObject(type2, [constituentParts2, 'quantity']) || 0 : 0;
     const constituentParts3Quantity = type3 ? getResourceDataObject(type3, [constituentParts3, 'quantity']) || 0 : 0;
     const constituentParts4Quantity = type4 ? getResourceDataObject(type4, [constituentParts4, 'quantity']) || 0 : 0;
-    
-    // Calculate max constituent parts that can be used
+
     const maxConstituentParts1 = constituentPartsRatio1 > 0 ? Math.floor(constituentParts1Quantity / constituentPartsRatio1) : Infinity;
     const maxConstituentParts2 = constituentPartsRatio2 > 0 ? Math.floor(constituentParts2Quantity / constituentPartsRatio2) : Infinity;
     const maxConstituentParts3 = constituentPartsRatio3 > 0 ? Math.floor(constituentParts3Quantity / constituentPartsRatio3) : Infinity;
