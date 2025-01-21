@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getPrize,
+    setPrize,
     deferredActions,
     setRenderedTechTree,
     getRenderedTechTree,
@@ -39,6 +41,7 @@ import {
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
+    setResourceDataObject,
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -1406,13 +1409,6 @@ function initializeTabEventListeners() {
     }  
 }
 
-function calculateScrollDuration(message, containerWidth) {
-    const textLength = message.length;
-    const scrollSpeed = 60;
-    const estimatedTextWidth = textLength * 10;
-    return Math.max((estimatedTextWidth + containerWidth) / scrollSpeed, 20) * 1000;
-}
-
 export function showNewsTickerMessage(newsTickerContainer) {
     const randomValue = Math.random();
     let category;
@@ -1428,8 +1424,13 @@ export function showNewsTickerMessage(newsTickerContainer) {
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
     let message = newsTickerContainer[category][randomIndex];
 
-    if (category === 'prize') {
-        message = specialMessageBuilder();
+    if (category === 'prize' || category === 'oneOff') {
+        message = specialMessageBuilder(message);
+    }
+
+    if (message === false) {
+        showNewsTickerMessage(newsTickerContainer);
+        return;
     }
     
     //add any special info in the message not to be shown, or category conditions, and call events here
@@ -1445,13 +1446,13 @@ function displayNewsTickerMessage(message) {
 
     const textElement = document.createElement('div');
     textElement.classList.add('news-ticker-text');
-    textElement.textContent = message;
+    textElement.innerHTML = message;
 
     newsTicker.appendChild(textElement);
 
     const containerWidth = container.offsetWidth;
     const additionalOffset = containerWidth * 0.3;
-    const scrollDuration = calculateScrollDuration(message, containerWidth + additionalOffset);
+    const scrollDuration = 45000;
     console.log('scrollDuration: ' + scrollDuration);
 
     textElement.style.animation = `scrollNews ${scrollDuration / 1000}s linear infinite`;
@@ -1473,10 +1474,14 @@ function displayNewsTickerMessage(message) {
     document.head.appendChild(styleTag);
 
     let timeoutId;
+    let prizeElement = document.getElementById('prize');
 
     function handleVisibilityChange() {
         if (document.hidden) {
             newsTicker.classList.add('invisible');
+            if (prizeElement) {
+                prizeElement.remove();
+            }
             clearTimeout(timeoutId);
         } else {
             startNewsTickerTimer();
@@ -1487,11 +1492,113 @@ function displayNewsTickerMessage(message) {
 
     timeoutId = setTimeout(() => {
         newsTicker.classList.add('invisible');
+        if (prizeElement) {
+            prizeElement.remove();
+        }        
         document.head.removeChild(styleTag);
         startNewsTickerTimer();
+        clearTimeout(timeoutId);
     }, scrollDuration);
 }
 
-function specialMessageBuilder() {
+function specialMessageBuilder(message, category) {
+    if (category === 'prize') {
+        if (message.type === 'giftResource') {
+            let amountToAdd = 0;
+
+            const visible = !getElements()[message.item + 'Option'].parentElement.parentElement.classList.contains('invisible');
+            if (message.condition === 'visible' && visible) {
+                const currentResourceQuantity = getResourceDataObject(message.category, [message.item, 'quantity']);
+                const resourceStorageCapacity = getResourceDataObject(message.category, [message.item, 'storageCapacity']);
+                const difference = resourceStorageCapacity - currentResourceQuantity;
+            
+                if (difference === 0) {
+                    return false;
+                }
+            
+                amountToAdd = Math.min(Math.floor(Math.random() * difference) + 1, resourceStorageCapacity / 10);
+            } else {
+                return false;
+            }
+
+            let newMessage = message.body;
+            newMessage = newMessage.replace('xxx', amountToAdd);
     
+            const linkWord = message.linkWord;
+            const linkWordRegex = new RegExp(`\\b${linkWord}\\b`, 'g');
+    
+            newMessage = newMessage.replace(linkWordRegex, `
+                <span id="prize" 
+                    data-prize-type="giftResource" 
+                    data-category="${message.category}" 
+                    data-item="${message.item}"
+                    data-data1="${amountToAdd}">
+                    ${linkWord}
+                </span>
+            `);
+    
+            deferredActions.push(() => {
+                addPrizeEventListeners();
+            });
+    
+            return newMessage;
+        }
+
+    } else if (category === 'oneOff') {
+        const id = message.id;
+        //check id is not already in getOneOffPrizesAlreadyClaimedArray or return false
+        if (message.type === 'storageMultiplier') {
+            //handle condition and check it or return false
+            //if category contain resources or compounds
+            //get unlocked resources or compounds
+            //filter down to those stated in message.item or if 'all' then apply to all
+
+            //handle multiplier
+            const multiplier = message.type[1];
+            //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], capacity]) * multiplier));
+            //else
+            //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i], 'storageCapacity']) * multiplier));
+            //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i], 'storageCapacity']) * multiplier));
+        } else if (message.type === 'rateMultiplier') {
+            //handle condition and check it or return false
+            //if category contain resources or compounds (autobuyer rate multiplier)
+            //get unlocked resources or compounds
+            //filter down to those stated in message.item or if 'all' then apply to all
+
+            //handle multiplier
+            const multiplier = message.type[1];
+
+            //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], rate]) * multiplier));
+            //else
+            //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
+            //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
+        }
+    }
+}
+
+function addPrizeEventListeners() {
+    const prizeElement = document.getElementById('prize');
+    if (prizeElement) {
+        prizeElement.addEventListener('click', function () {
+            const prizeType = this.getAttribute('data-prize-type');
+            const category = this.getAttribute('data-category');
+            const item = this.getAttribute('data-item');
+            const data1 = parseInt(this.getAttribute('data-data1'));
+
+            switch (prizeType) {
+                case 'giftResource':
+                    setResourceDataObject(
+                        getResourceDataObject(category, [item, 'quantity']) + data1,
+                        category,
+                        [item, 'quantity']
+                    );
+                    break;
+                default:
+                    break;
+            }
+
+            this.style.pointerEvents = 'none';
+            this.style.opacity = '0.5';
+        });
+    }
 }

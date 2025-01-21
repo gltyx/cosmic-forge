@@ -1014,6 +1014,14 @@ button.red-disabled-text {
     animation-fill-mode: forwards;
 }
 
+#prize {
+    color: var(--ready-text);
+}
+
+#prize:hover {
+    color: var(--text-color);
+}
+
 .collapsible {
     border: 1px solid var(--border-color);
     background-color: var(--tab-bg);

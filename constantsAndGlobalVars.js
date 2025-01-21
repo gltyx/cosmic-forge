@@ -32,6 +32,7 @@ export const deferredActions = [];
 //GLOBAL VARIABLES
 export let gameState;
 
+let prize = [];
 let cachedRenderedTechTree = null;
 let saveName = null;
 let lastSavedTimeStamp = null;
@@ -1251,4 +1252,12 @@ export async function getTechTreeData(renew) {
     );
 
     await drawTechTree(techData, '#techTreeSvg', renew);
+}
+
+export function getPrize() {
+    return prize;
+}
+
+export function setPrize(value) {
+    prize = value;
 }

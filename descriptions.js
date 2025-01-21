@@ -753,31 +753,202 @@ export function initialiseDescriptions() {
 
     newsTickerContent = {
         oneOff: [
-            "A solar flare disrupts communication networks across the galaxy—brace for the unexpected!",
-            "You’ve stumbled upon a one-in-a-million cosmic anomaly—observe carefully!",
-            "An ancient artifact reveals secrets of the past—click to investigate!",
-            "A meteor shower lights up the sky—watch for rare phenomena!",
-            "A portal to an unknown dimension briefly opens—tap to explore its mysteries!",
-            "The universe whispers its deepest secrets—are you ready to listen?",
-            "A once-in-a-lifetime supernova lights the heavens—don’t blink!",
-            "The rarest event in cosmic history unfolds—click for more details!",
-            "A mysterious signal from deep space calls out—will you answer?",
-            "An ancient prophecy begins to unfold—your role awaits!"
+            {
+                id : 0,
+                body: "Double storage capacity of all unlocked resources here!",
+                type: ["storageMultiplier", 2],
+                condition: "visible",
+                category: ["resources"],
+                item: "all",
+                linkWord: "here"
+            },
+            {
+                id : 1,
+                body: "Double storage capacity of all unlocked compounds here!",
+                type: ["storageMultiplier", 2],
+                condition: "visible",
+                category: ["compounds"],
+                item: "all",
+                linkWord: "here"
+            },
+            {
+                id : 2,
+                body: "Double storage capacity of all unlocked resources and compounds here!",
+                type: ["storageMultiplier", 2],
+                condition: "visible",
+                category: ["resources", "compounds"],
+                item: "all",
+                linkWord: "here"
+            },
+            {
+                id : 3,
+                body: "Double storage capacity of tier 1 batteries here!",
+                type: ["storageMultiplier", 2],
+                condition: "",
+                category: ["buildings", "batteries"],
+                item: ["energy", "battery1"],
+                linkWord: "here"
+            },
+            {   
+                id : 4,
+                body: "Double storage capacity of tier 2 batteries here!",
+                type: ["storageMultiplier", 2],
+                condition: "",
+                category: ["buildings"],
+                item: ["energy", "battery2"],
+                linkWord: "here"
+            },
+            {
+                id : 5,
+                body: "Double storage capacity of tier 3 batteries here!",
+                type: ["storageMultiplier", 2],
+                condition: "",
+                category: ["buildings"],
+                item: ["energy", "battery3"],
+                linkWord: "here"
+            },
+            {
+                id : 6,
+                body: "Double output of all basic Power Plants here!",
+                type: ["rateMultiplier", 2],
+                condition: "",
+                category: ["buildings"],
+                item: ["energy", "powerPlant1"],
+                linkWord: "here"
+            },
+            {
+                id : 7,
+                body: "Double output of all Solar Power Plants here!",
+                type: ["rateMultiplier", 2],
+                condition: "",
+                category: ["buildings"],
+                item: ["energy", "powerPlant2"],
+                linkWord: "here"
+            },
+            {
+                id : 8,
+                body: "Double output of all Advanced Power Plants here!",
+                type: ["rateMultiplier", 2],
+                condition: "",
+                category: ["buildings"],
+                item: ["energy", "powerPlant3"],
+                linkWord: "here"
+            },            
+            {
+                id : 9,
+                body: "Double output of all Tier 1 Auto Buyers here!",
+                type: ["rateMultiplier", 2],
+                condition: "visible",
+                category: ["resources", "compounds"],
+                item: ["all", "tier1"],
+                linkWord: "here"
+            }       
         ],
-        prize: [   
-            ["Click here to get xxx free Hydrogen!", "", "", "", "here"],
-            ["Click here to get xxx free Helium!", "visible", "resources", "helium", "here"],
-            ["Click here to get xxx free Carbon!", "visible", "resources", "carbon", "here"],
-            ["Click here to get xxx free Neon!", "visible", "resources", "neon", "here"],
-            ["Click here to get xxx free Oxygen!", "visible", "resources", "oxygen", "here"],
-            ["Click here to get xxx free Sodium!", "visible", "resources", "sodium", "here"],
-            ["Click here to get xxx free Silicon!", "visible", "resources", "silicon", "here"],
-            ["Click here to get xxx free Iron!", "visible", "resources", "iron", "here"],
-            ["Click here to get xxx free Diesel!", "visible", "compounds", "diesel", "here"],
-            ["Click here to get xxx free Glass!", "visible", "compounds", "glass", "here"],
-            ["Click here to get xxx free Steel!", "visible", "compounds", "steel", "here"],
-            ["Click here to get xxx free Concrete!", "visible", "compounds", "concrete", "here"],
-            ["Click here to get xxx free Water!", "visible", "compounds", "water", "here"]
+        prize: [
+            {
+                body: "Click here to get xxx free Hydrogen!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "hydrogen",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Helium!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "helium",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Carbon!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "carbon",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Neon!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "neon",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Oxygen!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "oxygen",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Sodium!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "sodium",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Silicon!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "silicon",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Iron!",
+                type: "giftResource",
+                condition: "visible",
+                category: "resources",
+                item: "iron",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Diesel!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "diesel",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Glass!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "glass",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Steel!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "steel",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Concrete!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "concrete",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Water!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "water",
+                linkWord: "here"
+            }
         ],
         noPrize: [        
             "A hummingbird's heart can beat over 1,200 times per minute.",
