@@ -1014,11 +1014,11 @@ button.red-disabled-text {
     animation-fill-mode: forwards;
 }
 
-#prize {
+#prizeTickerSpan {
     color: var(--ready-text);
 }
 
-#prize:hover {
+#prizeTickerSpan:hover {
     color: var(--text-color);
 }
 
