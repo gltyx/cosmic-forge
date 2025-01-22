@@ -41,7 +41,8 @@ import {
     getSaveName,
     getSaveData,
     getTimerRateRatio,
-    getBuildingTypeOnOff
+    getBuildingTypeOnOff,
+    getNewsTickerSetting
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1382,6 +1383,14 @@ function initializeTabEventListeners() {
         });
     });
 
+    document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'game options');
+            setCurrentOptionPane('game options');
+            updateContent('Game Options', 'tab8', 'content');
+        });
+    });
+
     const tabsContainer = document.getElementById('tabsContainer');
 
     if (tabsContainer) {
@@ -1421,7 +1430,7 @@ export function showNewsTickerMessage(newsTickerContainer) {
         category = "oneOff";
     } else if (randomValue < 0.13) {
         category = "prize";
-    } else if (randomValue < 0.99) { //0.36
+    } else if (randomValue < 0.28) {
         category = "wackyEffects";
     } else {
         category = "noPrize";
@@ -1429,8 +1438,7 @@ export function showNewsTickerMessage(newsTickerContainer) {
 
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
 
-    // let message = newsTickerContainer[category][randomIndex];
-    let message = newsTickerContainer['wackyEffects'][randomIndex];
+    let message = newsTickerContainer[category][randomIndex];
 
     if (category === 'prize' || category === 'oneOff' || category === 'wackyEffects') {
         if (category === 'oneOff') {
@@ -1492,11 +1500,14 @@ function displayNewsTickerMessage(message) {
         if (document.hidden) {
             newsTicker.classList.add('invisible');
             if (prizeElement) {
+                document.querySelector('.news-ticker-content').style.animation = 'none';
                 prizeElement.remove();
             }
             clearTimeout(timeoutId);
         } else {
-            startNewsTickerTimer();
+            if (getNewsTickerSetting()) {
+                startNewsTickerTimer();
+            }
         }
     }
 
@@ -1505,6 +1516,7 @@ function displayNewsTickerMessage(message) {
     timeoutId = setTimeout(() => {
         newsTicker.classList.add('invisible');
         if (prizeElement) {
+            document.querySelector('.news-ticker-content').style.animation = 'none';
             prizeElement.remove();
         }        
         document.head.removeChild(styleTag);
@@ -1588,15 +1600,17 @@ function specialMessageBuilder(message, prizeCategory) {
     } else if (prizeCategory === 'wackyEffects') {
         let newMessage = message.body;
         const linkWord = message.linkWord;
-        const linkWordRegex = new RegExp(`\\b${linkWord}\\b`, 'g');
-    
-        newMessage = newMessage.replace(linkWordRegex, `
-            <span 
-                id="prizeTickerSpan"
-                data-effect-item='${message.item}'>
-                ${linkWord}
-            </span>
-        `);
+
+        if (newMessage.includes(linkWord)) {
+            newMessage = newMessage.split(linkWord).join(`
+                <span 
+                    id="prizeTickerSpan"
+                    ${message.class ? `class="${message.class}"` : ''} 
+                    data-effect-item='${message.item}'>
+                    ${linkWord}
+                </span>
+            `);
+        }
     
         deferredActions.push(() => {
             addWackyEffectsEventListeners();
@@ -1755,44 +1769,96 @@ function addWackyEffectsEventListeners() {
 
     prizeTickerSpan.addEventListener('click', () => {
         const effectItem = prizeTickerSpan.getAttribute('data-effect-item');
-        const targetElement = prizeTickerSpan.parentElement;
+        let targetElement = prizeTickerSpan.parentElement;
 
         if (!targetElement) return;
 
+        const existingAnimation = targetElement.style.animation || '';
+        let newAnimation = existingAnimation;
+
         switch (effectItem) {
             case 'wave':
-                targetElement.classList.add('wave');
+                targetElement = prizeTickerSpan.parentElement.parentElement;
+                newAnimation += ', waveAnimation 2s infinite alternate ease-in-out';
+                prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'disco':
-                targetElement.classList.add('disco');
+                targetElement = prizeTickerSpan.parentElement;
+                prizeTickerSpan.classList.add('disco');
                 break;
             case 'bounce':
-                targetElement.classList.add('bounce');
-                break;
-            case 'rotate':
-                targetElement.classList.add('rotate');
+                targetElement = prizeTickerSpan.parentElement.parentElement;
+                newAnimation += ', bounceAnimation 1s infinite ease-in-out';
+                prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'fade':
-                targetElement.classList.add('fade');
+                newAnimation += ', fadeAnimation 1s infinite alternate';
+                prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'glitch':
-                targetElement.classList.add('glitch');
+                targetElement = prizeTickerSpan.parentElement.parentElement;
+                newAnimation += ', glitchAnimation 0.1s infinite';
+                prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'wobble':
-                targetElement.classList.add('wobble');
+                targetElement = prizeTickerSpan.parentElement.parentElement;
+                newAnimation += ', wobbleAnimation 1s infinite ease-in-out';
+                prizeTickerSpan.style.opacity = '0.5';
                 break;
-            case 'heartbeat':
-                targetElement.classList.add('heartbeat');
-                break;
-            case 'pulse':
-                targetElement.classList.add('pulse');
+            case 'boo':
+                prizeTickerSpan.classList.remove('boo');
                 break;
             default:
                 console.warn('Unknown effect item:', effectItem);
                 break;
         }
 
+        targetElement.style.animation = newAnimation;
+
         prizeTickerSpan.style.pointerEvents = 'none';
-        prizeTickerSpan.style.opacity = '0.5';
+
     });
+}
+
+export function startRainEffect() {
+    const rainOverlay = document.getElementById('rainOverlay');
+    if (!rainOverlay) return;
+
+    rainOverlay.style.display = 'block';
+
+    const overlayHeight = 1000;
+    const fallDuration = 0.003;
+
+    setInterval(() => {
+        const raindrop = document.createElement('div');
+        raindrop.classList.add('raindrop');
+
+        const randomX = Math.random() * 5000
+        raindrop.style.left = `${randomX}px`;
+
+        const adjustedDuration = (overlayHeight) * fallDuration; 
+
+        raindrop.style.animationDuration = `${adjustedDuration}s`;
+
+        rainOverlay.appendChild(raindrop);
+
+        setTimeout(() => {
+            raindrop.remove();
+        }, adjustedDuration * 1000);
+    }, 20);
+}
+
+let rainInterval;
+
+export function stopRainEffect() {
+    const rainOverlay = document.getElementById('rainOverlay');
+    if (!rainOverlay) return;
+
+    clearInterval(rainInterval);
+    rainOverlay.style.display = 'none';
+
+    const raindrops = rainOverlay.getElementsByClassName('raindrop');
+    for (let raindrop of raindrops) {
+        raindrop.remove();
+    }
 }

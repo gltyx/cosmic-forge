@@ -1,8 +1,8 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
-import { drawTechTree, selectTheme } from "./ui.js";
+import { drawTechTree, selectTheme, stopRainEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
-import { offlineGains } from './game.js';
+import { offlineGains, startNewsTickerTimer } from './game.js';
 
 
 //DEBUG
@@ -99,6 +99,8 @@ let notationType = 'normalCondensed';
 // let audioMuted;
 // let languageChangedFlag;
 let autoSaveToggle = false;
+let newsTickerSetting = true;
+let rainSettingToggle = true;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
@@ -261,6 +263,8 @@ export function captureGameStatusForSaving(type) {
     // Flags
     gameState.flags = {
         autoSaveToggle: getAutoSaveToggle(),
+        rainSettingToggle: getRainSetting(),
+        newsTickerSetting: getNewsTickerSetting(),
         notificationsToggle: getNotificationsToggle(),
         techRenderChange: getTechRenderChange(),
         losingEnergy: getLosingEnergy(),
@@ -306,6 +310,8 @@ export function restoreGameStatus(gameState, type) {
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
             setNotificationsToggle(gameState.flags.notificationsToggle);
+            setRainSetting(gameState.flags.rainSettingToggle);
+            setNewsTickerSetting(gameState.flags.newsTickerSetting);
             setTechRenderChange(gameState.flags.techRenderChange);
             setLosingEnergy(gameState.flags.losingEnergy);
             setPowerOnOff(gameState.flags.powerOnOff);
@@ -318,6 +324,8 @@ export function restoreGameStatus(gameState, type) {
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
+            const rainSettingToggleElement = document.getElementById('rainSettingToggle');
+            const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
 
             if (autoSaveFrequencyElement) {
                 autoSaveFrequencyElement.value = getAutoSaveFrequency();
@@ -326,6 +334,21 @@ export function restoreGameStatus(gameState, type) {
             if (autoSaveToggleElement) {
                 autoSaveToggleElement.checked = getAutoSaveToggle();
             }
+
+            if (autoSaveToggleElement) {
+                autoSaveToggleElement.checked = getAutoSaveToggle();
+            }
+
+            if (rainSettingToggleElement) {
+                rainSettingToggleElement.checked = getRainSetting();
+            }
+
+            if (newsTickerSettingToggleElement) {
+                newsTickerSettingToggleElement.checked = getNewsTickerSetting();
+            }
+
+            setCurrentPrecipitationRate(0);
+            stopRainEffect();
 
             resolve();
         } catch (error) {
@@ -1277,4 +1300,36 @@ export function setOneOffPrizesAlreadyClaimedArray(value) {
 
 export function getNewsTickerScrollDuration() {
     return NEWS_TICKER_SCROLL_DURATION;
+}
+
+export function setRainSetting(value) {
+    rainSettingToggle = value;
+    if (!value) {
+        stopRainEffect();
+    }
+}
+
+export function getRainSetting() {
+    return rainSettingToggle;
+}
+
+export function setNewsTickerSetting(value) {
+    newsTickerSetting = value;
+    startNewsTickerTimer(); //will also stop any existing timer if the setting is toggle off ie if just toggle off when a timer already counting down to show a message
+    
+    if (!value) {
+        document.getElementById('newsTickerContainer').classList.add('invisible');
+        document.getElementById('tabsContainer').style.marginTop = '30px';
+        document.querySelector('.main-container').style.marginTop = '80px';
+        document.getElementById('statsContainer').style.borderBottom = 'none';
+    } else {
+        document.getElementById('newsTickerContainer').classList.remove('invisible');
+        document.getElementById('tabsContainer').style.marginTop = '60px';
+        document.querySelector('.main-container').style.marginTop = '110px';
+        document.getElementById('statsContainer').style.borderBottom = '1px dashed';
+    }
+}
+
+export function getNewsTickerSetting() {
+    return newsTickerSetting;
 }

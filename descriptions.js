@@ -54,6 +54,7 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy",
         
         visual: "Change the visual settings of the game.",
+        'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
     };
 
@@ -754,50 +755,47 @@ export function initialiseDescriptions() {
     newsTickerContent = {
         wackyEffects: [
             {
-                body: "Stretch and shrink the element horizontally in a wave-like effect here!",
+                body: "Stretch Me!",
                 item: "wave",
-                linkWord: "here"
+                linkWord: "Stretch Me!",
+                class: ""
             },
             {
-                body: "Change colors like a disco every 200ms here!",
+                body: "🕺💃 D.I.S.C.O. 🕺💃",
                 item: "disco",
-                linkWord: "here"
+                linkWord: "🕺💃 D.I.S.C.O. 🕺💃",
+                class: ""
             },
             {
-                body: "Make the element bounce up and down continuously here!",
+                body: "Boing!",
                 item: "bounce",
-                linkWord: "here"
+                linkWord: "Boing!",
+                class: ""
             },
             {
-                body: "Rotate the element continuously here!",
-                item: "rotate",
-                linkWord: "here"
-            },
-            {
-                body: "Make the element fade in and out continuously here!",
+                body: "There Or Not?",
                 item: "fade",
-                linkWord: "here"
+                linkWord: "There Or Not?",
+                class: ""
             },
             {
-                body: "Give the element a glitch effect here!",
+                body: "Bzzzzzzz!",
                 item: "glitch",
-                linkWord: "here"
+                linkWord: "Bzzzzzzz!",
+                class: ""
             },
             {
-                body: "Apply a wobble effect to the element here!",
+                body: "Wibble Wobble!",
                 item: "wobble",
-                linkWord: "here"
+                linkWord: "Wibble Wobble!",
+                class: ""
             },
             {
-                body: "Expand and contract the element like a heartbeat here!",
-                item: "heartbeat",
-                linkWord: "here"
-            },
-            {
-                body: "Make the element pulse with increasing and decreasing opacity here!",
-                item: "pulse",
-                linkWord: "here"
-            }
+                body: "Dont Click This: Boo!",
+                item: "boo",
+                linkWord: "Boo!",
+                class: "boo"
+            }     
         ],        
         oneOff: [
             {

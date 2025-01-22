@@ -1199,7 +1199,7 @@ canvas {
 
 /* Wave Effect */
 .wave {
-    animation: waveAnimation 2s infinite alternate ease-in-out;
+    animation: waveAnimation;
 }
 @keyframes waveAnimation {
     0% {
@@ -1212,68 +1212,55 @@ canvas {
 
 /* Disco Effect */
 .disco {
-    animation: discoAnimation 0.2s infinite alternate;
+    animation: discoAnimation 1s infinite alternate;
 }
 @keyframes discoAnimation {
     0% {
-        background-color: red;
+        color: red;
     }
     25% {
-        background-color: orange;
+        color: orange;
     }
     50% {
-        background-color: yellow;
+        color: yellow;
     }
     75% {
-        background-color: green;
+        color: green;
     }
     100% {
-        background-color: blue;
+        color: blue;
     }
 }
 
 /* Bounce Effect */
 .bounce {
-    animation: bounceAnimation 1s infinite ease-in-out;
+    animation: bounceAnimation;
 }
 @keyframes bounceAnimation {
     0%, 100% {
-        transform: translateY(0);
+        transform: translateY(10);
     }
     50% {
-        transform: translateY(-20px);
-    }
-}
-
-/* Rotate Effect */
-.rotate {
-    animation: rotateAnimation 1s infinite linear;
-}
-@keyframes rotateAnimation {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
+        transform: translateY(-15px);
     }
 }
 
 /* Fade Effect */
 .fade {
-    animation: fadeAnimation 1.5s infinite alternate;
+    animation: fadeAnimation;
 }
 @keyframes fadeAnimation {
     0% {
         opacity: 1;
     }
     100% {
-        opacity: 0.3;
+        opacity: 0.0;
     }
 }
 
 /* Glitch Effect */
 .glitch {
-    animation: glitchAnimation 0.1s infinite;
+    animation: glitchAnimation;
 }
 @keyframes glitchAnimation {
     0% {
@@ -1289,48 +1276,60 @@ canvas {
 
 /* Wobble Effect */
 .wobble {
-    animation: wobbleAnimation 1s infinite ease-in-out;
+    animation: wobbleAnimation;
 }
 @keyframes wobbleAnimation {
     0% {
         transform: rotate(0deg);
     }
     25% {
-        transform: rotate(-10deg);
+        transform: rotate(-6deg);
     }
     50% {
-        transform: rotate(10deg);
+        transform: rotate(6deg);
     }
     75% {
-        transform: rotate(-5deg);
+        transform: rotate(-3deg);
     }
     100% {
         transform: rotate(0deg);
     }
 }
 
-/* Heartbeat Effect */
-.heartbeat {
-    animation: heartbeatAnimation 1.5s infinite ease-in-out;
+.boo {
+    background-color: var(--text-color) !important;
+    color: var(--text-color) !important;
+    border: 3px solid var(--ready-text);
 }
-@keyframes heartbeatAnimation {
-    0%, 100% {
-        transform: scale(1);
+
+.rainOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 300vw;
+    height: 100vw;
+    z-index: 10000;
+    pointer-events: none;
+    background: transparent;
+    overflow: hidden;
+}
+
+.raindrop {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background-color: rgb(50, 50, 255);
+    opacity: 0.5;
+    animation: fall 1.5s linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-150vh) translateX(-100vw);
     }
-    50% {
-        transform: scale(1.2);
+    100% {
+        transform: translateY(150vh) translateX(100vw);
     }
 }
 
-/* Pulse Effect */
-.pulse {
-    animation: pulseAnimation 1s infinite alternate;
-}
-@keyframes pulseAnimation {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0.5;
-    }
-}

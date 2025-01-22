@@ -1,4 +1,6 @@
 import {
+    getNewsTickerSetting,
+    getRainSetting,
     setTechTreeDrawnYet,
     getTechTreeDrawnYet,
     setUpcomingTechArray,
@@ -89,7 +91,9 @@ import {
     getTimeInStatCell,
     updateDynamicColumns,
     checkOrderOfTabs,
-    showNewsTickerMessage
+    showNewsTickerMessage,
+    startRainEffect,
+    stopRainEffect,
 } from "./ui.js";
 
 import { 
@@ -198,6 +202,10 @@ export async function gameLoop() {
 
         addPrecipitationResource();
 
+        if (getCurrentPrecipitationRate() === 0) {
+            stopRainEffect();
+        }
+        
         let allQuantities = getAllQuantities();
         allQuantities = normalizeAllQuantities(allQuantities);
         const allStorages = getAllStorages();
@@ -2498,9 +2506,15 @@ function startInitialTimers() {
                 if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && !precipitationRateSet) {
                     precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
                     setCurrentPrecipitationRate(precipitationRate);
+                    if (getRainSetting()) {
+                        startRainEffect();
+                    }
                     precipitationRateSet = true;
                 } else if (!precipitationRateSet) {
                     setCurrentPrecipitationRate(0);
+                    if (getRainSetting()) {
+                        stopRainEffect();
+                    }
                     precipitationRateSet = true;
                 }
 
@@ -2525,14 +2539,20 @@ function getRandomNewsTickerInterval(min, max) {
 }
 
 export function startNewsTickerTimer() {
-    const randomDuration = getRandomNewsTickerInterval(1, 5); //20,35
-    const newsTicker = document.querySelector('.news-ticker-content');
-
-    timerManager.addTimer('newsTicker', randomDuration, () => {
-        newsTicker.classList.remove('invisible');
-        showNewsTickerMessage(newsTickerContent);
-        timerManager.removeTimer('newsTicker');
-    });
+    if (getNewsTickerSetting()) {
+        const randomDuration = getRandomNewsTickerInterval(20, 35);
+        const newsTicker = document.querySelector('.news-ticker-content');
+    
+        timerManager.addTimer('newsTicker', randomDuration, () => {
+            newsTicker.classList.remove('invisible');
+            showNewsTickerMessage(newsTickerContent);
+            timerManager.removeTimer('newsTicker');
+        });       
+    } else {
+        if (timerManager.getTimer('newsTicker')) {
+            timerManager.removeTimer('newsTicker');
+        }
+    }
 }
 
 function startUpdateScienceTimers(elementName) {

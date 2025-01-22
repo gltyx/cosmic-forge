@@ -1,4 +1,4 @@
-import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName } from './constantsAndGlobalVars.js';
+import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getRainSetting, setRainSetting, setNewsTickerSetting, getNewsTickerSetting } from './constantsAndGlobalVars.js';
 import { createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
@@ -124,6 +124,31 @@ export function drawTab8Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(settingsThemeRow);
 
+        const rainSettingRow = createOptionRow(
+            'rainSettingRow',
+            null,
+            'Rain Effect:',
+            createToggleSwitch('rainSettingToggle', true, (isEnabled) => {
+                setRainSetting(isEnabled);
+            }, null),
+            null,
+            null,
+            null,
+            null,
+            'Toggle the rain effect on or off.',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(rainSettingRow);
+
         const notificationsToggleElement = document.getElementById('notificationsToggle');
         if (notificationsToggleElement) {
             notificationsToggleElement.checked = getNotificationsToggle();
@@ -142,7 +167,45 @@ export function drawTab8Content(heading, optionContentElement) {
         const themeDropdownElement = document.getElementById('themeSelect');
         if (themeDropdownElement) {
             themeDropdownElement.value = getCurrentTheme();
-        }     
+        }  
+        
+        const rainSettingToggleElement = document.getElementById('rainSettingToggle');
+        if (rainSettingToggleElement) {
+            rainSettingToggleElement.checked = getRainSetting();
+        } 
+    }
+
+    if (heading === 'Game Options') {
+
+        const newsTickerToggleRow = createOptionRow(
+            'newsTickerToggleRow',
+            null,
+            'News Ticker Feature:',
+            createToggleSwitch('newsTickerSettingToggle', true, (isEnabled) => {
+                setNewsTickerSetting(isEnabled);
+            }, null),
+            null,
+            null,
+            null,
+            null,
+            'Toggle the News Ticker feature on or off.',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(newsTickerToggleRow);
+
+        const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
+        if (newsTickerSettingToggleElement) {
+            newsTickerSettingToggleElement.checked = getNewsTickerSetting();
+        }
     }
 
     if (heading === 'Saving / Loading') {   
