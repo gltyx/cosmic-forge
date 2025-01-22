@@ -60,6 +60,7 @@ let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
+let oneOffPrizesAlreadyClaimedArray = [];
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -253,6 +254,7 @@ export function captureGameStatusForSaving(type) {
     gameState.buildingTypeOnOff = buildingTypeOnOff;
     gameState.ranOutOfFuelWhenOn = ranOutOfFuelWhenOn;
     gameState.notationType = getNotationType();
+    gameState.oneOffPrizesAlreadyClaimedArray = oneOffPrizesAlreadyClaimedArray;
 
     // Flags
     gameState.flags = {
@@ -297,6 +299,7 @@ export function restoreGameStatus(gameState, type) {
             buildingTypeOnOff = gameState.buildingTypeOnOff;
             ranOutOfFuelWhenOn = gameState.ranOutOfFuelWhenOn;
             setNotationType(gameState.notationType);
+            oneOffPrizesAlreadyClaimedArray = gameState.oneOffPrizesAlreadyClaimedArray;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1260,4 +1263,12 @@ export function getPrize() {
 
 export function setPrize(value) {
     prize = value;
+}
+
+export function getOneOffPrizesAlreadyClaimedArray() {
+    return oneOffPrizesAlreadyClaimedArray;
+}
+
+export function setOneOffPrizesAlreadyClaimedArray(value) {
+    oneOffPrizesAlreadyClaimedArray.unshift(value);
 }

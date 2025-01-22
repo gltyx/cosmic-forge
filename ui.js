@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getOneOffPrizesAlreadyClaimedArray,
+    setOneOffPrizesAlreadyClaimedArray,
     getPrize,
     setPrize,
     deferredActions,
@@ -1413,9 +1415,9 @@ export function showNewsTickerMessage(newsTickerContainer) {
     const randomValue = Math.random();
     let category;
 
-    if (randomValue < 0.01) {
+    if (randomValue < 0.99) {
         category = "oneOff";
-    } else if (randomValue < 0.10) {
+    } else if (randomValue < 0.999) {
         category = "prize";
     } else {
         category = "noPrize";
@@ -1425,7 +1427,7 @@ export function showNewsTickerMessage(newsTickerContainer) {
     let message = newsTickerContainer[category][randomIndex];
 
     if (category === 'prize' || category === 'oneOff') {
-        message = specialMessageBuilder(message);
+        message = specialMessageBuilder(message, category);
     }
 
     if (message === false) {
@@ -1474,7 +1476,7 @@ function displayNewsTickerMessage(message) {
     document.head.appendChild(styleTag);
 
     let timeoutId;
-    let prizeElement = document.getElementById('prize');
+    let prizeElement = document.getElementById('prizeTickerSpan');
 
     function handleVisibilityChange() {
         if (document.hidden) {
@@ -1501,8 +1503,8 @@ function displayNewsTickerMessage(message) {
     }, scrollDuration);
 }
 
-function specialMessageBuilder(message, category) {
-    if (category === 'prize') {
+function specialMessageBuilder(message, prizeCategory) {
+    if (prizeCategory === 'prize') {
         if (message.type === 'giftResource') {
             let amountToAdd = 0;
 
@@ -1528,7 +1530,7 @@ function specialMessageBuilder(message, category) {
             const linkWordRegex = new RegExp(`\\b${linkWord}\\b`, 'g');
     
             newMessage = newMessage.replace(linkWordRegex, `
-                <span id="prize" 
+                <span id="prizeTickerSpan" 
                     data-prize-type="giftResource" 
                     data-category="${message.category}" 
                     data-item="${message.item}"
@@ -1544,40 +1546,211 @@ function specialMessageBuilder(message, category) {
             return newMessage;
         }
 
-    } else if (category === 'oneOff') {
-        const id = message.id;
-        //check id is not already in getOneOffPrizesAlreadyClaimedArray or return false
-        if (message.type === 'storageMultiplier') {
-            //handle condition and check it or return false
-            //if category contain resources or compounds
-            //get unlocked resources or compounds
-            //filter down to those stated in message.item or if 'all' then apply to all
-
-            //handle multiplier
+    } else if (prizeCategory === 'oneOff') {
+        if (!getOneOffPrizesAlreadyClaimedArray().includes(message.id)) {
+            setOneOffPrizesAlreadyClaimedArray(message.id);
             const multiplier = message.type[1];
-            //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], capacity]) * multiplier));
-            //else
-            //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i], 'storageCapacity']) * multiplier));
-            //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i], 'storageCapacity']) * multiplier));
-        } else if (message.type === 'rateMultiplier') {
-            //handle condition and check it or return false
-            //if category contain resources or compounds (autobuyer rate multiplier)
-            //get unlocked resources or compounds
-            //filter down to those stated in message.item or if 'all' then apply to all
-
-            //handle multiplier
-            const multiplier = message.type[1];
-
-            //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], rate]) * multiplier));
-            //else
-            //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
-            //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
+    
+            let newMessage = message.body;
+            const linkWord = message.linkWord;
+            const linkWordRegex = new RegExp(`\\b${linkWord}\\b`, 'g');
+    
+            newMessage = newMessage.replace(linkWordRegex, `
+                <span 
+                    id="prizeTickerSpan"
+                    data-oneoff-id='${message.id}' 
+                    data-category='${JSON.stringify(message.category)}'
+                    data-item='${typeof message.item === 'string' ? message.item : JSON.stringify(message.item)}'  
+                    data-type='${message.type[0]}' 
+                    data-multiplier='${multiplier}'>
+                    ${linkWord}
+                </span>
+            `);
+    
+            deferredActions.push(() => {
+                addOneOffEventListeners(); //at this point we have not already claimed it and we are definitely applying it no matter what
+            });
+    
+            return newMessage;
+        } else {
+            return false;
         }
+
+
+        // const id = message.id;
+        // const multiplier = message.type[1];
+
+        // if (getOneOffPrizesAlreadyClaimedArray().includes(id)) {
+        //     return false;
+        // } else {
+        //     setOneOffPrizesAlreadyClaimedArray(id);
+
+        //     let resourcesToInclude = getResourceDataObject('resources');
+        //     let compoundsToInclude = getResourceDataObject('compounds');
+
+        //     let resourcesAndCompoundsToInclude = {
+        //         resources: resourcesToInclude,
+        //         compounds: compoundsToInclude
+        //     };
+
+        //     resourcesToInclude = filterObjectsByCondition(resourcesToInclude);
+        //     compoundsToInclude = filterObjectsByCondition(compoundsToInclude);
+
+        //     if (message.type[0] === 'storageMultiplier') {
+        //         if (message.condition === 'visible') { //resources/compounds
+        //             if (['resources', 'compounds'].some(category => message.category.includes(category))) {
+        //                 const applyUpgradeToCategory = (category) => {
+        //                     if ((category === 'resources' && resourcesToInclude.length > 0 && message.item !== 'all') ||
+        //                         (category === 'compounds' && compoundsToInclude.length > 0 && message.item !== 'all')) {
+        //                         return message.body;
+        //                     } else if (message.item === 'all') {
+        //                         Object.keys(resourcesAndCompoundsToInclude[category]).forEach(element => {
+        //                             setResourceDataObject(
+        //                                 Math.floor(
+        //                                     getResourceDataObject(category, [element, 'storageCapacity']) * multiplier
+        //                                 ),
+        //                                 category,
+        //                                 [element, 'storageCapacity']
+        //                             );
+        //                         });
+        //                         return message.body;
+        //                     } else {
+        //                         return false;
+        //                     }
+        //                 };
+                    
+        //                 for (let category of ['resources', 'compounds']) {
+        //                     if (message.category.includes(category)) {
+        //                         const result = applyUpgradeToCategory(category);
+        //                         if (result) return result;
+        //                     }
+        //                 }
+        //             }                    
+        //         } else { //buildings ... etc
+        //             if (message.category.includes('buildings')) {
+        //                 setResourceData(Math.floor(getResourceData('buildings', [message.item[0], 'upgrades', message.item[1], 'capacity']) * multiplier), 'buildings', [message.item[0], 'upgrades', message.item[1], 'capacity']);
+        //             }
+        //         }
+        //     } else if (message.type[0] === 'rateMultiplier') {
+        //         //handle condition and check it or return false
+        //         //if category contain resources or compounds (autobuyer rate multiplier)
+        //         //get unlocked resources or compounds
+        //         //filter down to those stated in message.item or if 'all' then apply to all
+
+        //         //handle multiplier
+        //         const multiplier = message.type[1];
+
+        //         //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], rate]) * multiplier));
+        //         //else
+        //         //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
+        //         //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
+        //     }
+
+        // }
     }
 }
 
+function addOneOffEventListeners() {
+    const oneOffElement = document.getElementById('prizeTickerSpan');
+
+    oneOffElement.addEventListener('click', function () {
+        const multiplier = parseFloat(this.getAttribute('data-multiplier'));
+        const categoryArray = JSON.parse(this.getAttribute('data-category'));
+        let item = this.getAttribute('data-item');
+
+        if (item.startsWith('[') && item.endsWith(']')) {
+            item = JSON.parse(item);
+        }
+
+        const type = this.getAttribute('data-type');
+
+        let resourcesToInclude = getResourceDataObject('resources');
+        let compoundsToInclude = getResourceDataObject('compounds');
+
+        let resourcesAndCompoundsToInclude = {
+            resources: resourcesToInclude,
+            compounds: compoundsToInclude
+        };
+
+        resourcesToInclude = filterObjectsByCondition(resourcesToInclude);
+        compoundsToInclude = filterObjectsByCondition(compoundsToInclude);
+
+        if (type === 'storageMultiplier') {
+            categoryArray.forEach(category => { // resource or compounds storage capacity
+                if (category === 'resources' || category === 'compounds') {
+                    const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
+                    Object.keys(categoryTypeToUse).forEach(element => {
+                        setResourceDataObject(
+                            Math.floor(
+                                getResourceDataObject(category, [element, 'storageCapacity']) * multiplier
+                            ),
+                            category,
+                            [element, 'storageCapacity']
+                        );
+                    });
+                } else if (category === 'buildings') { //battery storage capacity
+                    const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
+
+                    const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
+                    const currentCapacityOfBuilding = Math.floor(quantityOfBuilding * getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * quantityOfBuilding);
+                    const currentTotalCapacityMinusBuildingType = Math.floor(getResourceDataObject('buildings', [item[0], 'storageCapacity']) - currentCapacityOfBuilding);
+                    const newTotalCapacity = Math.floor(currentTotalCapacityMinusBuildingType + (currentCapacityOfBuilding * multiplier));
+
+                    setResourceDataObject(newTotalCapacity, 'buildings', [item[0], 'storageCapacity']);
+                    setResourceDataObject(Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * multiplier),'buildings',[item[0], 'upgrades', item[1], 'capacity']);
+                   
+                    if (buyBuildingButtonElement)  {
+                        buyBuildingButtonElement.innerHTML = `Add ${Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) / 1000)} MWh`;
+                    }
+                }
+            });
+        } else if (type === 'rateMultiplier') {
+            if (categoryArray === 'resources' || categoryArray === 'compounds') {
+                Object.keys(resourcesAndCompoundsToInclude[categoryArray]).forEach(element => {
+                    setResourceDataObject(
+                        Math.floor(
+                            getResourceDataObject(categoryArray, [element, 'upgrades', 'autoBuyers', item[2], 'rate']) * multiplier
+                        ),
+                        categoryArray,
+                        [element, 'upgrades', 'autoBuyers', item[2], 'rate']
+                    );
+                });
+            } else if (categoryArray === 'buildings') {
+                setResourceDataObject(
+                    Math.floor(
+                        getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'rate']) * multiplier
+                    ),
+                    'buildings',
+                    [item[0], 'upgrades', item[1], 'rate']
+                );
+            }
+        }
+
+        this.style.pointerEvents = 'none';
+        this.style.opacity = '0.5';
+    });
+}
+
+function filterObjectsByCondition(dataObject) {
+    let filteredObject = {};
+    for (let key in dataObject) {
+        if (dataObject.hasOwnProperty(key)) {
+            let element = document.getElementById(key + 'Option');
+            if (
+                element &&
+                element.parentElement &&
+                element.parentElement.parentElement &&
+                !element.parentElement.parentElement.classList.contains('invisible')
+            ) {
+                filteredObject[key] = dataObject[key];
+            }
+        }
+    }
+    return filteredObject;
+}
+
 function addPrizeEventListeners() {
-    const prizeElement = document.getElementById('prize');
+    const prizeElement = document.getElementById('prizeTickerSpan');
     if (prizeElement) {
         prizeElement.addEventListener('click', function () {
             const prizeType = this.getAttribute('data-prize-type');
