@@ -2525,7 +2525,7 @@ function getRandomNewsTickerInterval(min, max) {
 }
 
 export function startNewsTickerTimer() {
-    const randomDuration = getRandomNewsTickerInterval(1, 5);
+    const randomDuration = getRandomNewsTickerInterval(1, 5); //20,35
     const newsTicker = document.querySelector('.news-ticker-content');
 
     timerManager.addTimer('newsTicker', randomDuration, () => {

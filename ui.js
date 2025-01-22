@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getNewsTickerScrollDuration,
+    oneOffPrizesAlreadyClaimedArray,
     getOneOffPrizesAlreadyClaimedArray,
     setOneOffPrizesAlreadyClaimedArray,
     getPrize,
@@ -1415,29 +1417,38 @@ export function showNewsTickerMessage(newsTickerContainer) {
     const randomValue = Math.random();
     let category;
 
-    if (randomValue < 0.99) {
+    if (randomValue < 0.03) {
         category = "oneOff";
-    } else if (randomValue < 0.999) {
+    } else if (randomValue < 0.13) {
         category = "prize";
+    } else if (randomValue < 0.99) { //0.36
+        category = "wackyEffects";
     } else {
         category = "noPrize";
     }
 
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
-    let message = newsTickerContainer[category][randomIndex];
 
-    if (category === 'prize' || category === 'oneOff') {
-        message = specialMessageBuilder(message, category);
+    // let message = newsTickerContainer[category][randomIndex];
+    let message = newsTickerContainer['wackyEffects'][randomIndex];
+
+    if (category === 'prize' || category === 'oneOff' || category === 'wackyEffects') {
+        if (category === 'oneOff') {
+            if (getOneOffPrizesAlreadyClaimedArray().includes(randomIndex)) {
+                message = false;
+            } else {
+                message = specialMessageBuilder(message, category);
+            }
+        } else {
+            message = specialMessageBuilder(message, category);
+        }
     }
 
-    if (message === false) {
+    if (message === false || message === undefined) {
         showNewsTickerMessage(newsTickerContainer);
-        return;
-    }
-    
-    //add any special info in the message not to be shown, or category conditions, and call events here
-
-    displayNewsTickerMessage(message);
+    } else {
+        displayNewsTickerMessage(message);
+    }  
 }
 
 function displayNewsTickerMessage(message) {
@@ -1454,8 +1465,7 @@ function displayNewsTickerMessage(message) {
 
     const containerWidth = container.offsetWidth;
     const additionalOffset = containerWidth * 0.3;
-    const scrollDuration = 45000;
-    console.log('scrollDuration: ' + scrollDuration);
+    const scrollDuration = getNewsTickerScrollDuration();
 
     textElement.style.animation = `scrollNews ${scrollDuration / 1000}s linear infinite`;
     textElement.style.animationName = 'scrollNews';
@@ -1575,78 +1585,24 @@ function specialMessageBuilder(message, prizeCategory) {
         } else {
             return false;
         }
-
-
-        // const id = message.id;
-        // const multiplier = message.type[1];
-
-        // if (getOneOffPrizesAlreadyClaimedArray().includes(id)) {
-        //     return false;
-        // } else {
-        //     setOneOffPrizesAlreadyClaimedArray(id);
-
-        //     let resourcesToInclude = getResourceDataObject('resources');
-        //     let compoundsToInclude = getResourceDataObject('compounds');
-
-        //     let resourcesAndCompoundsToInclude = {
-        //         resources: resourcesToInclude,
-        //         compounds: compoundsToInclude
-        //     };
-
-        //     resourcesToInclude = filterObjectsByCondition(resourcesToInclude);
-        //     compoundsToInclude = filterObjectsByCondition(compoundsToInclude);
-
-        //     if (message.type[0] === 'storageMultiplier') {
-        //         if (message.condition === 'visible') { //resources/compounds
-        //             if (['resources', 'compounds'].some(category => message.category.includes(category))) {
-        //                 const applyUpgradeToCategory = (category) => {
-        //                     if ((category === 'resources' && resourcesToInclude.length > 0 && message.item !== 'all') ||
-        //                         (category === 'compounds' && compoundsToInclude.length > 0 && message.item !== 'all')) {
-        //                         return message.body;
-        //                     } else if (message.item === 'all') {
-        //                         Object.keys(resourcesAndCompoundsToInclude[category]).forEach(element => {
-        //                             setResourceDataObject(
-        //                                 Math.floor(
-        //                                     getResourceDataObject(category, [element, 'storageCapacity']) * multiplier
-        //                                 ),
-        //                                 category,
-        //                                 [element, 'storageCapacity']
-        //                             );
-        //                         });
-        //                         return message.body;
-        //                     } else {
-        //                         return false;
-        //                     }
-        //                 };
-                    
-        //                 for (let category of ['resources', 'compounds']) {
-        //                     if (message.category.includes(category)) {
-        //                         const result = applyUpgradeToCategory(category);
-        //                         if (result) return result;
-        //                     }
-        //                 }
-        //             }                    
-        //         } else { //buildings ... etc
-        //             if (message.category.includes('buildings')) {
-        //                 setResourceData(Math.floor(getResourceData('buildings', [message.item[0], 'upgrades', message.item[1], 'capacity']) * multiplier), 'buildings', [message.item[0], 'upgrades', message.item[1], 'capacity']);
-        //             }
-        //         }
-        //     } else if (message.type[0] === 'rateMultiplier') {
-        //         //handle condition and check it or return false
-        //         //if category contain resources or compounds (autobuyer rate multiplier)
-        //         //get unlocked resources or compounds
-        //         //filter down to those stated in message.item or if 'all' then apply to all
-
-        //         //handle multiplier
-        //         const multiplier = message.type[1];
-
-        //         //if category[0] is 'buildings' then setResourceData(Math.floor(getResourceData('buildings', [item[0].upgrades[item[1], rate]) * multiplier));
-        //         //else
-        //         //if category[i] is 'resources' then all unlocked resources setResourceData(Math.floor(getResourceData('resources', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
-        //         //if category[i] is 'compounds' then all unlocked resources setResourceData(Math.floor(getResourceData('compounds', [category[i].upgrades.autoBuyers[item[2]], 'rate']) * multiplier));
-        //     }
-
-        // }
+    } else if (prizeCategory === 'wackyEffects') {
+        let newMessage = message.body;
+        const linkWord = message.linkWord;
+        const linkWordRegex = new RegExp(`\\b${linkWord}\\b`, 'g');
+    
+        newMessage = newMessage.replace(linkWordRegex, `
+            <span 
+                id="prizeTickerSpan"
+                data-effect-item='${message.item}'>
+                ${linkWord}
+            </span>
+        `);
+    
+        deferredActions.push(() => {
+            addWackyEffectsEventListeners();
+        });
+    
+        return newMessage;
     }
 }
 
@@ -1705,25 +1661,41 @@ function addOneOffEventListeners() {
                 }
             });
         } else if (type === 'rateMultiplier') {
-            if (categoryArray === 'resources' || categoryArray === 'compounds') {
-                Object.keys(resourcesAndCompoundsToInclude[categoryArray]).forEach(element => {
-                    setResourceDataObject(
-                        Math.floor(
-                            getResourceDataObject(categoryArray, [element, 'upgrades', 'autoBuyers', item[2], 'rate']) * multiplier
-                        ),
-                        categoryArray,
-                        [element, 'upgrades', 'autoBuyers', item[2], 'rate']
-                    );
-                });
-            } else if (categoryArray === 'buildings') {
-                setResourceDataObject(
-                    Math.floor(
-                        getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'rate']) * multiplier
-                    ),
-                    'buildings',
-                    [item[0], 'upgrades', item[1], 'rate']
-                );
-            }
+            categoryArray.forEach(category => { // resource, compounds, or building rate multiplier
+                if (category === 'resources' || category === 'compounds') {
+                    const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
+                    Object.keys(categoryTypeToUse).forEach(element => { //set future purchase rate * multiplier
+                        setResourceDataObject(getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * multiplier, category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']
+                        );
+
+                        if (getCurrentOptionPane() === element) { //set autobuyer button text if on that screen at the moment prize is clicked
+                            const buyBuildingButtonElement = document.querySelector(`#${element}AutoBuyer${item[1].replace(/^\D+/g, '')}Row .option-row-main .input-container button[data-auto-buyer-tier="${item[1]}`);
+                            buyBuildingButtonElement.innerHTML = `Add ${getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * getTimerRateRatio()} ${capitaliseString(element)} /s`;
+                        }
+                    });
+                } else if (category === 'buildings') { // building rate multiplier e.g. Power Plants
+                    const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
+                    const rateElement = document.getElementById(`${item[1]}Rate`);
+                    
+                    const currentPurchasedRateOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
+                    const newPurchasedRateOfBuilding = (currentPurchasedRateOfBuilding * multiplier);
+
+                    const currentRatePerBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'rate']);
+                    const newRateOfBuilding = (currentRatePerBuilding * multiplier);
+
+                    setResourceDataObject(newPurchasedRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
+                    setResourceDataObject(newRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'rate']);
+        
+                    if (buyBuildingButtonElement) {
+                        buyBuildingButtonElement.innerHTML = `Add ${Math.floor(newRateOfBuilding * getTimerRateRatio())} KW /s`;
+                    }
+
+                    if (rateElement) {
+                        const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
+                        rateElement.innerHTML = `${Math.floor((newRateOfBuilding * getTimerRateRatio()) * quantityOfBuilding)} KW / s`;
+                    }
+                }
+            });
         }
 
         this.style.pointerEvents = 'none';
@@ -1774,4 +1746,53 @@ function addPrizeEventListeners() {
             this.style.opacity = '0.5';
         });
     }
+}
+
+function addWackyEffectsEventListeners() {
+    const prizeTickerSpan = document.getElementById('prizeTickerSpan');
+    
+    if (!prizeTickerSpan) return;
+
+    prizeTickerSpan.addEventListener('click', () => {
+        const effectItem = prizeTickerSpan.getAttribute('data-effect-item');
+        const targetElement = prizeTickerSpan.parentElement;
+
+        if (!targetElement) return;
+
+        switch (effectItem) {
+            case 'wave':
+                targetElement.classList.add('wave');
+                break;
+            case 'disco':
+                targetElement.classList.add('disco');
+                break;
+            case 'bounce':
+                targetElement.classList.add('bounce');
+                break;
+            case 'rotate':
+                targetElement.classList.add('rotate');
+                break;
+            case 'fade':
+                targetElement.classList.add('fade');
+                break;
+            case 'glitch':
+                targetElement.classList.add('glitch');
+                break;
+            case 'wobble':
+                targetElement.classList.add('wobble');
+                break;
+            case 'heartbeat':
+                targetElement.classList.add('heartbeat');
+                break;
+            case 'pulse':
+                targetElement.classList.add('pulse');
+                break;
+            default:
+                console.warn('Unknown effect item:', effectItem);
+                break;
+        }
+
+        prizeTickerSpan.style.pointerEvents = 'none';
+        prizeTickerSpan.style.opacity = '0.5';
+    });
 }

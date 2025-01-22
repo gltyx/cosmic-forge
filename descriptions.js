@@ -752,6 +752,53 @@ export function initialiseDescriptions() {
     };
 
     newsTickerContent = {
+        wackyEffects: [
+            {
+                body: "Stretch and shrink the element horizontally in a wave-like effect here!",
+                item: "wave",
+                linkWord: "here"
+            },
+            {
+                body: "Change colors like a disco every 200ms here!",
+                item: "disco",
+                linkWord: "here"
+            },
+            {
+                body: "Make the element bounce up and down continuously here!",
+                item: "bounce",
+                linkWord: "here"
+            },
+            {
+                body: "Rotate the element continuously here!",
+                item: "rotate",
+                linkWord: "here"
+            },
+            {
+                body: "Make the element fade in and out continuously here!",
+                item: "fade",
+                linkWord: "here"
+            },
+            {
+                body: "Give the element a glitch effect here!",
+                item: "glitch",
+                linkWord: "here"
+            },
+            {
+                body: "Apply a wobble effect to the element here!",
+                item: "wobble",
+                linkWord: "here"
+            },
+            {
+                body: "Expand and contract the element like a heartbeat here!",
+                item: "heartbeat",
+                linkWord: "here"
+            },
+            {
+                body: "Make the element pulse with increasing and decreasing opacity here!",
+                item: "pulse",
+                linkWord: "here"
+            }
+        ],        
         oneOff: [
             {
                 id : 0,
@@ -836,13 +883,31 @@ export function initialiseDescriptions() {
             },            
             {
                 id : 9,
-                body: "Double output of all Tier 1 Auto Buyers here!",
+                body: "Double output of Tier 1 Auto Buyers for all unlocked resources here!",
                 type: ["rateMultiplier", 2],
-                condition: "visible",
+                condition: "",
+                category: ["resources"],
+                item: ["all", "tier1"],
+                linkWord: "here"
+            },
+            {
+                id : 10,
+                body: "Double output of Tier 1 Auto Buyers for all unlocked compounds here!",
+                type: ["rateMultiplier", 2],
+                condition: "",
+                category: ["compounds"],
+                item: ["all", "tier1"],
+                linkWord: "here"
+            },
+            {
+                id : 11,
+                body: "Double output of Tier 1 Auto Buyers for all unlocked resources and compounds here!",
+                type: ["rateMultiplier", 2],
+                condition: "",
                 category: ["resources", "compounds"],
                 item: ["all", "tier1"],
                 linkWord: "here"
-            }       
+            }     
         ],
         prize: [
             {

@@ -20,6 +20,8 @@ let saveData = null;
 // let oldLanguage = 'en';
 
 //CONSTANTS
+export const deferredActions = [];
+
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
@@ -27,7 +29,7 @@ export const TIMER_RATE_RATIO = 100;
 export const READY_TO_SORT = 120;
 export const NOW = 30; //READY TO SORT NOW needs total of 150
 export const BUILDING_TYPES = ['energy'];
-export const deferredActions = [];
+export const NEWS_TICKER_SCROLL_DURATION = 40000;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -60,7 +62,7 @@ let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
-let oneOffPrizesAlreadyClaimedArray = [];
+export let oneOffPrizesAlreadyClaimedArray = [];
 
 let lastScreenOpenRegister = {
     tab1: null,
@@ -1271,4 +1273,8 @@ export function getOneOffPrizesAlreadyClaimedArray() {
 
 export function setOneOffPrizesAlreadyClaimedArray(value) {
     oneOffPrizesAlreadyClaimedArray.unshift(value);
+}
+
+export function getNewsTickerScrollDuration() {
+    return NEWS_TICKER_SCROLL_DURATION;
 }
