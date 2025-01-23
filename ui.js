@@ -1069,12 +1069,6 @@ export async function drawTechTree(techData, svgElement, renew) {
         return;
     }
 
-    // let graphDef = `digraph TechTree {
-    //     graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
-    //     node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
-    //     edge [color="${textColor}", fontcolor="${textColor}"];
-    // `;
-
     let graphDef = `digraph TechTree {
         graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!", size="10,7!", rankdir="TB"];
         node [
@@ -1131,19 +1125,13 @@ export async function drawTechTree(techData, svgElement, renew) {
 
     graphDef += "}";
 
-    // const graphviz = d3.select(svgElement)
-    //     .graphviz()
-    //     .zoom(false)
-    //     .scale(0.7)
-    //     .fit(true);
-
     const graphviz = d3.select(svgElement)
         .graphviz()
         .zoom(false)
         .scale(0.8)
         .fit(false);  
 
-    await graphviz.renderDot(graphDef);
+    graphviz.renderDot(graphDef);
 
     setTimeout(() => {
         setupTooltip(svgElement);
