@@ -975,8 +975,8 @@ body {
 .science-building-quantity,
 .autoBuyer-building-quantity,
 .toggle-switch-spacing,
-.save-name-margin
 .full-screen-button
+#newsTickerSettingToggle
 {
     margin-left: 30px;
 }
@@ -985,6 +985,7 @@ body {
     margin-left: 5px;
 }
 
+.save-name-margin,
 .save-load-button {
     margin-left: 50px;
 }

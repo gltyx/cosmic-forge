@@ -2542,6 +2542,10 @@ export function startNewsTickerTimer() {
     if (getNewsTickerSetting()) {
         const randomDuration = getRandomNewsTickerInterval(20, 35);
         const newsTicker = document.querySelector('.news-ticker-content');
+
+        if (timerManager.getTimer('newsTicker')) {
+            timerManager.removeTimer('newsTicker');
+        }
     
         timerManager.addTimer('newsTicker', randomDuration, () => {
             newsTicker.classList.remove('invisible');
