@@ -111,6 +111,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         this.classList.toggle('checked');
     });
 
+    document.querySelector('.fullScreenLabel').addEventListener('click', function () {
+        document.querySelector('.fullScreenCheckBox').classList.toggle('checked');
+    });
+
     await getUserSaveName();
 
     content = gameIntroText;
@@ -1047,13 +1051,6 @@ export async function drawTechTree(techData, svgElement, renew) {
     const container = document.querySelector(svgElement);
     container.innerHTML = '';
 
-    if (cachedTree && !renew) {
-        container.innerHTML = '';
-        container.appendChild(cachedTree.cloneNode(true));
-        setupTooltip(svgElement);
-        return;
-    }
-
     const bgColor = getComputedStyle(container).getPropertyValue('--bg-color').trim();
     const textColor = getComputedStyle(container).getPropertyValue('--text-color').trim();
 
@@ -1065,11 +1062,42 @@ export async function drawTechTree(techData, svgElement, renew) {
     const svgWidth = container.clientWidth || container.parentNode.clientWidth;
     const svgHeight = container.clientHeight || container.parentNode.clientHeight;
 
+    if (cachedTree && !renew) {
+        container.innerHTML = '';
+        container.appendChild(cachedTree.cloneNode(true));
+        setupTooltip(svgElement);
+        return;
+    }
+
+    // let graphDef = `digraph TechTree {
+    //     graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
+    //     node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
+    //     edge [color="${textColor}", fontcolor="${textColor}"];
+    // `;
+
     let graphDef = `digraph TechTree {
-        graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!"];
-        node [style="filled", fontcolor="${textColor}", color="${textColor}", fillcolor="${bgColor}", fontname="Arial"];
-        edge [color="${textColor}", fontcolor="${textColor}"];
+        graph [bgcolor="${bgColor}", size="${svgWidth / 72},${svgHeight / 72}!", size="10,7!", rankdir="TB"];
+        node [
+            color="${textColor}"
+            style="filled,rounded",
+            shape="box",
+            fontname="Arial",
+            fontsize=24,
+            penwidth=4
+            fixedsize=true,
+            width=4.5,
+            height=1.3
+        ];
+        edge [
+            color="${textColor}",
+            penwidth=2,
+            arrowsize=1.2,
+            fontname="Arial",
+            fontsize=10
+        ];
     `;
+
+    let title = `<b>???</b><br/>???`;
 
     for (const [key, value] of Object.entries(techData)) {
         const isResearched = researchedTechs.includes(key);
@@ -1079,7 +1107,7 @@ export async function drawTechTree(techData, svgElement, renew) {
         const capitalisedTechName = capitaliseString(key);
         const separatedCapitalisedTechNames = capitalisedTechName.replace(/([a-z])([A-Z])/g, '$1 $2');
         const price = value.price;
-        let title;
+        
 
         if (getUpcomingTechArray().includes(key) && !getRevealedTechArray().includes(key)) {
             title = `<b>???</b><br/>Price: ${price}`;
@@ -1103,11 +1131,17 @@ export async function drawTechTree(techData, svgElement, renew) {
 
     graphDef += "}";
 
+    // const graphviz = d3.select(svgElement)
+    //     .graphviz()
+    //     .zoom(false)
+    //     .scale(0.7)
+    //     .fit(true);
+
     const graphviz = d3.select(svgElement)
         .graphviz()
         .zoom(false)
-        .scale(0.7)
-        .fit(true);
+        .scale(0.8)
+        .fit(false);  
 
     await graphviz.renderDot(graphDef);
 

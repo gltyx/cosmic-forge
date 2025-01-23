@@ -1209,11 +1209,11 @@ canvas {
     border: 2px solid var(--text-color);
     border-radius: 20px;
     padding: 20px;
+    height: fit-content;
   }
   
   .tech-tree-svg svg {
-    width: 100%;   /* Ensure the SVG fits its container */
-    height: 100%;
+    width: 100%;
   }
 
   svg title {
@@ -1380,8 +1380,8 @@ canvas {
 
 .raindrop {
     position: absolute;
-    width: 5px;
-    height: 10px;
+    width: 2px;
+    height: 5px;
     background-color: rgb(50, 50, 255);
     opacity: 0.5;
     animation: fall 1.5s linear infinite;
