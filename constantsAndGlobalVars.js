@@ -1,6 +1,6 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
-import { drawTechTree, selectTheme, stopRainEffect } from "./ui.js";
+import { drawTechTree, selectTheme, startRainEffect, stopRainEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
 
@@ -1306,6 +1306,10 @@ export function setRainSetting(value) {
     rainSettingToggle = value;
     if (!value) {
         stopRainEffect();
+    }
+
+    if (value && getCurrentPrecipitationRate() > 0) {
+        startRainEffect();
     }
 }
 
