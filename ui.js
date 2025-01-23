@@ -1128,7 +1128,7 @@ export async function drawTechTree(techData, svgElement, renew) {
     const graphviz = d3.select(svgElement)
         .graphviz()
         .zoom(false)
-        .scale(0.8)
+        .scale(0.7)
         .fit(false);  
 
     graphviz.renderDot(graphDef);

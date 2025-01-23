@@ -885,7 +885,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 row: createOptionRow(
                     'techFusionEfficiencyIRow',
                     null,
-                    'Fusion Efficiency Stage I:',
+                    'Fusion Efficiency I:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('fusionEfficiencyI', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
@@ -916,7 +916,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 row: createOptionRow(
                     'techFusionEfficiencyIIRow',
                     null,
-                    'Fusion Efficiency Stage II:',
+                    'Fusion Efficiency II:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('fusionEfficiencyII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
@@ -947,7 +947,7 @@ export function drawTab3Content(heading, optionContentElement) {
                 row: createOptionRow(
                     'techFusionEfficiencyIIIRow',
                     null,
-                    'Fusion Efficiency Stage III:',
+                    'Fusion Efficiency III:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('fusionEfficiencyIII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
