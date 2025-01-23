@@ -1,5 +1,5 @@
 import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getRainSetting, setRainSetting, setNewsTickerSetting, getNewsTickerSetting } from './constantsAndGlobalVars.js';
-import { createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
 export function drawTab8Content(heading, optionContentElement) {
@@ -176,6 +176,31 @@ export function drawTab8Content(heading, optionContentElement) {
     }
 
     if (heading === 'Game Options') {
+
+        const toggleGameFullScreenRow = createOptionRow(
+            'toggleGameFullScreenRow',
+            null,
+            'Toggle Full Screen:',
+            createButton(`Toggle`, ['option-button', 'full-screen-button'], () => {
+                toggleGameFullScreen();
+            }),
+            null,
+            null,
+            null,
+            null,
+            'Toggle Full Screen Mode. (or F11)',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(toggleGameFullScreenRow);
 
         const newsTickerToggleRow = createOptionRow(
             'newsTickerToggleRow',

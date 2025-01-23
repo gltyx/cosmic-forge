@@ -107,14 +107,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     getElements().modalContainer.style.display = 'flex';
     getElements().overlay.style.display = 'flex';
 
+    document.querySelector('.fullScreenCheckBox').addEventListener('click', function () {
+        this.classList.toggle('checked');
+    });
+
     await getUserSaveName();
 
     content = gameIntroText;
     populateModal(headerText, content);
     getElements().modalContainer.style.display = 'flex';
+    document.querySelector('.fullScreenContainer').style.display = 'flex';
     getElements().overlay.style.display = 'flex';
 
     getElements().modalOKButton.addEventListener('click', () => {
+        if (document.getElementById('fullScreenCheckBox').classList.contains('checked')) {
+            toggleGameFullScreen();
+        }
         const handleClick = async () => {
             showHideModal();
             try {
@@ -1860,5 +1868,29 @@ export function stopRainEffect() {
     const raindrops = rainOverlay.getElementsByClassName('raindrop');
     for (let raindrop of raindrops) {
         raindrop.remove();
+    }
+}
+
+export function toggleGameFullScreen() {
+    if (!document.fullscreenElement) {
+        if (document.body.requestFullscreen) {
+            document.body.requestFullscreen();
+        } else if (document.body.mozRequestFullScreen) {
+            document.body.mozRequestFullScreen();
+        } else if (document.body.webkitRequestFullscreen) {
+            document.body.webkitRequestFullscreen();
+        } else if (document.body.msRequestFullscreen) {
+            document.body.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
     }
 }
