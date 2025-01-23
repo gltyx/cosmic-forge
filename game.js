@@ -1,4 +1,5 @@
 import {
+    getSaveData,
     getNewsTickerSetting,
     getRainSetting,
     setTechTreeDrawnYet,
@@ -299,6 +300,10 @@ export async function gameLoop() {
         if (!getSavedYetSinceOpeningSaveDialogue() && getCurrentOptionPane() === 'saving / loading') {
             saveGame('onSaveScreen');
             setSavedYetSinceOpeningSaveDialogue(true);
+        } else if (getCurrentOptionPane() === 'saving / loading') {
+            const saveData = getSaveData();
+            const exportSaveArea = document.getElementById('exportSaveArea');
+            exportSaveArea.value = saveData;
         }
 
         if (getSavedYetSinceOpeningSaveDialogue && getCurrentOptionPane() !== 'saving / loading') {

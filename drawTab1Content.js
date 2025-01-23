@@ -38,9 +38,9 @@ export function drawTab1Content(heading, optionContentElement) {
                     {
                         fuseTo: getResourceDataObject('resources', ['hydrogen', 'fuseTo1']),
                         ratio: getResourceDataObject('resources', ['hydrogen', 'fuseToRatio1']),
-                        resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(2)'),
-                        categoryToShow: document.getElementById('simpleGases'),
-                        mainCategoryToShow: document.getElementById('gases')
+                        resourceRowToShow: document.querySelector('#gases .collapsible-content .row-side-menu:nth-child(2)'),
+                        categoryToShow: document.getElementById('gases'),
+                        mainCategoryToShow: document.getElementById('gas')
                     }
                 ]);                
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
@@ -457,9 +457,9 @@ export function drawTab1Content(heading, optionContentElement) {
                     {
                         fuseTo: getResourceDataObject('resources', ['carbon', 'fuseTo1']),
                         ratio: getResourceDataObject('resources', ['carbon', 'fuseToRatio1']),
-                        resourceRowToShow: document.querySelector('#nobleGases .collapsible-content .row-side-menu:nth-child(1)'),
-                        categoryToShow: document.getElementById('nobleGases'),
-                        mainCategoryToShow: document.getElementById('gases')
+                        resourceRowToShow: document.querySelector('#gases .collapsible-content .row-side-menu:nth-child(1)'),
+                        categoryToShow: document.getElementById('gases'),
+                        mainCategoryToShow: document.getElementById('gas')
                     },
                     {
                         fuseTo: getResourceDataObject('resources', ['carbon', 'fuseTo2']),
@@ -674,9 +674,9 @@ export function drawTab1Content(heading, optionContentElement) {
                     {
                         fuseTo: getResourceDataObject('resources', ['neon', 'fuseTo1']),
                         ratio: getResourceDataObject('resources', ['neon', 'fuseToRatio1']),
-                        resourceRowToShow: document.querySelector('#simpleGases .collapsible-content .row-side-menu:nth-child(3)'),
-                        categoryToShow: document.getElementById('simpleGases'),
-                        mainCategoryToShow: document.getElementById('gases')
+                        resourceRowToShow: document.querySelector('#gases .collapsible-content .row-side-menu:nth-child(3)'),
+                        categoryToShow: document.getElementById('gases'),
+                        mainCategoryToShow: document.getElementById('gas')
                     }
                 ]);
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
