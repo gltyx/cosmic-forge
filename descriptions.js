@@ -84,6 +84,8 @@ export function initialiseDescriptions() {
         atmosphericTelescopes: 'Atmospheric Telescopes Researched\n\nYou can now get data from the local stellar neighborhood!',
         giganticTurbines: 'Gigantic Turbines Researched\n\nThis opens up new research in power generation!',
         steelFoundries: 'Steel Foundries Researched\n\nYou can now create Steel compounds!',
+        rocketComposites: 'Rocket Composites Researched\n\nYou can now build Rocket Parts!',
+        advancedFuels: 'Advanced Fuels Researched\n\nYou can now build Rocket Fuel!',
         advancedPowerGeneration: 'Advanced Power Generation Researched\n\nBuild Advanced Power Plants!',
         basicPowerGeneration: 'Basic Power Generation Researched\n\nYou can now build basic Power Stations!',
         solarPowerGeneration: 'Solar Power Generation Researched\n\nYou can now build Solar Panels to generate power!',
@@ -710,6 +712,16 @@ export function initialiseDescriptions() {
         techCompoundsRow: {
             content1: "Unlock Compounds to expand the materials you have access to.",
             content2: "Unlock Compounds to gain access to new materials and enhance your manufacturing capabilities.<br><br><span class='green-ready-text'>Unlock Compounds Tab</span>",
+            updateAt: ""
+        },
+        techRocketCompositesRow: {
+            content1: "Unlock Rocket Composites to build rocket components and unlock the Space Mining tab.",
+            content2: "Unlock Rocket Composites to build rocket components to mine in space.<br><br><span class='green-ready-text'>Unlock Space Mining Tab</span>",
+            updateAt: ""
+        },
+        techAdvancedFuelsRow: {
+            content1: "Unlock Advanced Fuels to fuel your Space Mining vessels.",
+            content2: "Unlock Advanced Fuels to fuel your Space Mining vessels<br><br><span class='green-ready-text'>Create Rocket Fuel</span>",
             updateAt: ""
         },
         techAdvancedPowerGenerationRow: {

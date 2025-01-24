@@ -1,4 +1,6 @@
 import {
+    getSaveExportCloudFlag,
+    setSaveExportCloudFlag,
     getSaveData,
     getNewsTickerSetting,
     getRainSetting,
@@ -60,7 +62,6 @@ import {
     getCurrentOptionPane,
     getIncreaseStorageFactor,
     setGameStateVariable,  
-    getMenuState, 
     getGameVisibleActive, 
     getElements, 
     gameState, 
@@ -301,9 +302,17 @@ export async function gameLoop() {
             saveGame('onSaveScreen');
             setSavedYetSinceOpeningSaveDialogue(true);
         } else if (getCurrentOptionPane() === 'saving / loading') {
-            const saveData = getSaveData();
-            const exportSaveArea = document.getElementById('exportSaveArea');
-            exportSaveArea.value = saveData;
+            if (!getSaveExportCloudFlag()) {
+                const saveData = getSaveData();
+                const exportSaveArea = document.getElementById('exportSaveArea');
+                exportSaveArea.value = saveData;
+            } else {
+                const saveData = getSaveExportCloudFlag();
+                const exportSaveArea = document.getElementById('exportSaveArea');
+                exportSaveArea.value = saveData;
+            }
+        } else {
+            setSaveExportCloudFlag(false);
         }
 
         if (getSavedYetSinceOpeningSaveDialogue && getCurrentOptionPane() !== 'saving / loading') {
@@ -3299,19 +3308,7 @@ export function setGameState(newState) {
     setGameStateVariable(newState);
 
     switch (newState) {
-        case getMenuState():
-            getElements().menu.classList.remove('d-none');
-            getElements().menu.classList.add('d-flex');
-            getElements().statsContainer.classList.remove('d-flex');
-            getElements().statsContainer.classList.add('d-none');
-            getElements().tabsContainer.classList.remove('d-flex');
-            getElements().tabsContainer.classList.add('d-none');
-            getElements().mainContainer.classList.remove('d-flex');
-            getElements().mainContainer.classList.add('d-none');
-            break;
         case getGameVisibleActive():
-            getElements().menu.classList.remove('d-flex');
-            getElements().menu.classList.add('d-none');
             getElements().statsContainer.classList.remove('d-none');
             getElements().statsContainer.classList.add('d-flex');
             getElements().tabsContainer.classList.remove('d-none');

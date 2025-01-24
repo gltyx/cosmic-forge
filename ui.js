@@ -147,10 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     notificationContainer = getElements().notificationContainer;
     // Event listeners
-    getElements().newGameMenuButton.addEventListener('click', async () => {
-
-    });
-
     document.querySelectorAll('.collapsible-header').forEach(header => {
         header.addEventListener('click', function () {
             const content = this.nextElementSibling;

@@ -266,20 +266,16 @@ button {
     background-color: var(--container-bg-color);
     padding: 10px;
     line-height: 1.8;
-    transform: translateY(-20%);
-    /* remove line above */
 }
   
 #modalButton,
 #modalSaveButton 
 {
     position: fixed;
-    bottom: 0;
-    /* bottom: 10%; */
+    bottom: 10%;
     left: 50%;
     width: 40%;
-    transform: translateX(-50%) translateY(250%);
-    /* remove above  */
+    transform: translateX(-50%);
 }
 
 .fullScreenContainer {
@@ -299,12 +295,12 @@ button {
 .fullScreenContainer {
     display: none;
     position: fixed;
-    bottom: 0;
-    /* bottom: 20%; */
+    /* bottom: 0; */
+    bottom: 20%;
     left: 50%;
     width: 40%;
-    transform: translateX(-60%) translateY(90%);
-    /* transform: translateX(-50%); */
+    /* transform: translateX(-60%) translateY(90%); */
+    transform: translateX(-50%);
     text-align: center;
     align-items: center;
     justify-content: center;

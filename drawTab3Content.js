@@ -756,6 +756,73 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'rocketComposites',
+                row: createOptionRow(
+                    'techRocketCompositesRow',
+                    null,
+                    'Rocket Composites:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('rocketComposites', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('rocketComposites');
+                        setTechSpecificUIItemsArray('tab6', 'tab6', 'rocketComposites');
+                        const resourceObject = getResourceDataObject('resources');
+                        Object.keys(resourceObject).forEach(key => {
+                            if (getResourceDataObject('resources', [key, 'upgrades', 'autoBuyer', 'normalProgression']) === true) {
+                                setAutoBuyerTierLevel(key, 4, false, 'resources');
+                            }
+                        });
+                        showNotification(techNotificationMessages.rocketComposites, 'info');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'rocketComposites', null, 'research', false, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['rocketComposites', 'price'])} Research${getResourceDataObject('techs', ['rocketComposites', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="rocketCompositesPrereq">${getResourceDataObject('techs', ['rocketComposites', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'rocketComposites',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'advancedFuels',
+                row: createOptionRow(
+                    'techAdvancedFuelsRow',
+                    null,
+                    'Advanced Fuels:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('advancedFuels', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('advancedFuels');
+                        showNotification(techNotificationMessages.advancedFuels, 'info');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'advancedFuels', null, 'research', false, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['advancedFuels', 'price'])} Research${getResourceDataObject('techs', ['advancedFuels', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="advancedFuelsPrereq">${getResourceDataObject('techs', ['advancedFuels', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'advancedFuels',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
                 techName: 'compounds',
                 row: createOptionRow(
                     'techCompoundsRow',

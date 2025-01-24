@@ -1,4 +1,4 @@
-import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getRainSetting, setRainSetting, setNewsTickerSetting, getNewsTickerSetting } from './constantsAndGlobalVars.js';
+import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getRainSetting, setRainSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
 import { toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
@@ -326,8 +326,10 @@ export function drawTab8Content(heading, optionContentElement) {
             'Export Cloud Save:',
             createButton(`Export Cloud Save`, ['option-button', 'save-load-button'], () => {
                 saveGame('manualExportCloud');
-                if (getSaveData()) {
-                    saveGameToCloud(getSaveData(), 'manualExportCloud');
+                const saveData = getSaveData();
+                if (saveData) {
+                    saveGameToCloud(saveData, 'manualExportCloud');
+                    setSaveExportCloudFlag(saveData);
                 }
                 setSaveData(null);
             }),

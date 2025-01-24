@@ -98,6 +98,7 @@ let notationType = 'normalCondensed';
 //FLAGS
 // let audioMuted;
 // let languageChangedFlag;
+let saveExportCloudFlag = false;
 let autoSaveToggle = false;
 let newsTickerSetting = true;
 let rainSettingToggle = true;
@@ -392,10 +393,6 @@ export function restoreGameStatus(gameState, type) {
 // export function getAudioMuted() {
 //     return audioMuted;
 // }
-
-export function getMenuState() {
-    return MENU_STATE;
-}
 
 export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
@@ -1252,6 +1249,14 @@ export function getSavedYetSinceOpeningSaveDialogue() {
 
 export function setSavedYetSinceOpeningSaveDialogue(value) {
     savedYetSinceOpeningSaveDialogue = value;
+}
+
+export function getSaveExportCloudFlag() {
+    return saveExportCloudFlag;
+}
+
+export function setSaveExportCloudFlag(value) {
+    saveExportCloudFlag = value;
 }
 
 export function getTechTreeDrawnYet() {

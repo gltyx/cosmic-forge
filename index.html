@@ -11,13 +11,13 @@
 
 <body data-theme="terminal">
     <div id="notificationContainer" class="notification-container"></div>
-    <!-- Menu Container -->
+    <!-- Menu Container
     <div id="menu" class="d-flex flex-column align-items-center justify-content-center d-none">
         <h1 id="menuTitle" class="mb-4">Game Title Placeholder</h1>
         <div class="d-flex mb-2">
             <button id="newGame" class="btn btn-primary mr-2">New Game Placeholder</button>
         </div>
-    </div>
+    </div> -->
 
     <!-- News Ticker Container -->
     <div id="newsTickerContainer" class="news-ticker-container fixed-top">
@@ -70,7 +70,7 @@
         <div class="tab" data-tab="" data-name ="Research" id="tab3">Research</div>
         <div class="tab tab-not-yet" data-tab="compounds" data-name ="Compounds" id="tab4">???</div>
         <div class="tab tab-not-yet" data-tab="stellarCartography" data-name ="Star Map" id="tab5">???</div>
-        <div class="tab tab-not-yet" data-tab="" data-name ="tab6" id="tab6">???</div>
+        <div class="tab tab-not-yet" data-tab="rocketComposites" data-name ="Space Mining" id="tab6">???</div>
         <div class="tab tab-not-yet" data-tab="" data-name ="tab7" id="tab7">???</div>
         <div class="tab" data-tab="" data-name ="☰" id="tab8">☰</div>
     </div>
@@ -554,6 +554,8 @@
             </div>
         </div>
 
+        <!-- SPACE MINING -->
+
         <div id="tab6ContainerGroup" class="tab-6-container-group tab-6">
             <div class="container-item-menu tab-6">
                 <div class="container-item-menu-header tab-6">
@@ -562,24 +564,57 @@
                 <div class="container-item-menu-body tab-6">
                     <div class="row-side-menu d-flex">
                         <div class="row-side-menu-item">
-                            <p id="option1" class="tab6.option1"></p>
+                            <p id="spaceMining" class="tab6.option1">Space Mining</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="option2"></p>
+                            <p id="antimatterRate" class="tab6.option1 notation">0 / s</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p id="quantity"></p>
+                            <p id="antimatterQuantity" class="tab6.option1 notation">0/100</p>
                         </div>
                     </div>
                     <div class="row-side-menu d-flex invisible">
                         <div class="row-side-menu-item">
-                            <p class="tab6.option2"></p>
+                            <p id="rocket1" class="tab6.option2">Rocket 1</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p class="placeholder"></p>
+                            <p id="rocket1PartsQuantity" class="tab6.option2 notation">0 / 100</p>
                         </div>
                         <div class="row-side-menu-item right-align">
-                            <p class="placeholder"></p>
+                            <p id="rocket1FuelQuantity" class="tab6.option2 notation">0 / 100</p>
+                        </div>
+                    </div>
+                    <div class="row-side-menu d-flex invisible">
+                        <div class="row-side-menu-item">
+                            <p id="rocket2" class="tab6.option3">Rocket 2</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket2PartsQuantity" class="tab6.option3 notation">0 / 100</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket2FuelQuantity" class="tab6.option3 notation">0 / 100</p>
+                        </div>
+                    </div>
+                    <div class="row-side-menu d-flex invisible">
+                        <div class="row-side-menu-item">
+                            <p id="rocket3" class="tab6.option4">Rocket 3</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket3PartsQuantity" class="tab6.option4 notation">0 / 100</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket3FuelQuantity" class="tab6.option4 notation">0 / 100</p>
+                        </div>
+                    </div>
+                    <div class="row-side-menu d-flex invisible">
+                        <div class="row-side-menu-item">
+                            <p id="rocket4" class="tab6.option5">Rocket 4</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket4PartsQuantity" class="tab6.option5 notation">0 / 100</p>
+                        </div>
+                        <div class="row-side-menu-item right-align">
+                            <p id="rocket4FuelQuantity" class="tab6.option5 notation">0 / 100</p>
                         </div>
                     </div>
                 </div>
