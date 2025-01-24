@@ -1,6 +1,6 @@
 import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
-import { drawTechTree, selectTheme, startRainEffect, stopRainEffect } from "./ui.js";
+import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
 
@@ -101,7 +101,7 @@ let notationType = 'normalCondensed';
 let saveExportCloudFlag = false;
 let autoSaveToggle = false;
 let newsTickerSetting = true;
-let rainSettingToggle = true;
+let weatherEffectSettingToggle = true;
 let notificationsToggle = true;
 let techRenderChange = false;
 let losingEnergy = false;
@@ -109,6 +109,7 @@ let powerOnOff = false;
 let trippedStatus = false;
 let savedYetSinceOpeningSaveDialogue = false;
 let techTreeDrawnYet = false;
+let weatherEffectOn = false;
 
 // let autoSaveOn = false;
 // export let pauseAutoSaveCountdown = true;
@@ -267,7 +268,7 @@ export function captureGameStatusForSaving(type) {
     // Flags
     gameState.flags = {
         autoSaveToggle: getAutoSaveToggle(),
-        rainSettingToggle: getRainSetting(),
+        weatherEffectSettingToggle: getWeatherEffectSetting(),
         newsTickerSetting: getNewsTickerSetting(),
         notificationsToggle: getNotificationsToggle(),
         techRenderChange: getTechRenderChange(),
@@ -314,7 +315,7 @@ export function restoreGameStatus(gameState, type) {
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
             setNotificationsToggle(gameState.flags.notificationsToggle);
-            setRainSetting(gameState.flags.rainSettingToggle);
+            setWeatherEffectSetting(gameState.flags.weatherEffectSettingToggle);
             setNewsTickerSetting(gameState.flags.newsTickerSetting);
             setTechRenderChange(gameState.flags.techRenderChange);
             setLosingEnergy(gameState.flags.losingEnergy);
@@ -328,7 +329,7 @@ export function restoreGameStatus(gameState, type) {
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
-            const rainSettingToggleElement = document.getElementById('rainSettingToggle');
+            const weatherEffectSettingToggleElement = document.getElementById('weatherEffectSettingToggle');
             const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
 
             if (autoSaveFrequencyElement) {
@@ -343,8 +344,8 @@ export function restoreGameStatus(gameState, type) {
                 autoSaveToggleElement.checked = getAutoSaveToggle();
             }
 
-            if (rainSettingToggleElement) {
-                rainSettingToggleElement.checked = getRainSetting();
+            if (weatherEffectSettingToggleElement) {
+                weatherEffectSettingToggleElement.checked = getWeatherEffectSetting();
             }
 
             if (newsTickerSettingToggleElement) {
@@ -352,7 +353,8 @@ export function restoreGameStatus(gameState, type) {
             }
 
             setCurrentPrecipitationRate(0);
-            stopRainEffect();
+            stopWeatherEffect();
+            setWeatherEffectOn(false);
 
             resolve();
         } catch (error) {
@@ -1310,19 +1312,34 @@ export function getNewsTickerScrollDuration() {
     return NEWS_TICKER_SCROLL_DURATION;
 }
 
-export function setRainSetting(value) {
-    rainSettingToggle = value;
+export function setWeatherEffectSetting(value) {
+    weatherEffectSettingToggle = value;
     if (!value) {
-        stopRainEffect();
+        stopWeatherEffect();
+        setWeatherEffectOn(false);
     }
 
-    if (value && getCurrentPrecipitationRate() > 0) {
-        startRainEffect();
+    if (value && getCurrentStarSystemWeatherEfficiency()[2] === 'rain') {
+        startWeatherEffect('rain');
+        setWeatherEffectOn(true);
+    }
+
+    if (value && getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
+        startWeatherEffect('volcano');
+        setWeatherEffectOn(true);
     }
 }
 
-export function getRainSetting() {
-    return rainSettingToggle;
+export function getWeatherEffectSetting() {
+    return weatherEffectSettingToggle;
+}
+
+export function setWeatherEffectOn(value) {
+    weatherEffectOn = value;
+}
+
+export function getWeatherEffectOn() {
+    return weatherEffectOn;
 }
 
 export function setNewsTickerSetting(value) {

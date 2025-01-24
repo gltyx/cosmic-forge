@@ -1,4 +1,4 @@
-import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getRainSetting, setRainSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
+import { getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
 import { toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 
@@ -124,18 +124,18 @@ export function drawTab8Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(settingsThemeRow);
 
-        const rainSettingRow = createOptionRow(
-            'rainSettingRow',
+        const weatherEffectSettingsRow = createOptionRow(
+            'weatherEffectSettingsRow',
             null,
-            'Rain Effect:',
-            createToggleSwitch('rainSettingToggle', true, (isEnabled) => {
-                setRainSetting(isEnabled);
+            'Weather Effects:',
+            createToggleSwitch('weatherEffectSettingToggle', true, (isEnabled) => {
+                setWeatherEffectSetting(isEnabled);
             }, null),
             null,
             null,
             null,
             null,
-            'Toggle the rain effect on or off.',
+            'Toggle weather effects on or off.',
             null,
             null,
             null,
@@ -147,7 +147,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null
         );
-        optionContentElement.appendChild(rainSettingRow);
+        optionContentElement.appendChild(weatherEffectSettingsRow);
 
         const notificationsToggleElement = document.getElementById('notificationsToggle');
         if (notificationsToggleElement) {
@@ -169,9 +169,9 @@ export function drawTab8Content(heading, optionContentElement) {
             themeDropdownElement.value = getCurrentTheme();
         }  
         
-        const rainSettingToggleElement = document.getElementById('rainSettingToggle');
-        if (rainSettingToggleElement) {
-            rainSettingToggleElement.checked = getRainSetting();
+        const weatherEffectSettingToggleElement = document.getElementById('weatherEffectSettingToggle');
+        if (weatherEffectSettingToggleElement) {
+            weatherEffectSettingToggleElement.checked = getWeatherEffectSetting();
         } 
     }
 

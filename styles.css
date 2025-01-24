@@ -1367,7 +1367,7 @@ canvas {
     border: 3px solid var(--ready-text);
 }
 
-.rainOverlay {
+.weatherEffectOverlay {
     display: none;
     position: fixed;
     top: 0;
@@ -1386,15 +1386,33 @@ canvas {
     height: 5px;
     background-color: rgb(147, 147, 255);
     opacity: 0.5;
-    animation: fall 1.5s linear infinite;
+    animation: fallRain 1.5s linear infinite;
 }
 
-@keyframes fall {
+.lavadrop {
+    position: absolute;
+    width: 5px;
+    height: 12px;
+    background-color: rgb(193, 60, 11);
+    opacity: 0.8;
+    animation: fallLava 1.5s linear infinite;
+}
+
+@keyframes fallRain {
     0% {
         transform: translateY(-150vh) translateX(-100vw);
     }
     100% {
         transform: translateY(150vh) translateX(100vw);
+    }
+}
+
+@keyframes fallLava {
+    0% {
+        transform: translateY(-150vh);
+    }
+    100% {
+        transform: translateY(100vh);
     }
 }
 

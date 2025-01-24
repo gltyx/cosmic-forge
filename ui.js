@@ -1895,47 +1895,61 @@ function addWackyEffectsEventListeners() {
     });
 }
 
-export function startRainEffect() {
-    const rainOverlay = document.getElementById('rainOverlay');
-    if (!rainOverlay) return;
+let particleInterval;
 
-    rainOverlay.style.display = 'block';
+export function startWeatherEffect(type) {
+    const weatherEffectOverlay = document.getElementById('weatherEffectOverlay');
+    if (!weatherEffectOverlay) return;
+
+    weatherEffectOverlay.style.display = 'block';
 
     const overlayHeight = 1000;
     const fallDuration = 0.003;
 
-    setInterval(() => {
-        const raindrop = document.createElement('div');
-        raindrop.classList.add('raindrop');
+    const classNameToAddToParticle = type === 'rain' ? 'raindrop' : type === 'volcano' ? 'lavadrop' : null;
 
-        const randomX = Math.random() * 5000
-        raindrop.style.left = `${randomX}px`;
+    if (!classNameToAddToParticle) {
+        console.error('Invalid weather effect type:', type);
+        return;
+    }
 
-        const adjustedDuration = (overlayHeight) * fallDuration; 
+    if (particleInterval) {
+        clearInterval(particleInterval);
+    }
 
-        raindrop.style.animationDuration = `${adjustedDuration}s`;
+    particleInterval = setInterval(() => {
+        const drop = document.createElement('div');
+        drop.classList.add(classNameToAddToParticle);
 
-        rainOverlay.appendChild(raindrop);
+        const randomX = Math.random() * 5000;
+        drop.style.left = `${randomX}px`;
+
+        const adjustedDuration = overlayHeight * fallDuration;
+        drop.style.animationDuration = `${adjustedDuration}s`;
+
+        weatherEffectOverlay.appendChild(drop);
 
         setTimeout(() => {
-            raindrop.remove();
+            drop.remove();
         }, adjustedDuration * 1000);
     }, 20);
 }
 
-let rainInterval;
+export function stopWeatherEffect() {
+    const weatherEffectOverlay = document.getElementById('weatherEffectOverlay');
 
-export function stopRainEffect() {
-    const rainOverlay = document.getElementById('rainOverlay');
-    if (!rainOverlay) return;
+    if (!weatherEffectOverlay) return;
 
-    clearInterval(rainInterval);
-    rainOverlay.style.display = 'none';
-
-    const raindrops = rainOverlay.getElementsByClassName('raindrop');
-    for (let raindrop of raindrops) {
-        raindrop.remove();
+    if (particleInterval) {
+        clearInterval(particleInterval);
     }
+
+    particleInterval = null;
+
+    weatherEffectOverlay.style.display = 'none';
+
+    const particles = weatherEffectOverlay.querySelectorAll('.raindrop, .lavadrop');
+    particles.forEach(particle => particle.remove());
 }
 
 export function toggleGameFullScreen() {

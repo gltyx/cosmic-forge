@@ -1,9 +1,11 @@
 import {
+    getWeatherEffectOn,
+    setWeatherEffectOn,
     getSaveExportCloudFlag,
     setSaveExportCloudFlag,
     getSaveData,
     getNewsTickerSetting,
-    getRainSetting,
+    getWeatherEffectSetting,
     setTechTreeDrawnYet,
     getTechTreeDrawnYet,
     setUpcomingTechArray,
@@ -94,8 +96,8 @@ import {
     updateDynamicColumns,
     checkOrderOfTabs,
     showNewsTickerMessage,
-    startRainEffect,
-    stopRainEffect,
+    startWeatherEffect,
+    stopWeatherEffect,
 } from "./ui.js";
 
 import { 
@@ -204,8 +206,9 @@ export async function gameLoop() {
 
         addPrecipitationResource();
 
-        if (getCurrentPrecipitationRate() === 0) {
-            stopRainEffect();
+        if (getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano') {
+            stopWeatherEffect();
+            setWeatherEffectOn(false);
         }
         
         let allQuantities = getAllQuantities();
@@ -2447,10 +2450,12 @@ function startInitialTimers() {
         }
     });
 
-    let weatherTimerName = 'weatherTimer';
+    let weatherCountDownToChangeInterval;
 
-    function startWeatherTimer() {
-        function selectWeather() {
+    changeWeather();
+
+    function changeWeather() {
+        function selectNewWeather() {
             const weatherCurrentStarSystemObject = getStarSystemWeather(getCurrentStarSystem());
     
             const weatherTypes = Object.keys(weatherCurrentStarSystemObject);
@@ -2498,15 +2503,17 @@ function startInitialTimers() {
             setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
         }
     
-        selectWeather();
+        selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
         const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
+        // const randomDurationInMs = 10000; //For Testing Weather
+
         const durationInSeconds = randomDurationInMs / 1000;
-    
-        if (timerManager.getTimer(weatherTimerName)) {
-            timerManager.removeTimer(weatherTimerName);
+
+        if (weatherCountDownToChangeInterval) {
+            clearInterval(weatherCountDownToChangeInterval);
         }
     
         let timeLeft = durationInSeconds;
@@ -2514,38 +2521,34 @@ function startInitialTimers() {
         let precipitationRate = 0;
         let precipitationRateSet = false;
         setCurrentPrecipitationRate(0);
-
-        const countdownInterval = setInterval(() => {
+        
+        weatherCountDownToChangeInterval = setInterval(() => {
             if (timeLeft > 0) {
                 if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && !precipitationRateSet) {
                     precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
                     setCurrentPrecipitationRate(precipitationRate);
-                    if (getRainSetting()) {
-                        startRainEffect();
-                    }
                     precipitationRateSet = true;
                 } else if (!precipitationRateSet) {
                     setCurrentPrecipitationRate(0);
-                    if (getRainSetting()) {
-                        stopRainEffect();
-                    }
                     precipitationRateSet = true;
+                }
+
+                if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
+                    if (getWeatherEffectSetting() && !getWeatherEffectOn()) {
+                        startWeatherEffect(getCurrentStarSystemWeatherEfficiency()[2]);
+                        setWeatherEffectOn(true);
+                    }
                 }
 
                 timeLeft -= 1;
             } else {
-                clearInterval(countdownInterval);
+                stopWeatherEffect();
+                setWeatherEffectOn(false);
+                clearInterval(weatherCountDownToChangeInterval);
+                changeWeather();
             }
         }, 1000);
-
-        timerManager.addTimer(weatherTimerName, randomDurationInMs, () => {
-            clearInterval(countdownInterval);
-            selectWeather();
-            startWeatherTimer();
-        });
     }
-    
-    startWeatherTimer();
 }  
 
 function getRandomNewsTickerInterval(min, max) {
