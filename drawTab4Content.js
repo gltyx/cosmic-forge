@@ -1066,4 +1066,215 @@ export function drawTab4Content(heading, optionContentElement) {
             );
             optionContentElement.appendChild(waterAutoBuyer4Row);
         }
+        if (heading === 'Titanium') {
+            let storagePrice = getResourceDataObject('compounds', ['titanium', 'storageCapacity']);
+            let autobuyer1Price = getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier1', 'price']);
+            let autobuyer2Price = getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier2', 'price']);
+            let autobuyer3Price = getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier3', 'price']);
+            let autobuyer4Price = getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier4', 'price']);
+        
+            const titaniumCreateRow = createOptionRow(
+                'titaniumCreateRow',
+                null,
+                'Create Titanium:',
+                createDropdown('titaniumCreateSelectQuantity', [
+                    { value: 'max', text: 'Max Possible' },
+                    { value: 'threeQuarters', text: 'Up to 75%' },
+                    { value: 'twoThirds', text: 'Up to 67%' },
+                    { value: 'half', text: 'Up to 50%' },
+                    { value: 'oneThird', text: 'Up to 33%' },
+                    { value: '50000', text: '50000 - 1.1M Irn, 900K Sod, 2M Neo' },
+                    { value: '5000', text: '5000 - 110K Irn, 90K Sod, 200K Neo' },
+                    { value: '500', text: '500 - 11K Irn, 9K Sod, 20K Neo' },
+                    { value: '50', text: '50 - 1.1K Irn, 900 Sod, 2K Neo' },
+                    { value: '5', text: '5 - 110 Irn, 90 Sod, 200 Neo' },
+                    { value: '1', text: '1 - 22 Irn, 18 Sod, 40 Neo' },
+                ], 'all', (value) => {
+                    setCreateCompoundPreview('titanium', value);
+                }),
+                createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
+                    createCompound('titanium');
+                }, 'createCompound', null, null, null, 'titanium', true, null, 'compound'),
+                null,
+                null,
+                null,
+                `${getCompoundCreatePreview('titanium')}`,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumCreateRow);
+        
+            const titaniumSellRow = createOptionRow(
+                'titaniumSellRow',
+                null,
+                'Sell Titanium:',
+                createDropdown('titaniumSellSelectQuantity', [
+                    { value: 'all', text: 'All Stock' },
+                    { value: 'threeQuarters', text: '75% Stock' },
+                    { value: 'twoThirds', text: '67% Stock' },
+                    { value: 'half', text: '50% Stock' },
+                    { value: 'oneThird', text: '33% Stock' },
+                    { value: '100000', text: '100,000' },
+                    { value: '10000', text: '10,000' },
+                    { value: '1000', text: '1,000' },
+                    { value: '100', text: '100' },
+                    { value: '10', text: '10' },
+                    { value: '1', text: '1' },
+                ], 'all', (value) => {
+                    setSaleCompoundPreview('titanium', value);
+                }),
+                createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
+                    sellCompound('titanium');
+                }, 'sellCompound', null, null, null, 'titanium', true, null, 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${getCompoundSalePreview('titanium')}`,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumSellRow);
+        
+            const titaniumIncreaseStorageRow = createOptionRow(
+                'titaniumIncreaseStorageRow',
+                null,
+                'Increase Storage:',
+                createButton('Increase Storage', ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    increaseResourceStorage(['titaniumQuantity'], ['titanium'], ['compounds']);
+                    storagePrice = getResourceDataObject('compounds', ['titanium', 'storageCapacity']) - 1;
+                }, 'upgradeCheck', '', 'storage', null, 'titanium', true, null, 'compound'),
+                null,
+                null,
+                null,
+                null,
+                `${storagePrice + " " + getResourceDataObject('compounds', ['titanium', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'storage',
+                null,
+                'titanium',
+                null,
+                false,
+                'titanium',
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumIncreaseStorageRow);
+        
+            const titaniumAutoBuyer1Row = createOptionRow(
+                'titaniumAutoBuyer1Row',
+                getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
+                'Titanium Auto Buyer Tier 1:',
+                createButton(`Add ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Titanium /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'titaniumAB1Quantity', 'autoBuyer', true, 'tier1', 'titanium', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'titanium', true, 'tier1', 'compound'),
+                createTextElement(`Quantity: ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'titaniumAB1Quantity', ['autoBuyer-building-quantity']),
+                null,
+                null,
+                null,
+                `${autobuyer1Price + " " + getResourceDataObject('compounds', ['titanium', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'titanium',
+                'tier1',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumAutoBuyer1Row);
+        
+            const titaniumAutoBuyer2Row = createOptionRow(
+                'titaniumAutoBuyer2Row',
+                getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
+                'Titanium Auto Buyer Tier 2:',
+                createButton(`Add ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Titanium /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'titaniumAB2Quantity', 'autoBuyer', true, 'tier2', 'titanium', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'titanium', true, 'tier2', 'compound'),
+                createTextElement(`Quantity: ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'titaniumAB2Quantity', ['autoBuyer-building-quantity']),
+                null,
+                null,
+                null,
+                `${autobuyer2Price + " " + getResourceDataObject('compounds', ['titanium', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'titanium',
+                'tier2',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumAutoBuyer2Row);
+        
+            const titaniumAutoBuyer3Row = createOptionRow(
+                'titaniumAutoBuyer3Row',
+                getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
+                'Titanium Auto Buyer Tier 3:',
+                createButton(`Add ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Titanium /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'titaniumAB3Quantity', 'autoBuyer', true, 'tier3', 'titanium', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'titanium', true, 'tier3', 'compound'),
+                createTextElement(`Quantity: ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'titaniumAB3Quantity', ['autoBuyer-building-quantity']),
+                null,
+                null,
+                null,
+                `${autobuyer3Price + " " + getResourceDataObject('compounds', ['titanium', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'titanium',
+                'tier3',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumAutoBuyer3Row);
+        
+            const titaniumAutoBuyer4Row = createOptionRow(
+                'titaniumAutoBuyer4Row',
+                getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
+                'Titanium Auto Buyer Tier 4:',
+                createButton(`Add ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Titanium /s`, ['option-button', 'red-disabled-text', 'compound-cost-sell-check'], () => {
+                    gain(1, 'titaniumAB4Quantity', 'autoBuyer', true, 'tier4', 'titanium', 'compounds')
+                }, 'upgradeCheck', '', 'autoBuyer', null, 'titanium', true, 'tier4', 'compound'),
+                createTextElement(`Quantity: ${getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'titaniumAB4Quantity', ['autoBuyer-building-quantity']),
+                null,
+                null,
+                null,
+                `${autobuyer4Price + " " + getResourceDataObject('compounds', ['titanium', 'nameResource'])}`,
+                '',
+                'upgradeCheck',
+                'autoBuyer',
+                null,
+                'titanium',
+                'tier4',
+                false,
+                null,
+                null,
+                'compound'
+            );
+            optionContentElement.appendChild(titaniumAutoBuyer4Row);
+        }        
 }

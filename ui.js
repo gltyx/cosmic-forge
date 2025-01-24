@@ -1389,6 +1389,14 @@ function initializeTabEventListeners() {
         });
     });
 
+    document.querySelectorAll('[class*="tab4"][class*="option6"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab4', 'titanium');
+            setCurrentOptionPane('titanium');
+            updateContent('Titanium', 'tab4', 'content');
+        });
+    });
+
     document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab5', 'star map');

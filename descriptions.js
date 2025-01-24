@@ -50,6 +50,8 @@ export function initialiseDescriptions() {
         glass: "This is reinforced specialist glass and is great for solar applications.",
         steel: "This is reinforced steel, highly durable and used in construction and manufacturing.",
         water: "Water is an essential resource which can be produced, or collected from rain in your reservoir.",
+        concrete: "Concrete is a fundamental building material used in construction, offering strength and versatility.",
+        titanium: "Titanium is a strong, lightweight, and corrosion-resistant metal, neede for advanced construction.",
 
         'star map': "This is a map of the known galaxy",
         
@@ -70,7 +72,7 @@ export function initialiseDescriptions() {
         nobleGasCollection: 'Noble Gas Collection Researched\n\nYou can now store Noble Gases when fused!',
         glassManufacture: 'Glass Manufacture Researched\n\nYou can now produce Glass compounds!',
         aggregateMixing: 'Aggregate Mixing Researched\n\nYou can now produce Concrete compounds!',
-        neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Gold, modern day Alchemy, we will be rich beyond belief!',
+        neutronCapture: 'Neutron Capture Researched\n\nThis will now allow us to fuse Titanium, a versatile and durable material essential for advanced construction and technology!',
         quantumComputing: 'Quantum Computing Researched\n\nMore advanced Machinery is now available!',
         scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
         hydroCarbons: 'HydroCarbons Researched\n\nYou can gain access to Diesel Fuel once you have Compounds unlocked!',
@@ -282,6 +284,21 @@ export function initialiseDescriptions() {
         },
         concreteIncreaseStorageRow: {
             content1: "Upgrade your Concrete storage capacity to hold more resources.",
+            content2: "",
+            updateAt: ""
+        },
+        titaniumCreateRow: {
+            content1: "Here you can create Titanium, provided you have the materials, and the power is ON.",
+            content2: "",
+            updateAt: ""
+        },
+        titaniumSellRow: {
+            content1: "Here you can sell Titanium for cash.",
+            content2: "",
+            updateAt: ""
+        },
+        titaniumIncreaseStorageRow: {
+            content1: "Upgrade your Titanium storage capacity to hold more resources.",
             content2: "",
             updateAt: ""
         },
@@ -544,6 +561,26 @@ export function initialiseDescriptions() {
             content1: `Add a Quantum Concrete Synthesizer for cutting-edge Concrete production - Power: ${Math.floor(getResourceDataObject('compounds', ['concrete', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
             content2: "",
             updateAt: ""
+        },
+        titaniumAutoBuyer1Row: {
+            content1: `Add a Titanium Mixer to automate Titanium production.`,
+            content2: "",
+            updateAt: ""
+        },
+        titaniumAutoBuyer2Row: {
+            content1: `Install an Advanced Titanium Mixer for enhanced Titanium production - Power: ${Math.floor(getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier2', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        titaniumAutoBuyer3Row: {
+            content1: `Add a Titanium Refinery to maximize Titanium automation - Power: ${Math.floor(getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier3', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        titaniumAutoBuyer4Row: {
+            content1: `Add a Quantum Titanium Synthesizer for cutting-edge Titanium production - Power: ${Math.floor(getResourceDataObject('compounds', ['titanium', 'upgrades', 'autoBuyer', 'tier4', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
         },             
         researchScienceKitRow: {
             content1: "Purchase a Science Kit to start generating Research points.",
@@ -622,7 +659,7 @@ export function initialiseDescriptions() {
         },
         techNeutronCaptureRow: {
             content1: "Unlock Neutron Capture to collect fusion by-products.",
-            content2: "Unlock Neutron Capture to gather and study by-products from fusion reactions for advanced technologies.<br><br><span class='green-ready-text'>Unlock Gold resource</span>",
+            content2: "Unlock Neutron Capture to gather and study by-products from fusion reactions for advanced technologies.<br><br><span class='green-ready-text'>Unlock Titanium resource</span>",
             updateAt: ""
         },
         techGlassManufactureRow: {
@@ -1002,6 +1039,14 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "concrete",
+                linkWord: "here"
+            },
+            {
+                body: "Click here to get xxx free Titanium!",
+                type: "giftResource",
+                condition: "visible",
+                category: "compounds",
+                item: "titanium",
                 linkWord: "here"
             },
             {

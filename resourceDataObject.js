@@ -404,7 +404,39 @@ export let resourceData = {
             createsFromRatio2: 10,
             createsFromRatio3: 0,
             createsFromRatio4: 0
-        },                   
+        },  
+        titanium: {
+            nameResource: 'Titanium',
+            screenName: 'titanium',
+            saleValue: 12,
+            salePreviewElement: 'sellTitaniumDescription',
+            createPreviewElement: 'createTitaniumDescription',
+            quantity: 0,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 50,
+            currentSecondaryIncreasePrice: 15,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Basic Titanium Smelter', screen: 'titanium', place: 'titaniumAutoBuyer1Row', price: 105000, rate: 0.01, quantity: 0, setPrice: 'titaniumAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer2Row', price: 850000, rate: 0.08, quantity: 0, setPrice: 'titaniumAB2Price', energyUse: 0.4 },
+                    tier3: { nameUpgrade: 'Medium Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer3Row', price: 4800000, rate: 0.5, quantity: 0, setPrice: 'titaniumAB3Price', energyUse: 1.3 },
+                    tier4: { nameUpgrade: 'Large Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer4Row', price: 1880000, rate: 2, quantity: 0, setPrice: 'titaniumAB4Price', energyUse: 5.1 }
+                },
+            },
+            revealedBy: 'neutronCapture',
+            canCreateTech: 'compounds',
+            createsFrom1: ['iron', 'resources'],
+            createsFrom2: ['sodium', 'resources'],
+            createsFrom3: ['neon', 'resources'],
+            createsFrom4: '',
+            createsFromRatio1: 22,
+            createsFromRatio2: 18,
+            createsFromRatio3: 40,
+            createsFromRatio4: 0
+        }                         
     },
     buildings: {
         energy: {
