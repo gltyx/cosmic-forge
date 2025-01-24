@@ -1169,6 +1169,7 @@ export function checkOrderOfTabs() {
     if (techArray.includes('stellarCartography')) unlockedTabs.push(5);
     if (techArray.includes('basicPowerGeneration')) unlockedTabs.push(2);
     if (techArray.includes('compounds')) unlockedTabs.push(4);
+    if (techArray.includes('rocketComposites')) unlockedTabs.push(6);
 
     unlockedTabs = unlockedTabs.sort((a, b) => tabPriorities[a] - tabPriorities[b]);
 
@@ -1398,6 +1399,46 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star map');
             setCurrentOptionPane('star map');
             updateContent('Star Map', 'tab5', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'space mining');
+            setCurrentOptionPane('space mining');
+            updateContent('Space Mining', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'rocket1');
+            setCurrentOptionPane('rocket1');
+            updateContent('Rocket 1', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'rocket2');
+            setCurrentOptionPane('rocket2');
+            updateContent('Rocket 2', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'rocket3');
+            setCurrentOptionPane('rocket3');
+            updateContent('Rocket 3', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'rocket4');
+            setCurrentOptionPane('rocket4');
+            updateContent('Rocket 4', 'tab6', 'content');
         });
     });
     

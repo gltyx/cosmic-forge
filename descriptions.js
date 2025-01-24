@@ -25,7 +25,7 @@ export function initialiseDescriptions() {
         'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
         'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
         'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
-        tab6intro: '',
+        'Space Mining': 'Here you can set about mining asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
         tab7intro: '',
         'Settings': 'Change the game settings to your liking.',
         
@@ -53,7 +53,8 @@ export function initialiseDescriptions() {
         concrete: "Concrete is a fundamental building material used in construction, offering strength and versatility.",
         titanium: "Titanium is a strong, lightweight, and corrosion-resistant metal, neede for advanced construction.",
 
-        'star map': "This is a map of the known galaxy",
+        'star map': "This is a map of the known galaxy.",
+        'space mining': "Mine asteroids for valuable Antimatter.",
         
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
