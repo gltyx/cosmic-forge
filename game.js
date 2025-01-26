@@ -901,6 +901,8 @@ function getAllQuantities() {
     allQuantities.powerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
     allQuantities.powerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
 
+    allQuantities.launchPad = null;
+
     allQuantities.research = getResourceDataObject('research', ['quantity']);
     allQuantities.scienceKit = getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity']);
     allQuantities.scienceClub = getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity']);
@@ -932,6 +934,8 @@ function getAllStorages() {
     allStorages.powerPlant1 = null;
     allStorages.powerPlant2 = null;
     allStorages.powerPlant3 = null;
+
+    allStorages.launchPad = null;
 
     allStorages.research = null;
     allStorages.scienceKit = null;
@@ -977,6 +981,8 @@ function getAllElements(resourcesArray, compoundsArray) {
     allElements.powerPlant2 = getElements().powerPlant2Quantity;
     allElements.powerPlant3 = getElements().powerPlant3Quantity;
 
+    allElements.launchPad = null;
+
     allElements.research = getElements().researchQuantity;
     allElements.scienceKit = getElements().scienceKitQuantity;
     allElements.scienceClub = getElements().scienceClubQuantity;
@@ -1012,7 +1018,9 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
 
     const scienceElements = getScienceResourceDescriptionElements();
     const buildingsElements = getBuildingResourceDescriptionElements();
-    Object.assign(elements, scienceElements, buildingsElements);
+    const spaceMiningElements = getSpaceMiningResourceDescriptionElements();
+
+    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements);
 
     return elements;
 }
@@ -1178,6 +1186,28 @@ function getBuildingResourceDescriptionElements() {
             string3: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource2Price'])[1]), 
             string4: capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource3Price'])[1])  
         }        
+    };
+}
+
+function getSpaceMiningResourceDescriptionElements() {
+    const launchPadBuyDescElement = document.getElementById('launchPadDescription');
+    const launchPadBuyPrice = getResourceDataObject('space', ['upgrades', 'launchPad', 'price']);
+    const launchPadBuyResource1Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[0];
+    const launchPadBuyResource2Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[0];
+    const launchPadBuyResource3Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[0];
+
+    return {
+        launchPadBuy: { 
+            element: launchPadBuyDescElement, 
+            price: launchPadBuyPrice, 
+            resource1Price: launchPadBuyResource1Price, 
+            resource2Price: launchPadBuyResource2Price, 
+            resource3Price: launchPadBuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[1]) 
+        }       
     };
 }
 
@@ -1654,6 +1684,7 @@ function checkStatusAndSetTextClasses(element) {
         //science / building upgrades
         const scienceUpgradeType = element.dataset.resourceToFuseTo;
         const buildingUpgradeType = element.dataset.resourceToFuseTo;
+        const spaceUpgradeType = element.dataset.resourceToFuseTo;
 
         if (resource === 'storage' || resource === 'autoBuyer') {
             resource = element.dataset.argumentCheckQuantity;
@@ -1781,6 +1812,9 @@ function checkStatusAndSetTextClasses(element) {
         } else if (type === 'energy') {
             mainKey = 'buildings';
             price = getResourceDataObject(mainKey, [resource, 'upgrades', buildingUpgradeType, 'price']);
+        } else if (type === 'spaceUpgrade') {
+            mainKey = 'space';
+            price = getResourceDataObject(mainKey, ['upgrades', spaceUpgradeType, 'price']);
         } else {
             if (element.dataset.type === "research") {
                 mainKey = 'research';
@@ -1799,21 +1833,39 @@ function checkStatusAndSetTextClasses(element) {
         let resourceCategories = [];
 
         if (element.classList.contains('building-purchase')) {
-            resourcePrices.push(
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
-            );
-            resourceNames.push(
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
-            );
-            resourceCategories.push(
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
-                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
-            );
+            if (type === 'spaceUpgrade') {
+                resourcePrices.push(
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[0],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[0],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[0]
+                );
+                resourceNames.push(
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[1],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[1],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[1]
+                );
+                resourceCategories.push(
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[2],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[2],
+                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[2]
+                );
+            } else {
+                resourcePrices.push(
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
+                );
+                resourceNames.push(
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
+                );
+                resourceCategories.push(
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
+                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
+                );
+            }
         }
 
         if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
@@ -1901,9 +1953,9 @@ function checkStatusAndSetTextClasses(element) {
                 
         if (element.classList.contains('building-purchase-button')) {
             return;
-        }        
+        }      
 
-        if (resource !== 'energy' && resource !== 'scienceUpgrade') {
+        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade') {
             if (getElements()[resource + 'Rate'].textContent.includes('-')) {
                 getElements()[resource + 'Rate'].classList.add('red-disabled-text');
             } else {
@@ -3304,10 +3356,13 @@ export function setAllCompoundsToZeroQuantity() {
     });
 }
 
+export function buildLaunchPad() {
+    setResourceDataObject(true, 'space', ['upgrades', 'launchPad', 'launchPadBoughtYet']);
+}
+
 //===============================================================================================================
 
 export function setGameState(newState) {
-    console.log("Setting game state to " + newState);
     setGameStateVariable(newState);
 
     switch (newState) {

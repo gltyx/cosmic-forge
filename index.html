@@ -713,7 +713,7 @@
         <div class="modal-content">
             <p>Some text in the Modal..</p>
             <div class="fullScreenContainer">
-                <div class="fullScreenCheckBox checked" id="fullScreenCheckBox" tabindex="0"></div>
+                <div class="fullScreenCheckBox" id="fullScreenCheckBox" tabindex="0"></div>
                 <label class="fullScreenLabel">Start game full screen</label>
             </div>              
             <button id="modalButton" class="option-button invisible">START</button>
@@ -721,6 +721,33 @@
         </div>
     </div>
 
+    <div id="debugWindow" class="debug-window">
+        <div class="debug-header">
+            <span>Debug Window</span>
+            <button class="close-btn">×</button>
+        </div>
+        <div class="debug-content">
+            <div class="debug-row">
+                <div class="debug-label">Give $1B</div>
+                <div class="button-column">
+                    <button id="give1BButton" class="option-button">Gain</button>
+                </div>
+            </div>
+            <div class="debug-row">
+                <div class="debug-label">Give 1M of all resources and compounds</div>
+                <div class="button-column">
+                    <button id="give1MAllResourcesAndCompounds" class="option-button">Gain</button>
+                </div>
+            </div>
+            <div class="debug-row">
+                <div class="debug-label">Grant All Techs</div>
+                <div class="button-column">
+                    <button id="grantAllTechsButton" class="option-button">Grant</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

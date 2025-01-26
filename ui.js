@@ -1,5 +1,9 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setUnlockedCompoundsArray,
+    setUnlockedResourcesArray,
+    setTechSpecificUIItemsArray,
+    setTechUnlockedArray,
     getNewsTickerScrollDuration,
     oneOffPrizesAlreadyClaimedArray,
     getOneOffPrizesAlreadyClaimedArray,
@@ -87,6 +91,8 @@ import { drawTab7Content } from './drawTab7Content.js';
 import { drawTab8Content } from './drawTab8Content.js';
 
 let notificationContainer;
+const debugWindow = document.getElementById('debugWindow');
+const closeButton = document.querySelector('.close-btn');
 
 document.addEventListener('DOMContentLoaded', async () => {
     setElements();
@@ -147,6 +153,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     notificationContainer = getElements().notificationContainer;
     // Event listeners
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'NumpadSubtract') {
+            toggleDebugWindow();
+        }
+    });
+
     document.querySelectorAll('.collapsible-header').forEach(header => {
         header.addEventListener('click', function () {
             const content = this.nextElementSibling;
@@ -372,7 +385,7 @@ export function createOptionRow(
         const description = document.createElement('label');
         description.classList.add('notation');
     
-        if (rowCategory === 'building') {
+        if (rowCategory === 'building' || rowCategory === 'spaceMiningPurchase') {
             description.classList.add('building-purchase');
         }
     
@@ -380,7 +393,7 @@ export function createOptionRow(
         description.innerHTML = descriptionText;
     
         if (dataConditionCheck) {
-            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'science' || rowCategory === 'tech') {
+            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'science' || rowCategory === 'tech') {
                 description.classList.add('red-disabled-text', 'resource-cost-sell-check');
             } else if (rowCategory === 'compound') {
                 description.classList.add('red-disabled-text', 'compound-cost-sell-check');
@@ -1158,8 +1171,8 @@ export function checkOrderOfTabs() {
         2: 4,
         3: 3,
         4: 2,
-        5: 5,
-        6: 6,
+        5: 6,
+        6: 5,
         7: 7,
         8: 8
     };
@@ -1975,3 +1988,129 @@ export function toggleGameFullScreen() {
         }
     }
 }
+
+//-------------------------------------------------------------------------------------------------
+//--------------DEBUG-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+
+function toggleDebugWindow() {
+    if (debugWindow.style.display === 'none' || !debugWindow.style.display) {
+        showDebugWindow();
+    } else {
+        debugWindow.style.display = 'none';
+    }
+}
+
+function showDebugWindow() {
+    debugWindow.style.display = 'block';
+}
+
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+const header = document.querySelector('.debug-header');
+header.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    offsetX = e.clientX - debugWindow.offsetLeft;
+    offsetY = e.clientY - debugWindow.offsetTop;
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+});
+
+function onMouseMove(e) {
+    if (isDragging) {
+        debugWindow.style.left = `${e.clientX - offsetX}px`;
+        debugWindow.style.top = `${e.clientY - offsetY}px`;
+    }
+}
+
+function onMouseUp() {
+    isDragging = false;
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+}
+
+closeButton.addEventListener('click', () => {
+    debugWindow.style.display = 'none';
+});
+
+const grantAllTechsButton = document.getElementById('grantAllTechsButton');
+grantAllTechsButton.addEventListener('click', () => {
+    const techArray = getResourceDataObject('techs');
+    setResourceDataObject(getResourceDataObject('research', ['quantity']) + 1000000, 'research', ['quantity']);
+
+    const fusionKeys = [
+        'hydrogenFusion',
+        'heliumFusion',
+        'carbonFusion',
+        'neonFusion',
+        'oxygenFusion',
+        'siliconFusion',
+    ];
+
+    Object.keys(techArray).forEach((techKey) => {
+        setTechUnlockedArray(techKey);
+
+        if (fusionKeys.includes(techKey)) {
+            const fusionElement = techKey.split('Fusion')[0];
+            setTechSpecificUIItemsArray(fusionElement, 'fusionButton', techKey);
+        }
+    });
+
+    grantAllTechsButton.classList.add('red-disabled-text');
+    setRenderedTechTree(false);
+    showNotification('CHEAT! All techs unlocked!', 'info');
+
+    console.log('All techs unlocked!');
+});
+
+const give1BButton = document.getElementById('give1BButton');
+give1BButton.addEventListener('click', () => {
+    const currentCash = getResourceDataObject('currency', ['cash']);
+    const newCash = currentCash + 1000000000;
+
+    setResourceDataObject(newCash, 'currency', ['cash']);
+    
+    showNotification('CHEAT! $1B added', 'info');
+    console.log('$ 1B granted! Current cash:', newCash);
+});
+
+const give1MAllResourcesAndCompoundsButton = document.getElementById('give1MAllResourcesAndCompounds');
+give1MAllResourcesAndCompoundsButton.addEventListener('click', () => {
+    const resources = getResourceDataObject('resources');
+    const compounds = getResourceDataObject('compounds');
+
+    const resourceGases = document.getElementById('gas');
+    const resourceSolids = document.getElementById('solids');
+    const compoundLiquids = document.getElementById('liquidCompounds');
+    const compoundSolids = document.getElementById('solidCompounds');
+
+    resourceGases.classList.remove('invisible');
+    resourceSolids.classList.remove('invisible');
+    compoundLiquids.classList.remove('invisible');
+    compoundSolids.classList.remove('invisible');
+
+    [resourceGases, resourceSolids, compoundLiquids, compoundSolids].forEach(category => {
+        category.querySelectorAll('.invisible').forEach(child => {
+            child.classList.remove('invisible');
+        });
+    });
+
+    Object.keys(resources).forEach(resourceKey => {
+        setResourceDataObject(1000000, 'resources', [resourceKey, 'storageCapacity']);
+        setResourceDataObject(1000000, 'resources', [resourceKey, 'quantity']);
+        setUnlockedResourcesArray(resourceKey);
+    });
+
+    Object.keys(compounds).forEach(compoundKey => {
+        setResourceDataObject(1000000, 'compounds', [compoundKey, 'storageCapacity']);
+        setResourceDataObject(1000000, 'compounds', [compoundKey, 'quantity']);
+        setUnlockedCompoundsArray(compoundKey);
+    });
+    
+    showNotification('CHEAT! $1M of every resource and compound added!', 'info');
+    console.log('1M storage capacity granted to all resources and compounds!');
+});
+
+

@@ -780,6 +780,11 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
+        spaceBuildLaunchPadRow: {
+            content1: "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+            content2: "",
+            updateAt: ""
+        },
         settingsCurrencySymbolRow: {
             content1: "Change the currency symbol displayed in the game.",
             content2: "",

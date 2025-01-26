@@ -519,6 +519,18 @@ export let resourceData = {
             }
         }
     },
+    space: {
+        upgrades: {
+            launchPad: { 
+                launchPadBoughtYet: false,
+                price: 40000,
+                resource1Price: [10000, 'steel', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [0, '', ''],
+                setPrice: 'launchPadPrice',
+            },
+        }
+    },
     research: {
         screenName: 'research',
         quantity: 50,

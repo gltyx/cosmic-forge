@@ -1416,3 +1416,65 @@ canvas {
     }
 }
 
+.debug-window {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 50vw;
+    border: 2px solid var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 100000000000000000000000000;
+}
+
+.debug-header {
+    padding: 10px;
+    height: 30px;
+    cursor: move;
+    background: var(--text-color);
+    color: var(--bg-color);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.debug-header span {
+    font-weight: bold;
+}
+
+.debug-header .close-btn {
+    background: none;
+    border: none;
+    color: var(--bg-color);
+    font-size: 18px;
+    cursor: pointer;
+    outline: none;
+}
+
+.debug-header .close-btn:hover {
+    color: red;
+}
+
+.debug-content {
+    padding: 10px;
+}
+
+.debug-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--text-color);
+    color: var(--text-color);
+}
+
+.debug-label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
