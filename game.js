@@ -3357,7 +3357,55 @@ export function setAllCompoundsToZeroQuantity() {
 }
 
 export function buildLaunchPad() {
+    let currentResource1Quantity;
+    let currentResource2Quantity;
+    let currentResource3Quantity;
+
+    const buyLaunchPadButtonElement = document.querySelector('button[data-resource-to-fuse-to="launchPad"]');
+    const buyLaunchPadDescriptionElement = document.getElementById('launchPadDescription');
+    const launchPadAlreadyBoughtTextElement = document.getElementById('launchPadAlreadyBoughtText');
+
+    const currentCash = getResourceDataObject('currency', ['cash']);
+    const launchPadCashPrice = getResourceDataObject('space', ['upgrades', 'launchPad', 'price']);
+
+    const launchPadResource1PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[0];
+    const launchPadResource1PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[1];
+    const launchPadResource1PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[2];
+    if (launchPadResource1PriceCategory) {
+        currentResource1Quantity = getResourceDataObject(launchPadResource1PriceCategory, [launchPadResource1PriceResource, 'quantity']);
+    }
+    const launchPadResource2PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[0];
+    const launchPadResource2PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[1];
+    const launchPadResource2PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[2];
+    if (launchPadResource2PriceCategory) {
+        currentResource2Quantity = getResourceDataObject(launchPadResource2PriceCategory, [launchPadResource2PriceResource, 'quantity']);
+    }
+    const launchPadResource3PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[0];
+    const launchPadResource3PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[1];
+    const launchPadResource3PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[2];
+    if (launchPadResource3PriceCategory) {
+        currentResource3Quantity = getResourceDataObject(launchPadResource3PriceCategory, [launchPadResource3PriceResource, 'quantity']);
+    }
+
+    setResourceDataObject(Math.floor(currentCash - launchPadCashPrice), 'currency', ['cash']);
+
+    if (launchPadResource1PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource1Quantity - launchPadResource1PriceQuantity), launchPadResource1PriceCategory, [launchPadResource1PriceResource, 'quantity']);
+    }
+
+    if (launchPadResource1PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource2Quantity - launchPadResource2PriceQuantity), launchPadResource2PriceCategory, [launchPadResource2PriceResource, 'quantity']);
+    }
+
+    if (launchPadResource1PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource3Quantity - launchPadResource3PriceQuantity), launchPadResource3PriceCategory, [launchPadResource3PriceResource, 'quantity']);
+    }
+
     setResourceDataObject(true, 'space', ['upgrades', 'launchPad', 'launchPadBoughtYet']);
+
+    buyLaunchPadButtonElement.classList.add('invisible');
+    buyLaunchPadDescriptionElement.classList.add('invisible');
+    launchPadAlreadyBoughtTextElement.classList.remove('invisible');
 }
 
 //===============================================================================================================

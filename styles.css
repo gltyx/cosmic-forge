@@ -978,7 +978,8 @@ body {
 .autoBuyer-building-quantity,
 .toggle-switch-spacing,
 .full-screen-button
-#newsTickerSettingToggle
+#newsTickerSettingToggle,
+#launchPadAlreadyBoughtText
 {
     margin-left: 30px;
 }

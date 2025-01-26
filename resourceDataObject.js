@@ -527,7 +527,6 @@ export let resourceData = {
                 resource1Price: [10000, 'steel', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [0, '', ''],
-                setPrice: 'launchPadPrice',
             },
         }
     },
