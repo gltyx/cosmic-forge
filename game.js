@@ -1968,6 +1968,15 @@ function checkStatusAndSetTextClasses(element) {
         }
                 
         if (element.classList.contains('building-purchase-button')) {
+            if (element.classList.contains ('launchPad')) {
+                if (getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
+                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+
+                    element.classList.add('invisible');
+                    document.getElementById('launchPadAlreadyBoughtText').classList.remove('invisible');
+                    accompanyingLabel.classList.add('invisible');
+                }
+            }
             return;
         }      
 
@@ -3409,11 +3418,11 @@ export function buildLaunchPad() {
         setResourceDataObject(Math.floor(currentResource1Quantity - launchPadResource1PriceQuantity), launchPadResource1PriceCategory, [launchPadResource1PriceResource, 'quantity']);
     }
 
-    if (launchPadResource1PriceCategory) {
+    if (launchPadResource2PriceCategory) {
         setResourceDataObject(Math.floor(currentResource2Quantity - launchPadResource2PriceQuantity), launchPadResource2PriceCategory, [launchPadResource2PriceResource, 'quantity']);
     }
 
-    if (launchPadResource1PriceCategory) {
+    if (launchPadResource3PriceCategory) {
         setResourceDataObject(Math.floor(currentResource3Quantity - launchPadResource3PriceQuantity), launchPadResource3PriceCategory, [launchPadResource3PriceResource, 'quantity']);
     }
 

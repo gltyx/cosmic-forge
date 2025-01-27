@@ -333,6 +333,14 @@ export function createOptionRow(
         }
     }
 
+    if (getCurrentOptionPane() === 'space mining') {
+        if (objectSectionArgument2.startsWith('rocket') && !getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
+            wrapper.classList.add('invisible');
+        } else if (objectSectionArgument2.startsWith('rocket')) {
+            wrapper.classList.remove('invisible');
+        }
+    }
+
     if (startInvisibleValue && startInvisibleValue[0] !== 'research') {
         const revealElementType = startInvisibleValue[0];
         const revealElementCondition = startInvisibleValue[1];
@@ -2067,8 +2075,6 @@ export function setBatteryIndicator(value) {
         batteryBar.style.setProperty('background-color', 'var(--disabled-text)', 'important');
     }
 }
-
-
 
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------

@@ -528,6 +528,38 @@ export let resourceData = {
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [0, '', ''],
             },
+            rocket1: {
+                builtParts: 0,
+                parts: 15,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+            },
+            rocket2: {
+                builtParts: 0,
+                parts: 20,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+            },
+            rocket3: {
+                builtParts: 0,
+                parts: 25,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+            },
+            rocket4: {
+                builtParts: 0,
+                parts: 30,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+            }
         }
     },
     research: {
@@ -729,4 +761,12 @@ export function setAutoBuyerTierLevel(key, value, override = false, type) {
 
 export function getAutoBuyerTierLevel(key, type) {
     return resourceData[type][key].upgrades.autoBuyer.currentTierLevel;
+}
+
+export function getRocketParts(rocket) {
+    return resourceData.space.upgrades[rocket].builtParts;
+}
+
+export function getRocketPartsNeededInTotalPerRocket(rocket) {
+    return resourceData.space.upgrades[rocket].parts;
 }
