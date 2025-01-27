@@ -1070,7 +1070,6 @@ button.red-disabled-text {
     display: flex;
     align-items: center;
     border: 1px dotted var(--text-color) !important;
-    justify-content: end;
 }
 
 #batteryBar {

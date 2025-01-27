@@ -934,6 +934,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const sortedGenerationStatuses = generationData.map(data => data.status);
 
     function drawBar(x, values, colors, status, powerOn, barType) {
+        const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
         let currentY = height - 11;
     
         values.forEach((value, index) => {
@@ -956,7 +957,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
                 if (status[index] === false) {
                     ctx.save();
                     ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = 'orange';
+                    ctx.strokeStyle = textColor;
                     ctx.lineWidth = 4;
                     ctx.strokeRect(x, currentY - barHeight, barWidth, barHeight);
                     ctx.restore();
@@ -2033,22 +2034,20 @@ export function setBatteryIndicator(value) {
         batteryBarContainer.appendChild(batteryBar);
     }
 
-    const currentWidth = parseFloat(batteryBar.style.width) || 0;
-    const roundedCurrentWidth = parseFloat(currentWidth.toFixed(4));
-    const roundedValue = parseFloat(value.toFixed(4));
-
     let indicatorSymbol = document.getElementById('indicatorSymbol');
     if (!indicatorSymbol) {
         indicatorSymbol = document.createElement('span');
         indicatorSymbol.id = 'indicatorSymbol';
         batteryBarContainer.parentElement.appendChild(indicatorSymbol);
-        //batteryBarContainer.parentElement.textContent = getResourceDataObject('buildings', ['energy', 'quantity']);
     }
 
-    if (roundedValue > roundedCurrentWidth) {
+    const energyRate = getResourceDataObject('buildings', ['energy', 'rate']);
+    const consumption = getResourceDataObject('buildings', ['energy', 'consumption']);
+
+    if (energyRate > consumption && getPowerOnOff()) {
         indicatorSymbol.innerHTML = '▲';
         indicatorSymbol.style.color = 'var(--ready-text)';
-    } else if (roundedValue < roundedCurrentWidth) {
+    } else if (energyRate < consumption && getPowerOnOff()) {
         indicatorSymbol.innerHTML = '▼';
         indicatorSymbol.style.color = 'var(--disabled-text)';
     } else {
