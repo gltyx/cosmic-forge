@@ -46,7 +46,8 @@ import {
     getSaveData,
     getTimerRateRatio,
     getBuildingTypeOnOff,
-    getNewsTickerSetting
+    getNewsTickerSetting,
+    getPowerOnOff
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -932,27 +933,40 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const sortedGenerationValues = generationData.map(data => data.value);
     const sortedGenerationStatuses = generationData.map(data => data.status);
 
-    function drawBar(x, values, colors, status) {
+    function drawBar(x, values, colors, status, powerOn, barType) {
         let currentY = height - 11;
-
+    
         values.forEach((value, index) => {
             const barHeight = (value / maxValue) * maxBarHeight;
 
-            ctx.fillStyle = (status[index] === false) ? bgColor : colors[index];
-            ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
-
-            if (status[index] === false) {
+            if (barType === 'consumption' && !powerOn) {
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
+    
                 ctx.save();
                 ctx.setLineDash([5, 5]);
-                ctx.strokeStyle = 'orange';
+                ctx.strokeStyle = 'red';
                 ctx.lineWidth = 4;
                 ctx.strokeRect(x, currentY - barHeight, barWidth, barHeight);
                 ctx.restore();
+            } else {
+                ctx.fillStyle = (status[index] === false) ? bgColor : colors[index];
+                ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
+    
+                if (status[index] === false) {
+                    ctx.save();
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = 'orange';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(x, currentY - barHeight, barWidth, barHeight);
+                    ctx.restore();
+                }
             }
-
+    
             currentY -= barHeight;
         });
     }
+    
 
     const barWidth = width * 0.3;
     const gap = 10;
@@ -960,8 +974,8 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
     const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
 
-    drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses);
-    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true]);
+    drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation');
+    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true], getPowerOnOff(), 'consumption');
 
     ctx.beginPath();
     ctx.moveTo(0, height - 10);
