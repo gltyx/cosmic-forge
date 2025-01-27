@@ -2042,12 +2042,13 @@ export function setBatteryIndicator(value) {
         indicatorSymbol = document.createElement('span');
         indicatorSymbol.id = 'indicatorSymbol';
         batteryBarContainer.parentElement.appendChild(indicatorSymbol);
+        //batteryBarContainer.parentElement.textContent = getResourceDataObject('buildings', ['energy', 'quantity']);
     }
 
     if (roundedValue > roundedCurrentWidth) {
         indicatorSymbol.innerHTML = '▲';
         indicatorSymbol.style.color = 'var(--ready-text)';
-    } else if (value < currentWidth) {
+    } else if (roundedValue < roundedCurrentWidth) {
         indicatorSymbol.innerHTML = '▼';
         indicatorSymbol.style.color = 'var(--disabled-text)';
     } else {

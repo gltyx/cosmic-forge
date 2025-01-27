@@ -1070,6 +1070,7 @@ button.red-disabled-text {
     display: flex;
     align-items: center;
     border: 1px dotted var(--text-color) !important;
+    justify-content: end;
 }
 
 #batteryBar {
@@ -1088,7 +1089,7 @@ button.red-disabled-text {
 .news-ticker-container {
     width: 100%;
     height: 30px;
-    background-color: var(--bg-color);
+    background-color: var(--container-bg-color);
     color: var(--text-color);
     position: fixed;
     top: 30px;
