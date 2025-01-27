@@ -1,7 +1,7 @@
 import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createTextElement, createOptionRow, createButton } from './ui.js';
+import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab2Content(heading, optionContentElement) {
@@ -15,6 +15,7 @@ export function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery1');
             }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', false, null, 'building'),
             null,
@@ -45,6 +46,7 @@ export function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery2');
             }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', false, null, 'building'),
             null,
@@ -72,6 +74,7 @@ export function drawTab2Content(heading, optionContentElement) {
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resources'),
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery3');
             }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', false, null, 'building'),
             null,

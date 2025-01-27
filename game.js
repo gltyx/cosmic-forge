@@ -98,6 +98,8 @@ import {
     showNewsTickerMessage,
     startWeatherEffect,
     stopWeatherEffect,
+    switchBatteryStatBarWhenBatteryBought,
+    setBatteryIndicator
 } from "./ui.js";
 
 import { 
@@ -383,6 +385,13 @@ function updateStats() {
 
     //stat3
     checkStatusAndSetTextClasses(document.getElementById('stat3'));
+
+    //stat4
+    const batteryLevel = switchBatteryStatBarWhenBatteryBought();
+
+    if (batteryLevel || batteryLevel === 0) {
+        setBatteryIndicator(batteryLevel);
+    }
 
     //stat8
     getTimeInStatCell();
@@ -1496,8 +1505,15 @@ function checkStatusAndSetTextClasses(element) {
                 element.textContent = '• ON';
                 element.classList.remove('red-disabled-text');
                 element.classList.add('green-ready-text');
+                element.classList.remove('warning-orange-text');
+            } else if (getTrippedStatus()) {
+                element.textContent = '• TRIPPED';
+                element.classList.add('warning-orange-text');
+                element.classList.remove('green-ready-text');
+                element.classList.remove('red-disabled-text');
             } else {
                 element.textContent = '• OFF';
+                element.classList.remove('warning-orange-text');
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
             }
@@ -3407,6 +3423,15 @@ export function buildLaunchPad() {
     buyLaunchPadDescriptionElement.classList.add('invisible');
     launchPadAlreadyBoughtTextElement.classList.remove('invisible');
 }
+
+export function getBatteryLevel() {
+    const totalBatteryCapacity = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
+    const totalBatteryCharge = getResourceDataObject('buildings', ['energy', 'quantity']);
+
+    const batteryPercentage = (totalBatteryCharge / totalBatteryCapacity) * 100;
+    return Math.min(100, Math.max(0, batteryPercentage));
+}
+
 
 //===============================================================================================================
 

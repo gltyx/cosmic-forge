@@ -1028,6 +1028,27 @@ button.red-disabled-text {
     padding-left: 10px;
 }
 
+.stat-cell {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--text-color);
+    flex-shrink: 0;
+}
+
+.stat-value {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+}
+
 .stats-title {
     font-weight: 700;
 }
@@ -1036,23 +1057,32 @@ button.red-disabled-text {
     width: 100%;
 }
 
-.stat-cell {
-    text-align: center;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: var(--text-color);
-}
-
-.stat-value {
-    font-size: 0.8rem;
-    color: var(--text-color);
+#stat4 {
+    width: 60px;
 }
 
 .stat-value.red-disabled-text {
     color: var(--disabled-text);
+}
+
+.battery-indicator-bar-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    border: 1px dotted var(--text-color) !important;
+}
+
+#batteryBar {
+    height: 10px;
+}
+
+#statusIndicator {
+    width: 10px;
+    height: 10px;
+}
+
+#indicatorSymbol {
+    margin-left: 5px;
 }
 
 .news-ticker-container {

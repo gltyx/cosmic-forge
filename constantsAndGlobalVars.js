@@ -1150,6 +1150,10 @@ export function setBuildingTypeOnOff(building, value) {
         setTrippedStatus(true);
     }
 
+    if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) && getResourceDataObject('buildings', ['energy', 'quantity']) === 0 && getResourceDataObject('buildings', ['energy', 'consumption']) > totalRate) {
+        setTrippedStatus(true);
+    }
+
     buildingTypeOnOff[building] = value;
 }
 

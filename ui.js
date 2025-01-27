@@ -50,6 +50,7 @@ import {
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
+    setAutoBuyerTierLevel,
     setResourceDataObject,
 } from "./resourceDataObject.js";
 import {
@@ -69,7 +70,8 @@ import {
     setGameState,
     startGame,
     offlineGains,
-    startNewsTickerTimer
+    startNewsTickerTimer,
+    getBatteryLevel
 } from './game.js';
 
 // import {
@@ -1989,6 +1991,71 @@ export function toggleGameFullScreen() {
     }
 }
 
+export function switchBatteryStatBarWhenBatteryBought() {
+    const batteryNo = document.getElementById('batteryNo');
+    const batteryIndicatorBarContainer = document.getElementById('batteryBarContainer');
+
+    if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+        if (batteryNo && batteryIndicatorBarContainer) {
+            batteryNo.classList.add('invisible');
+            batteryIndicatorBarContainer.classList.remove('invisible');
+            return getBatteryLevel();
+        }
+    } else {
+        batteryNo.classList.remove('invisible');
+        batteryIndicatorBarContainer.classList.add('invisible');
+        return null;
+    }
+}
+
+export function setBatteryIndicator(value) {
+    const batteryBarContainer = document.getElementById('batteryBarContainer');
+    batteryBarContainer.classList.remove('invisible');
+
+    let batteryBar = document.getElementById('batteryBar');
+    if (!batteryBar) {
+        batteryBar = document.createElement('div');
+        batteryBar.id = 'batteryBar';
+        batteryBarContainer.appendChild(batteryBar);
+    }
+
+    const currentWidth = parseFloat(batteryBar.style.width) || 0;
+    const roundedCurrentWidth = parseFloat(currentWidth.toFixed(4));
+    const roundedValue = parseFloat(value.toFixed(4));
+
+    let indicatorSymbol = document.getElementById('indicatorSymbol');
+    if (!indicatorSymbol) {
+        indicatorSymbol = document.createElement('span');
+        indicatorSymbol.id = 'indicatorSymbol';
+        batteryBarContainer.parentElement.appendChild(indicatorSymbol);
+    }
+
+    if (roundedValue > roundedCurrentWidth) {
+        indicatorSymbol.innerHTML = '▲';
+        indicatorSymbol.style.color = 'var(--ready-text)';
+    } else if (value < currentWidth) {
+        indicatorSymbol.innerHTML = '▼';
+        indicatorSymbol.style.color = 'var(--disabled-text)';
+    } else {
+        indicatorSymbol.innerHTML = '-';
+        indicatorSymbol.style.color = 'var(--text-color)';
+    }
+
+    batteryBar.style.width = `${value}%`;
+
+    if (value === 100) {
+        batteryBar.style.setProperty('background-color', 'var(--ready-text)', 'important');
+    } else if (value > 25) {
+        batteryBar.style.setProperty('background-color', 'var(--text-color)', 'important');
+    } else if (value > 10) {
+        batteryBar.style.setProperty('background-color', 'var(--warning-text)', 'important');
+    } else {
+        batteryBar.style.setProperty('background-color', 'var(--disabled-text)', 'important');
+    }
+}
+
+
+
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -2101,12 +2168,14 @@ give1MAllResourcesAndCompoundsButton.addEventListener('click', () => {
         setResourceDataObject(1000000, 'resources', [resourceKey, 'storageCapacity']);
         setResourceDataObject(1000000, 'resources', [resourceKey, 'quantity']);
         setUnlockedResourcesArray(resourceKey);
+        setAutoBuyerTierLevel(resourceKey, 4, false, 'resources');
     });
 
     Object.keys(compounds).forEach(compoundKey => {
         setResourceDataObject(1000000, 'compounds', [compoundKey, 'storageCapacity']);
         setResourceDataObject(1000000, 'compounds', [compoundKey, 'quantity']);
         setUnlockedCompoundsArray(compoundKey);
+        setAutoBuyerTierLevel(compoundKey, 4, false, 'compounds');
     });
     
     showNotification('CHEAT! $1M of every resource and compound added!', 'info');
