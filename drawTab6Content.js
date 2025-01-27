@@ -42,10 +42,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'rocket1BuildRow',
                     null,
                     'Rocket Miner 1:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'invisible'], () => {
+                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                         addRocketPart('rocket1');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket1', 'cash', false, null, 'spaceMiningPurchase'),
-                    createTextElement(`Built: ${getRocketParts('rocket1')} / ${getRocketPartsNeededInTotalPerRocket('rocket1')}}`, 'rocket1PartsCountText', ['invisible']),
+                    createTextElement(`Built: ${getRocketParts('rocket1')} / ${getRocketPartsNeededInTotalPerRocket('rocket1')}`, 'rocket1PartsCountText', []),
                     null,
                     null,
                     null,
@@ -70,10 +70,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'rocket2BuildRow',
                     null,
                     'Rocket Miner 2:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'invisible'], () => {
+                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                         addRocketPart('rocket2');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket2', 'cash', false, null, 'spaceMiningPurchase'),
-                    createTextElement(`Built: ${getRocketParts('rocket2')} / ${getRocketPartsNeededInTotalPerRocket('rocket2')}}`, 'rocket2PartsCountText', ['invisible']),
+                    createTextElement(`Built: ${getRocketParts('rocket2')} / ${getRocketPartsNeededInTotalPerRocket('rocket2')}`, 'rocket2PartsCountText', []),
                     null,
                     null,
                     null,
@@ -98,10 +98,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'rocket3BuildRow',
                     null,
                     'Rocket Miner 3:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'invisible'], () => {
+                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                         addRocketPart('rocket3');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket3', 'cash', false, null, 'spaceMiningPurchase'),
-                    createTextElement(`Built: ${getRocketParts('rocket3')} / ${getRocketPartsNeededInTotalPerRocket('rocket3')}}`, 'rocket3PartsCountText', ['invisible']),
+                    createTextElement(`Built: ${getRocketParts('rocket3')} / ${getRocketPartsNeededInTotalPerRocket('rocket3')}`, 'rocket3PartsCountText', []),
                     null,
                     null,
                     null,
@@ -126,10 +126,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'rocket4BuildRow',
                     null,
                     'Rocket Miner 4:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'invisible'], () => {
+                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                         addRocketPart('rocket4');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket4', 'cash', false, null, 'spaceMiningPurchase'),
-                    createTextElement(`Built: ${getRocketParts('rocket4')} / ${getRocketPartsNeededInTotalPerRocket('rocket4')}}`, 'rocket4PartsCountText', ['invisible']),
+                    createTextElement(`Built: ${getRocketParts('rocket4')} / ${getRocketPartsNeededInTotalPerRocket('rocket4')}`, 'rocket4PartsCountText', []),
                     null,
                     null,
                     null,

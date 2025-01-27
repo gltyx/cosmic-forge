@@ -979,7 +979,11 @@ body {
 .toggle-switch-spacing,
 .full-screen-button
 #newsTickerSettingToggle,
-#launchPadAlreadyBoughtText
+#launchPadAlreadyBoughtText,
+#rocket1PartsCountText,
+#rocket2PartsCountText,
+#rocket3PartsCountText,
+#rocket4PartsCountText
 {
     margin-left: 30px;
 }
