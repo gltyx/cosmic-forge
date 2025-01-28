@@ -2163,6 +2163,16 @@ give1BButton.addEventListener('click', () => {
     console.log('$ 1B granted! Current cash:', newCash);
 });
 
+const give100Button = document.getElementById('give100Button');
+give100Button.addEventListener('click', () => {
+    const newCash = 100;
+
+    setResourceDataObject(newCash, 'currency', ['cash']);
+    
+    showNotification('CHEAT! $100 set', 'info');
+    console.log('$100 set! Current cash:', newCash);
+});
+
 const give1MAllResourcesAndCompoundsButton = document.getElementById('give1MAllResourcesAndCompounds');
 give1MAllResourcesAndCompoundsButton.addEventListener('click', () => {
     const resources = getResourceDataObject('resources');
@@ -2198,8 +2208,47 @@ give1MAllResourcesAndCompoundsButton.addEventListener('click', () => {
         setAutoBuyerTierLevel(compoundKey, 4, false, 'compounds');
     });
     
-    showNotification('CHEAT! $1M of every resource and compound added!', 'info');
+    showNotification('CHEAT! 1M of every resource and compound added!', 'info');
     console.log('1M storage capacity granted to all resources and compounds!');
+});
+
+const give100AllResourcesAndCompoundsButton = document.getElementById('give100AllResourcesAndCompounds');
+give100AllResourcesAndCompoundsButton.addEventListener('click', () => {
+    const resources = getResourceDataObject('resources');
+    const compounds = getResourceDataObject('compounds');
+
+    const resourceGases = document.getElementById('gas');
+    const resourceSolids = document.getElementById('solids');
+    const compoundLiquids = document.getElementById('liquidCompounds');
+    const compoundSolids = document.getElementById('solidCompounds');
+
+    resourceGases.classList.remove('invisible');
+    resourceSolids.classList.remove('invisible');
+    compoundLiquids.classList.remove('invisible');
+    compoundSolids.classList.remove('invisible');
+
+    [resourceGases, resourceSolids, compoundLiquids, compoundSolids].forEach(category => {
+        category.querySelectorAll('.invisible').forEach(child => {
+            child.classList.remove('invisible');
+        });
+    });
+
+    Object.keys(resources).forEach(resourceKey => {
+        setResourceDataObject(100, 'resources', [resourceKey, 'storageCapacity']);
+        setResourceDataObject(100, 'resources', [resourceKey, 'quantity']);
+        setUnlockedResourcesArray(resourceKey);
+        setAutoBuyerTierLevel(resourceKey, 1, false, 'resources');
+    });
+
+    Object.keys(compounds).forEach(compoundKey => {
+        setResourceDataObject(100, 'compounds', [compoundKey, 'storageCapacity']);
+        setResourceDataObject(100, 'compounds', [compoundKey, 'quantity']);
+        setUnlockedCompoundsArray(compoundKey);
+        setAutoBuyerTierLevel(compoundKey, 1, false, 'compounds');
+    });
+    
+    showNotification('CHEAT! 100 of every resource and compound!', 'info');
+    console.log('100 of all resources and compounds!');
 });
 
 

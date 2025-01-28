@@ -881,6 +881,7 @@ function checkAndDeductResources() {
 function getAllQuantities() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
     const compoundKeys = Object.keys(getResourceDataObject('compounds'));
+    const rockets = Object.keys(getResourceDataObject('space', ['upgrades'])).filter(part => part !== 'launchPad');
 
     const allQuantities = {};
 
@@ -901,6 +902,12 @@ function getAllQuantities() {
         allQuantities[`${compoundName}AB3Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier3', 'quantity']);
         allQuantities[`${compoundName}AB4Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
     });
+
+    if (getCurrentOptionPane() === 'space mining') {
+        rockets.forEach(rocket => {
+            allQuantities[rocket = getResourceDataObject('space', ['upgrades', rocket, 'builtParts'])];
+        })
+    }
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
     allQuantities.battery1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'quantity']);
@@ -991,6 +998,32 @@ function getAllElements(resourcesArray, compoundsArray) {
     allElements.powerPlant3 = getElements().powerPlant3Quantity;
 
     allElements.launchPad = null;
+
+    if (getCurrentOptionPane() === 'space mining') {
+        allElements.rocket1BuiltParts = document.getElementById('rocket1BuiltPartsQuantity');
+        allElements.rocket1TotalParts = document.getElementById('rocket1TotalPartsQuantity');
+    
+        allElements.rocket2BuiltParts = document.getElementById('rocket2BuiltPartsQuantity');
+        allElements.rocket2TotalParts = document.getElementById('rocket2TotalPartsQuantity');
+    
+        allElements.rocket3BuiltParts = document.getElementById('rocket3BuiltPartsQuantity');
+        allElements.rocket3TotalParts = document.getElementById('rocket3TotalPartsQuantity');
+    
+        allElements.rocket4BuiltParts = document.getElementById('rocket4BuiltPartsQuantity');
+        allElements.rocket4TotalParts = document.getElementById('rocket4TotalPartsQuantity');
+    } else {
+        allElements.rocket1BuiltParts = null;
+        allElements.rocket1TotalParts = null;
+    
+        allElements.rocket2BuiltParts = null;
+        allElements.rocket2TotalParts = null;
+    
+        allElements.rocket3BuiltParts = null;
+        allElements.rocket3TotalParts = null;
+    
+        allElements.rocket4BuiltParts = null;
+        allElements.rocket4TotalParts = null;
+    }    
 
     allElements.research = getElements().researchQuantity;
     allElements.scienceKit = getElements().scienceKitQuantity;
@@ -1205,6 +1238,30 @@ function getSpaceMiningResourceDescriptionElements() {
     const launchPadBuyResource2Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[0];
     const launchPadBuyResource3Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[0];
 
+    const rocket1BuyDescElement = document.getElementById('rocketMiner1Description');
+    const rocket1BuyPrice = getResourceDataObject('space', ['upgrades', 'rocket1', 'price']);
+    const rocket1BuyResource1Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'resource1Price'])[0];
+    const rocket1BuyResource2Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'resource2Price'])[0];
+    const rocket1BuyResource3Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'resource3Price'])[0];
+
+    const rocket2BuyDescElement = document.getElementById('rocketMiner2Description');
+    const rocket2BuyPrice = getResourceDataObject('space', ['upgrades', 'rocket2', 'price']);
+    const rocket2BuyResource1Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'resource1Price'])[0];
+    const rocket2BuyResource2Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'resource2Price'])[0];
+    const rocket2BuyResource3Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'resource3Price'])[0];
+
+    const rocket3BuyDescElement = document.getElementById('rocketMiner3Description');
+    const rocket3BuyPrice = getResourceDataObject('space', ['upgrades', 'rocket3', 'price']);
+    const rocket3BuyResource1Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'resource1Price'])[0];
+    const rocket3BuyResource2Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'resource2Price'])[0];
+    const rocket3BuyResource3Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'resource3Price'])[0];
+
+    const rocket4BuyDescElement = document.getElementById('rocketMiner4Description');
+    const rocket4BuyPrice = getResourceDataObject('space', ['upgrades', 'rocket4', 'price']);
+    const rocket4BuyResource1Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'resource1Price'])[0];
+    const rocket4BuyResource2Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'resource2Price'])[0];
+    const rocket4BuyResource3Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[0];
+
     return {
         launchPadBuy: { 
             element: launchPadBuyDescElement, 
@@ -1216,8 +1273,52 @@ function getSpaceMiningResourceDescriptionElements() {
             string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[1]), 
             string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[1]), 
             string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[1]) 
-        }       
-    };
+        },
+        rocket1Buy: { 
+            element: rocket1BuyDescElement,
+            price: rocket1BuyPrice,
+            resource1Price: rocket1BuyResource1Price,
+            resource2Price: rocket1BuyResource2Price,
+            resource3Price: rocket1BuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource3Price'])[1])
+        },
+        rocket2Buy: { 
+            element: rocket2BuyDescElement,
+            price: rocket2BuyPrice,
+            resource1Price: rocket2BuyResource1Price,
+            resource2Price: rocket2BuyResource2Price,
+            resource3Price: rocket2BuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource3Price'])[1])
+        },
+        rocket3Buy: { 
+            element: rocket3BuyDescElement,
+            price: rocket3BuyPrice,
+            resource1Price: rocket3BuyResource1Price,
+            resource2Price: rocket3BuyResource2Price,
+            resource3Price: rocket3BuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource3Price'])[1])
+        },
+        rocket4Buy: { 
+            element: rocket4BuyDescElement,
+            price: rocket4BuyPrice,
+            resource1Price: rocket4BuyResource1Price,
+            resource2Price: rocket4BuyResource2Price,
+            resource3Price: rocket4BuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[1])
+        }
+    };    
 }
 
 function updateRates() {
