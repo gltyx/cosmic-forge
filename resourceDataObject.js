@@ -535,6 +535,7 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket1Price'
             },
             rocket2: {
                 builtParts: 0,
@@ -543,6 +544,7 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket2Price'
             },
             rocket3: {
                 builtParts: 0,
@@ -551,6 +553,7 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket3Price'
             },
             rocket4: {
                 builtParts: 0,
@@ -559,6 +562,7 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket4Price'
             }
         }
     },

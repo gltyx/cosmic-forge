@@ -35,6 +35,7 @@ export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export let gameState;
 
 let prize = [];
+let rocketsBuilt = [];
 let cachedRenderedTechTree = null;
 let saveName = null;
 let lastSavedTimeStamp = null;
@@ -264,6 +265,7 @@ export function captureGameStatusForSaving(type) {
     gameState.ranOutOfFuelWhenOn = ranOutOfFuelWhenOn;
     gameState.notationType = getNotationType();
     gameState.oneOffPrizesAlreadyClaimedArray = oneOffPrizesAlreadyClaimedArray;
+    gameState.rocketsBuilt = rocketsBuilt;
 
     // Flags
     gameState.flags = {
@@ -311,6 +313,7 @@ export function restoreGameStatus(gameState, type) {
             ranOutOfFuelWhenOn = gameState.ranOutOfFuelWhenOn;
             setNotationType(gameState.notationType);
             oneOffPrizesAlreadyClaimedArray = gameState.oneOffPrizesAlreadyClaimedArray;
+            rocketsBuilt = gameState.rocketsBuilt;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1365,4 +1368,12 @@ export function setNewsTickerSetting(value) {
 
 export function getNewsTickerSetting() {
     return newsTickerSetting;
+}
+
+export function setRocketsBuilt(value) {
+    rocketsBuilt.push(value);
+}
+
+export function getRocketsBuilt() {
+    return rocketsBuilt;
 }

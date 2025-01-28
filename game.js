@@ -1,4 +1,6 @@
 import {
+    setRocketsBuilt,
+    getRocketsBuilt,
     getWeatherEffectOn,
     setWeatherEffectOn,
     getSaveExportCloudFlag,
@@ -74,7 +76,7 @@ import {
     getCompoundSalePreview,
     getCompoundCreatePreview,
     getNotationType,
-    getTechTreeData
+    getTechTreeData,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -85,6 +87,8 @@ import {
     setResourceDataObject,
     getStarSystemWeather,
     setStarSystemWeather,
+    getRocketPartsNeededInTotalPerRocket,
+    getRocketParts
 } from "./resourceDataObject.js";
 
 import { 
@@ -727,7 +731,7 @@ function checkAndIncreasePrices() {
                 const { currentPrice, setPriceTarget, typeOfResourceCompound } = priceIncreaseObject[priceIncrease];
                 if (setPriceTarget.startsWith('science')) {
                     setNewItemPrice(currentPrice, setPriceTarget, null, null, null);
-                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery')) { //add new building types if needed will have a bug here if add any more it will go to the else block
+                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery') || setPriceTarget.startsWith('rocket')) { //add new building types if needed will have a bug here if add any more it will go to the else block
                     if (priceIncrease === "cash") {
                         setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncrease);
                     } else {
@@ -820,6 +824,20 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             if (resource3Price > 0) {
                 setResourceDataObject(newResource3Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource3Price']);
             }
+        } else if (elementName.startsWith('rocket')) {
+            const strippedElementName = elementName.slice(0, -5);
+            if (optionalResource === 'cash') {
+                setResourceDataObject(newCurrencyPrice, 'space', ['upgrades', strippedElementName, 'price']);
+            }        
+            if (resource1Price > 0) {
+                setResourceDataObject(newResource1Price, 'space', ['upgrades', strippedElementName, 'resource1Price']);
+            }
+            if (resource2Price > 0) {
+                setResourceDataObject(newResource2Price, 'space', ['upgrades', strippedElementName, 'resource2Price']);
+            }
+            if (resource3Price > 0) {
+                setResourceDataObject(newResource3Price, 'space', ['upgrades', strippedElementName, 'resource3Price']);
+            }
         } else { //autoBuyer
             const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
             setResourceDataObject(newCurrencyPrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
@@ -905,7 +923,7 @@ function getAllQuantities() {
 
     if (getCurrentOptionPane() === 'space mining') {
         rockets.forEach(rocket => {
-            allQuantities[rocket = getResourceDataObject('space', ['upgrades', rocket, 'builtParts'])];
+            allQuantities[rocket] = getResourceDataObject('space', ['upgrades', rocket, 'builtParts']);
         })
     }
 
@@ -1364,6 +1382,14 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
             const element = document.getElementById(item);
             if (element) {
                 element.textContent = `Quantity: ${quantityAutoBuyer}`;
+            }
+        }
+
+        if (item.startsWith('rocket')) {
+            const quantityRocketBuilding = allQuantities[item];
+            if (quantityRocketBuilding || quantityRocketBuilding === 0) {
+                const rocketPartsCountText = document.getElementById(`${item}PartsCountText`);
+                rocketPartsCountText.innerHTML = `Built: <span id="${item}BuiltPartsQuantity">${quantityRocketBuilding}</span> / <span id="${item}TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket(item)}</span>`;
             }
         }
     }
@@ -2087,6 +2113,34 @@ function checkStatusAndSetTextClasses(element) {
             } else {
                 getElements()[resource + 'Rate'].classList.remove('red-disabled-text');
             }
+        } else if (resource === 'spaceUpgrade') {
+            const dataName = element.dataset.resourceToFuseTo;
+            if (dataName.includes('rocket')) {
+                const builtParts = getResourceDataObject('space', ['upgrades', dataName, 'builtParts']);
+                const totalParts = getResourceDataObject('space', ['upgrades', dataName, 'parts']);
+                if (builtParts === totalParts) {
+                    const builtPartsElement = document.getElementById(`${dataName}BuiltPartsQuantity`);
+                    const totalPartsElement = document.getElementById(`${dataName}TotalPartsQuantity`);
+                    const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
+                    rocketPartBuyButton.classList.add('red-disabled-text');
+                    element.classList.add('green-ready-text');
+                    builtPartsElement.classList.add('green-ready-text');
+                    totalPartsElement.classList.add('green-ready-text');
+                    element.classList.remove('red-disabled-text');
+                    element.textContent = 'Built!';
+                }
+                const rocketsBuiltArray = getRocketsBuilt();
+                for (let i = 1; i <= 4; i++) {
+                    const rocketElement = document.getElementById('rocket' + i);
+                    if (rocketElement) {
+                        if (rocketsBuiltArray.includes('rocket' + i)) {
+                            rocketElement.parentElement.parentElement.classList.remove('invisible');
+                        } else {
+                            rocketElement.parentElement.parentElement.classList.add('invisible');
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -2207,35 +2261,39 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         resourceType = 'scienceUpgrade';
     } else if (resourceCategory === 'energy') { 
         resourceType = 'energy';
+    } else if (resourceCategory === 'space') { 
+        resourceType = 'space';
     } else {
         resourceType = itemType.slice(0, -1);
     }
 
-    let currentResourceOrCompoundQuantity;
+    let currentQuantity;
 
     if (item && item === 'techUnlock') {
-        currentResourceOrCompoundQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
+        currentQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
     } else if (item && item.startsWith('science')) {
-        currentResourceOrCompoundQuantity = getResourceDataObject('research', ['upgrades', item, 'quantity']); 
+        currentQuantity = getResourceDataObject('research', ['upgrades', item, 'quantity']); 
     } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
-        currentResourceOrCompoundQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
+        currentQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
+    } else if ((item && item.startsWith('rocket'))) {
+        currentQuantity = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
     } else if (item && item === 'autoBuyer') {
-        currentResourceOrCompoundQuantity = getResourceDataObject(itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
+        currentQuantity = getResourceDataObject(itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
-        currentResourceOrCompoundQuantity = getResourceDataObject(itemType, [resourceCategory, 'quantity']);
+        currentQuantity = getResourceDataObject(itemType, [resourceCategory, 'quantity']);
     }
 
     if (ABOrTechPurchase) {
         if (ABOrTechPurchase === 'techUnlock') {
-            setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentResourceOrCompoundQuantity, 'research', ['quantity']);
+            setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentQuantity, 'research', ['quantity']);
         } else {
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
+            setResourceDataObject(currentQuantity + incrementAmount, itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
         }
     } else {
         if (resourceType === 'scienceUpgrade') {
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
+            setResourceDataObject(currentQuantity + incrementAmount, 'research', ['upgrades', item, 'quantity']); 
         } else if (resourceType === 'energy') { 
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
+            setResourceDataObject(currentQuantity + incrementAmount, 'buildings', ['energy', 'upgrades', item, 'quantity']);
             if (item.startsWith('power')) {
                 const powerBuildingFuelType = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[0];
                 const powerBuildingFuelBurnRate = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'fuel'])[1];
@@ -2250,16 +2308,24 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             }
         } else if (resourceType === 'resource' || resourceType === 'compound') {
             const storageCapacity = getResourceDataObject(itemType, [resourceCategory, 'storageCapacity']);
-            if (currentResourceOrCompoundQuantity < storageCapacity) {
+            if (currentQuantity < storageCapacity) {
                 getElements()[elementId].classList.remove('green-ready-text');
-                setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, itemType, [resourceCategory, 'quantity']);
+                setResourceDataObject(currentQuantity + incrementAmount, itemType, [resourceCategory, 'quantity']);
             } else {
                 setResourceDataObject(storageCapacity, itemType, [resourceCategory, 'quantity']);
             }
             return;
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
-            setResourceDataObject(currentResourceOrCompoundQuantity + incrementAmount, 'research', ['quantity']);
+            setResourceDataObject(currentQuantity + incrementAmount, 'research', ['quantity']);
+        } else if (resourceType === 'space') {
+            setResourceDataObject(currentQuantity + incrementAmount, 'space', ['upgrades', item, 'builtParts']);
+            const builtParts = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
+            const totalParts = getResourceDataObject('space', ['upgrades', item, 'parts']);
+
+            if (builtParts === totalParts) {
+                setRocketsBuilt(item);
+            }
         }
     }    
 
@@ -2279,6 +2345,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         itemObject = getResourceDataObject('research', ['upgrades', item]);
     } else if (resourceCategory === 'energy') {
         itemObject = getResourceDataObject('buildings', ['energy', 'upgrades', item]);
+    } else if (resourceCategory === 'space') {
+        itemObject = getResourceDataObject('space', ['upgrades', item]);
     } else {
         itemObject = getResourceDataObject(itemType, [resourceCategory]);
     }
@@ -2286,9 +2354,9 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     if (ABOrTechPurchase) {
         amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
         itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
-    } else { //buildings
+    } else { //buildings / space
         amountToDeduct = itemObject.price;
-        if (resourceCategory === 'energy') {
+        if (resourceCategory === 'energy' || resourceCategory === 'space') {
             resource1ToDeduct = itemObject.resource1Price[0];
             resource2ToDeduct = itemObject.resource2Price[0];
             resource3ToDeduct = itemObject.resource3Price[0];
@@ -2307,9 +2375,9 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
 
     let resourcePrices = [[0,''],[0,''],[0,'']];
 
-    if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy') {
+    if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy' || resourceCategory === 'space') {
         itemToDeduct1Name = 'cash';
-        if (resourceCategory === 'energy') {
+        if (resourceCategory === 'energy' || resourceCategory === 'space') {
             itemToDeduct2Name = itemObject.resource1Price[1];
             itemToDeduct3Name = itemObject.resource2Price[1];
             itemToDeduct4Name = itemObject.resource3Price[1];
