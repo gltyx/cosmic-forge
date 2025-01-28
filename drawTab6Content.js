@@ -43,7 +43,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'Rocket Miner 1:',
                     createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                        addRocketPart('rocket1');
+                        addRocketPart('rocket1'); //use gain
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket1', 'cash', false, null, 'spaceMiningPurchase'),
                     createTextElement(
                         `Built: <span id="rocket1BuiltPartsQuantity">${getRocketParts('rocket1')}</span> / <span id="rocket1TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket('rocket1')}</span>`,
