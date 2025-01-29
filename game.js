@@ -1,4 +1,6 @@
 import {
+    getCheckRocketFuellingStatus,
+    setCheckRocketFuellingStatus,
     getRocketsFuellerStartedArray,
     setRocketsFuellerStartedArray,
     setRocketsBuilt,
@@ -308,6 +310,8 @@ export async function gameLoop() {
                 }
             }
         });
+
+        fuelRockets();
 
         if (!getSavedYetSinceOpeningSaveDialogue() && getCurrentOptionPane() === 'saving / loading') {
             saveGame('onSaveScreen');
@@ -2156,7 +2160,7 @@ function checkStatusAndSetTextClasses(element) {
                     }
                 }
             }
-        } else if (resource === 'cash') { //rocket fueller buy button
+        }else if (resource === 'cash') {
             let rocket;
             let currentCash = getResourceDataObject('currency', ['cash']);
             for (let clas of element.classList) {
@@ -2165,21 +2169,23 @@ function checkStatusAndSetTextClasses(element) {
                     break;
                 }
             }
-
+        
             const rocketsFuellerStartedArray = getRocketsFuellerStartedArray();
             const accompanyingLabel = element.parentElement.parentElement.querySelector('.description-container label');
-            if (!rocketsFuellerStartedArray.includes(rocket) && currentCash >= price) {
+        
+            const filteredRockets = rocketsFuellerStartedArray.filter(item => !item.includes('FuelledUp'));
+        
+            if (!filteredRockets.includes(rocket) && currentCash >= price) {
                 element.classList.remove('red-disabled-text');
-            } else if (rocketsFuellerStartedArray.includes(rocket)) {
+            } else if (filteredRockets.includes(rocket)) {
                 element.classList.add('invisible');
-                accompanyingLabel.textContent ='Fuelling...';
+                accompanyingLabel.textContent = 'Fuelling...';
                 accompanyingLabel.classList.remove('red-disabled-text');
                 accompanyingLabel.classList.add('ready-green-text');
-                //console.log('show progress bar instead of button for ' + rocket);
             } else {
                 element.classList.add('red-disabled-text');
             }
-        }
+        }        
     }
 }
 
@@ -2492,8 +2498,28 @@ export function startUpdateTimersAndRates(elementName, action) {
 function startInitialTimers() {
     const resources = getResourceDataObject('resources');
     const compounds = getResourceDataObject('compounds');
+    const rockets = Object.fromEntries(Object.entries(getResourceDataObject('space', ['upgrades'])).filter(([key, value]) => key.includes('rocket')));
     const tiers = [1, 2, 3, 4];
 
+    for (const rocket in rockets) {
+        if (rockets.hasOwnProperty(rocket)) {
+            const timerName = `${rocket}FuelTimer`;
+            
+            if (!timerManager.getTimer(timerName)) {
+                let counter = 0;
+                
+                timerManager.addTimer(timerName, getTimerUpdateInterval(), () => {
+                    counter += getTimerUpdateInterval();
+                    
+                    if (counter >= 1000) {
+                        setCheckRocketFuellingStatus(rocket, true);
+                        counter = 0;
+                    }
+                });
+            }
+        }
+    }
+    
     for (const resource in resources) {
         if (resources.hasOwnProperty(resource)) {
             tiers.forEach(tier => {
@@ -2638,7 +2664,7 @@ function startInitialTimers() {
                 }
             });
         }
-    } 
+    }
 
     timerManager.addTimer('research', getTimerUpdateInterval(), () => {
         const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
@@ -3646,6 +3672,60 @@ export function getBatteryLevel() {
 
     const batteryPercentage = (totalBatteryCharge / totalBatteryCapacity) * 100;
     return Math.min(100, Math.max(0, batteryPercentage));
+}
+
+export function getFuelLevel(rocket) {
+    const totalFuelCapacity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch']);
+    const currentFuelQuantityLoaded = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
+
+    const fuelPercentage = (currentFuelQuantityLoaded / totalFuelCapacity) * 100;
+    return Math.min(100, Math.max(0, fuelPercentage));
+}
+
+export function fuelRockets() {
+    let rocketsToFuel = getRocketsFuellerStartedArray();
+    rocketsToFuel = rocketsToFuel.filter(rocket => !rocket.includes('FuelledUp'));
+
+    rocketsToFuel.forEach(rocket => {
+        const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
+        const fuelRate = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', 'tier1', 'rate']);
+        const fuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
+        const fullLevel = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch']);
+
+        let newFuelQuantity = fuelQuantity;
+
+        if (getCheckRocketFuellingStatus(rocket)) {
+            newFuelQuantity = fuelQuantity + fuelRate * getTimerRateRatio();
+
+            if (newFuelQuantity <= fullLevel) {
+                setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
+            } else {
+                if (rocketLaunchButton) {
+                    rocketLaunchButton.classList.remove('red-disabled-text');
+                    rocketLaunchButton.classList.add('green-ready-text');
+                    rocketLaunchButton.textContent = 'Launch!';
+                }
+            }
+
+            if (getCurrentOptionPane() === rocket) {
+                const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
+                const progressBarPercentage = getFuelLevel(rocket);
+                fuelQuantityProgressBarElement.style.width = `${progressBarPercentage}%`;
+
+                if (newFuelQuantity < fullLevel) {
+                    rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}% Fuelled`;
+                    rocketLaunchButton.classList.add('red-disabled-text');
+                    rocketLaunchButton.classList.remove('green-ready-text');
+                } else {
+                    document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
+                    document.getElementById('fuelDescription').classList.add('green-ready-text');
+                    setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
+                    setRocketsFuellerStartedArray(`${rocket}`, 'remove');
+                }
+            }
+            setCheckRocketFuellingStatus(rocket, false);
+        }
+    });
 }
 
 

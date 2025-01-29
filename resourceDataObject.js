@@ -536,6 +536,8 @@ export let resourceData = {
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket1Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 10000,
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
@@ -550,6 +552,8 @@ export let resourceData = {
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket2Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 12000,
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
@@ -564,6 +568,8 @@ export let resourceData = {
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket3Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 14000,
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
@@ -578,6 +584,8 @@ export let resourceData = {
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket4Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 16000,
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,

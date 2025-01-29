@@ -1098,6 +1098,18 @@ button.red-disabled-text {
     background-color: var(--disabled-text);
     height: 25px;
     width: 100%;
+    z-index: 999;
+ }
+
+ #rocket1FuellingProgressBar,
+ #rocket2FuellingProgressBar,
+ #rocket3FuellingProgressBar,
+ #rocket4FuellingProgressBar
+ {
+    background-color: var(--green-text) !important;
+    height: 25px;
+    width: 0%;
+    z-index: 1000
  }
 
 .news-ticker-container {

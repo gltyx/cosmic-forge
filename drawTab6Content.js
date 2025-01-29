@@ -175,7 +175,7 @@ export function drawTab6Content(heading, optionContentElement) {
             getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1'], () => {
-                setRocketsFuellerStartedArray('rocket1');
+                setRocketsFuellerStartedArray('rocket1', 'add');
                 switchFuelGaugeWhenFuellerBought('rocket1');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
             createTextElement(
@@ -212,7 +212,7 @@ export function drawTab6Content(heading, optionContentElement) {
             getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2'], () => {
-                setRocketsFuellerStartedArray('rocket2');
+                setRocketsFuellerStartedArray('rocket2', 'add');
                 switchFuelGaugeWhenFuellerBought('rocket2');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
             createTextElement(
@@ -249,7 +249,7 @@ export function drawTab6Content(heading, optionContentElement) {
             getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3'], () => {
-                setRocketsFuellerStartedArray('rocket3');
+                setRocketsFuellerStartedArray('rocket3', 'add');
                 switchFuelGaugeWhenFuellerBought('rocket3');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
             createTextElement(
@@ -286,7 +286,7 @@ export function drawTab6Content(heading, optionContentElement) {
             getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4'], () => {
-                setRocketsFuellerStartedArray('rocket4');
+                setRocketsFuellerStartedArray('rocket4', 'add');
                 switchFuelGaugeWhenFuellerBought('rocket4');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
             createTextElement(

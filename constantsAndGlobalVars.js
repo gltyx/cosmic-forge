@@ -100,6 +100,13 @@ let notationType = 'normalCondensed';
 //FLAGS
 // let audioMuted;
 // let languageChangedFlag;
+let checkRocketFuellingStatus = {
+    rocket1: false,
+    rocket2: false,
+    rocket3: false,
+    rocket4: false
+};
+
 let saveExportCloudFlag = false;
 let autoSaveToggle = false;
 let newsTickerSetting = true;
@@ -112,9 +119,6 @@ let trippedStatus = false;
 let savedYetSinceOpeningSaveDialogue = false;
 let techTreeDrawnYet = false;
 let weatherEffectOn = false;
-
-// let autoSaveOn = false;
-// export let pauseAutoSaveCountdown = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1381,15 +1385,25 @@ export function getRocketsBuilt() {
     return rocketsBuilt;
 }
 
-export function setRocketsFuellerStartedArray(value) {
-    rocketsFuellerStartedArray.push(value);
-
-    if (rocketsFuellerStartedArray.includes('')) {
-        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== '');
+export function setRocketsFuellerStartedArray(value, addRemove) {
+    if (addRemove === 'add') {
+        rocketsFuellerStartedArray.push(value);
+    } else if (addRemove === 'remove') {
+        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== value);
     }
+
+    rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== '');
 }
+
 
 export function getRocketsFuellerStartedArray() {
     return rocketsFuellerStartedArray;
 }
 
+export function setCheckRocketFuellingStatus(key, value) {
+    checkRocketFuellingStatus[key] = value;
+}
+
+export function getCheckRocketFuellingStatus(key) {
+    return checkRocketFuellingStatus[key];
+}
