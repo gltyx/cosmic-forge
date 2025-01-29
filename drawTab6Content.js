@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
+import { setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton } from './ui.js';
@@ -38,8 +38,8 @@ export function drawTab6Content(heading, optionContentElement) {
                 );
                 optionContentElement.appendChild(spaceBuildLaunchPadRow);
 
-        const rocket1BuildRow = createOptionRow(
-                    'rocket1BuildRow',
+        const spaceRocket1BuildRow = createOptionRow(
+                    'spaceRocket1BuildRow',
                     null,
                     'Rocket Miner 1:',
                     createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
@@ -68,10 +68,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'spaceMiningPurchase'
                 );
-                optionContentElement.appendChild(rocket1BuildRow);
+                optionContentElement.appendChild(spaceRocket1BuildRow);
         
-                const rocket2BuildRow = createOptionRow(
-                    'rocket2BuildRow',
+                const spaceRocket2BuildRow = createOptionRow(
+                    'spaceRocket2BuildRow',
                     null,
                     'Rocket Miner 2:',
                     createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
@@ -100,10 +100,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'spaceMiningPurchase'
                 );
-                optionContentElement.appendChild(rocket2BuildRow);
+                optionContentElement.appendChild(spaceRocket2BuildRow);
 
-        const rocket3BuildRow = createOptionRow(
-                    'rocket3BuildRow',
+        const spaceRocket3BuildRow = createOptionRow(
+                    'spaceRocket3BuildRow',
                     null,
                     'Rocket Miner 3:',
                     createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
@@ -132,10 +132,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'spaceMiningPurchase'
                 );
-                optionContentElement.appendChild(rocket3BuildRow);
+                optionContentElement.appendChild(spaceRocket3BuildRow);
 
-        const rocket4BuildRow = createOptionRow(
-                    'rocket4BuildRow',
+        const spaceRocket4BuildRow = createOptionRow(
+                    'spaceRocket4BuildRow',
                     null,
                     'Rocket Miner 4:',
                     createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
@@ -164,14 +164,15 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'spaceMiningPurchase'
                 );
-                optionContentElement.appendChild(rocket4BuildRow);           
+                optionContentElement.appendChild(spaceRocket4BuildRow);           
     }
 
     if (heading === 'Rocket 1') {
         let autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'price']);
+        setCheckRocketFuellingStatus('rocket1', true);
 
-        const rocket1AutoBuyerRow = createOptionRow(
-            'rocket1AutoBuyerRow',
+        const spaceRocket1AutoBuyerRow = createOptionRow(
+            'spaceRocket1AutoBuyerRow',
             getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1'], () => {
@@ -183,7 +184,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 'rocket1FuellingProgressBarContainer',
                 ['progress-bar-container', 'invisible']
             ),
-            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket1-launch-button', 'invisible'], () => {
+            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket1-launch-button', 'invisible'], () => {
                 //launchRocket(rocket);
                 console.log('rocket1 launched!');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
@@ -201,14 +202,15 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
-        optionContentElement.appendChild(rocket1AutoBuyerRow);
+        optionContentElement.appendChild(spaceRocket1AutoBuyerRow);
     }
     
     if (heading === 'Rocket 2') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'price']);
-    
-        const rocket2AutoBuyerRow = createOptionRow(
-            'rocket2AutoBuyerRow',
+        setCheckRocketFuellingStatus('rocket2', true);
+
+        const spaceRocket2AutoBuyerRow = createOptionRow(
+            'spaceRocket2AutoBuyerRow',
             getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2'], () => {
@@ -220,7 +222,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 'rocket2FuellingProgressBarContainer',
                 ['progress-bar-container', 'invisible']
             ),
-            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket2-launch-button', 'invisible'], () => {
+            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket2-launch-button', 'invisible'], () => {
                 //launchRocket(rocket);
                 console.log('rocket2 launched!');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
@@ -238,14 +240,15 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
-        optionContentElement.appendChild(rocket2AutoBuyerRow);
+        optionContentElement.appendChild(spaceRocket2AutoBuyerRow);
     }
     
     if (heading === 'Rocket 3') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'price']);
-    
-        const rocket3AutoBuyerRow = createOptionRow(
-            'rocket3AutoBuyerRow',
+        setCheckRocketFuellingStatus('rocket3', true);
+
+        const spaceRocket3AutoBuyerRow = createOptionRow(
+            'spaceRocket3AutoBuyerRow',
             getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3'], () => {
@@ -257,7 +260,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 'rocket3FuellingProgressBarContainer',
                 ['progress-bar-container', 'invisible']
             ),
-            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket3-launch-button', 'invisible'], () => {
+            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket3-launch-button', 'invisible'], () => {
                 //launchRocket(rocket);
                 console.log('rocket3 launched!');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
@@ -275,14 +278,15 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
-        optionContentElement.appendChild(rocket3AutoBuyerRow);
+        optionContentElement.appendChild(spaceRocket3AutoBuyerRow);
     }
     
     if (heading === 'Rocket 4') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'price']);
-    
-        const rocket4AutoBuyerRow = createOptionRow(
-            'rocket4AutoBuyerRow',
+        setCheckRocketFuellingStatus('rocket4', true);
+
+        const spaceRocket4AutoBuyerRow = createOptionRow(
+            'spaceRocket4AutoBuyerRow',
             getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4'], () => {
@@ -294,7 +298,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 'rocket4FuellingProgressBarContainer',
                 ['progress-bar-container', 'invisible']
             ),
-            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket4-launch-button', 'invisible'], () => {
+            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket4-launch-button', 'invisible'], () => {
                 //launchRocket(rocket);
                 console.log('rocket4 launched!');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
@@ -312,6 +316,6 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
-        optionContentElement.appendChild(rocket4AutoBuyerRow);
+        optionContentElement.appendChild(spaceRocket4AutoBuyerRow);
     }    
 }

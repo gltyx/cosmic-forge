@@ -4,7 +4,6 @@ import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
 
-
 //DEBUG
 export let debugFlag = false;
 export let debugOptionFlag = false;
@@ -119,6 +118,7 @@ let trippedStatus = false;
 let savedYetSinceOpeningSaveDialogue = false;
 let techTreeDrawnYet = false;
 let weatherEffectOn = false;
+let weatherEfficiencyApplied = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1406,4 +1406,12 @@ export function setCheckRocketFuellingStatus(key, value) {
 
 export function getCheckRocketFuellingStatus(key) {
     return checkRocketFuellingStatus[key];
+}
+
+export function setWeatherEfficiencyApplied(value) {
+    weatherEfficiencyApplied = value;
+}
+
+export function getWeatherEfficiencyApplied(key) {
+    return weatherEfficiencyApplied;
 }

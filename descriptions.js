@@ -56,10 +56,10 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
 
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
-        'rocket 1': "Here you can control and monitor the mining progress of your mining vessel",
-        'rocket 2': "Here you can control and monitor the mining progress of your mining vessel",
-        'rocket 3': "Here you can control and monitor the mining progress of your mining vessel",
-        'rocket 4': "Here you can control and monitor the mining progress of your mining vessel",
+        'rocket 1': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+        'rocket 2': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+        'rocket 3': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+        'rocket 4': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
         
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
@@ -787,6 +787,27 @@ export function initialiseDescriptions() {
         },
         spaceBuildLaunchPadRow: {
             content1: "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+            content2: "",
+            updateAt: ""
+        },
+        // content1: `Add an Advanced Water Mixer for better Water production`,
+        spaceRocket1AutoBuyerRow: {
+            content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceRocket2AutoBuyerRow: {
+            content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceRocket3AutoBuyerRow: {
+            content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceRocket4AutoBuyerRow: {
+            content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
             content2: "",
             updateAt: ""
         },

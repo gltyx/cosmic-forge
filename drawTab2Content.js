@@ -151,7 +151,7 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant2Row',
             null,
             'Solar Power Plant:',
-            createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+            createButton(`Add (max) ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources')
                 addBuildingPotentialRate('powerPlant2');
                 if (getBuildingTypeOnOff('powerPlant2')) {

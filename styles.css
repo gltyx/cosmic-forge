@@ -1106,9 +1106,9 @@ button.red-disabled-text {
  #rocket3FuellingProgressBar,
  #rocket4FuellingProgressBar
  {
-    background-color: var(--green-text) !important;
-    height: 25px;
+    background-color: var(--text-color);
     width: 0%;
+    height: 25px;
     z-index: 1000
  }
 

@@ -1,4 +1,6 @@
 import {
+    setWeatherEfficiencyApplied,
+    getWeatherEfficiencyApplied,
     getCheckRocketFuellingStatus,
     setCheckRocketFuellingStatus,
     getRocketsFuellerStartedArray,
@@ -2682,6 +2684,11 @@ function startInitialTimers() {
         let currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
         const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
         const energyStorageCapacity = getResourceDataObject('buildings', ['energy', 'storageCapacity']);
+
+        if (!getWeatherEfficiencyApplied()) {
+            setResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']) * getCurrentStarSystemWeatherEfficiency()[1], 'buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+            setWeatherEfficiencyApplied(true);
+        }
         
         if (Math.floor(currentEnergyQuantity) <= energyStorageCapacity) {
             if (getPowerOnOff()) {   
@@ -2689,7 +2696,7 @@ function startInitialTimers() {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate'])
                 }
                 if (getBuildingTypeOnOff('powerPlant2')) {
-                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']) * getCurrentStarSystemWeatherEfficiency()[1];
+                    newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
                 }
                 if (getBuildingTypeOnOff('powerPlant3')) {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
@@ -2714,7 +2721,7 @@ function startInitialTimers() {
                         getElements().energyQuantity.classList.remove('red-disabled-text');
                         getElements().energyQuantity.classList.remove('green-ready-text');
                     }
-                } //maybe add cases for no battery
+                }
 
                 getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} KW / s`;
             } else {
@@ -2766,6 +2773,8 @@ function startInitialTimers() {
 
     function changeWeather() {
         function selectNewWeather() {
+            setResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']) * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']), 'buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+            setWeatherEfficiencyApplied(false);
             const weatherCurrentStarSystemObject = getStarSystemWeather(getCurrentStarSystem());
     
             const weatherTypes = Object.keys(weatherCurrentStarSystemObject);
@@ -2816,9 +2825,9 @@ function startInitialTimers() {
         selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        //const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
-        // const randomDurationInMs = 10000; //For Testing Weather
+        const randomDurationInMs = 10000; //For Testing Weather
 
         const durationInSeconds = randomDurationInMs / 1000;
 
@@ -3188,10 +3197,12 @@ function setEnergyUse() {
     const resourceData = getResourceDataObject('resources');
     const compoundData = getResourceDataObject('compounds');
     const researchData = getResourceDataObject('research', ['upgrades']);
+    const rocketData = Object.fromEntries(Object.entries(getResourceDataObject('space', ['upgrades'])).filter(([key]) => key.includes('rocket')));
 
     let totalEnergyUseResources = 0;
     let totalEnergyUseCompounds = 0;
     let totalEnergyUseResearch = 0;
+    let totalEnergyUseRocketFuellers = 0;
 
     for (const resourceKey in resourceData) { //autobuyer resources upgrades
         const resource = resourceData[resourceKey];
@@ -3237,7 +3248,19 @@ function setEnergyUse() {
         }
     }
 
-    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseCompounds + totalEnergyUseResearch);
+    for (const rocketKey in rocketData) { //rocket fuellers
+        let energyUse = 0;
+        const rocketFueller = rocketData[rocketKey].autoBuyer.tier1;
+
+        if (rocketFueller) {
+            if (getRocketsFuellerStartedArray().includes(rocketKey)) {
+                energyUse = rocketFueller.energyUse;
+            }
+            totalEnergyUseResearch += energyUse;
+        }
+    }
+
+    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseCompounds + totalEnergyUseResearch + totalEnergyUseRocketFuellers);
 }
 
 export function setEnergyCapacity(battery) {
@@ -3416,9 +3439,14 @@ export function addBuildingPotentialRate(powerBuilding) {
     const powerBuildingQuantity = powerBuildingObject['quantity'];
     const powerBuildingEnergyRatePerUnit = powerBuildingObject['rate'];
 
-    const powerBuildingPotentialRate = powerBuildingQuantity * powerBuildingEnergyRatePerUnit;
+    let powerBuildingPotentialRate = powerBuildingQuantity * powerBuildingEnergyRatePerUnit;
+
+    if (powerBuilding === 'powerPlant2') {
+        powerBuildingPotentialRate *= getCurrentStarSystemWeatherEfficiency()[1];
+    }
 
     setResourceDataObject(powerBuildingPotentialRate, 'buildings', ['energy', 'upgrades', powerBuilding, 'purchasedRate']);
+    setResourceDataObject(powerBuildingQuantity * powerBuildingEnergyRatePerUnit, 'buildings', ['energy', 'upgrades', powerBuilding, 'maxPurchasedRate']);
 }
 
 export function toggleBuildingTypeOnOff(building, activeStatus) { //flag building as switched on or off
@@ -3692,15 +3720,25 @@ export function fuelRockets() {
         const fuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
         const fullLevel = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch']);
 
-        let newFuelQuantity = fuelQuantity;
+        if (rocketLaunchButton) {
+            rocketLaunchButton.classList.remove('invisible');
+        }
 
-        if (getCheckRocketFuellingStatus(rocket)) {
+        let newFuelQuantity = fuelQuantity;
+        const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
+
+        if (getCurrentOptionPane() === rocket) {
+            fuelQuantityProgressBarElement.parentElement.classList.remove('invisible');
+        }
+
+        if (getCheckRocketFuellingStatus(rocket) && getPowerOnOff()) {
             newFuelQuantity = fuelQuantity + fuelRate * getTimerRateRatio();
 
             if (newFuelQuantity <= fullLevel) {
                 setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
             } else {
                 if (rocketLaunchButton) {
+                    rocketLaunchButton.classList.remove('invisible');
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.add('green-ready-text');
                     rocketLaunchButton.textContent = 'Launch!';
@@ -3708,22 +3746,29 @@ export function fuelRockets() {
             }
 
             if (getCurrentOptionPane() === rocket) {
-                const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
                 const progressBarPercentage = getFuelLevel(rocket);
                 fuelQuantityProgressBarElement.style.width = `${progressBarPercentage}%`;
 
                 if (newFuelQuantity < fullLevel) {
-                    rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}% Fuelled`;
-                    rocketLaunchButton.classList.add('red-disabled-text');
+                    rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
+                    rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.remove('green-ready-text');
                 } else {
                     document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
                     document.getElementById('fuelDescription').classList.add('green-ready-text');
+                    document.getElementById('fuelDescription').classList.remove('red-disabled-text');
                     setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
                     setRocketsFuellerStartedArray(`${rocket}`, 'remove');
                 }
             }
             setCheckRocketFuellingStatus(rocket, false);
+        } else if (!getPowerOnOff() && newFuelQuantity < fullLevel) {
+            const progressBarPercentage = getFuelLevel(rocket);
+            rocketLaunchButton.classList.add('red-disabled-text');
+            rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
+            document.getElementById('fuelDescription').textContent = 'Requires Power!';
+            document.getElementById('fuelDescription').classList.remove('green-ready-text');
+            document.getElementById('fuelDescription').classList.add('red-disabled-text');
         }
     });
 }

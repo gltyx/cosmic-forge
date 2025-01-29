@@ -48,10 +48,13 @@ import {
     getBuildingTypeOnOff,
     getNewsTickerSetting,
     getPowerOnOff,
-    getRocketsFuellerStartedArray
+    getRocketsFuellerStartedArray,
+    getCurrentStarSystemWeatherEfficiency,
+    getCurrentStarSystem
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
+    getStarSystemDataObject,
     setAutoBuyerTierLevel,
     setResourceDataObject,
 } from "./resourceDataObject.js";
@@ -897,7 +900,7 @@ export function getTimeInStatCell() {
     }
 }
 
-function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
+function drawStackedBarChart(canvasId, generationValues, consumptionValues, solarPlantMaxPurchasedRate) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
 
@@ -913,12 +916,30 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const axisPadding = 50;
     const maxBarHeight = height - axisPadding;
 
-    const maxValue = Math.max(
-        ...generationValues,
-        ...consumptionValues,
-        generationValues.reduce((a, b) => a + b, 0),
-        consumptionValues.reduce((a, b) => a + b, 0)
-    );
+    let maxValue;
+
+    if (powerPlant2Status) { 
+        const difference = solarPlantMaxPurchasedRate - generationValues[1];
+    
+        const adjustedGenerationValues = [...generationValues];
+        if (difference > 0) {
+            adjustedGenerationValues[1] = adjustedGenerationValues[1] + difference;
+        }
+    
+        maxValue = Math.max(
+            ...adjustedGenerationValues,
+            ...consumptionValues,
+            adjustedGenerationValues.reduce((a, b) => a + b, 0),
+            consumptionValues.reduce((a, b) => a + b, 0)
+        );
+    } else {
+        maxValue = Math.max(
+            ...generationValues,
+            ...consumptionValues,
+            generationValues.reduce((a, b) => a + b, 0),
+            consumptionValues.reduce((a, b) => a + b, 0)
+        );
+    }
 
     const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
     const bgColor = getComputedStyle(canvas).getPropertyValue('--bg-color').trim();
@@ -942,13 +963,13 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
     const sortedGenerationValues = generationData.map(data => data.value);
     const sortedGenerationStatuses = generationData.map(data => data.status);
 
-    function drawBar(x, values, colors, status, powerOn, barType) {
+    function drawBar(x, values, colors, status, powerOn, barType, solarMaxPurchasedRate) {
         const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
         let currentY = height - 11;
     
         values.forEach((value, index) => {
             const barHeight = (value / maxValue) * maxBarHeight;
-
+    
             if (barType === 'consumption' && !powerOn) {
                 ctx.fillStyle = bgColor;
                 ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
@@ -973,19 +994,55 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues) {
                 }
             }
     
+            // Move the currentY position up
             currentY -= barHeight;
         });
-    }
-    
 
+        if (barType === 'generation') {
+            const powerPlant2Index = generationData.findIndex(d => d.originalIndex === 1);
+            if (powerPlant2Index !== -1 && getBuildingTypeOnOff('powerPlant2')) {
+                const powerPlant2Value = values[powerPlant2Index];
+                const solarExtra = Math.max(0, solarMaxPurchasedRate - powerPlant2Value);
+        
+                if (solarExtra > 0) {
+                    const solarExtraHeight = (solarExtra / maxValue) * maxBarHeight;
+
+                    ctx.save();
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = 'orange';
+                    ctx.lineWidth = 4;
+                    ctx.strokeRect(x, currentY - solarExtraHeight, barWidth, solarExtraHeight);
+                    ctx.restore();
+
+                    ctx.font = '60px Arial';
+                    ctx.fillStyle = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
+                    const symbol = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[1];
+                    const textWidth = ctx.measureText(symbol).width;
+
+                    const centerX = x + (barWidth / 2) - (textWidth / 2);
+                    const centerY = currentY - solarExtraHeight + 50;
+        
+                    ctx.fillText(symbol, centerX, centerY);
+                    
+                    currentY -= solarExtraHeight;
+                }
+            }
+        }        
+    }    
+    
     const barWidth = width * 0.3;
     const gap = 10;
 
     const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
     const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
 
-    drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation');
-    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true], getPowerOnOff(), 'consumption');
+    if (generationData.length > 0 && generationData[0].originalIndex === 1) {
+        drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation', solarPlantMaxPurchasedRate);
+    } else {
+        drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation', solarPlantMaxPurchasedRate);
+    }
+    
+    drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true], getPowerOnOff(), 'consumption', solarPlantMaxPurchasedRate);
 
     ctx.beginPath();
     ctx.moveTo(0, height - 10);
@@ -1022,13 +1079,14 @@ export function updateDynamicColumns() {
     if (!document.getElementById('energyConsumptionStats').classList.contains('invisible')) {
         const powerPlant1PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate']);
         const powerPlant2PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+        const solarPlantMaxPurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'maxPurchasedRate']) * getTimerRateRatio();
         const powerPlant3PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate']);
 
         const powerConsumption = getResourceDataObject('buildings', ['energy', 'consumption']);
         
         const generationValues = [powerPlant1PurchasedRate * getTimerRateRatio(), powerPlant2PurchasedRate * getTimerRateRatio(), powerPlant3PurchasedRate * getTimerRateRatio()];
         const consumptionValues = [powerConsumption * getTimerRateRatio()];
-        drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues);
+        drawStackedBarChart('powerGenerationConsumptionChart', generationValues, consumptionValues, solarPlantMaxPurchasedRate);
     }
 
     if (getCurrentOptionPane() !== 'tech tree') {

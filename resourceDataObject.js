@@ -461,6 +461,7 @@ export let resourceData = {
                     setPrice: 'powerPlant1Price',
                     fuel: ['carbon', 0.03, 'resources'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: false,
                 },
                 powerPlant2: {
@@ -474,6 +475,7 @@ export let resourceData = {
                     setPrice: 'powerPlant2Price',
                     fuel: ['solar', 0, 'resources'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: true,
                 },
                 powerPlant3: {
@@ -487,6 +489,7 @@ export let resourceData = {
                     setPrice: 'powerPlant3Price',
                     fuel: ['diesel', 0.01, 'compounds'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: false,
                 },
                 battery1: {
@@ -541,7 +544,7 @@ export let resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket1', place: 'rocket1Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket1AB1Price', energyUse: 0.8 },
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket1', place: 'rocket1Autobuyer1Row', price: 5000, rate: 0.02, quantity: 0, setPrice: 'rocket1AB1Price', energyUse: 0.7 },
                 },
             },
             rocket2: {
@@ -557,7 +560,7 @@ export let resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket2', place: 'rocket2Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket2AB1Price', energyUse: 0.8 },
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket2', place: 'rocket2Autobuyer1Row', price: 6000, rate: 0.02, quantity: 0, setPrice: 'rocket2AB1Price', energyUse: 0.8 },
                 },
             },
             rocket3: {
@@ -573,7 +576,7 @@ export let resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket3', place: 'rocket3Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket3AB1Price', energyUse: 0.8 },
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket3', place: 'rocket3Autobuyer1Row', price: 7000, rate: 0.02, quantity: 0, setPrice: 'rocket3AB1Price', energyUse: 0.9 },
                 },
             },
             rocket4: {
@@ -589,7 +592,7 @@ export let resourceData = {
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
-                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 0.8 },
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 8000, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 1.0 },
                 },
             }
         }
@@ -674,10 +677,10 @@ export let starSystems = {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',
         weather: {
-            sunny: [30, '☀', 1],
-            cloudy: [47, '☁', 0.6],
-            rain: [20, '☂', 0.4],
-            volcano: [3, '⛰', 0.05]
+            sunny: [30, '☀', 1, 'white'],
+            cloudy: [47, '☁', 0.6, 'orange'],
+            rain: [20, '☂', 0.4, 'orange'],
+            volcano: [3, '⛰', 0.05, 'red']
         }
     }
 };
