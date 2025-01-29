@@ -333,7 +333,7 @@ export function createOptionRow(
         }
     }
 
-    if (getCurrentOptionPane() === 'space mining') {
+    if (getCurrentOptionPane() === 'launch pad') {
         if (objectSectionArgument2.startsWith('rocket') && !getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
             wrapper.classList.add('invisible');
         } else if (objectSectionArgument2.startsWith('rocket')) {
@@ -1442,9 +1442,9 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab6', 'space mining');
-            setCurrentOptionPane('space mining');
-            updateContent('Space Mining', 'tab6', 'content');
+            setLastScreenOpenRegister('tab6', 'launch pad');
+            setCurrentOptionPane('launch pad');
+            updateContent('Launch Pad', 'tab6', 'content');
         });
     });
 

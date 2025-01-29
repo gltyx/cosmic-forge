@@ -25,7 +25,7 @@ export function initialiseDescriptions() {
         'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
         'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
         'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
-        'Space Mining': 'Here you can set about mining asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
+        'Space Mining': 'Here you can build vessels to mine asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
         tab7intro: '',
         'Settings': 'Change the game settings to your liking.',
         
@@ -54,7 +54,12 @@ export function initialiseDescriptions() {
         titanium: "Titanium is a strong, lightweight, and corrosion-resistant metal, neede for advanced construction.",
 
         'star map': "This is a map of the known galaxy.",
-        'space mining': "Mine asteroids for valuable Antimatter.",
+
+        'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
+        'rocket 1': "Here you can control and monitor the mining progress of your mining vessel",
+        'rocket 2': "Here you can control and monitor the mining progress of your mining vessel",
+        'rocket 3': "Here you can control and monitor the mining progress of your mining vessel",
+        'rocket 4': "Here you can control and monitor the mining progress of your mining vessel",
         
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
@@ -716,8 +721,8 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techRocketCompositesRow: {
-            content1: "Unlock Rocket Composites to build rocket components and unlock the Space Mining tab.",
-            content2: "Unlock Rocket Composites to build rocket components to mine in space.<br><br><span class='green-ready-text'>Unlock Space Mining Tab</span>",
+            content1: "Unlock Rocket Composites to build rocket components and unlock the Launch Pad tab.",
+            content2: "Unlock Rocket Composites to build rocket components to mine in space.<br><br><span class='green-ready-text'>Unlock Launch Pad Tab</span>",
             updateAt: ""
         },
         techAdvancedFuelsRow: {

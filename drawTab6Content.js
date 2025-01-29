@@ -1,11 +1,11 @@
-import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff } from './constantsAndGlobalVars.js';
+import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
-    if (heading === 'Space Mining') {
+    if (heading === 'Launch Pad') {
         const spaceBuildLaunchPadRow = createOptionRow(
                     'spaceBuildLaunchPadRow',
                     null,
@@ -166,4 +166,128 @@ export function drawTab6Content(heading, optionContentElement) {
                 );
                 optionContentElement.appendChild(rocket4BuildRow);           
     }
+
+    if (heading === 'Rocket 1') {
+        let autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'price']);
+
+        const rocket1AutoBuyerRow = createOptionRow(
+            'rocket1AutoBuyerRow',
+            getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Fuel:',
+            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1'], () => {
+                setRocketsFuellerStartedArray('rocket1');
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
+            // progress bar like battery for fuelling
+            // button to launch rocket when fuelled
+            null, //to replace with progress bar for fuelling
+            null, //to replace with launch button
+            null,
+            null,
+            `${getCurrencySymbol()}${autobuyer1Price}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'cash',
+            'tier1',
+            false,
+            null,
+            null,
+            'rocketFuel'
+        );
+        optionContentElement.appendChild(rocket1AutoBuyerRow);
+    }
+    
+    if (heading === 'Rocket 2') {
+        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'price']);
+    
+        const rocket2AutoBuyerRow = createOptionRow(
+            'rocket2AutoBuyerRow',
+            getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Fuel:',
+            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2'], () => {
+                setRocketsFuellerStartedArray('rocket2');
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
+            // progress bar like battery for fuelling
+            // button to launch rocket when fuelled
+            null, //to replace with progress bar for fuelling
+            null, //to replace with launch button
+            null,
+            null,
+            `${getCurrencySymbol()}${autobuyer1Price}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'cash',
+            'tier1',
+            false,
+            null,
+            null,
+            'rocketFuel'
+        );
+        optionContentElement.appendChild(rocket2AutoBuyerRow);
+    }
+    
+    if (heading === 'Rocket 3') {
+        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'price']);
+    
+        const rocket3AutoBuyerRow = createOptionRow(
+            'rocket3AutoBuyerRow',
+            getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Fuel:',
+            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3'], () => {
+                setRocketsFuellerStartedArray('rocket3');
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
+            // progress bar like battery for fuelling
+            // button to launch rocket when fuelled
+            null, //to replace with progress bar for fuelling
+            null, //to replace with launch button
+            null,
+            null,
+            `${getCurrencySymbol()}${autobuyer1Price}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'cash',
+            'tier1',
+            false,
+            null,
+            null,
+            'rocketFuel'
+        );
+        optionContentElement.appendChild(rocket3AutoBuyerRow);
+    }
+    
+    if (heading === 'Rocket 4') {
+        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'price']);
+    
+        const rocket4AutoBuyerRow = createOptionRow(
+            'rocket4AutoBuyerRow',
+            getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'nameUpgrade']),
+            'Fuel:',
+            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4'], () => {
+                setRocketsFuellerStartedArray('rocket4');
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
+            // progress bar like battery for fuelling
+            // button to launch rocket when fuelled
+            null, //to replace with progress bar for fuelling
+            null, //to replace with launch button
+            null,
+            null,
+            `${getCurrencySymbol()}${autobuyer1Price}`,
+            '',
+            'upgradeCheck',
+            'autoBuyer',
+            null,
+            'cash',
+            'tier1',
+            false,
+            null,
+            null,
+            'rocketFuel'
+        );
+        optionContentElement.appendChild(rocket4AutoBuyerRow);
+    }    
 }

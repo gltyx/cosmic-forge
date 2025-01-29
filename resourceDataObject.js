@@ -535,7 +535,12 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
-                setPrice: 'rocket1Price'
+                setPrice: 'rocket1Price',
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket1', place: 'rocket1Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket1AB1Price', energyUse: 0.8 },
+                },
             },
             rocket2: {
                 builtParts: 0,
@@ -544,7 +549,12 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
-                setPrice: 'rocket2Price'
+                setPrice: 'rocket2Price',
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket2', place: 'rocket2Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket2AB1Price', energyUse: 0.8 },
+                },
             },
             rocket3: {
                 builtParts: 0,
@@ -553,7 +563,12 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
-                setPrice: 'rocket3Price'
+                setPrice: 'rocket3Price',
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket3', place: 'rocket3Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket3AB1Price', energyUse: 0.8 },
+                },
             },
             rocket4: {
                 builtParts: 0,
@@ -562,7 +577,12 @@ export let resourceData = {
                 resource1Price: [1000, 'glass', 'compounds'],
                 resource2Price: [1000, 'titanium', 'compounds'],
                 resource3Price: [3000, 'steel', 'compounds'],
-                setPrice: 'rocket4Price'
+                setPrice: 'rocket4Price',
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 500, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 0.8 },
+                },
             }
         }
     },

@@ -1,4 +1,6 @@
 import {
+    getRocketsFuellerStartedArray,
+    setRocketsFuellerStartedArray,
     setRocketsBuilt,
     getRocketsBuilt,
     getWeatherEffectOn,
@@ -921,7 +923,7 @@ function getAllQuantities() {
         allQuantities[`${compoundName}AB4Quantity`] = getResourceDataObject('compounds', [compoundName, 'upgrades', 'autoBuyer', 'tier4', 'quantity']);
     });
 
-    if (getCurrentOptionPane() === 'space mining') {
+    if (getCurrentOptionPane() === 'launch pad') {
         rockets.forEach(rocket => {
             allQuantities[rocket] = getResourceDataObject('space', ['upgrades', rocket, 'builtParts']);
         })
@@ -1017,7 +1019,7 @@ function getAllElements(resourcesArray, compoundsArray) {
 
     allElements.launchPad = null;
 
-    if (getCurrentOptionPane() === 'space mining') {
+    if (getCurrentOptionPane() === 'launch pad') {
         allElements.rocket1BuiltParts = document.getElementById('rocket1BuiltPartsQuantity');
         allElements.rocket1TotalParts = document.getElementById('rocket1TotalPartsQuantity');
     
@@ -1945,10 +1947,23 @@ function checkStatusAndSetTextClasses(element) {
         let mainKey;
 
         if (type === 'autoBuyer') {
-            mainKey = 'resources';
-            const autoBuyerTier = element.dataset.autoBuyerTier;
-            if (autoBuyerTier === 'tier0') return;
-            price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+            if (resource === 'cash') { //rocketFuelBuyer
+                const autoBuyerTier = element.dataset.autoBuyerTier;
+                let rocket;
+                for (let clas of element.classList) {
+                    if (clas.includes("rocket")) {
+                        rocket = clas;
+                        break;
+                    }
+                }
+                price = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', autoBuyerTier, 'price']);
+            } else {
+                mainKey = 'resources';
+                const autoBuyerTier = element.dataset.autoBuyerTier;
+                if (autoBuyerTier === 'tier0') return;
+                price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+            }
+
         } else if (type === 'scienceUpgrade') {
             mainKey = 'research';
             price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
@@ -2107,7 +2122,7 @@ function checkStatusAndSetTextClasses(element) {
             return;
         }      
 
-        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade') {
+        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash') {
             if (getElements()[resource + 'Rate'].textContent.includes('-')) {
                 getElements()[resource + 'Rate'].classList.add('red-disabled-text');
             } else {
@@ -2140,6 +2155,29 @@ function checkStatusAndSetTextClasses(element) {
                         }
                     }
                 }
+            }
+        } else if (resource === 'cash') { //rocket fueller buy button
+            let rocket;
+            let currentCash = getResourceDataObject('currency', ['cash']);
+            for (let clas of element.classList) {
+                if (clas.includes("rocket")) {
+                    rocket = clas;
+                    break;
+                }
+            }
+
+            const rocketsFuellerStartedArray = getRocketsFuellerStartedArray();
+            const accompanyingLabel = element.parentElement.parentElement.querySelector('.description-container label');
+            if (!rocketsFuellerStartedArray.includes(rocket) && currentCash >= price) {
+                element.classList.remove('red-disabled-text');
+            } else if (rocketsFuellerStartedArray.includes(rocket)) {
+                element.classList.add('invisible');
+                accompanyingLabel.textContent ='Fuelling...';
+                accompanyingLabel.classList.remove('red-disabled-text');
+                accompanyingLabel.classList.add('ready-green-text');
+                //console.log('show progress bar instead of button for ' + rocket);
+            } else {
+                element.classList.add('red-disabled-text');
             }
         }
     }
