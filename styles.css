@@ -983,7 +983,8 @@ body {
 #rocket1PartsCountText,
 #rocket2PartsCountText,
 #rocket3PartsCountText,
-#rocket4PartsCountText
+#rocket4PartsCountText,
+[class*="-launch-button"]
 {
     margin-left: 30px;
 }
@@ -1069,7 +1070,7 @@ button.red-disabled-text {
     color: var(--disabled-text);
 }
 
-.battery-indicator-bar-container {
+.progress-bar-container {
     width: 100%;
     display: flex;
     align-items: center;
@@ -1088,6 +1089,16 @@ button.red-disabled-text {
 #indicatorSymbol {
     margin-left: 5px;
 }
+
+#rocket1FuellingProgressBarContainer,
+#rocket2FuellingProgressBarContainer,
+#rocket3FuellingProgressBarContainer,
+#rocket4FuellingProgressBarContainer
+ {
+    background-color: var(--disabled-text);
+    height: 25px;
+    width: 100%;
+ }
 
 .news-ticker-container {
     width: 100%;

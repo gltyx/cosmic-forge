@@ -47,7 +47,8 @@ import {
     getTimerRateRatio,
     getBuildingTypeOnOff,
     getNewsTickerSetting,
-    getPowerOnOff
+    getPowerOnOff,
+    getRocketsFuellerStartedArray
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -2011,6 +2012,17 @@ export function toggleGameFullScreen() {
         } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
         }
+    }
+}
+
+export function switchFuelGaugeWhenFuellerBought(rocket) {
+    const fuellerBought = getRocketsFuellerStartedArray().includes(rocket);
+
+    if (fuellerBought && getCurrentOptionPane() === rocket) {
+        const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
+        const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check'); //adding rocket launch check button
+        progressFuelingElement.classList.remove('invisible');
+        rocketLaunchButton.classList.remove('invisible');
     }
 }
 

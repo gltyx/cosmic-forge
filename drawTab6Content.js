@@ -1,7 +1,7 @@
 import { getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
 import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createTextElement, createOptionRow, createButton } from './ui.js';
+import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
@@ -176,11 +176,17 @@ export function drawTab6Content(heading, optionContentElement) {
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1'], () => {
                 setRocketsFuellerStartedArray('rocket1');
+                switchFuelGaugeWhenFuellerBought('rocket1');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            // progress bar like battery for fuelling
-            // button to launch rocket when fuelled
-            null, //to replace with progress bar for fuelling
-            null, //to replace with launch button
+            createTextElement(
+                `<div id="rocket1FuellingProgressBar">`,
+                'rocket1FuellingProgressBarContainer',
+                ['progress-bar-container', 'invisible']
+            ),
+            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket1-launch-button', 'invisible'], () => {
+                //launchRocket(rocket);
+                console.log('rocket1 launched!');
+            }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
             `${getCurrencySymbol()}${autobuyer1Price}`,
@@ -207,11 +213,17 @@ export function drawTab6Content(heading, optionContentElement) {
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2'], () => {
                 setRocketsFuellerStartedArray('rocket2');
+                switchFuelGaugeWhenFuellerBought('rocket2');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            // progress bar like battery for fuelling
-            // button to launch rocket when fuelled
-            null, //to replace with progress bar for fuelling
-            null, //to replace with launch button
+            createTextElement(
+                `<div id="rocket2FuellingProgressBar">`,
+                'rocket2FuellingProgressBarContainer',
+                ['progress-bar-container', 'invisible']
+            ),
+            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket2-launch-button', 'invisible'], () => {
+                //launchRocket(rocket);
+                console.log('rocket2 launched!');
+            }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
             `${getCurrencySymbol()}${autobuyer1Price}`,
@@ -238,11 +250,17 @@ export function drawTab6Content(heading, optionContentElement) {
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3'], () => {
                 setRocketsFuellerStartedArray('rocket3');
+                switchFuelGaugeWhenFuellerBought('rocket3');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            // progress bar like battery for fuelling
-            // button to launch rocket when fuelled
-            null, //to replace with progress bar for fuelling
-            null, //to replace with launch button
+            createTextElement(
+                `<div id="rocket3FuellingProgressBar">`,
+                'rocket3FuellingProgressBarContainer',
+                ['progress-bar-container', 'invisible']
+            ),
+            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket3-launch-button', 'invisible'], () => {
+                //launchRocket(rocket);
+                console.log('rocket3 launched!');
+            }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
             `${getCurrencySymbol()}${autobuyer1Price}`,
@@ -269,11 +287,17 @@ export function drawTab6Content(heading, optionContentElement) {
             'Fuel:',
             createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4'], () => {
                 setRocketsFuellerStartedArray('rocket4');
+                switchFuelGaugeWhenFuellerBought('rocket4');
             }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            // progress bar like battery for fuelling
-            // button to launch rocket when fuelled
-            null, //to replace with progress bar for fuelling
-            null, //to replace with launch button
+            createTextElement(
+                `<div id="rocket1FuellingProgressBar">`,
+                'rocket4FuellingProgressBarContainer',
+                ['progress-bar-container', 'invisible']
+            ),
+            createButton(`Launch!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket4-launch-button', 'invisible'], () => {
+                //launchRocket(rocket);
+                console.log('rocket4 launched!');
+            }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
             `${getCurrencySymbol()}${autobuyer1Price}`,
