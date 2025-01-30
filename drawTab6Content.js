@@ -12,10 +12,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'Launch Pad:',
                     createButton(`Build Launch Pad`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'launchPad'], () => {
                         buildLaunchPad();
-                        document.getElementById('rocket1BuildRow').classList.remove('invisible');
-                        document.getElementById('rocket2BuildRow').classList.remove('invisible');
-                        document.getElementById('rocket3BuildRow').classList.remove('invisible');
-                        document.getElementById('rocket4BuildRow').classList.remove('invisible');
+                        document.getElementById('spaceRocket1BuildRow').classList.remove('invisible');
+                        document.getElementById('spaceRocket2BuildRow').classList.remove('invisible');
+                        document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');
+                        document.getElementById('spaceRocket4BuildRow').classList.remove('invisible');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'launchPad', 'cash', false, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'launchPadAlreadyBoughtText', ['green-ready-text', 'invisible']),
                     null,

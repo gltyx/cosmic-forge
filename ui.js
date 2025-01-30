@@ -76,7 +76,8 @@ import {
     startGame,
     offlineGains,
     startNewsTickerTimer,
-    getBatteryLevel
+    getBatteryLevel,
+    toggleAllPower
 } from './game.js';
 
 // import {
@@ -178,6 +179,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     //handleLanguageChange(getLanguageSelected()); //if we are using localise later on
 
     initializeTabEventListeners();
+
+    const powerAllButton = document.getElementById('activateGridButton');
+    powerAllButton.addEventListener('click', () => {
+        toggleAllPower();
+    });
+    
     
     window.addEventListener('resize', () => {
         if (getCurrentOptionPane()) {
@@ -1009,7 +1016,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
 
                     ctx.save();
                     ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = 'orange';
+                    ctx.strokeStyle = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
                     ctx.lineWidth = 4;
                     ctx.strokeRect(x, currentY - solarExtraHeight, barWidth, solarExtraHeight);
                     ctx.restore();

@@ -969,6 +969,22 @@ body {
     cursor: pointer; /* Changes the cursor to a pointer for these elements */
 }
 
+.power-on-fill-state {
+    background-color: var(--text-color) !important;
+    color: var(--ready-text);
+    border-color: var(--ready-text) !important;
+}
+
+#activateGridButton {
+    margin-left: 10px;
+    margin-right: 10px;
+    border: solid 2px var(--text-color);
+}
+
+.activate-grid-disabled-border {
+    border: solid 2px var(--disabled-text) !important;
+}
+
 .sell,
 .create,
 .fuse,

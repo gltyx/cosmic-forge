@@ -256,6 +256,7 @@ export async function gameLoop() {
             checkStatusAndSetTextClasses(elementItemCheck);
         });
 
+        handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
 
         monitorTechTree();
@@ -3772,6 +3773,67 @@ export function fuelRockets() {
         }
     });
 }
+
+export function toggleAllPower() {
+    const quantityPowerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+    const quantityPowerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
+    const quantityPowerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
+
+    if (!getPowerOnOff()) {
+        if (quantityPowerPlant1 > 0) {
+            toggleBuildingTypeOnOff('powerPlant1', true);
+            startUpdateTimersAndRates('powerPlant1', 'toggle');
+        }
+        if (quantityPowerPlant2 > 0) {
+            toggleBuildingTypeOnOff('powerPlant2', true);
+            startUpdateTimersAndRates('powerPlant2', 'toggle');
+        }
+        if (quantityPowerPlant3 > 0) {
+            toggleBuildingTypeOnOff('powerPlant3', true);
+            startUpdateTimersAndRates('powerPlant3', 'toggle');
+        }
+
+        setPowerOnOff(true);
+    } else {
+        toggleBuildingTypeOnOff('powerPlant1', false);
+        startUpdateTimersAndRates('powerPlant1', 'toggle');
+
+        toggleBuildingTypeOnOff('powerPlant2', false);
+        startUpdateTimersAndRates('powerPlant2', 'toggle');
+
+        toggleBuildingTypeOnOff('powerPlant3', false);
+        startUpdateTimersAndRates('powerPlant3', 'toggle');
+
+        setPowerOnOff(false);
+    }
+}
+
+function handlePowerAllButtonState() {
+    const quantityPowerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+    const quantityPowerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+    const quantityPowerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+
+    const powerColumnElement = document.getElementById('energyConsumptionStats');
+    const powerAllButton = document.getElementById('activateGridButton');
+
+    if (!powerColumnElement.classList.contains('invisible')) {
+        powerAllButton.classList.remove('red-disabled-text');
+        powerAllButton.classList.remove('activate-grid-disabled-border');
+        if (getPowerOnOff()) {
+            powerAllButton.textContent = 'Power Off';
+            powerAllButton.classList.add('power-on-fill-state');
+        } else {
+            powerAllButton.textContent = 'Power On';
+            powerAllButton.classList.remove('power-on-fill-state');
+        }
+
+        if (quantityPowerPlant1 === 0 && quantityPowerPlant2 === 0 && quantityPowerPlant3 === 0) {
+            powerAllButton.classList.add('red-disabled-text');
+            powerAllButton.classList.add('activate-grid-disabled-border');
+        }
+    }
+}
+
 
 
 //===============================================================================================================
