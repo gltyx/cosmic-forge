@@ -493,7 +493,6 @@ export let resourceData = {
                     weatherAffects: false,
                 },
                 battery1: {
-                    revealedBy: 'sodiumIonPowerStorage',
                     price: 5000,
                     resource1Price: [500, 'sodium', 'resources'],
                     resource2Price: [1000, 'carbon', 'resources'],
@@ -503,7 +502,6 @@ export let resourceData = {
                     setPrice: 'battery1Price'
                 },
                 battery2: {
-                    revealedBy: 'sodiumIonPowerStorage',
                     price: 50000,
                     resource1Price: [0, '', ''],
                     resource2Price: [0, '', ''],
@@ -513,7 +511,6 @@ export let resourceData = {
                     setPrice: 'battery2Price'
                 },
                 battery3: {
-                    revealedBy: 'sodiumIonPowerStorage',
                     price: 500000,
                     resource1Price: [0, '', ''],
                     resource2Price: [0, '', ''],
