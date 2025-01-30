@@ -404,7 +404,39 @@ export let resourceData = {
             createsFromRatio2: 10,
             createsFromRatio3: 0,
             createsFromRatio4: 0
-        },                   
+        },  
+        titanium: {
+            nameResource: 'Titanium',
+            screenName: 'titanium',
+            saleValue: 12,
+            salePreviewElement: 'sellTitaniumDescription',
+            createPreviewElement: 'createTitaniumDescription',
+            quantity: 0,
+            rate: 0,
+            usedForFuelPerSec: 0,
+            storageCapacity: 50,
+            currentSecondaryIncreasePrice: 15,
+            upgrades: {
+                autoBuyer: {
+                    currentTierLevel: 0,
+                    normalProgression: true,
+                    tier1: { nameUpgrade: 'Basic Titanium Smelter', screen: 'titanium', place: 'titaniumAutoBuyer1Row', price: 105000, rate: 0.01, quantity: 0, setPrice: 'titaniumAB1Price', energyUse: 0 },
+                    tier2: { nameUpgrade: 'Small Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer2Row', price: 850000, rate: 0.08, quantity: 0, setPrice: 'titaniumAB2Price', energyUse: 0.4 },
+                    tier3: { nameUpgrade: 'Medium Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer3Row', price: 4800000, rate: 0.5, quantity: 0, setPrice: 'titaniumAB3Price', energyUse: 1.3 },
+                    tier4: { nameUpgrade: 'Large Titanium Factory', screen: 'titanium', place: 'titaniumAutoBuyer4Row', price: 1880000, rate: 2, quantity: 0, setPrice: 'titaniumAB4Price', energyUse: 5.1 }
+                },
+            },
+            revealedBy: 'neutronCapture',
+            canCreateTech: 'compounds',
+            createsFrom1: ['iron', 'resources'],
+            createsFrom2: ['sodium', 'resources'],
+            createsFrom3: ['neon', 'resources'],
+            createsFrom4: '',
+            createsFromRatio1: 22,
+            createsFromRatio2: 18,
+            createsFromRatio3: 40,
+            createsFromRatio4: 0
+        }                         
     },
     buildings: {
         energy: {
@@ -429,6 +461,7 @@ export let resourceData = {
                     setPrice: 'powerPlant1Price',
                     fuel: ['carbon', 0.03, 'resources'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: false,
                 },
                 powerPlant2: {
@@ -442,6 +475,7 @@ export let resourceData = {
                     setPrice: 'powerPlant2Price',
                     fuel: ['solar', 0, 'resources'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: true,
                 },
                 powerPlant3: {
@@ -455,9 +489,11 @@ export let resourceData = {
                     setPrice: 'powerPlant3Price',
                     fuel: ['diesel', 0.01, 'compounds'],
                     purchasedRate: 0,
+                    maxPurchasedRate: 0,
                     weatherAffects: false,
                 },
                 battery1: {
+                    revealedBy: 'sodiumIonPowerStorage',
                     price: 5000,
                     resource1Price: [500, 'sodium', 'resources'],
                     resource2Price: [1000, 'carbon', 'resources'],
@@ -467,6 +503,7 @@ export let resourceData = {
                     setPrice: 'battery1Price'
                 },
                 battery2: {
+                    revealedBy: 'sodiumIonPowerStorage',
                     price: 50000,
                     resource1Price: [0, '', ''],
                     resource2Price: [0, '', ''],
@@ -476,6 +513,7 @@ export let resourceData = {
                     setPrice: 'battery2Price'
                 },
                 battery3: {
+                    revealedBy: 'sodiumIonPowerStorage',
                     price: 500000,
                     resource1Price: [0, '', ''],
                     resource2Price: [0, '', ''],
@@ -484,6 +522,81 @@ export let resourceData = {
                     quantity: 0, 
                     setPrice: 'battery3Price'
                 }
+            }
+        }
+    },
+    space: {
+        upgrades: {
+            launchPad: { 
+                launchPadBoughtYet: false,
+                price: 40000,
+                resource1Price: [10000, 'steel', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [0, '', ''],
+            },
+            rocket1: {
+                builtParts: 0,
+                parts: 15,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket1Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 100, //10000
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket1', place: 'rocket1Autobuyer1Row', price: 5000, rate: 0.02, quantity: 0, setPrice: 'rocket1AB1Price', energyUse: 0.7 },
+                },
+            },
+            rocket2: {
+                builtParts: 0,
+                parts: 20,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket2Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 12000,
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket2', place: 'rocket2Autobuyer1Row', price: 6000, rate: 0.02, quantity: 0, setPrice: 'rocket2AB1Price', energyUse: 0.8 },
+                },
+            },
+            rocket3: {
+                builtParts: 0,
+                parts: 25,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket3Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 14000,
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket3', place: 'rocket3Autobuyer1Row', price: 7000, rate: 0.02, quantity: 0, setPrice: 'rocket3AB1Price', energyUse: 0.9 },
+                },
+            },
+            rocket4: {
+                builtParts: 0,
+                parts: 30,
+                price: 1000,
+                resource1Price: [1000, 'glass', 'compounds'],
+                resource2Price: [1000, 'titanium', 'compounds'],
+                resource3Price: [3000, 'steel', 'compounds'],
+                setPrice: 'rocket4Price',
+                fuelQuantity: 0,
+                fuelQuantityToLaunch: 16000,
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 8000, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 1.0 },
+                },
             }
         }
     },
@@ -530,12 +643,14 @@ export let resourceData = {
         fusionTheory: { appearsAt: [500, "knowledgeSharing", ""], prereqs: ['Knowledge Sharing'], price: 750, idForRenderPosition: 20 },
         hydrogenFusion: { appearsAt: [1000, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1150, idForRenderPosition: 30 },
         heliumFusion: { appearsAt: [2000, "hydrogenFusion", ""], prereqs: ['Hydrogen Fusion'], price: 2300, idForRenderPosition: 40 },
-        carbonFusion: { appearsAt: [3500, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 4000, idForRenderPosition: 50 },
-        basicPowerGeneration: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 51 },
+        carbonFusion: { appearsAt: [4100, "nobleGasCollection", ""], prereqs: ['Noble Gas Collection'], price: 4300, idForRenderPosition: 50 },
+        basicPowerGeneration: { appearsAt: [3000, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4200, idForRenderPosition: 51 },
         sodiumIonPowerStorage: { appearsAt: [5000, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 7000, idForRenderPosition: 52 },
-        solarPowerGeneration: { appearsAt: [7000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 8000, idForRenderPosition: 53 },
+        solarPowerGeneration: { appearsAt: [12000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 15000, idForRenderPosition: 53 },
         giganticTurbines: { appearsAt: [4200, "hydroCarbons", ""], prereqs: ['HydroCarbons'], price: 4800, idForRenderPosition: 54 },
         advancedPowerGeneration: { appearsAt: [6000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 8000, idForRenderPosition: 55 },
+        rocketComposites: { appearsAt: [28000, "neutronCapture", "nanoTubeTechnology", "steelFoundries"], prereqs: ['Neutron Capture', 'Nano Tube Technology', 'Steel Foundries'], price: 34000, idForRenderPosition: 55 },
+        advancedFuels: { appearsAt: [25000, "hydroCarbons", "neutronCapture", "advancedPowerGeneration"], prereqs: ['HydroCarbons', 'Neutron Capture', 'Advanced Power Generation'], price: 30000, idForRenderPosition: 56 },
         neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
@@ -556,7 +671,7 @@ export let resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficiency II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 1000000000,
+        cash: 10,
     },
 };
 
@@ -565,10 +680,10 @@ export let starSystems = {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',
         weather: {
-            sunny: [30, '☀', 1],
-            cloudy: [47, '☁', 0.6],
-            rain: [20, '☂', 0.4],
-            volcano: [3, '⛰', 0.05]
+            sunny: [30, '☀', 1, 'white'],
+            cloudy: [47, '☁', 0.6, 'orange'],
+            rain: [20, '☂', 0.4, 'orange'],
+            volcano: [3, '⛰', 0.05, 'red']
         }
     }
 };
@@ -684,4 +799,12 @@ export function setAutoBuyerTierLevel(key, value, override = false, type) {
 
 export function getAutoBuyerTierLevel(key, type) {
     return resourceData[type][key].upgrades.autoBuyer.currentTierLevel;
+}
+
+export function getRocketParts(rocket) {
+    return resourceData.space.upgrades[rocket].builtParts;
+}
+
+export function getRocketPartsNeededInTotalPerRocket(rocket) {
+    return resourceData.space.upgrades[rocket].parts;
 }
