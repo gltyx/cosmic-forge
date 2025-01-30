@@ -1,4 +1,4 @@
-import { setSaleResourcePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
+import { getImageUrls, setSaleResourcePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
 import { sellResource, fuseResource, gain, increaseResourceStorage } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';

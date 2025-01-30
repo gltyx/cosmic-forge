@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getImageUrls,
     setUnlockedCompoundsArray,
     setUnlockedResourcesArray,
     setTechSpecificUIItemsArray,
@@ -229,6 +230,15 @@ export function updateContent(heading, tab, type) {
         optionDescriptionElement = optionDescriptionElements[tabNumber - 1];
         optionDescriptionElement.textContent = optionDescription;
         optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
+
+        const asciiArt = getImageUrls();
+        const asciiContainer = document.createElement('div');
+        asciiContainer.classList.add('intro-image-container');
+
+        const asciiKey = heading.toLowerCase();
+        asciiContainer.innerHTML = asciiArt[asciiKey];
+    
+        optionContentElement.appendChild(asciiContainer);
         return;
     } else {
         optionDescription = getHeaderDescriptions([heading.toLowerCase()]);

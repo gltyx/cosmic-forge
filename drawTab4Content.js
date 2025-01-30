@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
+import { getImageUrls, getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
