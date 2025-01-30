@@ -1,5 +1,5 @@
-import { setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
-import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
+import { setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
+import { launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -170,6 +170,9 @@ export function drawTab6Content(heading, optionContentElement) {
     if (heading === 'Rocket 1') {
         let autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'price']);
         setCheckRocketFuellingStatus('rocket1', true);
+        const fuellingState = getRocketsFuellerStartedArray().includes('rocket1');
+        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket1FuelledUp');
+        const launchedState = getLaunchedRockets().includes('rocket1');
 
         const spaceRocket1AutoBuyerRow = createOptionRow(
             'spaceRocket1AutoBuyerRow',
@@ -185,8 +188,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 ['progress-bar-container', 'invisible']
             ),
             createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket1-launch-button', 'invisible'], () => {
-                //launchRocket(rocket);
-                console.log('rocket1 launched!');
+                launchRocket('rocket1');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
@@ -202,12 +204,39 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
+
         optionContentElement.appendChild(spaceRocket1AutoBuyerRow);
+        
+        if (fuellingState || fuelledUpState) {
+            const fuelUpButton = document.querySelector('.rocket1');
+            fuelUpButton.classList.add('invisible');
+            document.getElementById('rocket1FuellingProgressBarContainer').classList.remove('invisible');
+            const launchButton = document.querySelector('.rocket1-launch-button');
+            launchButton.classList.remove('invisible');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Fuelling...'
+            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+        }
+        if (fuelledUpState) {
+            document.getElementById('rocket1FuellingProgressBar').style.width = '100%';
+            const launchButton = document.querySelector('.rocket1-launch-button');
+            launchButton.classList.add('green-ready-text');
+            launchButton.classList.remove('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+            document.getElementById('fuelDescription').classList.add('green-ready-text');
+        }
+        if (launchedState) {
+            spaceRocket1AutoBuyerRow.classList.add('invisible');
+        }
     }
     
     if (heading === 'Rocket 2') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'price']);
         setCheckRocketFuellingStatus('rocket2', true);
+        const fuellingState = getRocketsFuellerStartedArray().includes('rocket2');
+        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket2FuelledUp');
+        const launchedState = getLaunchedRockets().includes('rocket2');
 
         const spaceRocket2AutoBuyerRow = createOptionRow(
             'spaceRocket2AutoBuyerRow',
@@ -223,8 +252,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 ['progress-bar-container', 'invisible']
             ),
             createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket2-launch-button', 'invisible'], () => {
-                //launchRocket(rocket);
-                console.log('rocket2 launched!');
+                launchRocket('rocket2');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
@@ -240,12 +268,39 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
+
         optionContentElement.appendChild(spaceRocket2AutoBuyerRow);
+
+        if (fuellingState || fuelledUpState) {
+            const fuelUpButton = document.querySelector('.rocket2');
+            fuelUpButton.classList.add('invisible');
+            document.getElementById('rocket2FuellingProgressBarContainer').classList.remove('invisible');
+            const launchButton = document.querySelector('.rocket2-launch-button');
+            launchButton.classList.remove('invisible');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Fuelling...'
+            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+        }
+        if (fuelledUpState) {
+            document.getElementById('rocket2FuellingProgressBar').style.width = '100%';
+            const launchButton = document.querySelector('.rocket2-launch-button');
+            launchButton.classList.add('green-ready-text');
+            launchButton.classList.remove('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+            document.getElementById('fuelDescription').classList.add('green-ready-text');
+        }
+        if (launchedState) {
+            spaceRocket2AutoBuyerRow.classList.add('invisible');
+        }
     }
     
     if (heading === 'Rocket 3') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'price']);
         setCheckRocketFuellingStatus('rocket3', true);
+        const fuellingState = getRocketsFuellerStartedArray().includes('rocket3');
+        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket3FuelledUp');
+        const launchedState = getLaunchedRockets().includes('rocket3');
 
         const spaceRocket3AutoBuyerRow = createOptionRow(
             'spaceRocket3AutoBuyerRow',
@@ -261,8 +316,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 ['progress-bar-container', 'invisible']
             ),
             createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket3-launch-button', 'invisible'], () => {
-                //launchRocket(rocket);
-                console.log('rocket3 launched!');
+                launchRocket('rocket3');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
@@ -278,12 +332,39 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
+
         optionContentElement.appendChild(spaceRocket3AutoBuyerRow);
+
+        if (fuellingState || fuelledUpState) {
+            const fuelUpButton = document.querySelector('.rocket3');
+            fuelUpButton.classList.add('invisible');
+            document.getElementById('rocket3FuellingProgressBarContainer').classList.remove('invisible');
+            const launchButton = document.querySelector('.rocket3-launch-button');
+            launchButton.classList.remove('invisible');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Fuelling...'
+            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+        }
+        if (fuelledUpState) {
+            document.getElementById('rocket3FuellingProgressBar').style.width = '100%';
+            const launchButton = document.querySelector('.rocket3-launch-button');
+            launchButton.classList.add('green-ready-text');
+            launchButton.classList.remove('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+            document.getElementById('fuelDescription').classList.add('green-ready-text');
+        }
+        if (launchedState) {
+            spaceRocket3AutoBuyerRow.classList.add('invisible');
+        }
     }
     
     if (heading === 'Rocket 4') {
         const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'price']);
         setCheckRocketFuellingStatus('rocket4', true);
+        const fuellingState = getRocketsFuellerStartedArray().includes('rocket4');
+        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket4FuelledUp');
+        const launchedState = getLaunchedRockets().includes('rocket4');
 
         const spaceRocket4AutoBuyerRow = createOptionRow(
             'spaceRocket4AutoBuyerRow',
@@ -299,8 +380,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 ['progress-bar-container', 'invisible']
             ),
             createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket4-launch-button', 'invisible'], () => {
-                //launchRocket(rocket);
-                console.log('rocket4 launched!');
+                launchRocket('rocket4');
             }, 'upgradeCheck', '', null, null, null, true, null, null),
             null,
             null,
@@ -316,6 +396,30 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
+
         optionContentElement.appendChild(spaceRocket4AutoBuyerRow);
+        
+        if (fuellingState || fuelledUpState) {
+            const fuelUpButton = document.querySelector('.rocket4');
+            fuelUpButton.classList.add('invisible');
+            document.getElementById('rocket4FuellingProgressBarContainer').classList.remove('invisible');
+            const launchButton = document.querySelector('.rocket4-launch-button');
+            launchButton.classList.remove('invisible');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Fuelling...'
+            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+        }
+        if (fuelledUpState) {
+            document.getElementById('rocket4FuellingProgressBar').style.width = '100%';
+            const launchButton = document.querySelector('.rocket4-launch-button');
+            launchButton.classList.add('green-ready-text');
+            launchButton.classList.remove('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+            document.getElementById('fuelDescription').classList.add('green-ready-text');
+        }
+        if (launchedState) {
+            spaceRocket4AutoBuyerRow.classList.add('invisible');
+        }
     }    
 }

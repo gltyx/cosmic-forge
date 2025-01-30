@@ -1,4 +1,6 @@
 import {
+    setLaunchedRockets,
+    getLaunchedRockets,
     setWeatherEfficiencyApplied,
     getWeatherEfficiencyApplied,
     getCheckRocketFuellingStatus,
@@ -315,6 +317,7 @@ export async function gameLoop() {
         });
 
         fuelRockets();
+        updateRocketDescription();
 
         if (!getSavedYetSinceOpeningSaveDialogue() && getCurrentOptionPane() === 'saving / loading') {
             saveGame('onSaveScreen');
@@ -2826,9 +2829,9 @@ function startInitialTimers() {
         selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        //const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
-        const randomDurationInMs = 10000; //For Testing Weather
+        //const randomDurationInMs = 10000; //For Testing Weather
 
         const durationInSeconds = randomDurationInMs / 1000;
 
@@ -3735,10 +3738,11 @@ export function fuelRockets() {
         if (getCheckRocketFuellingStatus(rocket) && getPowerOnOff()) {
             newFuelQuantity = fuelQuantity + fuelRate * getTimerRateRatio();
 
-            if (newFuelQuantity <= fullLevel) {
+            if (newFuelQuantity < fullLevel) {
                 setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
             } else {
                 if (rocketLaunchButton) {
+                    fuelQuantityProgressBarElement.style.width = `100%`;
                     rocketLaunchButton.classList.remove('invisible');
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.add('green-ready-text');
@@ -3748,7 +3752,10 @@ export function fuelRockets() {
 
             if (getCurrentOptionPane() === rocket) {
                 const progressBarPercentage = getFuelLevel(rocket);
-                fuelQuantityProgressBarElement.style.width = `${progressBarPercentage}%`;
+
+                if (fuelQuantityProgressBarElement.style.width !== `100%`) {
+                    fuelQuantityProgressBarElement.style.width = `${progressBarPercentage}%`;
+                }
 
                 if (newFuelQuantity < fullLevel) {
                     rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
@@ -3765,13 +3772,33 @@ export function fuelRockets() {
             setCheckRocketFuellingStatus(rocket, false);
         } else if (!getPowerOnOff() && newFuelQuantity < fullLevel) {
             const progressBarPercentage = getFuelLevel(rocket);
-            rocketLaunchButton.classList.add('red-disabled-text');
-            rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
-            document.getElementById('fuelDescription').textContent = 'Requires Power!';
-            document.getElementById('fuelDescription').classList.remove('green-ready-text');
-            document.getElementById('fuelDescription').classList.add('red-disabled-text');
+            if (rocketLaunchButton) {
+                rocketLaunchButton.classList.add('red-disabled-text');
+                rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
+                document.getElementById('fuelDescription').textContent = 'Requires Power!';
+                document.getElementById('fuelDescription').classList.remove('green-ready-text');
+                document.getElementById('fuelDescription').classList.add('red-disabled-text');
+            }
         }
     });
+}
+
+export function updateRocketDescription() {
+    const launchedRockets = getLaunchedRockets();
+    const currentScreen = getCurrentOptionPane();
+
+    for (const rocket of launchedRockets) {
+        if (rocket === currentScreen) {
+            document.getElementById('fuelDescription').textContent = 'Launched!';
+            break;
+        }
+    }
+}
+
+
+export function launchRocket(rocket) {
+    setLaunchedRockets(rocket);
+    document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
 }
 
 export function toggleAllPower() {
@@ -3810,8 +3837,8 @@ export function toggleAllPower() {
 
 function handlePowerAllButtonState() {
     const quantityPowerPlant1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
-    const quantityPowerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
-    const quantityPowerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'quantity']);
+    const quantityPowerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
+    const quantityPowerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
 
     const powerColumnElement = document.getElementById('energyConsumptionStats');
     const powerAllButton = document.getElementById('activateGridButton');

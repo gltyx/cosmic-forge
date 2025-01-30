@@ -36,6 +36,7 @@ export let gameState;
 let prize = [];
 let rocketsBuilt = [];
 let rocketsFuellerStartedArray = [];
+let launchedRockets = [];
 let cachedRenderedTechTree = null;
 let saveName = null;
 let lastSavedTimeStamp = null;
@@ -272,6 +273,7 @@ export function captureGameStatusForSaving(type) {
     gameState.oneOffPrizesAlreadyClaimedArray = oneOffPrizesAlreadyClaimedArray;
     gameState.rocketsBuilt = rocketsBuilt;
     gameState.rocketsFuellerStartedArray = rocketsFuellerStartedArray;
+    gameState.launchedRockets = launchedRockets;
 
     // Flags
     gameState.flags = {
@@ -321,6 +323,7 @@ export function restoreGameStatus(gameState, type) {
             oneOffPrizesAlreadyClaimedArray = gameState.oneOffPrizesAlreadyClaimedArray;
             rocketsBuilt = gameState.rocketsBuilt;
             rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray || [''];
+            launchedRockets = gameState.launchedRockets || [''];
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1415,3 +1418,13 @@ export function setWeatherEfficiencyApplied(value) {
 export function getWeatherEfficiencyApplied(key) {
     return weatherEfficiencyApplied;
 }
+
+export function setLaunchedRockets(value) {
+    launchedRockets.push(value);
+}
+
+export function getLaunchedRockets() {
+    return launchedRockets;
+}
+
+
