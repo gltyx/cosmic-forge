@@ -256,8 +256,6 @@ export function captureGameStatusForSaving(type) {
     gameState.currentTheme = getCurrentTheme();
     gameState.autoSaveFrequency = getAutoSaveFrequency();
     gameState.currentStarSystem = getCurrentStarSystem();
-    gameState.currentStarSystemWeatherEfficiency = getCurrentStarSystemWeatherEfficiency();
-    gameState.currentPrecipitationRate = getCurrentPrecipitationRate();
     gameState.currencySymbol = getCurrencySymbol();
     gameState.constituentPartsObject = getConstituentPartsObject();
     gameState.techUnlockedArray = techUnlockedArray;
@@ -306,8 +304,6 @@ export function restoreGameStatus(gameState, type) {
             setCurrentTheme(gameState.currentTheme);
             setAutoSaveFrequency(gameState.autoSaveFrequency);
             setCurrentStarSystem(gameState.currentStarSystem);
-            setCurrentStarSystemWeatherEfficiency(gameState.currentStarSystemWeatherEfficiency);
-            setCurrentPrecipitationRate(gameState.currentPrecipitationRate);
             setCurrencySymbol(gameState.currencySymbol);
             setConstituentPartsObject(gameState.constituentPartsObject);
             techUnlockedArray = gameState.techUnlockedArray;

@@ -68,7 +68,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Hydrogen:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'hydrogenQuantity', null, false, null, 'hydrogen', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
@@ -277,7 +277,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Helium:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'heliumQuantity', null, false, null, 'helium', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
@@ -494,7 +494,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Carbon:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'carbonQuantity', null, false, null, 'carbon', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'),
+            }, null, null, null, null, null, true, null, 'resource'),
             null,
             null,
             null,
@@ -704,7 +704,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Neon:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'neonQuantity', null, false, null, 'neon', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'),
+            }, null, null, null, null, null, true, null, 'resource'),
             null,
             null,
             null,
@@ -914,7 +914,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Oxygen:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'oxygenQuantity', null, false, null, 'oxygen', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
@@ -1112,7 +1112,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Sodium:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'sodiumQuantity', null, false, null, 'sodium', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
@@ -1322,7 +1322,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Silicon:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'siliconQuantity', null, false, null, 'silicon', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,
@@ -1520,7 +1520,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'Gain 1 Iron:',
             createButton('Gain', ['option-button'], () => {
                 gain(1, 'ironQuantity', null, false, null, 'iron', 'resources');
-            }, null, null, null, null, null, false, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
+            }, null, null, null, null, null, true, null, 'resource'), //set false to true out of development to stop fast gains by holding enter
             null,
             null,
             null,

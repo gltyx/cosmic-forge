@@ -17,7 +17,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery1');
-            }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', true, null, 'building'),
             null,
             null,
             null,
@@ -48,7 +48,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery2');
-            }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', true, null, 'building'),
             null,
             null,
             null,
@@ -76,7 +76,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery3');
-            }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', true, null, 'building'),
             null,
             null,
             null,
@@ -113,13 +113,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 if (getBuildingTypeOnOff('powerPlant1')) {
                     startUpdateTimersAndRates('powerPlant1', 'buy');
                 }
-            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', true, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant1Toggle'], (event) => {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', 'toggle');
                 setPowerOnOff(true);
-            }, 'toggle', null, null, 'powerPlant1', null, false, null, 'building'),
+            }, 'toggle', null, null, 'powerPlant1', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
             null,
@@ -157,13 +157,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 if (getBuildingTypeOnOff('powerPlant2')) {
                     startUpdateTimersAndRates('powerPlant2', 'buy');
                 }
-            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', true, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant2Toggle'], (event) => {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', 'toggle');
                 setPowerOnOff(true);
-            }, 'toggle', null, null, 'powerPlant2', null, false, null, 'building'),
+            }, 'toggle', null, null, 'powerPlant2', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0])}:`, 'powerPlant2FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0], 'quantity'])}`, 'powerPlant2FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
             null,
@@ -201,13 +201,13 @@ export function drawTab2Content(heading, optionContentElement) {
                 if (getBuildingTypeOnOff('powerPlant3')) {
                     startUpdateTimersAndRates('powerPlant3', 'buy');
                 }
-            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', false, null, 'building'),
+            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', true, null, 'building'),
             createButton(toggleButtonText, ['option-button', 'toggle-timer', 'fuel-check', 'invisible', 'id_powerPlant3Toggle'], (event) => {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'compounds', null, false);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', 'toggle');
                 setPowerOnOff(true);
-            }, 'toggle', null, null, 'powerPlant3', null, false, null, 'building'),
+            }, 'toggle', null, null, 'powerPlant3', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0])}:`, 'powerPlant3FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0], 'quantity'])}`, 'powerPlant3FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
             null,
