@@ -24,7 +24,7 @@ export function initialiseDescriptions() {
         'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',
         'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
         'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
-        'Buildings': 'Here you can buy upgrades for making resource gathering more efficient and progress through the game.',
+        'Energy': 'Here you can buy upgrades for generating power which is needed for more advanced buildings.',
         'Space Mining': 'Here you can build vessels to mine asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
         tab7intro: '',
         'Settings': 'Change the game settings to your liking.',
@@ -38,7 +38,7 @@ export function initialiseDescriptions() {
         silicon: "The backbone of modern technology, it is a crucial component in electronics and solar panels.",
         iron: "A strong and versatile metal, iron is the foundation of construction and industry.",
 
-        energy: "Any buildings beyond the first level require power to operate, you can manage that here, as well as energy storage.",
+        'energy storage': "Any buildings beyond the first level require power to operate, you can store that energy here.",
         'power plant': "These buildings provide the energy resource, and it is used by advanced buildings, without which they won't operate.",
         'advanced power plant': "These buildings provide higher amounts of energy for powering a lot of machinery.",
         'solar power plant': "Solar power plants provide renewable energy without using any resources.",

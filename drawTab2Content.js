@@ -6,7 +6,7 @@ import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab2Content(heading, optionContentElement) {
     let toggleButtonText;
-    if (heading === 'Energy') {
+    if (heading === 'Energy Storage') {
 
         const battery1Row = createOptionRow(
             'energyBattery1Row',

@@ -1396,9 +1396,9 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab2', 'energy');
-            setCurrentOptionPane('energy');
-            updateContent('Energy', 'tab2', 'content');
+            setLastScreenOpenRegister('tab2', 'energy storage');
+            setCurrentOptionPane('energy storage');
+            updateContent('Energy Storage', 'tab2', 'content');
         });
     });
 

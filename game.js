@@ -345,7 +345,7 @@ export async function gameLoop() {
 }
 
 function showHideDynamicColumns() {
-    if (getCurrentOptionPane() === 'energy' || getCurrentOptionPane() === 'power plant' || getCurrentOptionPane() === 'solar power plant' || getCurrentOptionPane() === 'advanced power plant') {
+    if (getCurrentOptionPane() === 'energy storage' || getCurrentOptionPane() === 'power plant' || getCurrentOptionPane() === 'solar power plant' || getCurrentOptionPane() === 'advanced power plant') {
         document.getElementById('energyConsumptionStats').classList.remove('invisible');
     } else {
         document.getElementById('energyConsumptionStats').classList.add('invisible');
@@ -2404,7 +2404,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     if (ABOrTechPurchase) {
         amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
         itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
-    } else { //buildings / space
+    } else { //energy / space
         amountToDeduct = itemObject.price;
         if (resourceCategory === 'energy' || resourceCategory === 'space') {
             resource1ToDeduct = itemObject.resource1Price[0];
