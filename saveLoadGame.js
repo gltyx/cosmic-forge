@@ -1,4 +1,5 @@
 import {
+    getCurrentGameVersion,
     setSaveName,
     getSaveName,
     setLastSavedTimeStamp,
@@ -15,8 +16,6 @@ import {
     // setLanguageChangedFlag, 
     // getLanguageChangedFlag 
 } from './constantsAndGlobalVars.js';
-
-import { startGame, offlineGains } from './game.js';
 
 //import {localize} from './localization.js';
 //import { handleLanguageChange } from './ui.js';
@@ -221,3 +220,60 @@ export function generateRandomPioneerName() {
     const pioneerName = `Pioneer-${randomString}`;
     setSaveName(pioneerName);
 }
+
+export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER TIME
+    function parseVersion(versionString) {
+        return parseFloat(versionString.split('.').slice(0, 2).join('.'));
+    }
+
+    const currentVersion = parseVersion(getCurrentGameVersion());
+    if (!saveData.version) saveData.version = parseVersion('0.20.0');
+
+    while (saveData.version < currentVersion) {
+        if (saveData.version < 0.21) {
+            if (objectType === 'resourceData') {
+                //saveData.version = '0.21.0';
+                //add a loop if necessary to change structure of all keys
+                // if (!saveData.space.upgrades.rocket5) { //EXAMPLE OF HOW TO ADD A NEW RESOURCE CHANGE TO AN EXISTING SAVE
+                //         
+
+                //         saveData.space.upgrades.rocket5 = {
+                //         builtParts: 0,
+                //         parts: 50,
+                //         price: 2000,
+                //         resource1Price: [2000, 'glass', 'compounds'],
+                //         resource2Price: [4000, 'titanium', 'compounds'],
+                //         resource3Price: [6000, 'water', 'compounds'],
+                //         setPrice: 'rocket5Price',
+                //         fuelQuantity: 0,
+                //         fuelQuantityToLaunch: 14000,
+                //         autoBuyer: {
+                //             currentTierLevel: 1,
+                //             normalProgression: false,
+                //             tier1: { 
+                //                 nameUpgrade: 'Fuel', 
+                //                 screen: 'rocket5', 
+                //                 place: 'rocket5Autobuyer1Row', 
+                //                 price: 8000, 
+                //                 rate: 0.09, 
+                //                 quantity: 0, 
+                //                 setPrice: 'rocket5AB1Price', 
+                //                 energyUse: 1.2 
+                //             },
+                //         },
+                //     };
+                // }
+            } else if (objectType === 'starSystemsData') {
+                //saveData.version = '0.21.0';
+                for (let key in saveData) {
+                    // stuff to add (loop may or may not be necessary if structure changes same for all)
+                }
+            }
+        }
+    
+        saveData.version += 0.01;
+    }    
+
+    return saveData;
+}
+

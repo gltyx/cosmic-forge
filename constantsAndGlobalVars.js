@@ -19,6 +19,8 @@ let saveData = null;
 // let oldLanguage = 'en';
 
 //CONSTANTS
+//ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
+export const GAME_VERSION_FOR_SAVES = '0.21.0' //used by function that migrates old saves to new versions of game.
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -1425,6 +1427,10 @@ export function getLaunchedRockets() {
 
 export function getImageUrls() {
     return IMAGE_URLS;
+}
+
+export function getCurrentGameVersion() {
+    return GAME_VERSION_FOR_SAVES;
 }
 
 const IMAGE_URLS = {

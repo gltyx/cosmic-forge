@@ -1,4 +1,7 @@
+import { migrateResourceData } from "./saveLoadGame.js";
+
 export let resourceData = {
+    version: '0.20.0',
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -668,11 +671,12 @@ export let resourceData = {
         fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficiency II'], price: 10000, idForRenderPosition: 9030 }
     },    
     currency: {
-        cash: 100000000,
+        cash: 10,
     },
 };
 
 export let starSystems = {
+    version: '0.20.0',
     spica: {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',
@@ -689,10 +693,12 @@ export let starSystems = {
 //GETTER SETTERS
 
 export function restoreResourceDataObject(value) {
+    value = migrateResourceData(value, 'resourceData');
     resourceData = value;
 }
 
 export function restoreStarSystemsDataObject(value) {
+    value = migrateResourceData(value, 'starSystemsData');
     starSystems = value;
 }
 
