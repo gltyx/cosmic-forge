@@ -67,6 +67,9 @@ let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
+let baseSearchTimerDuration = 180000;
+let timeLeftUntilAsteroidTimerFinishes = 0;
+
 export let oneOffPrizesAlreadyClaimedArray = [];
 
 let lastScreenOpenRegister = {
@@ -123,6 +126,8 @@ let savedYetSinceOpeningSaveDialogue = false;
 let techTreeDrawnYet = false;
 let weatherEffectOn = false;
 let weatherEfficiencyApplied = false;
+let currentlySearchingAsteroid = false;
+let telescopeReadyToSearch = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -275,6 +280,8 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketsBuilt = rocketsBuilt;
     gameState.rocketsFuellerStartedArray = rocketsFuellerStartedArray;
     gameState.launchedRockets = launchedRockets;
+    gameState.baseSearchTimerDuration = baseSearchTimerDuration;
+    gameState.timeLeftUntilAsteroidTimerFinishes = timeLeftUntilAsteroidTimerFinishes;
 
     // Flags
     gameState.flags = {
@@ -286,6 +293,8 @@ export function captureGameStatusForSaving(type) {
         losingEnergy: getLosingEnergy(),
         powerOnOff: getPowerOnOff(),
         trippedStatus: getTrippedStatus(),
+        currentlySearchingAsteroid: getCurrentlySearchingAsteroid(),
+        telescopeReadyToSearch: getTelescopeReadyToSearch()
     };
 
     return gameState;
@@ -321,8 +330,10 @@ export function restoreGameStatus(gameState, type) {
             setNotationType(gameState.notationType);
             oneOffPrizesAlreadyClaimedArray = gameState.oneOffPrizesAlreadyClaimedArray;
             rocketsBuilt = gameState.rocketsBuilt;
-            rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray || [''];
-            launchedRockets = gameState.launchedRockets || [''];
+            rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray ?? [''];
+            launchedRockets = gameState.launchedRockets ?? [''];
+            baseSearchTimerDuration = gameState.baseSearchTimerDuration ?? 180000;
+            timeLeftUntilAsteroidTimerFinishes = gameState.timeLeftUntilAsteroidTimerFinishes ?? 0;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -333,6 +344,8 @@ export function restoreGameStatus(gameState, type) {
             setLosingEnergy(gameState.flags.losingEnergy);
             setPowerOnOff(gameState.flags.powerOnOff);
             setTrippedStatus(gameState.flags.trippedStatus);
+            setCurrentlySearchingAsteroid(gameState.flags.currentlySearchingAsteroid);
+            setTelescopeReadyToSearch(gameState.flags.telescopeReadyToSearch);
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1436,6 +1449,38 @@ export function getCurrentGameVersion() {
 
 export function getMinimumVersion() {
     return MINIMUM_GAME_VERSION_FOR_SAVES;
+}
+
+export function getBaseSearchTimerDuration() {
+    return baseSearchTimerDuration;
+}
+
+export function setBaseSearchTimerDuration(value) {
+    baseSearchTimerDuration = value;
+}
+
+export function getCurrentlySearchingAsteroid() {
+    return currentlySearchingAsteroid;
+}
+
+export function setCurrentlySearchingAsteroid(value) {
+    currentlySearchingAsteroid = value ?? false;
+}
+
+export function getTimeLeftUntilAsteroidTimerFinishes() {
+    return timeLeftUntilAsteroidTimerFinishes;
+}
+
+export function setTimeLeftUntilAsteroidTimerFinishes(value) {
+    timeLeftUntilAsteroidTimerFinishes = value ?? 0;
+}
+
+export function getTelescopeReadyToSearch() {
+    return telescopeReadyToSearch;
+}
+
+export function setTelescopeReadyToSearch(value) {
+    telescopeReadyToSearch = value ?? true;
 }
 
 const IMAGE_URLS = {

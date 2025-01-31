@@ -1,5 +1,5 @@
 import { getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
-import { discoverAsteroid, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -45,8 +45,8 @@ export function drawTab6Content(heading, optionContentElement) {
                     'spaceTelescopeSearchAsteroidRow',
                     'Search Asteroid',
                     'Search Asteroid',
-                    createButton(`Discover Asteroid`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                        discoverAsteroid();
+                    createButton(`Search Asteroid`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                        startSearchAsteroidTimer();
                     }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
                     createTextElement(
                         `<div id="spaceTelescopeSearchProgressBar">`,

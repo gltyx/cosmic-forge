@@ -1,4 +1,12 @@
 import {
+    getTelescopeReadyToSearch,
+    setTelescopeReadyToSearch,
+    setTimeLeftUntilAsteroidTimerFinishes,
+    getTimeLeftUntilAsteroidTimerFinishes,
+    setCurrentlySearchingAsteroid,
+    getCurrentlySearchingAsteroid,
+    setBaseSearchTimerDuration,
+    getBaseSearchTimerDuration,
     setLaunchedRockets,
     getLaunchedRockets,
     setWeatherEfficiencyApplied,
@@ -1584,6 +1592,20 @@ function monitorRevealRowsChecks(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
+    if ((element === document.getElementById('searchAsteroidDescription') || element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
+        element.classList.remove('red-disabled-text');
+
+        if (element === document.getElementById('searchAsteroidDescription')) {
+            getTelescopeReadyToSearch() ? element.classList.add('green-ready-text') : element.classList.remove('green-ready-text');
+            return;
+        }
+
+        if (element.dataset.resourceToFuseTo === 'searchAsteroid') {
+            getTelescopeReadyToSearch() ? (element.classList.add('green-ready-text'), element.classList.remove('red-disabled-text')) : (element.classList.remove('green-ready-text'), element.classList.add('red-disabled-text'));
+            return;
+        }
+    }
+
     if (element.classList.contains('fuel-check')) {
         if (element.tagName.toLowerCase() === 'button') {
             const buildingNameString = element.dataset.toggleTarget;
@@ -2905,7 +2927,42 @@ function startInitialTimers() {
             }
         }, 1000);
     }
-}  
+}
+
+export function startSearchAsteroidTimer() {
+    setTelescopeReadyToSearch(false);
+    const searchTimerDescriptionElement = document.getElementById('searchAsteroidDescription');
+    const timerName = 'searchAsteroidTimer';
+    
+    if (!timerManager.getTimer(timerName)) {
+        let counter = 0;
+        const searchInterval = getTimerUpdateInterval();
+        const searchDuration = getAsteroidSearchDuration();
+        
+        timerManager.addTimer(timerName, searchInterval, () => {
+            counter += searchInterval;
+            
+            if (counter >= searchDuration) {
+                discoverAsteroid();
+                timerManager.removeTimer(timerName);
+                if (searchTimerDescriptionElement) {             
+                    searchTimerDescriptionElement.classList.add('green-ready-text');
+                    searchTimerDescriptionElement.innerText = 'Ready To Search';
+                    setTelescopeReadyToSearch(true);
+                }
+            } else {
+                
+            }
+        });
+    }
+}
+
+function getAsteroidSearchDuration() {
+    const baseTimeDuration = getBaseSearchTimerDuration();
+    const variance = baseTimeDuration * 0.2; // 20% variance
+    const randomOffset = (Math.random() * 2 - 1) * variance;
+    return baseTimeDuration + randomOffset;
+}
 
 function getRandomNewsTickerInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min) * 1000;
@@ -3903,7 +3960,7 @@ export function discoverAsteroid() {
     //when expires add asteroid to discovered asteroids array and enable the search button
     //create name for asteroid
     document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
-
+    setBaseSearchTimerDuration(getBaseSearchTimerDuration() * 1.1); //increase search time on next one
     console.log('searching for asteroid...');
     console.log('asteroid discovered: ' + asteroidName);
     //write another function to show discovered asteroids in dedicated section of space mining tab
