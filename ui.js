@@ -156,8 +156,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         handleClick();
     });
     
-
-    //PRE GAME START CODE HERE AFTER NEW GAME CLICKED
     startGame();
 
     notificationContainer = getElements().notificationContainer;
@@ -358,6 +356,14 @@ export function createOptionRow(
         if (objectSectionArgument2.startsWith('rocket') && !getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
             wrapper.classList.add('invisible');
         } else if (objectSectionArgument2.startsWith('rocket')) {
+            wrapper.classList.remove('invisible');
+        }
+    }
+
+    if (getCurrentOptionPane() === 'space telescope') {
+        if (objectSectionArgument2 === 'searchAsteroid' && !getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
+            wrapper.classList.add('invisible');
+        } else if (objectSectionArgument2 === 'searchAsteroid') {
             wrapper.classList.remove('invisible');
         }
     }
@@ -1283,7 +1289,7 @@ export function checkOrderOfTabs() {
     if (techArray.includes('stellarCartography')) unlockedTabs.push(5);
     if (techArray.includes('basicPowerGeneration')) unlockedTabs.push(2);
     if (techArray.includes('compounds')) unlockedTabs.push(4);
-    if (techArray.includes('rocketComposites')) unlockedTabs.push(6);
+    if (techArray.includes('atmosphericTelescopes')) unlockedTabs.push(6);
 
     unlockedTabs = unlockedTabs.sort((a, b) => tabPriorities[a] - tabPriorities[b]);
 
@@ -1553,6 +1559,22 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'rocket4');
             setCurrentOptionPane('rocket4');
             updateContent('Rocket 4', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option6"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'space telescope');
+            setCurrentOptionPane('space telescope');
+            updateContent('Space Telescope', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option7"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'asteroids');
+            setCurrentOptionPane('asteroids');
+            updateContent('Asteroids', 'tab6', 'content');
         });
     });
     

@@ -1,7 +1,7 @@
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: '0.20.0',
+    version: 0.21, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -527,6 +527,13 @@ export let resourceData = {
     },
     space: {
         upgrades: {
+            spaceTelescope: { 
+                spaceTelescopeBoughtYet: false,
+                price: 10000,
+                resource1Price: [20000, 'steel', 'compounds'],
+                resource2Price: [15000, 'glass', 'compounds'],
+                resource3Price: [20000, 'silicon', 'resources'],
+            },
             launchPad: { 
                 launchPadBoughtYet: false,
                 price: 40000,
@@ -676,7 +683,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: '0.20.0',
+    version: 0.21, //update this whenever changes are made to the structure
     spica: {
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',

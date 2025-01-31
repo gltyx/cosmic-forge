@@ -774,6 +774,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         });
                         showNotification(techNotificationMessages.rocketComposites, 'info');
                         setRenderedTechTree(false);
+                        document.getElementById('launchPad').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'rocketComposites', null, 'research', true, null, 'tech'),
                     null,
                     null,

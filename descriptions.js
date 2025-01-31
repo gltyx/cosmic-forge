@@ -55,11 +55,13 @@ export function initialiseDescriptions() {
 
         'star map': "This is a map of the known galaxy.",
 
+        'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
+        'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
-        'rocket 1': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
-        'rocket 2': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
-        'rocket 3': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
-        'rocket 4': "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
+        'rocket 1': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        'rocket 2': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        'rocket 3': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        'rocket 4': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
@@ -789,6 +791,16 @@ export function initialiseDescriptions() {
             content1: "Build the launch pad to launch built rockets and mine asteroids for antimatter.",
             content2: "",
             updateAt: ""
+        },
+        spaceBuildTelescopeRow: {
+            content1: "Build the space telescope to search for Asteroids to mine.",
+            content2: "",
+            updateAt: "" 
+        },
+        spaceTelescopeSearchAsteroidRow: {
+            content1: "Search and discover Asteroids.",
+            content2: "",
+            updateAt: "" 
         },
         // content1: `Add an Advanced Water Mixer for better Water production`,
         spaceRocket1AutoBuyerRow: {

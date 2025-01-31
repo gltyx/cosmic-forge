@@ -20,7 +20,8 @@ let saveData = null;
 
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
-export const GAME_VERSION_FOR_SAVES = '0.21.0' //used by function that migrates old saves to new versions of game.
+export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
+export const GAME_VERSION_FOR_SAVES = 0.21;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -1431,6 +1432,10 @@ export function getImageUrls() {
 
 export function getCurrentGameVersion() {
     return GAME_VERSION_FOR_SAVES;
+}
+
+export function getMinimumVersion() {
+    return MINIMUM_GAME_VERSION_FOR_SAVES;
 }
 
 const IMAGE_URLS = {

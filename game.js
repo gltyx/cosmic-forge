@@ -911,7 +911,8 @@ function checkAndDeductResources() {
 function getAllQuantities() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
     const compoundKeys = Object.keys(getResourceDataObject('compounds'));
-    const rockets = Object.keys(getResourceDataObject('space', ['upgrades'])).filter(part => part !== 'launchPad');
+    const rockets = Object.keys(getResourceDataObject('space', ['upgrades']))
+    .filter(part => part !== 'launchPad' && part !== 'spaceTelescope');
 
     const allQuantities = {};
 
@@ -947,6 +948,7 @@ function getAllQuantities() {
     allQuantities.powerPlant2 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']);
     allQuantities.powerPlant3 = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'quantity']);
 
+    allQuantities.spaceTelescope = null;
     allQuantities.launchPad = null;
 
     allQuantities.research = getResourceDataObject('research', ['quantity']);
@@ -981,6 +983,7 @@ function getAllStorages() {
     allStorages.powerPlant2 = null;
     allStorages.powerPlant3 = null;
 
+    allStorages.spaceTelescope = null;
     allStorages.launchPad = null;
 
     allStorages.research = null;
@@ -1027,6 +1030,7 @@ function getAllElements(resourcesArray, compoundsArray) {
     allElements.powerPlant2 = getElements().powerPlant2Quantity;
     allElements.powerPlant3 = getElements().powerPlant3Quantity;
 
+    allElements.spaceTelescope = null;
     allElements.launchPad = null;
 
     if (getCurrentOptionPane() === 'launch pad') {
@@ -1262,6 +1266,12 @@ function getBuildingResourceDescriptionElements() {
 }
 
 function getSpaceMiningResourceDescriptionElements() {
+    const spaceTelescopeBuyDescElement = document.getElementById('spaceTelescopeDescription');
+    const spaceTelescopeBuyPrice = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'price']);
+    const spaceTelescopeBuyResource1Price = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource1Price'])[0];
+    const spaceTelescopeBuyResource2Price = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource2Price'])[0];
+    const spaceTelescopeBuyResource3Price = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource3Price'])[0];
+
     const launchPadBuyDescElement = document.getElementById('launchPadDescription');
     const launchPadBuyPrice = getResourceDataObject('space', ['upgrades', 'launchPad', 'price']);
     const launchPadBuyResource1Price = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[0];
@@ -1293,6 +1303,17 @@ function getSpaceMiningResourceDescriptionElements() {
     const rocket4BuyResource3Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[0];
 
     return {
+        spaceTelescopeBuy: { 
+            element: spaceTelescopeBuyDescElement, 
+            price: spaceTelescopeBuyPrice, 
+            resource1Price: spaceTelescopeBuyResource1Price, 
+            resource2Price: spaceTelescopeBuyResource2Price, 
+            resource3Price: spaceTelescopeBuyResource3Price, 
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource1Price'])[1]), 
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource2Price'])[1]), 
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource3Price'])[1]) 
+        },
         launchPadBuy: { 
             element: launchPadBuyDescElement, 
             price: launchPadBuyPrice, 
@@ -1851,6 +1872,8 @@ function checkStatusAndSetTextClasses(element) {
 
         if (checkQuantityString === 'cash') {
             quantity = getResourceDataObject('currency', ['cash']);
+        } else if (checkQuantityString === 'time') {
+            quantity = 0;
         } else {
             if (checkQuantityString === 'research') {
                 quantity = getResourceDataObject('research', ['quantity']); //research
@@ -1967,6 +1990,8 @@ function checkStatusAndSetTextClasses(element) {
                     }
                 }
                 price = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', autoBuyerTier, 'price']);
+            } else if (resource === 'time') { //for things like search asteroid
+                price = 0;
             } else {
                 mainKey = 'resources';
                 const autoBuyerTier = element.dataset.autoBuyerTier;
@@ -2018,21 +2043,23 @@ function checkStatusAndSetTextClasses(element) {
                     getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[2]
                 );
             } else {
-                resourcePrices.push(
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
-                );
-                resourceNames.push(
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
-                );
-                resourceCategories.push(
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
-                    getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
-                );
+                if (resource !== 'time') {
+                    resourcePrices.push(
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
+                    );
+                    resourceNames.push(
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
+                    );
+                    resourceCategories.push(
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
+                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
+                    );
+                }
             }
         }
 
@@ -2120,19 +2147,23 @@ function checkStatusAndSetTextClasses(element) {
         }
                 
         if (element.classList.contains('building-purchase-button')) {
-            if (element.classList.contains ('launchPad')) {
-                if (getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
-                    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+            const upgradeTypes = ['launchPad', 'spaceTelescope'];
 
-                    element.classList.add('invisible');
-                    document.getElementById('launchPadAlreadyBoughtText').classList.remove('invisible');
-                    accompanyingLabel.classList.add('invisible');
+            upgradeTypes.forEach(upgradeType => {
+                if (element.classList.contains(upgradeType)) {
+                    if (getResourceDataObject('space', ['upgrades', upgradeType, `${upgradeType}BoughtYet`])) {
+                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+            
+                        element.classList.add('invisible');
+                        document.getElementById(`${upgradeType}AlreadyBoughtText`).classList.remove('invisible');
+                        accompanyingLabel.classList.add('invisible');
+                    }
                 }
-            }
+            });
             return;
         }      
 
-        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash') {
+        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash' && resource !== 'time') {
             if (getElements()[resource + 'Rate'].textContent.includes('-')) {
                 getElements()[resource + 'Rate'].classList.add('red-disabled-text');
             } else {
@@ -2166,7 +2197,7 @@ function checkStatusAndSetTextClasses(element) {
                     }
                 }
             }
-        }else if (resource === 'cash') {
+        } else if (resource === 'cash') {
             let rocket;
             let currentCash = getResourceDataObject('currency', ['cash']);
             for (let clas of element.classList) {
@@ -2191,7 +2222,9 @@ function checkStatusAndSetTextClasses(element) {
             } else {
                 element.classList.add('red-disabled-text');
             }
-        }        
+        } else if (resource === 'time') {
+            //handle timer for things like search asteroid with telescope
+        }    
     }
 }
 
@@ -3646,56 +3679,56 @@ export function setAllCompoundsToZeroQuantity() {
     });
 }
 
-export function buildLaunchPad() {
+export function buildSpaceMiningBuilding(spaceMiningBuilding) {
     let currentResource1Quantity;
     let currentResource2Quantity;
     let currentResource3Quantity;
 
-    const buyLaunchPadButtonElement = document.querySelector('button[data-resource-to-fuse-to="launchPad"]');
-    const buyLaunchPadDescriptionElement = document.getElementById('launchPadDescription');
-    const launchPadAlreadyBoughtTextElement = document.getElementById('launchPadAlreadyBoughtText');
+    const buySpaceMiningBuildingButtonElement = document.querySelector(`button[data-resource-to-fuse-to="${spaceMiningBuilding}"]`);
+    const spaceMiningBuildingDescriptionElement = document.getElementById(`${spaceMiningBuilding}Description`);
+    const spaceMiningBuildingAlreadyBoughtTextElement = document.getElementById(`${spaceMiningBuilding}AlreadyBoughtText`);
 
     const currentCash = getResourceDataObject('currency', ['cash']);
-    const launchPadCashPrice = getResourceDataObject('space', ['upgrades', 'launchPad', 'price']);
+    const spaceMiningBuildingCashPrice = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'price']);
 
-    const launchPadResource1PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[0];
-    const launchPadResource1PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[1];
-    const launchPadResource1PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource1Price'])[2];
-    if (launchPadResource1PriceCategory) {
-        currentResource1Quantity = getResourceDataObject(launchPadResource1PriceCategory, [launchPadResource1PriceResource, 'quantity']);
+    const spaceMiningBuildingResource1PriceQuantity = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource1Price'])[0];
+    const spaceMiningBuildingResource1PriceResource = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource1Price'])[1];
+    const spaceMiningBuildingResource1PriceCategory = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource1Price'])[2];
+    if (spaceMiningBuildingResource1PriceCategory) {
+        currentResource1Quantity = getResourceDataObject(spaceMiningBuildingResource1PriceCategory, [spaceMiningBuildingResource1PriceResource, 'quantity']);
     }
-    const launchPadResource2PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[0];
-    const launchPadResource2PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[1];
-    const launchPadResource2PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource2Price'])[2];
-    if (launchPadResource2PriceCategory) {
-        currentResource2Quantity = getResourceDataObject(launchPadResource2PriceCategory, [launchPadResource2PriceResource, 'quantity']);
+    const spaceMiningBuildingResource2PriceQuantity = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource2Price'])[0];
+    const spaceMiningBuildingResource2PriceResource = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource2Price'])[1];
+    const spaceMiningBuildingResource2PriceCategory = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource2Price'])[2];
+    if (spaceMiningBuildingResource2PriceCategory) {
+        currentResource2Quantity = getResourceDataObject(spaceMiningBuildingResource2PriceCategory, [spaceMiningBuildingResource2PriceResource, 'quantity']);
     }
-    const launchPadResource3PriceQuantity = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[0];
-    const launchPadResource3PriceResource = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[1];
-    const launchPadResource3PriceCategory = getResourceDataObject('space', ['upgrades', 'launchPad', 'resource3Price'])[2];
-    if (launchPadResource3PriceCategory) {
-        currentResource3Quantity = getResourceDataObject(launchPadResource3PriceCategory, [launchPadResource3PriceResource, 'quantity']);
-    }
-
-    setResourceDataObject(Math.floor(currentCash - launchPadCashPrice), 'currency', ['cash']);
-
-    if (launchPadResource1PriceCategory) {
-        setResourceDataObject(Math.floor(currentResource1Quantity - launchPadResource1PriceQuantity), launchPadResource1PriceCategory, [launchPadResource1PriceResource, 'quantity']);
+    const spaceMiningBuildingResource3PriceQuantity = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource3Price'])[0];
+    const spaceMiningBuildingResource3PriceResource = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource3Price'])[1];
+    const spaceMiningBuildingResource3PriceCategory = getResourceDataObject('space', ['upgrades', spaceMiningBuilding, 'resource3Price'])[2];
+    if (spaceMiningBuildingResource3PriceCategory) {
+        currentResource3Quantity = getResourceDataObject(spaceMiningBuildingResource3PriceCategory, [spaceMiningBuildingResource3PriceResource, 'quantity']);
     }
 
-    if (launchPadResource2PriceCategory) {
-        setResourceDataObject(Math.floor(currentResource2Quantity - launchPadResource2PriceQuantity), launchPadResource2PriceCategory, [launchPadResource2PriceResource, 'quantity']);
+    setResourceDataObject(Math.floor(currentCash - spaceMiningBuildingCashPrice), 'currency', ['cash']);
+
+    if (spaceMiningBuildingResource1PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource1Quantity - spaceMiningBuildingResource1PriceQuantity), spaceMiningBuildingResource1PriceCategory, [spaceMiningBuildingResource1PriceResource, 'quantity']);
     }
 
-    if (launchPadResource3PriceCategory) {
-        setResourceDataObject(Math.floor(currentResource3Quantity - launchPadResource3PriceQuantity), launchPadResource3PriceCategory, [launchPadResource3PriceResource, 'quantity']);
+    if (spaceMiningBuildingResource2PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource2Quantity - spaceMiningBuildingResource2PriceQuantity), spaceMiningBuildingResource2PriceCategory, [spaceMiningBuildingResource2PriceResource, 'quantity']);
     }
 
-    setResourceDataObject(true, 'space', ['upgrades', 'launchPad', 'launchPadBoughtYet']);
+    if (spaceMiningBuildingResource3PriceCategory) {
+        setResourceDataObject(Math.floor(currentResource3Quantity - spaceMiningBuildingResource3PriceQuantity), spaceMiningBuildingResource3PriceCategory, [spaceMiningBuildingResource3PriceResource, 'quantity']);
+    }
 
-    buyLaunchPadButtonElement.classList.add('invisible');
-    buyLaunchPadDescriptionElement.classList.add('invisible');
-    launchPadAlreadyBoughtTextElement.classList.remove('invisible');
+    setResourceDataObject(true, 'space', ['upgrades', spaceMiningBuilding, `${spaceMiningBuilding}BoughtYet`]);
+
+    buySpaceMiningBuildingButtonElement.classList.add('invisible');
+    spaceMiningBuildingDescriptionElement.classList.add('invisible');
+    spaceMiningBuildingAlreadyBoughtTextElement.classList.remove('invisible');
 }
 
 export function getBatteryLevel() {
@@ -3718,7 +3751,7 @@ export function fuelRockets() {
     let rocketsToFuel = getRocketsFuellerStartedArray();
     rocketsToFuel = rocketsToFuel.filter(rocket => !rocket.includes('FuelledUp'));
 
-    rocketsToFuel.forEach(rocket => {
+    rocketsToFuel.forEach((rocket, index) => {
         const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
         const fuelRate = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', 'tier1', 'rate']);
         const fuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
@@ -3747,6 +3780,7 @@ export function fuelRockets() {
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.add('green-ready-text');
                     rocketLaunchButton.textContent = 'Launch!';
+                    showNotification(`Rocket ${index + 1} is ready for Launch!`, 'info');
                 }
             }
 
@@ -3795,10 +3829,10 @@ export function updateRocketDescription() {
     }
 }
 
-
 export function launchRocket(rocket) {
     setLaunchedRockets(rocket);
     document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
+    showNotification(`${capitaliseString(rocket).slice(0, -1)} ${rocket.slice(-1)}`, 'info');
 }
 
 export function toggleAllPower() {
@@ -3859,6 +3893,20 @@ function handlePowerAllButtonState() {
             powerAllButton.classList.add('activate-grid-disabled-border');
         }
     }
+}
+
+export function discoverAsteroid() {
+    let asteroidName;
+    //get the time needed for the search
+    //start searching countdown timer
+    //within timer update the searching counter, progressbar and disable the search button
+    //when expires add asteroid to discovered asteroids array and enable the search button
+    //create name for asteroid
+    document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
+
+    console.log('searching for asteroid...');
+    console.log('asteroid discovered: ' + asteroidName);
+    //write another function to show discovered asteroids in dedicated section of space mining tab
 }
 
 

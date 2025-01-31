@@ -1,4 +1,5 @@
 import {
+    getMinimumVersion,
     getCurrentGameVersion,
     setSaveName,
     getSaveName,
@@ -124,12 +125,15 @@ export async function loadGameFromCloud() {
 
             await initialiseLoadedGame(gameState, 'cloud');
             showNotification('Game loaded successfully!', 'info');
+            return true;
         } else {
             showNotification('No saved game data found.', 'warning');
+            return false;
         }
     } catch (error) {
         console.error("Error loading game from cloud:", error);
         showNotification('Error loading game data from the cloud.', 'error');
+        return false;
     }
 }
 
@@ -222,49 +226,25 @@ export function generateRandomPioneerName() {
 }
 
 export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER TIME
-    function parseVersion(versionString) {
-        return parseFloat(versionString.split('.').slice(0, 2).join('.'));
-    }
-
-    const currentVersion = parseVersion(getCurrentGameVersion());
-    if (!saveData.version) saveData.version = parseVersion('0.20.0');
+    const currentVersion = getCurrentGameVersion();
+    saveData.version = saveData.version ? saveData.version : getMinimumVersion();
 
     while (saveData.version < currentVersion) {
         if (saveData.version < 0.21) {
             if (objectType === 'resourceData') {
-                //saveData.version = '0.21.0';
+                saveData.version = 0.21;
                 //add a loop if necessary to change structure of all keys
-                // if (!saveData.space.upgrades.rocket5) { //EXAMPLE OF HOW TO ADD A NEW RESOURCE CHANGE TO AN EXISTING SAVE
-                //         
-
-                //         saveData.space.upgrades.rocket5 = {
-                //         builtParts: 0,
-                //         parts: 50,
-                //         price: 2000,
-                //         resource1Price: [2000, 'glass', 'compounds'],
-                //         resource2Price: [4000, 'titanium', 'compounds'],
-                //         resource3Price: [6000, 'water', 'compounds'],
-                //         setPrice: 'rocket5Price',
-                //         fuelQuantity: 0,
-                //         fuelQuantityToLaunch: 14000,
-                //         autoBuyer: {
-                //             currentTierLevel: 1,
-                //             normalProgression: false,
-                //             tier1: { 
-                //                 nameUpgrade: 'Fuel', 
-                //                 screen: 'rocket5', 
-                //                 place: 'rocket5Autobuyer1Row', 
-                //                 price: 8000, 
-                //                 rate: 0.09, 
-                //                 quantity: 0, 
-                //                 setPrice: 'rocket5AB1Price', 
-                //                 energyUse: 1.2 
-                //             },
-                //         },
-                //     };
-                // }
+                if (!saveData.space.upgrades.spaceTelescope) {
+                    saveData.space.upgrades.spaceTelescope = { 
+                        spaceTelescopeBoughtYet: false,
+                        price: 10000,
+                        resource1Price: [20000, 'steel', 'compounds'],
+                        resource2Price: [15000, 'glass', 'compounds'],
+                        resource3Price: [20000, 'silicon', 'resources'],
+                    }
+                }
             } else if (objectType === 'starSystemsData') {
-                //saveData.version = '0.21.0';
+                saveData.version = 0.21;
                 for (let key in saveData) {
                     // stuff to add (loop may or may not be necessary if structure changes same for all)
                 }

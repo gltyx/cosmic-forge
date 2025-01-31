@@ -1,21 +1,83 @@
 import { getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
-import { launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildLaunchPad } from './game.js';
+import { discoverAsteroid, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton } from './ui.js';
+import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
+    if (heading === 'Space Telescope') {
+        const spaceBuildTelescopeRow = createOptionRow(
+                    'spaceBuildTelescopeRow',
+                    null,
+                    'Space Telescope:',
+                    createButton(`Build Space Telescope`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'spaceTelescope'], () => {
+                        buildSpaceMiningBuilding('spaceTelescope');
+                        document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
+                        showNotification('Space Telescope Built!', 'info');
+                    }, 'upgradeCheck', '', 'spaceUpgrade', 'spaceTelescope', 'cash', true, null, 'spaceMiningPurchase'),
+                    createTextElement('Bought', 'spaceTelescopeAlreadyBoughtText', ['green-ready-text', 'invisible']),
+                    null,
+                    null,
+                    null,
+                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'price'])}, 
+                    ${getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource1Price'])[1])}, 
+                    ${getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource2Price'])[1])}, 
+                    ${getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'resource3Price'])[1])}`,
+                    '',
+                    'upgradeCheck',
+                    'spaceUpgrade',
+                    'spaceTelescope',
+                    'cash',
+                    null,
+                    false,
+                    null,
+                    null,
+                    'spaceMiningPurchase'
+                );
+                optionContentElement.appendChild(spaceBuildTelescopeRow);
+
+        const spaceTelescopeSearchAsteroidRow = createOptionRow(
+                    'spaceTelescopeSearchAsteroidRow',
+                    null,
+                    'Search Asteroid:',
+                    createButton(`Discover Asteroid`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                        discoverAsteroid();
+                    }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+                    createTextElement(
+                        `<div id="spaceTelescopeSearchProgressBar">`,
+                        'spaceTelescopeSearchProgressBarContainer',
+                        ['progress-bar-container', 'invisible']
+                    ),                     
+                    null,
+                    null,
+                    null,
+                    `Searching ... xs`,
+                    '',
+                    'upgradeCheck',
+                    'autoBuyer',
+                    'searchAsteroid',
+                    'time',
+                    null,
+                    false,
+                    null,
+                    null,
+                    'spaceMiningPurchase'
+                );
+                optionContentElement.appendChild(spaceTelescopeSearchAsteroidRow);
+    }
+
     if (heading === 'Launch Pad') {
         const spaceBuildLaunchPadRow = createOptionRow(
                     'spaceBuildLaunchPadRow',
                     null,
                     'Launch Pad:',
                     createButton(`Build Launch Pad`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'launchPad'], () => {
-                        buildLaunchPad();
+                        buildSpaceMiningBuilding('launchPad');
                         document.getElementById('spaceRocket1BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket2BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket4BuildRow').classList.remove('invisible');
+                        showNotification('Launch Pad Built!', 'info');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'launchPad', 'cash', true, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'launchPadAlreadyBoughtText', ['green-ready-text', 'invisible']),
                     null,
