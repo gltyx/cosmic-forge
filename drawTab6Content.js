@@ -1,5 +1,5 @@
-import { getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray } from './constantsAndGlobalVars.js';
-import { startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
+import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -37,16 +37,12 @@ export function drawTab6Content(heading, optionContentElement) {
                 );
                 optionContentElement.appendChild(spaceBuildTelescopeRow);
 
-                if (getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
-                    spaceBuildTelescopeRow.classList.add('invisible');
-                }
-
         const spaceTelescopeSearchAsteroidRow = createOptionRow(
                     'spaceTelescopeSearchAsteroidRow',
-                    'Search Asteroid',
-                    'Search Asteroid',
-                    createButton(`Search Asteroid`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                        startSearchAsteroidTimer();
+                    'Scan Asteroids',
+                    'Scan Asteroids',
+                    createButton(`Scan Asteroids`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                        startSearchAsteroidTimer([0, 'buttonClick']);
                     }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
                     createTextElement(
                         `<div id="spaceTelescopeSearchProgressBar">`,
@@ -69,6 +65,16 @@ export function drawTab6Content(heading, optionContentElement) {
                     'spaceMiningPurchase'
                 );
                 optionContentElement.appendChild(spaceTelescopeSearchAsteroidRow);
+
+                if (getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
+                    spaceBuildTelescopeRow.classList.add('invisible');
+                    timerManager.removeTimer('searchAsteroidTimer');
+                    if (getCurrentlySearchingAsteroid()) {
+                        const timeRemaining = getTimeLeftUntilAsteroidTimerFinishes();
+                        startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
+                    }
+                }
+                
     }
 
     if (heading === 'Launch Pad') {

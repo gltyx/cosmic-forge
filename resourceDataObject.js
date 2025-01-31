@@ -550,7 +550,7 @@ export let resourceData = {
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket1Price',
                 fuelQuantity: 0,
-                fuelQuantityToLaunch: 100, //10000
+                fuelQuantityToLaunch: 10000, //10000
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,

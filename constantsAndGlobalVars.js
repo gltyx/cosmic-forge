@@ -69,6 +69,7 @@ let canAffordDeferred = null;
 let originalFrameNumbers = {};
 let baseSearchTimerDuration = 180000;
 let timeLeftUntilAsteroidTimerFinishes = 0;
+let currentAsteroidSearchTimerDurationTotal = 0;
 
 export let oneOffPrizesAlreadyClaimedArray = [];
 
@@ -282,6 +283,7 @@ export function captureGameStatusForSaving(type) {
     gameState.launchedRockets = launchedRockets;
     gameState.baseSearchTimerDuration = baseSearchTimerDuration;
     gameState.timeLeftUntilAsteroidTimerFinishes = timeLeftUntilAsteroidTimerFinishes;
+    gameState.currentAsteroidSearchTimerDurationTotal = currentAsteroidSearchTimerDurationTotal;
 
     // Flags
     gameState.flags = {
@@ -334,6 +336,7 @@ export function restoreGameStatus(gameState, type) {
             launchedRockets = gameState.launchedRockets ?? [''];
             baseSearchTimerDuration = gameState.baseSearchTimerDuration ?? 180000;
             timeLeftUntilAsteroidTimerFinishes = gameState.timeLeftUntilAsteroidTimerFinishes ?? 0;
+            currentAsteroidSearchTimerDurationTotal = gameState.currentAsteroidSearchTimerDurationTotal ?? 0;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1482,6 +1485,16 @@ export function getTelescopeReadyToSearch() {
 export function setTelescopeReadyToSearch(value) {
     telescopeReadyToSearch = value ?? true;
 }
+
+export function getCurrentAsteroidSearchTimerDurationTotal() {
+    return currentAsteroidSearchTimerDurationTotal;
+}
+
+export function setCurrentAsteroidSearchTimerDurationTotal(value) {
+    currentAsteroidSearchTimerDurationTotal = value ?? 0;
+}
+
+
 
 const IMAGE_URLS = {
     resources: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

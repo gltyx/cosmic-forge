@@ -1,4 +1,6 @@
 import {
+    setCurrentAsteroidSearchTimerDurationTotal,
+    getCurrentAsteroidSearchTimerDurationTotal,
     getTelescopeReadyToSearch,
     setTelescopeReadyToSearch,
     setTimeLeftUntilAsteroidTimerFinishes,
@@ -186,7 +188,7 @@ class Timer {
     }
 }
 
-const timerManager = new TimerManager();
+export const timerManager = new TimerManager();
 //--------------------------------------------------------------------------------------------------------
 
 
@@ -195,6 +197,7 @@ export function startGame() {
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
     startInitialTimers();
+    startSearchAsteroidTimer([getTimeLeftUntilAsteroidTimerFinishes(), 'fromLoadOrNewGame']);
     startNewsTickerTimer();
     gameLoop();
 }
@@ -279,6 +282,8 @@ export async function gameLoop() {
         getBuildingTypes().forEach(type => {
             checkAndRevealNewBuildings(type);
         });
+
+        checkAndRevealNewBuildings('space');
 
         monitorRevealResourcesCheck();
         monitorRevealCompoundsCheck();
@@ -381,6 +386,12 @@ function checkAndRevealNewBuildings(type) {
         case 'energy':
             elements = getResourceDataObject('buildings', ['energy', 'upgrades']);
             break;
+        case 'space':
+            const element = document.getElementById('launchPad');
+            if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1] === 'Space Mining') {
+                document.getElementById(element.id).parentElement.parentElement.classList.remove('invisible');
+            }
+            return;
     }
 
     for (const key in elements) {
@@ -1592,16 +1603,20 @@ function monitorRevealRowsChecks(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
-    if ((element === document.getElementById('searchAsteroidDescription') || element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
+    if ((element === document.getElementById('scanAsteroidsDescription') || element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
         element.classList.remove('red-disabled-text');
 
-        if (element === document.getElementById('searchAsteroidDescription')) {
+        if (element === document.getElementById('scanAsteroidsDescription')) {
             getTelescopeReadyToSearch() ? element.classList.add('green-ready-text') : element.classList.remove('green-ready-text');
             return;
         }
 
         if (element.dataset.resourceToFuseTo === 'searchAsteroid') {
-            getTelescopeReadyToSearch() ? (element.classList.add('green-ready-text'), element.classList.remove('red-disabled-text')) : (element.classList.remove('green-ready-text'), element.classList.add('red-disabled-text'));
+            getTelescopeReadyToSearch() ? (element.classList.remove('invisible'), element.classList.remove('red-disabled-text')) : (element.classList.add('invisible'), element.classList.add('red-disabled-text'));
+            const progressBarSearchAsteroid = document.getElementById('spaceTelescopeSearchProgressBarContainer');
+            if (progressBarSearchAsteroid) {
+                getTelescopeReadyToSearch() ? progressBarSearchAsteroid.classList.add('invisible') : progressBarSearchAsteroid.classList.remove('invisible');
+            }
             return;
         }
     }
@@ -2929,29 +2944,48 @@ function startInitialTimers() {
     }
 }
 
-export function startSearchAsteroidTimer() {
+export function startSearchAsteroidTimer(adjustment) {
+    if (adjustment[1] === 'fromLoadOrNewGame' && !getCurrentlySearchingAsteroid()) {
+        return;
+    }
     setTelescopeReadyToSearch(false);
-    const searchTimerDescriptionElement = document.getElementById('searchAsteroidDescription');
+    setCurrentlySearchingAsteroid(true);
+    const searchTimerDescriptionElement = document.getElementById('scanAsteroidsDescription');
     const timerName = 'searchAsteroidTimer';
     
     if (!timerManager.getTimer(timerName)) {
         let counter = 0;
         const searchInterval = getTimerUpdateInterval();
-        const searchDuration = getAsteroidSearchDuration();
+        const searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
+
+        if (adjustment[0] === 0) {
+            setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
+        }
         
         timerManager.addTimer(timerName, searchInterval, () => {
             counter += searchInterval;
+
+            const timeLeft = Math.max(searchDuration - counter, 0);
+            const timeLeftUI = Math.max(Math.floor((searchDuration - counter) / 1000), 0);
             
             if (counter >= searchDuration) {
                 discoverAsteroid();
                 timerManager.removeTimer(timerName);
                 if (searchTimerDescriptionElement) {             
-                    searchTimerDescriptionElement.classList.add('green-ready-text');
                     searchTimerDescriptionElement.innerText = 'Ready To Search';
                     setTelescopeReadyToSearch(true);
+                    setCurrentlySearchingAsteroid(false);
+                    setTimeLeftUntilAsteroidTimerFinishes(0);
                 }
             } else {
-                
+                if (searchTimerDescriptionElement) { 
+                    setTimeLeftUntilAsteroidTimerFinishes(timeLeft);    
+                    searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
+                    const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
+                    const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
+
+                    document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
+                }
             }
         });
     }
@@ -3693,11 +3727,15 @@ export function offlineGains(switchedFocus) {
         );
     };
 
-    const offlineGains = {
+    let offlineGains = {
         resources: calculateOfflineGains(combinedValues.rate.resources, getTimerRateRatio()),
         compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
         energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
         research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
+        rocket1: 0,
+        rocket2: 0,
+        rocket3: 0,
+        rocket4: 0
     };
 
     Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
@@ -3719,7 +3757,30 @@ export function offlineGains(switchedFocus) {
 
     const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
     setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
-    
+
+    const currentFuelQuantityRockets = getRocketsFuellerStartedArray().filter(rocket => !rocket.includes('FuelledUp'));
+    currentFuelQuantityRockets.forEach(rocket => {
+        const rocketDetails = getResourceDataObject('space', ['upgrades', rocket]);
+        const fuelUpgradeRate = rocketDetails.autoBuyer.tier1.rate;
+        const offlineFuelGain = (fuelUpgradeRate * timeDifferenceInSeconds) * getTimerRateRatio();
+        offlineGains[rocket] += offlineFuelGain;
+    });
+
+    currentFuelQuantityRockets.forEach(rocket => {
+        const currentRocketFuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
+        setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
+    });
+
+    if (getCurrentlySearchingAsteroid()) {
+        const timeLeft = getTimeLeftUntilAsteroidTimerFinishes();
+        const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+
+        const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+
+        timerManager.removeTimer('searchAsteroidTimer');
+        startSearchAsteroidTimer([remainingTime, 'offlineGains']);
+    }
+
     if (!switchedFocus) {
         showNotification('Offline Gains Added!', 'info');
     }

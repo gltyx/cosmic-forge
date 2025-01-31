@@ -1130,7 +1130,8 @@ button.red-disabled-text {
 #rocket1FuellingProgressBarContainer,
 #rocket2FuellingProgressBarContainer,
 #rocket3FuellingProgressBarContainer,
-#rocket4FuellingProgressBarContainer
+#rocket4FuellingProgressBarContainer,
+#spaceTelescopeSearchProgressBarContainer
  {
     background-color: var(--disabled-text);
     height: 25px;
@@ -1141,7 +1142,8 @@ button.red-disabled-text {
  #rocket1FuellingProgressBar,
  #rocket2FuellingProgressBar,
  #rocket3FuellingProgressBar,
- #rocket4FuellingProgressBar
+ #rocket4FuellingProgressBar,
+ #spaceTelescopeSearchProgressBar
  {
     background-color: var(--text-color);
     width: 0%;
