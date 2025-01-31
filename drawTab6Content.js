@@ -13,6 +13,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     createButton(`Build Space Telescope`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'spaceTelescope'], () => {
                         buildSpaceMiningBuilding('spaceTelescope');
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
+                        spaceBuildTelescopeRow.classList.add('invisible');
                         showNotification('Space Telescope Built!', 'info');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'spaceTelescope', 'cash', true, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'spaceTelescopeAlreadyBoughtText', ['green-ready-text', 'invisible']),
@@ -36,10 +37,14 @@ export function drawTab6Content(heading, optionContentElement) {
                 );
                 optionContentElement.appendChild(spaceBuildTelescopeRow);
 
+                if (getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
+                    spaceBuildTelescopeRow.classList.add('invisible');
+                }
+
         const spaceTelescopeSearchAsteroidRow = createOptionRow(
                     'spaceTelescopeSearchAsteroidRow',
-                    null,
-                    'Search Asteroid:',
+                    'Search Asteroid',
+                    'Search Asteroid',
                     createButton(`Discover Asteroid`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                         discoverAsteroid();
                     }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
@@ -51,7 +56,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `Searching ... xs`,
+                    `Ready To Search`,
                     '',
                     'upgradeCheck',
                     'autoBuyer',
@@ -77,6 +82,7 @@ export function drawTab6Content(heading, optionContentElement) {
                         document.getElementById('spaceRocket2BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket4BuildRow').classList.remove('invisible');
+                        spaceBuildLaunchPadRow.classList.add('invisible');
                         showNotification('Launch Pad Built!', 'info');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'launchPad', 'cash', true, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'launchPadAlreadyBoughtText', ['green-ready-text', 'invisible']),
@@ -99,6 +105,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     'spaceMiningPurchase'
                 );
                 optionContentElement.appendChild(spaceBuildLaunchPadRow);
+
+                if (getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet'])) {
+                    spaceBuildLaunchPadRow.classList.add('invisible');
+                }
 
         const spaceRocket1BuildRow = createOptionRow(
                     'spaceRocket1BuildRow',
