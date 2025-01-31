@@ -685,6 +685,7 @@ export let resourceData = {
 export let starSystems = {
     version: 0.21, //update this whenever changes are made to the structure
     spica: {
+        starCode: 'SPC',
         precipitationResourceCategory: 'compounds',
         precipitationType: 'water',
         weather: {

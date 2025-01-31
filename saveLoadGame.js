@@ -230,9 +230,9 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
     saveData.version = saveData.version ? saveData.version : getMinimumVersion();
 
     while (saveData.version < currentVersion) {
-        if (saveData.version < 0.21) {
+        if (saveData.version < 0.22) {
             if (objectType === 'resourceData') {
-                saveData.version = 0.21;
+                saveData.version = 0.22;
                 //add a loop if necessary to change structure of all keys
                 if (!saveData.space.upgrades.spaceTelescope) {
                     saveData.space.upgrades.spaceTelescope = { 
@@ -244,9 +244,9 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     }
                 }
             } else if (objectType === 'starSystemsData') {
-                saveData.version = 0.21;
-                for (let key in saveData) {
-                    // stuff to add (loop may or may not be necessary if structure changes same for all)
+                saveData.version = 0.22;
+                if (!saveData.spica.starCode) {
+                    saveData.spica.starCode = 'SPC';
                 }
             }
         }

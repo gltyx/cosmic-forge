@@ -21,7 +21,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.21;
+export const GAME_VERSION_FOR_SAVES = 0.22;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -32,10 +32,12 @@ export const READY_TO_SORT = 120;
 export const NOW = 30; //READY TO SORT NOW needs total of 150
 export const BUILDING_TYPES = ['energy'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
+export const GAME_COST_MULTIPLIER = 1.15;
 
 //GLOBAL VARIABLES
 export let gameState;
 
+let asteroidArray = [];
 let prize = [];
 let rocketsBuilt = [];
 let rocketsFuellerStartedArray = [];
@@ -284,6 +286,7 @@ export function captureGameStatusForSaving(type) {
     gameState.baseSearchTimerDuration = baseSearchTimerDuration;
     gameState.timeLeftUntilAsteroidTimerFinishes = timeLeftUntilAsteroidTimerFinishes;
     gameState.currentAsteroidSearchTimerDurationTotal = currentAsteroidSearchTimerDurationTotal;
+    gameState.asteroidArray = asteroidArray;
 
     // Flags
     gameState.flags = {
@@ -337,6 +340,7 @@ export function restoreGameStatus(gameState, type) {
             baseSearchTimerDuration = gameState.baseSearchTimerDuration ?? 180000;
             timeLeftUntilAsteroidTimerFinishes = gameState.timeLeftUntilAsteroidTimerFinishes ?? 0;
             currentAsteroidSearchTimerDurationTotal = gameState.currentAsteroidSearchTimerDurationTotal ?? 0;
+            asteroidArray = (gameState.asteroidArray ?? []).filter(item => item !== '') || null;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1403,6 +1407,14 @@ export function getRocketsBuilt() {
     return rocketsBuilt;
 }
 
+export function setAsteroidArray(value) {
+    asteroidArray.push(value);
+}
+
+export function getAsteroidArray() {
+    return asteroidArray;
+}
+
 export function setRocketsFuellerStartedArray(value, addRemove) {
     if (addRemove === 'add') {
         rocketsFuellerStartedArray.push(value);
@@ -1492,6 +1504,10 @@ export function getCurrentAsteroidSearchTimerDurationTotal() {
 
 export function setCurrentAsteroidSearchTimerDurationTotal(value) {
     currentAsteroidSearchTimerDurationTotal = value ?? 0;
+}
+
+export function getGameCostMultiplier() {
+    return GAME_COST_MULTIPLIER;
 }
 
 

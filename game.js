@@ -1,4 +1,7 @@
 import {
+    getAsteroidArray,
+    setAsteroidArray,
+    getGameCostMultiplier,
     setCurrentAsteroidSearchTimerDurationTotal,
     getCurrentAsteroidSearchTimerDurationTotal,
     getTelescopeReadyToSearch,
@@ -381,15 +384,24 @@ function addPrecipitationResource() {
 
 function checkAndRevealNewBuildings(type) {
     let elements;
+    let element;
 
     switch (type) {
         case 'energy':
             elements = getResourceDataObject('buildings', ['energy', 'upgrades']);
             break;
         case 'space':
-            const element = document.getElementById('launchPad');
+            element = document.getElementById('launchPad');
             if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1] === 'Space Mining') {
-                document.getElementById(element.id).parentElement.parentElement.classList.remove('invisible');
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.remove('add');
+            }
+            element = document.getElementById('asteroids');
+            if (getAsteroidArray().length > 0 && getCurrentTab()[1] === 'Space Mining') {
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.add('invisible');
             }
             return;
     }
@@ -796,7 +808,7 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
     let resource3Category = '';
 
     if (elementName) {
-        const newCurrencyPrice = Math.ceil(currentPrice * 1.15);
+        const newCurrencyPrice = Math.ceil(currentPrice * getGameCostMultiplier());
 
         if (optionalResource && optionalResource !== 'cash') {
             for (const item in optionalResource) {
@@ -821,9 +833,9 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             }
         }
 
-        let newResource1Price = resource1Price > 0 ? Math.ceil(resource1Price * 1.15) : 0;
-        let newResource2Price = resource2Price > 0 ? Math.ceil(resource2Price * 1.15) : 0;
-        let newResource3Price = resource3Price > 0 ? Math.ceil(resource3Price * 1.15) : 0;
+        let newResource1Price = resource1Price > 0 ? Math.ceil(resource1Price * getGameCostMultiplier()) : 0;
+        let newResource2Price = resource2Price > 0 ? Math.ceil(resource2Price * getGameCostMultiplier()) : 0;
+        let newResource3Price = resource3Price > 0 ? Math.ceil(resource3Price * getGameCostMultiplier()) : 0;
 
         if (newResource1Price > 0) {
             newResource1Price = [newResource1Price, resource1Name, resource1Category];
@@ -4014,18 +4026,16 @@ function handlePowerAllButtonState() {
 }
 
 export function discoverAsteroid() {
-    let asteroidName;
-    //get the time needed for the search
-    //start searching countdown timer
-    //within timer update the searching counter, progressbar and disable the search button
-    //when expires add asteroid to discovered asteroids array and enable the search button
-    //create name for asteroid
+    const starCode = getStarSystemDataObject(getCurrentStarSystem(), ['starCode']);
+    const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+    let asteroidName = `${starCode}-${randomNumber}${randomLetter}`;
     document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
-    setBaseSearchTimerDuration(getBaseSearchTimerDuration() * 1.1); //increase search time on next one
-    console.log('searching for asteroid...');
-    console.log('asteroid discovered: ' + asteroidName);
-    //write another function to show discovered asteroids in dedicated section of space mining tab
+    setBaseSearchTimerDuration(getBaseSearchTimerDuration() * getGameCostMultiplier());
+    setAsteroidArray(asteroidName);
+    showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
 }
+
 
 
 

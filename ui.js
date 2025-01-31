@@ -678,7 +678,7 @@ function processNotificationQueue() {
 function sendNotificationIfActive(message, type, duration) {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.innerText = message;
+    notification.innerHTML = message;
 
     const allNotifications = document.querySelectorAll('.notification');
     allNotifications.forEach((notification, index) => {
