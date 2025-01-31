@@ -2968,7 +2968,9 @@ export function startSearchAsteroidTimer(adjustment) {
     if (!timerManager.getTimer(timerName)) {
         let counter = 0;
         const searchInterval = getTimerUpdateInterval();
-        const searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
+        let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
+
+        searchDuration = 8000; //DEBUG
 
         if (adjustment[0] === 0) {
             setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
@@ -4026,15 +4028,71 @@ function handlePowerAllButtonState() {
 }
 
 export function discoverAsteroid() {
+    if (Math.random() < 0.07) {
+        showNotification('Asteroid not found after search!', 'warning');
+        return;
+    }
+
     const starCode = getStarSystemDataObject(getCurrentStarSystem(), ['starCode']);
     const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
-    let asteroidName = `${starCode}-${randomNumber}${randomLetter}`;
+    const asteroidName = `${starCode}-${randomNumber}${randomLetter}`;
+    const asteroid = generateAsteroidData(asteroidName);
     document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
     setBaseSearchTimerDuration(getBaseSearchTimerDuration() * getGameCostMultiplier());
-    setAsteroidArray(asteroidName);
+    setAsteroidArray(asteroid);
     showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
+    console.log(asteroid);
 }
+
+function generateAsteroidData(name) {
+    const distance = Math.floor(Math.random() * (570000 - 30000 + 1)) + 30000;
+
+    const rarityRoll = Math.floor(Math.random() * 101);
+    let rarity;
+    if (rarityRoll <= 70) {
+        rarity = "Common";
+    } else if (rarityRoll <= 90) {
+        rarity = "Uncommon";
+    } else if (rarityRoll <= 98) {
+        rarity = "Rare";
+    } else {
+        rarity = "Legendary";
+    }
+
+    let easeOfExtraction;
+    if (rarity === "Common") {
+        easeOfExtraction = Math.floor(Math.random() * 10) + 1;
+    } else if (rarity === "Uncommon") {
+        easeOfExtraction = Math.floor(Math.random() * 10) + 1;
+    } else if (rarity === "Rare") {
+        easeOfExtraction = Math.floor(Math.random() * 6) + 1;
+    } else {
+        easeOfExtraction = Math.floor(Math.random() * 4) + 1;
+    }
+
+    let quantity;
+    if (rarity === "Common") {
+        quantity = Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+    } else if (rarity === "Uncommon") {
+        quantity = Math.floor(Math.random() * (120 - 70 + 1)) + 70;
+    } else if (rarity === "Rare") {
+        quantity = Math.floor(Math.random() * (200 - 110 + 1)) + 110;
+    } else {
+        quantity = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+    }
+
+    return {
+        [name]: {
+            name,
+            distance,
+            rarity,
+            easeOfExtraction,
+            quantity
+        }
+    };
+}
+
 
 
 

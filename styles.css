@@ -1151,6 +1151,18 @@ button.red-disabled-text {
     z-index: 1000
  }
 
+ .label-asteroid {
+    margin-right: 10px;
+    width: 25%;
+    text-align: center;
+ }
+
+ .value-asteroid {
+    margin-right: 10px;
+    width: 25%;
+    text-align: center;
+ }
+
 .news-ticker-container {
     width: 100%;
     height: 30px;

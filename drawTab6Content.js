@@ -1,4 +1,4 @@
-import { getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
+import { getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
 import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
@@ -499,5 +499,100 @@ export function drawTab6Content(heading, optionContentElement) {
         if (launchedState) {
             spaceRocket4AutoBuyerRow.classList.add('invisible');
         }
+    }
+    
+    if (heading === 'Asteroids') {
+        const asteroidsArray = getAsteroidArray();
+    
+        if (asteroidsArray.length === 0) {
+            return;
+        }
+
+        const asteroidLegendRow = createOptionRow(
+            `asteroidLegendRow`,
+            null,
+            ``,
+            createTextElement(
+                `Rarity`,
+                'asteroidLegendRarity',
+                ['green-ready-text', 'label-asteroid']
+            ),
+            createTextElement(
+                `Distance`,
+                'asteroidLegendDistance',
+                ['green-ready-text', 'label-asteroid']
+            ),
+            createTextElement(
+                `Complexity`,
+                'asteroidLegendEOE',
+                ['green-ready-text', 'label-asteroid']
+            ),
+            createTextElement(
+                `Antimatter`,
+                'asteroidLegendQuantity',
+                ['green-ready-text', 'label-asteroid']
+            ),
+            null,
+            ``,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'asteroid',
+            [true, '25%', '75%']
+        );
+        optionContentElement.appendChild(asteroidLegendRow);
+
+        asteroidsArray.forEach((asteroid) => {
+            const asteroidName = Object.keys(asteroid)[0];
+
+            const { name, distance, easeOfExtraction, quantity, rarity } = asteroid[asteroidName];
+            const asteroidRowName = `asteroidRow_${name}`;
+    
+            const asteroidRow = createOptionRow(
+                `${asteroidRowName}`,
+                null,
+                `${name}:`,
+                createTextElement(
+                    `${rarity}`,
+                    'asteroidInfoContainerRarity',
+                    ['value-asteroid', 'rarity-asteroid']
+                ),
+                createTextElement(
+                    `${distance}`,
+                    'asteroidInfoContainerDistance',
+                    ['value-asteroid', 'distance-asteroid']
+                ),
+                createTextElement(
+                    `${easeOfExtraction}`,
+                    'asteroidInfoContainerEOE',
+                    ['value-asteroid', 'eoe-asteroid']
+                ),
+                createTextElement(
+                    `${quantity}`,
+                    'asteroidInfoContainerQuantity',
+                    ['value-asteroid', 'quantity-asteroid']
+                ),                              
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'asteroid',
+                [true, '25%', '75%']
+            );
+            optionContentElement.appendChild(asteroidRow);
+        });
     }    
 }
