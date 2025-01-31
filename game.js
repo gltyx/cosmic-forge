@@ -2233,6 +2233,9 @@ function checkStatusAndSetTextClasses(element) {
                     totalPartsElement.classList.add('green-ready-text');
                     element.classList.remove('red-disabled-text');
                     element.textContent = 'Built!';
+                    if (getLaunchedRockets().includes(dataName)) {
+                        element.textContent = 'Launched!';
+                    }
                 }
                 const rocketsBuiltArray = getRocketsBuilt();
                 for (let i = 1; i <= 4; i++) {
@@ -2970,7 +2973,7 @@ export function startSearchAsteroidTimer(adjustment) {
         const searchInterval = getTimerUpdateInterval();
         let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
 
-        searchDuration = 8000; //DEBUG
+        searchDuration = 1000; //DEBUG
 
         if (adjustment[0] === 0) {
             setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
@@ -2987,17 +2990,16 @@ export function startSearchAsteroidTimer(adjustment) {
                 timerManager.removeTimer(timerName);
                 if (searchTimerDescriptionElement) {             
                     searchTimerDescriptionElement.innerText = 'Ready To Search';
-                    setTelescopeReadyToSearch(true);
-                    setCurrentlySearchingAsteroid(false);
-                    setTimeLeftUntilAsteroidTimerFinishes(0);
                 }
+                setTelescopeReadyToSearch(true);
+                setCurrentlySearchingAsteroid(false);
+                setTimeLeftUntilAsteroidTimerFinishes(0);
             } else {
+                setTimeLeftUntilAsteroidTimerFinishes(timeLeft); 
                 if (searchTimerDescriptionElement) { 
-                    setTimeLeftUntilAsteroidTimerFinishes(timeLeft);    
                     searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
                     const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
                     const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
-
                     document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
                 }
             }
@@ -3896,6 +3898,13 @@ export function fuelRockets() {
         let newFuelQuantity = fuelQuantity;
         const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
 
+        if (newFuelQuantity >= fullLevel && !getRocketsFuellerStartedArray().includes(rocket + 'FuelledUp')) {
+            const formattedRocket = rocket.slice(0, -1) + " " + rocket.slice(-1);
+            showNotification(`${capitaliseString(formattedRocket)} is ready for Launch!`, 'info');
+            setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
+            setRocketsFuellerStartedArray(`${rocket}`, 'remove');
+        }
+
         if (getCurrentOptionPane() === rocket) {
             fuelQuantityProgressBarElement.parentElement.classList.remove('invisible');
         }
@@ -3912,7 +3921,6 @@ export function fuelRockets() {
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.add('green-ready-text');
                     rocketLaunchButton.textContent = 'Launch!';
-                    showNotification(`Rocket ${index + 1} is ready for Launch!`, 'info');
                 }
             }
 
@@ -3931,8 +3939,6 @@ export function fuelRockets() {
                     document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
                     document.getElementById('fuelDescription').classList.add('green-ready-text');
                     document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-                    setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
-                    setRocketsFuellerStartedArray(`${rocket}`, 'remove');
                 }
             }
             setCheckRocketFuellingStatus(rocket, false);
@@ -3964,7 +3970,7 @@ export function updateRocketDescription() {
 export function launchRocket(rocket) {
     setLaunchedRockets(rocket);
     document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
-    showNotification(`${capitaliseString(rocket).slice(0, -1)} ${rocket.slice(-1)}`, 'info');
+    showNotification(`${capitaliseString(rocket).slice(0, -1)} ${rocket.slice(-1)} Launched!`, 'info');
 }
 
 export function toggleAllPower() {
@@ -4046,56 +4052,115 @@ export function discoverAsteroid() {
 }
 
 function generateAsteroidData(name) {
-    const distance = Math.floor(Math.random() * (570000 - 30000 + 1)) + 30000;
+    let distanceClass;
+    const minDistance = 30000;
+    const maxDistance = 570000;
+
+    const distance = Math.floor(Math.random() * (maxDistance - minDistance + 1)) + minDistance;
+    const distancePercentile = (distance - minDistance) / (maxDistance - minDistance);
+    
+    
+    if (distancePercentile >= 0.76) {
+        distanceClass = 'red-disabled-text';
+    } else if (distancePercentile >= 0.51) {
+        distanceClass = 'orange-warning-text';
+    } else if (distancePercentile >= 0.26) {
+        distanceClass = 'none';
+    } else {
+        distanceClass = 'green-ready-text';
+    }
 
     const rarityRoll = Math.floor(Math.random() * 101);
-    let rarity;
+    let rarity, rarityClass;
     if (rarityRoll <= 70) {
         rarity = "Common";
+        rarityClass = 'red-disabled-text';
     } else if (rarityRoll <= 90) {
         rarity = "Uncommon";
+        rarityClass = 'warning-orange-text';
     } else if (rarityRoll <= 98) {
         rarity = "Rare";
+        rarityClass = 'none';
     } else {
         rarity = "Legendary";
+        rarityClass = 'green-ready-text';
     }
 
     let easeOfExtraction;
-    if (rarity === "Common") {
-        easeOfExtraction = Math.floor(Math.random() * 10) + 1;
-    } else if (rarity === "Uncommon") {
-        easeOfExtraction = Math.floor(Math.random() * 10) + 1;
+    let easeClass;
+    let min, max;
+    
+    if (rarity === "Common" || rarity === "Uncommon") {
+        easeOfExtraction = Math.floor(Math.random() * 6) + 5;
+        min = 5;
+        max = 10;
     } else if (rarity === "Rare") {
         easeOfExtraction = Math.floor(Math.random() * 6) + 1;
+        min = 1;
+        max = 6;
     } else {
         easeOfExtraction = Math.floor(Math.random() * 4) + 1;
+        min = 1;
+        max = 4;
+    }
+
+    const easePercentile = (easeOfExtraction - min) / (max - min);
+
+    if (easePercentile >= 0.76) {
+        easeClass = 'red-disabled-text';
+    } else if (easePercentile >= 0.51) {
+        easeClass = 'warning-orange-text';
+    } else if (easePercentile >= 0.26) {
+        easeClass = 'none';
+    } else {
+        easeClass = 'green-ready-text';
     }
 
     let quantity;
     if (rarity === "Common") {
-        quantity = Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+        quantity = Math.floor(Math.random() * (800 - 300 + 1)) + 300;
     } else if (rarity === "Uncommon") {
-        quantity = Math.floor(Math.random() * (120 - 70 + 1)) + 70;
+        quantity = Math.floor(Math.random() * (1200 - 700 + 1)) + 700;
     } else if (rarity === "Rare") {
-        quantity = Math.floor(Math.random() * (200 - 110 + 1)) + 110;
+        quantity = Math.floor(Math.random() * (2000 - 1100 + 1)) + 1100;
     } else {
-        quantity = Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+        quantity = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
+    }    
+
+    let quantityClass;
+    const minQuantity = rarity === "Common" ? 300 : (rarity === "Uncommon" ? 700 : (rarity === "Rare" ? 1100 : 5000));
+    const maxQuantity = rarity === "Common" ? 800 : (rarity === "Uncommon" ? 1200 : (rarity === "Rare" ? 2000 : 10000));
+    
+    const quantityPercentile = (quantity - minQuantity) / (maxQuantity - minQuantity);
+
+    if (quantityPercentile >= 0.76) {
+        quantityClass = 'green-ready-text';
+    } else if (quantityPercentile >= 0.51) {
+        quantityClass = 'none';
+    } else if (quantityPercentile >= 0.26) {
+        quantityClass = 'warning-orange-text';
+    } else {
+        quantityClass = 'red-disabled-text';
+    }
+
+    if (rarity === "Uncommon") {
+        if (easeClass === 'green-ready-text') easeClass = 'none';
+        if (quantityClass === 'green-ready-text') quantityClass = 'none';
+    } else if (rarity === "Common") {
+        if (easeClass === 'green-ready-text') easeClass = 'warning-orange-text';
+        if (quantityClass === 'green-ready-text') quantityClass = 'warning-orange-text';
     }
 
     return {
         [name]: {
             name,
-            distance,
-            rarity,
-            easeOfExtraction,
-            quantity
+            distance: [distance, distanceClass],
+            rarity: [rarity, rarityClass],
+            easeOfExtraction: [easeOfExtraction, easeClass],
+            quantity: [quantity, quantityClass]
         }
     };
 }
-
-
-
-
 
 //===============================================================================================================
 

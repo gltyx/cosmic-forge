@@ -559,25 +559,25 @@ export function drawTab6Content(heading, optionContentElement) {
                 null,
                 `${name}:`,
                 createTextElement(
-                    `${rarity}`,
+                    `${rarity[0]}`,
                     'asteroidInfoContainerRarity',
-                    ['value-asteroid', 'rarity-asteroid']
+                    ['value-asteroid', 'rarity-asteroid', rarity[1]]
                 ),
                 createTextElement(
-                    `${distance}`,
+                    `${distance[0]}`,
                     'asteroidInfoContainerDistance',
-                    ['value-asteroid', 'distance-asteroid']
+                    ['value-asteroid', 'distance-asteroid', distance[1]]
                 ),
                 createTextElement(
-                    `${easeOfExtraction}`,
+                    `${easeOfExtraction[0]}`,
                     'asteroidInfoContainerEOE',
-                    ['value-asteroid', 'eoe-asteroid']
+                    ['value-asteroid', 'eoe-asteroid', easeOfExtraction[1]]
                 ),
                 createTextElement(
-                    `${quantity}`,
+                    `${quantity[0]}`,
                     'asteroidInfoContainerQuantity',
-                    ['value-asteroid', 'quantity-asteroid']
-                ),                              
+                    ['value-asteroid', 'quantity-asteroid', quantity[1]]
+                ),                             
                 null,
                 ``,
                 '',
