@@ -174,21 +174,42 @@ class Timer {
         this.duration = duration;
         this.onExpire = onExpire;
         this.timerId = null;
+        this.elapsedTime = 0;
+        this.isPaused = false;
     }
 
     start() {
-        if (this.timerId) {
-            clearTimeout(this.timerId);
+        if (this.isPaused) {
+            this.resume();
+        } else {
+            this.timerId = setInterval(() => {
+                this.elapsedTime += this.duration;
+                this.onExpire();
+            }, this.duration);
         }
-        this.timerId = setInterval(() => {
-            this.onExpire();
-        }, this.duration);
     }
 
     stop() {
         if (this.timerId) {
             clearInterval(this.timerId);
             this.timerId = null;
+        }
+    }
+
+    pause() {
+        if (this.timerId) {
+            clearInterval(this.timerId);
+            this.isPaused = true;  // Mark as paused
+        }
+    }
+
+    resume() {
+        if (this.isPaused) {
+            this.isPaused = false;
+            this.timerId = setInterval(() => {
+                this.elapsedTime += this.duration;
+                this.onExpire();
+            }, this.duration);
         }
     }
 }
@@ -276,6 +297,7 @@ export async function gameLoop() {
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
+        checkPowerForAsteroidTimer();
 
         monitorTechTree();
         
@@ -1612,6 +1634,17 @@ function monitorRevealRowsChecks(element) {
             } else {
                 element.classList.add('invisible');
             }
+        }
+    }
+}
+
+export function checkPowerForAsteroidTimer() {
+    const searchTimer = timerManager.getTimer('searchAsteroidTimer');
+    if (searchTimer) {
+        if (getAsteroidTimerCanContinue()) {
+            searchTimer.resume();
+        } else {
+            searchTimer.pause();
         }
     }
 }
