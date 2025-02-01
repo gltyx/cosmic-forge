@@ -245,8 +245,8 @@ export function drawTab8Content(heading, optionContentElement) {
                 { value: 180000, text: '3 Minutes' },
                 { value: 300000, text: '5 Minutes' },
                 { value: 600000, text: '10 Minutes' },
-            ], getAutoSaveFrequency(), (value) => {
-                setAutoSaveFrequency(value);
+            ], parseInt(getAutoSaveFrequency()), (value) => {
+                setAutoSaveFrequency(parseInt(value));
                 initializeAutoSave();
             }),
             createToggleSwitch('autoSaveToggle', false, (isEnabled) => {

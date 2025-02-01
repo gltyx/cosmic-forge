@@ -521,9 +521,7 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
 
         optionDiv.addEventListener('click', (event) => {
             const value = event.target.getAttribute('data-value');
-            // Find the selected option
-            const selectedOption = options.find(option => option.value === value);
-            // Update the dropdown text with innerHTML to keep the color classes
+            const selectedOption = options.find(option => option.value == value);
             dropdownText.innerHTML = selectedOption ? selectedOption.text : 'Select an option';
             dropdownOptions.classList.remove('show');
             selectContainer.style.borderRadius = '10px 10px 10px 10px';
