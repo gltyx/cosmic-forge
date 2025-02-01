@@ -1631,6 +1631,12 @@ function initializeTabEventListeners() {
     
                 const lastOpenOptionPane = getLastScreenOpenRegister('tab' + getCurrentTab()[0]);
                 if (lastOpenOptionPane) {
+                    if (lastOpenOptionPane === 'space telescope') { //hack to refresh timer if ongoing
+                        const optionContentElement = document.getElementById(`optionContentTab6`);
+                        optionContentElement.innerHTML = '';
+                        drawTab6Content('Space Telescope', optionContentElement);
+                    }
+
                     setCurrentOptionPane(lastOpenOptionPane);
                 }
             });

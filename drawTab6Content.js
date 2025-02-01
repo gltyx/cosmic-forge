@@ -1,4 +1,4 @@
-import { getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
+import { deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
 import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
@@ -70,8 +70,10 @@ export function drawTab6Content(heading, optionContentElement) {
                     spaceBuildTelescopeRow.classList.add('invisible');
                     timerManager.removeTimer('searchAsteroidTimer');
                     if (getCurrentlySearchingAsteroid()) {
-                        const timeRemaining = getTimeLeftUntilAsteroidTimerFinishes();
-                        startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
+                        deferredActions.push(() => {
+                            const timeRemaining = getTimeLeftUntilAsteroidTimerFinishes();
+                            startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
+                        });
                     }
                 }
     }

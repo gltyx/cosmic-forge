@@ -3050,6 +3050,7 @@ export function startSearchAsteroidTimer(adjustment) {
                 } else {
                     setTimeLeftUntilAsteroidTimerFinishes(timeLeft); 
                     if (searchTimerDescriptionElement) { 
+                        searchTimerDescriptionElement.classList.add('green-ready-text');
                         searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
                         const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
                         const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
