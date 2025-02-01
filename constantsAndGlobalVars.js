@@ -53,6 +53,7 @@ let currentPrecipitationRate = 0;
 let techRenderCounter = 0;
 let tempRowValue = null;
 let currencySymbol = '$';
+let sortAsteroidMethod = 'rarity';
 let increaseStorageFactor = 2;
 let saleResourcePreviews = {};
 let saleCompoundPreviews = {};
@@ -1508,6 +1509,14 @@ export function setCurrentAsteroidSearchTimerDurationTotal(value) {
 
 export function getGameCostMultiplier() {
     return GAME_COST_MULTIPLIER;
+}
+
+export function setSortAsteroidMethod(value) {
+    sortAsteroidMethod = value;
+}
+
+export function getSortAsteroidMethod() {
+    return sortAsteroidMethod;
 }
 
 

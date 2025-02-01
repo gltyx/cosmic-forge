@@ -1,7 +1,7 @@
-import { getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
+import { getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
 import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
+import { handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
@@ -74,7 +74,6 @@ export function drawTab6Content(heading, optionContentElement) {
                         startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
                     }
                 }
-                
     }
 
     if (heading === 'Launch Pad') {
@@ -502,7 +501,7 @@ export function drawTab6Content(heading, optionContentElement) {
     }
     
     if (heading === 'Asteroids') {
-        const asteroidsArray = getAsteroidArray();
+        let asteroidsArray = getAsteroidArray();
     
         if (asteroidsArray.length === 0) {
             return;
@@ -511,27 +510,31 @@ export function drawTab6Content(heading, optionContentElement) {
         const asteroidLegendRow = createOptionRow(
             `asteroidLegendRow`,
             null,
-            ``,
+            `Sort By:`,
             createTextElement(
                 `Rarity`,
                 'asteroidLegendRarity',
-                ['green-ready-text', 'label-asteroid']
+                ['sort-by', 'label-asteroid'],
+                (event) => handleSortAsteroidClick('rarity')
             ),
             createTextElement(
                 `Distance`,
                 'asteroidLegendDistance',
-                ['green-ready-text', 'label-asteroid']
+                ['no-sort', 'label-asteroid'],
+                (event) => handleSortAsteroidClick('distance')
             ),
             createTextElement(
                 `Complexity`,
                 'asteroidLegendEOE',
-                ['green-ready-text', 'label-asteroid']
+                ['no-sort', 'label-asteroid'],
+                (event) => handleSortAsteroidClick('eoe')
             ),
             createTextElement(
                 `Antimatter`,
                 'asteroidLegendQuantity',
-                ['green-ready-text', 'label-asteroid']
-            ),
+                ['no-sort', 'label-asteroid'],
+                (event) => handleSortAsteroidClick('quantity')
+            ),            
             null,
             ``,
             '',
@@ -547,6 +550,8 @@ export function drawTab6Content(heading, optionContentElement) {
             [true, '25%', '75%']
         );
         optionContentElement.appendChild(asteroidLegendRow);
+
+        asteroidsArray = sortAsteroidTable(asteroidsArray, getSortAsteroidMethod());
 
         asteroidsArray.forEach((asteroid) => {
             const asteroidName = Object.keys(asteroid)[0];

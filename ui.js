@@ -51,7 +51,8 @@ import {
     getPowerOnOff,
     getRocketsFuellerStartedArray,
     getCurrentStarSystemWeatherEfficiency,
-    getCurrentStarSystem
+    getCurrentStarSystem,
+    setSortAsteroidMethod
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -594,7 +595,7 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
     return button;
 }
 
-export function createTextElement(text, id, classList) {
+export function createTextElement(text, id, classList, onClick) {
     const div = document.createElement('div');
     
     div.id = id;
@@ -602,6 +603,10 @@ export function createTextElement(text, id, classList) {
 
     if (Array.isArray(classList)) {
         div.classList.add(...classList);
+    }
+
+    if (typeof onClick === 'function') {
+        div.addEventListener('click', (event) => onClick(event));
     }
 
     return div;
@@ -2183,6 +2188,61 @@ export function setBatteryIndicator(value) {
     } else {
         batteryBar.style.setProperty('background-color', 'var(--disabled-text)', 'important');
     }
+}
+
+export function handleSortAsteroidClick(sortMethod) {
+    setSortAsteroidMethod(sortMethod);
+    const optionContentElement = document.getElementById(`optionContentTab6`);
+    optionContentElement.innerHTML = '';
+    drawTab6Content('Asteroids', optionContentElement);
+}
+
+export function sortAsteroidTable(asteroidsArray, sortMethod) {
+    const labels = {
+        rarity: document.getElementById('asteroidLegendRarity'),
+        distance: document.getElementById('asteroidLegendDistance'),
+        eoe: document.getElementById('asteroidLegendEOE'),
+        quantity: document.getElementById('asteroidLegendQuantity')
+    };
+
+    Object.values(labels).forEach(label => label.classList.remove('sort-by'));
+
+    if (labels[sortMethod]) {
+        labels[sortMethod].classList.add('sort-by');
+    }
+
+    Object.entries(labels).forEach(([key, label]) => {
+        if (key !== sortMethod) {
+            label.classList.add('no-sort');
+        }
+    });
+
+    asteroidsArray.sort((a, b) => {
+        const nameA = Object.keys(a)[0];
+        const nameB = Object.keys(b)[0];
+
+        const asteroidA = a[nameA];
+        const asteroidB = b[nameB];
+
+        switch (sortMethod) {
+            case "rarity":
+                const rarityOrder = { "Legendary": 1, "Rare": 2, "Uncommon": 3, "Common": 4 };
+                return rarityOrder[asteroidA.rarity[0]] - rarityOrder[asteroidB.rarity[0]];
+            
+            case "distance":
+                return asteroidA.distance[0] - asteroidB.distance[0];
+
+            case "eoe":
+                return asteroidA.easeOfExtraction[0] - asteroidB.easeOfExtraction[0];
+
+            case "quantity":
+                return asteroidB.quantity[0] - asteroidA.quantity[0];
+
+            default:
+                return 0;
+        }
+    });
+    return asteroidsArray;
 }
 
 //-------------------------------------------------------------------------------------------------
