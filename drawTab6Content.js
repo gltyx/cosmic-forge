@@ -62,7 +62,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     false,
                     null,
                     null,
-                    'spaceMiningPurchase'
+                    null
                 );
                 optionContentElement.appendChild(spaceTelescopeSearchAsteroidRow);
 

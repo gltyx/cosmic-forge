@@ -241,6 +241,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource1Price: [20000, 'steel', 'compounds'],
                         resource2Price: [15000, 'glass', 'compounds'],
                         resource3Price: [20000, 'silicon', 'resources'],
+                        energyUse: 0.7,
                     }
                 }
             } else if (objectType === 'starSystemsData') {

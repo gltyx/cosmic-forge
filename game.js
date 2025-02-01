@@ -1,4 +1,6 @@
 import {
+    setAsteroidTimerCanContinue,
+    getAsteroidTimerCanContinue,
     getAsteroidArray,
     setAsteroidArray,
     getGameCostMultiplier,
@@ -1615,16 +1617,33 @@ function monitorRevealRowsChecks(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
-    if ((element === document.getElementById('scanAsteroidsDescription') || element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
-        element.classList.remove('red-disabled-text');
+    if ((element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
+        const accompanyingLabel = document.getElementById('scanAsteroidsDescription');  
 
-        if (element === document.getElementById('scanAsteroidsDescription')) {
-            getTelescopeReadyToSearch() ? element.classList.add('green-ready-text') : element.classList.remove('green-ready-text');
-            return;
+        if (accompanyingLabel) { //scan description
+            if (getPowerOnOff()) {
+                accompanyingLabel.classList.remove('red-disabled-text');
+                if (getTelescopeReadyToSearch()) {
+                    accompanyingLabel.innerText = 'Ready To Search...';
+                    accompanyingLabel.classList.add('green-ready-text');
+                }
+                setAsteroidTimerCanContinue(true);
+            } else {
+                accompanyingLabel.classList.add('red-disabled-text');
+                accompanyingLabel.classList.remove('green-ready-text');
+                accompanyingLabel.innerText = 'Requires Power!';
+                setAsteroidTimerCanContinue(false);
+            }
         }
 
-        if (element.dataset.resourceToFuseTo === 'searchAsteroid') {
-            getTelescopeReadyToSearch() ? (element.classList.remove('invisible'), element.classList.remove('red-disabled-text')) : (element.classList.add('invisible'), element.classList.add('red-disabled-text'));
+        if (element.dataset.resourceToFuseTo === 'searchAsteroid') { // scan button
+            if (getPowerOnOff() && getTelescopeReadyToSearch()) {
+                element.classList.remove ('red-disabled-text');
+            } else {
+                element.classList.add('red-disabled-text');
+            }
+
+            getTelescopeReadyToSearch() ? (element.classList.remove('invisible')) : (element.classList.add('invisible'));
             const progressBarSearchAsteroid = document.getElementById('spaceTelescopeSearchProgressBarContainer');
             if (progressBarSearchAsteroid) {
                 getTelescopeReadyToSearch() ? progressBarSearchAsteroid.classList.add('invisible') : progressBarSearchAsteroid.classList.remove('invisible');
@@ -2960,50 +2979,52 @@ function startInitialTimers() {
 }
 
 export function startSearchAsteroidTimer(adjustment) {
-    if (adjustment[1] === 'fromLoadOrNewGame' && !getCurrentlySearchingAsteroid()) {
-        return;
-    }
-    setTelescopeReadyToSearch(false);
-    setCurrentlySearchingAsteroid(true);
     const searchTimerDescriptionElement = document.getElementById('scanAsteroidsDescription');
-    const timerName = 'searchAsteroidTimer';
-    
-    if (!timerManager.getTimer(timerName)) {
-        let counter = 0;
-        const searchInterval = getTimerUpdateInterval();
-        let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
-
-        searchDuration = 1000; //DEBUG
-
-        if (adjustment[0] === 0) {
-            setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
+    if (getAsteroidTimerCanContinue()) {
+        if (adjustment[1] === 'fromLoadOrNewGame' && !getCurrentlySearchingAsteroid()) {
+            return;
         }
+        setTelescopeReadyToSearch(false);
+        setCurrentlySearchingAsteroid(true);
+        const timerName = 'searchAsteroidTimer';
         
-        timerManager.addTimer(timerName, searchInterval, () => {
-            counter += searchInterval;
-
-            const timeLeft = Math.max(searchDuration - counter, 0);
-            const timeLeftUI = Math.max(Math.floor((searchDuration - counter) / 1000), 0);
-            
-            if (counter >= searchDuration) {
-                discoverAsteroid();
-                timerManager.removeTimer(timerName);
-                if (searchTimerDescriptionElement) {             
-                    searchTimerDescriptionElement.innerText = 'Ready To Search';
-                }
-                setTelescopeReadyToSearch(true);
-                setCurrentlySearchingAsteroid(false);
-                setTimeLeftUntilAsteroidTimerFinishes(0);
-            } else {
-                setTimeLeftUntilAsteroidTimerFinishes(timeLeft); 
-                if (searchTimerDescriptionElement) { 
-                    searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
-                    const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
-                    const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
-                    document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
-                }
+        if (!timerManager.getTimer(timerName)) {
+            let counter = 0;
+            const searchInterval = getTimerUpdateInterval();
+            let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
+    
+            //searchDuration = 1000; //DEBUG
+    
+            if (adjustment[0] === 0) {
+                setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
             }
-        });
+            
+            timerManager.addTimer(timerName, searchInterval, () => {
+                counter += searchInterval;
+    
+                const timeLeft = Math.max(searchDuration - counter, 0);
+                const timeLeftUI = Math.max(Math.floor((searchDuration - counter) / 1000), 0);
+                
+                if (counter >= searchDuration) {
+                    discoverAsteroid();
+                    timerManager.removeTimer(timerName);
+                    if (searchTimerDescriptionElement) {             
+                        searchTimerDescriptionElement.innerText = 'Ready To Search';
+                    }
+                    setTelescopeReadyToSearch(true);
+                    setCurrentlySearchingAsteroid(false);
+                    setTimeLeftUntilAsteroidTimerFinishes(0);
+                } else {
+                    setTimeLeftUntilAsteroidTimerFinishes(timeLeft); 
+                    if (searchTimerDescriptionElement) { 
+                        searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
+                        const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
+                        const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
+                        document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
+                    }
+                }
+            });
+        }
     }
 }
 
@@ -3342,11 +3363,13 @@ function setEnergyUse() {
     const compoundData = getResourceDataObject('compounds');
     const researchData = getResourceDataObject('research', ['upgrades']);
     const rocketData = Object.fromEntries(Object.entries(getResourceDataObject('space', ['upgrades'])).filter(([key]) => key.includes('rocket')));
+    const spaceTelescope = getResourceDataObject('space', ['upgrades', 'spaceTelescope']);
 
     let totalEnergyUseResources = 0;
     let totalEnergyUseCompounds = 0;
     let totalEnergyUseResearch = 0;
     let totalEnergyUseRocketFuellers = 0;
+    let totalEnergyUseSpaceTelescope = 0;
 
     for (const resourceKey in resourceData) { //autobuyer resources upgrades
         const resource = resourceData[resourceKey];
@@ -3400,11 +3423,19 @@ function setEnergyUse() {
             if (getRocketsFuellerStartedArray().includes(rocketKey)) {
                 energyUse = rocketFueller.energyUse;
             }
-            totalEnergyUseResearch += energyUse;
+            totalEnergyUseRocketFuellers += energyUse;
         }
     }
 
-    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseCompounds + totalEnergyUseResearch + totalEnergyUseRocketFuellers);
+    if (spaceTelescope) { //space telescope scanner
+        let energyUse = 0;
+        if (getCurrentlySearchingAsteroid() && getTimeLeftUntilAsteroidTimerFinishes() > 0) {
+            energyUse = spaceTelescope.energyUse;
+        }
+        totalEnergyUseSpaceTelescope += energyUse;
+    }
+
+    setTotalEnergyUse(totalEnergyUseResources + totalEnergyUseCompounds + totalEnergyUseResearch + totalEnergyUseRocketFuellers + totalEnergyUseSpaceTelescope);
 }
 
 export function setEnergyCapacity(battery) {

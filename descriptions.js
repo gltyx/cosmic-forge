@@ -798,7 +798,7 @@ export function initialiseDescriptions() {
             updateAt: "" 
         },
         spaceTelescopeSearchAsteroidRow: {
-            content1: "Search and discover Asteroids.",
+            content1: `Search and discover Asteroids - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'energyUse']) * getTimerRateRatio())}KW / s`,
             content2: "",
             updateAt: "" 
         },

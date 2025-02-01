@@ -132,6 +132,7 @@ let weatherEffectOn = false;
 let weatherEfficiencyApplied = false;
 let currentlySearchingAsteroid = false;
 let telescopeReadyToSearch = true;
+let asteroidTimerCanContinue = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1505,6 +1506,14 @@ export function getCurrentAsteroidSearchTimerDurationTotal() {
 
 export function setCurrentAsteroidSearchTimerDurationTotal(value) {
     currentAsteroidSearchTimerDurationTotal = value ?? 0;
+}
+
+export function getAsteroidTimerCanContinue() {
+    return asteroidTimerCanContinue;
+}
+
+export function setAsteroidTimerCanContinue(value) {
+    asteroidTimerCanContinue = value;
 }
 
 export function getGameCostMultiplier() {
