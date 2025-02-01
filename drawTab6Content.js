@@ -286,14 +286,6 @@ export function drawTab6Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(spaceRocket1AutoBuyerRow);
 
-        console.log(JSON.stringify(asteroids, null, 2));
-        const options = asteroids.map((asteroid, key) => {
-            return {
-                value: asteroid.name,
-                text: `${asteroid.name}: Distance: ${asteroid.distance}, Rarity: ${asteroid.rarity}, Antimatter: ${asteroid.quantity}`
-            };
-        });
-
         const spaceRocket1TravelRow = createOptionRow(
             `spaceRocket1TravelRow`,
             null,
@@ -378,6 +370,49 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket2AutoBuyerRow);
+
+        const spaceRocket2TravelRow = createOptionRow(
+            `spaceRocket2TravelRow`,
+            null,
+            `Travel To:`,
+            createDropdown('rocket2TravelDropdown', asteroids
+                .map((asteroidObj) => {
+                    return Object.keys(asteroidObj).map((key) => {
+                        const asteroid = asteroidObj[key];
+                        const rarityClass = getRarityClass(asteroid.rarity[0]);
+                        const distanceClass = getDistanceClass(asteroid.distance[0]);
+                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
+        
+                        return {
+                            value: asteroid.name,
+                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
+                            distance: asteroid.distance[0]
+                        };
+                    });
+                })
+                .flat()
+                .sort((a, b) => a.distance - b.distance),
+                '', (value) => {
+                    console.log('Selected asteroid name:', value);
+                }, ['travel-to']),                                 
+            null, //button here for set off travel
+            null,
+            null,           
+            null,
+            ``, //travel time
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'asteroid'
+        );
+        optionContentElement.appendChild(spaceRocket2TravelRow);
+
         setFuellingVisibility('rocket2', [fuellingState, fuelledUpState, launchedState]);
     }
     
@@ -420,6 +455,49 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket3AutoBuyerRow);
+
+        const spaceRocket3TravelRow = createOptionRow(
+            `spaceRocket3TravelRow`,
+            null,
+            `Travel To:`,
+            createDropdown('rocket3TravelDropdown', asteroids
+                .map((asteroidObj) => {
+                    return Object.keys(asteroidObj).map((key) => {
+                        const asteroid = asteroidObj[key];
+                        const rarityClass = getRarityClass(asteroid.rarity[0]);
+                        const distanceClass = getDistanceClass(asteroid.distance[0]);
+                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
+        
+                        return {
+                            value: asteroid.name,
+                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
+                            distance: asteroid.distance[0]
+                        };
+                    });
+                })
+                .flat()
+                .sort((a, b) => a.distance - b.distance),
+                '', (value) => {
+                    console.log('Selected asteroid name:', value);
+                }, ['travel-to']),                                 
+            null, //button here for set off travel
+            null,
+            null,           
+            null,
+            ``, //travel time
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'asteroid'
+        );
+        optionContentElement.appendChild(spaceRocket3TravelRow);
+
         setFuellingVisibility('rocket3', [fuellingState, fuelledUpState, launchedState]);
     }
     
@@ -462,6 +540,49 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket4AutoBuyerRow);
+
+        const spaceRocket4TravelRow = createOptionRow(
+            `spaceRocket4TravelRow`,
+            null,
+            `Travel To:`,
+            createDropdown('rocket4TravelDropdown', asteroids
+                .map((asteroidObj) => {
+                    return Object.keys(asteroidObj).map((key) => {
+                        const asteroid = asteroidObj[key];
+                        const rarityClass = getRarityClass(asteroid.rarity[0]);
+                        const distanceClass = getDistanceClass(asteroid.distance[0]);
+                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
+        
+                        return {
+                            value: asteroid.name,
+                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
+                            distance: asteroid.distance[0]
+                        };
+                    });
+                })
+                .flat()
+                .sort((a, b) => a.distance - b.distance),
+                '', (value) => {
+                    console.log('Selected asteroid name:', value);
+                }, ['travel-to']),                                 
+            null, //button here for set off travel
+            null,
+            null,           
+            null,
+            ``, //travel time
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'asteroid'
+        );
+        optionContentElement.appendChild(spaceRocket4TravelRow);
+
         setFuellingVisibility('rocket4', [fuellingState, fuelledUpState, launchedState]);
     }
     
