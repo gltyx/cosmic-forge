@@ -1665,6 +1665,9 @@ function checkStatusAndSetTextClasses(element) {
                 accompanyingLabel.classList.add('red-disabled-text');
                 accompanyingLabel.classList.remove('green-ready-text');
                 accompanyingLabel.innerText = 'Requires Power!';
+                const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
+                const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
+                document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
                 setAsteroidTimerCanContinue(false);
             }
         }
