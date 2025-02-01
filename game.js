@@ -708,7 +708,7 @@ function updateAllCreatePreviews() {
         if (compound === currentScreen) {
             const dropDownElementId = compound + "CreateSelectQuantity";
 
-            setCreateCompoundPreview(currentScreen, document.getElementById(dropDownElementId).value);
+            setCreateCompoundPreview(currentScreen, document.getElementById(dropDownElementId).querySelector('div.dropdown').innerText);
                   
             const createPreviewString = getCompoundCreatePreview(compound);
             let cleanedString = cleanString(createPreviewString);
@@ -735,7 +735,7 @@ function updateAllSalePricePreviews() {
         if (resource === currentScreen) {
             const dropDownElementId = resource + "SellSelectQuantity";
 
-            setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).value, fuseTo1, fuseTo2);
+            setSaleResourcePreview(currentScreen, document.getElementById(dropDownElementId).querySelector('div.dropdown').innerText, fuseTo1, fuseTo2);
                   
             const salePreviewString = getResourceSalePreview(resource);
             let cleanedString = cleanString(salePreviewString);
@@ -753,7 +753,7 @@ function updateAllSalePricePreviews() {
         if (compound === currentScreen) {
             const dropDownElementId = compound + "SellSelectQuantity";
 
-            setSaleCompoundPreview(currentScreen, document.getElementById(dropDownElementId).value);
+            setSaleCompoundPreview(currentScreen, document.getElementById(dropDownElementId).querySelector('div.dropdown').innerText);
                   
             const salePreviewString = getCompoundSalePreview(compound);
             let cleanedString = cleanString(salePreviewString);
@@ -3029,7 +3029,7 @@ export function startSearchAsteroidTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
-            //searchDuration = 1000; //DEBUG
+            searchDuration = 1000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentAsteroidSearchTimerDurationTotal(searchDuration);

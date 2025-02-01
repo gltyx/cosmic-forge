@@ -27,7 +27,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 1.3K Hyd, 600 Crb' },
                     { value: '5', text: '5 - 130 Hyd, 60 Crb' },
                     { value: '1', text: '1 - 26 Hyd, 12 Crb' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('diesel', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
@@ -239,7 +239,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 200 Sil, 100 Oxy, 50 Sod' },
                     { value: '5', text: '5 - 20 Sil, 10 Oxy, 5 Sod' },
                     { value: '1', text: '1 - 4 Sil, 2 Oxy, 1 Sod' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('glass', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
@@ -451,7 +451,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 200 Irn, 50 Crb' },
                     { value: '5', text: '5 - 20 Irn, 5 Crb' },
                     { value: '1', text: '1 - 4 Irn, 1 Crb' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('steel', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
@@ -663,7 +663,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 250 Sil, 100 Sod, 150 Hyd' },
                     { value: '5', text: '5 - 25 Sil, 10 Sod, 15 Hyd' },
                     { value: '1', text: '1 - 5 Sil, 2 Sod, 3 Hyd' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('concrete', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
@@ -877,7 +877,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 1K Hyd, 500 Oxy' },
                     { value: '5', text: '5 - 100 Hyd, 50 Oxy' },
                     { value: '1', text: '1 - 20 Hyd, 10 Oxy' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('water', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
@@ -1089,7 +1089,7 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '50', text: '50 - 1.1K Irn, 900 Sod, 2K Neo' },
                     { value: '5', text: '5 - 110 Irn, 90 Sod, 200 Neo' },
                     { value: '1', text: '1 - 22 Irn, 18 Sod, 40 Neo' },
-                ], 'all', (value) => {
+                ], 'max', (value) => {
                     setCreateCompoundPreview('titanium', value);
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {

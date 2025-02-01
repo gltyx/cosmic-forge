@@ -607,19 +607,19 @@ export function setSaleResourcePreview(resource, amount, fusionTo1, fusionTo2) {
     let calculatedAmount;
 
     switch (amount) {
-        case 'all':
+        case 'All Stock':
             calculatedAmount = Math.floor(resourceQuantity);
             break;
-        case 'threeQuarters':
+        case '75% Stock':
             calculatedAmount = Math.floor(resourceQuantity * 0.75);
             break;
-        case 'twoThirds':
+        case '67% Stock':
             calculatedAmount = Math.floor(resourceQuantity * 2 / 3);
             break;
-        case 'half':
+        case '50% Stock':
             calculatedAmount = Math.floor(resourceQuantity * 0.5);
             break;
-        case 'oneThird':
+        case '33% Stock':
             calculatedAmount = Math.floor(resourceQuantity / 3);
             break;
         case '100000':
@@ -653,19 +653,19 @@ export function setSaleCompoundPreview(compound, amount) {
     let calculatedAmount;
 
     switch (amount) {
-        case 'all':
+        case 'All Stock':
             calculatedAmount = Math.floor(compoundQuantity);
             break;
-        case 'threeQuarters':
+        case '75% Stock':
             calculatedAmount = Math.floor(compoundQuantity * 0.75);
             break;
-        case 'twoThirds':
+        case '67% Stock':
             calculatedAmount = Math.floor(compoundQuantity * 2 / 3);
             break;
-        case 'half':
+        case '50% Stock':
             calculatedAmount = Math.floor(compoundQuantity * 0.5);
             break;
-        case 'oneThird':
+        case '33% Stock':
             calculatedAmount = Math.floor(compoundQuantity / 3);
             break;
         case '100000':
@@ -728,35 +728,35 @@ export function setCreateCompoundPreview(compoundToCreate, amount) {
     let constituentPartsQuantityNeeded4 = 0;
 
     switch (amount) {
-        case 'max':
+        case 'Max Possible':
             createAmount = Math.floor(maxCompoundToCreate * 1);
             constituentPartsQuantityNeeded1 = createAmount * constituentPartsRatio1;
             constituentPartsQuantityNeeded2 = createAmount * constituentPartsRatio2;
             constituentPartsQuantityNeeded3 = createAmount * constituentPartsRatio3;
             constituentPartsQuantityNeeded4 = createAmount * constituentPartsRatio4;
             break;
-        case 'threeQuarters':
+        case 'Up to 75%':
             createAmount = Math.floor(maxCompoundToCreate * 0.75);
             constituentPartsQuantityNeeded1 = createAmount * constituentPartsRatio1;
             constituentPartsQuantityNeeded2 = createAmount * constituentPartsRatio2;
             constituentPartsQuantityNeeded3 = createAmount * constituentPartsRatio3;
             constituentPartsQuantityNeeded4 = createAmount * constituentPartsRatio4;
             break;
-        case 'twoThirds':
+        case 'Up to 67%':
             createAmount = Math.floor(maxCompoundToCreate * (2 / 3));
             constituentPartsQuantityNeeded1 = createAmount * constituentPartsRatio1;
             constituentPartsQuantityNeeded2 = createAmount * constituentPartsRatio2;
             constituentPartsQuantityNeeded3 = createAmount * constituentPartsRatio3;
             constituentPartsQuantityNeeded4 = createAmount * constituentPartsRatio4;
             break;
-        case 'half':
+        case 'Up to 50%':
             createAmount = Math.floor(maxCompoundToCreate * 0.5);
             constituentPartsQuantityNeeded1 = createAmount * constituentPartsRatio1;
             constituentPartsQuantityNeeded2 = createAmount * constituentPartsRatio2;
             constituentPartsQuantityNeeded3 = createAmount * constituentPartsRatio3;
             constituentPartsQuantityNeeded4 = createAmount * constituentPartsRatio4;
             break;
-        case 'oneThird':
+        case 'Up to 33%':
             createAmount = Math.floor(maxCompoundToCreate * (1 / 3));
             constituentPartsQuantityNeeded1 = createAmount * constituentPartsRatio1;
             constituentPartsQuantityNeeded2 = createAmount * constituentPartsRatio2;
@@ -882,7 +882,7 @@ export function setResourceSalePreview(resource, value, fuseToResource1, fuseToR
         let quantityToAddFuseTo2 = 0;
         let fuseToCapitalised2 = '';
 
-        if (fuseToResource2 !== '') {
+        if (fuseToResource2 !== '' && fuseToResource2 !== undefined) {
             fuseToCapitalised2 = getResourceDataObject('resources', [fuseToResource2, 'nameResource']);
             const fuseToQuantity2 = getResourceDataObject('resources', [fuseToResource2, 'quantity']);
             const fuseToStorage2 = getResourceDataObject('resources', [fuseToResource2, 'storageCapacity']);

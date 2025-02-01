@@ -759,11 +759,63 @@ body {
     position: relative;
     width: 100%;
     max-width: 300px;
+    border: 2px solid var(--text-color);
+    border-radius: 10px 10px 10px 10px;
+    padding: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dropdown-options {
+    background-color: var(--container-bg-color);
+    position: absolute;
+    color: var(--text-color);
+    width: 101%;
+    z-index: 10;
+    border: 2px solid var(--text-color);
+    border-top: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius:  0 0 10px 10px;
+    transform: translate(-12px, 12px);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+}
+
+.dropdown-options.show {
+    max-height: 300px;
+    opacity: 1;
+    overflow-y: scroll;
+}
+
+.dropdown-option {
+    border-bottom: 2px dotted var(--text-color);
+    margin-bottom: 8px;
+    color: var(--text-color);
+    border-radius: 4px;
+    width: 100%;
+    z-index: 10;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.dropdown-option:hover {
+    background-color: var(--tab-bg-hover);
+    cursor: pointer;
+}
+
+.travel-to {
+    max-width: unset;
+}
+
+.select-container:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .select-container select {
     width: 100%;
-    padding: 3px 3px;
+    padding: 10px;
     background-color: var(--container-bg-color);
     color: var(--text-color);
     border: 1px solid var(--container-border-color);
@@ -774,6 +826,11 @@ body {
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
+}
+
+.select-container select:hover {
+    border-color: var(--highlight-color);
+    background-color: var(--highlight-bg-color);
 }
 
 .option-row {

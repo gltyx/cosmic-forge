@@ -1,10 +1,11 @@
 import { deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
 import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
+import { createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
+    const asteroids = getAsteroidArray();
     if (heading === 'Space Telescope') {
         const spaceBuildTelescopeRow = createOptionRow(
                     'spaceBuildTelescopeRow',
@@ -283,31 +284,59 @@ export function drawTab6Content(heading, optionContentElement) {
             null,
             'rocketFuel'
         );
-
         optionContentElement.appendChild(spaceRocket1AutoBuyerRow);
+
+        console.log(JSON.stringify(asteroids, null, 2));
+        const options = asteroids.map((asteroid, key) => {
+            return {
+                value: asteroid.name,
+                text: `${asteroid.name}: Distance: ${asteroid.distance}, Rarity: ${asteroid.rarity}, Antimatter: ${asteroid.quantity}`
+            };
+        });
+
+        const spaceRocket1TravelRow = createOptionRow(
+            `spaceRocket1TravelRow`,
+            null,
+            `Travel To:`,
+            createDropdown('rocket1TravelDropdown', asteroids
+                .map((asteroidObj) => {
+                    return Object.keys(asteroidObj).map((key) => {
+                        const asteroid = asteroidObj[key];
+                        const rarityClass = getRarityClass(asteroid.rarity[0]);
+                        const distanceClass = getDistanceClass(asteroid.distance[0]);
+                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
         
-        if (fuellingState || fuelledUpState) {
-            const fuelUpButton = document.querySelector('.rocket1');
-            fuelUpButton.classList.add('invisible');
-            document.getElementById('rocket1FuellingProgressBarContainer').classList.remove('invisible');
-            const launchButton = document.querySelector('.rocket1-launch-button');
-            launchButton.classList.remove('invisible');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Fuelling...'
-            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-        }
-        if (fuelledUpState) {
-            document.getElementById('rocket1FuellingProgressBar').style.width = '100%';
-            const launchButton = document.querySelector('.rocket1-launch-button');
-            launchButton.classList.add('green-ready-text');
-            launchButton.classList.remove('red-disabled-text');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
-            document.getElementById('fuelDescription').classList.add('green-ready-text');
-        }
-        if (launchedState) {
-            spaceRocket1AutoBuyerRow.classList.add('invisible');
-        }
+                        return {
+                            value: asteroid.name,
+                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
+                            distance: asteroid.distance[0]
+                        };
+                    });
+                })
+                .flat()
+                .sort((a, b) => a.distance - b.distance),
+                '', (value) => {
+                    console.log('Selected asteroid name:', value);
+                }, ['travel-to']),                                 
+            null, //button here for set off travel
+            null,
+            null,           
+            null,
+            ``, //travel time
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'asteroid'
+        );
+        optionContentElement.appendChild(spaceRocket1TravelRow);
+
+        setFuellingVisibility('rocket1', [fuellingState, fuelledUpState, launchedState]);
     }
     
     if (heading === 'Rocket 2') {
@@ -349,29 +378,7 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket2AutoBuyerRow);
-
-        if (fuellingState || fuelledUpState) {
-            const fuelUpButton = document.querySelector('.rocket2');
-            fuelUpButton.classList.add('invisible');
-            document.getElementById('rocket2FuellingProgressBarContainer').classList.remove('invisible');
-            const launchButton = document.querySelector('.rocket2-launch-button');
-            launchButton.classList.remove('invisible');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Fuelling...'
-            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-        }
-        if (fuelledUpState) {
-            document.getElementById('rocket2FuellingProgressBar').style.width = '100%';
-            const launchButton = document.querySelector('.rocket2-launch-button');
-            launchButton.classList.add('green-ready-text');
-            launchButton.classList.remove('red-disabled-text');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
-            document.getElementById('fuelDescription').classList.add('green-ready-text');
-        }
-        if (launchedState) {
-            spaceRocket2AutoBuyerRow.classList.add('invisible');
-        }
+        setFuellingVisibility('rocket2', [fuellingState, fuelledUpState, launchedState]);
     }
     
     if (heading === 'Rocket 3') {
@@ -413,29 +420,7 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket3AutoBuyerRow);
-
-        if (fuellingState || fuelledUpState) {
-            const fuelUpButton = document.querySelector('.rocket3');
-            fuelUpButton.classList.add('invisible');
-            document.getElementById('rocket3FuellingProgressBarContainer').classList.remove('invisible');
-            const launchButton = document.querySelector('.rocket3-launch-button');
-            launchButton.classList.remove('invisible');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Fuelling...'
-            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-        }
-        if (fuelledUpState) {
-            document.getElementById('rocket3FuellingProgressBar').style.width = '100%';
-            const launchButton = document.querySelector('.rocket3-launch-button');
-            launchButton.classList.add('green-ready-text');
-            launchButton.classList.remove('red-disabled-text');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
-            document.getElementById('fuelDescription').classList.add('green-ready-text');
-        }
-        if (launchedState) {
-            spaceRocket3AutoBuyerRow.classList.add('invisible');
-        }
+        setFuellingVisibility('rocket3', [fuellingState, fuelledUpState, launchedState]);
     }
     
     if (heading === 'Rocket 4') {
@@ -477,29 +462,7 @@ export function drawTab6Content(heading, optionContentElement) {
         );
 
         optionContentElement.appendChild(spaceRocket4AutoBuyerRow);
-        
-        if (fuellingState || fuelledUpState) {
-            const fuelUpButton = document.querySelector('.rocket4');
-            fuelUpButton.classList.add('invisible');
-            document.getElementById('rocket4FuellingProgressBarContainer').classList.remove('invisible');
-            const launchButton = document.querySelector('.rocket4-launch-button');
-            launchButton.classList.remove('invisible');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Fuelling...'
-            document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-        }
-        if (fuelledUpState) {
-            document.getElementById('rocket4FuellingProgressBar').style.width = '100%';
-            const launchButton = document.querySelector('.rocket4-launch-button');
-            launchButton.classList.add('green-ready-text');
-            launchButton.classList.remove('red-disabled-text');
-            launchButton.textContent = 'Launch!';
-            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
-            document.getElementById('fuelDescription').classList.add('green-ready-text');
-        }
-        if (launchedState) {
-            spaceRocket4AutoBuyerRow.classList.add('invisible');
-        }
+        setFuellingVisibility('rocket4', [fuellingState, fuelledUpState, launchedState]);
     }
     
     if (heading === 'Asteroids') {
@@ -603,3 +566,65 @@ export function drawTab6Content(heading, optionContentElement) {
         });
     }    
 }
+
+function setFuellingVisibility(rocket, params) {
+    const { fuellingState, fuelledUpState, launchedState } = params;
+    if (fuellingState || fuelledUpState) {
+        const fuelUpButton = document.querySelector(rocket);
+        fuelUpButton.classList.add('invisible');
+        document.getElementById(`${rocket}FuellingProgressBarContainer`).classList.remove('invisible');
+        const launchButton = document.querySelector(`.${rocket}-launch-button`);
+        launchButton.classList.remove('invisible');
+        launchButton.textContent = 'Launch!';
+        document.getElementById('fuelDescription').textContent = 'Fuelling...'
+        document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+    }
+    if (fuelledUpState) {
+        document.getElementById(`${rocket}FuellingProgressBar`).style.width = '100%';
+        const launchButton = document.querySelector(`.${rocket}-launch-button`);
+        launchButton.classList.add('green-ready-text');
+        launchButton.classList.remove('red-disabled-text');
+        launchButton.textContent = 'Launch!';
+        document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+        document.getElementById('fuelDescription').classList.add('green-ready-text');
+    }
+    if (launchedState) {
+        spaceRocket1AutoBuyerRow.classList.add('invisible');
+    }
+}
+
+function getRarityClass(rarity) {
+    if (rarity === 'Common') {
+        return 'red-disabled-text';
+    } else if (rarity === 'Uncommon') {
+        return 'warning-orange-text';
+    } else if (rarity === 'Legendary') {
+        return 'green-ready-text';
+    }
+    return '';
+}
+
+function getDistanceClass(distance) {
+    if (distance < 100000) {
+        return 'green-ready-text';
+    } else if (distance < 200000) {
+        return '';
+    } else if (distance < 300000) {
+        return 'warning-orange-text';
+    } else {
+        return 'red-disabled-text';
+    }
+}
+
+function getQuantityClass(quantity) {
+    if (quantity <= 300) {
+        return 'red-disabled-text';
+    } else if (quantity <= 600) {
+        return 'warning-orange-text';
+    } else if (quantity <= 750) {
+        return '';
+    } else {
+        return 'green-ready-text';
+    }
+}
+

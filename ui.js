@@ -488,29 +488,82 @@ function generateElementId(labelText, resource, optionalIterationParam) {
     return id;
 }
 
-export function createDropdown(id, options, selectedValue, onChange) {
+export function createDropdown(id, options, selectedValue, onChange, classes = []) {
     const selectContainer = document.createElement('div');
     selectContainer.classList.add('select-container');
+    selectContainer.id = id;
 
-    const select = document.createElement('select');
-    select.id = id;
+    if (Array.isArray(classes)) {
+        classes.forEach(className => selectContainer.classList.add(className));
+    }
+
+    const dropdown = document.createElement('div');
+    dropdown.classList.add('dropdown');
+    dropdown.setAttribute('tabindex', '0');
+
+    const dropdownText = document.createElement('span');
+    dropdownText.classList.add('dropdown-text');
+
+    // Find the default option and set it as selected
+    const defaultOption = options.find(option => option.value === selectedValue);
+    dropdownText.innerHTML = defaultOption ? defaultOption.text : 'Select an option';
+
+    dropdown.appendChild(dropdownText);
+
+    const dropdownOptions = document.createElement('div');
+    dropdownOptions.classList.add('dropdown-options');
+
     options.forEach((option) => {
-        const opt = document.createElement('option');
-        opt.value = option.value;
-        opt.innerText = option.text;
-        if (option.value === selectedValue) {
-            opt.selected = true;
+        const optionDiv = document.createElement('div');
+        optionDiv.classList.add('dropdown-option');
+        optionDiv.setAttribute('data-value', option.value);
+        optionDiv.innerHTML = option.text;
+
+        optionDiv.addEventListener('click', (event) => {
+            const value = event.target.getAttribute('data-value');
+            // Find the selected option
+            const selectedOption = options.find(option => option.value === value);
+            // Update the dropdown text with innerHTML to keep the color classes
+            dropdownText.innerHTML = selectedOption ? selectedOption.text : 'Select an option';
+            dropdownOptions.classList.remove('show');
+            selectContainer.style.borderRadius = '10px 10px 10px 10px';
+            onChange(value);
+        });
+
+        dropdownOptions.appendChild(optionDiv);
+    });
+
+    dropdown.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        const isVisible = dropdownOptions.classList.contains('show');
+
+        // Close all dropdowns
+        document.querySelectorAll('.dropdown-options').forEach(option => {
+            option.classList.remove('show');
+        });
+
+        // Toggle the dropdown visibility and change the border radius
+        if (!isVisible) {
+            dropdownOptions.classList.add('show');
+            selectContainer.style.borderRadius = '10px 10px 0 0'; 
+        } else {
+            selectContainer.style.borderRadius = '10px 10px 10px 10px';
         }
-        select.appendChild(opt);
     });
 
-    select.addEventListener('change', (event) => {
-        onChange(event.target.value);
+    document.addEventListener('click', (event) => {
+        if (!selectContainer.contains(event.target)) {
+            selectContainer.style.borderRadius = '10px 10px 10px 10px';
+            dropdownOptions.classList.remove('show');
+        }
     });
 
-    selectContainer.appendChild(select);
+    selectContainer.appendChild(dropdown);
+    selectContainer.appendChild(dropdownOptions);
     return selectContainer;
 }
+
 
 export function createToggleSwitch(id, isChecked, onChange, extraClasses) {
     const toggleContainer = document.createElement('div');
