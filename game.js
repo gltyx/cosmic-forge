@@ -3855,7 +3855,7 @@ export function offlineGains(switchedFocus) {
         setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
     });
 
-    if (getCurrentlySearchingAsteroid()) {
+    if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
         const timeLeft = getTimeLeftUntilAsteroidTimerFinishes();
         const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
 
