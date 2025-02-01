@@ -689,9 +689,9 @@ export function drawTab6Content(heading, optionContentElement) {
 }
 
 function setFuellingVisibility(rocket, params) {
-    const { fuellingState, fuelledUpState, launchedState } = params;
+    const [fuellingState, fuelledUpState, launchedState] = params;
     if (fuellingState || fuelledUpState) {
-        const fuelUpButton = document.querySelector(rocket);
+        const fuelUpButton = document.querySelector(`.${rocket}`);
         fuelUpButton.classList.add('invisible');
         document.getElementById(`${rocket}FuellingProgressBarContainer`).classList.remove('invisible');
         const launchButton = document.querySelector(`.${rocket}-launch-button`);

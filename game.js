@@ -2325,13 +2325,11 @@ function checkStatusAndSetTextClasses(element) {
                 element.classList.add('invisible');
                 accompanyingLabel.textContent = 'Fuelling...';
                 accompanyingLabel.classList.remove('red-disabled-text');
-                accompanyingLabel.classList.add('ready-green-text');
+                accompanyingLabel.classList.add('green-ready-text');
             } else {
                 element.classList.add('red-disabled-text');
             }
-        } else if (resource === 'time') {
-            //handle timer for things like search asteroid with telescope
-        }    
+        }  
     }
 }
 
@@ -3966,10 +3964,12 @@ export function fuelRockets() {
         let newFuelQuantity = fuelQuantity;
         const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
 
-        if (newFuelQuantity >= fullLevel && !getRocketsFuellerStartedArray().includes(rocket + 'FuelledUp')) {
+        if (newFuelQuantity >= fullLevel) {
             const formattedRocket = rocket.slice(0, -1) + " " + rocket.slice(-1);
             showNotification(`${capitaliseString(formattedRocket)} is ready for Launch!`, 'info');
-            setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
+            if (!getRocketsFuellerStartedArray().includes(rocket + 'FuelledUp')) {
+                setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
+            }
             setRocketsFuellerStartedArray(`${rocket}`, 'remove');
         }
 
