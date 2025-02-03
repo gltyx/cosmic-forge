@@ -3835,7 +3835,7 @@ export function offlineGains(switchedFocus) {
     });
 
     const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
-    setResourceDataObject(currentEnergyQuantity + offlineGains.energy, 'buildings', ['energy', 'quantity']);
+    setResourceDataObject(Math.min(currentEnergyQuantity + offlineGains.energy, getResourceDataObject('buildings', ['energy', 'storageCapacity'])), 'buildings', ['energy', 'quantity']);
 
     const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
     setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
