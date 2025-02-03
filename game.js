@@ -1669,749 +1669,826 @@ export function checkPowerForAsteroidTimer() {
     }
 }
 
-function checkStatusAndSetTextClasses(element) {
-    
-    if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
-        const accompanyingLabel = document.getElementById('travelToDescription');  
+function travelToAsteroidChecks(element) {
+    const accompanyingLabel = document.getElementById('travelToDescription');  
 
-        if (accompanyingLabel) { //travelTo description
-            const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
-            if (rocketClass) {
-                const rocketName = rocketClass.match(/^rocket\d+/)[0];
-                if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
-                    accompanyingLabel.classList.remove('red-disabled-text');
-                    accompanyingLabel.innerText = 'Ready To Travel...';
-                    accompanyingLabel.classList.add('green-ready-text');
-                } else {
-                    if (getCurrentlyTravellingToAsteroid(rocketName)) {
-                        accompanyingLabel.classList.remove('red-disabled-text');
-                        accompanyingLabel.innerText = 'Travelling...' + getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName) + 's';
-                        accompanyingLabel.classList.add('green-ready-text'); 
-                    } else if (getMiningObject()[rocketName !== null]) { //if rocket mining at an asteroid
-                        accompanyingLabel.classList.remove('red-disabled-text');
-                        accompanyingLabel.innerText = 'Mining Antimatter...'; //maybe add rate or something else like quantity left
-                        accompanyingLabel.classList.add('green-ready-text');  
-                    } else {
-                        accompanyingLabel.classList.add('red-disabled-text');
-                        accompanyingLabel.classList.remove('green-ready-text');
-                        accompanyingLabel.innerText = 'Not Launched!';
-                    }
-
-
-                    const elapsedTime = getRocketTravelDuration(rocketName) - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName);
-                    const progressBarPercentage = (elapsedTime / getRocketTravelDuration(rocketName)) * 100;
-                    document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`).style.width = `${progressBarPercentage}%`;
-                }
-            }
-        }
-
-        if (element.dataset.resourceToFuseTo === 'travelToAsteroid') { //travelTo button
-            const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
-            if (rocketClass) {
-                const rocketName = rocketClass.match(/^rocket\d+/)[0];
-
-                if (getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
-                    element.classList.add('red-disabled-text');
-                    element.classList.remove('green-ready-text');
-                }
-    
-                getCurrentlyTravellingToAsteroid(rocketName) ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
-                const progressBarSearchAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
-                if (progressBarSearchAsteroid) {
-                    getCurrentlyTravellingToAsteroid(rocketName) ? progressBarSearchAsteroid.classList.remove('invisible') : progressBarSearchAsteroid.classList.add('invisible');
-                }
-                return;
-            }
-        }
-    }
-
-    if ((element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
-        const accompanyingLabel = document.getElementById('scanAsteroidsDescription');  
-
-        if (accompanyingLabel) { //scan description
-            if (getPowerOnOff()) {
+    if (accompanyingLabel) { //travelTo description
+        const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
+        if (rocketClass) {
+            const rocketName = rocketClass.match(/^rocket\d+/)[0];
+            if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
                 accompanyingLabel.classList.remove('red-disabled-text');
-                if (getTelescopeReadyToSearch()) {
-                    accompanyingLabel.innerText = 'Ready To Search...';
-                    accompanyingLabel.classList.add('green-ready-text');
-                }
-                setAsteroidTimerCanContinue(true);
+                accompanyingLabel.innerText = 'Ready To Travel...';
+                accompanyingLabel.classList.add('green-ready-text');
             } else {
-                accompanyingLabel.classList.add('red-disabled-text');
-                accompanyingLabel.classList.remove('green-ready-text');
-                accompanyingLabel.innerText = 'Requires Power!';
-                const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
-                const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
-                document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
-                setAsteroidTimerCanContinue(false);
+                if (getCurrentlyTravellingToAsteroid(rocketName)) {
+                    accompanyingLabel.classList.remove('red-disabled-text');
+                    accompanyingLabel.innerText = 'Travelling...' + getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName) + 's';
+                    accompanyingLabel.classList.add('green-ready-text'); 
+                } else if (getMiningObject()[rocketName !== null]) { //if rocket mining at an asteroid
+                    accompanyingLabel.classList.remove('red-disabled-text');
+                    accompanyingLabel.innerText = 'Mining Antimatter...'; //maybe add rate or something else like quantity left
+                    accompanyingLabel.classList.add('green-ready-text');  
+                } else {
+                    accompanyingLabel.classList.add('red-disabled-text');
+                    accompanyingLabel.classList.remove('green-ready-text');
+                    accompanyingLabel.innerText = 'Not Launched!';
+                }
+
+
+                const elapsedTime = getRocketTravelDuration(rocketName) - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName);
+                const progressBarPercentage = (elapsedTime / getRocketTravelDuration(rocketName)) * 100;
+                document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`).style.width = `${progressBarPercentage}%`;
             }
         }
+    }
 
-        if (element.dataset.resourceToFuseTo === 'searchAsteroid') { // scan button
-            if (getPowerOnOff() && getTelescopeReadyToSearch()) {
-                element.classList.remove ('red-disabled-text');
-            } else {
+    if (element.dataset.resourceToFuseTo === 'travelToAsteroid') { //travelTo button
+        const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
+        if (rocketClass) {
+            const rocketName = rocketClass.match(/^rocket\d+/)[0];
+
+            if (getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
                 element.classList.add('red-disabled-text');
+                element.classList.remove('green-ready-text');
             }
 
-            getTelescopeReadyToSearch() ? (element.classList.remove('invisible')) : (element.classList.add('invisible'));
-            const progressBarSearchAsteroid = document.getElementById('spaceTelescopeSearchProgressBarContainer');
+            getCurrentlyTravellingToAsteroid(rocketName) ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
+            const progressBarSearchAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
             if (progressBarSearchAsteroid) {
-                getTelescopeReadyToSearch() ? progressBarSearchAsteroid.classList.add('invisible') : progressBarSearchAsteroid.classList.remove('invisible');
-            }
-            return;
-        }
-    }
-
-    if (element.classList.contains('fuel-check')) {
-        if (element.tagName.toLowerCase() === 'button') {
-            const buildingNameString = element.dataset.toggleTarget;
-            const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'quantity']);
-
-            const fuelType = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[0];
-            const fuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[2];
-            const fuelQuantity = getResourceDataObject(fuelCategory, [fuelType, 'quantity']);
-
-            const fuelTypeElement = document.getElementById(buildingNameString + 'FuelType');
-            const fuelQuantityElement = document.getElementById(buildingNameString + 'FuelQuantity');
-
-            if (buildingQuantity > 0) {
-                element.classList.remove('invisible');
-                fuelTypeElement.classList.remove('invisible');
-                fuelQuantityElement.classList.remove('invisible');
-
-                if (fuelQuantity <= 0) {
-                    element.textContent = 'Activate';
-                    element.classList.add('red-disabled-text');
-                    fuelTypeElement.classList.add('red-disabled-text');
-                    fuelQuantityElement.classList.add('red-disabled-text');
-                    fuelTypeElement.classList.remove('green-ready-text');
-                    fuelQuantityElement.classList.remove('green-ready-text');
-                } else {
-                    if (getBuildingTypeOnOff(buildingNameString)) {                
-                        element.textContent = 'Deactivate';
-                    }
-                    element.classList.remove('red-disabled-text');
-                    fuelTypeElement.classList.remove('red-disabled-text');
-                    fuelQuantityElement.classList.remove('red-disabled-text');
-                    fuelTypeElement.classList.add('green-ready-text');
-                    fuelQuantityElement.classList.add('green-ready-text');
-                }
-                fuelQuantityElement.textContent = Math.floor(fuelQuantity);
-            } 
-        }
-        return;
-    }
-
-    if (element.classList.contains('energy-check')) {
-
-        const valueText = element.textContent;
-        const match = valueText.match(/(-?\d+(\.\d+)?) KW \/ s/);
-    
-        if (match) {
-            const number = parseFloat(match[1]);
-            if (number < 0) {
-                element.classList.add('red-disabled-text');
-            } else {
-                element.classList.remove('red-disabled-text');
+                getCurrentlyTravellingToAsteroid(rocketName) ? progressBarSearchAsteroid.classList.remove('invisible') : progressBarSearchAsteroid.classList.add('invisible');
             }
         }
-        return;
     }
+}
 
-    if (element.classList.contains('powered-check')) {
-        if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
-            // No battery purchased yet
-            if (getResourceDataObject('buildings', ['energy', 'rate']) > 0) {
-                element.textContent = '• ON';
-                element.classList.remove('red-disabled-text');
-                element.classList.add('green-ready-text');
-                element.classList.remove('warning-orange-text');
-            } else if (getTrippedStatus()) { 
-                element.textContent = '• TRIPPED';
-                element.classList.add('warning-orange-text');
-                element.classList.remove('green-ready-text');
-                element.classList.remove('red-disabled-text');
-            } else {
-                element.textContent = '• OFF';
-                element.classList.add('red-disabled-text');
-                element.classList.remove('green-ready-text');
-                element.classList.remove('warning-orange-text');
+function searchAsteroidChecks(element) {
+    const accompanyingLabel = document.getElementById('scanAsteroidsDescription');  
+
+    if (accompanyingLabel) { //scan description
+        if (getPowerOnOff()) {
+            accompanyingLabel.classList.remove('red-disabled-text');
+            if (getTelescopeReadyToSearch()) {
+                accompanyingLabel.innerText = 'Ready To Search...';
+                accompanyingLabel.classList.add('green-ready-text');
             }
+            setAsteroidTimerCanContinue(true);
         } else {
-            // Battery is purchased
-            if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0.00001) {
-                element.textContent = '• ON';
-                element.classList.remove('red-disabled-text');
-                element.classList.add('green-ready-text');
-                element.classList.remove('warning-orange-text');
-            } else if (getTrippedStatus()) {
-                element.textContent = '• TRIPPED';
-                element.classList.add('warning-orange-text');
-                element.classList.remove('green-ready-text');
-                element.classList.remove('red-disabled-text');
-            } else {
-                element.textContent = '• OFF';
-                element.classList.remove('warning-orange-text');
-                element.classList.add('red-disabled-text');
-                element.classList.remove('green-ready-text');
-            }
+            accompanyingLabel.classList.add('red-disabled-text');
+            accompanyingLabel.classList.remove('green-ready-text');
+            accompanyingLabel.innerText = 'Requires Power!';
+            const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
+            const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
+            document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
+            setAsteroidTimerCanContinue(false);
         }
-        
-        return;
     }
 
-    if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        let compound = element.dataset.type;
-        let compound2;
-
-        const type = element.dataset.type;
-
-        if (compound === 'storage' || compound === 'autoBuyer') {
-            compound = element.dataset.argumentCheckQuantity;
-            compound2 = element.dataset.argumentCheckQuantity2;
+    if (element.dataset.resourceToFuseTo === 'searchAsteroid') { // scan button
+        if (getPowerOnOff() && getTelescopeReadyToSearch()) {
+            element.classList.remove ('red-disabled-text');
+        } else {
+            element.classList.add('red-disabled-text');
         }
 
-        const checkQuantityString = element.dataset.argumentCheckQuantity;
-        const checkQuantityString2 = element.dataset.argumentCheckQuantity2;
+        getTelescopeReadyToSearch() ? (element.classList.remove('invisible')) : (element.classList.add('invisible'));
+        const progressBarSearchAsteroid = document.getElementById('spaceTelescopeSearchProgressBarContainer');
+        if (progressBarSearchAsteroid) {
+            getTelescopeReadyToSearch() ? progressBarSearchAsteroid.classList.add('invisible') : progressBarSearchAsteroid.classList.remove('invisible');
+        }
+    }
+}
 
-        let quantity = getResourceDataObject('compounds', [checkQuantityString, 'quantity']);
-        let quantity2;
-        compound2 ? quantity2 = getResourceDataObject('compounds', [checkQuantityString2, 'quantity']) : -1;
+function powerGenerationFuelChecks(element) {
+    if (element.tagName.toLowerCase() === 'button') {
+        const buildingNameString = element.dataset.toggleTarget;
+        const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'quantity']);
 
-        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellCompound') { //sell
-            if (quantity > 0) { 
-                element.classList.remove('red-disabled-text');
-            } else {
+        const fuelType = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[0];
+        const fuelCategory = getResourceDataObject('buildings', ['energy', 'upgrades', buildingNameString, 'fuel'])[2];
+        const fuelQuantity = getResourceDataObject(fuelCategory, [fuelType, 'quantity']);
+
+        const fuelTypeElement = document.getElementById(buildingNameString + 'FuelType');
+        const fuelQuantityElement = document.getElementById(buildingNameString + 'FuelQuantity');
+
+        if (buildingQuantity > 0) {
+            element.classList.remove('invisible');
+            fuelTypeElement.classList.remove('invisible');
+            fuelQuantityElement.classList.remove('invisible');
+
+            if (fuelQuantity <= 0) {
+                element.textContent = 'Activate';
                 element.classList.add('red-disabled-text');
-            }
-
-            return;
-        }
-
-        if (element.classList.contains('create') || element.dataset.conditionCheck === 'createCompound') { //sell           
-            const createCompoundDescriptionString = document.getElementById('create' + capitaliseString(checkQuantityString) + 'Description').innerHTML;
-            const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
-            if (accompanyingLabel.textContent.startsWith('0')) {
-                accompanyingLabel.classList.remove('warning-orange-text');
-                accompanyingLabel.classList.add('red-disabled-text');
+                fuelTypeElement.classList.add('red-disabled-text');
+                fuelQuantityElement.classList.add('red-disabled-text');
+                fuelTypeElement.classList.remove('green-ready-text');
+                fuelQuantityElement.classList.remove('green-ready-text');
             } else {
-                accompanyingLabel.classList.remove('red-disabled-text'); 
+                if (getBuildingTypeOnOff(buildingNameString)) {                
+                    element.textContent = 'Deactivate';
+                }
+                element.classList.remove('red-disabled-text');
+                fuelTypeElement.classList.remove('red-disabled-text');
+                fuelQuantityElement.classList.remove('red-disabled-text');
+                fuelTypeElement.classList.add('green-ready-text');
+                fuelQuantityElement.classList.add('green-ready-text');
             }
-            
-            let constituentComponents = getConstituentComponents(createCompoundDescriptionString);      
-            constituentComponents = unpackConstituentPartsObject(constituentComponents);
-            setConstituentPartsObject(constituentComponents);
+            fuelQuantityElement.textContent = Math.floor(fuelQuantity);
+        } 
+    }
+}
 
-            let isDisabled = false;
+function energyChecks(element) {
+    const valueText = element.textContent;
+    const match = valueText.match(/(-?\d+(\.\d+)?) KW \/ s/);
 
-            for (let i = 1; i <= 4; i++) {
-                const nameKey = `constituentPartName${i}`;
-                const quantityKey = `constituentPartQuantity${i}`;
-                const requiredName = constituentComponents[nameKey];
-                const requiredQuantity = constituentComponents[quantityKey];
-        
-                if (constituentComponents.compoundToCreateQuantity <= 0) {
-                    isDisabled = true;
-                    break;
-                }
-
-                if (!requiredName || requiredQuantity <= 0) continue;
-        
-                const currentQuantity = getResourceDataObject('resources', [requiredName, 'quantity']);
-                if (currentQuantity < requiredQuantity) {
-                    element.classList.remove('warning-orange-text');
-                    element.classList.add('red-disabled-text');
-                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
-                    isDisabled = true;
-                    break;
-                }
-            }
-        
-            if (!isDisabled) {
-                if (createCompoundDescriptionString.includes('!')) {
-                    element.classList.add('warning-orange-text');
-                }
-                if (!createCompoundDescriptionString.includes('!')) {
-                    element.classList.remove('warning-orange-text');
-                }
-                if (getPowerOnOff()) {
-                    element.classList.remove('red-disabled-text');
-                } else {
-                    element.classList.add('red-disabled-text');
-                }
-                setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
-            }
-
-            return;
+    if (match) {
+        const number = parseFloat(match[1]);
+        if (number < 0) {
+            element.classList.add('red-disabled-text');
+        } else {
+            element.classList.remove('red-disabled-text');
         }
+    }
+}
 
-        let price;
-        let price2;
-        let mainKey;
-
-        if (type === 'autoBuyer') {
-            mainKey = 'compounds';
-            const autoBuyerTier = element.dataset.autoBuyerTier;
-            if (autoBuyerTier === 'tier0') return;
-            price = getResourceDataObject(mainKey, [compound, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
-            price2 = 0;
-        } else if (element.dataset.type === "storage") {
-            mainKey = 'compounds' //storageCapacity
-            price = getResourceDataObject(mainKey, [compound, 'storageCapacity']) - 1;
-            if (element.tagName.toLowerCase() !== 'button') {
-                price2 = compound2 ? Math.floor(getResourceDataObject(mainKey, [compound, 'storageCapacity']) * 0.3) : 0;
-                const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
-                const secondaryCompoundPriceText = price2 > 0 ? `, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}` : '';
-            
-                const mainCompoundSpan = document.createElement('span');
-                mainCompoundSpan.id = 'mainCompoundPriceText';
-                mainCompoundSpan.textContent = mainCompoundPriceText;
-            
-                const secondaryCompoundSpan = document.createElement('span');
-                secondaryCompoundSpan.id = 'secondaryCompoundPriceText';
-                secondaryCompoundSpan.textContent = secondaryCompoundPriceText;
-            
-                element.textContent = '';
-                element.appendChild(mainCompoundSpan);
-                element.appendChild(secondaryCompoundSpan);
-            }
-             else {
-                price2 = 0;
-            }
-        }
-
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price && quantity2 >= price2) { //reason for quantity2 being -1 higher up
-            if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
-                document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
-                document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
-                document.getElementById('mainCompoundPriceText').classList.remove('red-disabled-text');
-                document.getElementById('secondaryCompoundPriceText').classList.remove('red-disabled-text');
-            }
+function powerOnOrOffChecks(element) {
+    if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
+        // No battery purchased yet
+        if (getResourceDataObject('buildings', ['energy', 'rate']) > 0) {
+            element.textContent = '• ON';
+            element.classList.remove('red-disabled-text');
+            element.classList.add('green-ready-text');
+            element.classList.remove('warning-orange-text');
+        } else if (getTrippedStatus()) { 
+            element.textContent = '• TRIPPED';
+            element.classList.add('warning-orange-text');
+            element.classList.remove('green-ready-text');
             element.classList.remove('red-disabled-text');
         } else {
-            if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
-                if (quantity < price) {
-                    document.getElementById('mainCompoundPriceText').classList.add('red-disabled-text');
-                    document.getElementById('mainCompoundPriceText').classList.remove('green-ready-text');
-                    element.classList.add('red-disabled-text');
-                } else {
-                    document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
-                }
-                if (quantity2 < price2) {
-                    document.getElementById('secondaryCompoundPriceText').classList.add('red-disabled-text');
-                    document.getElementById('secondaryCompoundPriceText').classList.remove('green-ready-text'); 
-                    element.classList.add('red-disabled-text');
-                } else {
-                    document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
-                }
-                if (quantity >= price && quantity2 >= price2) {
-                    element.classList.remove('red-disabled-text');
-                }
-            } else if (element.tagName.toLowerCase() !== 'button') {
-                if (quantity < price) {
-                    element.classList.add('red-disabled-text');
-                } else {
-                    element.classList.remove('red-disabled-text');
-                }
-            } else { //buttons
-                if (element.parentElement.parentElement.querySelector('.description-container').firstChild.classList.contains('red-disabled-text')) { //could cause problems with compound autobuyers if introduced, even when this is working as intended
-                    element.classList.add('red-disabled-text');
-                } else {
-                    element.classList.remove('red-disabled-text');
-                }
-            }
+            element.textContent = '• OFF';
+            element.classList.add('red-disabled-text');
+            element.classList.remove('green-ready-text');
+            element.classList.remove('warning-orange-text');
         }
-
-        if (getElements()[compound + 'Rate'].textContent.includes('-')) {
-            getElements()[compound + 'Rate'].classList.add('red-disabled-text');
+    } else {
+        // Battery is purchased
+        if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0.00001) {
+            element.textContent = '• ON';
+            element.classList.remove('red-disabled-text');
+            element.classList.add('green-ready-text');
+            element.classList.remove('warning-orange-text');
+        } else if (getTrippedStatus()) {
+            element.textContent = '• TRIPPED';
+            element.classList.add('warning-orange-text');
+            element.classList.remove('green-ready-text');
+            element.classList.remove('red-disabled-text');
         } else {
-            getElements()[compound + 'Rate'].classList.remove('red-disabled-text');
+            element.textContent = '• OFF';
+            element.classList.remove('warning-orange-text');
+            element.classList.add('red-disabled-text');
+            element.classList.remove('green-ready-text');
         }
     }
+}
 
-    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') { //will need to add price2 and quantity2 if ever need a
-        let resource = element.dataset.type;
-        const techName = element.dataset.type;
-        const type = element.dataset.type;
-        const resourceToFuseTo = element.dataset.resourceToFuseTo;
+function compoundCostSellCreateChecks(element) {  //to refactor
+    let compound = element.dataset.type;
+    let compound2;
 
-        //science / building upgrades
-        const scienceUpgradeType = element.dataset.resourceToFuseTo;
-        const buildingUpgradeType = element.dataset.resourceToFuseTo;
-        const spaceUpgradeType = element.dataset.resourceToFuseTo;
+    const type = element.dataset.type;
 
-        if (resource === 'storage' || resource === 'autoBuyer') {
-            resource = element.dataset.argumentCheckQuantity;
-        }
+    if (compound === 'storage' || compound === 'autoBuyer') {
+        compound = element.dataset.argumentCheckQuantity;
+        compound2 = element.dataset.argumentCheckQuantity2;
+    }
 
-        const checkQuantityString = element.dataset.argumentCheckQuantity;
+    const checkQuantityString = element.dataset.argumentCheckQuantity;
+    const checkQuantityString2 = element.dataset.argumentCheckQuantity2;
 
-        let quantity;
+    let quantity = getResourceDataObject('compounds', [checkQuantityString, 'quantity']);
+    let quantity2;
+    compound2 ? quantity2 = getResourceDataObject('compounds', [checkQuantityString2, 'quantity']) : -1;
 
-        if (checkQuantityString === 'cash') {
-            quantity = getResourceDataObject('currency', ['cash']);
-        } else if (checkQuantityString === 'time') {
-            quantity = 0;
-        } else {
-            if (checkQuantityString === 'research') {
-                quantity = getResourceDataObject('research', ['quantity']); //research
-            } else {
-                quantity = getResourceDataObject('resources', [checkQuantityString, 'quantity']); //research
-            } 
-        }
-
-        if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellResource') { //sell
-            if (quantity > 0) { 
-                element.classList.remove('red-disabled-text');
-            } else {
-                element.classList.add('red-disabled-text');
-            }
-
-            return;
-        }
-
-        if (element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
-            if (getTechUnlockedArray().includes(resource + 'Fusion') && getUnlockedResourcesArray().includes(resourceToFuseTo)) {
-                element.classList.remove('invisible'); 
-            }
-
-            if (getTechUnlockedArray().includes(resource + 'Fusion') && quantity > 0) {
-                element.classList.remove('red-disabled-text');
-                if (element.tagName.toLowerCase() === 'button') {
-                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'fuse');
-                }
-            } else if (!getTechUnlockedArray().includes(resource + 'Fusion')) {
-                element.classList.add('invisible');
-            } else {
-                element.classList.remove('warning-orange-text');
-                element.classList.add('red-disabled-text');
-            }
-            return;
-        }
-
-        if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') { 
-            const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
-            
-            if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
-                element.classList.remove('red-disabled-text');
-            } else if (element) {
-                element.classList.add('red-disabled-text');
-            }
-
-            if (element.tagName.toLowerCase() === 'button') {
-                if (quantity >= getResourceDataObject('techs', [techName, 'price'])) {
-                    const allPrerequisitesUnlocked = prerequisiteArray.every(prerequisite => getTechUnlockedArray().includes(prerequisite));
-        
-                    if (allPrerequisitesUnlocked) {
-                        element.classList.remove('red-disabled-text');
-                    } else {
-                        element.classList.add('red-disabled-text');
-                    }
-                }
-            } else { 
-                const prerequisiteSpan = element.querySelector('span');
-                
-                if (prerequisiteSpan) {
-                    const technologiesString = prerequisiteSpan.textContent.trim();
-                    if ((technologiesString !== "" && element.tagName.toLowerCase() !== 'button') || element.tagName.toLowerCase() === 'button') {
-                        const technologiesArray = technologiesString.split(', ');
-                        prerequisiteSpan.innerHTML = '';
-        
-                        technologiesArray.forEach((tech, index) => {
-
-                            const techSpan = document.createElement('span');
-                            techSpan.textContent = tech.trim();
-                            const techSpanArrayName = tech.charAt(0).toLowerCase() + tech.slice(1).replace(/\s+/g, '');
-
-                            if (getTechUnlockedArray().includes(techSpanArrayName)) {
-                                techSpan.classList.add('green-ready-text');
-                                techSpan.classList.remove('red-disabled-text');
-                            } else {
-                                techSpan.classList.remove('green-ready-text');
-                                techSpan.classList.add('red-disabled-text');
-                            }
-                            prerequisiteSpan.appendChild(techSpan);
-
-                            if (index < technologiesArray.length - 1) {
-                                prerequisiteSpan.appendChild(document.createTextNode(', '));
-                            }
-                        });
-                    }
-                }
-            }
-
-            if (getTechUnlockedArray().includes(techName)) {
-                if (element.tagName.toLowerCase() === 'button') {
-                    setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'green');
-                }
-                element.classList.remove('red-disabled-text');
-                element.classList.add('green-ready-text');
-                element.textContent = 'Researched';
-                element.style.pointerEvents = 'none';
-                setTechRenderChange(true);
-            }
-
-            return;
-        }        
-
-        let price;
-        let mainKey;
-
-        if (type === 'autoBuyer') {
-            if (resource === 'cash') { //rocketFuelBuyer
-                const autoBuyerTier = element.dataset.autoBuyerTier;
-                let rocket;
-                for (let clas of element.classList) {
-                    if (clas.includes("rocket")) {
-                        rocket = clas;
-                        break;
-                    }
-                }
-                price = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', autoBuyerTier, 'price']);
-            } else if (resource === 'time') { //for things like search asteroid
-                price = 0;
-            } else {
-                mainKey = 'resources';
-                const autoBuyerTier = element.dataset.autoBuyerTier;
-                if (autoBuyerTier === 'tier0') return;
-                price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
-            }
-
-        } else if (type === 'scienceUpgrade') {
-            mainKey = 'research';
-            price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
-        } else if (type === 'energy') {
-            mainKey = 'buildings';
-            price = getResourceDataObject(mainKey, [resource, 'upgrades', buildingUpgradeType, 'price']);
-        } else if (type === 'spaceUpgrade') {
-            mainKey = 'space';
-            price = getResourceDataObject(mainKey, ['upgrades', spaceUpgradeType, 'price']);
-        } else {
-            if (element.dataset.type === "research") {
-                mainKey = 'research';
-                price = getResourceDataObject(mainKey, ['quantity']);
-            } else if (element.dataset.type === "storage") {
-                mainKey = 'resources' //storageCapacity
-                price = getResourceDataObject(mainKey, [resource, 'storageCapacity']) - 1;
-                if (element.tagName.toLowerCase() !== 'button') {
-                    element.textContent = `${price} ${getResourceDataObject(mainKey, [resource, 'nameResource'])}`;
-                }
-            }
-        }
-
-        let resourcePrices = [];
-        let resourceNames = [];
-        let resourceCategories = [];
-
-        if (element.classList.contains('building-purchase')) {
-            if (type === 'spaceUpgrade') {
-                resourcePrices.push(
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[0],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[0],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[0]
-                );
-                resourceNames.push(
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[1],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[1],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[1]
-                );
-                resourceCategories.push(
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[2],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[2],
-                    getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[2]
-                );
-            } else {
-                if (resource !== 'time') {
-                    resourcePrices.push(
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
-                    );
-                    resourceNames.push(
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
-                    );
-                    resourceCategories.push(
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
-                        getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
-                    );
-                }
-            }
-        }
-
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+    if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellCompound') { //sell
+        if (quantity > 0) { 
             element.classList.remove('red-disabled-text');
         } else {
             element.classList.add('red-disabled-text');
         }
-        
-        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
-            if (element.classList.contains('building-purchase')) {
-                element.querySelectorAll('span').forEach((span, index) => {
-                    if (index !== 0) {
-                        const category = resourceCategories[index-1];
-                        const name = resourceNames[index-1];
-                        const price = resourcePrices[index-1];
-    
-                        if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
-                            span.classList.remove('red-disabled-text');
-                            span.classList.add('green-ready-text');
-                        } else if (category) {
-                            span.classList.add('red-disabled-text');
-                            span.classList.remove('green-ready-text');
-                        }
-                    } else {
-                        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
-                            span.classList.remove('red-disabled-text');
-                            span.classList.add('green-ready-text');  
-                        } else {
-                            span.classList.add('red-disabled-text');
-                            span.classList.remove('green-ready-text');
-                        }
-                    }
-                });
-            } else {
-                element.classList.remove('red-disabled-text');
-            }
+
+        return;
+    }
+
+    if (element.classList.contains('create') || element.dataset.conditionCheck === 'createCompound') { //sell           
+        const createCompoundDescriptionString = document.getElementById('create' + capitaliseString(checkQuantityString) + 'Description').innerHTML;
+        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+        if (accompanyingLabel.textContent.startsWith('0')) {
+            accompanyingLabel.classList.remove('warning-orange-text');
+            accompanyingLabel.classList.add('red-disabled-text');
         } else {
-            if (element.classList.contains('building-purchase') && !element.classList.contains('building-purchase-button')) {
-                element.querySelectorAll('span').forEach((span, index) => {
-                    if (index !== 0) {
-                        const category = resourceCategories[index-1];
-                        const name = resourceNames[index-1];
-                        const price = resourcePrices[index-1];
-            
-                        if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
-                            span.classList.remove('red-disabled-text');
-                            span.classList.add('green-ready-text');
-                        } else if (category) {
-                            span.classList.add('red-disabled-text');
-                            span.classList.remove('green-ready-text');
-                        }
-                    } else {
-                        if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
-                            span.classList.remove('red-disabled-text');
-                            span.classList.add('green-ready-text');  
-                        } else {
-                            span.classList.add('red-disabled-text');
-                            span.classList.remove('green-ready-text');
-                        }
-                    }
-                });
+            accompanyingLabel.classList.remove('red-disabled-text'); 
+        }
+        
+        let constituentComponents = getConstituentComponents(createCompoundDescriptionString);      
+        constituentComponents = unpackConstituentPartsObject(constituentComponents);
+        setConstituentPartsObject(constituentComponents);
+
+        let isDisabled = false;
+
+        for (let i = 1; i <= 4; i++) {
+            const nameKey = `constituentPartName${i}`;
+            const quantityKey = `constituentPartQuantity${i}`;
+            const requiredName = constituentComponents[nameKey];
+            const requiredQuantity = constituentComponents[quantityKey];
+    
+            if (constituentComponents.compoundToCreateQuantity <= 0) {
+                isDisabled = true;
+                break;
+            }
+
+            if (!requiredName || requiredQuantity <= 0) continue;
+    
+            const currentQuantity = getResourceDataObject('resources', [requiredName, 'quantity']);
+            if (currentQuantity < requiredQuantity) {
+                element.classList.remove('warning-orange-text');
+                element.classList.add('red-disabled-text');
+                setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
+                isDisabled = true;
+                break;
+            }
+        }
+    
+        if (!isDisabled) {
+            if (createCompoundDescriptionString.includes('!')) {
+                element.classList.add('warning-orange-text');
+            }
+            if (!createCompoundDescriptionString.includes('!')) {
+                element.classList.remove('warning-orange-text');
+            }
+            if (getPowerOnOff()) {
+                element.classList.remove('red-disabled-text');
             } else {
                 element.classList.add('red-disabled-text');
             }
-        } 
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'create');
+        }
 
-        if (element.classList.contains('building-purchase')) {
-            const spans = element.querySelectorAll('span');
+        return;
+    }
 
-            let hasRedDisabledText = false;
-            spans.forEach(span => {
-                if (span.classList.contains('red-disabled-text')) {
-                    hasRedDisabledText = true;
-                }
-            });
+    let price;
+    let price2;
+    let mainKey;
 
-            const buyButton = element.parentElement.parentElement.querySelector('button');
+    if (type === 'autoBuyer') {
+        mainKey = 'compounds';
+        const autoBuyerTier = element.dataset.autoBuyerTier;
+        if (autoBuyerTier === 'tier0') return;
+        price = getResourceDataObject(mainKey, [compound, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+        price2 = 0;
+    } else if (element.dataset.type === "storage") {
+        mainKey = 'compounds' //storageCapacity
+        price = getResourceDataObject(mainKey, [compound, 'storageCapacity']) - 1;
+        if (element.tagName.toLowerCase() !== 'button') {
+            price2 = compound2 ? Math.floor(getResourceDataObject(mainKey, [compound, 'storageCapacity']) * 0.3) : 0;
+            const mainCompoundPriceText = `${price} ${getResourceDataObject(mainKey, [compound, 'nameResource'])}`;
+            const secondaryCompoundPriceText = price2 > 0 ? `, ${price2} ${getResourceDataObject(mainKey, [compound2, 'nameResource'])}` : '';
+        
+            const mainCompoundSpan = document.createElement('span');
+            mainCompoundSpan.id = 'mainCompoundPriceText';
+            mainCompoundSpan.textContent = mainCompoundPriceText;
+        
+            const secondaryCompoundSpan = document.createElement('span');
+            secondaryCompoundSpan.id = 'secondaryCompoundPriceText';
+            secondaryCompoundSpan.textContent = secondaryCompoundPriceText;
+        
+            element.textContent = '';
+            element.appendChild(mainCompoundSpan);
+            element.appendChild(secondaryCompoundSpan);
+        }
+         else {
+            price2 = 0;
+        }
+    }
 
-            if (hasRedDisabledText) {
-                buyButton.classList.add('red-disabled-text');
+    if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price && quantity2 >= price2) { //reason for quantity2 being -1 higher up
+        if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
+            document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
+            document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
+            document.getElementById('mainCompoundPriceText').classList.remove('red-disabled-text');
+            document.getElementById('secondaryCompoundPriceText').classList.remove('red-disabled-text');
+        }
+        element.classList.remove('red-disabled-text');
+    } else {
+        if (element.tagName.toLowerCase() !== 'button' && price2 > 0) {
+            if (quantity < price) {
+                document.getElementById('mainCompoundPriceText').classList.add('red-disabled-text');
+                document.getElementById('mainCompoundPriceText').classList.remove('green-ready-text');
+                element.classList.add('red-disabled-text');
             } else {
-                buyButton.classList.remove('red-disabled-text');
+                document.getElementById('mainCompoundPriceText').classList.add('green-ready-text');
+            }
+            if (quantity2 < price2) {
+                document.getElementById('secondaryCompoundPriceText').classList.add('red-disabled-text');
+                document.getElementById('secondaryCompoundPriceText').classList.remove('green-ready-text'); 
+                element.classList.add('red-disabled-text');
+            } else {
+                document.getElementById('secondaryCompoundPriceText').classList.add('green-ready-text');
+            }
+            if (quantity >= price && quantity2 >= price2) {
+                element.classList.remove('red-disabled-text');
+            }
+        } else if (element.tagName.toLowerCase() !== 'button') {
+            if (quantity < price) {
+                element.classList.add('red-disabled-text');
+            } else {
+                element.classList.remove('red-disabled-text');
+            }
+        } else { //buttons
+            if (element.parentElement.parentElement.querySelector('.description-container').firstChild.classList.contains('red-disabled-text')) { //could cause problems with compound autobuyers if introduced, even when this is working as intended
+                element.classList.add('red-disabled-text');
+            } else {
+                element.classList.remove('red-disabled-text');
             }
         }
-                
-        if (element.classList.contains('building-purchase-button')) {
-            const upgradeTypes = ['launchPad', 'spaceTelescope'];
+    }
 
-            upgradeTypes.forEach(upgradeType => {
-                if (element.classList.contains(upgradeType)) {
-                    if (getResourceDataObject('space', ['upgrades', upgradeType, `${upgradeType}BoughtYet`])) {
-                        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+    if (getElements()[compound + 'Rate'].textContent.includes('-')) {
+        getElements()[compound + 'Rate'].classList.add('red-disabled-text');
+    } else {
+        getElements()[compound + 'Rate'].classList.remove('red-disabled-text');
+    }
+}
+
+function resourceCostSellChecks(element) {
+    let resource = element.dataset.type;
+    const techName = element.dataset.type;
+    const type = element.dataset.type;
+    const resourceToFuseTo = element.dataset.resourceToFuseTo;
+
+    //science / building upgrades
+    const scienceUpgradeType = element.dataset.resourceToFuseTo;
+    const buildingUpgradeType = element.dataset.resourceToFuseTo;
+    const spaceUpgradeType = element.dataset.resourceToFuseTo;
+
+    if (resource === 'storage' || resource === 'autoBuyer') {
+        resource = element.dataset.argumentCheckQuantity;
+    }
+
+    const checkQuantityString = element.dataset.argumentCheckQuantity;
+
+    let quantity;
+
+    if (checkQuantityString === 'cash') {
+        quantity = getResourceDataObject('currency', ['cash']);
+    } else if (checkQuantityString === 'time') {
+        quantity = 0;
+    } else {
+        if (checkQuantityString === 'research') {
+            quantity = getResourceDataObject('research', ['quantity']); //research
+        } else {
+            quantity = getResourceDataObject('resources', [checkQuantityString, 'quantity']); //research
+        } 
+    }
+
+    if (element.classList.contains('sell') || element.dataset.conditionCheck === 'sellResource') { //sell
+        return setStateOfSellResourceButton(element, quantity);
+    }
+
+    if (element.classList.contains('fuse') || element.dataset.conditionCheck === 'fuseResource') {
+        return setStateOfFuseResourceButton(element, quantity, resource, resourceToFuseTo);
+    }
+
+    if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') { 
+        return handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName);
+    }        
+
+    let price = setPriceForAllPurchases(element, type, resource, scienceUpgradeType, buildingUpgradeType, spaceUpgradeType);
+
+    let resourcePrices = [];
+    let resourceNames = [];
+    let resourceCategories = [];
+
+    if (element.classList.contains('building-purchase')) {
+        ({ resourcePrices, resourceNames, resourceCategories } = setUpResourcePricesNamesCategories(resource, type, spaceUpgradeType, buildingUpgradeType));
+    }
+
+    checkIfHaveEnoughResourceForUpgradeAndSetState(element, quantity, price);
+    
+    if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+        setStateOfDescriptionLabelsForAutoBuyers(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
+    } else {
+        setStateOfDescriptionLabelsForBuildingAndOneOffSpacePurchases(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
+    } 
+
+    if (element.classList.contains('building-purchase')) {
+        setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
+    }
             
-                        element.classList.add('invisible');
-                        document.getElementById(`${upgradeType}AlreadyBoughtText`).classList.remove('invisible');
-                        accompanyingLabel.classList.add('invisible');
-                    }
-                }
-            });
-            return;
-        }      
+    if (element.classList.contains('building-purchase-button')) {
+        return handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
+    }      
 
-        if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash' && resource !== 'time') {
-            if (getElements()[resource + 'Rate'].textContent.includes('-')) {
-                getElements()[resource + 'Rate'].classList.add('red-disabled-text');
-            } else {
-                getElements()[resource + 'Rate'].classList.remove('red-disabled-text');
-            }
-        } else if (resource === 'spaceUpgrade') {
-            const dataName = element.dataset.resourceToFuseTo;
-            if (dataName.includes('rocket')) {
-                const builtParts = getResourceDataObject('space', ['upgrades', dataName, 'builtParts']);
-                const totalParts = getResourceDataObject('space', ['upgrades', dataName, 'parts']);
-                if (builtParts === totalParts) {
-                    const builtPartsElement = document.getElementById(`${dataName}BuiltPartsQuantity`);
-                    const totalPartsElement = document.getElementById(`${dataName}TotalPartsQuantity`);
-                    const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
-                    rocketPartBuyButton.classList.add('red-disabled-text');
-                    element.classList.add('green-ready-text');
-                    builtPartsElement.classList.add('green-ready-text');
-                    totalPartsElement.classList.add('green-ready-text');
-                    element.classList.remove('red-disabled-text');
-                    element.textContent = 'Built!';
-                    if (getLaunchedRockets().includes(dataName)) {
-                        element.textContent = 'Launched!';
-                    }
-                }
-                const rocketsBuiltArray = getRocketsBuilt();
-                for (let i = 1; i <= 4; i++) {
-                    const rocketElement = document.getElementById('rocket' + i);
-                    if (rocketElement) {
-                        if (rocketsBuiltArray.includes('rocket' + i)) {
-                            rocketElement.parentElement.parentElement.classList.remove('invisible');
-                        } else {
-                            rocketElement.parentElement.parentElement.classList.add('invisible');
-                        }
-                    }
-                }
-            }
-        } else if (resource === 'cash') {
+    if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash' && resource !== 'time') {
+        handleResourceRateStates(resource);
+    } else if (resource === 'spaceUpgrade') {
+        handleSpaceUpgradeResourceType(element);
+    } else if (resource === 'cash') { //build launchPad, spaceTelescope, startFuellingAutoBuyers
+        handleRocketFuellingChecksAndOneOffPurchases(element, price);
+        //add any more that need resource === cash
+    } else if (resource === 'time') {
+        //should be handled in the timer itself
+    }
+}
+
+function setPriceForAllPurchases(element, type, resource, scienceUpgradeType, buildingUpgradeType, spaceUpgradeType) {
+    let mainKey;
+    let price;
+
+    if (type === 'autoBuyer') {
+        if (resource === 'cash') { //rocketFuelBuyer
+            const autoBuyerTier = element.dataset.autoBuyerTier;
             let rocket;
-            let currentCash = getResourceDataObject('currency', ['cash']);
             for (let clas of element.classList) {
                 if (clas.includes("rocket")) {
                     rocket = clas;
                     break;
                 }
             }
+            price = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', autoBuyerTier, 'price']);
+        } else if (resource === 'time') { //for things like search asteroid
+            price = 0;
+        } else {
+            mainKey = 'resources';
+            const autoBuyerTier = element.dataset.autoBuyerTier;
+            if (autoBuyerTier === 'tier0') return 0;
+            price = getResourceDataObject(mainKey, [resource, 'upgrades', 'autoBuyer', autoBuyerTier, 'price']);
+        }
+
+    } else if (type === 'scienceUpgrade') {
+        mainKey = 'research';
+        price = getResourceDataObject(mainKey, ['upgrades', scienceUpgradeType, 'price']);
+    } else if (type === 'energy') {
+        mainKey = 'buildings';
+        price = getResourceDataObject(mainKey, [resource, 'upgrades', buildingUpgradeType, 'price']);
+    } else if (type === 'spaceUpgrade') {
+        mainKey = 'space';
+        price = getResourceDataObject(mainKey, ['upgrades', spaceUpgradeType, 'price']);
+    } else {
+        if (element.dataset.type === "research") {
+            mainKey = 'research';
+            price = getResourceDataObject(mainKey, ['quantity']);
+        } else if (element.dataset.type === "storage") {
+            mainKey = 'resources' //storageCapacity
+            price = getResourceDataObject(mainKey, [resource, 'storageCapacity']) - 1;
+            if (element.tagName.toLowerCase() !== 'button') {
+                element.textContent = `${price} ${getResourceDataObject(mainKey, [resource, 'nameResource'])}`;
+            }
+        }
+    }
+
+    return price;
+}
+
+function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
+    const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
         
-            const rocketsFuellerStartedArray = getRocketsFuellerStartedArray();
-            const accompanyingLabel = element.parentElement.parentElement.querySelector('.description-container label');
-        
-            const filteredRockets = rocketsFuellerStartedArray.filter(item => !item.includes('FuelledUp'));
-        
-            if (!filteredRockets.includes(rocket) && currentCash >= price) {
+    if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
+        element.classList.remove('red-disabled-text');
+    } else if (element) {
+        element.classList.add('red-disabled-text');
+    }
+
+    if (element.tagName.toLowerCase() === 'button') {
+        if (quantity >= getResourceDataObject('techs', [techName, 'price'])) {
+            const allPrerequisitesUnlocked = prerequisiteArray.every(prerequisite => getTechUnlockedArray().includes(prerequisite));
+
+            if (allPrerequisitesUnlocked) {
                 element.classList.remove('red-disabled-text');
-            } else if (filteredRockets.includes(rocket)) {
-                element.classList.add('invisible');
-                accompanyingLabel.textContent = 'Fuelling...';
-                accompanyingLabel.classList.remove('red-disabled-text');
-                accompanyingLabel.classList.add('green-ready-text');
             } else {
                 element.classList.add('red-disabled-text');
             }
+        }
+    } else { 
+        const prerequisiteSpan = element.querySelector('span');
+        
+        if (prerequisiteSpan) {
+            const technologiesString = prerequisiteSpan.textContent.trim();
+            if ((technologiesString !== "" && element.tagName.toLowerCase() !== 'button') || element.tagName.toLowerCase() === 'button') {
+                const technologiesArray = technologiesString.split(', ');
+                prerequisiteSpan.innerHTML = '';
 
-            if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`)) {
-                document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
-                document.getElementById('fuelDescription').classList.add('green-ready-text');
-                document.getElementById('fuelDescription').classList.remove('red-disabled-text');
-                setCheckRocketFuellingStatus(rocket, false);
+                technologiesArray.forEach((tech, index) => {
+
+                    const techSpan = document.createElement('span');
+                    techSpan.textContent = tech.trim();
+                    const techSpanArrayName = tech.charAt(0).toLowerCase() + tech.slice(1).replace(/\s+/g, '');
+
+                    if (getTechUnlockedArray().includes(techSpanArrayName)) {
+                        techSpan.classList.add('green-ready-text');
+                        techSpan.classList.remove('red-disabled-text');
+                    } else {
+                        techSpan.classList.remove('green-ready-text');
+                        techSpan.classList.add('red-disabled-text');
+                    }
+                    prerequisiteSpan.appendChild(techSpan);
+
+                    if (index < technologiesArray.length - 1) {
+                        prerequisiteSpan.appendChild(document.createTextNode(', '));
+                    }
+                });
             }
-        }  
+        }
+    }
+
+    if (getTechUnlockedArray().includes(techName)) {
+        if (element.tagName.toLowerCase() === 'button') {
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'green');
+        }
+        element.classList.remove('red-disabled-text');
+        element.classList.add('green-ready-text');
+        element.textContent = 'Researched';
+        element.style.pointerEvents = 'none';
+        setTechRenderChange(true);
+    }
+}
+
+function setStateOfSellResourceButton(element, quantity) {
+    if (quantity > 0) { 
+        element.classList.remove('red-disabled-text');
+    } else {
+        element.classList.add('red-disabled-text');
+    }
+}
+
+function setStateOfFuseResourceButton(element, quantity, resource, resourceToFuseTo) {
+    if (getTechUnlockedArray().includes(resource + 'Fusion') && getUnlockedResourcesArray().includes(resourceToFuseTo)) {
+        element.classList.remove('invisible'); 
+    }
+
+    if (getTechUnlockedArray().includes(resource + 'Fusion') && quantity > 0) {
+        element.classList.remove('red-disabled-text');
+        if (element.tagName.toLowerCase() === 'button') {
+            setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, 'fuse');
+        }
+    } else if (!getTechUnlockedArray().includes(resource + 'Fusion')) {
+        element.classList.add('invisible');
+    } else {
+        element.classList.remove('warning-orange-text');
+        element.classList.add('red-disabled-text');
+    }
+}
+
+function setUpResourcePricesNamesCategories(resource, type, spaceUpgradeType, buildingUpgradeType) {
+    let resourceCategories = [];
+    let resourcePrices = [];
+    let resourceNames = [];
+
+    if (type === 'spaceUpgrade') {
+        resourcePrices.push(
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[0],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[0],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[0]
+        );
+        resourceNames.push(
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[1],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[1],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[1]
+        );
+        resourceCategories.push(
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource1Price'])[2],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource2Price'])[2],
+            getResourceDataObject('space', ['upgrades', spaceUpgradeType, 'resource3Price'])[2]
+        );
+    } else {
+        if (resource !== 'time') {
+            resourcePrices.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[0],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[0],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[0]
+            );
+            resourceNames.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[1],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[1],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[1]
+            );
+            resourceCategories.push(
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource1Price'])[2],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource2Price'])[2],
+                getResourceDataObject('buildings', ['energy', 'upgrades', buildingUpgradeType, 'resource3Price'])[2]
+            );
+        }
+    }
+
+    return { resourceCategories: resourceCategories, resourceNames: resourceNames, resourcePrices: resourcePrices };
+}
+
+function checkIfHaveEnoughResourceForUpgradeAndSetState(element, quantity, price) {
+    if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+        element.classList.remove('red-disabled-text');
+    } else {
+        element.classList.add('red-disabled-text');
+    }
+}
+
+function handleResourceRateStates(resource) {
+    if (getElements()[resource + 'Rate'].textContent.includes('-')) {
+        getElements()[resource + 'Rate'].classList.add('red-disabled-text');
+    } else {
+        getElements()[resource + 'Rate'].classList.remove('red-disabled-text');
+    }
+}
+
+function setStateOfDescriptionLabelsForAutoBuyers(element, price, quantity, resourceCategories, resourceNames, resourcePrices) {
+    if (element.classList.contains('building-purchase')) {
+        element.querySelectorAll('span').forEach((span, index) => {
+            if (index !== 0) {
+                const category = resourceCategories[index-1];
+                const name = resourceNames[index-1];
+                const price = resourcePrices[index-1];
+
+                if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
+                    span.classList.remove('red-disabled-text');
+                    span.classList.add('green-ready-text');
+                } else if (category) {
+                    span.classList.add('red-disabled-text');
+                    span.classList.remove('green-ready-text');
+                }
+            } else {
+                if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+                    span.classList.remove('red-disabled-text');
+                    span.classList.add('green-ready-text');  
+                } else {
+                    span.classList.add('red-disabled-text');
+                    span.classList.remove('green-ready-text');
+                }
+            }
+        });
+    } else {
+        element.classList.remove('red-disabled-text');
+    }
+}
+
+function setStateOfDescriptionLabelsForBuildingAndOneOffSpacePurchases(element, price, quantity, resourceCategories, resourceNames, resourcePrices) {
+    if (element.classList.contains('building-purchase') && !element.classList.contains('building-purchase-button')) {
+        element.querySelectorAll('span').forEach((span, index) => {
+            if (index !== 0) {
+                const category = resourceCategories[index-1];
+                const name = resourceNames[index-1];
+                const price = resourcePrices[index-1];
+    
+                if (category && getResourceDataObject(category, [name, 'quantity']) > price) {
+                    span.classList.remove('red-disabled-text');
+                    span.classList.add('green-ready-text');
+                } else if (category) {
+                    span.classList.add('red-disabled-text');
+                    span.classList.remove('green-ready-text');
+                }
+            } else {
+                if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+                    span.classList.remove('red-disabled-text');
+                    span.classList.add('green-ready-text');  
+                } else {
+                    span.classList.add('red-disabled-text');
+                    span.classList.remove('green-ready-text');
+                }
+            }
+        });
+    } else {
+        element.classList.add('red-disabled-text');
+    }
+}
+
+function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
+    const spans = element.querySelectorAll('span');
+
+    let hasRedDisabledText = false;
+    spans.forEach(span => {
+        if (span.classList.contains('red-disabled-text')) {
+            hasRedDisabledText = true;
+        }
+    });
+
+    const buyButton = element.parentElement.parentElement.querySelector('button');
+
+    if (hasRedDisabledText) {
+        buyButton.classList.add('red-disabled-text');
+    } else {
+        buyButton.classList.remove('red-disabled-text');
+    }
+}
+
+function handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element) {
+    const upgradeTypes = ['launchPad', 'spaceTelescope'];
+
+    upgradeTypes.forEach(upgradeType => {
+        if (element.classList.contains(upgradeType)) {
+            if (getResourceDataObject('space', ['upgrades', upgradeType, `${upgradeType}BoughtYet`])) {
+                const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+    
+                element.classList.add('invisible');
+                document.getElementById(`${upgradeType}AlreadyBoughtText`).classList.remove('invisible');
+                accompanyingLabel.classList.add('invisible');
+            }
+        }
+    });
+}
+
+function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
+    let rocket;
+    let currentCash = getResourceDataObject('currency', ['cash']);
+    for (let clas of element.classList) {
+        if (clas.includes("rocket")) {
+            rocket = clas;
+            break;
+        }
+    }
+
+    const rocketsFuellerStartedArray = getRocketsFuellerStartedArray();
+    const accompanyingLabel = element.parentElement.parentElement.querySelector('.description-container label');
+    const filteredRockets = rocketsFuellerStartedArray.filter(item => !item.includes('FuelledUp'));
+
+    if (!filteredRockets.includes(rocket) && currentCash >= price) { //purchase launchPad, spaceTelescope etc
+        element.classList.remove('red-disabled-text');
+    } else if (filteredRockets.includes(rocket)) {
+        element.classList.add('invisible');
+        accompanyingLabel.textContent = 'Fuelling...';
+        accompanyingLabel.classList.remove('red-disabled-text');
+        accompanyingLabel.classList.add('green-ready-text');
+    } else {
+        element.classList.add('red-disabled-text');
+    }
+
+    if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`)) {
+        document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
+        document.getElementById('fuelDescription').classList.add('green-ready-text');
+        document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+        setCheckRocketFuellingStatus(rocket, false);
+    }
+}
+
+function handleSpaceUpgradeResourceType(element) {
+    const dataName = element.dataset.resourceToFuseTo;
+    if (dataName.includes('rocket')) {
+        const builtParts = getResourceDataObject('space', ['upgrades', dataName, 'builtParts']);
+        const totalParts = getResourceDataObject('space', ['upgrades', dataName, 'parts']);
+        if (builtParts === totalParts) {
+            const builtPartsElement = document.getElementById(`${dataName}BuiltPartsQuantity`);
+            const totalPartsElement = document.getElementById(`${dataName}TotalPartsQuantity`);
+            const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
+            rocketPartBuyButton.classList.add('red-disabled-text');
+            element.classList.add('green-ready-text');
+            builtPartsElement.classList.add('green-ready-text');
+            totalPartsElement.classList.add('green-ready-text');
+            element.classList.remove('red-disabled-text');
+            element.textContent = 'Built!';
+            if (getLaunchedRockets().includes(dataName)) {
+                element.textContent = 'Launched!';
+            }
+        }
+        const rocketsBuiltArray = getRocketsBuilt();
+        for (let i = 1; i <= 4; i++) {
+            const rocketElement = document.getElementById('rocket' + i);
+            if (rocketElement) {
+                if (rocketsBuiltArray.includes('rocket' + i)) {
+                    rocketElement.parentElement.parentElement.classList.remove('invisible');
+                } else {
+                    rocketElement.parentElement.parentElement.classList.add('invisible');
+                }
+            }
+        }
+    }
+}
+
+function checkStatusAndSetTextClasses(element) {
+    
+    if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
+        return travelToAsteroidChecks(element);
+    }
+
+    if ((element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
+        return searchAsteroidChecks(element);
+    }
+
+    if (element.classList.contains('fuel-check')) {
+        return powerGenerationFuelChecks(element);
+    }
+
+    if (element.classList.contains('energy-check')) {
+        return energyChecks(element);
+    }
+
+    if (element.classList.contains('powered-check')) {
+        return powerOnOrOffChecks(element);
+    }
+
+    if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
+        return compoundCostSellCreateChecks(element);
+    }
+
+    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') { //will need to add price2 and quantity2 if ever need a
+        return resourceCostSellChecks(element);  
     }
 }
 
