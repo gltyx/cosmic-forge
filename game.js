@@ -4486,21 +4486,37 @@ function generateLegendaryAsteroidName(commanderName) {
 
     let cleanedName = commanderName.replace(/[0-9]/g, "");
     cleanedName = capitaliseString(cleanedName);
-    const nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
-    const usePrefix = Math.random() > 0.5;
+    let nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
+    let usePrefix = Math.random() > 0.5;
     let asteroidName = usePrefix ? `${nameComponent} ${cleanedName}` : `${cleanedName} ${nameComponent}`;
 
     const asteroidArray = getAsteroidArray();
     const existingKeys = asteroidArray.map(asteroid => Object.keys(asteroid)[0]);
 
-    while (existingKeys.includes(asteroidName)) {
-        const nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
-        const usePrefix = Math.random() > 0.5;
+    let attempts = 0;
+
+    while (existingKeys.includes(asteroidName) && attempts < 100) {
+        nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
+        usePrefix = Math.random() > 0.5;
         asteroidName = usePrefix ? `${nameComponent} ${cleanedName}` : `${cleanedName} ${nameComponent}`;
+        attempts++;
+    }
+
+    if (attempts >= 100) {
+        let increment = 1;
+        let newAsteroidName = `${asteroidName}${increment}`;
+
+        while (existingKeys.includes(newAsteroidName)) {
+            increment++;
+            newAsteroidName = `${asteroidName}${increment}`;
+        }
+
+        asteroidName = newAsteroidName;
     }
 
     return asteroidName;
 }
+
 
 //===============================================================================================================
 
