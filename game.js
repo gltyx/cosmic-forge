@@ -4502,7 +4502,7 @@ function generateLegendaryAsteroidName(commanderName) {
         attempts++;
     }
 
-    if (attempts >= 100) {
+    if (attempts >= 100) { //lower this number if any performance issues, 50 is probably ok
         let increment = 1;
         let newAsteroidName = `${asteroidName}${increment}`;
 
