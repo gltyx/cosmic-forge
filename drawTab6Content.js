@@ -1,5 +1,5 @@
-import { deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidTimerFinishes } from './constantsAndGlobalVars.js';
-import { timerManager, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid } from './constantsAndGlobalVars.js';
+import { timerManager, startTravelToAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -72,7 +72,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     timerManager.removeTimer('searchAsteroidTimer');
                     if (getCurrentlySearchingAsteroid()) {
                         deferredActions.push(() => {
-                            const timeRemaining = getTimeLeftUntilAsteroidTimerFinishes();
+                            const timeRemaining = getTimeLeftUntilAsteroidScannerTimerFinishes();
                             startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
                         });
                     }
@@ -308,13 +308,20 @@ export function drawTab6Content(heading, optionContentElement) {
                 .flat()
                 .sort((a, b) => a.distance - b.distance),
                 '', (value) => {
+                    setDestinationAsteroid('rocket1', value);
                     console.log('Selected asteroid name:', value);
                 }, ['travel-to']),                                 
-            null, //button here for set off travel
-            null,
+            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1-travel-to-asteroid-button'], () => {
+                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket1');
+            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+            createTextElement(
+                `<div id="spaceTravelToAsteroidProgressBarRocket1">`,
+                'spaceTravelToAsteroidProgressBarRocket1Container',
+                ['progress-bar-container', 'invisible']
+            ),
             null,           
             null,
-            ``, //travel time
+            `Travelling...`,
             '',
             null,
             null,
@@ -324,7 +331,7 @@ export function drawTab6Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'asteroid'
+            'travel'
         );
         optionContentElement.appendChild(spaceRocket1TravelRow);
 
@@ -395,11 +402,17 @@ export function drawTab6Content(heading, optionContentElement) {
                 '', (value) => {
                     console.log('Selected asteroid name:', value);
                 }, ['travel-to']),                                 
-            null, //button here for set off travel
-            null,
+            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2-travel-to-asteroid-button'], () => {
+                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket2');
+            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+            createTextElement(
+                `<div id="spaceTravelToAsteroidProgressBarRocket2">`,
+                'spaceTravelToAsteroidProgressBarRocket2Container',
+                ['progress-bar-container', 'invisible']
+            ),
             null,           
             null,
-            ``, //travel time
+            `Travelling...`,
             '',
             null,
             null,
@@ -409,7 +422,7 @@ export function drawTab6Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'asteroid'
+            'travel'
         );
         optionContentElement.appendChild(spaceRocket2TravelRow);
 
@@ -480,11 +493,17 @@ export function drawTab6Content(heading, optionContentElement) {
                 '', (value) => {
                     console.log('Selected asteroid name:', value);
                 }, ['travel-to']),                                 
-            null, //button here for set off travel
-            null,
+            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3-travel-to-asteroid-button'], () => {
+                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket3');
+            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+            createTextElement(
+                `<div id="spaceTravelToAsteroidProgressBarRocket3">`,
+                'spaceTravelToAsteroidProgressBarRocket3Container',
+                ['progress-bar-container', 'invisible']
+            ),
             null,           
             null,
-            ``, //travel time
+            `Travelling...`,
             '',
             null,
             null,
@@ -494,7 +513,7 @@ export function drawTab6Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'asteroid'
+            'travel'
         );
         optionContentElement.appendChild(spaceRocket3TravelRow);
 
@@ -565,11 +584,17 @@ export function drawTab6Content(heading, optionContentElement) {
                 '', (value) => {
                     console.log('Selected asteroid name:', value);
                 }, ['travel-to']),                                 
-            null, //button here for set off travel
-            null,
+            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4-travel-to-asteroid-button'], () => {
+                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket4');
+            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+            createTextElement(
+                `<div id="spaceTravelToAsteroidProgressBarRocket4">`,
+                'spaceTravelToAsteroidProgressBarRocket4Container',
+                ['progress-bar-container', 'invisible']
+            ),
             null,           
             null,
-            ``, //travel time
+            `Travelling...`,
             '',
             null,
             null,
@@ -579,7 +604,7 @@ export function drawTab6Content(heading, optionContentElement) {
             false,
             null,
             null,
-            'asteroid'
+            'travel'
         );
         optionContentElement.appendChild(spaceRocket4TravelRow);
 

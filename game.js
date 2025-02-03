@@ -1,4 +1,17 @@
 import {
+    setMiningObject,
+    getMiningObject,
+    setTimeLeftUntilRocketTravelToAsteroidTimerFinishes,
+    getTimeLeftUntilRocketTravelToAsteroidTimerFinishes,
+    getRocketTravelSpeed,
+    getDestinationAsteroid,
+    setDestinationAsteroid,
+    getRocketTravelDuration,
+    setRocketTravelDuration,
+    setRocketReadyToTravel,
+    getRocketReadyToTravel,
+    getCurrentlyTravellingToAsteroid,
+    setCurrentlyTravellingToAsteroid,
     setAsteroidTimerCanContinue,
     getAsteroidTimerCanContinue,
     getAsteroidArray,
@@ -8,8 +21,8 @@ import {
     getCurrentAsteroidSearchTimerDurationTotal,
     getTelescopeReadyToSearch,
     setTelescopeReadyToSearch,
-    setTimeLeftUntilAsteroidTimerFinishes,
-    getTimeLeftUntilAsteroidTimerFinishes,
+    setTimeLeftUntilAsteroidScannerTimerFinishes,
+    getTimeLeftUntilAsteroidScannerTimerFinishes,
     setCurrentlySearchingAsteroid,
     getCurrentlySearchingAsteroid,
     setBaseSearchTimerDuration,
@@ -223,9 +236,16 @@ export function startGame() {
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
     startInitialTimers();
-    startSearchAsteroidTimer([getTimeLeftUntilAsteroidTimerFinishes(), 'fromLoadOrNewGame']);
+    startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), 'fromLoadOrNewGame']);
+    startRocketTimers();
     startNewsTickerTimer();
     gameLoop();
+}
+
+function startRocketTimers() {
+    for (let i = 1; i <= 4; i++) {
+        startTravelToAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), 'fromLoadOrNewGame'], 'rocket' + i);
+    }
 }
 
 export async function gameLoop() {
@@ -1650,6 +1670,61 @@ export function checkPowerForAsteroidTimer() {
 }
 
 function checkStatusAndSetTextClasses(element) {
+    
+    if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
+        const accompanyingLabel = document.getElementById('travelToDescription');  
+
+        if (accompanyingLabel) { //travelTo description
+            const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
+            if (rocketClass) {
+                const rocketName = rocketClass.match(/^rocket\d+/)[0];
+                if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
+                    accompanyingLabel.classList.remove('red-disabled-text');
+                    accompanyingLabel.innerText = 'Ready To Travel...';
+                    accompanyingLabel.classList.add('green-ready-text');
+                } else {
+                    if (getCurrentlyTravellingToAsteroid(rocketName)) {
+                        accompanyingLabel.classList.remove('red-disabled-text');
+                        accompanyingLabel.innerText = 'Travelling...' + getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName) + 's';
+                        accompanyingLabel.classList.add('green-ready-text'); 
+                    } else if (getMiningObject()[rocketName !== null]) { //if rocket mining at an asteroid
+                        accompanyingLabel.classList.remove('red-disabled-text');
+                        accompanyingLabel.innerText = 'Mining Antimatter...'; //maybe add rate or something else like quantity left
+                        accompanyingLabel.classList.add('green-ready-text');  
+                    } else {
+                        accompanyingLabel.classList.add('red-disabled-text');
+                        accompanyingLabel.classList.remove('green-ready-text');
+                        accompanyingLabel.innerText = 'Not Launched!';
+                    }
+
+
+                    const elapsedTime = getRocketTravelDuration(rocketName) - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName);
+                    const progressBarPercentage = (elapsedTime / getRocketTravelDuration(rocketName)) * 100;
+                    document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`).style.width = `${progressBarPercentage}%`;
+                }
+            }
+        }
+
+        if (element.dataset.resourceToFuseTo === 'travelToAsteroid') { //travelTo button
+            const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
+            if (rocketClass) {
+                const rocketName = rocketClass.match(/^rocket\d+/)[0];
+
+                if (getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
+                    element.classList.add('red-disabled-text');
+                    element.classList.remove('green-ready-text');
+                }
+    
+                getCurrentlyTravellingToAsteroid(rocketName) ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
+                const progressBarSearchAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
+                if (progressBarSearchAsteroid) {
+                    getCurrentlyTravellingToAsteroid(rocketName) ? progressBarSearchAsteroid.classList.remove('invisible') : progressBarSearchAsteroid.classList.add('invisible');
+                }
+                return;
+            }
+        }
+    }
+
     if ((element.dataset.resourceToFuseTo === 'searchAsteroid') && getCurrentOptionPane() === 'space telescope') {
         const accompanyingLabel = document.getElementById('scanAsteroidsDescription');  
 
@@ -1665,7 +1740,7 @@ function checkStatusAndSetTextClasses(element) {
                 accompanyingLabel.classList.add('red-disabled-text');
                 accompanyingLabel.classList.remove('green-ready-text');
                 accompanyingLabel.innerText = 'Requires Power!';
-                const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
+                const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
                 const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
                 document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
                 setAsteroidTimerCanContinue(false);
@@ -3012,10 +3087,77 @@ function startInitialTimers() {
     }
 }
 
+function calculateRocketTravelDuration(destinationAsteroid) {
+    const asteroidsArray = getAsteroidArray();
+    const targetAsteroid = asteroidsArray.find(obj => obj.hasOwnProperty(destinationAsteroid));
+
+    if (!targetAsteroid) return;
+
+    const distance = targetAsteroid[destinationAsteroid].distance;
+    const speed = getRocketTravelSpeed();
+
+    return Math.floor(distance / speed);
+}
+
+export function mineAsteroid(rocket, asteroid) {
+    console.log(rocket + ' has reached ' + asteroid + ' and started mining antimatter!');
+}
+
+export function startTravelToAsteroidTimer(adjustment, rocket) {
+    const travelTimerDescriptionElement = document.getElementById('travelToDescription');
+
+    if ((adjustment[1] === 'fromLoadOrNewGame' || adjustment[1] === 'offlineGains') && !getCurrentlyTravellingToAsteroid(rocket)) {
+        return;
+    }
+
+    setRocketReadyToTravel(rocket, false);
+    setCurrentlyTravellingToAsteroid(rocket, true);
+
+    const timerName = `${rocket}travelToAsteroidTimer`;
+    const destinationAsteroid = getDestinationAsteroid(rocket);
+    
+    if (!timerManager.getTimer(timerName)) {
+        let counter = 0;
+        const travelInterval = getTimerUpdateInterval();
+        let travelDuration = adjustment[0] === 0 ? calculateRocketTravelDuration(destinationAsteroid) : adjustment[0];
+
+        if (adjustment[0] === 0) {
+            setRocketTravelDuration(rocket, travelDuration);
+        }
+        
+        timerManager.addTimer(timerName, travelInterval, () => {
+            counter += travelInterval;
+
+            const timeLeft = Math.max(travelDuration - counter, 0);
+            const timeLeftUI = Math.max(Math.floor((travelDuration - counter) / 1000), 0);
+            
+            if (counter >= travelDuration) {
+                mineAsteroid(rocket, destinationAsteroid);
+                timerManager.removeTimer(timerName);
+                if (travelTimerDescriptionElement) {             
+                    travelTimerDescriptionElement.innerText = 'Mining Antimatter at ' + destinationAsteroid;
+                }
+                setMiningObject(rocket, destinationAsteroid); //leave travelling to array true until mining finishes
+                setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
+                setCurrentlyTravellingToAsteroid(rocket, false);
+            } else {
+                setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(timeLeft); 
+                if (travelTimerDescriptionElement) { 
+                    travelTimerDescriptionElement.classList.add('green-ready-text');
+                    travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
+                    const elapsedTime = getRocketTravelDuration()[rocket] - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
+                    const progressBarPercentage = (elapsedTime / getRocketTravelDuration()[rocket]) * 100;
+                    document.getElementById('spaceTravelToAsteroidProgressBarRocket1').style.width = `${progressBarPercentage}%`;
+                }
+            }
+        });
+    }
+}
+
 export function startSearchAsteroidTimer(adjustment) {
     const searchTimerDescriptionElement = document.getElementById('scanAsteroidsDescription');
     if (getAsteroidTimerCanContinue()) {
-        if (adjustment[1] === 'fromLoadOrNewGame' && !getCurrentlySearchingAsteroid()) {
+        if ((adjustment[1] === 'fromLoadOrNewGame' || adjustment[1] === 'offlineGains') && !getCurrentlySearchingAsteroid()) {
             return;
         }
         setTelescopeReadyToSearch(false);
@@ -3025,7 +3167,7 @@ export function startSearchAsteroidTimer(adjustment) {
         if (!timerManager.getTimer(timerName)) {
             let counter = 0;
             const searchInterval = getTimerUpdateInterval();
-            let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
+            let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration(rocket) : adjustment[0];
     
             searchDuration = 1000; //DEBUG
     
@@ -3047,13 +3189,13 @@ export function startSearchAsteroidTimer(adjustment) {
                     }
                     setTelescopeReadyToSearch(true);
                     setCurrentlySearchingAsteroid(false);
-                    setTimeLeftUntilAsteroidTimerFinishes(0);
+                    setTimeLeftUntilAsteroidScannerTimerFinishes(0);
                 } else {
-                    setTimeLeftUntilAsteroidTimerFinishes(timeLeft); 
+                    setTimeLeftUntilAsteroidScannerTimerFinishes(timeLeft); 
                     if (searchTimerDescriptionElement) { 
                         searchTimerDescriptionElement.classList.add('green-ready-text');
                         searchTimerDescriptionElement.innerText = `Searching ... ${timeLeftUI}s`;
-                        const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidTimerFinishes();
+                        const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
                         const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
                         document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
                     }
@@ -3464,7 +3606,7 @@ function setEnergyUse() {
 
     if (spaceTelescope) { //space telescope scanner
         let energyUse = 0;
-        if (getCurrentlySearchingAsteroid() && getTimeLeftUntilAsteroidTimerFinishes() > 0) {
+        if (getCurrentlySearchingAsteroid() && getTimeLeftUntilAsteroidScannerTimerFinishes() > 0) {
             energyUse = spaceTelescope.energyUse;
         }
         totalEnergyUseSpaceTelescope += energyUse;
@@ -3854,7 +3996,7 @@ export function offlineGains(switchedFocus) {
     });
 
     if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
-        const timeLeft = getTimeLeftUntilAsteroidTimerFinishes();
+        const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
         const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
 
         const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
@@ -3862,6 +4004,18 @@ export function offlineGains(switchedFocus) {
         timerManager.removeTimer('searchAsteroidTimer');
         startSearchAsteroidTimer([remainingTime, 'offlineGains']);
     }
+
+    const rocketTravelDurationObject = getRocketTravelDuration();
+    Object.keys(rocketTravelDurationObject).forEach(rocketKey => {
+        const rocket = rocketKey;
+        const timeLeft = getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
+        const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+    
+        const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+    
+        timerManager.removeTimer(`${rocketKey}travelToAsteroidTimer`);
+        startTravelToAsteroidTimer([remainingTime, 'offlineGains'], rocketKey);
+    });    
 
     if (!switchedFocus) {
         showNotification('Offline Gains Added!', 'info');

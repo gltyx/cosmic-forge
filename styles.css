@@ -1080,6 +1080,7 @@ body {
 #rocket2PartsCountText,
 #rocket3PartsCountText,
 #rocket4PartsCountText,
+[class*="-travel-to-asteroid-button"],
 [class*="-launch-button"]
 {
     margin-left: 30px;

@@ -802,6 +802,26 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: "" 
         },
+        spaceRocket1TravelRow: {
+            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content2: "",
+            updateAt: "" 
+        },
+        spaceRocket2TravelRow: {
+            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content2: "",
+            updateAt: "" 
+        },
+        spaceRocket3TravelRow: {
+            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content2: "",
+            updateAt: "" 
+        },
+        spaceRocket4TravelRow: {
+            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content2: "",
+            updateAt: "" 
+        },
         // content1: `Add an Advanced Water Mixer for better Water production`,
         spaceRocket1AutoBuyerRow: {
             content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
