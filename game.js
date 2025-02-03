@@ -2404,6 +2404,13 @@ function checkStatusAndSetTextClasses(element) {
             } else {
                 element.classList.add('red-disabled-text');
             }
+
+            if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`)) {
+                document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
+                document.getElementById('fuelDescription').classList.add('green-ready-text');
+                document.getElementById('fuelDescription').classList.remove('red-disabled-text');
+                setCheckRocketFuellingStatus(rocket, false);
+            }
         }  
     }
 }
@@ -3167,7 +3174,7 @@ export function startSearchAsteroidTimer(adjustment) {
         if (!timerManager.getTimer(timerName)) {
             let counter = 0;
             const searchInterval = getTimerUpdateInterval();
-            let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration(rocket) : adjustment[0];
+            let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
             searchDuration = 1000; //DEBUG
     
@@ -4125,6 +4132,14 @@ export function fuelRockets() {
                 setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
             }
             setRocketsFuellerStartedArray(`${rocket}`, 'remove');
+
+            if (rocketLaunchButton) {
+                fuelQuantityProgressBarElement.style.width = `100%`;
+                rocketLaunchButton.classList.remove('invisible');
+                rocketLaunchButton.classList.remove('red-disabled-text');
+                rocketLaunchButton.classList.add('green-ready-text');
+                rocketLaunchButton.textContent = 'Launch!';
+            }
         }
 
         if (getCurrentOptionPane() === rocket) {
@@ -4134,17 +4149,7 @@ export function fuelRockets() {
         if (getCheckRocketFuellingStatus(rocket) && getPowerOnOff()) {
             newFuelQuantity = fuelQuantity + fuelRate * getTimerRateRatio();
 
-            if (newFuelQuantity < fullLevel) {
-                setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
-            } else {
-                if (rocketLaunchButton) {
-                    fuelQuantityProgressBarElement.style.width = `100%`;
-                    rocketLaunchButton.classList.remove('invisible');
-                    rocketLaunchButton.classList.remove('red-disabled-text');
-                    rocketLaunchButton.classList.add('green-ready-text');
-                    rocketLaunchButton.textContent = 'Launch!';
-                }
-            }
+            setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
 
             if (getCurrentOptionPane() === rocket) {
                 const progressBarPercentage = getFuelLevel(rocket);
@@ -4157,13 +4162,8 @@ export function fuelRockets() {
                     rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.remove('green-ready-text');
-                } else {
-                    document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
-                    document.getElementById('fuelDescription').classList.add('green-ready-text');
-                    document.getElementById('fuelDescription').classList.remove('red-disabled-text');
                 }
             }
-            setCheckRocketFuellingStatus(rocket, false);
         } else if (!getPowerOnOff() && newFuelQuantity < fullLevel) {
             const progressBarPercentage = getFuelLevel(rocket);
             if (rocketLaunchButton) {
