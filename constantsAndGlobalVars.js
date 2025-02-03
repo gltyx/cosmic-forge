@@ -33,7 +33,7 @@ export const NOW = 30; //READY TO SORT NOW needs total of 150
 export const BUILDING_TYPES = ['energy'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
-export const ROCKET_TRAVEL_SPEED = 100;
+export const ROCKET_TRAVEL_SPEED = 0.1;
 
 //GLOBAL VARIABLES
 export let gameState;

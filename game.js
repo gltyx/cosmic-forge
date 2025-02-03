@@ -1677,26 +1677,44 @@ function travelToAsteroidChecks(element) {
         const rocketClass = [...element.classList].find(cls => cls.startsWith('rocket') && cls.match(/^rocket\d+/));
         if (rocketClass) {
             const rocketName = rocketClass.match(/^rocket\d+/)[0];
+            const travelToProgressBarElement = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}Container`);
+            const travelToDropdown = document.getElementById(`${rocketName}TravelDropdown`);
+            const destinationAsteroidTextElement = document.getElementById(`${rocketName}DestinationAsteroid`);
+            destinationAsteroidTextElement.innerHTML = `${getDestinationAsteroid(rocketName)}`;
+
             if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
                 accompanyingLabel.classList.remove('red-disabled-text');
                 accompanyingLabel.innerText = 'Ready To Travel...';
                 accompanyingLabel.classList.add('green-ready-text');
+                travelToProgressBarElement.classList.add('invisible');
+                destinationAsteroidTextElement.classList.add('invisible');
+                element.classList.remove('invisible');
+                travelToDropdown.classList.remove('invisible');
                 if (!getDestinationAsteroid(rocketName)) {
                     accompanyingLabel.innerText = 'Select Destination...';
                 }
             } else {
-                if (getCurrentlyTravellingToAsteroid(rocketName)) {
-                    accompanyingLabel.classList.remove('red-disabled-text');
-                    accompanyingLabel.innerText = 'Travelling...' + getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName) + 's';
-                    accompanyingLabel.classList.add('green-ready-text'); 
+                if (getCurrentlyTravellingToAsteroid(rocketName)) { //travelling case handled in timer
+                    travelToProgressBarElement.classList.remove('invisible');
+                    destinationAsteroidTextElement.classList.remove('invisible');
+                    element.classList.add('invisible');
+                    travelToDropdown.classList.add('invisible');
                 } else if (getMiningObject()[rocketName !== null]) { //if rocket mining at an asteroid
                     accompanyingLabel.classList.remove('red-disabled-text');
                     accompanyingLabel.innerText = 'Mining Antimatter...'; //maybe add rate or something else like quantity left
-                    accompanyingLabel.classList.add('green-ready-text');  
-                } else {
+                    accompanyingLabel.classList.add('green-ready-text');
+                    travelToProgressBarElement.classList.add('invisible');
+                    destinationAsteroidTextElement.classList.add('invisible');
+                    element.classList.remove('invisible'); //handle this again later when doing mining code  
+                    travelToDropdown.classList.add('invisible'); // and this
+                } else if (!getLaunchedRockets().includes(rocketName)) {
                     accompanyingLabel.classList.add('red-disabled-text');
                     accompanyingLabel.classList.remove('green-ready-text');
                     accompanyingLabel.innerText = 'Not Launched!';
+                    travelToProgressBarElement.classList.add('invisible');
+                    destinationAsteroidTextElement.classList.add('invisible');
+                    element.classList.add('invisible');
+                    travelToDropdown.classList.remove('invisible');
                 }
 
 
@@ -3184,7 +3202,7 @@ function calculateRocketTravelDuration(destinationAsteroid) {
 
     if (!targetAsteroid) return;
 
-    const distance = targetAsteroid[destinationAsteroid].distance;
+    const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
     return Math.floor(distance / speed);
@@ -3204,7 +3222,7 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
     setRocketReadyToTravel(rocket, false);
     setCurrentlyTravellingToAsteroid(rocket, true);
 
-    const timerName = `${rocket}travelToAsteroidTimer`;
+    const timerName = `${rocket}TravelToAsteroidTimer`;
     const destinationAsteroid = getDestinationAsteroid(rocket);
     
     if (!timerManager.getTimer(timerName)) {
@@ -3220,7 +3238,7 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
             counter += travelInterval;
 
             const timeLeft = Math.max(travelDuration - counter, 0);
-            const timeLeftUI = Math.max(Math.floor((travelDuration - counter) / 1000), 0);
+            const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
             
             if (counter >= travelDuration) {
                 mineAsteroid(rocket, destinationAsteroid);
@@ -3232,13 +3250,14 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
                 setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 setCurrentlyTravellingToAsteroid(rocket, false);
             } else {
-                setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(timeLeft); 
+                setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket, timeLeft); 
                 if (travelTimerDescriptionElement) { 
+                    travelTimerDescriptionElement.classList.remove('red-disabled-text');
                     travelTimerDescriptionElement.classList.add('green-ready-text');
                     travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
                     const elapsedTime = getRocketTravelDuration()[rocket] - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
                     const progressBarPercentage = (elapsedTime / getRocketTravelDuration()[rocket]) * 100;
-                    document.getElementById('spaceTravelToAsteroidProgressBarRocket1').style.width = `${progressBarPercentage}%`;
+                    document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`).style.width = `${progressBarPercentage}%`;
                 }
             }
         });

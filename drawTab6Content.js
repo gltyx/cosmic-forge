@@ -1,4 +1,4 @@
-import { deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid } from './constantsAndGlobalVars.js';
+import { getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid } from './constantsAndGlobalVars.js';
 import { timerManager, startTravelToAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
@@ -290,6 +290,7 @@ export function drawTab6Content(heading, optionContentElement) {
             `spaceRocket1TravelRow`,
             null,
             `Travel To:`,
+            createTextElement(`${getDestinationAsteroid('rocket1')}`, 'rocket1DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
             createDropdown('rocket1TravelDropdown', asteroids
                 .map((asteroidObj) => {
                     return Object.keys(asteroidObj).map((key) => {
@@ -318,8 +319,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 `<div id="spaceTravelToAsteroidProgressBarRocket1">`,
                 'spaceTravelToAsteroidProgressBarRocket1Container',
                 ['progress-bar-container', 'invisible']
-            ),
-            null,           
+            ),        
             null,
             `Travelling...`,
             '',
@@ -382,6 +382,7 @@ export function drawTab6Content(heading, optionContentElement) {
             `spaceRocket2TravelRow`,
             null,
             `Travel To:`,
+            createTextElement(`${getDestinationAsteroid('rocket2')}`, 'rocket2DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
             createDropdown('rocket2TravelDropdown', asteroids
                 .map((asteroidObj) => {
                     return Object.keys(asteroidObj).map((key) => {
@@ -409,8 +410,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 `<div id="spaceTravelToAsteroidProgressBarRocket2">`,
                 'spaceTravelToAsteroidProgressBarRocket2Container',
                 ['progress-bar-container', 'invisible']
-            ),
-            null,           
+            ),          
             null,
             `Travelling...`,
             '',
@@ -473,6 +473,7 @@ export function drawTab6Content(heading, optionContentElement) {
             `spaceRocket3TravelRow`,
             null,
             `Travel To:`,
+            createTextElement(`${getDestinationAsteroid('rocket3')}`, 'rocket3DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
             createDropdown('rocket3TravelDropdown', asteroids
                 .map((asteroidObj) => {
                     return Object.keys(asteroidObj).map((key) => {
@@ -500,8 +501,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 `<div id="spaceTravelToAsteroidProgressBarRocket3">`,
                 'spaceTravelToAsteroidProgressBarRocket3Container',
                 ['progress-bar-container', 'invisible']
-            ),
-            null,           
+            ),           
             null,
             `Travelling...`,
             '',
@@ -564,6 +564,7 @@ export function drawTab6Content(heading, optionContentElement) {
             `spaceRocket4TravelRow`,
             null,
             `Travel To:`,
+            createTextElement(`${getDestinationAsteroid('rocket4')}`, 'rocket4DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
             createDropdown('rocket4TravelDropdown', asteroids
                 .map((asteroidObj) => {
                     return Object.keys(asteroidObj).map((key) => {
@@ -591,8 +592,7 @@ export function drawTab6Content(heading, optionContentElement) {
                 `<div id="spaceTravelToAsteroidProgressBarRocket4">`,
                 'spaceTravelToAsteroidProgressBarRocket4Container',
                 ['progress-bar-container', 'invisible']
-            ),
-            null,           
+            ),          
             null,
             `Travelling...`,
             '',

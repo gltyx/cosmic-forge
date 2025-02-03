@@ -1095,6 +1095,10 @@ body {
     margin-left: 50px;
 }
 
+.destination-text {
+    margin-right: 20px;
+}
+
 button.red-disabled-text {
     color: var(--disabled-text) !important;
     font-weight: bold;
@@ -1191,6 +1195,10 @@ button.red-disabled-text {
 #rocket2FuellingProgressBarContainer,
 #rocket3FuellingProgressBarContainer,
 #rocket4FuellingProgressBarContainer,
+#spaceTravelToAsteroidProgressBarRocket1Container,
+#spaceTravelToAsteroidProgressBarRocket2Container,
+#spaceTravelToAsteroidProgressBarRocket3Container,
+#spaceTravelToAsteroidProgressBarRocket4Container,
 #spaceTelescopeSearchProgressBarContainer
  {
     background-color: var(--disabled-text);
@@ -1203,6 +1211,10 @@ button.red-disabled-text {
  #rocket2FuellingProgressBar,
  #rocket3FuellingProgressBar,
  #rocket4FuellingProgressBar,
+ #spaceTravelToAsteroidProgressBarRocket1,
+#spaceTravelToAsteroidProgressBarRocket2,
+#spaceTravelToAsteroidProgressBarRocket3,
+#spaceTravelToAsteroidProgressBarRocket4,
  #spaceTelescopeSearchProgressBar
  {
     background-color: var(--text-color);
