@@ -4379,13 +4379,13 @@ function generateAsteroidData(name) {
 
     const rarityRoll = Math.floor(Math.random() * 101);
     let rarity, rarityClass;
-    if (rarityRoll <= 1) { //70
+    if (rarityRoll <= 70) { //70
         rarity = "Common";
         rarityClass = 'red-disabled-text';
-    } else if (rarityRoll <= 1) { //90
+    } else if (rarityRoll <= 90) { //90
         rarity = "Uncommon";
         rarityClass = 'warning-orange-text';
-    } else if (rarityRoll <= 1) { //98
+    } else if (rarityRoll <= 98) { //98
         rarity = "Rare";
         rarityClass = 'none';
     } else {
@@ -4494,6 +4494,8 @@ function generateLegendaryAsteroidName(commanderName) {
     const existingKeys = asteroidArray.map(asteroid => Object.keys(asteroid)[0]);
 
     while (existingKeys.includes(asteroidName)) {
+        const nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
+        const usePrefix = Math.random() > 0.5;
         asteroidName = usePrefix ? `${nameComponent} ${cleanedName}` : `${cleanedName} ${nameComponent}`;
     }
 
