@@ -2087,15 +2087,7 @@ function resourceCostSellChecks(element) {
         setStateOfDescriptionLabelsForAutoBuyers(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
     } else {
         setStateOfDescriptionLabelsForBuildingAndOneOffSpacePurchases(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
-    } 
-
-    if (element.classList.contains('building-purchase')) {
-        setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
-    }
-            
-    if (element.classList.contains('building-purchase-button')) {
-        return handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
-    }      
+    }     
 
     if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash' && resource !== 'time') {
         handleResourceRateStates(resource);
@@ -2489,6 +2481,14 @@ function checkStatusAndSetTextClasses(element) {
     if (element.classList.contains('powered-check')) {
         return powerOnOrOffChecks(element);
     }
+
+    if (element.classList.contains('building-purchase')) {
+        setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element); //not return as continues in to resourceCostSellChecks
+    }
+            
+    if (element.classList.contains('building-purchase-button')) {
+        return handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
+    }  
 
     if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         return compoundCostSellCreateChecks(element);
