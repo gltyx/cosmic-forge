@@ -113,6 +113,7 @@ import {
     getCompoundCreatePreview,
     getNotationType,
     getTechTreeData,
+    getSaveName,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -4346,12 +4347,19 @@ export function discoverAsteroid() {
     document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
     setBaseSearchTimerDuration(getBaseSearchTimerDuration() * getGameCostMultiplier());
     setAsteroidArray(asteroid);
-    showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
-    console.log(asteroid);
+
+    const keyName = Object.keys(asteroid)[0];
+    if (asteroid[keyName].specialName) {
+        showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info');
+    } else {
+        showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
+    }
 }
 
 function generateAsteroidData(name) {
     let distanceClass;
+    let specialName = false;
+
     const minDistance = 30000;
     const maxDistance = 570000;
 
@@ -4371,13 +4379,13 @@ function generateAsteroidData(name) {
 
     const rarityRoll = Math.floor(Math.random() * 101);
     let rarity, rarityClass;
-    if (rarityRoll <= 70) {
+    if (rarityRoll <= 1) { //70
         rarity = "Common";
         rarityClass = 'red-disabled-text';
-    } else if (rarityRoll <= 90) {
+    } else if (rarityRoll <= 1) { //90
         rarity = "Uncommon";
         rarityClass = 'warning-orange-text';
-    } else if (rarityRoll <= 98) {
+    } else if (rarityRoll <= 1) { //98
         rarity = "Rare";
         rarityClass = 'none';
     } else {
@@ -4450,15 +4458,46 @@ function generateAsteroidData(name) {
         if (quantityClass === 'green-ready-text') quantityClass = 'warning-orange-text';
     }
 
+    if (rarity === "Legendary") {
+        const commanderName = getSaveName();
+        name = generateLegendaryAsteroidName(commanderName);
+        specialName = true;
+    }
+
     return {
         [name]: {
             name,
             distance: [distance, distanceClass],
             rarity: [rarity, rarityClass],
             easeOfExtraction: [easeOfExtraction, easeClass],
-            quantity: [quantity, quantityClass]
+            quantity: [quantity, quantityClass],
+            specialName: specialName
         }
     };
+}
+
+function generateLegendaryAsteroidName(commanderName) {
+    const asteroidNameParts = [
+        "Eternal", "Dominion", "Celestara", "Hyperion", "Zenith", 
+        "Titanis", "Astralis", "Nebularis", "Excalis", "Oblivion", 
+        "Infinity", "Nova", "Sentinel", "Aetheris", "Solstice", 
+        "Zephyrus", "Valhalla", "Eon", "Omicron", "Vanguard"
+    ];
+
+    let cleanedName = commanderName.replace(/[0-9]/g, "");
+    cleanedName = capitaliseString(cleanedName);
+    const nameComponent = asteroidNameParts[Math.floor(Math.random() * asteroidNameParts.length)];
+    const usePrefix = Math.random() > 0.5;
+    let asteroidName = usePrefix ? `${nameComponent} ${cleanedName}` : `${cleanedName} ${nameComponent}`;
+
+    const asteroidArray = getAsteroidArray();
+    const existingKeys = asteroidArray.map(asteroid => Object.keys(asteroid)[0]);
+
+    while (existingKeys.includes(asteroidName)) {
+        asteroidName = usePrefix ? `${nameComponent} ${cleanedName}` : `${cleanedName} ${nameComponent}`;
+    }
+
+    return asteroidName;
 }
 
 //===============================================================================================================
