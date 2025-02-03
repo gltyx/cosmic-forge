@@ -1681,6 +1681,9 @@ function travelToAsteroidChecks(element) {
                 accompanyingLabel.classList.remove('red-disabled-text');
                 accompanyingLabel.innerText = 'Ready To Travel...';
                 accompanyingLabel.classList.add('green-ready-text');
+                if (!getDestinationAsteroid(rocketName)) {
+                    accompanyingLabel.innerText = 'Select Destination...';
+                }
             } else {
                 if (getCurrentlyTravellingToAsteroid(rocketName)) {
                     accompanyingLabel.classList.remove('red-disabled-text');
@@ -1709,9 +1712,12 @@ function travelToAsteroidChecks(element) {
         if (rocketClass) {
             const rocketName = rocketClass.match(/^rocket\d+/)[0];
 
-            if (getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
+            if (!getDestinationAsteroid(rocketName) || !getLaunchedRockets().includes(rocketName) || getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
+            } else {
+                element.classList.remove('red-disabled-text');
+                element.classList.add('green-ready-text'); 
             }
 
             getCurrentlyTravellingToAsteroid(rocketName) ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
@@ -2488,7 +2494,7 @@ function checkStatusAndSetTextClasses(element) {
         return compoundCostSellCreateChecks(element);
     }
 
-    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') { //will need to add price2 and quantity2 if ever need a
+    if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         return resourceCostSellChecks(element);  
     }
 }
