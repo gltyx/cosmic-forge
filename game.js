@@ -1699,13 +1699,12 @@ function travelToAsteroidChecks(element) {
                     destinationAsteroidTextElement.classList.remove('invisible');
                     element.classList.add('invisible');
                     travelToDropdown.classList.add('invisible');
-                } else if (getMiningObject()[rocketName !== null]) { //if rocket mining at an asteroid
+                } else if (getMiningObject()[rocketName] !== null) { //if rocket mining at an asteroid
                     accompanyingLabel.classList.remove('red-disabled-text');
-                    accompanyingLabel.innerText = 'Mining Antimatter...'; //maybe add rate or something else like quantity left
                     accompanyingLabel.classList.add('green-ready-text');
                     travelToProgressBarElement.classList.add('invisible');
                     destinationAsteroidTextElement.classList.add('invisible');
-                    element.classList.remove('invisible'); //handle this again later when doing mining code  
+                    element.classList.add('invisible'); //handle this again later when doing mining code  
                     travelToDropdown.classList.add('invisible'); // and this
                 } else if (!getLaunchedRockets().includes(rocketName)) {
                     accompanyingLabel.classList.add('red-disabled-text');
@@ -1738,7 +1737,7 @@ function travelToAsteroidChecks(element) {
                 element.classList.add('green-ready-text'); 
             }
 
-            getCurrentlyTravellingToAsteroid(rocketName) ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
+            getCurrentlyTravellingToAsteroid(rocketName) || getMiningObject()[rocketName] !== null ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
             const progressBarSearchAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
             if (progressBarSearchAsteroid) {
                 getCurrentlyTravellingToAsteroid(rocketName) ? progressBarSearchAsteroid.classList.remove('invisible') : progressBarSearchAsteroid.classList.add('invisible');
@@ -3205,7 +3204,8 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
-    return Math.floor(distance / speed);
+    //return Math.floor(distance / speed);
+    return 10000;
 }
 
 export function mineAsteroid(rocket, asteroid) {
