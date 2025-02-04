@@ -1052,7 +1052,9 @@ export function drawTab3Content(heading, optionContentElement) {
 
         const container = optionContentElement;
         setTemporaryRowsRepo(container, rows);
-    }if (heading === 'Tech Tree') {
+    }
+    
+    if (heading === 'Tech Tree') {
         const techTreeSvgRow = createOptionRow(
             'techTreeSvgRow',
             null,

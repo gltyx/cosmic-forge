@@ -52,7 +52,8 @@ import {
     getRocketsFuellerStartedArray,
     getCurrentStarSystemWeatherEfficiency,
     getCurrentStarSystem,
-    setSortAsteroidMethod
+    setSortAsteroidMethod,
+    getAsteroidArray
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1088,14 +1089,14 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
 
                     ctx.save();
                     ctx.setLineDash([5, 5]);
-                    ctx.strokeStyle = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
+                    ctx.strokeStyle = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
                     ctx.lineWidth = 4;
                     ctx.strokeRect(x, currentY - solarExtraHeight, barWidth, solarExtraHeight);
                     ctx.restore();
 
                     ctx.font = '60px Arial';
-                    ctx.fillStyle = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
-                    const symbol = getStarSystemDataObject(getCurrentStarSystem(), ['weather', getCurrentStarSystemWeatherEfficiency()[2]])[1];
+                    ctx.fillStyle = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'weather', getCurrentStarSystemWeatherEfficiency()[2]])[3];
+                    const symbol = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'weather', getCurrentStarSystemWeatherEfficiency()[2]])[1];
                     const textWidth = ctx.measureText(symbol).width;
 
                     const centerX = x + (barWidth / 2) - (textWidth / 2);
@@ -1217,6 +1218,135 @@ function setupTooltip(svgElement) {
             d3.select('#techTreeTooltip').style('display', 'none');
         });
 }
+
+export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const boxWidth = "35%";
+    const boxHeight = 130;
+    const leftOffset = "5%";
+    const rightOffset = "60%";
+    const verticalSpacing = 165;
+
+    // Clear previous SVG content
+    while (svgElement.firstChild) {
+        svgElement.removeChild(svgElement.firstChild);
+    }
+
+    const rockets = ["Rocket 1", "Rocket 2", "Rocket 3", "Rocket 4"];
+    
+    let firstDivHeight = null; // Variable to store the first div height
+
+    rockets.forEach((rocket, index) => {
+        const yOffset = 30 + index * verticalSpacing;
+        const rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
+
+        let textLines = [];
+        if (rocketInfo) {
+            textLines = [
+                [`Rocket ${index + 1}`],
+                ["Asteroid:", rocketInfo[1]],
+                ["Complexity:", rocketInfo[2]],
+                ["Rate:", Math.floor(rocketInfo[3] * getTimerRateRatio())],
+                ["Antimatter Left:", rocketInfo[4]]
+            ];
+        } else {
+            textLines = [
+                [`Rocket ${index + 1}`],
+                ["Not at Asteroid"],
+                ["", ""],
+                ["", ""],
+                ["", ""]
+            ];
+        }
+
+        const table = document.createElementNS(svgNS, "foreignObject");
+        table.setAttribute("x", leftOffset);
+        table.setAttribute("y", yOffset);
+        table.setAttribute("width", "40%");
+        table.setAttribute("height", "100%");
+
+        const div = document.createElement("div");
+        div.style.border = "2px solid var(--text-color)"; // Border around the div
+        div.style.borderRadius = "10px"; // Rounded corners for the div
+        div.style.padding = "10px"; // Add padding for spacing inside the div
+        div.style.width = "100%"; // Set the width to 100% of the parent container (foreignObject)
+        div.style.boxSizing = "border-box"; // Ensure padding doesn't affect the div's overall size
+
+        const htmlTable = document.createElement("table");
+        htmlTable.style.width = "100%";
+
+        textLines.forEach(([label, value], rowIndex) => {
+            const row = document.createElement("tr");
+
+            const labelCell = document.createElement("td");
+            labelCell.textContent = label; // This will be empty for "" values
+            labelCell.style.padding = "0px";
+            labelCell.style.fontWeight = "bold";
+            labelCell.style.textAlign = "left";
+            row.appendChild(labelCell);
+
+            const valueCell = document.createElement("td");
+            valueCell.textContent = value; // This will also be empty for "" values
+            valueCell.style.padding = "0px";
+            valueCell.style.width = "50%";
+            valueCell.style.textAlign = "left";
+
+            if (rowIndex === 0) {
+                valueCell.style.color = "red";
+            } else if (rowIndex === 1) {
+                valueCell.style.color = "blue";
+            } else if (rowIndex === 2) {
+                valueCell.style.color = "yellow";
+            } else if (rowIndex === 3) {
+                valueCell.style.color = "purple";
+            }
+
+            row.appendChild(valueCell);
+
+            htmlTable.appendChild(row);
+        });
+
+        div.appendChild(htmlTable); // Append the table inside the div
+        table.appendChild(div); // Append the div inside the foreignObject
+        svgElement.appendChild(table); // Finally append the foreignObject to the SVG element
+
+        // Set the height of the divs
+        if (index === 0) {
+            // Store the height of the first div
+            firstDivHeight = div.offsetHeight;
+        } else {
+            // Apply the height of the first div to subsequent divs
+            div.style.height = firstDivHeight + "px";
+        }
+    });
+
+    const svgHeight = svgElement.getBoundingClientRect().height; // Get the computed height of the SVG element
+    const rightBoxYOffset = (svgHeight / 2) - (boxHeight / 2) - 25; // Halfway point of the SVG height minus half the box height    
+    
+    const rightBox = document.createElementNS(svgNS, "rect");
+    rightBox.setAttribute("x", rightOffset);
+    rightBox.setAttribute("y", rightBoxYOffset);
+    rightBox.setAttribute("width", boxWidth);
+    rightBox.setAttribute("height", boxHeight);
+    rightBox.setAttribute("fill", "var(--bg-color");
+    rightBox.setAttribute("stroke", "var(--text-color)");
+    rightBox.setAttribute("stroke-width", "2");
+    rightBox.setAttribute("rx", "10");
+    
+    const rightBoxText = document.createElementNS(svgNS, "text");
+    rightBoxText.setAttribute("x", "80%");
+    rightBoxText.setAttribute("y", rightBoxYOffset + (boxHeight / 2));
+    rightBoxText.setAttribute("fill", "var(--text-color)");
+    rightBoxText.setAttribute("font-size", "12px");
+    rightBoxText.setAttribute("font-family", "Arial");
+    rightBoxText.setAttribute("text-anchor", "middle");
+    rightBoxText.setAttribute("alignment-baseline", "middle");
+    rightBoxText.textContent = "Antimatter Storage";
+    
+    svgElement.appendChild(rightBox);
+    svgElement.appendChild(rightBoxText);
+}
+
 
 export async function drawTechTree(techData, svgElement, renew) {
     const cachedTree = getRenderedTechTree();
@@ -1631,6 +1761,14 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'asteroids');
             setCurrentOptionPane('asteroids');
             updateContent('Asteroids', 'tab6', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab6"][class*="option8"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab6', 'antimatter');
+            setCurrentOptionPane('antimatter');
+            updateContent('Antimatter', 'tab6', 'content');
         });
     });
     

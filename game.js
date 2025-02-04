@@ -1,4 +1,6 @@
 import {
+    setAntimatterUnlocked,
+    getAntimatterUnlocked,
     setMiningObject,
     getMiningObject,
     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes,
@@ -140,7 +142,8 @@ import {
     startWeatherEffect,
     stopWeatherEffect,
     switchBatteryStatBarWhenBatteryBought,
-    setBatteryIndicator
+    setBatteryIndicator,
+    drawAntimatterFlowDiagram
 } from "./ui.js";
 
 import { 
@@ -321,6 +324,7 @@ export async function gameLoop() {
         checkPowerForAsteroidTimer();
 
         monitorTechTree();
+        monitorAntimatterDiagram();
         
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
@@ -335,6 +339,10 @@ export async function gameLoop() {
 
         monitorRevealResourcesCheck();
         monitorRevealCompoundsCheck();
+
+        if (getAntimatterUnlocked() && getCurrentTab()[1] === 'Space Mining') {
+            getElements().antimatterOption.parentElement.parentElement.classList.remove('invisible');
+        }
 
         updateAllSalePricePreviews();
         updateAllCreatePreviews();
@@ -414,8 +422,8 @@ function showHideDynamicColumns() {
 }
 
 function addPrecipitationResource() {
-    const currentStarSystemPrecipitationCategory = getStarSystemDataObject(getCurrentStarSystem(), ['precipitationResourceCategory']);
-    const currentStarSystemPrecipitationType = getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType']);
+    const currentStarSystemPrecipitationCategory = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationResourceCategory']);
+    const currentStarSystemPrecipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
     const precipitationTypeRevealedYet = getTechUnlockedArray().includes(getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'revealedBy']));
 
     let currentStarSystemPrecipitationTypeQuantity = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
@@ -1593,6 +1601,48 @@ function monitorRevealCompoundsCheck() {
     }
 }
 
+function monitorAntimatterDiagram() {
+    if (getCurrentOptionPane() === 'antimatter') {
+        const antimatterTotalQuantity = getResourceDataObject('antimatter', ['quantity']);
+        const antimatterTotalRate = getResourceDataObject('antimatter', ['rate']);
+        const svgElement = document.getElementById('antimatterSvg');
+        const rocketData = {};
+        console.log(JSON.stringify(getAsteroidArray(), null, 2));
+
+        for (let i = 1; i <= 4; i++) {
+            const rocketKey = getMiningObject()[`rocket${i}`];
+            const asteroid = getAsteroidArray().find(asteroid => asteroid[rocketKey])?.[rocketKey];
+
+            if (asteroid) {
+                rocketData[`rocket${i}`] = [
+                    `Rocket ${i}`,
+                    asteroid.name,
+                    asteroid.easeOfExtraction[0],
+                    getSpecificAsteroidExtractionRate(asteroid),
+                    asteroid.quantity[0]
+                ];
+            } else {
+                rocketData[`rocket${i}`] = null;
+            }
+        }        
+        
+        drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement);  
+    }      
+}
+
+
+function getSpecificAsteroidExtractionRate(asteroid) {
+    const maxRate = 0.01;
+    const minRate = 0.0001;
+    const maxEase = 1;
+    const minEase = 10;
+
+    const normalizedEase = (asteroid.easeOfExtraction[0] - maxEase) / (minEase - maxEase);
+    const extractionRate = maxRate - (normalizedEase * (maxRate - minRate));
+
+    return extractionRate;
+}
+
 function monitorTechTree() {
     const techs = getResourceDataObject('techs');
     
@@ -1700,12 +1750,14 @@ function travelToAsteroidChecks(element) {
                     element.classList.add('invisible');
                     travelToDropdown.classList.add('invisible');
                 } else if (getMiningObject()[rocketName] !== null) { //if rocket mining at an asteroid
+                    const asteroidBeingMinedByCurrentRocket = getMiningObject()[rocketName];
                     accompanyingLabel.classList.remove('red-disabled-text');
                     accompanyingLabel.classList.add('green-ready-text');
                     travelToProgressBarElement.classList.add('invisible');
                     destinationAsteroidTextElement.classList.add('invisible');
                     element.classList.add('invisible'); //handle this again later when doing mining code  
                     travelToDropdown.classList.add('invisible'); // and this
+                    accompanyingLabel.innerText = 'Mining Antimatter at ' + asteroidBeingMinedByCurrentRocket;
                 } else if (!getLaunchedRockets().includes(rocketName)) {
                     accompanyingLabel.classList.add('red-disabled-text');
                     accompanyingLabel.classList.remove('green-ready-text');
@@ -2944,7 +2996,7 @@ function startInitialTimers() {
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'rate']) * 
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier4', 'quantity'])
 
-                            if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                            if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType'])) {
                                 allCompoundRatesAddedTogether += getCurrentPrecipitationRate();
                             }
     
@@ -2974,14 +3026,14 @@ function startInitialTimers() {
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
                                 
-                                if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                                if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType'])) {
                                     compoundTier1Rate += getCurrentPrecipitationRate();
                                 }
 
                                 setResourceDataObject(compoundTier1Rate, 'compounds', [compound, 'rate']);
                                 getElements()[`${compound}Rate`].textContent = `${(compoundTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
                             } else {
-                                if (compound === getStarSystemDataObject(getCurrentStarSystem(), ['precipitationType'])) {
+                                if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType'])) {
                                     setResourceDataObject(getCurrentPrecipitationRate(), 'compounds', [compound, 'rate']);
                                     getElements()[`${compound}Rate`].textContent = `${(getCurrentPrecipitationRate() * getTimerRateRatio()).toFixed(1)} / s`;
                                 }
@@ -3243,9 +3295,15 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
             if (counter >= travelDuration) {
                 mineAsteroid(rocket, destinationAsteroid);
                 timerManager.removeTimer(timerName);
+
                 if (travelTimerDescriptionElement) {             
                     travelTimerDescriptionElement.innerText = 'Mining Antimatter at ' + destinationAsteroid;
                 }
+
+                if (!getAntimatterUnlocked()) {
+                    setAntimatterUnlocked(true);
+                }
+
                 setMiningObject(rocket, destinationAsteroid); //leave travelling to array true until mining finishes
                 setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 setCurrentlyTravellingToAsteroid(rocket, false);
@@ -4364,7 +4422,7 @@ export function discoverAsteroid() {
         return;
     }
 
-    const starCode = getStarSystemDataObject(getCurrentStarSystem(), ['starCode']);
+    const starCode = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'starCode']);
     const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
     const asteroidName = `${starCode}-${randomNumber}${randomLetter}`;

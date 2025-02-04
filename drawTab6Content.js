@@ -1,7 +1,7 @@
 import { getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid } from './constantsAndGlobalVars.js';
 import { timerManager, startTravelToAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
+import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
@@ -710,7 +710,34 @@ export function drawTab6Content(heading, optionContentElement) {
             );
             optionContentElement.appendChild(asteroidRow);
         });
-    }    
+    } 
+    
+    if (heading === 'Antimatter') {
+            const antimatterSvgRow = createOptionRow(
+                'techTreeSvgRow',
+                null,
+                '',
+                createSvgElement('antimatterSvg', '100%', '700px', ['antimatter-svg']),
+                null,
+                null,
+                null,
+                null,
+                '',
+                '',
+                'antimatterRender',
+                '',
+                '',
+                '',
+                null,
+                false,
+                null,
+                null,
+                'antimatter',
+                [true, 'invisible', '100%']
+            );
+        
+            optionContentElement.appendChild(antimatterSvgRow);    
+        }  
 }
 
 function setFuellingVisibility(rocket, params) {

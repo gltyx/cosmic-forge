@@ -1,7 +1,7 @@
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.21, //update this whenever changes are made to the structure
+    version: 0.26, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -681,19 +681,25 @@ export let resourceData = {
     currency: {
         cash: 10,
     },
+    antimatter: {
+        quantity: 0,
+        rate: 0
+    },
 };
 
 export let starSystems = {
-    version: 0.21, //update this whenever changes are made to the structure
-    spica: {
-        starCode: 'SPC',
-        precipitationResourceCategory: 'compounds',
-        precipitationType: 'water',
-        weather: {
-            sunny: [30, '☀', 1, 'white'],
-            cloudy: [47, '☁', 0.6, 'orange'],
-            rain: [20, '☂', 0.4, 'orange'],
-            volcano: [3, '⛰', 0.05, 'red']
+    version: 0.26, //update this whenever changes are made to the structure
+    stars: {
+        spica: {
+            starCode: 'SPC',
+            precipitationResourceCategory: 'compounds',
+            precipitationType: 'water',
+            weather: {
+                sunny: [30, '☀', 1, 'white'],
+                cloudy: [47, '☁', 0.6, 'orange'],
+                rain: [20, '☂', 0.4, 'orange'],
+                volcano: [3, '⛰', 0.05, 'red']
+            }
         }
     }
 };
@@ -712,12 +718,12 @@ export function restoreStarSystemsDataObject(value) {
 }
 
 export function getStarSystemWeather(starSystem) {
-    return starSystems[starSystem]?.weather || null;
+    return starSystems.stars[starSystem]?.weather || null;
 }
 
 export function setStarSystemWeather(starSystem, weatherData) {
-    if (starSystems[starSystem]) {
-        starSystems[starSystem].weather = weatherData;
+    if (starSystems.stars[starSystem]) {
+        starSystems.stars[starSystem].weather = weatherData;
     }
 }
 

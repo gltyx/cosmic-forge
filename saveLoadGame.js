@@ -230,9 +230,9 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
     saveData.version = saveData.version ? saveData.version : getMinimumVersion();
 
     while (saveData.version < currentVersion) {
-        if (saveData.version < 0.22) {
+        if (saveData.version < 0.26) {
             if (objectType === 'resourceData') {
-                saveData.version = 0.22;
+                saveData.version = 0.26;
                 //add a loop if necessary to change structure of all keys
                 if (!saveData.space.upgrades.spaceTelescope) {
                     saveData.space.upgrades.spaceTelescope = { 
@@ -244,16 +244,35 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         energyUse: 0.7,
                     }
                 }
-            } else if (objectType === 'starSystemsData') {
-                saveData.version = 0.22;
-                if (!saveData.spica.starCode) {
-                    saveData.spica.starCode = 'SPC';
+
+                if (!saveData.antimatter) {
+                    saveData.antimatter = {
+                        quantity: 0,
+                        rate: 0
+                    }
                 }
+            } else if (objectType === 'starSystemsData') {
+                saveData = {
+                    stars: {
+                        spica: {
+                            starCode: 'SPC',
+                            precipitationResourceCategory: 'compounds',
+                            precipitationType: 'water',
+                            weather: {
+                                sunny: [30, '☀', 1, 'white'],
+                                cloudy: [47, '☁', 0.6, 'orange'],
+                                rain: [20, '☂', 0.4, 'orange'],
+                                volcano: [3, '⛰', 0.05, 'red']
+                            }
+                        }
+                    }
+                };
+                saveData.version = 0.26;
             }
         }
     
         saveData.version += 0.01;
-    }    
+    }   
 
     return saveData;
 }

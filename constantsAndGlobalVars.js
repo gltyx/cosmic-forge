@@ -21,7 +21,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.22;
+export const GAME_VERSION_FOR_SAVES = 0.26;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -176,6 +176,7 @@ let weatherEfficiencyApplied = false;
 let currentlySearchingAsteroid = false;
 let telescopeReadyToSearch = true;
 let asteroidTimerCanContinue = false;
+let antimatterUnlocked = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -253,6 +254,9 @@ export function setElements() {
         scienceKitQuantity: document.getElementById('scienceKitQuantity'),
         scienceClubQuantity: document.getElementById('scienceClubQuantity'),
         scienceLabQuantity: document.getElementById('scienceLabQuantity'),
+        antimatterOption: document.getElementById('antimatterOption'),
+        antimatterQuantity: document.getElementById('antimatterQuantity'),
+        antimatterRate: document.getElementById('antimatterRate'),
         cashStat: document.getElementById('cashStat'),
         optionPaneDescriptions: document.querySelectorAll('.option-pane-description'),
         notificationContainer: document.getElementById('notificationContainer'),
@@ -335,6 +339,7 @@ export function captureGameStatusForSaving(type) {
     gameState.asteroidArray = asteroidArray;
     gameState.rocketTravelDuration = rocketTravelDuration;
     gameState.miningObject = miningObject;
+    gameState.destinationAsteroid = destinationAsteroid;
 
     // Flags
     gameState.flags = {
@@ -349,7 +354,8 @@ export function captureGameStatusForSaving(type) {
         currentlySearchingAsteroid: getCurrentlySearchingAsteroid(),
         telescopeReadyToSearch: getTelescopeReadyToSearch(),
         currentlyTravellingToAsteroid: currentlyTravellingToAsteroid,
-        rocketReadyToTravel: rocketReadyToTravel
+        rocketReadyToTravel: rocketReadyToTravel,
+        antimatterUnlocked: antimatterUnlocked
     }
 
     return gameState;
@@ -394,6 +400,7 @@ export function restoreGameStatus(gameState, type) {
             asteroidArray = (gameState.asteroidArray ?? []).filter(item => item !== '') || null;
             rocketTravelDuration = gameState.rocketTravelDuration ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             miningObject = gameState.miningObject ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
+            destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -408,6 +415,7 @@ export function restoreGameStatus(gameState, type) {
             setTelescopeReadyToSearch(gameState.flags.telescopeReadyToSearch);
             currentlyTravellingToAsteroid = gameState.flags.currentlyTravellingToAsteroid ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
             rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? {rocket1: true, rocket2: true, rocket3: true, rocket4: true};
+            antimatterUnlocked = gameState.flags.antimatterUnlocked ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1631,6 +1639,14 @@ export function getSortAsteroidMethod() {
 
 export function getRocketTravelSpeed() {
     return ROCKET_TRAVEL_SPEED;
+}
+
+export function getAntimatterUnlocked() {
+    return antimatterUnlocked;
+}
+
+export function setAntimatterUnlocked(value) {
+    antimatterUnlocked = value;
 }
 
 

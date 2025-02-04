@@ -1395,7 +1395,8 @@ canvas {
     border-radius: 0;
 }
 
-.tech-tree-svg {
+.tech-tree-svg,
+.antimatter-svg  {
     background-color: var(--bg-color);
     border: 2px solid var(--text-color);
     border-radius: 20px;
@@ -1403,7 +1404,8 @@ canvas {
     height: fit-content;
   }
   
-  .tech-tree-svg svg {
+  .tech-tree-svg svg,
+  .antimatter-svg svg {
     width: 100%;
   }
 
