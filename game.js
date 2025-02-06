@@ -493,8 +493,23 @@ function updateStats() {
         setBatteryIndicator(batteryLevel);
     }
 
+    //stat5
+    updateAntimatterStat();
+    
     //stat8
     getTimeInStatCell();
+}
+
+function updateAntimatterStat() {
+    const statLabelElement = document.getElementById('stat5').closest('.stat-cell').querySelector('.stat-label');
+    if (getAntimatterUnlocked()) {
+        statLabelElement.innerHTML = 'Antimatter:'
+        const antimatterTotalQuantity = getResourceDataObject('antimatter', ['quantity']);
+        document.getElementById('stat5').innerHTML = `<span class="green-ready-text">${antimatterTotalQuantity}</span>`;
+    } else {
+        statLabelElement.innerHTML = '???';
+        document.getElementById('stat5').innerHTML = `<span class="red-disabled-text">???</span>`;
+    }
 }
 
 function setRevealedResources(resource) {
@@ -3315,7 +3330,9 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
                     travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
                     const elapsedTime = getRocketTravelDuration()[rocket] - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
                     const progressBarPercentage = (elapsedTime / getRocketTravelDuration()[rocket]) * 100;
-                    document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`).style.width = `${progressBarPercentage}%`;
+                    if (document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`)) {
+                        document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`).style.width = `${progressBarPercentage}%`;
+                    }
                 }
             }
         });

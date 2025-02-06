@@ -1323,7 +1323,7 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
         const div = document.createElement("div");
         div.style.border = `2px solid var(--${lineClass})`;
         div.style.borderRadius = "10px";
-        div.style.padding = "10px";
+        div.style.padding = "5px 10px 10px 10px";
         div.style.width = "100%";
         div.style.height = "100%";
         div.style.boxSizing = "border-box";
@@ -1344,12 +1344,16 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
             valueCell.textContent = value;
             valueCell.style.textAlign = "left";
     
+            if (label === "Not at Asteroid") {
+                labelCell.style.color = "var(--disabled-text)";
+            }
+
             if (rowIndex < 2) {
                 valueCell.style.color = `var(--${lineClass})`;
             } else if (rowIndex === 2) {
                 valueCell.style.color = `var(--${colorClass})`;
             } else if (rowIndex === 3) {
-                valueCell.style.color = `var(--text-color)`; //ADD COLOR OF ANITMATTER LOGIC HERE
+                valueCell.style.color = `var(--text-color)`; // Add color of Antimatter logic here
             }
     
             row.appendChild(valueCell);
@@ -1368,8 +1372,8 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
         marker.setAttribute("id", `arrow${index}`);
         marker.setAttribute("markerWidth", "10");
         marker.setAttribute("markerHeight", "7");
-        marker.setAttribute("refX", "10"); // Position the arrow at the tip of the line
-        marker.setAttribute("refY", "3.5"); // Center the arrow vertically
+        marker.setAttribute("refX", "10");
+        marker.setAttribute("refY", "3.5");
         marker.setAttribute("orient", "auto");
         marker.setAttribute("markerUnits", "strokeWidth");
     
@@ -1379,7 +1383,6 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
         marker.appendChild(arrowPath);
         svgElement.appendChild(marker);
     
-        // Create the line and apply the arrow marker
         const line = document.createElementNS(svgNS, "line");
         line.setAttribute("x1", boxRightX);
         line.setAttribute("y1", centerY);
@@ -1387,19 +1390,22 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
         line.setAttribute("y2", centerY);
         line.setAttribute("stroke", "var(--" + lineClass + ")");
         line.setAttribute("stroke-width", "2");
-        line.setAttribute("marker-end", `url(#arrow${index})`); // Apply the marker to the line
+        line.setAttribute("marker-end", `url(#arrow${index})`);
     
         svgElement.appendChild(line);
 
-        // Create label above each line (0.01 / s)
         const label = document.createElementNS(svgNS, "text");
-        label.setAttribute("x", (boxRightX + lineEndX) / 2);  // Position label in the middle of the line
-        label.setAttribute("y", centerY - 10);  // Position label slightly above the line
-        label.setAttribute("text-anchor", "middle");  // Center the text horizontally
-        label.setAttribute("fill", "var(--" + lineClass + ")");  // Set the text color to match the line
+        label.setAttribute("x", (boxRightX + lineEndX) / 2);
+        label.setAttribute("y", centerY - 10);
+        label.setAttribute("text-anchor", "middle");
+        label.setAttribute("fill", "var(--" + lineClass + ")");
         label.setAttribute("font-size", "14");
-        label.textContent = "0.01 / s";
-        
+        if (rocketInfo) {
+            label.textContent = `${(rocketInfo[3] * getTimerRateRatio()).toFixed(2)} / s`;
+        } else {
+            label.textContent = '0 / s';
+        }
+
         svgElement.appendChild(label);
     });
 

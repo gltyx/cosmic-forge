@@ -247,369 +247,10 @@ export function drawTab6Content(heading, optionContentElement) {
                 optionContentElement.appendChild(spaceRocket4BuildRow);           
     }
 
-    if (heading === 'Rocket 1') {
-        let autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'price']);
-        setCheckRocketFuellingStatus('rocket1', true);
-        const fuellingState = getRocketsFuellerStartedArray().includes('rocket1');
-        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket1FuelledUp');
-        const launchedState = getLaunchedRockets().includes('rocket1');
-
-        const spaceRocket1AutoBuyerRow = createOptionRow(
-            'spaceRocket1AutoBuyerRow',
-            getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'nameUpgrade']),
-            'Fuel:',
-            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1'], () => {
-                setRocketsFuellerStartedArray('rocket1', 'add');
-                switchFuelGaugeWhenFuellerBought('rocket1');
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            createTextElement(
-                `<div id="rocket1FuellingProgressBar">`,
-                'rocket1FuellingProgressBarContainer',
-                ['progress-bar-container', 'invisible']
-            ),
-            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket1-launch-button', 'invisible'], () => {
-                launchRocket('rocket1');
-            }, 'upgradeCheck', '', null, null, null, true, null, null),
-            null,
-            null,
-            `${getCurrencySymbol()}${autobuyer1Price}`,
-            '',
-            'upgradeCheck',
-            'autoBuyer',
-            null,
-            'cash',
-            'tier1',
-            false,
-            null,
-            null,
-            'rocketFuel'
-        );
-        optionContentElement.appendChild(spaceRocket1AutoBuyerRow);
-
-        const spaceRocket1TravelRow = createOptionRow(
-            `spaceRocket1TravelRow`,
-            null,
-            `Travel To:`,
-            createTextElement(`${getDestinationAsteroid('rocket1')}`, 'rocket1DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
-            createDropdown('rocket1TravelDropdown', asteroids
-                .map((asteroidObj) => {
-                    return Object.keys(asteroidObj).map((key) => {
-                        const asteroid = asteroidObj[key];
-                        const rarityClass = getRarityClass(asteroid.rarity[0]);
-                        const distanceClass = getDistanceClass(asteroid.distance[0]);
-                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
-        
-                        return {
-                            value: asteroid.name,
-                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
-                            distance: asteroid.distance[0]
-                        };
-                    });
-                })
-                .flat()
-                .sort((a, b) => a.distance - b.distance),
-                '', (value) => {
-                    setDestinationAsteroid('rocket1', value);
-                    console.log('Selected asteroid name:', value);
-                }, ['travel-to']),                                 
-            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket1-travel-to-asteroid-button'], () => {
-                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket1');
-            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
-            createTextElement(
-                `<div id="spaceTravelToAsteroidProgressBarRocket1">`,
-                'spaceTravelToAsteroidProgressBarRocket1Container',
-                ['progress-bar-container', 'invisible']
-            ),        
-            null,
-            `Travelling...`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            'travel'
-        );
-        optionContentElement.appendChild(spaceRocket1TravelRow);
-
-        setFuellingVisibility('rocket1', [fuellingState, fuelledUpState, launchedState]);
-    }
-    
-    if (heading === 'Rocket 2') {
-        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'price']);
-        setCheckRocketFuellingStatus('rocket2', true);
-        const fuellingState = getRocketsFuellerStartedArray().includes('rocket2');
-        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket2FuelledUp');
-        const launchedState = getLaunchedRockets().includes('rocket2');
-
-        const spaceRocket2AutoBuyerRow = createOptionRow(
-            'spaceRocket2AutoBuyerRow',
-            getResourceDataObject('space', ['upgrades', 'rocket2', 'autoBuyer', 'tier1', 'nameUpgrade']),
-            'Fuel:',
-            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2'], () => {
-                setRocketsFuellerStartedArray('rocket2', 'add');
-                switchFuelGaugeWhenFuellerBought('rocket2');
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            createTextElement(
-                `<div id="rocket2FuellingProgressBar">`,
-                'rocket2FuellingProgressBarContainer',
-                ['progress-bar-container', 'invisible']
-            ),
-            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket2-launch-button', 'invisible'], () => {
-                launchRocket('rocket2');
-            }, 'upgradeCheck', '', null, null, null, true, null, null),
-            null,
-            null,
-            `${getCurrencySymbol()}${autobuyer1Price}`,
-            '',
-            'upgradeCheck',
-            'autoBuyer',
-            null,
-            'cash',
-            'tier1',
-            false,
-            null,
-            null,
-            'rocketFuel'
-        );
-
-        optionContentElement.appendChild(spaceRocket2AutoBuyerRow);
-
-        const spaceRocket2TravelRow = createOptionRow(
-            `spaceRocket2TravelRow`,
-            null,
-            `Travel To:`,
-            createTextElement(`${getDestinationAsteroid('rocket2')}`, 'rocket2DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
-            createDropdown('rocket2TravelDropdown', asteroids
-                .map((asteroidObj) => {
-                    return Object.keys(asteroidObj).map((key) => {
-                        const asteroid = asteroidObj[key];
-                        const rarityClass = getRarityClass(asteroid.rarity[0]);
-                        const distanceClass = getDistanceClass(asteroid.distance[0]);
-                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
-        
-                        return {
-                            value: asteroid.name,
-                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
-                            distance: asteroid.distance[0]
-                        };
-                    });
-                })
-                .flat()
-                .sort((a, b) => a.distance - b.distance),
-                '', (value) => {
-                    console.log('Selected asteroid name:', value);
-                }, ['travel-to']),                                 
-            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket2-travel-to-asteroid-button'], () => {
-                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket2');
-            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
-            createTextElement(
-                `<div id="spaceTravelToAsteroidProgressBarRocket2">`,
-                'spaceTravelToAsteroidProgressBarRocket2Container',
-                ['progress-bar-container', 'invisible']
-            ),          
-            null,
-            `Travelling...`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            'travel'
-        );
-        optionContentElement.appendChild(spaceRocket2TravelRow);
-
-        setFuellingVisibility('rocket2', [fuellingState, fuelledUpState, launchedState]);
-    }
-    
-    if (heading === 'Rocket 3') {
-        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'price']);
-        setCheckRocketFuellingStatus('rocket3', true);
-        const fuellingState = getRocketsFuellerStartedArray().includes('rocket3');
-        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket3FuelledUp');
-        const launchedState = getLaunchedRockets().includes('rocket3');
-
-        const spaceRocket3AutoBuyerRow = createOptionRow(
-            'spaceRocket3AutoBuyerRow',
-            getResourceDataObject('space', ['upgrades', 'rocket3', 'autoBuyer', 'tier1', 'nameUpgrade']),
-            'Fuel:',
-            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3'], () => {
-                setRocketsFuellerStartedArray('rocket3', 'add');
-                switchFuelGaugeWhenFuellerBought('rocket3');
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            createTextElement(
-                `<div id="rocket3FuellingProgressBar">`,
-                'rocket3FuellingProgressBarContainer',
-                ['progress-bar-container', 'invisible']
-            ),
-            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket3-launch-button', 'invisible'], () => {
-                launchRocket('rocket3');
-            }, 'upgradeCheck', '', null, null, null, true, null, null),
-            null,
-            null,
-            `${getCurrencySymbol()}${autobuyer1Price}`,
-            '',
-            'upgradeCheck',
-            'autoBuyer',
-            null,
-            'cash',
-            'tier1',
-            false,
-            null,
-            null,
-            'rocketFuel'
-        );
-
-        optionContentElement.appendChild(spaceRocket3AutoBuyerRow);
-
-        const spaceRocket3TravelRow = createOptionRow(
-            `spaceRocket3TravelRow`,
-            null,
-            `Travel To:`,
-            createTextElement(`${getDestinationAsteroid('rocket3')}`, 'rocket3DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
-            createDropdown('rocket3TravelDropdown', asteroids
-                .map((asteroidObj) => {
-                    return Object.keys(asteroidObj).map((key) => {
-                        const asteroid = asteroidObj[key];
-                        const rarityClass = getRarityClass(asteroid.rarity[0]);
-                        const distanceClass = getDistanceClass(asteroid.distance[0]);
-                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
-        
-                        return {
-                            value: asteroid.name,
-                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
-                            distance: asteroid.distance[0]
-                        };
-                    });
-                })
-                .flat()
-                .sort((a, b) => a.distance - b.distance),
-                '', (value) => {
-                    console.log('Selected asteroid name:', value);
-                }, ['travel-to']),                                 
-            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket3-travel-to-asteroid-button'], () => {
-                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket3');
-            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
-            createTextElement(
-                `<div id="spaceTravelToAsteroidProgressBarRocket3">`,
-                'spaceTravelToAsteroidProgressBarRocket3Container',
-                ['progress-bar-container', 'invisible']
-            ),           
-            null,
-            `Travelling...`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            'travel'
-        );
-        optionContentElement.appendChild(spaceRocket3TravelRow);
-
-        setFuellingVisibility('rocket3', [fuellingState, fuelledUpState, launchedState]);
-    }
-    
-    if (heading === 'Rocket 4') {
-        const autobuyer1Price = getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'price']);
-        setCheckRocketFuellingStatus('rocket4', true);
-        const fuellingState = getRocketsFuellerStartedArray().includes('rocket4');
-        const fuelledUpState = getRocketsFuellerStartedArray().includes('rocket4FuelledUp');
-        const launchedState = getLaunchedRockets().includes('rocket4');
-
-        const spaceRocket4AutoBuyerRow = createOptionRow(
-            'spaceRocket4AutoBuyerRow',
-            getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'nameUpgrade']),
-            'Fuel:',
-            createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4'], () => {
-                setRocketsFuellerStartedArray('rocket4', 'add');
-                switchFuelGaugeWhenFuellerBought('rocket4');
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
-            createTextElement(
-                `<div id="rocket1FuellingProgressBar">`,
-                'rocket4FuellingProgressBarContainer',
-                ['progress-bar-container', 'invisible']
-            ),
-            createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', 'rocket4-launch-button', 'invisible'], () => {
-                launchRocket('rocket4');
-            }, 'upgradeCheck', '', null, null, null, true, null, null),
-            null,
-            null,
-            `${getCurrencySymbol()}${autobuyer1Price}`,
-            '',
-            'upgradeCheck',
-            'autoBuyer',
-            null,
-            'cash',
-            'tier1',
-            false,
-            null,
-            null,
-            'rocketFuel'
-        );
-
-        optionContentElement.appendChild(spaceRocket4AutoBuyerRow);
-
-        const spaceRocket4TravelRow = createOptionRow(
-            `spaceRocket4TravelRow`,
-            null,
-            `Travel To:`,
-            createTextElement(`${getDestinationAsteroid('rocket4')}`, 'rocket4DestinationAsteroid', ['green-ready-text', 'invisible', 'destination-text']),
-            createDropdown('rocket4TravelDropdown', asteroids
-                .map((asteroidObj) => {
-                    return Object.keys(asteroidObj).map((key) => {
-                        const asteroid = asteroidObj[key];
-                        const rarityClass = getRarityClass(asteroid.rarity[0]);
-                        const distanceClass = getDistanceClass(asteroid.distance[0]);
-                        const quantityClass = getQuantityClass(asteroid.quantity[0]);
-        
-                        return {
-                            value: asteroid.name,
-                            text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${distanceClass}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${rarityClass}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${quantityClass}">${asteroid.quantity[0]}</span>`,
-                            distance: asteroid.distance[0]
-                        };
-                    });
-                })
-                .flat()
-                .sort((a, b) => a.distance - b.distance),
-                '', (value) => {
-                    console.log('Selected asteroid name:', value);
-                }, ['travel-to']),                                 
-            createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'rocket4-travel-to-asteroid-button'], () => {
-                startTravelToAsteroidTimer([0, 'buttonClick'], 'rocket4');
-            }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
-            createTextElement(
-                `<div id="spaceTravelToAsteroidProgressBarRocket4">`,
-                'spaceTravelToAsteroidProgressBarRocket4Container',
-                ['progress-bar-container', 'invisible']
-            ),          
-            null,
-            `Travelling...`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            'travel'
-        );
-        optionContentElement.appendChild(spaceRocket4TravelRow);
-
-        setFuellingVisibility('rocket4', [fuellingState, fuelledUpState, launchedState]);
-    }
+    if (heading === 'Rocket 1') createRocketUI('rocket1', optionContentElement, asteroids);
+    if (heading === 'Rocket 2') createRocketUI('rocket2', optionContentElement, asteroids);
+    if (heading === 'Rocket 3') createRocketUI('rocket3', optionContentElement, asteroids);
+    if (heading === 'Rocket 4') createRocketUI('rocket4', optionContentElement, asteroids);
     
     if (heading === 'Asteroids') {
         let asteroidsArray = getAsteroidArray();
@@ -762,8 +403,85 @@ function setFuellingVisibility(rocket, params) {
         document.getElementById('fuelDescription').classList.add('green-ready-text');
     }
     if (launchedState) {
-        spaceRocket1AutoBuyerRow.classList.add('invisible');
+        const autoBuyerRow = document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`);
+        if (autoBuyerRow) {
+            autoBuyerRow.classList.add('invisible');
+        }
     }
+}
+
+function createRocketUI(rocketId, optionContentElement, asteroids) {
+    const autobuyerPrice = getResourceDataObject('space', ['upgrades', rocketId, 'autoBuyer', 'tier1', 'price']);
+    setCheckRocketFuellingStatus(rocketId, true);
+    
+    const fuellingState = getRocketsFuellerStartedArray().includes(rocketId);
+    const fuelledUpState = getRocketsFuellerStartedArray().includes(`${rocketId}FuelledUp`);
+    const launchedState = getLaunchedRockets().includes(rocketId);
+
+    const rocketAutoBuyerRow = createOptionRow(
+        `space${capitaliseString(rocketId)}AutoBuyerRow`,
+        getResourceDataObject('space', ['upgrades', rocketId, 'autoBuyer', 'tier1', 'nameUpgrade']),
+        'Fuel:',
+        createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', rocketId], () => {
+            setRocketsFuellerStartedArray(rocketId, 'add');
+            switchFuelGaugeWhenFuellerBought(rocketId);
+        }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
+        createTextElement(`<div id="${rocketId}FuellingProgressBar">`, `${rocketId}FuellingProgressBarContainer`, ['progress-bar-container', 'invisible']),
+        createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', `${rocketId}-launch-button`, 'invisible'], () => {
+            launchRocket(rocketId);
+        }, 'upgradeCheck', '', null, null, null, true, null, null),
+        null,
+        null,
+        `${getCurrencySymbol()}${autobuyerPrice}`,
+        '',
+        'upgradeCheck',
+        'autoBuyer',
+        null,
+        'cash',
+        'tier1',
+        false,
+        null,
+        null,
+        'rocketFuel'
+    );
+    optionContentElement.appendChild(rocketAutoBuyerRow);
+
+    const rocketTravelRow = createOptionRow(
+        `${rocketId}TravelRow`,
+        null,
+        `Travel To:`,
+        createTextElement(`${getDestinationAsteroid(rocketId)}`, `${rocketId}DestinationAsteroid`, ['green-ready-text', 'invisible', 'destination-text']),
+        createDropdown(`${rocketId}TravelDropdown`, asteroids
+            .flatMap(asteroidObj => Object.values(asteroidObj).map(asteroid => ({
+                value: asteroid.name,
+                text: `${asteroid.name}: Distance: <span class="dropDownDistanceValue ${getDistanceClass(asteroid.distance[0])}">${asteroid.distance[0]}</span>, Rarity: <span class="dropDownRarityValue ${getRarityClass(asteroid.rarity[0])}">${asteroid.rarity[0]}</span>, Antimatter: <span class="dropDownQuantityValue ${getQuantityClass(asteroid.quantity[0])}">${asteroid.quantity[0]}</span>`,
+                distance: asteroid.distance[0]
+            })))
+            .sort((a, b) => a.distance - b.distance),
+            '', (value) => {
+                setDestinationAsteroid(rocketId, value);
+                console.log('Selected asteroid name:', value);
+            }, ['travel-to']),                                 
+        createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', `${rocketId}-travel-to-asteroid-button`], () => {
+            startTravelToAsteroidTimer([0, 'buttonClick'], rocketId);
+        }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
+        createTextElement(`<div id="spaceTravelToAsteroidProgressBar${capitaliseString(rocketId)}">`, `spaceTravelToAsteroidProgressBar${capitaliseString(rocketId)}Container`, ['progress-bar-container', 'invisible']),
+        null,
+        `Travelling...`,
+        '',
+        null,
+        null,
+        null,
+        null,
+        null,
+        false,
+        null,
+        null,
+        'travel'
+    );
+    optionContentElement.appendChild(rocketTravelRow);
+
+    setFuellingVisibility(rocketId, [fuellingState, fuelledUpState, launchedState]);
 }
 
 function getRarityClass(rarity) {
