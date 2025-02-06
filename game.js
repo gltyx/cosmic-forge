@@ -2516,10 +2516,20 @@ function handleSpaceUpgradeResourceType(element) {
     if (dataName.includes('rocket')) {
         const builtParts = getResourceDataObject('space', ['upgrades', dataName, 'builtParts']);
         const totalParts = getResourceDataObject('space', ['upgrades', dataName, 'parts']);
+
+        const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
+
+        const hasRedDisabledTextSpan = Array.from(element.querySelectorAll('span')).some(span => 
+            span.classList.contains('red-disabled-text')
+        );
+
+        if (hasRedDisabledTextSpan) {
+            rocketPartBuyButton.classList.add('red-disabled-text');
+        }
+
         if (builtParts === totalParts) {
             const builtPartsElement = document.getElementById(`${dataName}BuiltPartsQuantity`);
             const totalPartsElement = document.getElementById(`${dataName}TotalPartsQuantity`);
-            const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
             rocketPartBuyButton.classList.add('red-disabled-text');
             element.classList.add('green-ready-text');
             builtPartsElement.classList.add('green-ready-text');
