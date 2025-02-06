@@ -400,7 +400,18 @@ export function createOptionRow(
 
     }
     const label = document.createElement('label');
-    objectSectionArgument1 === 'autoBuyer' ? label.innerText = renderNameABs + ':' : label.innerText = labelText;
+
+    if (objectSectionArgument1 === 'autoBuyer') { //to change color of label pass an array [value, class] as labeltext argument to function
+        label.innerText = renderNameABs + ':';
+    } else {
+        if (Array.isArray(labelText)) {
+            labelContainer.classList.add(labelText[1]);
+            label.innerText = labelText[0];
+        } else {
+            label.innerText = labelText;
+        }
+    }
+    
     labelContainer.appendChild(label);
     mainRow.appendChild(labelContainer);
 
@@ -2510,6 +2521,11 @@ export function sortAsteroidTable(asteroidsArray, sortMethod) {
         const asteroidA = a[nameA];
         const asteroidB = b[nameB];
 
+        // Prioritize non-mined asteroids first
+        if (asteroidA.beingMined && !asteroidB.beingMined) return 1;
+        if (!asteroidA.beingMined && asteroidB.beingMined) return -1;
+
+        // Normal sorting based on the selected method
         switch (sortMethod) {
             case "rarity":
                 const rarityOrder = { "Legendary": 1, "Rare": 2, "Uncommon": 3, "Common": 4 };
@@ -2528,6 +2544,7 @@ export function sortAsteroidTable(asteroidsArray, sortMethod) {
                 return 0;
         }
     });
+
     return asteroidsArray;
 }
 

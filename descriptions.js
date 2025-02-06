@@ -809,22 +809,22 @@ export function initialiseDescriptions() {
             updateAt: "" 
         },
         spaceRocket1TravelRow: {
-            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content1: `Select an Asteroid to travel there and begin mining Antimatter`,
             content2: "",
             updateAt: "" 
         },
         spaceRocket2TravelRow: {
-            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content1: `Select an Asteroid to travel there and begin mining Antimatter`,
             content2: "",
             updateAt: "" 
         },
         spaceRocket3TravelRow: {
-            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content1: `Select an Asteroid to travel there and begin mining Antimatter`,
             content2: "",
             updateAt: "" 
         },
         spaceRocket4TravelRow: {
-            content1: `Travel to Asteroids to begin mining Antimatter`,
+            content1: `Select an Asteroid to travel there and begin mining Antimatter`,
             content2: "",
             updateAt: "" 
         },
