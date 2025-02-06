@@ -4478,7 +4478,6 @@ function generateAsteroidData(name) {
     const distance = Math.floor(Math.random() * (maxDistance - minDistance + 1)) + minDistance;
     const distancePercentile = (distance - minDistance) / (maxDistance - minDistance);
     
-    
     if (distancePercentile >= 0.76) {
         distanceClass = 'red-disabled-text';
     } else if (distancePercentile >= 0.51) {
@@ -4505,34 +4504,17 @@ function generateAsteroidData(name) {
         rarityClass = 'green-ready-text';
     }
 
-    let easeOfExtraction;
+    // Simplified ease of extraction logic
+    const easeOfExtraction = Math.floor(Math.random() * 10) + 1;  // Random number between 1 and 10
     let easeClass;
-    let min, max;
-    
-    if (rarity === "Common" || rarity === "Uncommon") {
-        easeOfExtraction = Math.floor(Math.random() * 6) + 5;
-        min = 5;
-        max = 10;
-    } else if (rarity === "Rare") {
-        easeOfExtraction = Math.floor(Math.random() * 6) + 1;
-        min = 1;
-        max = 6;
-    } else {
-        easeOfExtraction = Math.floor(Math.random() * 4) + 1;
-        min = 1;
-        max = 4;
-    }
-
-    const easePercentile = (easeOfExtraction - min) / (max - min);
-
-    if (easePercentile >= 0.76) {
-        easeClass = 'red-disabled-text';
-    } else if (easePercentile >= 0.51) {
-        easeClass = 'warning-orange-text';
-    } else if (easePercentile >= 0.26) {
-        easeClass = 'none';
-    } else {
+    if (easeOfExtraction <= 2) {
         easeClass = 'green-ready-text';
+    } else if (easeOfExtraction === 3 || easeOfExtraction === 4) {
+        easeClass = 'none';
+    } else if (easeOfExtraction > 4 && easeOfExtraction <= 8) {
+        easeClass = 'warning-orange-text';
+    } else {
+        easeClass = 'red-disabled-text';
     }
 
     let quantity;
@@ -4544,7 +4526,7 @@ function generateAsteroidData(name) {
         quantity = Math.floor(Math.random() * (2000 - 1100 + 1)) + 1100;
     } else {
         quantity = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
-    }    
+    }
 
     let quantityClass;
     const minQuantity = rarity === "Common" ? 300 : (rarity === "Uncommon" ? 700 : (rarity === "Rare" ? 1100 : 5000));
@@ -4563,10 +4545,8 @@ function generateAsteroidData(name) {
     }
 
     if (rarity === "Uncommon") {
-        if (easeClass === 'green-ready-text') easeClass = 'none';
         if (quantityClass === 'green-ready-text') quantityClass = 'none';
     } else if (rarity === "Common") {
-        if (easeClass === 'green-ready-text') easeClass = 'warning-orange-text';
         if (quantityClass === 'green-ready-text') quantityClass = 'warning-orange-text';
     }
 
