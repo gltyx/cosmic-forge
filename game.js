@@ -4322,7 +4322,9 @@ export function fuelRockets() {
             setRocketsFuellerStartedArray(`${rocket}`, 'remove');
 
             if (rocketLaunchButton) {
-                fuelQuantityProgressBarElement.style.width = `100%`;
+                if (fuelQuantityProgressBarElement) {
+                    fuelQuantityProgressBarElement.style.width = `100%`;
+                }
                 rocketLaunchButton.classList.remove('invisible');
                 rocketLaunchButton.classList.remove('red-disabled-text');
                 rocketLaunchButton.classList.add('green-ready-text');

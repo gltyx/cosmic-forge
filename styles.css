@@ -1403,6 +1403,10 @@ canvas {
     padding: 20px;
     height: fit-content;
   }
+
+  .antimatter-svg {
+    padding-left: 0;
+  }
   
   .tech-tree-svg svg,
   .antimatter-svg svg {

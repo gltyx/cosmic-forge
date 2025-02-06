@@ -1254,7 +1254,7 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
     ];    
 
     const titleContainer = document.createElementNS(svgNS, "foreignObject");
-    titleContainer.setAttribute("x", 0);
+    titleContainer.setAttribute("x", "0px");
     titleContainer.setAttribute("y", "0");
     titleContainer.setAttribute("width", svgWidth);
     titleContainer.setAttribute("height", "60");
