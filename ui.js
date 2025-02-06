@@ -1221,56 +1221,59 @@ function setupTooltip(svgElement) {
 
 export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement) {
     const svgNS = "http://www.w3.org/2000/svg";
-    const boxWidth = "35%";
-    const boxHeight = 130;
-    const leftOffset = "5%";
-    const rightOffset = "60%";
-    const verticalSpacing = 165;
 
-    // Clear previous SVG content
     while (svgElement.firstChild) {
         svgElement.removeChild(svgElement.firstChild);
     }
 
     const rockets = ["Rocket 1", "Rocket 2", "Rocket 3", "Rocket 4"];
-    
-    let firstDivHeight = null; // Variable to store the first div height
+    const numRockets = rockets.length;
+
+    const svgWidth = svgElement.clientWidth;
+    const svgHeight = svgElement.clientHeight;
+    const boxWidth = svgWidth * 0.3;
+    const leftOffset = svgWidth * 0.1;
+    const rightOffset = svgWidth * 0.6;
+    const verticalSpacing = svgHeight / (numRockets + 1);
+    const boxHeight = verticalSpacing * 0.8;
+    const arrowColors = ["red", "blue", "green", "yellow"];
+
+    let topMostY = null;
+    let bottomMostY = null;
 
     rockets.forEach((rocket, index) => {
-        const yOffset = 30 + index * verticalSpacing;
-        const rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
+        const yOffset = verticalSpacing * (index + 1) - boxHeight / 2;
+        if (topMostY === null) topMostY = yOffset;
+        bottomMostY = yOffset + boxHeight;
 
-        let textLines = [];
-        if (rocketInfo) {
-            textLines = [
-                [`Rocket ${index + 1}`],
-                ["Asteroid:", rocketInfo[1]],
-                ["Complexity:", rocketInfo[2]],
-                ["Rate:", Math.floor(rocketInfo[3] * getTimerRateRatio())],
-                ["Antimatter Left:", rocketInfo[4]]
-            ];
-        } else {
-            textLines = [
-                [`Rocket ${index + 1}`],
-                ["Not at Asteroid"],
-                ["", ""],
-                ["", ""],
-                ["", ""]
-            ];
-        }
+        const rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
+        let textLines = rocketInfo ? [
+            [`Rocket ${index + 1}`],
+            ["Asteroid:", rocketInfo[1]],
+            ["Complexity:", rocketInfo[2]],
+            ["Rate:", Math.floor(rocketInfo[3] * getTimerRateRatio())],
+            ["Antimatter Left:", rocketInfo[4]]
+        ] : [
+            [`Rocket ${index + 1}`],
+            ["Not at Asteroid"],
+            ["", ""],
+            ["", ""],
+            ["", ""]
+        ];
 
         const table = document.createElementNS(svgNS, "foreignObject");
         table.setAttribute("x", leftOffset);
         table.setAttribute("y", yOffset);
-        table.setAttribute("width", "40%");
-        table.setAttribute("height", "100%");
+        table.setAttribute("width", boxWidth);
+        table.setAttribute("height", boxHeight);
 
         const div = document.createElement("div");
-        div.style.border = "2px solid var(--text-color)"; // Border around the div
-        div.style.borderRadius = "10px"; // Rounded corners for the div
-        div.style.padding = "10px"; // Add padding for spacing inside the div
-        div.style.width = "100%"; // Set the width to 100% of the parent container (foreignObject)
-        div.style.boxSizing = "border-box"; // Ensure padding doesn't affect the div's overall size
+        div.style.border = "2px solid var(--text-color)";
+        div.style.borderRadius = "10px";
+        div.style.padding = "10px";
+        div.style.width = "100%";
+        div.style.height = "100%";
+        div.style.boxSizing = "border-box";
 
         const htmlTable = document.createElement("table");
         htmlTable.style.width = "100%";
@@ -1279,73 +1282,105 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
             const row = document.createElement("tr");
 
             const labelCell = document.createElement("td");
-            labelCell.textContent = label; // This will be empty for "" values
-            labelCell.style.padding = "0px";
+            labelCell.textContent = label;
             labelCell.style.fontWeight = "bold";
             labelCell.style.textAlign = "left";
             row.appendChild(labelCell);
 
             const valueCell = document.createElement("td");
-            valueCell.textContent = value; // This will also be empty for "" values
-            valueCell.style.padding = "0px";
-            valueCell.style.width = "50%";
+            valueCell.textContent = value;
             valueCell.style.textAlign = "left";
 
-            if (rowIndex === 0) {
-                valueCell.style.color = "red";
-            } else if (rowIndex === 1) {
-                valueCell.style.color = "blue";
-            } else if (rowIndex === 2) {
-                valueCell.style.color = "yellow";
-            } else if (rowIndex === 3) {
-                valueCell.style.color = "purple";
+            const colors = ["red", "blue", "yellow", "purple"];
+            if (rowIndex < colors.length) {
+                valueCell.style.color = colors[rowIndex];
             }
 
             row.appendChild(valueCell);
-
             htmlTable.appendChild(row);
         });
 
-        div.appendChild(htmlTable); // Append the table inside the div
-        table.appendChild(div); // Append the div inside the foreignObject
-        svgElement.appendChild(table); // Finally append the foreignObject to the SVG element
+        div.appendChild(htmlTable);
+        table.appendChild(div);
+        svgElement.appendChild(table);
 
-        // Set the height of the divs
-        if (index === 0) {
-            // Store the height of the first div
-            firstDivHeight = div.offsetHeight;
-        } else {
-            // Apply the height of the first div to subsequent divs
-            div.style.height = firstDivHeight + "px";
-        }
+        const centerY = yOffset + boxHeight / 2;
+        const boxRightX = leftOffset + boxWidth;
+        const lineEndX = rightOffset;
+        const arrowColor = arrowColors[index % arrowColors.length];
+
+        const marker = document.createElementNS(svgNS, "marker");
+        marker.setAttribute("id", `arrow${index}`);
+        marker.setAttribute("markerWidth", "10");
+        marker.setAttribute("markerHeight", "7");
+        marker.setAttribute("refX", "10");
+        marker.setAttribute("refY", "3.5");
+        marker.setAttribute("orient", "auto");
+        marker.setAttribute("markerUnits", "strokeWidth");
+
+        const arrowPath = document.createElementNS(svgNS, "path");
+        arrowPath.setAttribute("d", "M0,0 L10,3.5 L0,7");
+        arrowPath.setAttribute("fill", arrowColor);
+        marker.appendChild(arrowPath);
+        svgElement.appendChild(marker);
+
+        const line = document.createElementNS(svgNS, "line");
+        line.setAttribute("x1", boxRightX);
+        line.setAttribute("y1", centerY);
+        line.setAttribute("x2", lineEndX);
+        line.setAttribute("y2", centerY);
+        line.setAttribute("stroke", arrowColor);
+        line.setAttribute("stroke-width", "2");
+        line.setAttribute("marker-end", `url(#arrow${index})`);
+
+        svgElement.appendChild(line);
     });
 
-    const svgHeight = svgElement.getBoundingClientRect().height; // Get the computed height of the SVG element
-    const rightBoxYOffset = (svgHeight / 2) - (boxHeight / 2) - 25; // Halfway point of the SVG height minus half the box height    
-    
-    const rightBox = document.createElementNS(svgNS, "rect");
+    const rightBoxHeight = bottomMostY - topMostY;
+
+    const rightBox = document.createElementNS(svgNS, "foreignObject");
     rightBox.setAttribute("x", rightOffset);
-    rightBox.setAttribute("y", rightBoxYOffset);
+    rightBox.setAttribute("y", topMostY);
     rightBox.setAttribute("width", boxWidth);
-    rightBox.setAttribute("height", boxHeight);
-    rightBox.setAttribute("fill", "var(--bg-color");
-    rightBox.setAttribute("stroke", "var(--text-color)");
-    rightBox.setAttribute("stroke-width", "2");
-    rightBox.setAttribute("rx", "10");
-    
-    const rightBoxText = document.createElementNS(svgNS, "text");
-    rightBoxText.setAttribute("x", "80%");
-    rightBoxText.setAttribute("y", rightBoxYOffset + (boxHeight / 2));
-    rightBoxText.setAttribute("fill", "var(--text-color)");
-    rightBoxText.setAttribute("font-size", "12px");
-    rightBoxText.setAttribute("font-family", "Arial");
-    rightBoxText.setAttribute("text-anchor", "middle");
-    rightBoxText.setAttribute("alignment-baseline", "middle");
-    rightBoxText.textContent = "Antimatter Storage";
-    
+    rightBox.setAttribute("height", rightBoxHeight);
+
+    const rightBoxDiv = document.createElement("div");
+    rightBoxDiv.style.position = "relative";
+    rightBoxDiv.style.width = "100%";
+    rightBoxDiv.style.height = "100%";
+    rightBoxDiv.style.border = "2px solid var(--text-color)";
+    rightBoxDiv.style.borderRadius = "10px";
+    rightBoxDiv.style.backgroundColor = "var(--bg-color)";
+
+    const innerDivRightBox = document.createElement("div");
+    innerDivRightBox.style.position = "absolute";
+    innerDivRightBox.style.bottom = "0";
+    innerDivRightBox.style.width = "100%";
+    innerDivRightBox.style.height = "50%";
+    innerDivRightBox.style.borderRadius = "10px";
+    innerDivRightBox.style.backgroundColor = "var(--text-color)";
+
+    // const rightBoxText = document.createElement("div");
+    // rightBoxText.style.position = "absolute";
+    // rightBoxText.style.top = "50%";
+    // rightBoxText.style.left = "50%";
+    // rightBoxText.style.transform = "translate(-50%, -50%)";
+    // rightBoxText.style.color = "var(--text-color)";
+    // rightBoxText.style.fontSize = "16px";
+    // rightBoxText.style.fontFamily = "Arial";
+    // rightBoxText.style.textAlign = "center";
+    // rightBoxText.textContent = "Antimatter Storage";
+
+    // rightBoxDiv.appendChild(rightBoxText);
+    rightBoxDiv.appendChild(innerDivRightBox);
+    rightBox.appendChild(rightBoxDiv);
     svgElement.appendChild(rightBox);
-    svgElement.appendChild(rightBoxText);
 }
+
+
+
+
+
 
 
 export async function drawTechTree(techData, svgElement, renew) {

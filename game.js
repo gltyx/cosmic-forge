@@ -1607,7 +1607,7 @@ function monitorAntimatterDiagram() {
         const antimatterTotalRate = getResourceDataObject('antimatter', ['rate']);
         const svgElement = document.getElementById('antimatterSvg');
         const rocketData = {};
-        console.log(JSON.stringify(getAsteroidArray(), null, 2));
+        //console.log(JSON.stringify(getAsteroidArray(), null, 2));
 
         for (let i = 1; i <= 4; i++) {
             const rocketKey = getMiningObject()[`rocket${i}`];
