@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getMiningObject,
     getImageUrls,
     setUnlockedCompoundsArray,
     setUnlockedResourcesArray,
@@ -505,7 +506,6 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
     const dropdownText = document.createElement('span');
     dropdownText.classList.add('dropdown-text');
 
-    // Find the default option and set it as selected
     const defaultOption = options.find(option => option.value === selectedValue);
     dropdownText.innerHTML = defaultOption ? defaultOption.text : 'Select an option';
 
@@ -537,12 +537,10 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
 
         const isVisible = dropdownOptions.classList.contains('show');
 
-        // Close all dropdowns
         document.querySelectorAll('.dropdown-options').forEach(option => {
             option.classList.remove('show');
         });
 
-        // Toggle the dropdown visibility and change the border radius
         if (!isVisible) {
             dropdownOptions.classList.add('show');
             selectContainer.style.borderRadius = '10px 10px 0 0'; 
@@ -674,10 +672,8 @@ export function createTextFieldArea(id, classList = [], placeholder = '', innerT
         textArea.value = innerTextString;
     }
 
-    // Apply default classes for dimensions and styling
     textArea.classList.add('text-area-height', 'text-area-width', 'text-area-style'); 
 
-    // Apply additional classes if provided
     if (Array.isArray(classList)) {
         textArea.classList.add(...classList);
     } else if (typeof classList === 'string') {
@@ -1220,8 +1216,10 @@ function setupTooltip(svgElement) {
 }
 
 export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement) {
+    const asteroidsArray = getAsteroidArray();
     const svgNS = "http://www.w3.org/2000/svg";
 
+    // Clear existing content in the SVG
     while (svgElement.firstChild) {
         svgElement.removeChild(svgElement.firstChild);
     }
@@ -1231,109 +1229,178 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
 
     const svgWidth = svgElement.clientWidth;
     const svgHeight = svgElement.clientHeight;
-    const boxWidth = svgWidth * 0.3;
+    const boxWidth = svgWidth * 0.4;
     const leftOffset = svgWidth * 0.1;
-    const rightOffset = svgWidth * 0.6;
+    const rightOffset = svgWidth * 0.65;
     const verticalSpacing = svgHeight / (numRockets + 1);
     const boxHeight = verticalSpacing * 0.8;
-    const arrowColors = ["red", "blue", "green", "yellow"];
+
+    let lineClasses = [
+        getMiningObject().rocket1 ? "ready-text" : "disabled-text",
+        getMiningObject().rocket2 ? "ready-text" : "disabled-text",
+        getMiningObject().rocket3 ? "ready-text" : "disabled-text",
+        getMiningObject().rocket4 ? "ready-text" : "disabled-text"
+    ];    
+
+    const titleContainer = document.createElementNS(svgNS, "foreignObject");
+    titleContainer.setAttribute("x", 0);
+    titleContainer.setAttribute("y", "0");
+    titleContainer.setAttribute("width", svgWidth);
+    titleContainer.setAttribute("height", "60");
+
+    const titleDiv = document.createElement("div");
+    titleDiv.style.width = "100%";
+    titleDiv.style.height = "100%";
+    titleDiv.style.display = "flex";
+    titleDiv.style.alignItems = "center";
+    titleDiv.style.justifyContent = "center";
+    titleDiv.style.fontSize = "36px";
+    titleDiv.style.fontWeight = "bold";
+    titleDiv.style.color = "var(--text-color)";
+    titleDiv.style.fontFamily = "var(--font-family)";
+    titleDiv.style.textAlign = "center";
+    titleDiv.textContent = "Antimatter Mining";
+
+    titleContainer.appendChild(titleDiv);
+    svgElement.appendChild(titleContainer);
 
     let topMostY = null;
     let bottomMostY = null;
 
     rockets.forEach((rocket, index) => {
+        const lineClass = lineClasses[index % lineClasses.length];
+
         const yOffset = verticalSpacing * (index + 1) - boxHeight / 2;
         if (topMostY === null) topMostY = yOffset;
         bottomMostY = yOffset + boxHeight;
-
+    
         const rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
+
+        let asteroid;
+        if (rocketInfo) {
+            asteroid = asteroidsArray.find(asteroidObj => asteroidObj[rocketInfo[1]])[rocketInfo[1]];
+        } else {
+            asteroid = null;
+        }
+
         let textLines = rocketInfo ? [
-            [`Rocket ${index + 1}`],
+            ['', `Rocket ${index + 1}`],
             ["Asteroid:", rocketInfo[1]],
             ["Complexity:", rocketInfo[2]],
-            ["Rate:", Math.floor(rocketInfo[3] * getTimerRateRatio())],
             ["Antimatter Left:", rocketInfo[4]]
         ] : [
-            [`Rocket ${index + 1}`],
+            ['', `Rocket ${index + 1}`],
             ["Not at Asteroid"],
-            ["", ""],
             ["", ""],
             ["", ""]
         ];
 
+        let colorClass;
+
+        if (asteroid) {
+            switch (asteroid.easeOfExtraction[1]) {
+                case 'warning-orange-text':
+                    colorClass = 'warning-text';
+                    break;
+                case 'red-disabled-text':
+                    colorClass = 'disabled-text';
+                    break;
+                case 'green-ready-text':
+                    colorClass = 'ready-text';
+                    break;
+                default:
+                    colorClass = 'var(--text-color)';
+                    break;
+            }
+        }
+    
         const table = document.createElementNS(svgNS, "foreignObject");
         table.setAttribute("x", leftOffset);
         table.setAttribute("y", yOffset);
         table.setAttribute("width", boxWidth);
         table.setAttribute("height", boxHeight);
-
+    
         const div = document.createElement("div");
-        div.style.border = "2px solid var(--text-color)";
+        div.style.border = `2px solid var(--${lineClass})`;
         div.style.borderRadius = "10px";
         div.style.padding = "10px";
         div.style.width = "100%";
         div.style.height = "100%";
         div.style.boxSizing = "border-box";
-
+    
         const htmlTable = document.createElement("table");
         htmlTable.style.width = "100%";
-
+    
         textLines.forEach(([label, value], rowIndex) => {
             const row = document.createElement("tr");
-
+    
             const labelCell = document.createElement("td");
             labelCell.textContent = label;
             labelCell.style.fontWeight = "bold";
             labelCell.style.textAlign = "left";
             row.appendChild(labelCell);
-
+    
             const valueCell = document.createElement("td");
             valueCell.textContent = value;
             valueCell.style.textAlign = "left";
-
-            const colors = ["red", "blue", "yellow", "purple"];
-            if (rowIndex < colors.length) {
-                valueCell.style.color = colors[rowIndex];
+    
+            if (rowIndex < 2) {
+                valueCell.style.color = `var(--${lineClass})`;
+            } else if (rowIndex === 2) {
+                valueCell.style.color = `var(--${colorClass})`;
+            } else if (rowIndex === 3) {
+                valueCell.style.color = `var(--text-color)`; //ADD COLOR OF ANITMATTER LOGIC HERE
             }
-
+    
             row.appendChild(valueCell);
             htmlTable.appendChild(row);
         });
-
+    
         div.appendChild(htmlTable);
         table.appendChild(div);
         svgElement.appendChild(table);
-
-        const centerY = yOffset + boxHeight / 2;
+    
+        const centerY = yOffset + boxHeight / 2.5;
         const boxRightX = leftOffset + boxWidth;
         const lineEndX = rightOffset;
-        const arrowColor = arrowColors[index % arrowColors.length];
 
         const marker = document.createElementNS(svgNS, "marker");
         marker.setAttribute("id", `arrow${index}`);
         marker.setAttribute("markerWidth", "10");
         marker.setAttribute("markerHeight", "7");
-        marker.setAttribute("refX", "10");
-        marker.setAttribute("refY", "3.5");
+        marker.setAttribute("refX", "10"); // Position the arrow at the tip of the line
+        marker.setAttribute("refY", "3.5"); // Center the arrow vertically
         marker.setAttribute("orient", "auto");
         marker.setAttribute("markerUnits", "strokeWidth");
-
+    
         const arrowPath = document.createElementNS(svgNS, "path");
         arrowPath.setAttribute("d", "M0,0 L10,3.5 L0,7");
-        arrowPath.setAttribute("fill", arrowColor);
+        arrowPath.setAttribute("fill", "var(--" + lineClass + ")");
         marker.appendChild(arrowPath);
         svgElement.appendChild(marker);
-
+    
+        // Create the line and apply the arrow marker
         const line = document.createElementNS(svgNS, "line");
         line.setAttribute("x1", boxRightX);
         line.setAttribute("y1", centerY);
         line.setAttribute("x2", lineEndX);
         line.setAttribute("y2", centerY);
-        line.setAttribute("stroke", arrowColor);
+        line.setAttribute("stroke", "var(--" + lineClass + ")");
         line.setAttribute("stroke-width", "2");
-        line.setAttribute("marker-end", `url(#arrow${index})`);
-
+        line.setAttribute("marker-end", `url(#arrow${index})`); // Apply the marker to the line
+    
         svgElement.appendChild(line);
+
+        // Create label above each line (0.01 / s)
+        const label = document.createElementNS(svgNS, "text");
+        label.setAttribute("x", (boxRightX + lineEndX) / 2);  // Position label in the middle of the line
+        label.setAttribute("y", centerY - 10);  // Position label slightly above the line
+        label.setAttribute("text-anchor", "middle");  // Center the text horizontally
+        label.setAttribute("fill", "var(--" + lineClass + ")");  // Set the text color to match the line
+        label.setAttribute("font-size", "14");
+        label.textContent = "0.01 / s";
+        
+        svgElement.appendChild(label);
     });
 
     const rightBoxHeight = bottomMostY - topMostY;
@@ -1341,7 +1408,7 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
     const rightBox = document.createElementNS(svgNS, "foreignObject");
     rightBox.setAttribute("x", rightOffset);
     rightBox.setAttribute("y", topMostY);
-    rightBox.setAttribute("width", boxWidth);
+    rightBox.setAttribute("width", boxWidth / 2);
     rightBox.setAttribute("height", rightBoxHeight);
 
     const rightBoxDiv = document.createElement("div");
@@ -1360,27 +1427,10 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
     innerDivRightBox.style.borderRadius = "10px";
     innerDivRightBox.style.backgroundColor = "var(--text-color)";
 
-    // const rightBoxText = document.createElement("div");
-    // rightBoxText.style.position = "absolute";
-    // rightBoxText.style.top = "50%";
-    // rightBoxText.style.left = "50%";
-    // rightBoxText.style.transform = "translate(-50%, -50%)";
-    // rightBoxText.style.color = "var(--text-color)";
-    // rightBoxText.style.fontSize = "16px";
-    // rightBoxText.style.fontFamily = "Arial";
-    // rightBoxText.style.textAlign = "center";
-    // rightBoxText.textContent = "Antimatter Storage";
-
-    // rightBoxDiv.appendChild(rightBoxText);
     rightBoxDiv.appendChild(innerDivRightBox);
     rightBox.appendChild(rightBoxDiv);
     svgElement.appendChild(rightBox);
 }
-
-
-
-
-
 
 
 export async function drawTechTree(techData, svgElement, renew) {
