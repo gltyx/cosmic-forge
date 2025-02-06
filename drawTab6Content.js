@@ -119,133 +119,46 @@ export function drawTab6Content(heading, optionContentElement) {
                     spaceBuildLaunchPadRow.classList.add('invisible');
                 }
 
-        const spaceRocket1BuildRow = createOptionRow(
-                    'spaceRocket1BuildRow',
-                    null,
-                    'Rocket Miner 1:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                        gain(1, 'rocket1BuiltPartsQuantity', 'rocket1', false, null, 'space', 'space')
-                    }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket1', 'cash', true, null, 'spaceMiningPurchase'),
-                    createTextElement(
-                        `Built: <span id="rocket1BuiltPartsQuantity">${getRocketParts('rocket1')}</span> / <span id="rocket1TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket('rocket1')}</span>`,
-                        'rocket1PartsCountText',
-                        []
-                      ),                      
-                    null,
-                    null,
-                    null,
-                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', 'rocket1', 'price'])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket1', 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource1Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket1', 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource2Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket1', 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket1', 'resource3Price'])[1])}`,
-                    '',
-                    'upgradeCheck',
-                    'spaceUpgrade',
-                    'rocket1',
-                    'cash',
-                    null,
-                    false,
-                    null,
-                    null,
-                    'spaceMiningPurchase'
-                );
-                optionContentElement.appendChild(spaceRocket1BuildRow);
-        
-                const spaceRocket2BuildRow = createOptionRow(
-                    'spaceRocket2BuildRow',
-                    null,
-                    'Rocket Miner 2:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                        gain(1, 'rocket2BuiltPartsQuantity', 'rocket2', false, null, 'space', 'space')
-                    }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket2', 'cash', true, null, 'spaceMiningPurchase'),
-                    createTextElement(
-                        `Built: <span id="rocket2BuiltPartsQuantity">${getRocketParts('rocket2')}</span> / <span id="rocket2TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket('rocket2')}</span>`,
-                        'rocket2PartsCountText',
-                        []
-                      ), 
-                    null,
-                    null,
-                    null,
-                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', 'rocket2', 'price'])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket2', 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource1Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket2', 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource2Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket2', 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket2', 'resource3Price'])[1])}`,
-                    '',
-                    'upgradeCheck',
-                    'spaceUpgrade',
-                    'rocket2',
-                    'cash',
-                    null,
-                    false,
-                    null,
-                    null,
-                    'spaceMiningPurchase'
-                );
-                optionContentElement.appendChild(spaceRocket2BuildRow);
+        const rockets = [
+            { id: 'rocket1', label: 'Rocket Miner 1' },
+            { id: 'rocket2', label: 'Rocket Miner 2' },
+            { id: 'rocket3', label: 'Rocket Miner 3' },
+            { id: 'rocket4', label: 'Rocket Miner 4' }
+        ];
 
-        const spaceRocket3BuildRow = createOptionRow(
-                    'spaceRocket3BuildRow',
-                    null,
-                    'Rocket Miner 3:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                        gain(1, 'rocket3BuiltPartsQuantity', 'rocket3', false, null, 'space', 'space')
-                    }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket3', 'cash', true, null, 'spaceMiningPurchase'),
-                    createTextElement(
-                        `Built: <span id="rocket3BuiltPartsQuantity">${getRocketParts('rocket3')}</span> / <span id="rocket3TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket('rocket3')}</span>`,
-                        'rocket3PartsCountText',
-                        []
-                      ),
-                    null,
-                    null,
-                    null,
-                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', 'rocket3', 'price'])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket3', 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource1Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket3', 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource2Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket3', 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket3', 'resource3Price'])[1])}`,
-                    '',
-                    'upgradeCheck',
-                    'spaceUpgrade',
-                    'rocket3',
-                    'cash',
-                    null,
-                    false,
-                    null,
-                    null,
-                    'spaceMiningPurchase'
-                );
-                optionContentElement.appendChild(spaceRocket3BuildRow);
-
-        const spaceRocket4BuildRow = createOptionRow(
-                    'spaceRocket4BuildRow',
-                    null,
-                    'Rocket Miner 4:',
-                    createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                        gain(1, 'rocket4BuiltPartsQuantity', 'rocket4', false, null, 'space', 'space')
-                    }, 'upgradeCheck', '', 'spaceUpgrade', 'rocket4', 'cash', true, null, 'spaceMiningPurchase'),
-                    createTextElement(
-                        `Built: <span id="rocket4BuiltPartsQuantity">${getRocketParts('rocket4')}</span> / <span id="rocket4TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket('rocket4')}</span>`,
-                        'rocket4PartsCountText',
-                        []
-                      ),
-                    null,
-                    null,
-                    null,
-                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', 'rocket4', 'price'])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket4', 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource1Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket4', 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource2Price'])[1])}, 
-                    ${getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[1])}`,
-                    '',
-                    'upgradeCheck',
-                    'spaceUpgrade',
-                    'rocket4',
-                    'cash',
-                    null,
-                    false,
-                    null,
-                    null,
-                    'spaceMiningPurchase'
-                );
-                optionContentElement.appendChild(spaceRocket4BuildRow);           
+        rockets.forEach(rocket => {
+            const rocketBuildRow = createOptionRow(
+                `space${capitaliseString(rocket.id)}BuildRow`,
+                null,
+                `${rocket.label}:`,
+                createButton(`Build Rocket Part`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+                    gain(1, `${rocket.id}BuiltPartsQuantity`, rocket.id, false, null, 'space', 'space')
+                }, 'upgradeCheck', '', 'spaceUpgrade', rocket.id, 'cash', true, null, 'spaceMiningPurchase'),
+                createTextElement(
+                    `Built: <span id="${rocket.id}BuiltPartsQuantity">${getRocketParts(rocket.id)}</span> / <span id="${rocket.id}TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket(rocket.id)}</span>`,
+                    `${rocket.id}PartsCountText`,
+                    []
+                ),
+                null,
+                null,
+                null,
+                `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', rocket.id, 'price'])}, 
+                ${getResourceDataObject('space', ['upgrades', rocket.id, 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', rocket.id, 'resource1Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', rocket.id, 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', rocket.id, 'resource2Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', rocket.id, 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', rocket.id, 'resource3Price'])[1])}`,
+                '',
+                'upgradeCheck',
+                'spaceUpgrade',
+                rocket.id,
+                'cash',
+                null,
+                false,
+                null,
+                null,
+                'spaceMiningPurchase'
+            );
+            optionContentElement.appendChild(rocketBuildRow);
+        });
     }
 
     if (heading === 'Rocket 1') createRocketUI('rocket1', optionContentElement, asteroids, asteroidsBeingMined);
@@ -534,4 +447,3 @@ function getQuantityClass(quantity) {
         return 'green-ready-text';
     }
 }
-
