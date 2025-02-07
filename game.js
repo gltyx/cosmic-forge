@@ -2171,7 +2171,7 @@ function resourceCostSellChecks(element) {
         setStateOfDescriptionLabelsForAutoBuyers(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
     } else {
         setStateOfDescriptionLabelsForBuildingAndOneOffSpacePurchases(element, price, quantity, resourceCategories, resourceNames, resourcePrices);
-    }     
+    } 
 
     if (resource !== 'energy' && resource !== 'spaceUpgrade' && resource !== 'scienceUpgrade' && resource !== 'cash' && resource !== 'time') {
         handleResourceRateStates(resource);
@@ -2181,8 +2181,10 @@ function resourceCostSellChecks(element) {
         handleRocketFuellingChecksAndOneOffPurchases(element, price);
         //add any more that need resource === cash
     } else if (resource === 'time') {
+        console.log('time element:')
+        console.lof(element);
         //should be handled in the timer itself
-    }
+    } 
 }
 
 function setPriceForAllPurchases(element, type, resource, scienceUpgradeType, buildingUpgradeType, spaceUpgradeType) {
@@ -2555,6 +2557,21 @@ function handleSpaceUpgradeResourceType(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
+
+    if ([...element.classList].some(cls => cls.includes('travel-to-asteroid-button'))) {
+        const currentScreen = getCurrentOptionPane();
+        if (getCurrentlyTravellingToAsteroid(currentScreen)) {
+            const timerElement = timerManager.getTimer(`${currentScreen}TravelToAsteroidTimer`);
+            if (timerElement) {
+                const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(currentScreen) / 1000);
+                const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
+                labelElement.classList.add('green-ready-text');
+                labelElement.classList.remove('notation');
+
+                labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
+            }
+        }
+    }
     
     if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
         return travelToAsteroidChecks(element);
@@ -4306,7 +4323,7 @@ export function fuelRockets() {
         const fuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
         const fullLevel = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch']);
 
-        if (rocketLaunchButton) {
+        if (rocketLaunchButton && [...rocketLaunchButton.classList].some(clas => clas.includes(rocket))) {
             rocketLaunchButton.classList.remove('invisible');
         }
 
