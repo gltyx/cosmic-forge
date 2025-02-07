@@ -2558,19 +2558,8 @@ function handleSpaceUpgradeResourceType(element) {
 
 function checkStatusAndSetTextClasses(element) {
 
-    if ([...element.classList].some(cls => cls.includes('travel-to-asteroid-button'))) {
-        const currentScreen = getCurrentOptionPane();
-        if (getCurrentlyTravellingToAsteroid(currentScreen)) {
-            const timerElement = timerManager.getTimer(`${currentScreen}TravelToAsteroidTimer`);
-            if (timerElement) {
-                const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(currentScreen) / 1000);
-                const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
-                labelElement.classList.add('green-ready-text');
-                labelElement.classList.remove('notation');
-
-                labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
-            }
-        }
+    if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
+        checkTravelToDescriptions();
     }
     
     if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
@@ -2607,6 +2596,21 @@ function checkStatusAndSetTextClasses(element) {
 
     if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
         return resourceCostSellChecks(element);  
+    }
+}
+
+function checkTravelToDescriptions() {
+    const currentScreen = getCurrentOptionPane();
+    if (getCurrentlyTravellingToAsteroid(currentScreen)) {
+        const timerElement = timerManager.getTimer(`${currentScreen}TravelToAsteroidTimer`);
+        if (timerElement) {
+            const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(currentScreen) / 1000);
+            const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
+            labelElement.classList.add('green-ready-text');
+            labelElement.classList.remove('notation');
+
+            labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
+        }
     }
 }
 
