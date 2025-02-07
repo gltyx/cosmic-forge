@@ -218,17 +218,14 @@ export function drawTab6Content(heading, optionContentElement) {
         optionContentElement.appendChild(asteroidLegendRow);
 
         const asteroidsBeingMined = getMiningObject();
-        Object.keys(asteroidsBeingMined).forEach(rocket => {
-            if (rocket !== null) {
-                const asteroidName = asteroidsBeingMined[rocket];
-                if (asteroidName) {
-                    setAsteroidArray()
-                    asteroidsBeingMined[rocket] = { name: asteroidName, beingMined: true };
-                } else {
-                    asteroidsBeingMined[rocket] = { name: null, beingMined: false };
-                }
+        let flaggedAsteroids = asteroidsArray.map(obj => {
+            const asteroidName = Object.keys(obj)[0];
+            if (Object.values(asteroidsBeingMined).includes(asteroidName)) {
+                obj[asteroidName].beingMined = true;
+            } else {
+                obj[asteroidName].beingMined = false;
             }
-
+            return obj;
         });
 
         flaggedAsteroids = sortAsteroidTable(flaggedAsteroids, getSortAsteroidMethod());
@@ -259,7 +256,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     ['value-asteroid', 'eoe-asteroid', easeOfExtraction[1]]
                 ),
                 createTextElement(
-                    `${quantity[0]}`,
+                    `${Math.floor(quantity[0])}`,
                     'asteroidInfoContainerQuantity',
                     ['value-asteroid', 'quantity-asteroid', quantity[1]]
                 ),                             

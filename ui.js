@@ -1226,7 +1226,7 @@ function setupTooltip(svgElement) {
         });
 }
 
-export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement) {
+export function drawAntimatterFlowDiagram(rocketData, svgElement) {
     const asteroidsArray = getAsteroidArray();
     const svgNS = "http://www.w3.org/2000/svg";
 
@@ -1285,7 +1285,7 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
         if (topMostY === null) topMostY = yOffset;
         bottomMostY = yOffset + boxHeight;
     
-        const rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
+        let rocketInfo = rocketData[(rocket.slice(0, rocket.length - 2) + (index + 1)).toLowerCase()];
 
         let asteroid;
         if (rocketInfo) {
@@ -1298,7 +1298,7 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
             ['', `Rocket ${index + 1}`],
             ["Asteroid:", rocketInfo[1]],
             ["Complexity:", rocketInfo[2]],
-            ["Antimatter Left:", rocketInfo[4]]
+            ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
             ['', `Rocket ${index + 1}`],
             ["Not at Asteroid"],
@@ -1306,21 +1306,21 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
             ["", ""]
         ];
 
-        let colorClass;
+        let easeOfExtractionColorClass;
 
         if (asteroid) {
             switch (asteroid.easeOfExtraction[1]) {
                 case 'warning-orange-text':
-                    colorClass = 'warning-text';
+                    easeOfExtractionColorClass = 'warning-text';
                     break;
                 case 'red-disabled-text':
-                    colorClass = 'disabled-text';
+                    easeOfExtractionColorClass = 'disabled-text';
                     break;
                 case 'green-ready-text':
-                    colorClass = 'ready-text';
+                    easeOfExtractionColorClass = 'ready-text';
                     break;
                 default:
-                    colorClass = 'var(--text-color)';
+                    easeOfExtractionColorClass = 'var(--text-color)';
                     break;
             }
         }
@@ -1359,12 +1359,18 @@ export function drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTot
                 labelCell.style.color = "var(--disabled-text)";
             }
 
+            let antimatterColorClass = 'var(--text-color)';
+            
+            if (asteroid) {
+                antimatterColorClass = asteroid.quantity[1];
+            }
+
             if (rowIndex < 2) {
                 valueCell.style.color = `var(--${lineClass})`;
             } else if (rowIndex === 2) {
-                valueCell.style.color = `var(--${colorClass})`;
+                valueCell.style.color = `var(--${easeOfExtractionColorClass})`;
             } else if (rowIndex === 3) {
-                valueCell.style.color = `var(--text-color)`; // Add color of Antimatter logic here
+                valueCell.style.color = `var(--${antimatterColorClass})`;
             }
     
             row.appendChild(valueCell);

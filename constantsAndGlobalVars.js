@@ -1470,8 +1470,13 @@ export function getRocketsBuilt() {
     return rocketsBuilt;
 }
 
-export function changeAsteroidArray(key, value) {
-    asteroidArray[key] = value;
+export function changeAsteroidArray(key, property, value) {
+    for (let obj of asteroidArray) {
+        if (obj.hasOwnProperty(key)) {
+            obj[key][property] = value;
+            return;
+        }
+    }
 }
 
 export function setAsteroidArray(value) {
