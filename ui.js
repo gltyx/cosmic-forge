@@ -2302,7 +2302,7 @@ function addWackyEffectsEventListeners() {
             case 'bounce':
                 targetElement = prizeTickerSpan.parentElement.parentElement;
                 newAnimation += ', bounceAnimation 1s infinite ease-in-out';
-                prizeTickerSpan.style.opacity = '0.5';
+                prizeTickerSpan.style.opacity = '0.8';
                 break;
             case 'fade':
                 newAnimation += ', fadeAnimation 1s infinite alternate';

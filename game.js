@@ -1,4 +1,5 @@
 import {
+    changeAsteroidArray,
     setAntimatterUnlocked,
     getAntimatterUnlocked,
     setMiningObject,
@@ -324,7 +325,7 @@ export async function gameLoop() {
         checkPowerForAsteroidTimer();
 
         monitorTechTree();
-        monitorAntimatterDiagram();
+        updateAntimatterAndDiagram();
         
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
@@ -1616,31 +1617,56 @@ function monitorRevealCompoundsCheck() {
     }
 }
 
-function monitorAntimatterDiagram() {
+function updateAntimatterAndDiagram() {
+    const antimatterTotalQuantity = getResourceDataObject('antimatter', ['quantity']);
+    const antimatterTotalRate = getResourceDataObject('antimatter', ['rate']);
+
+    const miningObject = getMiningObject();
+    const asteroidsBeingMined = getAsteroidArray();
+    
+    asteroidsBeingMined.forEach(obj => {
+        const asteroidName = Object.keys(obj)[0];
+        const isBeingMined = Object.values(miningObject).includes(asteroidName);
+    
+        if (obj[asteroidName]) {
+            obj[asteroidName].beingMined = isBeingMined;
+            changeAsteroidArray(asteroidName, obj[asteroidName].beingMined);
+            console.log(getAsteroidArray());
+        }
+    });
+
+    const rocketData = {};
+    let totalAntimatterExtractionRate = 0;
+
+    for (let i = 1; i <= 4; i++) {
+        const rocketKey = getMiningObject()[`rocket${i}`];
+        const asteroid = getAsteroidArray().find(asteroid => asteroid[rocketKey])?.[rocketKey];
+
+        if (asteroid) {
+            rocketData[`rocket${i}`] = [
+                `Rocket ${i}`,
+                asteroid.name,
+                asteroid.easeOfExtraction[0],
+                getSpecificAsteroidExtractionRate(asteroid),
+                asteroid.quantity[0]
+            ];
+        } else {
+            rocketData[`rocket${i}`] = null;
+        }
+
+        if(asteroid && asteroid.beingMined) {
+            //deduct antimatter available on asteroid rounded to nearest number
+            //add rate to a total rate
+            totalAntimatterExtractionRate += rocketData[`rocket${i}`][3];
+        }
+    } 
+    setResourceDataObject(totalAntimatterExtractionRate, 'antimatter', ['rate']);
+    //console.log(getResourceDataObject('antimatter', ['rate']));
+
+
+
     if (getCurrentOptionPane() === 'antimatter') {
-        const antimatterTotalQuantity = getResourceDataObject('antimatter', ['quantity']);
-        const antimatterTotalRate = getResourceDataObject('antimatter', ['rate']);
         const svgElement = document.getElementById('antimatterSvg');
-        const rocketData = {};
-        //console.log(JSON.stringify(getAsteroidArray(), null, 2));
-
-        for (let i = 1; i <= 4; i++) {
-            const rocketKey = getMiningObject()[`rocket${i}`];
-            const asteroid = getAsteroidArray().find(asteroid => asteroid[rocketKey])?.[rocketKey];
-
-            if (asteroid) {
-                rocketData[`rocket${i}`] = [
-                    `Rocket ${i}`,
-                    asteroid.name,
-                    asteroid.easeOfExtraction[0],
-                    getSpecificAsteroidExtractionRate(asteroid),
-                    asteroid.quantity[0]
-                ];
-            } else {
-                rocketData[`rocket${i}`] = null;
-            }
-        }        
-        
         drawAntimatterFlowDiagram(antimatterTotalQuantity, antimatterTotalRate, rocketData, svgElement);  
     }      
 }
@@ -2923,6 +2949,14 @@ function startInitialTimers() {
     const compounds = getResourceDataObject('compounds');
     const rockets = Object.fromEntries(Object.entries(getResourceDataObject('space', ['upgrades'])).filter(([key, value]) => key.includes('rocket')));
     const tiers = [1, 2, 3, 4];
+
+    timerManager.addTimer('antimatter', getTimerUpdateInterval(), () => {
+        const currentAntimatterQuantity = getResourceDataObject('antimatter', ['quantity']);
+        const currentAntimatterRate = getResourceDataObject('antimatter', ['rate']);
+        if (getAntimatterUnlocked()) {
+            setResourceDataObject(currentAntimatterQuantity + currentAntimatterRate, 'antimatter', ['quantity']);
+        }
+    });
 
     for (const rocket in rockets) {
         if (rockets.hasOwnProperty(rocket)) {
@@ -4582,6 +4616,7 @@ function generateAsteroidData(name) {
             rarity: [rarity, rarityClass],
             easeOfExtraction: [easeOfExtraction, easeClass],
             quantity: [quantity, quantityClass],
+            beingMined: false,
             specialName: specialName
         }
     };

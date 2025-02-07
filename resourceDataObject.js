@@ -683,7 +683,8 @@ export let resourceData = {
     },
     antimatter: {
         quantity: 0,
-        rate: 0
+        rate: 0,
+        storageCapacity: 100000
     },
 };
 

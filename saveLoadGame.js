@@ -248,7 +248,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 if (!saveData.antimatter) {
                     saveData.antimatter = {
                         quantity: 0,
-                        rate: 0
+                        rate: 0,
+                        storageCapacity: 100000
                     }
                 }
             } else if (objectType === 'starSystemsData') {

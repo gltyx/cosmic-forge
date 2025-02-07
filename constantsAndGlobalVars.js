@@ -1470,6 +1470,10 @@ export function getRocketsBuilt() {
     return rocketsBuilt;
 }
 
+export function changeAsteroidArray(key, value) {
+    asteroidArray[key] = value;
+}
+
 export function setAsteroidArray(value) {
     asteroidArray.push(value);
 }

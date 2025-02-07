@@ -1,4 +1,4 @@
-import { getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject } from './constantsAndGlobalVars.js';
+import { getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray } from './constantsAndGlobalVars.js';
 import { timerManager, startTravelToAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
@@ -218,14 +218,17 @@ export function drawTab6Content(heading, optionContentElement) {
         optionContentElement.appendChild(asteroidLegendRow);
 
         const asteroidsBeingMined = getMiningObject();
-        let flaggedAsteroids = asteroidsArray.map(obj => {
-            const asteroidName = Object.keys(obj)[0];
-            if (Object.values(asteroidsBeingMined).includes(asteroidName)) {
-                obj[asteroidName].beingMined = true;
-            } else {
-                obj[asteroidName].beingMined = false;
+        Object.keys(asteroidsBeingMined).forEach(rocket => {
+            if (rocket !== null) {
+                const asteroidName = asteroidsBeingMined[rocket];
+                if (asteroidName) {
+                    setAsteroidArray()
+                    asteroidsBeingMined[rocket] = { name: asteroidName, beingMined: true };
+                } else {
+                    asteroidsBeingMined[rocket] = { name: null, beingMined: false };
+                }
             }
-            return obj;
+
         });
 
         flaggedAsteroids = sortAsteroidTable(flaggedAsteroids, getSortAsteroidMethod());
