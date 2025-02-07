@@ -2559,7 +2559,7 @@ function handleSpaceUpgradeResourceType(element) {
 function checkStatusAndSetTextClasses(element) {
 
     if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
-        checkTravelToDescriptions();
+        checkTravelToDescriptions(element); //not return as this does not affect element and so still need to check element
     }
     
     if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
@@ -2599,16 +2599,14 @@ function checkStatusAndSetTextClasses(element) {
     }
 }
 
-function checkTravelToDescriptions() {
-    const currentScreen = getCurrentOptionPane();
-    if (getCurrentlyTravellingToAsteroid(currentScreen)) {
-        const timerElement = timerManager.getTimer(`${currentScreen}TravelToAsteroidTimer`);
+function checkTravelToDescriptions(element) {
+    const rocket = getCurrentOptionPane(); //only applicable if on a rocket screen, which we are by this point
+    if (getCurrentlyTravellingToAsteroid(rocket)) {
+        const timerElement = timerManager.getTimer(`${rocket}TravelToAsteroidTimer`);
         if (timerElement) {
-            const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(currentScreen) / 1000);
+            const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
             const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
             labelElement.classList.add('green-ready-text');
-            labelElement.classList.remove('notation');
-
             labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
         }
     }
