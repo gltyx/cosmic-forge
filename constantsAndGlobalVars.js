@@ -34,6 +34,7 @@ export const BUILDING_TYPES = ['energy'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
+export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -74,6 +75,7 @@ let originalFrameNumbers = {};
 let baseSearchTimerDuration = 180000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
+let oldAntimatterSvgData = null;
 
 let miningObject = {
     rocket1: null,
@@ -177,6 +179,8 @@ let currentlySearchingAsteroid = false;
 let telescopeReadyToSearch = true;
 let asteroidTimerCanContinue = false;
 let antimatterUnlocked = false;
+let isAntimatterBoostActive = false;
+let antimatterSvgEventListeners = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1657,6 +1661,35 @@ export function getAntimatterUnlocked() {
 export function setAntimatterUnlocked(value) {
     antimatterUnlocked = value;
 }
+
+export function getNormalMaxAntimatterRate() {
+    return NORMAL_MAX_ANTIMATTER_RATE;
+}
+
+export function getHasAntimatterSvgDataChanged(newAntimatterSvgData) {
+    return JSON.stringify(newAntimatterSvgData) !== JSON.stringify(oldAntimatterSvgData);
+}
+
+export function setHasAntimatterSvgDataChanged(value) {
+    oldAntimatterSvgData = value;
+}
+
+export function getIsAntimatterBoostActive() {
+    return isAntimatterBoostActive;
+}
+
+export function setIsAntimatterBoostActive(value) {
+    isAntimatterBoostActive = value;
+}
+
+export function getAntimatterSvgEventListeners() {
+    return antimatterSvgEventListeners;
+}
+
+export function setAntimatterSvgEventListeners(value) {
+    antimatterSvgEventListeners = value;
+}
+
 
 
 

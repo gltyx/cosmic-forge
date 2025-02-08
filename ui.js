@@ -1,5 +1,8 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setHasAntimatterSvgDataChanged,
+    getHasAntimatterSvgDataChanged,
+    getNormalMaxAntimatterRate,
     getMiningObject,
     getImageUrls,
     setUnlockedCompoundsArray,
@@ -81,7 +84,8 @@ import {
     offlineGains,
     startNewsTickerTimer,
     getBatteryLevel,
-    toggleAllPower
+    toggleAllPower,
+    boostAntimatterRate
 } from './game.js';
 
 // import {
@@ -186,8 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     powerAllButton.addEventListener('click', () => {
         toggleAllPower();
     });
-    
-    
+     
     window.addEventListener('resize', () => {
         if (getCurrentOptionPane()) {
             const starContainer = document.querySelector('#optionContentTab5');
@@ -201,6 +204,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             setLastSavedTimeStamp(new Date().toISOString());
         } else {
             offlineGains(true);
+        }
+    });
+
+    document.addEventListener('mousedown', (e) => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (e.target && e.target.id === 'svgRateBarOuter') {
+                boostAntimatterRate(true, false);
+            }
+        }
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (e.target && e.target.id === 'svgRateBarOuter') {
+                boostAntimatterRate(false, false);
+            }
         }
     });
 
@@ -1228,9 +1247,12 @@ function setupTooltip(svgElement) {
 
 export function drawAntimatterFlowDiagram(rocketData, svgElement) {
     const asteroidsArray = getAsteroidArray();
-    const svgNS = "http://www.w3.org/2000/svg";
+    const svgNS = "http://www.w3.org/2000/svg";  
 
-    // Clear existing content in the SVG
+    if (!getHasAntimatterSvgDataChanged(svgElement)) {
+        return;
+    }  
+
     while (svgElement.firstChild) {
         svgElement.removeChild(svgElement.firstChild);
     }
@@ -1433,28 +1455,131 @@ export function drawAntimatterFlowDiagram(rocketData, svgElement) {
     rightBox.setAttribute("y", topMostY);
     rightBox.setAttribute("width", boxWidth / 2);
     rightBox.setAttribute("height", rightBoxHeight);
+    rightBox.setAttribute("id", 'svgRateBar');
 
-    const rightBoxDiv = document.createElement("div");
-    rightBoxDiv.style.position = "relative";
-    rightBoxDiv.style.width = "100%";
-    rightBoxDiv.style.height = "100%";
-    rightBoxDiv.style.border = "2px solid var(--text-color)";
-    rightBoxDiv.style.borderRadius = "10px";
-    rightBoxDiv.style.backgroundColor = "var(--bg-color)";
+    const boostTextContainer = document.createElement("div");
+    boostTextContainer.style.position = "absolute";
+    boostTextContainer.style.top = "10px";
+    boostTextContainer.style.left = "50%";
+    boostTextContainer.style.transform = "translateX(-50%)";
+    boostTextContainer.style.textAlign = "center";
+    boostTextContainer.style.color = "var(--text-color)";
+    boostTextContainer.style.fontSize = "20px";
+    boostTextContainer.style.fontWeight = "bold";
+    boostTextContainer.style.pointerEvents = 'none';
+    boostTextContainer.setAttribute("id", 'boostTextContainer');
 
-    const innerDivRightBox = document.createElement("div");
-    innerDivRightBox.style.position = "absolute";
-    innerDivRightBox.style.bottom = "0";
-    innerDivRightBox.style.width = "100%";
-    innerDivRightBox.style.height = "50%";
-    innerDivRightBox.style.borderRadius = "10px";
-    innerDivRightBox.style.backgroundColor = "var(--text-color)";
+    const rightArrowLine = document.createElement("div");
+    rightArrowLine.innerText = "🢃";
+    boostTextContainer.appendChild(rightArrowLine);
 
-    rightBoxDiv.appendChild(innerDivRightBox);
-    rightBox.appendChild(rightBoxDiv);
+    const boostWordLine = document.createElement("div");
+    boostWordLine.innerText = "BOOST";
+    boostTextContainer.appendChild(boostWordLine);
+
+    const leftArrowLine = document.createElement("div");
+    leftArrowLine.innerText = "🢁";
+    boostTextContainer.appendChild(leftArrowLine);
+
+    boostTextContainer.style.opacity = "0";
+    boostTextContainer.style.visibility = "hidden";
+    boostTextContainer.style.transition = "opacity 0.3s ease, visibility 0.3s ease";
+
+    const antimatterRateBarOuter = document.createElement("div");
+    antimatterRateBarOuter.style.position = "relative";
+    antimatterRateBarOuter.style.width = "100%";
+    antimatterRateBarOuter.style.height = "100%";
+    antimatterRateBarOuter.style.border = "2px solid var(--text-color)";
+    antimatterRateBarOuter.style.borderRadius = "10px";
+    antimatterRateBarOuter.style.backgroundColor = "var(--bg-color)";
+    antimatterRateBarOuter.style.transition = "background-color 0.3s ease-in-out";
+    antimatterRateBarOuter.setAttribute("id", 'svgRateBarOuter');
+
+    const antimatterTotalRate = getResourceDataObject('antimatter', ['rate']);
+    const antimatterMaxRate = getNormalMaxAntimatterRate() * 10;
+    
+    const antimatterPercentage = (antimatterTotalRate / antimatterMaxRate) * 50;
+    const antimatterRateBarInner = document.createElement("div");
+    antimatterRateBarInner.style.position = "absolute";
+    antimatterRateBarInner.style.bottom = "0";
+    antimatterRateBarInner.style.width = "100%";
+    antimatterRateBarInner.style.height = `${Math.min(50, Math.max(0, antimatterPercentage))}%`;
+    antimatterRateBarInner.style.borderRadius = "10px";
+    antimatterRateBarInner.style.backgroundColor = "var(--text-color)";
+    antimatterRateBarInner.setAttribute("id", 'svgRateBarInner');
+
+    const scaleContainer = document.createElement("div");
+    scaleContainer.style.display = "flex";
+    scaleContainer.style.flexDirection = "column";
+    scaleContainer.style.justifyContent = "space-between";
+    scaleContainer.style.alignItems = "flex-end";
+    scaleContainer.style.width = "100%";
+    scaleContainer.style.color = "var(--text-color)";
+    scaleContainer.style.fontSize = "12px";
+    
+    for (let i = 0; i <= 4; i++) {  
+        const scaleLabel = document.createElement("div");
+        scaleLabel.innerText = `${(antimatterMaxRate * ((4 - i) / 4) * getTimerRateRatio()).toFixed(2)} / s`;
+        scaleLabel.style.position = "absolute";
+        scaleLabel.style.right = "5px";
+        
+        let topOffset = (i / 4) * 100;
+        
+        if (i === 0) {
+            topOffset += 2;
+        } else if (i === 4) {
+            topOffset -= 2;
+        }
+    
+        scaleLabel.style.top = `${topOffset}%`;
+        scaleLabel.style.transform = "translateY(-50%)";
+        scaleLabel.style.whiteSpace = "nowrap";
+        scaleContainer.appendChild(scaleLabel);
+    }
+    
+    const scaleForeignObject = document.createElementNS(svgNS, "foreignObject");
+    scaleForeignObject.setAttribute("x", rightOffset + (boxWidth / 2) - 20);
+    scaleForeignObject.setAttribute("y", topMostY + (rightBoxHeight / 2));
+    scaleForeignObject.setAttribute("width", 80);
+    scaleForeignObject.setAttribute("height", rightBoxHeight / 2);
+    scaleForeignObject.appendChild(scaleContainer);
+
+    svgElement.appendChild(scaleForeignObject);
+    antimatterRateBarOuter.appendChild(antimatterRateBarInner);
+    rightBox.appendChild(antimatterRateBarOuter);
+    rightBox.appendChild(boostTextContainer);
     svgElement.appendChild(rightBox);
-}
 
+    document.getElementById('svgRateBar').addEventListener("mouseenter", () => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (antimatterRateBarOuter) {
+                antimatterRateBarOuter.style.backgroundColor = `rgba(var(--text-color-rgb), 0.2)`;
+            }
+            if (boostTextContainer) {
+                boostTextContainer.style.visibility = 'visible';
+                boostTextContainer.style.opacity = "1";
+            }
+        }
+    });
+    
+    document.getElementById('svgRateBar').addEventListener("mouseleave", () => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (antimatterRateBarOuter) {
+                antimatterRateBarOuter.style.backgroundColor = "var(--bg-color)";
+            }
+            if (boostTextContainer) {
+                boostTextContainer.style.opacity = "0";
+                boostTextContainer.style.visibility = 'hidden';     
+            }
+        }
+    });
+
+    antimatterRateBarOuter.addEventListener('mouseleave', (e) => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            boostAntimatterRate(false, true);
+        }
+    });
+}
 
 export async function drawTechTree(techData, svgElement, renew) {
     const cachedTree = getRenderedTechTree();
@@ -1874,6 +1999,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            setHasAntimatterSvgDataChanged(null);
             setLastScreenOpenRegister('tab6', 'antimatter');
             setCurrentOptionPane('antimatter');
             updateContent('Antimatter', 'tab6', 'content');

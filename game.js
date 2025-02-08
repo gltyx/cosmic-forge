@@ -1,4 +1,7 @@
 import {
+    getIsAntimatterBoostActive,
+    setIsAntimatterBoostActive,
+    getNormalMaxAntimatterRate,
     changeAsteroidArray,
     setAntimatterUnlocked,
     getAntimatterUnlocked,
@@ -117,6 +120,7 @@ import {
     getNotationType,
     getTechTreeData,
     getSaveName,
+    setHasAntimatterSvgDataChanged,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -1619,7 +1623,6 @@ function monitorRevealCompoundsCheck() {
 
 function updateAntimatterAndDiagram() {
     const antimatterTotalQuantity = getResourceDataObject('antimatter', ['quantity']);
-
     const miningObject = getMiningObject();
     const asteroidsBeingMined = getAsteroidArray();
     
@@ -1654,13 +1657,23 @@ function updateAntimatterAndDiagram() {
 
         if (asteroid && asteroid.beingMined) {
             let quantityAntimatterClass = 'none';
-            totalAntimatterExtractionRate += rocketData[`rocket${i}`][3];
+            let extractionRate = rocketData[`rocket${i}`][3];
+            if (getIsAntimatterBoostActive()) {
+                extractionRate *= 2;
+            }
+            totalAntimatterExtractionRate += extractionRate;
+
             getElements().antimatterRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
             getElements().antimatterQuantity.innerText = `${Math.floor(antimatterTotalQuantity)}`;
             
-            const newQuantityAntimatterAsteroid = asteroid.quantity[0] - rocketData[`rocket${i}`][3];
+            let newQuantityAntimatterAsteroid = asteroid.quantity[0] - extractionRate;
             const quantityPercentage = (newQuantityAntimatterAsteroid / asteroid.originalQuantity) * 100;
         
+            if (quantityPercentage <= 0) {
+                newQuantityAntimatterAsteroid = 0;
+                totalAntimatterExtractionRate -= extractionRate;
+            }
+
             if (quantityPercentage > 90) {
                 quantityAntimatterClass = 'ready-text';
             } else if (quantityPercentage > 50) {
@@ -1674,17 +1687,26 @@ function updateAntimatterAndDiagram() {
             changeAsteroidArray(asteroid.name, "quantity", [newQuantityAntimatterAsteroid, quantityAntimatterClass]);
         }
     } 
+
     setResourceDataObject(totalAntimatterExtractionRate, 'antimatter', ['rate']);
 
     if (getCurrentOptionPane() === 'antimatter') {
         const svgElement = document.getElementById('antimatterSvg');
-        drawAntimatterFlowDiagram(rocketData, svgElement);  
-    }      
+        drawAntimatterFlowDiagram(rocketData, svgElement);
+        setHasAntimatterSvgDataChanged(svgElement);
+    }     
+}
+
+function toggleBoost() {
+    // Toggle the boost flag based on the user's action (click/hold/etc.)
+    isBoostActive = !isBoostActive;
+    console.log(isBoostActive ? 'Boost active' : 'Boost inactive');
 }
 
 
+
 function getSpecificAsteroidExtractionRate(asteroid) {
-    const maxRate = 0.01;
+    const maxRate = getNormalMaxAntimatterRate();
     const minRate = 0.0001;
     const maxEase = 1;
     const minEase = 10;
@@ -4700,6 +4722,29 @@ function generateLegendaryAsteroidName(commanderName) {
 
     return asteroidName;
 }
+
+export function boostAntimatterRate(start, mouseLeave) {
+    const rateBarInner = document.getElementById('svgRateBarInner');
+    const boostText = document.getElementById('boostTextContainer');
+    const svgRateBarOuter = document.getElementById('svgRateBarOuter');
+    
+    if (rateBarInner) {
+        if (start) {
+            console.log('starting boost');
+            setIsAntimatterBoostActive(true);
+            boostText.style.color = 'var(--ready-text)';
+            svgRateBarOuter.style.backgroundColor = `rgba(var(--text-color-rgb), 0.6)`;
+            rateBarInner.style.height = `${parseFloat(rateBarInner.style.height) * 2}%`;
+            rateBarInner.style.backgroundColor = "var(--ready-text)";
+        } else {
+                setIsAntimatterBoostActive(false);
+                setHasAntimatterSvgDataChanged(null);  
+        }
+    } else {
+        console.error('Rate bar inner element not found!');
+    }
+}
+
 
 
 //===============================================================================================================

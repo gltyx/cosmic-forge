@@ -393,6 +393,7 @@ button {
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;
+    --text-color-rgb: 255, 255, 255;
     --text-hover-color: #ddd;
     --text-focus-color: #eee;
     --tab-bg-color: #444;
@@ -416,6 +417,7 @@ button {
     --warning-text: orange;
     --bg-color: white;
     --text-color: black;
+    --text-color-rgb: 0, 0, 0;
     --text-hover-color: #666;
     --text-focus-color: #333;
     --tab-bg-color: #f0f0f0;
@@ -439,6 +441,7 @@ button {
     --warning-text: orange;
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
+    --text-color-rgb: 18, 159, 219;
     --text-hover-color: #0e7aa8;
     --text-focus-color: #0e7aa8;
     --tab-bg-color: #b0e0e6;
@@ -462,6 +465,7 @@ button {
     --warning-text: orange;
     --bg-color: #fffae6;
     --text-color: #8e5122;
+    --text-color-rgb: 142, 81, 34;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
     --tab-bg-color: #e4c066;
@@ -485,6 +489,7 @@ button {
     --warning-text: orange;
     --bg-color: #2f4f4f;
     --text-color: #7a4118;
+    --text-color-rgb: 122, 65, 24;
     --text-hover-color: #91ca2e;
     --text-focus-color: #32a132;
     --tab-bg-color: #1fa51f;
@@ -508,6 +513,7 @@ button {
     --warning-text: orange;
     --bg-color: black;
     --text-color: lime;
+    --text-color-rgb: 0, 255, 0;
     --text-hover-color: #fff;
     --text-focus-color: #fff;
     --tab-bg-color: #111;
@@ -531,6 +537,7 @@ button {
     --warning-text: orange;
     --bg-color: #000;
     --text-color: #c4c4c4;
+    --text-color-rgb: 196, 196, 196;
     --text-hover-color: #ccc;
     --text-focus-color: #fff;
     --tab-bg-color: #333;
