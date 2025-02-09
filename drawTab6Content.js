@@ -280,7 +280,7 @@ export function drawTab6Content(heading, optionContentElement) {
     
     if (heading === 'Antimatter') {
             const antimatterSvgRow = createOptionRow(
-                'techTreeSvgRow',
+                'antimatterSvgRow',
                 null,
                 '',
                 createSvgElement('antimatterSvg', '100%', '700px', ['antimatter-svg']),

@@ -1288,11 +1288,11 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
     const boxHeight = verticalSpacing * 0.8;
 
     let lineClasses = [
-        getMiningObject().rocket1 ? "ready-text" : "disabled-text",
-        getMiningObject().rocket2 ? "ready-text" : "disabled-text",
-        getMiningObject().rocket3 ? "ready-text" : "disabled-text",
-        getMiningObject().rocket4 ? "ready-text" : "disabled-text"
-    ];    
+        getMiningObject().rocket1 === "refuel" ? "warning-text" : (getMiningObject().rocket1 ? "ready-text" : "disabled-text"),
+        getMiningObject().rocket2 === "refuel" ? "warning-text" : (getMiningObject().rocket2 ? "ready-text" : "disabled-text"),
+        getMiningObject().rocket3 === "refuel" ? "warning-text" : (getMiningObject().rocket3 ? "ready-text" : "disabled-text"),
+        getMiningObject().rocket4 === "refuel" ? "warning-text" : (getMiningObject().rocket4 ? "ready-text" : "disabled-text")
+    ];       
 
     const titleContainer = document.createElementNS(svgNS, "foreignObject");
     titleContainer.setAttribute("x", "0px");
@@ -1342,10 +1342,11 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
             ['', `Rocket ${index + 1}`],
-            ["Not at Asteroid"],
+            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid"],
             ["", ""],
             ["", ""]
         ];
+        
 
         let easeOfExtractionColorClass;
 
@@ -1398,6 +1399,8 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
     
             if (label === "Not at Asteroid") {
                 labelCell.style.color = "var(--disabled-text)";
+            } else if (label === "Requires Refuelling") { //add a hidden refuel button to the box further up, and then show it at this point
+                labelCell.style.color = "var(--warning-text)";
             }
 
             let antimatterColorClass = 'var(--text-color)';

@@ -1663,9 +1663,6 @@ function updateAntimatterAndDiagram() {
                 extractionRate *= 2;
             }
             totalAntimatterExtractionRate += extractionRate;
-
-            getElements().antimatterRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
-            getElements().antimatterQuantity.innerText = `${Math.floor(antimatterTotalQuantity)}`;
             
             let newQuantityAntimatterAsteroid = asteroid.quantity[0] - extractionRate;
             const quantityPercentage = (newQuantityAntimatterAsteroid / asteroid.originalQuantity) * 100;
@@ -1673,7 +1670,12 @@ function updateAntimatterAndDiagram() {
             if (quantityPercentage <= 0) {
                 newQuantityAntimatterAsteroid = 0;
                 totalAntimatterExtractionRate -= extractionRate;
+                rocketData[`rocket${i}`][3] = 0;
+                setMiningObject(`rocket${i}`, 'refuel'); //TODO reset rocket for refuelling
             }
+ 
+            getElements().antimatterRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
+            getElements().antimatterQuantity.innerText = `${Math.floor(antimatterTotalQuantity)}`;
 
             if (quantityPercentage > 90) {
                 quantityAntimatterClass = 'ready-text';

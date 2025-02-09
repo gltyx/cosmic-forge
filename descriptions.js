@@ -55,7 +55,7 @@ export function initialiseDescriptions() {
 
         'star map': "This is a map of the known galaxy.",
 
-        'antimatter': "See the antimatter your Rocket Miners are accumulating",
+        'antimatter': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
@@ -789,7 +789,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         antimatterSvgRow: {
-            content1: "This shows Antimatter being produced, where, and by which Rocket Miner.",
+            content1: "Hold down the Antimatter rate bar to increase production!",
             content2: "",
             updateAt: ""
         },
