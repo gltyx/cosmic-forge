@@ -1695,6 +1695,7 @@ function updateAntimatterAndDiagram() {
 
     if (getCurrentOptionPane() === 'antimatter') {
         const svgElement = document.getElementById('antimatterSvg');
+
         drawAntimatterFlowDiagram(rocketData, svgElement);
         const rateBars = Array.from(svgElement.children).filter(child => child.id === 'svgRateBar');
         
@@ -1703,6 +1704,7 @@ function updateAntimatterAndDiagram() {
         }
         
         setHasAntimatterSvgRightBoxDataChanged(svgElement);
+        
     }     
 }
 
@@ -4745,6 +4747,10 @@ export function boostAntimatterRate(start, mouseLeave) {
     } else {
         console.error('Rate bar inner element not found!');
     }
+}
+
+export function resetRocketForRefuelling(rocket) {
+    console.log('refuel button pressed for ' + rocket);
 }
 
 

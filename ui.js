@@ -85,7 +85,8 @@ import {
     startNewsTickerTimer,
     getBatteryLevel,
     toggleAllPower,
-    boostAntimatterRate
+    boostAntimatterRate,
+    resetRocketForRefuelling,
 } from './game.js';
 
 // import {
@@ -1269,7 +1270,7 @@ function setupTooltip(svgElement) {
         });
 }
 
-function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
+function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svgNS) {
     Array.from(svgElement.children).forEach(child => {
         if (child.id !== 'svgRateBar' && child.id !== 'svgRightScaleContainer') {
             svgElement.removeChild(child);
@@ -1311,7 +1312,7 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
     titleDiv.style.color = "var(--text-color)";
     titleDiv.style.fontFamily = "var(--font-family)";
     titleDiv.style.textAlign = "center";
-    titleDiv.textContent = "Antimatter Mining";
+    titleDiv.innerHTML = "Antimatter Mining";
 
     titleContainer.appendChild(titleDiv);
     svgElement.appendChild(titleContainer);
@@ -1342,11 +1343,10 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
             ['', `Rocket ${index + 1}`],
-            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid"],
+            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid", null],
             ["", ""],
             ["", ""]
         ];
-        
 
         let easeOfExtractionColorClass;
 
@@ -1388,19 +1388,33 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
             const row = document.createElement("tr");
     
             const labelCell = document.createElement("td");
-            labelCell.textContent = label;
+            labelCell.innerHTML = label;
             labelCell.style.fontWeight = "bold";
             labelCell.style.textAlign = "left";
             row.appendChild(labelCell);
     
             const valueCell = document.createElement("td");
-            valueCell.textContent = value;
+            valueCell.innerHTML = value;
             valueCell.style.textAlign = "left";
+
+            if (value instanceof HTMLElement) { 
+                valueCell.innerHTML = ""; 
+                valueCell.appendChild(value);
+            } else {
+                valueCell.innerHTML = value;
+            }
     
-            if (label === "Not at Asteroid") {
-                labelCell.style.color = "var(--disabled-text)";
-            } else if (label === "Requires Refuelling") { //add a hidden refuel button to the box further up, and then show it at this point
-                labelCell.style.color = "var(--warning-text)";
+            if (label === "Not at Asteroid" || label === "Requires Refuelling") {
+                labelCell.style.color = label === "Not at Asteroid" 
+                    ? "var(--disabled-text)" 
+                    : "var(--warning-text)";
+
+                const refuelButton = createRefuelButton(`rocket${index + 1}`);
+                if (refuelButton) {
+                    valueCell.appendChild(refuelButton);
+                }
+            } else {
+                valueCell.innerHTML = value;
             }
 
             let antimatterColorClass = 'var(--text-color)';
@@ -1462,9 +1476,9 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
         label.setAttribute("fill", "var(--" + lineClass + ")");
         label.setAttribute("font-size", "14");
         if (rocketInfo) {
-            label.textContent = `${(rocketInfo[3] * getTimerRateRatio()).toFixed(2)} / s`;
+            label.innerHTML = `${(rocketInfo[3] * getTimerRateRatio()).toFixed(2)} / s`;
         } else {
-            label.textContent = '0 / s';
+            label.innerHTML = '0 / s';
         }
 
         svgElement.appendChild(label);
@@ -1472,7 +1486,23 @@ function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
     return [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight];
 }
 
-export function drawAntimatterFlowDiagram(rocketData, svgElement) {
+function createRefuelButton(rocketId) {
+    return createButton(
+        "Refuel",
+        ["option-button", "ready-text", "refuel-rocket"],
+        () => resetRocketForRefuelling(rocketId),
+        "upgradeCheck",
+        "",
+        null,
+        rocketId,
+        null,
+        true,
+        null,
+        null
+    );
+}
+
+export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
     const asteroidsArray = getAsteroidArray();
     const svgNS = "http://www.w3.org/2000/svg";
     let topMostY;
@@ -1480,14 +1510,14 @@ export function drawAntimatterFlowDiagram(rocketData, svgElement) {
     let rightOffset;
     let boxWidth;
     let boxHeight;
-    
+
     if (!getHasAntimatterSvgRightBoxDataChanged(svgElement)) {
-        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS);
+        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svgNS);
         return;
     }  else {
-        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS);
+        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svgNS);
     }
-
+    
     const rightBoxHeight = bottomMostY - topMostY;
 
     const rightBox = document.createElementNS(svgNS, "foreignObject");
