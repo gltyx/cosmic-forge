@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getBoostRate,
     setHasAntimatterSvgRightBoxDataChanged,
     getHasAntimatterSvgRightBoxDataChanged,
     getNormalMaxAntimatterRate,
@@ -57,7 +58,8 @@ import {
     getCurrentStarSystemWeatherEfficiency,
     getCurrentStarSystem,
     setSortAsteroidMethod,
-    getAsteroidArray
+    getAsteroidArray,
+    getIsAntimatterBoostActive
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1409,10 +1411,12 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
                     ? "var(--disabled-text)" 
                     : "var(--warning-text)";
 
-                const refuelButton = createRefuelButton(`rocket${index + 1}`);
-                if (refuelButton) {
-                    valueCell.appendChild(refuelButton);
-                }
+                    if (label === 'Requires Refuelling') {
+                        const refuelButton = createRefuelButton(`rocket${index + 1}`);
+                        if (refuelButton) {
+                            valueCell.appendChild(refuelButton);
+                        }
+                    }
             } else {
                 valueCell.innerHTML = value;
             }
@@ -1475,8 +1479,10 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         label.setAttribute("text-anchor", "middle");
         label.setAttribute("fill", "var(--" + lineClass + ")");
         label.setAttribute("font-size", "14");
-        if (rocketInfo) {
+        if (rocketInfo && !getIsAntimatterBoostActive()) {
             label.innerHTML = `${(rocketInfo[3] * getTimerRateRatio()).toFixed(2)} / s`;
+        } else if (rocketInfo && getIsAntimatterBoostActive()) {
+            label.innerHTML = `${(rocketInfo[3] * getTimerRateRatio() * getBoostRate()).toFixed(2)} / s`;
         } else {
             label.innerHTML = '0 / s';
         }

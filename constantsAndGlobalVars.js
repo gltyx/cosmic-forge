@@ -35,6 +35,7 @@ export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
+export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -1688,6 +1689,10 @@ export function getAntimatterSvgEventListeners() {
 
 export function setAntimatterSvgEventListeners(value) {
     antimatterSvgEventListeners = value;
+}
+
+export function getBoostRate() {
+    return BOOST_ANTIMATTER_RATE_MULTIPLIER;
 }
 
 

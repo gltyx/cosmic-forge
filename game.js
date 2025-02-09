@@ -1,4 +1,5 @@
 import {
+    getBoostRate,
     getIsAntimatterBoostActive,
     setIsAntimatterBoostActive,
     getNormalMaxAntimatterRate,
@@ -1660,7 +1661,7 @@ function updateAntimatterAndDiagram() {
             let quantityAntimatterClass = 'none';
             let extractionRate = rocketData[`rocket${i}`][3];
             if (getIsAntimatterBoostActive()) {
-                extractionRate *= 2;
+                extractionRate *= getBoostRate();
             }
             totalAntimatterExtractionRate += extractionRate;
             
