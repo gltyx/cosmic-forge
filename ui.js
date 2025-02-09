@@ -1,7 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
-    setHasAntimatterSvgDataChanged,
-    getHasAntimatterSvgDataChanged,
+    setHasAntimatterSvgRightBoxDataChanged,
+    getHasAntimatterSvgRightBoxDataChanged,
     getNormalMaxAntimatterRate,
     getMiningObject,
     getImageUrls,
@@ -207,6 +207,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
+    document.addEventListener("mouseenter", (e) => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (e.target && e.target.id === 'svgRateBar' || e.target.id === 'svgRateBarOuter') {
+                const boostTextContainer = document.getElementById('boostTextContainer');
+                const antimatterRateBarOuter = document.getElementById('svgRateBarOuter');
+                if (antimatterRateBarOuter) {
+                    antimatterRateBarOuter.style.backgroundColor = `rgba(var(--text-color-rgb), 0.2)`;
+                }
+                if (boostTextContainer) {
+                    boostTextContainer.style.visibility = 'visible';
+                    boostTextContainer.style.opacity = "1";
+                }
+            }
+        }
+    }, true);
+    
+    document.addEventListener("mouseleave", (e) => {
+        if (getResourceDataObject('antimatter', ['rate']) > 0) {
+            if (e.target && e.target.id === 'svgRateBarOuter') {
+                boostAntimatterRate(false, false);
+            }
+        }
+    }, true);   
+    
     document.addEventListener('mousedown', (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
@@ -1245,17 +1269,12 @@ function setupTooltip(svgElement) {
         });
 }
 
-export function drawAntimatterFlowDiagram(rocketData, svgElement) {
-    const asteroidsArray = getAsteroidArray();
-    const svgNS = "http://www.w3.org/2000/svg";  
-
-    if (!getHasAntimatterSvgDataChanged(svgElement)) {
-        return;
-    }  
-
-    while (svgElement.firstChild) {
-        svgElement.removeChild(svgElement.firstChild);
-    }
+function drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS) {
+    Array.from(svgElement.children).forEach(child => {
+        if (child.id !== 'svgRateBar' && child.id !== 'svgRightScaleContainer') {
+            svgElement.removeChild(child);
+        }
+    });
 
     const rockets = ["Rocket 1", "Rocket 2", "Rocket 3", "Rocket 4"];
     const numRockets = rockets.length;
@@ -1447,6 +1466,24 @@ export function drawAntimatterFlowDiagram(rocketData, svgElement) {
 
         svgElement.appendChild(label);
     });
+    return [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight];
+}
+
+export function drawAntimatterFlowDiagram(rocketData, svgElement) {
+    const asteroidsArray = getAsteroidArray();
+    const svgNS = "http://www.w3.org/2000/svg";
+    let topMostY;
+    let bottomMostY;
+    let rightOffset;
+    let boxWidth;
+    let boxHeight;
+    
+    if (!getHasAntimatterSvgRightBoxDataChanged(svgElement)) {
+        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS);
+        return;
+    }  else {
+        [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight] = drawLeftSideOfSvg(asteroidsArray, rocketData, svgElement, svgNS);
+    }
 
     const rightBoxHeight = bottomMostY - topMostY;
 
@@ -1542,43 +1579,15 @@ export function drawAntimatterFlowDiagram(rocketData, svgElement) {
     scaleForeignObject.setAttribute("y", topMostY + (rightBoxHeight / 2));
     scaleForeignObject.setAttribute("width", 80);
     scaleForeignObject.setAttribute("height", rightBoxHeight / 2);
+    scaleForeignObject.setAttribute("id", "svgRightScaleContainer");
     scaleForeignObject.appendChild(scaleContainer);
 
     svgElement.appendChild(scaleForeignObject);
     antimatterRateBarOuter.appendChild(antimatterRateBarInner);
     rightBox.appendChild(antimatterRateBarOuter);
     rightBox.appendChild(boostTextContainer);
+
     svgElement.appendChild(rightBox);
-
-    document.getElementById('svgRateBar').addEventListener("mouseenter", () => {
-        if (getResourceDataObject('antimatter', ['rate']) > 0) {
-            if (antimatterRateBarOuter) {
-                antimatterRateBarOuter.style.backgroundColor = `rgba(var(--text-color-rgb), 0.2)`;
-            }
-            if (boostTextContainer) {
-                boostTextContainer.style.visibility = 'visible';
-                boostTextContainer.style.opacity = "1";
-            }
-        }
-    });
-    
-    document.getElementById('svgRateBar').addEventListener("mouseleave", () => {
-        if (getResourceDataObject('antimatter', ['rate']) > 0) {
-            if (antimatterRateBarOuter) {
-                antimatterRateBarOuter.style.backgroundColor = "var(--bg-color)";
-            }
-            if (boostTextContainer) {
-                boostTextContainer.style.opacity = "0";
-                boostTextContainer.style.visibility = 'hidden';     
-            }
-        }
-    });
-
-    antimatterRateBarOuter.addEventListener('mouseleave', (e) => {
-        if (getResourceDataObject('antimatter', ['rate']) > 0) {
-            boostAntimatterRate(false, true);
-        }
-    });
 }
 
 export async function drawTechTree(techData, svgElement, renew) {
@@ -1999,7 +2008,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setHasAntimatterSvgDataChanged(null);
+            setHasAntimatterSvgRightBoxDataChanged(null);
             setLastScreenOpenRegister('tab6', 'antimatter');
             setCurrentOptionPane('antimatter');
             updateContent('Antimatter', 'tab6', 'content');

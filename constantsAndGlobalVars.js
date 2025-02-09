@@ -75,7 +75,7 @@ let originalFrameNumbers = {};
 let baseSearchTimerDuration = 180000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
-let oldAntimatterSvgData = null;
+let oldAntimatterRightBoxSvgData = null;
 
 let miningObject = {
     rocket1: null,
@@ -1666,12 +1666,12 @@ export function getNormalMaxAntimatterRate() {
     return NORMAL_MAX_ANTIMATTER_RATE;
 }
 
-export function getHasAntimatterSvgDataChanged(newAntimatterSvgData) {
-    return JSON.stringify(newAntimatterSvgData) !== JSON.stringify(oldAntimatterSvgData);
+export function getHasAntimatterSvgRightBoxDataChanged(newAntimatterSvgData) {
+    return JSON.stringify(newAntimatterSvgData) !== JSON.stringify(oldAntimatterRightBoxSvgData);
 }
 
-export function setHasAntimatterSvgDataChanged(value) {
-    oldAntimatterSvgData = value;
+export function setHasAntimatterSvgRightBoxDataChanged(value) {
+    oldAntimatterRightBoxSvgData = value;
 }
 
 export function getIsAntimatterBoostActive() {

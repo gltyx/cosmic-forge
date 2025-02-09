@@ -120,7 +120,8 @@ import {
     getNotationType,
     getTechTreeData,
     getSaveName,
-    setHasAntimatterSvgDataChanged,
+    setHasAntimatterSvgRightBoxDataChanged,
+    setAntimatterSvgEventListeners,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -1693,17 +1694,15 @@ function updateAntimatterAndDiagram() {
     if (getCurrentOptionPane() === 'antimatter') {
         const svgElement = document.getElementById('antimatterSvg');
         drawAntimatterFlowDiagram(rocketData, svgElement);
-        setHasAntimatterSvgDataChanged(svgElement);
+        const rateBars = Array.from(svgElement.children).filter(child => child.id === 'svgRateBar');
+        
+        if (rateBars.length > 1) {
+            svgElement.removeChild(rateBars[0]);
+        }
+        
+        setHasAntimatterSvgRightBoxDataChanged(svgElement);
     }     
 }
-
-function toggleBoost() {
-    // Toggle the boost flag based on the user's action (click/hold/etc.)
-    isBoostActive = !isBoostActive;
-    console.log(isBoostActive ? 'Boost active' : 'Boost inactive');
-}
-
-
 
 function getSpecificAsteroidExtractionRate(asteroid) {
     const maxRate = getNormalMaxAntimatterRate();
@@ -4737,8 +4736,9 @@ export function boostAntimatterRate(start, mouseLeave) {
             rateBarInner.style.height = `${parseFloat(rateBarInner.style.height) * 2}%`;
             rateBarInner.style.backgroundColor = "var(--ready-text)";
         } else {
+                console.log('stopping boost');
                 setIsAntimatterBoostActive(false);
-                setHasAntimatterSvgDataChanged(null);  
+                setHasAntimatterSvgRightBoxDataChanged(null);  
         }
     } else {
         console.error('Rate bar inner element not found!');
