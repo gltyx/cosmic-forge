@@ -333,7 +333,6 @@ export async function gameLoop() {
         checkPowerForAsteroidTimer();
 
         monitorTechTree();
-        updateAntimatterAndDiagram();
         
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
@@ -1695,6 +1694,10 @@ function updateAntimatterAndDiagram() {
             }
         
             changeAsteroidArray(asteroid.name, "quantity", [newQuantityAntimatterAsteroid, quantityAntimatterClass]);
+
+            if (getAntimatterUnlocked()) {
+                setResourceDataObject(antimatterTotalQuantity + totalAntimatterExtractionRate, 'antimatter', ['quantity']);
+            }
         }
     } 
 
@@ -1712,7 +1715,6 @@ function updateAntimatterAndDiagram() {
         }
         
         setHasAntimatterSvgRightBoxDataChanged(svgElement);
-        
     }     
 }
 
@@ -3006,10 +3008,8 @@ function startInitialTimers() {
     const tiers = [1, 2, 3, 4];
 
     timerManager.addTimer('antimatter', getTimerUpdateInterval(), () => {
-        const currentAntimatterQuantity = getResourceDataObject('antimatter', ['quantity']);
-        const currentAntimatterRate = getResourceDataObject('antimatter', ['rate']);
         if (getAntimatterUnlocked()) {
-            setResourceDataObject(currentAntimatterQuantity + currentAntimatterRate, 'antimatter', ['quantity']);
+            updateAntimatterAndDiagram();
         }
     });
 
@@ -4226,7 +4226,7 @@ export function checkPowerBuildingsFuelLevels() {
     });
 }
 
-const offlineGainsDebugToggle = false;
+const offlineGainsDebugToggle = true; //DEBUG to toggle offlineGains feature for testing
 
 export function offlineGains(switchedFocus) {
     if (offlineGainsDebugToggle) {
@@ -4383,7 +4383,7 @@ export function offlineGains(switchedFocus) {
             const quantityAntimatterAsteroid = asteroid[asteroidName].quantity[0];
         
             if (beingMined) {
-                const extractedAmount = Math.min(rateExtractionAsteroid * getTimerRateRatio() * timeDifferenceInSeconds, quantityAntimatterAsteroid); // Calculate extracted antimatter
+                const extractedAmount = Math.min(rateExtractionAsteroid * getTimerRateRatio() * timeDifferenceInSeconds, quantityAntimatterAsteroid);
                 offlineGainsAntimatter += extractedAmount;
                 changeAsteroidArray(asteroidName, 'quantity', [Math.max(asteroid[asteroidName].quantity[0] - extractedAmount, 0), 'none']);
             }
@@ -4398,8 +4398,8 @@ export function offlineGains(switchedFocus) {
         //console.log('Offline Gains:', offlineGains);
         //console.log('Time Offline (seconds):', timeDifferenceInSeconds);
     }
-    startSearchAsteroidTimer([10000, 'offlineGains']); //DEBUG
-    startTravelToAndFromAsteroidTimer([10000, 'offlineGains'], 'rocket1', getRocketDirection('rocket1')); //DEBUG
+    // startSearchAsteroidTimer([10000, 'offlineGains']); //DEBUG
+    // startTravelToAndFromAsteroidTimer([10000, 'offlineGains'], 'rocket1', getRocketDirection('rocket1')); //DEBUG
 }
 
 export function setAllCompoundsToZeroQuantity() {
