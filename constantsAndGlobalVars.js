@@ -149,6 +149,7 @@ let notationType = 'normalCondensed';
 //FLAGS
 // let audioMuted;
 // let languageChangedFlag;
+
 let checkRocketFuellingStatus = {
     rocket1: false,
     rocket2: false,
