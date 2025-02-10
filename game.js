@@ -3391,10 +3391,6 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     return 10000;
 }
 
-export function mineAsteroid(rocket, asteroid) {
-    console.log(rocket + ' has reached ' + asteroid + ' and started mining antimatter!');
-}
-
 export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction) {
     if (adjustment[1] === 'offlineGains' && !getCurrentlyTravellingToAsteroid(rocket)) {
         return;
@@ -3433,13 +3429,14 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
             
             if (counter >= travelDuration) {
                 if (direction) {
+                    showNotification(`${capitaliseString(rocket)} has returned to be refuelled!`, 'info');
                     resetRocketForNextJourney(rocket);
                     timerManager.removeTimer(timerName);
 
                     setCurrentlyTravellingToAsteroid(rocket, false);
                     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 } else {
-                    mineAsteroid(rocket, destination);
+                    showNotification(`${capitaliseString(rocket)} has reached ${destination} and started mining Antimatter!`, 'info');
                     timerManager.removeTimer(timerName);
     
                     if (travelTimerDescriptionElement) {             
