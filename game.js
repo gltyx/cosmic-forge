@@ -1697,6 +1697,7 @@ function updateAntimatterAndDiagram() {
         }
     } 
 
+    console.log(totalAntimatterExtractionRate);
     setResourceDataObject(totalAntimatterExtractionRate, 'antimatter', ['rate']);
 
     if (getCurrentOptionPane() === 'antimatter') {

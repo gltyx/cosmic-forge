@@ -2678,16 +2678,22 @@ export function sortAsteroidTable(asteroidsArray, sortMethod) {
         const asteroidA = a[nameA];
         const asteroidB = b[nameB];
 
-        // Prioritize non-mined asteroids first
-        if (asteroidA.beingMined && !asteroidB.beingMined) return 1;
-        if (!asteroidA.beingMined && asteroidB.beingMined) return -1;
+        const isExhaustedA = asteroidA.quantity[0] === 0;
+        const isExhaustedB = asteroidB.quantity[0] === 0;
+        const isMinedA = asteroidA.beingMined;
+        const isMinedB = asteroidB.beingMined;
 
-        // Normal sorting based on the selected method
+        if (isExhaustedA && !isExhaustedB) return 1;
+        if (!isExhaustedA && isExhaustedB) return -1;
+
+        if (isMinedA && !isMinedB) return 1;
+        if (!isMinedA && isMinedB) return -1;
+
         switch (sortMethod) {
             case "rarity":
                 const rarityOrder = { "Legendary": 1, "Rare": 2, "Uncommon": 3, "Common": 4 };
                 return rarityOrder[asteroidA.rarity[0]] - rarityOrder[asteroidB.rarity[0]];
-            
+
             case "distance":
                 return asteroidA.distance[0] - asteroidB.distance[0];
 
