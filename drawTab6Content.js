@@ -351,6 +351,12 @@ function setFuellingVisibility(rocket, params) {
             autoBuyerRow.classList.add('invisible');
         }
     }
+
+    if (!fuellingState && !fuelledUpState && !launchedState) {
+        document.getElementById(`${rocket}FuellingProgressBar`).style.width = '0%';
+        document.getElementById(`${rocket}FuellingProgressBarContainer`).classList.add('invisible');
+        
+    }
 }
 
 function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBeingMined) {
@@ -374,7 +380,7 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
         'Fuel:',
         createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', rocketId], () => {
             setRocketsFuellerStartedArray(rocketId, 'add');
-            switchFuelGaugeWhenFuellerBought(rocketId);
+            switchFuelGaugeWhenFuellerBought(rocketId, 'normal');
         }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
         createTextElement(`<div id="${rocketId}FuellingProgressBar">`, `${rocketId}FuellingProgressBarContainer`, ['progress-bar-container', 'invisible']),
         createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', `${rocketId}-launch-button`, 'invisible'], () => {

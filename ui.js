@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getCurrencySymbol,
     getBoostRate,
     setHasAntimatterSvgRightBoxDataChanged,
     getHasAntimatterSvgRightBoxDataChanged,
@@ -229,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener("mouseleave", (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(false, false);
+                boostAntimatterRate(false);
             }
         }
     }, true);   
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('mousedown', (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(true, false);
+                boostAntimatterRate(true);
             }
         }
     });
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('mouseup', (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(false, false);
+                boostAntimatterRate(false);
             }
         }
     });
@@ -2571,14 +2572,21 @@ export function toggleGameFullScreen() {
     }
 }
 
-export function switchFuelGaugeWhenFuellerBought(rocket) {
+export function switchFuelGaugeWhenFuellerBought(rocket, type) {
     const fuellerBought = getRocketsFuellerStartedArray().some(item => item === rocket && !item.includes('FuelledUp'));
 
-    if (fuellerBought && getCurrentOptionPane() === rocket) {
-        const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
-        const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
-        progressFuelingElement.classList.remove('invisible');
-        rocketLaunchButton.classList.remove('invisible');
+    if ((fuellerBought || type !== 'normal') && getCurrentOptionPane() === rocket) {
+        if (type === 'normal') {
+            const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
+            const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
+            progressFuelingElement.classList.remove('invisible');
+            rocketLaunchButton.classList.remove('invisible');
+        } else {
+            const optionContentElement = document.getElementById(`optionContentTab6`);
+            optionContentElement.innerHTML = '';
+            drawTab6Content(`${capitaliseString(rocket).replace(/(\d+)/, ' $1')}`, optionContentElement);
+        }
+
     }
 }
 

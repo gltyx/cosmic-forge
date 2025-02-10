@@ -1506,7 +1506,9 @@ export function setRocketsFuellerStartedArray(value, addRemove) {
     if (addRemove === 'add') {
         rocketsFuellerStartedArray.push(value);
     } else if (addRemove === 'remove') {
-        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== value);
+        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(
+            item => !item.startsWith(value)
+        );
     }
 
     rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== '');
@@ -1533,8 +1535,12 @@ export function getWeatherEfficiencyApplied(key) {
     return weatherEfficiencyApplied;
 }
 
-export function setLaunchedRockets(value) {
-    launchedRockets.push(value);
+export function setLaunchedRockets(value, addRemove) {
+    if (addRemove === 'add') {
+        launchedRockets.push(value);
+    } else if (addRemove === 'remove') {
+        launchedRockets = launchedRockets.filter(item => item !== value);
+    }
 }
 
 export function getLaunchedRockets() {
