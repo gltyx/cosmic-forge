@@ -365,11 +365,9 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
         const asteroidName = Object.keys(obj)[0];
         const asteroid = obj[asteroidName];
     
-        // Exclude asteroids that are being mined or have quantity[0] === 0
         return !Object.values(asteroidsBeingMined).includes(asteroidName) && asteroid.quantity[0] > 0;
     });
     
-
     const rocketAutoBuyerRow = createOptionRow(
         `space${capitaliseString(rocketId)}AutoBuyerRow`,
         getResourceDataObject('space', ['upgrades', rocketId, 'autoBuyer', 'tier1', 'nameUpgrade']),
