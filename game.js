@@ -1,4 +1,6 @@
 import {
+    setRocketDirection,
+    getRocketDirection,
     getBoostRate,
     getIsAntimatterBoostActive,
     setIsAntimatterBoostActive,
@@ -247,15 +249,14 @@ export function startGame() {
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
     startInitialTimers();
-    startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), 'fromLoadOrNewGame']);
-    startRocketTimers();
     startNewsTickerTimer();
     gameLoop();
 }
 
-function startRocketTimers() {
+export function startSpaceRelatedTimers(value) {
+    startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), value]);
     for (let i = 1; i <= 4; i++) {
-        startTravelToAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), 'fromLoadOrNewGame'], 'rocket' + i);
+        startTravelToAndFromAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), value], 'rocket' + i, getRocketDirection('rocket' + i));
     }
 }
 
@@ -1672,7 +1673,11 @@ function updateAntimatterAndDiagram() {
                 newQuantityAntimatterAsteroid = 0;
                 totalAntimatterExtractionRate -= extractionRate;
                 rocketData[`rocket${i}`][3] = 0;
-                setMiningObject(`rocket${i}`, 'refuel'); //TODO reset rocket for refuelling
+
+                if (!getRocketDirection(`rocket${i}`)) {
+                    setRocketDirection(`rocket${i}`, true); //set rocket returning
+                    startTravelToAndFromAsteroidTimer([0, 'returning'], `rocket${i}`, getRocketDirection(`rocket${i}`));
+                }
             }
  
             getElements().antimatterRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
@@ -1808,7 +1813,11 @@ function travelToAsteroidChecks(element) {
             const travelToProgressBarElement = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}Container`);
             const travelToDropdown = document.getElementById(`${rocketName}TravelDropdown`);
             const destinationAsteroidTextElement = document.getElementById(`${rocketName}DestinationAsteroid`);
-            destinationAsteroidTextElement.innerHTML = `${getDestinationAsteroid(rocketName)}`;
+            if (getRocketDirection(rocketName)) {
+                destinationAsteroidTextElement.innerHTML = `Base`;
+            } else {
+                destinationAsteroidTextElement.innerHTML = `${getDestinationAsteroid(rocketName)}`;
+            }
 
             if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
                 accompanyingLabel.classList.remove('red-disabled-text');
@@ -1833,8 +1842,8 @@ function travelToAsteroidChecks(element) {
                     accompanyingLabel.classList.add('green-ready-text');
                     travelToProgressBarElement.classList.add('invisible');
                     destinationAsteroidTextElement.classList.add('invisible');
-                    element.classList.add('invisible'); //handle this again later when doing mining code  
-                    travelToDropdown.classList.add('invisible'); // and this
+                    element.classList.add('invisible');
+                    travelToDropdown.classList.add('invisible');
                     accompanyingLabel.innerText = 'Mining Antimatter at ' + asteroidBeingMinedByCurrentRocket;
                 } else if (!getLaunchedRockets().includes(rocketName)) {
                     accompanyingLabel.classList.add('red-disabled-text');
@@ -1845,7 +1854,6 @@ function travelToAsteroidChecks(element) {
                     element.classList.add('invisible');
                     travelToDropdown.classList.remove('invisible');
                 }
-
 
                 const elapsedTime = getRocketTravelDuration(rocketName) - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName);
                 const progressBarPercentage = (elapsedTime / getRocketTravelDuration(rocketName)) * 100;
@@ -2663,12 +2671,22 @@ function checkStatusAndSetTextClasses(element) {
 function checkTravelToDescriptions(element) {
     const rocket = getCurrentOptionPane(); //only applicable if on a rocket screen, which we are by this point
     if (getCurrentlyTravellingToAsteroid(rocket)) {
-        const timerElement = timerManager.getTimer(`${rocket}TravelToAsteroidTimer`);
-        if (timerElement) {
-            const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
-            const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
-            labelElement.classList.add('green-ready-text');
-            labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
+        if (getRocketDirection(rocket)) {
+            const timerElement = timerManager.getTimer(`${rocket}TravelReturnTimer`);
+            if (timerElement) {
+                const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
+                const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
+                labelElement.classList.add('green-ready-text');
+                labelElement.innerHTML = `Returning ... ${timeLeft}s`;
+            }
+        } else {
+            const timerElement = timerManager.getTimer(`${rocket}TravelToAsteroidTimer`);
+            if (timerElement) {
+                const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
+                const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
+                labelElement.classList.add('green-ready-text');
+                labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
+            }
         }
     }
 }
@@ -3369,7 +3387,7 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
-    //return Math.floor(distance / speed);
+    //return Math.floor(distance / speed);  //DEBUG
     return 10000;
 }
 
@@ -3377,55 +3395,76 @@ export function mineAsteroid(rocket, asteroid) {
     console.log(rocket + ' has reached ' + asteroid + ' and started mining antimatter!');
 }
 
-export function startTravelToAsteroidTimer(adjustment, rocket) {
-    const travelTimerDescriptionElement = document.getElementById('travelToDescription');
-
-    if ((adjustment[1] === 'fromLoadOrNewGame' || adjustment[1] === 'offlineGains') && !getCurrentlyTravellingToAsteroid(rocket)) {
+export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction) {
+    if (adjustment[1] === 'offlineGains' && !getCurrentlyTravellingToAsteroid(rocket)) {
         return;
     }
 
     setRocketReadyToTravel(rocket, false);
     setCurrentlyTravellingToAsteroid(rocket, true);
 
-    const timerName = `${rocket}TravelToAsteroidTimer`;
-    const destinationAsteroid = getDestinationAsteroid(rocket);
+    let destination;
+    let timerName;
+
+    if (direction) {
+        setMiningObject(rocket, null);
+        timerName = `${rocket}TravelReturnTimer`;
+        destination = getDestinationAsteroid(rocket);
+    } else {
+        timerName = `${rocket}TravelToAsteroidTimer`;
+        destination = getDestinationAsteroid(rocket);
+    }
     
     if (!timerManager.getTimer(timerName)) {
         let counter = 0;
         const travelInterval = getTimerUpdateInterval();
-        let travelDuration = adjustment[0] === 0 ? calculateRocketTravelDuration(destinationAsteroid) : adjustment[0];
+        let travelDuration = adjustment[0] === 0 ? calculateRocketTravelDuration(destination) : adjustment[0];
 
         if (adjustment[0] === 0) {
             setRocketTravelDuration(rocket, travelDuration);
         }
         
         timerManager.addTimer(timerName, travelInterval, () => {
+            const travelTimerDescriptionElement = document.getElementById('travelToDescription');
             counter += travelInterval;
 
             const timeLeft = Math.max(travelDuration - counter, 0);
             const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
             
             if (counter >= travelDuration) {
-                mineAsteroid(rocket, destinationAsteroid);
-                timerManager.removeTimer(timerName);
+                if (direction) {
+                    resetRocketForNextJourney(rocket);
+                    timerManager.removeTimer(timerName);
 
-                if (travelTimerDescriptionElement) {             
-                    travelTimerDescriptionElement.innerText = 'Mining Antimatter at ' + destinationAsteroid;
+                    setCurrentlyTravellingToAsteroid(rocket, false);
+                    setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
+                } else {
+                    mineAsteroid(rocket, destination);
+                    timerManager.removeTimer(timerName);
+    
+                    if (travelTimerDescriptionElement) {             
+                        travelTimerDescriptionElement.innerText = 'Mining Antimatter at ' + destination;
+                    }
+    
+                    if (!getAntimatterUnlocked()) {
+                        setAntimatterUnlocked(true);
+                    }
+    
+                    setMiningObject(rocket, destination); //leave travelling to array true until mining finishes
+                    setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
+                    setCurrentlyTravellingToAsteroid(rocket, false);
                 }
-
-                if (!getAntimatterUnlocked()) {
-                    setAntimatterUnlocked(true);
-                }
-
-                setMiningObject(rocket, destinationAsteroid); //leave travelling to array true until mining finishes
-                setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
-                setCurrentlyTravellingToAsteroid(rocket, false);
             } else {
                 setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket, timeLeft); 
                 if (travelTimerDescriptionElement) { 
                     travelTimerDescriptionElement.classList.remove('red-disabled-text');
                     travelTimerDescriptionElement.classList.add('green-ready-text');
-                    travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
+                    if (direction) {
+                        travelTimerDescriptionElement.innerText = `Returning ... ${timeLeftUI}s`;
+                    } else {
+                        travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
+                    }
+                    
                     const elapsedTime = getRocketTravelDuration()[rocket] - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
                     const progressBarPercentage = (elapsedTime / getRocketTravelDuration()[rocket]) * 100;
                     if (document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`)) {
@@ -3437,10 +3476,13 @@ export function startTravelToAsteroidTimer(adjustment, rocket) {
     }
 }
 
+export function resetRocketForNextJourney(rocket) {
+    console.log('resetting rocket ' + rocket);
+}
+
 export function startSearchAsteroidTimer(adjustment) {
-    const searchTimerDescriptionElement = document.getElementById('scanAsteroidsDescription');
     if (getAsteroidTimerCanContinue()) {
-        if ((adjustment[1] === 'fromLoadOrNewGame' || adjustment[1] === 'offlineGains') && !getCurrentlySearchingAsteroid()) {
+        if (adjustment[1] === 'offlineGains' && !getCurrentlySearchingAsteroid()) {
             return;
         }
         setTelescopeReadyToSearch(false);
@@ -3452,13 +3494,14 @@ export function startSearchAsteroidTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
-            searchDuration = 1000; //DEBUG
+            searchDuration = 12000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
             }
             
             timerManager.addTimer(timerName, searchInterval, () => {
+                const searchTimerDescriptionElement = document.getElementById('scanAsteroidsDescription');
                 counter += searchInterval;
     
                 const timeLeft = Math.max(searchDuration - counter, 0);
@@ -4167,173 +4210,180 @@ export function checkPowerBuildingsFuelLevels() {
     });
 }
 
+const offlineGainsDebugToggle = false;
+
 export function offlineGains(switchedFocus) {
-    const resourcesObject = getResourceDataObject('resources');
-    const compoundsObject = getResourceDataObject('compounds');
-
-    const resources = Object.keys(resourcesObject);
-    const compounds = Object.keys(compoundsObject);
-
-    const resourceValues = {};
-    const compoundValues = {};
-    const energyValues = {};
-    const researchValues = {};
-    const antimatterValues = {};
-
-    resources.forEach(resource => {
-        resourceValues[resource] = {
-            rate: getResourceDataObject('resources', [resource, 'rate']),
-            quantity: getResourceDataObject('resources', [resource, 'quantity']),
-            storageCapacity: getResourceDataObject('resources', [resource, 'storageCapacity']),
+    if (offlineGainsDebugToggle) {
+        const resourcesObject = getResourceDataObject('resources');
+        const compoundsObject = getResourceDataObject('compounds');
+    
+        const resources = Object.keys(resourcesObject);
+        const compounds = Object.keys(compoundsObject);
+    
+        const resourceValues = {};
+        const compoundValues = {};
+        const energyValues = {};
+        const researchValues = {};
+        const antimatterValues = {};
+    
+        resources.forEach(resource => {
+            resourceValues[resource] = {
+                rate: getResourceDataObject('resources', [resource, 'rate']),
+                quantity: getResourceDataObject('resources', [resource, 'quantity']),
+                storageCapacity: getResourceDataObject('resources', [resource, 'storageCapacity']),
+            };
+        });
+    
+        compounds.forEach(compound => {
+            compoundValues[compound] = {
+                rate: getResourceDataObject('compounds', [compound, 'rate']),
+                quantity: getResourceDataObject('compounds', [compound, 'quantity']),
+                storageCapacity: getResourceDataObject('compounds', [compound, 'storageCapacity']),
+            };
+        });
+    
+        const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
+        energyValues.energy = {
+            rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) - getResourceDataObject('buildings', ['energy', 'consumption']) : 0,
+            quantity: getResourceDataObject('buildings', ['energy', 'quantity']),
         };
-    });
-
-    compounds.forEach(compound => {
-        compoundValues[compound] = {
-            rate: getResourceDataObject('compounds', [compound, 'rate']),
-            quantity: getResourceDataObject('compounds', [compound, 'quantity']),
-            storageCapacity: getResourceDataObject('compounds', [compound, 'storageCapacity']),
+    
+        researchValues.research = {
+            rate: getResourceDataObject('research', ['rate']),
+            quantity: getResourceDataObject('research', ['quantity']),
         };
-    });
-
-    const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
-    energyValues.energy = {
-        rate: batteryBought ? getResourceDataObject('buildings', ['energy', 'rate']) - getResourceDataObject('buildings', ['energy', 'consumption']) : 0,
-        quantity: getResourceDataObject('buildings', ['energy', 'quantity']),
-    };
-
-    researchValues.research = {
-        rate: getResourceDataObject('research', ['rate']),
-        quantity: getResourceDataObject('research', ['quantity']),
-    };
-
-    antimatterValues.antimatter = {
-        rate: getResourceDataObject('antimatter', ['rate']),
-        quantity: getResourceDataObject('antimatter', ['quantity'])
-    }
-
-    const combinedValues = {
-        rate: {
-            resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.rate])),
-            compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.rate])),
-            energy: energyValues.energy.rate,
-            research: researchValues.research.rate,
-            antimatter: antimatterValues.antimatter.rate
-        },
-        quantity: {
-            resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.quantity])),
-            compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.quantity])),
-            energy: energyValues.energy.quantity,
-            research: researchValues.research.quantity,
-            antimatter: antimatterValues.antimatter.quantity
-        },
-    };
-
-    const lastSavedTimeStamp = getLastSavedTimeStamp();
-    const currentTimeStamp = new Date().toISOString();
-
-    const timeDifferenceInSeconds = Math.floor(
-        (new Date(currentTimeStamp).getTime() - new Date(lastSavedTimeStamp).getTime()) / 1000
-    );
-
-    const calculateOfflineGains = (data, multiplier = 1) => {
-        return Object.fromEntries(
-            Object.entries(data).map(([key, rate]) => [key, rate * multiplier * timeDifferenceInSeconds])
-        );
-    };
-
-    let offlineGains = {
-        resources: calculateOfflineGains(combinedValues.rate.resources, getTimerRateRatio()),
-        compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
-        energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
-        research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
-        rocket1: 0,
-        rocket2: 0,
-        rocket3: 0,
-        rocket4: 0,
-        antimatter: combinedValues.rate.antimatter * getTimerRateRatio() * timeDifferenceInSeconds
-    };
-
-    Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
-        const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
-        const storageCapacity = resourceValues[resource].storageCapacity;
-        const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
-        setResourceDataObject(finalQuantity, 'resources', [resource, 'quantity']);
-    });
-
-    Object.entries(offlineGains.compounds).forEach(([compound, gain]) => {
-        const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
-        const storageCapacity = compoundValues[compound].storageCapacity;
-        const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
-        setResourceDataObject(finalQuantity, 'compounds', [compound, 'quantity']);
-    });
-
-    const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
-    setResourceDataObject(Math.min(currentEnergyQuantity + offlineGains.energy, getResourceDataObject('buildings', ['energy', 'storageCapacity'])), 'buildings', ['energy', 'quantity']);
-
-    const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
-    setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
-
-    const currentFuelQuantityRockets = getRocketsFuellerStartedArray().filter(rocket => !rocket.includes('FuelledUp'));
-    currentFuelQuantityRockets.forEach(rocket => {
-        const rocketDetails = getResourceDataObject('space', ['upgrades', rocket]);
-        const fuelUpgradeRate = rocketDetails.autoBuyer.tier1.rate;
-        const offlineFuelGain = (fuelUpgradeRate * timeDifferenceInSeconds) * getTimerRateRatio();
-        offlineGains[rocket] += offlineFuelGain;
-    });
-
-    currentFuelQuantityRockets.forEach(rocket => {
-        const currentRocketFuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
-        setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
-    });
-
-    if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
-        const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
-        const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
-
-        const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
-
-        timerManager.removeTimer('searchAsteroidTimer');
-        startSearchAsteroidTimer([remainingTime, 'offlineGains']);
-    }
-
-    const rocketTravelDurationObject = getRocketTravelDuration();
-    Object.keys(rocketTravelDurationObject).forEach(rocketKey => {
-        const rocket = rocketKey;
-        const timeLeft = getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
-        const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
     
-        const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
-    
-        timerManager.removeTimer(`${rocketKey}travelToAsteroidTimer`);
-        startTravelToAsteroidTimer([remainingTime, 'offlineGains'], rocketKey);
-    });  
-    
-    const currentAntimatterQuantity = combinedValues.quantity.antimatter;
-    const asteroidArray = getAsteroidArray();
-    let offlineGainsAntimatter = 0;
-    
-    asteroidArray.forEach((asteroid) => { 
-        const asteroidName = Object.keys(asteroid)[0];
-        const rateExtractionAsteroid = getSpecificAsteroidExtractionRate(asteroid[asteroidName]);
-        const beingMined = asteroid[asteroidName].beingMined;
-        const quantityAntimatterAsteroid = asteroid[asteroidName].quantity[0];
-    
-        if (beingMined) {
-            const extractedAmount = Math.min(rateExtractionAsteroid * getTimerRateRatio() * timeDifferenceInSeconds, quantityAntimatterAsteroid); // Calculate extracted antimatter
-            offlineGainsAntimatter += extractedAmount;
-            changeAsteroidArray(asteroidName, 'quantity', [Math.max(asteroid[asteroidName].quantity[0] - extractedAmount, 0), 'none']);
+        antimatterValues.antimatter = {
+            rate: getResourceDataObject('antimatter', ['rate']),
+            quantity: getResourceDataObject('antimatter', ['quantity'])
         }
-    });
     
-    setResourceDataObject(currentAntimatterQuantity + offlineGainsAntimatter, 'antimatter', ['quantity']);
+        const combinedValues = {
+            rate: {
+                resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.rate])),
+                compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.rate])),
+                energy: energyValues.energy.rate,
+                research: researchValues.research.rate,
+                antimatter: antimatterValues.antimatter.rate
+            },
+            quantity: {
+                resources: Object.fromEntries(Object.entries(resourceValues).map(([key, value]) => [key, value.quantity])),
+                compounds: Object.fromEntries(Object.entries(compoundValues).map(([key, value]) => [key, value.quantity])),
+                energy: energyValues.energy.quantity,
+                research: researchValues.research.quantity,
+                antimatter: antimatterValues.antimatter.quantity
+            },
+        };
     
-    if (!switchedFocus) {
-        showNotification('Offline Gains Added!', 'info');
+        const lastSavedTimeStamp = getLastSavedTimeStamp();
+        const currentTimeStamp = new Date().toISOString();
+    
+        const timeDifferenceInSeconds = Math.floor(
+            (new Date(currentTimeStamp).getTime() - new Date(lastSavedTimeStamp).getTime()) / 1000
+        );
+    
+        const calculateOfflineGains = (data, multiplier = 1) => {
+            return Object.fromEntries(
+                Object.entries(data).map(([key, rate]) => [key, rate * multiplier * timeDifferenceInSeconds])
+            );
+        };
+    
+        let offlineGains = {
+            resources: calculateOfflineGains(combinedValues.rate.resources, getTimerRateRatio()),
+            compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
+            energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
+            research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
+            rocket1: 0,
+            rocket2: 0,
+            rocket3: 0,
+            rocket4: 0,
+            antimatter: combinedValues.rate.antimatter * getTimerRateRatio() * timeDifferenceInSeconds
+        };
+    
+        Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
+            const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+            const storageCapacity = resourceValues[resource].storageCapacity;
+            const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
+            setResourceDataObject(finalQuantity, 'resources', [resource, 'quantity']);
+        });
+    
+        Object.entries(offlineGains.compounds).forEach(([compound, gain]) => {
+            const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+            const storageCapacity = compoundValues[compound].storageCapacity;
+            const finalQuantity = Math.min(currentQuantity + gain, storageCapacity);
+            setResourceDataObject(finalQuantity, 'compounds', [compound, 'quantity']);
+        });
+    
+        const currentEnergyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+        setResourceDataObject(Math.min(currentEnergyQuantity + offlineGains.energy, getResourceDataObject('buildings', ['energy', 'storageCapacity'])), 'buildings', ['energy', 'quantity']);
+    
+        const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
+        setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
+    
+        const currentFuelQuantityRockets = getRocketsFuellerStartedArray().filter(rocket => !rocket.includes('FuelledUp'));
+        currentFuelQuantityRockets.forEach(rocket => {
+            const rocketDetails = getResourceDataObject('space', ['upgrades', rocket]);
+            const fuelUpgradeRate = rocketDetails.autoBuyer.tier1.rate;
+            const offlineFuelGain = (fuelUpgradeRate * timeDifferenceInSeconds) * getTimerRateRatio();
+            offlineGains[rocket] += offlineFuelGain;
+        });
+    
+        currentFuelQuantityRockets.forEach(rocket => {
+            const currentRocketFuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
+            setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
+        });
+    
+        if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
+            const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
+            const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+    
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+    
+            timerManager.removeTimer('searchAsteroidTimer');
+            startSearchAsteroidTimer([remainingTime, 'offlineGains']);
+        }
+    
+        const rocketTravelDurationObject = getRocketTravelDuration();
+        Object.keys(rocketTravelDurationObject).forEach(rocketKey => {
+            const rocket = rocketKey;
+            const timeLeft = getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket);
+            const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+        
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+        
+            timerManager.removeTimer(`${rocketKey}TravelToAsteroidTimer`);
+            timerManager.removeTimer(`${rocketKey}TravelReturnTimer`);
+            startTravelToAndFromAsteroidTimer([remainingTime, 'offlineGains'], rocketKey, getRocketDirection(rocketKey));
+        });  
+        
+        const currentAntimatterQuantity = combinedValues.quantity.antimatter;
+        const asteroidArray = getAsteroidArray();
+        let offlineGainsAntimatter = 0;
+        
+        asteroidArray.forEach((asteroid) => { 
+            const asteroidName = Object.keys(asteroid)[0];
+            const rateExtractionAsteroid = getSpecificAsteroidExtractionRate(asteroid[asteroidName]);
+            const beingMined = asteroid[asteroidName].beingMined;
+            const quantityAntimatterAsteroid = asteroid[asteroidName].quantity[0];
+        
+            if (beingMined) {
+                const extractedAmount = Math.min(rateExtractionAsteroid * getTimerRateRatio() * timeDifferenceInSeconds, quantityAntimatterAsteroid); // Calculate extracted antimatter
+                offlineGainsAntimatter += extractedAmount;
+                changeAsteroidArray(asteroidName, 'quantity', [Math.max(asteroid[asteroidName].quantity[0] - extractedAmount, 0), 'none']);
+            }
+        });
+        
+        setResourceDataObject(currentAntimatterQuantity + offlineGainsAntimatter, 'antimatter', ['quantity']);
+        
+        if (!switchedFocus) {
+            showNotification('Offline Gains Added!', 'info');
+        }
+    
+        //console.log('Offline Gains:', offlineGains);
+        //console.log('Time Offline (seconds):', timeDifferenceInSeconds);
     }
-
-    //console.log('Offline Gains:', offlineGains);
-    //console.log('Time Offline (seconds):', timeDifferenceInSeconds);
+    startSearchAsteroidTimer([10000, 'offlineGains']); //DEBUG
+    startTravelToAndFromAsteroidTimer([10000, 'offlineGains'], 'rocket1', getRocketDirection('rocket1')); //DEBUG
 }
 
 export function setAllCompoundsToZeroQuantity() {

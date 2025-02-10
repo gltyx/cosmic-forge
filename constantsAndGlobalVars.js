@@ -106,6 +106,13 @@ let destinationAsteroid = {
     rocket4: null 
 };
 
+let rocketDirection = { //false outgoing true returning
+    rocket1: false,
+    rocket2: false,
+    rocket3: false,
+    rocket4: false 
+}
+
 export let oneOffPrizesAlreadyClaimedArray = [];
 
 let lastScreenOpenRegister = {
@@ -345,6 +352,7 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketTravelDuration = rocketTravelDuration;
     gameState.miningObject = miningObject;
     gameState.destinationAsteroid = destinationAsteroid;
+    gameState.rocketDirection = rocketDirection;
 
     // Flags
     gameState.flags = {
@@ -406,6 +414,7 @@ export function restoreGameStatus(gameState, type) {
             rocketTravelDuration = gameState.rocketTravelDuration ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             miningObject = gameState.miningObject ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
+            rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1693,6 +1702,14 @@ export function setAntimatterSvgEventListeners(value) {
 
 export function getBoostRate() {
     return BOOST_ANTIMATTER_RATE_MULTIPLIER;
+}
+
+export function setRocketDirection(key, value) {
+    rocketDirection[key] = value;
+}
+
+export function getRocketDirection(key) {
+    return rocketDirection[key] ?? false;
 }
 
 

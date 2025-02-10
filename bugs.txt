@@ -1,1 +1,2 @@
 resource calculations are not right when burning fuel in a power station, start with carbon, pretty deep bug
+quantity not being deducted correctly from asteroids, doesnt match rate of increase or maybe the problem is the rate of increase check this first actually

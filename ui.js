@@ -1345,7 +1345,7 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
             ['', `Rocket ${index + 1}`],
-            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid", null],
+            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid", ""],
             ["", ""],
             ["", ""]
         ];
@@ -1406,17 +1406,10 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
                 valueCell.innerHTML = value;
             }
     
-            if (label === "Not at Asteroid" || label === "Requires Refuelling") {
+            if (label === "Not at Asteroid") {
                 labelCell.style.color = label === "Not at Asteroid" 
                     ? "var(--disabled-text)" 
                     : "var(--warning-text)";
-
-                    if (label === 'Requires Refuelling') {
-                        const refuelButton = createRefuelButton(`rocket${index + 1}`);
-                        if (refuelButton) {
-                            valueCell.appendChild(refuelButton);
-                        }
-                    }
             } else {
                 valueCell.innerHTML = value;
             }
@@ -1490,22 +1483,6 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         svgElement.appendChild(label);
     });
     return [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight];
-}
-
-function createRefuelButton(rocketId) {
-    return createButton(
-        "Refuel",
-        ["option-button", "ready-text", "refuel-rocket"],
-        () => resetRocketForRefuelling(rocketId),
-        "upgradeCheck",
-        "",
-        null,
-        rocketId,
-        null,
-        true,
-        null,
-        null
-    );
 }
 
 export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
