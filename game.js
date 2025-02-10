@@ -3575,6 +3575,16 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
     setFuellingVisibility(rocketId, [fuellingState, fuelledUpState, launchedState]);
 }
 
+export function switchFuelGaugeWhenFuellerBought(rocket) {
+    const fuellerBought = getRocketsFuellerStartedArray().some(item => item === rocket && !item.includes('FuelledUp'));
+
+    if (fuellerBought && getCurrentOptionPane() === rocket) {
+        const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
+        const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
+        progressFuelingElement.classList.remove('invisible');
+        rocketLaunchButton.classList.remove('invisible');
+    }
+}
 
     */
 
