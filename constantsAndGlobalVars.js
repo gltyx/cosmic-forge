@@ -1288,8 +1288,8 @@ export function eNCrQueen() {
                 'U2FsdGVkX18AWb6elOwkLERwy9MKHXi4kHg49lJuW7SwWFfZDVccHyATjgEPdrqQA7N5OE8qxcFguBP/szFmTA==',
                 String((101 * 96) - (5 * 19) + Math.pow(3, 4) % 3)
             );
-            resolve(result);  // Resolve the promise after the delay
-        }, 100); // 1-second delay
+            resolve(result);
+        }, 100);
     });
 }
 
@@ -1448,7 +1448,7 @@ export function getWeatherEffectOn() {
 
 export function setNewsTickerSetting(value) {
     newsTickerSetting = value;
-    startNewsTickerTimer(); //will also stop any existing timer if the setting is toggle off ie if just toggle off when a timer already counting down to show a message
+    startNewsTickerTimer();
     
     if (!value) {
         document.getElementById('newsTickerContainer').classList.add('invisible');

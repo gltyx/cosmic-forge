@@ -3452,7 +3452,7 @@ export function startSearchAsteroidTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
-            searchDuration = 1000; //DEBUG
+            //searchDuration = 1000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
