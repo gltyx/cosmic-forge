@@ -3511,7 +3511,7 @@ export function startSearchAsteroidTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
-            searchDuration = 12000; //DEBUG
+            //searchDuration = 12000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
@@ -3525,7 +3525,7 @@ export function startSearchAsteroidTimer(adjustment) {
                 const timeLeftUI = Math.max(Math.floor((searchDuration - counter) / 1000), 0);
                 
                 if (counter >= searchDuration) {
-                    discoverAsteroid();
+                    discoverAsteroid(false);
                     timerManager.removeTimer(timerName);
                     if (searchTimerDescriptionElement) {             
                         searchTimerDescriptionElement.innerText = 'Ready To Search';
@@ -4411,7 +4411,7 @@ export function setAllCompoundsToZeroQuantity() {
     });
 }
 
-export function buildSpaceMiningBuilding(spaceMiningBuilding) {
+export function buildSpaceMiningBuilding(spaceMiningBuilding, debug) {
     let currentResource1Quantity;
     let currentResource2Quantity;
     let currentResource3Quantity;
@@ -4458,9 +4458,11 @@ export function buildSpaceMiningBuilding(spaceMiningBuilding) {
 
     setResourceDataObject(true, 'space', ['upgrades', spaceMiningBuilding, `${spaceMiningBuilding}BoughtYet`]);
 
-    buySpaceMiningBuildingButtonElement.classList.add('invisible');
-    spaceMiningBuildingDescriptionElement.classList.add('invisible');
-    spaceMiningBuildingAlreadyBoughtTextElement.classList.remove('invisible');
+    if (!debug) {
+        buySpaceMiningBuildingButtonElement.classList.add('invisible');
+        spaceMiningBuildingDescriptionElement.classList.add('invisible');
+        spaceMiningBuildingAlreadyBoughtTextElement.classList.remove('invisible');
+    }
 }
 
 export function getBatteryLevel() {
@@ -4628,8 +4630,8 @@ function handlePowerAllButtonState() {
     }
 }
 
-export function discoverAsteroid() {
-    if (Math.random() < 0.07) {
+export function discoverAsteroid(debug) {
+    if (Math.random() < 0.07 && !debug) {
         showNotification('Asteroid not found after search!', 'warning');
         return;
     }
@@ -4644,10 +4646,12 @@ export function discoverAsteroid() {
     setAsteroidArray(asteroid);
 
     const keyName = Object.keys(asteroid)[0];
-    if (asteroid[keyName].specialName) {
-        showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info');
-    } else {
-        showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
+    if (!debug) {
+        if (asteroid[keyName].specialName) {
+            showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info');
+        } else {
+            showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
+        }
     }
 }
 
@@ -4712,7 +4716,7 @@ function generateAsteroidData(name) {
     }
 
     //DEBUG
-    quantity = 10;
+    //quantity = 10;
     //
 
     let quantityClass;

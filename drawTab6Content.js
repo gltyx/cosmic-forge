@@ -13,7 +13,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'Space Telescope:',
                     createButton(`Build Space Telescope`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'spaceTelescope'], () => {
-                        buildSpaceMiningBuilding('spaceTelescope');
+                        buildSpaceMiningBuilding('spaceTelescope', false);
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
                         spaceBuildTelescopeRow.classList.add('invisible');
                         showNotification('Space Telescope Built!', 'info');
@@ -86,7 +86,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     null,
                     'Launch Pad:',
                     createButton(`Build Launch Pad`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'launchPad'], () => {
-                        buildSpaceMiningBuilding('launchPad');
+                        buildSpaceMiningBuilding('launchPad', false);
                         document.getElementById('spaceRocket1BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket2BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');

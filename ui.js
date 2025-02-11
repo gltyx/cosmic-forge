@@ -60,7 +60,10 @@ import {
     getCurrentStarSystem,
     setSortAsteroidMethod,
     getAsteroidArray,
-    getIsAntimatterBoostActive
+    getIsAntimatterBoostActive,
+    setRocketsBuilt,
+    setAntimatterSvgEventListeners,
+    setAntimatterUnlocked
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -90,6 +93,9 @@ import {
     toggleAllPower,
     boostAntimatterRate,
     resetRocketForRefuelling,
+    discoverAsteroid,
+    buildSpaceMiningBuilding,
+
 } from './game.js';
 
 // import {
@@ -2894,4 +2900,37 @@ give100AllResourcesAndCompoundsButton.addEventListener('click', () => {
     console.log('100 of all resources and compounds!');
 });
 
+const add10AsteroidsButton = document.getElementById('add10AsteroidsButton');
+add10AsteroidsButton.addEventListener('click', () => {
+    for (let i = 0; i < 10; i++) {
+        discoverAsteroid(true);
+    }
+    showNotification('CHEAT! Discovered 10 Asteroids!', 'info');
+});
+
+const buildLaunchPadScannerAndAllRocketsButton = document.getElementById('buildLaunchPadScannerAndAllRocketsButton');
+buildLaunchPadScannerAndAllRocketsButton.addEventListener('click', () => {
+    buildSpaceMiningBuilding('spaceTelescope', true);
+    buildSpaceMiningBuilding('launchPad', true);
+
+    setResourceDataObject(getResourceDataObject('space', ['upgrades', 'rocket1', 'parts']), 'space', ['upgrades', 'rocket1', 'builtParts']);
+    setResourceDataObject(getResourceDataObject('space', ['upgrades', 'rocket2', 'parts']), 'space', ['upgrades', 'rocket2', 'builtParts']);
+    setResourceDataObject(getResourceDataObject('space', ['upgrades', 'rocket3', 'parts']), 'space', ['upgrades', 'rocket3', 'builtParts']);
+    setResourceDataObject(getResourceDataObject('space', ['upgrades', 'rocket4', 'parts']), 'space', ['upgrades', 'rocket4', 'builtParts']);
+
+    setRocketsBuilt('rocket1');
+    setRocketsBuilt('rocket2');
+    setRocketsBuilt('rocket3');
+    setRocketsBuilt('rocket4');
+
+    buildLaunchPadScannerAndAllRocketsButton.classList.add('red-disabled-text');
+    showNotification('CHEAT! Launch Pad, Space Scanner and all Rockets Built!', 'info');
+});
+
+const gain10000AntimatterButton = document.getElementById('gain10000AntimatterButton');
+gain10000AntimatterButton.addEventListener('click', () => {
+    setAntimatterUnlocked(true);
+    setResourceDataObject(getResourceDataObject('antimatter', ['quantity']) + 10000, 'antimatter', ['quantity']);
+    showNotification('CHEAT! 10000 Antimatter added!', 'info');
+});
 
