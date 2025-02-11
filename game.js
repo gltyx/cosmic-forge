@@ -1677,6 +1677,7 @@ function updateAntimatterAndDiagram() {
                 if (!getRocketDirection(`rocket${i}`)) {
                     setRocketDirection(`rocket${i}`, true); //set rocket returning
                     startTravelToAndFromAsteroidTimer([0, 'returning'], `rocket${i}`, getRocketDirection(`rocket${i}`));
+                    boostAntimatterRate(false);
                 }
             }
  
@@ -3477,7 +3478,7 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
 
 export function resetRocketForNextJourney(rocket) {
     setResourceDataObject(0, 'space', ['upgrades', rocket, 'fuelQuantity']);
-    setRocketsFuellerStartedArray(rocket, 'remove');
+    setRocketsFuellerStartedArray(rocket, 'remove', 'reset');
     setLaunchedRockets(rocket, 'remove');
     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket, 0);
     setRocketTravelDuration(rocket, 0);

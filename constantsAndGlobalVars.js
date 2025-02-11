@@ -1502,18 +1502,17 @@ export function getAsteroidArray() {
     return asteroidArray;
 }
 
-export function setRocketsFuellerStartedArray(value, addRemove) {
+export function setRocketsFuellerStartedArray(value, addRemove, matchType = 'exact') {
     if (addRemove === 'add') {
         rocketsFuellerStartedArray.push(value);
     } else if (addRemove === 'remove') {
         rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(
-            item => !item.startsWith(value)
+            item => matchType === 'reset' ? !item.startsWith(value) : item !== value
         );
     }
 
     rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== '');
 }
-
 
 export function getRocketsFuellerStartedArray() {
     return rocketsFuellerStartedArray;
