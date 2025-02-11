@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getCurrencySymbol,
     getBoostRate,
     setHasAntimatterSvgRightBoxDataChanged,
     getHasAntimatterSvgRightBoxDataChanged,
@@ -229,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener("mouseleave", (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(false, false);
+                boostAntimatterRate(false);
             }
         }
     }, true);   
@@ -237,7 +238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('mousedown', (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(true, false);
+                boostAntimatterRate(true);
             }
         }
     });
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.addEventListener('mouseup', (e) => {
         if (getResourceDataObject('antimatter', ['rate']) > 0) {
             if (e.target && e.target.id === 'svgRateBarOuter') {
-                boostAntimatterRate(false, false);
+                boostAntimatterRate(false);
             }
         }
     });
@@ -1345,7 +1346,7 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
             ['', `Rocket ${index + 1}`],
-            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid", null],
+            [getMiningObject()[`rocket${index + 1}`] === 'refuel' ? "Requires Refuelling" : "Not at Asteroid", ""],
             ["", ""],
             ["", ""]
         ];
@@ -1406,17 +1407,10 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
                 valueCell.innerHTML = value;
             }
     
-            if (label === "Not at Asteroid" || label === "Requires Refuelling") {
+            if (label === "Not at Asteroid") {
                 labelCell.style.color = label === "Not at Asteroid" 
                     ? "var(--disabled-text)" 
                     : "var(--warning-text)";
-
-                    if (label === 'Requires Refuelling') {
-                        const refuelButton = createRefuelButton(`rocket${index + 1}`);
-                        if (refuelButton) {
-                            valueCell.appendChild(refuelButton);
-                        }
-                    }
             } else {
                 valueCell.innerHTML = value;
             }
@@ -1490,22 +1484,6 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         svgElement.appendChild(label);
     });
     return [topMostY, bottomMostY, rightOffset, boxWidth, boxHeight];
-}
-
-function createRefuelButton(rocketId) {
-    return createButton(
-        "Refuel",
-        ["option-button", "ready-text", "refuel-rocket"],
-        () => resetRocketForRefuelling(rocketId),
-        "upgradeCheck",
-        "",
-        null,
-        rocketId,
-        null,
-        true,
-        null,
-        null
-    );
 }
 
 export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
@@ -2594,14 +2572,21 @@ export function toggleGameFullScreen() {
     }
 }
 
-export function switchFuelGaugeWhenFuellerBought(rocket) {
+export function switchFuelGaugeWhenFuellerBought(rocket, type) {
     const fuellerBought = getRocketsFuellerStartedArray().some(item => item === rocket && !item.includes('FuelledUp'));
 
-    if (fuellerBought && getCurrentOptionPane() === rocket) {
-        const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
-        const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
-        progressFuelingElement.classList.remove('invisible');
-        rocketLaunchButton.classList.remove('invisible');
+    if ((fuellerBought || type !== 'normal') && getCurrentOptionPane() === rocket) {
+        if (type === 'normal') {
+            const progressFuelingElement = document.getElementById(rocket + 'FuellingProgressBarContainer');
+            const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
+            progressFuelingElement.classList.remove('invisible');
+            rocketLaunchButton.classList.remove('invisible');
+        } else {
+            const optionContentElement = document.getElementById(`optionContentTab6`);
+            optionContentElement.innerHTML = '';
+            drawTab6Content(`${capitaliseString(rocket).replace(/(\d+)/, ' $1')}`, optionContentElement);
+        }
+
     }
 }
 
@@ -2701,16 +2686,22 @@ export function sortAsteroidTable(asteroidsArray, sortMethod) {
         const asteroidA = a[nameA];
         const asteroidB = b[nameB];
 
-        // Prioritize non-mined asteroids first
-        if (asteroidA.beingMined && !asteroidB.beingMined) return 1;
-        if (!asteroidA.beingMined && asteroidB.beingMined) return -1;
+        const isExhaustedA = asteroidA.quantity[0] === 0;
+        const isExhaustedB = asteroidB.quantity[0] === 0;
+        const isMinedA = asteroidA.beingMined;
+        const isMinedB = asteroidB.beingMined;
 
-        // Normal sorting based on the selected method
+        if (isExhaustedA && !isExhaustedB) return 1;
+        if (!isExhaustedA && isExhaustedB) return -1;
+
+        if (isMinedA && !isMinedB) return 1;
+        if (!isMinedA && isMinedB) return -1;
+
         switch (sortMethod) {
             case "rarity":
                 const rarityOrder = { "Legendary": 1, "Rare": 2, "Uncommon": 3, "Common": 4 };
                 return rarityOrder[asteroidA.rarity[0]] - rarityOrder[asteroidB.rarity[0]];
-            
+
             case "distance":
                 return asteroidA.distance[0] - asteroidB.distance[0];
 

@@ -1,12 +1,12 @@
-import { getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray } from './constantsAndGlobalVars.js';
-import { timerManager, startTravelToAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray } from './constantsAndGlobalVars.js';
+import { timerManager, startTravelToAndFromAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
     const asteroids = getAsteroidArray();
-    const asteroidsBeingMined = getMiningObject();
+    const asteroidsBeingMinedOrExhausted = getMiningObject();
     if (heading === 'Space Telescope') {
         const spaceBuildTelescopeRow = createOptionRow(
                     'spaceBuildTelescopeRow',
@@ -161,10 +161,10 @@ export function drawTab6Content(heading, optionContentElement) {
         });
     }
 
-    if (heading === 'Rocket 1') createRocketUI('rocket1', optionContentElement, asteroids, asteroidsBeingMined);
-    if (heading === 'Rocket 2') createRocketUI('rocket2', optionContentElement, asteroids, asteroidsBeingMined);
-    if (heading === 'Rocket 3') createRocketUI('rocket3', optionContentElement, asteroids, asteroidsBeingMined);
-    if (heading === 'Rocket 4') createRocketUI('rocket4', optionContentElement, asteroids, asteroidsBeingMined);
+    if (heading === 'Rocket 1') createRocketUI('rocket1', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === 'Rocket 2') createRocketUI('rocket2', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === 'Rocket 3') createRocketUI('rocket3', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === 'Rocket 4') createRocketUI('rocket4', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
     
     if (heading === 'Asteroids') {
         let asteroidsArray = getAsteroidArray();
@@ -236,15 +236,28 @@ export function drawTab6Content(heading, optionContentElement) {
             const { name, distance, easeOfExtraction, quantity, rarity } = asteroid[asteroidName];
             const asteroidRowName = `asteroidRow_${name}`;
 
-            const rarityElement = asteroid[asteroidName].beingMined ? createTextElement("Being Mined!", 'asteroidInfoContainerRarity', ['value-asteroid', 'green-ready-text']) : createTextElement(`${rarity[0]}`, 'asteroidInfoContainerRarity', ['value-asteroid', 'rarity-asteroid', rarity[1]]);    
-    
+            let rarityElementOverride;
+
+            if (asteroid[asteroidName].quantity[0] === 0) {
+                rarityElementOverride = createTextElement("Exhausted!", 'asteroidInfoContainerRarity', ['value-asteroid', 'red-disabled-text']);
+                asteroid[asteroidName].quantity[1] = 'red-disabled-text';
+                asteroid[asteroidName].easeOfExtraction[1] = 'red-disabled-text';
+                asteroid[asteroidName].distance[1] = 'red-disabled-text';
+            } else if (asteroid[asteroidName].beingMined) {
+                rarityElementOverride = createTextElement("Being Mined!", 'asteroidInfoContainerRarity', ['value-asteroid', 'green-ready-text']);
+            } else {
+                rarityElementOverride = createTextElement(`${rarity[0]}`, 'asteroidInfoContainerRarity', ['value-asteroid', 'rarity-asteroid', rarity[1]]);
+            }
+            
             const asteroidRow = createOptionRow(
                 `${asteroidRowName}`,
                 null,
-                asteroid[asteroidName].beingMined
-                ? [`${name}:`, 'green-ready-text']
-                : `${name}:`, 
-                rarityElement,
+                asteroid[asteroidName].quantity[0] === 0 
+                ? [`${name}:`, 'red-disabled-text']
+                : asteroid[asteroidName].beingMined 
+                    ? [`${name}:`, 'green-ready-text']
+                    : [`${name}:`],
+                rarityElementOverride,
                 createTextElement(
                     `${distance[0]}`,
                     'asteroidInfoContainerDistance',
@@ -274,6 +287,11 @@ export function drawTab6Content(heading, optionContentElement) {
                 'asteroid',
                 [true, '25%', '75%']
             );
+
+            if (asteroid[asteroidName].quantity[0] === 0) {
+                asteroidRow.style.opacity = "0.5";
+            }
+
             optionContentElement.appendChild(asteroidRow);
         });
     } 
@@ -333,6 +351,12 @@ function setFuellingVisibility(rocket, params) {
             autoBuyerRow.classList.add('invisible');
         }
     }
+
+    if (!fuellingState && !fuelledUpState && !launchedState) {
+        document.getElementById(`${rocket}FuellingProgressBar`).style.width = '0%';
+        document.getElementById(`${rocket}FuellingProgressBarContainer`).classList.add('invisible');
+        
+    }
 }
 
 function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBeingMined) {
@@ -343,18 +367,20 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
     const fuelledUpState = getRocketsFuellerStartedArray().includes(`${rocketId}FuelledUp`);
     const launchedState = getLaunchedRockets().includes(rocketId);
 
-    const filteredAsteroids = asteroids.filter(obj => { //take out asteroids already being mined
+    let filteredAsteroids = asteroids.filter(obj => {
         const asteroidName = Object.keys(obj)[0];
-        return !Object.values(asteroidsBeingMined).includes(asteroidName);
+        const asteroid = obj[asteroidName];
+    
+        return !Object.values(asteroidsBeingMined).includes(asteroidName) && asteroid.quantity[0] > 0;
     });
-
+    
     const rocketAutoBuyerRow = createOptionRow(
         `space${capitaliseString(rocketId)}AutoBuyerRow`,
         getResourceDataObject('space', ['upgrades', rocketId, 'autoBuyer', 'tier1', 'nameUpgrade']),
         'Fuel:',
         createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', rocketId], () => {
             setRocketsFuellerStartedArray(rocketId, 'add');
-            switchFuelGaugeWhenFuellerBought(rocketId);
+            switchFuelGaugeWhenFuellerBought(rocketId, 'normal');
         }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
         createTextElement(`<div id="${rocketId}FuellingProgressBar">`, `${rocketId}FuellingProgressBarContainer`, ['progress-bar-container', 'invisible']),
         createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', `${rocketId}-launch-button`, 'invisible'], () => {
@@ -392,7 +418,8 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
                 setDestinationAsteroid(rocketId, value);
             }, ['travel-to']),                                 
         createButton(`Travel`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', `${rocketId}-travel-to-asteroid-button`], () => {
-            startTravelToAsteroidTimer([0, 'buttonClick'], rocketId);
+            startTravelToAndFromAsteroidTimer([0, 'buttonClick'], rocketId, false);
+            setRocketDirection(rocketId, false);
         }, 'upgradeCheck', '', 'autoBuyer', 'travelToAsteroid', 'time', true, null, 'spaceMiningPurchase'),
         createTextElement(`<div id="spaceTravelToAsteroidProgressBar${capitaliseString(rocketId)}">`, `spaceTravelToAsteroidProgressBar${capitaliseString(rocketId)}Container`, ['progress-bar-container', 'invisible']),
         null,

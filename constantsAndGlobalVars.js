@@ -106,6 +106,13 @@ let destinationAsteroid = {
     rocket4: null 
 };
 
+let rocketDirection = { //false outgoing true returning
+    rocket1: false,
+    rocket2: false,
+    rocket3: false,
+    rocket4: false 
+}
+
 export let oneOffPrizesAlreadyClaimedArray = [];
 
 let lastScreenOpenRegister = {
@@ -142,6 +149,7 @@ let notationType = 'normalCondensed';
 //FLAGS
 // let audioMuted;
 // let languageChangedFlag;
+
 let checkRocketFuellingStatus = {
     rocket1: false,
     rocket2: false,
@@ -345,6 +353,7 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketTravelDuration = rocketTravelDuration;
     gameState.miningObject = miningObject;
     gameState.destinationAsteroid = destinationAsteroid;
+    gameState.rocketDirection = rocketDirection;
 
     // Flags
     gameState.flags = {
@@ -406,6 +415,7 @@ export function restoreGameStatus(gameState, type) {
             rocketTravelDuration = gameState.rocketTravelDuration ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             miningObject = gameState.miningObject ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
+            rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1492,16 +1502,17 @@ export function getAsteroidArray() {
     return asteroidArray;
 }
 
-export function setRocketsFuellerStartedArray(value, addRemove) {
+export function setRocketsFuellerStartedArray(value, addRemove, matchType = 'exact') {
     if (addRemove === 'add') {
         rocketsFuellerStartedArray.push(value);
     } else if (addRemove === 'remove') {
-        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== value);
+        rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(
+            item => matchType === 'reset' ? !item.startsWith(value) : item !== value
+        );
     }
 
     rocketsFuellerStartedArray = rocketsFuellerStartedArray.filter(item => item !== '');
 }
-
 
 export function getRocketsFuellerStartedArray() {
     return rocketsFuellerStartedArray;
@@ -1523,8 +1534,12 @@ export function getWeatherEfficiencyApplied(key) {
     return weatherEfficiencyApplied;
 }
 
-export function setLaunchedRockets(value) {
-    launchedRockets.push(value);
+export function setLaunchedRockets(value, addRemove) {
+    if (addRemove === 'add') {
+        launchedRockets.push(value);
+    } else if (addRemove === 'remove') {
+        launchedRockets = launchedRockets.filter(item => item !== value);
+    }
 }
 
 export function getLaunchedRockets() {
@@ -1693,6 +1708,14 @@ export function setAntimatterSvgEventListeners(value) {
 
 export function getBoostRate() {
     return BOOST_ANTIMATTER_RATE_MULTIPLIER;
+}
+
+export function setRocketDirection(key, value) {
+    rocketDirection[key] = value;
+}
+
+export function getRocketDirection(key) {
+    return rocketDirection[key] ?? false;
 }
 
 
