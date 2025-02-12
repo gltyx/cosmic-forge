@@ -2691,10 +2691,6 @@ function checkStatusAndSetTextClasses(element) {
     if (element.classList.contains('powered-check')) {
         return powerOnOrOffChecks(element);
     }
-
-    if (element.classList.contains('building-purchase')) {
-        setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element); //not return as continues in to resourceCostSellChecks
-    }
             
     if (element.classList.contains('building-purchase-button')) {
         return handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
@@ -2705,7 +2701,11 @@ function checkStatusAndSetTextClasses(element) {
     }
 
     if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        return resourceCostSellChecks(element);  
+        resourceCostSellChecks(element);  
+    }
+
+    if (element.classList.contains('building-purchase')) {
+        setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
     }
 }
 
