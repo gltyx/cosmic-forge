@@ -2561,7 +2561,9 @@ function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
     if (hasRedDisabledText) {
         buyButton.classList.add('red-disabled-text');
     } else {
-        buyButton.classList.remove('red-disabled-text');
+        if (buyButton.innerHTML !== 'Built!') {
+            buyButton.classList.remove('red-disabled-text');
+        }
     }
 }
 
@@ -2579,6 +2581,16 @@ function handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element) {
             }
         }
     });
+
+    if (element.innerHTML === 'Built!') {
+        element.classList.remove('green-ready-text');
+        element.classList.add('red-disabled-text');
+        const rocketNumber = element.dataset.resourceToFuseTo;
+        const partsCountElement = document.getElementById(`${rocketNumber}PartsCountText`);
+        partsCountElement.classList.add('invisible');
+        return true;
+    }
+    return false;
 }
 
 function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
@@ -2597,7 +2609,15 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
     const launchButton = document.querySelector(`.${rocket}-launch-button`);
 
     if (!filteredRockets.includes(rocket) && currentCash >= price) { //purchase launchPad, spaceTelescope etc
-        element.classList.remove('red-disabled-text');
+        if (element.dataset?.rowCategory !== 'rocketFuel') {
+            element.classList.remove('red-disabled-text');
+        } else {
+            if (getPowerOnOff()) {
+                element.classList.remove('red-disabled-text');
+            } else {
+                element.classList.add('red-disabled-text');
+            }
+        }        
     } else if (filteredRockets.includes(rocket)) {
         element.classList.add('invisible');
         accompanyingLabel.textContent = 'Fuelling...';
@@ -2693,7 +2713,10 @@ function checkStatusAndSetTextClasses(element) {
     }
             
     if (element.classList.contains('building-purchase-button')) {
-        return handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
+        const earlyReturn = handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element);
+        if (earlyReturn) {
+            return;
+        }
     }  
 
     if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
@@ -4625,7 +4648,7 @@ export function fuelRockets() {
 
         rockets.forEach(rocket => {
             const fuelRocketButton = document.querySelector(`button.${rocket}`);
-            if (fuelRocketButton) {
+            if (fuelRocketButton && getTechUnlockedArray().includes('advancedFuels' && getPowerOnOff())) {
                 fuelRocketButton.classList.remove('red-disabled-text');
             }
 
