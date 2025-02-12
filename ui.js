@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setCurrentDestinationDropdownText,
+    getCurrentDestinationDropdownText,
     getCurrencySymbol,
     getBoostRate,
     setHasAntimatterSvgRightBoxDataChanged,
@@ -588,6 +590,7 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
             const value = event.target.getAttribute('data-value');
             const selectedOption = options.find(option => option.value == value);
             dropdownText.innerHTML = selectedOption ? selectedOption.text : 'Select an option';
+            setCurrentDestinationDropdownText(dropdownText.innerHTML);
             dropdownOptions.classList.remove('show');
             selectContainer.style.borderRadius = '10px 10px 10px 10px';
             onChange(value);

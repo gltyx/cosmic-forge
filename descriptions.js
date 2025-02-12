@@ -94,7 +94,8 @@ export function initialiseDescriptions() {
         giganticTurbines: 'Gigantic Turbines Researched\n\nThis opens up new research in power generation!',
         steelFoundries: 'Steel Foundries Researched\n\nYou can now create Steel compounds!',
         rocketComposites: 'Rocket Composites Researched\n\nYou can now build Rocket Parts!',
-        advancedFuels: 'Advanced Fuels Researched\n\nYou can now build Rocket Fuel!',
+        advancedFuels: 'Advanced Fuels Researched\n\nYou can now fuel Rockets!',
+        planetaryNavigation: 'Planetary Navigation Researched\n\nYou can now travel to Asteroids!',
         advancedPowerGeneration: 'Advanced Power Generation Researched\n\nBuild Advanced Power Plants!',
         basicPowerGeneration: 'Basic Power Generation Researched\n\nYou can now build basic Power Stations!',
         solarPowerGeneration: 'Solar Power Generation Researched\n\nYou can now build Solar Panels to generate power!',
@@ -604,7 +605,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         researchScienceLabRow: {
-            content1: `Build a Science Lab to do large amounts of Research - Power: ${Math.floor(getResourceDataObject('research', ['upgrades', 'scienceLab', 'rate']) * getTimerRateRatio())}KW / s`,
+            content1: `Build a Science Lab to do large amounts of Research - Power: ${Math.floor(getResourceDataObject('research', ['upgrades', 'scienceLab', 'energyUse']) * getTimerRateRatio())}KW / s`,
             content2: "",
             updateAt: ""
         },
@@ -731,6 +732,11 @@ export function initialiseDescriptions() {
         techAdvancedFuelsRow: {
             content1: "Unlock Advanced Fuels to fuel your Space Mining vessels.",
             content2: "Unlock Advanced Fuels to fuel your Space Mining vessels<br><br><span class='green-ready-text'>Create Rocket Fuel</span>",
+            updateAt: ""
+        },
+        techPlanetaryNavigationRow: {
+            content1: "Unlock the ability to travel to Asteroids.",
+            content2: "Unlock the ability to travel to Asteroids.<br><br><span class='green-ready-text'>Travel To Asteroids</span>",
             updateAt: ""
         },
         techAdvancedPowerGenerationRow: {

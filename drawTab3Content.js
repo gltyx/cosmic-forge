@@ -1,4 +1,4 @@
-import { getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
@@ -805,6 +805,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('advancedFuels');
                         showNotification(techNotificationMessages.advancedFuels, 'info');
                         setRenderedTechTree(false);
+                        setCanFuelRockets(true);
                     }, 'techUnlock', '', 'advancedFuels', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -814,6 +815,37 @@ export function drawTab3Content(heading, optionContentElement) {
                     '',
                     'techUnlock',
                     'advancedFuels',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'planetaryNavigation',
+                row: createOptionRow(
+                    'techPlanetaryNavigationRow',
+                    null,
+                    'Planetary Navigation:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('planetaryNavigation', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('planetaryNavigation');
+                        showNotification(techNotificationMessages.planetaryNavigation, 'info');
+                        setRenderedTechTree(false);
+                        setCanTravelToAsteroids(true);
+                    }, 'techUnlock', '', 'planetaryNavigation', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['planetaryNavigation', 'price'])} Research${getResourceDataObject('techs', ['planetaryNavigation', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="planetaryNavigationPrereq">${getResourceDataObject('techs', ['planetaryNavigation', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'planetaryNavigation',
                     null,
                     'research',
                     null,

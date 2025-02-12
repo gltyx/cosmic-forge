@@ -77,6 +77,7 @@ let baseSearchTimerDuration = 180000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
+let currentDestinationDropdownText = 'Select an option';
 
 let miningObject = {
     rocket1: null,
@@ -190,6 +191,8 @@ let asteroidTimerCanContinue = false;
 let antimatterUnlocked = false;
 let isAntimatterBoostActive = false;
 let antimatterSvgEventListeners = false;
+let canTravelToAsteroids = false;
+let canFuelRockets = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -369,7 +372,9 @@ export function captureGameStatusForSaving(type) {
         telescopeReadyToSearch: getTelescopeReadyToSearch(),
         currentlyTravellingToAsteroid: currentlyTravellingToAsteroid,
         rocketReadyToTravel: rocketReadyToTravel,
-        antimatterUnlocked: antimatterUnlocked
+        antimatterUnlocked: antimatterUnlocked,
+        canTravelToAsteroids: canTravelToAsteroids,
+        canFuelRockets: canFuelRockets
     }
 
     return gameState;
@@ -431,6 +436,8 @@ export function restoreGameStatus(gameState, type) {
             currentlyTravellingToAsteroid = gameState.flags.currentlyTravellingToAsteroid ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
             rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? {rocket1: true, rocket2: true, rocket3: true, rocket4: true};
             antimatterUnlocked = gameState.flags.antimatterUnlocked ?? false;
+            canTravelToAsteroids = gameState.flags.canTravelToAsteroids ?? false;
+            canFuelRockets = gameState.flags.canFuelRockets ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1717,6 +1724,34 @@ export function setRocketDirection(key, value) {
 export function getRocketDirection(key) {
     return rocketDirection[key] ?? false;
 }
+
+export function setCanTravelToAsteroids(value) {
+    canTravelToAsteroids = value;
+}
+
+export function getCanTravelToAsteroids() {
+    return canTravelToAsteroids ?? false;
+}
+
+export function setCanFuelRockets(value) {
+    canFuelRockets = value;
+}
+
+export function getCanFuelRockets() {
+    return canFuelRockets ?? false;
+}
+
+export function setCurrentDestinationDropdownText(value) {
+    currentDestinationDropdownText = value;
+}
+
+export function getCurrentDestinationDropdownText() {
+    return currentDestinationDropdownText ?? 'Select an option';
+}
+
+
+
+
 
 
 

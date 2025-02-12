@@ -1,4 +1,6 @@
 import {
+    getCanFuelRockets,
+    setCanFuelRockets,
     setRocketDirection,
     getRocketDirection,
     getBoostRate,
@@ -125,6 +127,8 @@ import {
     getSaveName,
     setHasAntimatterSvgRightBoxDataChanged,
     setAntimatterSvgEventListeners,
+    getCanTravelToAsteroids,
+    getCurrentDestinationDropdownText,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -1824,7 +1828,7 @@ function travelToAsteroidChecks(element) {
                 destinationAsteroidTextElement.innerHTML = `${getDestinationAsteroid(rocketName)}`;
             }
 
-            if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName)) {
+            if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName) && getCanTravelToAsteroids()) {
                 accompanyingLabel.classList.remove('red-disabled-text');
                 accompanyingLabel.innerText = 'Ready To Travel...';
                 accompanyingLabel.classList.add('green-ready-text');
@@ -1858,6 +1862,17 @@ function travelToAsteroidChecks(element) {
                     destinationAsteroidTextElement.classList.add('invisible');
                     element.classList.add('invisible');
                     travelToDropdown.classList.remove('invisible');
+                } else if (!getCanTravelToAsteroids()) {
+                    element.classList.add('red-disabled-text');
+                    element.classList.remove('green-ready-text');
+                    accompanyingLabel.classList.remove('green-ready-text');
+                    accompanyingLabel.classList.add('red-disabled-text');
+                    accompanyingLabel.innerHTML = `Lack Nav Tech!`;
+                    travelToDropdown.classList.remove('invisible');
+                }
+
+                if (!travelToDropdown.classList.contains('invisible')) {
+                    travelToDropdown.querySelector('div.dropdown span').innerHTML = getCurrentDestinationDropdownText();
                 }
 
                 const elapsedTime = getRocketTravelDuration(rocketName) - getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocketName);
@@ -1872,7 +1887,7 @@ function travelToAsteroidChecks(element) {
         if (rocketClass) {
             const rocketName = rocketClass.match(/^rocket\d+/)[0];
 
-            if (!getDestinationAsteroid(rocketName) || !getLaunchedRockets().includes(rocketName) || getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
+            if (!getCanTravelToAsteroids() || !getDestinationAsteroid(rocketName) || !getLaunchedRockets().includes(rocketName) || getCurrentlyTravellingToAsteroid(rocketName) || !getRocketReadyToTravel(rocketName) || getMiningObject()[rocketName] !== null) {
                 element.classList.add('red-disabled-text');
                 element.classList.remove('green-ready-text');
             } else {
@@ -2567,6 +2582,7 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
     const rocketsFuellerStartedArray = getRocketsFuellerStartedArray();
     const accompanyingLabel = element.parentElement.parentElement.querySelector('.description-container label');
     const filteredRockets = rocketsFuellerStartedArray.filter(item => !item.includes('FuelledUp'));
+    const launchButton = document.querySelector(`.${rocket}-launch-button`);
 
     if (!filteredRockets.includes(rocket) && currentCash >= price) { //purchase launchPad, spaceTelescope etc
         element.classList.remove('red-disabled-text');
@@ -2579,11 +2595,19 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
         element.classList.add('red-disabled-text');
     }
 
-    if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`)) {
+    if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano') {
         document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
         document.getElementById('fuelDescription').classList.add('green-ready-text');
         document.getElementById('fuelDescription').classList.remove('red-disabled-text');
         setCheckRocketFuellingStatus(rocket, false);
+        launchButton.classList.add('green-ready-text');
+        launchButton.classList.remove('red-disabled-text');
+    } else if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
+        document.getElementById('fuelDescription').textContent = 'Bad Weather!';
+        document.getElementById('fuelDescription').classList.remove('green-ready-text');
+        document.getElementById('fuelDescription').classList.add('red-disabled-text');
+        launchButton.classList.remove('green-ready-text');
+        launchButton.classList.add('red-disabled-text');
     }
 }
 
@@ -2682,6 +2706,7 @@ function checkTravelToDescriptions(element) {
                 const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
                 const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
                 labelElement.classList.add('green-ready-text');
+                labelElement.classList.remove('red-disabled-text');
                 labelElement.innerHTML = `Returning ... ${timeLeft}s`;
             }
         } else {
@@ -2690,6 +2715,7 @@ function checkTravelToDescriptions(element) {
                 const timeLeft = Math.floor(getTimeLeftUntilRocketTravelToAsteroidTimerFinishes(rocket) / 1000);
                 const labelElement = element.parentElement.parentElement.querySelector('div.description-container label');
                 labelElement.classList.add('green-ready-text');
+                labelElement.classList.remove('red-disabled-text');
                 labelElement.innerHTML = `Travelling ... ${timeLeft}s`;
             }
         }
@@ -4517,11 +4543,11 @@ export function fuelRockets() {
             }
         }
 
-        if (getCurrentOptionPane() === rocket) {
+        if (getCurrentOptionPane() === rocket && getCanFuelRockets()) {
             fuelQuantityProgressBarElement.parentElement.classList.remove('invisible');
         }
 
-        if (getCheckRocketFuellingStatus(rocket) && getPowerOnOff()) {
+        if (getCheckRocketFuellingStatus(rocket) && getPowerOnOff() && getCanFuelRockets()) {
             newFuelQuantity = fuelQuantity + fuelRate * getTimerRateRatio();
 
             setResourceDataObject(newFuelQuantity, 'space', ['upgrades', rocket, 'fuelQuantity']);
@@ -4539,7 +4565,7 @@ export function fuelRockets() {
                     rocketLaunchButton.classList.remove('green-ready-text');
                 }
             }
-        } else if (!getPowerOnOff() && newFuelQuantity < fullLevel) {
+        } else if (!getPowerOnOff() && newFuelQuantity < fullLevel && getCanFuelRockets()) {
             const progressBarPercentage = getFuelLevel(rocket);
             if (rocketLaunchButton) {
                 rocketLaunchButton.classList.add('red-disabled-text');
@@ -4550,6 +4576,57 @@ export function fuelRockets() {
             }
         }
     });
+
+    const rockets = ['rocket1', 'rocket2', 'rocket3', 'rocket4'];
+
+    if (!getCanFuelRockets()) {
+        const fuelDescriptionElement = document.getElementById('fuelDescription');
+        rockets.forEach(rocket => {
+            const fuelRocketButton = document.querySelector(`button.${rocket}`);
+            if (fuelRocketButton) {
+                fuelRocketButton.classList.add('red-disabled-text');
+            }
+
+            if (fuelDescriptionElement) {
+                fuelDescriptionElement.textContent = 'Lack Fuel Tech!';
+                fuelDescriptionElement.classList.remove('green-ready-text');
+                fuelDescriptionElement.classList.add('red-disabled-text');
+            }
+        });
+
+    } else {
+        const fuelDescriptionElement = document.getElementById('fuelDescription');
+        
+        if (fuelDescriptionElement) {
+            fuelDescriptionElement.textContent = 'Fuelling...';
+            fuelDescriptionElement.classList.add('green-ready-text');
+            fuelDescriptionElement.classList.remove('red-disabled-text');
+        }
+
+        rockets.forEach(rocket => {
+            const fuelRocketButton = document.querySelector(`button.${rocket}`);
+            if (fuelRocketButton) {
+                fuelRocketButton.classList.remove('red-disabled-text');
+            }
+
+            if (fuelDescriptionElement && getPowerOnOff() && getRocketsFuellerStartedArray().includes(`${rocket}FuelledUp`) && getCurrentOptionPane() === rocket) {
+                fuelDescriptionElement.textContent = 'Ready For Launch...';
+                fuelDescriptionElement.classList.add('green-ready-text');
+                fuelDescriptionElement.classList.remove('red-disabled-text');
+                return;
+            } else if (fuelDescriptionElement && getPowerOnOff() && !getRocketsFuellerStartedArray().includes(rocket) && getCurrentOptionPane() === rocket) {
+                fuelDescriptionElement.textContent = 'Ready To Fuel...';
+                fuelDescriptionElement.classList.add('green-ready-text');
+                fuelDescriptionElement.classList.remove('red-disabled-text');
+                return;
+            } else if (fuelDescriptionElement && !getPowerOnOff() && getCurrentOptionPane() === rocket) {
+                fuelDescriptionElement.textContent = 'Requires Power!';
+                fuelDescriptionElement.classList.remove('green-ready-text');
+                fuelDescriptionElement.classList.add('red-disabled-text');
+                return;
+            }
+        });
+    }
 }
 
 export function updateRocketDescription() {

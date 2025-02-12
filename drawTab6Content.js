@@ -1,4 +1,4 @@
-import { setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray } from './constantsAndGlobalVars.js';
+import { setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
 import { timerManager, startTravelToAndFromAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
@@ -339,11 +339,21 @@ function setFuellingVisibility(rocket, params) {
     if (fuelledUpState) {
         document.getElementById(`${rocket}FuellingProgressBar`).style.width = '100%';
         const launchButton = document.querySelector(`.${rocket}-launch-button`);
-        launchButton.classList.add('green-ready-text');
-        launchButton.classList.remove('red-disabled-text');
-        launchButton.textContent = 'Launch!';
-        document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
-        document.getElementById('fuelDescription').classList.add('green-ready-text');
+        if (getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano') {
+            launchButton.classList.add('green-ready-text');
+            launchButton.classList.remove('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Ready For Launch...'
+            document.getElementById('fuelDescription').classList.add('green-ready-text');
+        } else {
+            launchButton.classList.remove('green-ready-text');
+            launchButton.classList.add('red-disabled-text');
+            launchButton.textContent = 'Launch!';
+            document.getElementById('fuelDescription').textContent = 'Bad Weather!'
+            document.getElementById('fuelDescription').classList.remove('green-ready-text');
+            document.getElementById('fuelDescription').classList.add('red-disabled-text');
+        }
+
     }
     if (launchedState) {
         const autoBuyerRow = document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`);
