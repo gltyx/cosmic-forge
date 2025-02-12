@@ -246,6 +246,12 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     }
                 }
 
+                if (!saveData.techs.planetaryNavigation) {
+                    saveData.techs.planetaryNavigation = {
+                        appearsAt: [27000, "atmosphericTelescopes", "rocketComposites", "quantumComputing"], prereqs: ['Atmospheric Telescopes', 'Rocket Composites', 'Quantum Computing'], price: 29000, idForRenderPosition: 57
+                    }
+                }
+
                 if (!saveData.antimatter) {
                     saveData.antimatter = {
                         quantity: 0,
