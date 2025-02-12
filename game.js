@@ -4583,6 +4583,7 @@ export function fuelRockets() {
                 rocketLaunchButton.classList.remove('red-disabled-text');
                 rocketLaunchButton.classList.add('green-ready-text');
                 rocketLaunchButton.textContent = 'Launch!';
+                rocketLaunchButton.classList.remove('no-interaction');
             }
         }
 
@@ -4606,6 +4607,7 @@ export function fuelRockets() {
                     rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
                     rocketLaunchButton.classList.remove('red-disabled-text');
                     rocketLaunchButton.classList.remove('green-ready-text');
+                    rocketLaunchButton.classList.add('no-interaction');
                 }
             }
         } else if (!getPowerOnOff() && newFuelQuantity < fullLevel && getCanFuelRockets()) {
@@ -4613,6 +4615,7 @@ export function fuelRockets() {
             if (rocketLaunchButton) {
                 rocketLaunchButton.classList.add('red-disabled-text');
                 rocketLaunchButton.textContent = `${Math.floor(progressBarPercentage)}%`;
+                rocketLaunchButton.classList.add('no-interaction');
                 document.getElementById('fuelDescription').textContent = 'Requires Power!';
                 document.getElementById('fuelDescription').classList.remove('green-ready-text');
                 document.getElementById('fuelDescription').classList.add('red-disabled-text');

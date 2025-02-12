@@ -1433,6 +1433,10 @@ canvas {
     pointer-events: none;
 }
 
+.no-interaction {
+    pointer-events: none;
+}
+
 .rocket-name-field {
     display: inline-block;
     width: auto;
