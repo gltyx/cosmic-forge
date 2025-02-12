@@ -1,7 +1,8 @@
+import { replaceHeaderDescriptions } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: '0.20.0',
+    version: 0.26, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -527,6 +528,14 @@ export let resourceData = {
     },
     space: {
         upgrades: {
+            spaceTelescope: { 
+                spaceTelescopeBoughtYet: false,
+                price: 10000,
+                resource1Price: [20000, 'steel', 'compounds'],
+                resource2Price: [15000, 'glass', 'compounds'],
+                resource3Price: [20000, 'silicon', 'resources'],
+                energyUse: 0.4,
+            },
             launchPad: { 
                 launchPadBoughtYet: false,
                 price: 40000,
@@ -543,7 +552,7 @@ export let resourceData = {
                 resource3Price: [3000, 'steel', 'compounds'],
                 setPrice: 'rocket1Price',
                 fuelQuantity: 0,
-                fuelQuantityToLaunch: 100, //10000
+                fuelQuantityToLaunch: 10000, //10000
                 autoBuyer: {
                     currentTierLevel: 1,
                     normalProgression: false,
@@ -651,6 +660,7 @@ export let resourceData = {
         advancedPowerGeneration: { appearsAt: [6000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 8000, idForRenderPosition: 55 },
         rocketComposites: { appearsAt: [28000, "neutronCapture", "nanoTubeTechnology", "steelFoundries"], prereqs: ['Neutron Capture', 'Nano Tube Technology', 'Steel Foundries'], price: 34000, idForRenderPosition: 55 },
         advancedFuels: { appearsAt: [25000, "hydroCarbons", "neutronCapture", "advancedPowerGeneration"], prereqs: ['HydroCarbons', 'Neutron Capture', 'Advanced Power Generation'], price: 30000, idForRenderPosition: 56 },
+        planetaryNavigation: { appearsAt: [27000, "atmosphericTelescopes", "rocketComposites", "quantumComputing"], prereqs: ['Atmospheric Telescopes', 'Rocket Composites', 'Quantum Computing'], price: 29000, idForRenderPosition: 57 },
         neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
@@ -673,17 +683,26 @@ export let resourceData = {
     currency: {
         cash: 10,
     },
+    antimatter: {
+        quantity: 0,
+        rate: 0,
+        storageCapacity: 100000
+    },
 };
 
 export let starSystems = {
-    spica: {
-        precipitationResourceCategory: 'compounds',
-        precipitationType: 'water',
-        weather: {
-            sunny: [30, '☀', 1, 'white'],
-            cloudy: [47, '☁', 0.6, 'orange'],
-            rain: [20, '☂', 0.4, 'orange'],
-            volcano: [3, '⛰', 0.05, 'red']
+    version: 0.26, //update this whenever changes are made to the structure
+    stars: {
+        spica: {
+            starCode: 'SPC',
+            precipitationResourceCategory: 'compounds',
+            precipitationType: 'water',
+            weather: {
+                sunny: [30, '☀', 1, 'white'],
+                cloudy: [47, '☁', 0.6, 'orange'],
+                rain: [20, '☂', 0.4, 'orange'],
+                volcano: [3, '⛰', 0.05, 'red']
+            }
         }
     }
 };
@@ -701,13 +720,18 @@ export function restoreStarSystemsDataObject(value) {
     starSystems = value;
 }
 
+export function restoreHeaderDescriptionsObject(value) {
+    value = migrateResourceData(value, 'headerDescriptions');
+    replaceHeaderDescriptions(value);
+}
+
 export function getStarSystemWeather(starSystem) {
-    return starSystems[starSystem]?.weather || null;
+    return starSystems.stars[starSystem]?.weather || null;
 }
 
 export function setStarSystemWeather(starSystem, weatherData) {
-    if (starSystems[starSystem]) {
-        starSystems[starSystem].weather = weatherData;
+    if (starSystems.stars[starSystem]) {
+        starSystems.stars[starSystem].weather = weatherData;
     }
 }
 

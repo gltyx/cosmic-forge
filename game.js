@@ -3380,9 +3380,9 @@ function startInitialTimers() {
         selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        //const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
-        const randomDurationInMs = 10000; //DEBUG For Testing Weather
+        //const randomDurationInMs = 10000; //DEBUG For Testing Weather
 
         const durationInSeconds = randomDurationInMs / 1000;
 
