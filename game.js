@@ -269,6 +269,8 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         const elements = document.querySelectorAll('.notation');
 
+        console.log(getTimeLeftUntilAsteroidScannerTimerFinishes());
+
         showHideDynamicColumns();
         updateDynamicColumns();
         showTabsUponUnlock();
@@ -1914,7 +1916,6 @@ function searchAsteroidChecks(element) {
                 accompanyingLabel.innerText = 'Ready To Search...';
                 accompanyingLabel.classList.add('green-ready-text');
             }
-            setAsteroidTimerCanContinue(true);
         } else {
             accompanyingLabel.classList.add('red-disabled-text');
             accompanyingLabel.classList.remove('green-ready-text');
@@ -1922,7 +1923,6 @@ function searchAsteroidChecks(element) {
             const elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
             const progressBarPercentage = (elapsedTime / getCurrentAsteroidSearchTimerDurationTotal()) * 100;
             document.getElementById('spaceTelescopeSearchProgressBar').style.width = `${progressBarPercentage}%`;
-            setAsteroidTimerCanContinue(false);
         }
     }
 
@@ -3302,6 +3302,8 @@ function startInitialTimers() {
                 addOrRemoveUsedPerSecForFuelRate(fuelType, null, fuelCategory, powerBuilding, true);
             });
         }
+
+        setAsteroidTimerCanContinue(getPowerOnOff());
     });
 
     let weatherCountDownToChangeInterval;
@@ -4375,6 +4377,8 @@ export function offlineGains(switchedFocus) {
             const currentRocketFuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
             setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
         });
+
+        setAsteroidTimerCanContinue(getPowerOnOff());
     
         if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
             const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
