@@ -2602,7 +2602,7 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
         setCheckRocketFuellingStatus(rocket, false);
         launchButton.classList.add('green-ready-text');
         launchButton.classList.remove('red-disabled-text');
-    } else if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
+    } else if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano')) {
         document.getElementById('fuelDescription').textContent = 'Bad Weather!';
         document.getElementById('fuelDescription').classList.remove('green-ready-text');
         document.getElementById('fuelDescription').classList.add('red-disabled-text');
