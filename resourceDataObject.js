@@ -1,3 +1,4 @@
+import { replaceHeaderDescriptions } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
@@ -717,6 +718,11 @@ export function restoreResourceDataObject(value) {
 export function restoreStarSystemsDataObject(value) {
     value = migrateResourceData(value, 'starSystemsData');
     starSystems = value;
+}
+
+export function restoreHeaderDescriptionsObject(value) {
+    value = migrateResourceData(value, 'headerDescriptions');
+    replaceHeaderDescriptions(value);
 }
 
 export function getStarSystemWeather(starSystem) {

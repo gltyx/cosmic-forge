@@ -779,6 +779,32 @@ export function selectTheme(theme) {
 let notificationQueue = [];
 let isNotificationActive = false;
 
+export function showWeatherNotification(type) {
+    if (type === 'rain') {
+        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) {
+            showNotification('Heavy Rain! No launches until it clears, but water stores benefit!', 'warning');
+        } else if (getTechUnlockedArray().includes('rocketComposites')) {
+            showNotification('Heavy Rain! No launches until it clears.', 'warning');
+        } else if (getTechUnlockedArray().includes('compounds')) {
+            showNotification('Heavy Rain! Water stores benefit!', 'warning');
+        } else {
+            showNotification('Heavy Rain!', 'warning');
+        }
+    } else if (type === 'volcano') {
+        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('solarPowerGeneration')) {
+            showNotification('Volcano Eruption! No launches until it clears, and solar power generation severely affected!', 'error');
+        } else if (getTechUnlockedArray().includes('rocketComposites')) {
+            showNotification('Volcano Eruption! No launches until it clears.', 'error');
+        } else if (getTechUnlockedArray().includes('solarPowerGeneration')) {
+            showNotification('Volcano Eruption! Solar power severely affected!', 'error');
+        } else {
+            showNotification('Volcano Eruption!', 'warning');
+        }
+    } else {
+        console.error('Unknown weather type:', type);
+    }
+}
+
 export function showNotification(message, type = 'info', time = 3000) {
     if (getNotificationsToggle()) {
         notificationQueue.push({ message, type, time });
@@ -810,8 +836,10 @@ function sendNotificationIfActive(message, type, duration) {
         notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
     });
 
-    notificationContainer.prepend(notification);
-
+    if (notificationContainer) {
+        notificationContainer.prepend(notification);
+    }
+    
     setTimeout(() => {
         notification.style.opacity = '1';
         notification.style.transform = 'translateY(0)';

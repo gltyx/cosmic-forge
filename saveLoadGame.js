@@ -25,6 +25,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
+import { headerDescriptions } from './descriptions.js';
 
 let autoSaveTimer = null;
 let firebaseConfig;
@@ -269,6 +270,9 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     }
                 };
                 saveData.version = 0.26;
+            } else if (objectType === 'headerDescriptions') {
+                saveData.version = 0.26;
+                saveData.headerDescriptions = headerDescriptions;
             }
         }
     

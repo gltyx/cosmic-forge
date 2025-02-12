@@ -1,4 +1,4 @@
-import { restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
+import { restoreHeaderDescriptionsObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
@@ -387,8 +387,23 @@ export function restoreGameStatus(gameState, type) {
     return new Promise((resolve, reject) => {
         try {
             // Game variables
-            restoreResourceDataObject(JSON.parse(JSON.stringify(gameState.resourceData)));
-            restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
+            if (gameState.resourceData) {
+                restoreResourceDataObject(JSON.parse(JSON.stringify(gameState.resourceData)));
+            } else {
+                gameState.resourceData = resourceData;
+            }
+            
+            if (gameState.starSystems) {
+                restoreStarSystemsDataObject(JSON.parse(JSON.stringify(gameState.starSystems)));
+            } else {
+                gameState.starSystems = starSystems;
+            }
+            
+            if (gameState.headerDescriptions) {
+                restoreHeaderDescriptionsObject(JSON.parse(JSON.stringify(gameState.headerDescriptions)));
+            } else {
+                gameState.headerDescriptions = headerDescriptions;
+            }            
 
             // Global variables
             if (type === 'cloud') {

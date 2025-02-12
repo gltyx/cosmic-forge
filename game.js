@@ -159,7 +159,8 @@ import {
     switchBatteryStatBarWhenBatteryBought,
     setBatteryIndicator,
     drawAntimatterFlowDiagram,
-    switchFuelGaugeWhenFuellerBought
+    switchFuelGaugeWhenFuellerBought,
+    showWeatherNotification
 } from "./ui.js";
 
 import { 
@@ -2606,14 +2607,14 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
         element.classList.add('red-disabled-text');
     }
 
-    if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano') {
+    if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano' && getCurrentOptionPane() === rocket) {
         document.getElementById('fuelDescription').textContent = 'Ready For Launch...';
         document.getElementById('fuelDescription').classList.add('green-ready-text');
         document.getElementById('fuelDescription').classList.remove('red-disabled-text');
         setCheckRocketFuellingStatus(rocket, false);
         launchButton.classList.add('green-ready-text');
         launchButton.classList.remove('red-disabled-text');
-    } else if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano')) {
+    } else if (rocketsFuellerStartedArray.includes(`${rocket}FuelledUp`) && (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') && getCurrentOptionPane() === rocket) {
         document.getElementById('fuelDescription').textContent = 'Bad Weather!';
         document.getElementById('fuelDescription').classList.remove('green-ready-text');
         document.getElementById('fuelDescription').classList.add('red-disabled-text');
@@ -3359,11 +3360,15 @@ function startInitialTimers() {
                     statValueSpan.classList.remove('green-ready-text');
                     statValueSpan.classList.add('warning-orange-text');
                     statValueSpan.classList.remove('red-disabled-text');
+                    if (selectedWeatherType === 'rain') {
+                        showWeatherNotification('rain');
+                    }
                     break;
                 case 'volcano':
                     statValueSpan.classList.remove('green-ready-text');
                     statValueSpan.classList.remove('warning-orange-text');
                     statValueSpan.classList.add('red-disabled-text');
+                    showWeatherNotification('volcano');
                     break;  
             }
     
@@ -3375,9 +3380,9 @@ function startInitialTimers() {
         selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        //const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
-        //const randomDurationInMs = 10000; //For Testing Weather
+        const randomDurationInMs = 10000; //DEBUG For Testing Weather
 
         const durationInSeconds = randomDurationInMs / 1000;
 
@@ -4625,9 +4630,15 @@ export function fuelRockets() {
             }
 
             if (fuelDescriptionElement && getPowerOnOff() && getRocketsFuellerStartedArray().includes(`${rocket}FuelledUp`) && getCurrentOptionPane() === rocket) {
-                fuelDescriptionElement.textContent = 'Ready For Launch...';
-                fuelDescriptionElement.classList.add('green-ready-text');
-                fuelDescriptionElement.classList.remove('red-disabled-text');
+                if (getCurrentStarSystemWeatherEfficiency()[2] !== 'rain' && getCurrentStarSystemWeatherEfficiency()[2] !== 'volcano') {
+                    fuelDescriptionElement.textContent = 'Ready For Launch...';
+                    fuelDescriptionElement.classList.add('green-ready-text');
+                    fuelDescriptionElement.classList.remove('red-disabled-text');
+                } else {
+                    fuelDescriptionElement.textContent = 'Bad Weather!';
+                    fuelDescriptionElement.classList.remove('green-ready-text');
+                    fuelDescriptionElement.classList.add('red-disabled-text');
+                }
                 return;
             } else if (fuelDescriptionElement && getPowerOnOff() && !getRocketsFuellerStartedArray().includes(rocket) && getCurrentOptionPane() === rocket) {
                 fuelDescriptionElement.textContent = 'Ready To Fuel...';
