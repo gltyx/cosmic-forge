@@ -1433,6 +1433,21 @@ canvas {
     pointer-events: none;
 }
 
+.rocket-name-field {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    border: 1px dashed var(--text-color);
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.rename-button-container {
+    display: inline-block;
+    width: auto;
+    height: auto;
+}
+
 /* SCROLL BAR */
 ::-webkit-scrollbar {
     width: 12px;

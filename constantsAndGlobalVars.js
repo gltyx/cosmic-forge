@@ -3,6 +3,7 @@ import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
+import { replaceHeaderDescriptions, headerDescriptions } from './descriptions.js';
 
 //DEBUG
 export let debugFlag = false;
@@ -40,6 +41,7 @@ export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 //GLOBAL VARIABLES
 export let gameState;
 
+let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
 let prize = [];
 let rocketsBuilt = [];
@@ -73,7 +75,7 @@ let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
-let baseSearchTimerDuration = 180000;
+let baseSearchTimerDuration = 120000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
@@ -357,6 +359,8 @@ export function captureGameStatusForSaving(type) {
     gameState.miningObject = miningObject;
     gameState.destinationAsteroid = destinationAsteroid;
     gameState.rocketDirection = rocketDirection;
+    gameState.rocketUserName = rocketUserName;
+    gameState.headerDescriptions = headerDescriptions;
 
     // Flags
     gameState.flags = {
@@ -412,7 +416,7 @@ export function restoreGameStatus(gameState, type) {
             rocketsBuilt = gameState.rocketsBuilt;
             rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray ?? [''];
             launchedRockets = gameState.launchedRockets ?? [''];
-            baseSearchTimerDuration = gameState.baseSearchTimerDuration ?? 180000;
+            baseSearchTimerDuration = gameState.baseSearchTimerDuration ?? 120000;
             timeLeftUntilAsteroidScannerTimerFinishes = gameState.timeLeftUntilAsteroidScannerTimerFinishes ?? 0;
             timeLeftUntilRocketTravelToAsteroidTimerFinishes = gameState.timeLeftUntilRocketTravelToAsteroidTimerFinishes ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             currentAsteroidSearchTimerDurationTotal = gameState.currentAsteroidSearchTimerDurationTotal ?? 0;
@@ -421,6 +425,7 @@ export function restoreGameStatus(gameState, type) {
             miningObject = gameState.miningObject ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
+            rocketUserName = gameState.rocketUserName ?? {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -443,6 +448,8 @@ export function restoreGameStatus(gameState, type) {
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
             offlineGains(false);
+
+            replaceHeaderDescriptions(gameState.headerDescriptions);
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
@@ -1747,6 +1754,14 @@ export function setCurrentDestinationDropdownText(value) {
 
 export function getCurrentDestinationDropdownText() {
     return currentDestinationDropdownText ?? 'Select an option';
+}
+
+export function getRocketUserName(key) {
+    return rocketUserName[key] ?? `Rocket ${capitaliseString(key).slice(-1)}`;
+}
+
+export function setRocketUserName(key, value) {
+    rocketUserName[key] = value;
 }
 
 

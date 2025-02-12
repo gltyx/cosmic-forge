@@ -1,7 +1,8 @@
-import { setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
+import { getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
+import { headerDescriptions, setHeaderDescriptions, getHeaderDescriptions } from './descriptions.js';
 import { timerManager, startTravelToAndFromAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification } from './ui.js';
+import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab6Content(heading, optionContentElement) {
@@ -161,10 +162,10 @@ export function drawTab6Content(heading, optionContentElement) {
         });
     }
 
-    if (heading === 'Rocket 1') createRocketUI('rocket1', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
-    if (heading === 'Rocket 2') createRocketUI('rocket2', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
-    if (heading === 'Rocket 3') createRocketUI('rocket3', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
-    if (heading === 'Rocket 4') createRocketUI('rocket4', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === `${getRocketUserName('rocket1')}`) createRocketUI('rocket1', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === `${getRocketUserName('rocket2')}`) createRocketUI('rocket2', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === `${getRocketUserName('rocket3')}`) createRocketUI('rocket3', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
+    if (heading === `${getRocketUserName('rocket4')}`) createRocketUI('rocket4', optionContentElement, asteroids, asteroidsBeingMinedOrExhausted);
     
     if (heading === 'Asteroids') {
         let asteroidsArray = getAsteroidArray();
@@ -370,6 +371,42 @@ function setFuellingVisibility(rocket, params) {
 }
 
 function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBeingMined) {
+    const headerRow = document.getElementById('headerContentTab6');
+    const originalRocketKey = getRocketUserName(rocketId).toLowerCase();
+    
+    headerRow.innerHTML = `
+        <div id="${rocketId}NameField" class="rocket-name-field" spellcheck="false" contenteditable="true">${getRocketUserName(rocketId)}</div>
+        <div id="${rocketId}-rename-btn" class="rename-button-container"></div>
+    `;
+
+    const maxLength = 12;
+    const nameField = document.getElementById(`${rocketId}NameField`);
+
+    nameField.addEventListener('input', (e) => {
+        let text = nameField.innerText;
+        if (text.length > maxLength) {
+            nameField.innerText = text.slice(0, maxLength);
+            const range = document.createRange();
+            range.setStart(nameField.firstChild, maxLength);
+            range.setEnd(nameField.firstChild, maxLength);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+        }
+    });
+
+    nameField.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            renameRocket(rocketId, originalRocketKey);
+        }
+    });
+
+    document.getElementById(`${rocketId}-rename-btn`).appendChild(
+        createButton('Rename', ['option-button', 'rename-rocket'], () => { 
+            renameRocket(rocketId, originalRocketKey);
+        }, '', '', '', null, '', true, '', '')
+    );
+
     const autobuyerPrice = getResourceDataObject('space', ['upgrades', rocketId, 'autoBuyer', 'tier1', 'price']);
     setCheckRocketFuellingStatus(rocketId, true);
     

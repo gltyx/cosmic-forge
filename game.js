@@ -1,4 +1,6 @@
 import {
+    getRocketUserName,
+    setRocketUserName,
     getCanFuelRockets,
     setCanFuelRockets,
     setRocketDirection,
@@ -269,8 +271,6 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         const elements = document.querySelectorAll('.notation');
 
-        console.log(getTimeLeftUntilAsteroidScannerTimerFinishes());
-
         showHideDynamicColumns();
         updateDynamicColumns();
         showTabsUponUnlock();
@@ -310,6 +310,7 @@ export async function gameLoop() {
         updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
         
         updateStats();
+        updateRocketNames();
 
         if (getItemsToDeduct() && Object.keys(getItemsToDeduct()).length > 0) {
             checkAndDeductResources();
@@ -355,7 +356,9 @@ export async function gameLoop() {
         monitorRevealCompoundsCheck();
 
         if (getAntimatterUnlocked() && getCurrentTab()[1] === 'Space Mining') {
-            getElements().antimatterOption.parentElement.parentElement.classList.remove('invisible');
+            if (getElements().antimatterOption.parentElement.parentElement.classList.contains('invisible')) {
+                getElements().antimatterOption.parentElement.parentElement.classList.remove('invisible');
+            }
         }
 
         updateAllSalePricePreviews();
@@ -424,6 +427,14 @@ export async function gameLoop() {
         }
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function updateRocketNames() {
+    if (getCurrentTab()[1] === 'Space Mining') {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`rocket${i}`).textContent = getRocketUserName(`rocket${i}`);
+        }
     }
 }
 
@@ -3460,14 +3471,15 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
             
             if (counter >= travelDuration) {
                 if (direction) {
-                    showNotification(`${capitaliseString(rocket)} has returned to be refuelled!`, 'info');
+                    showNotification(`${
+                        getRocketUserName(rocket)} has returned to be refuelled!`, 'info');
                     resetRocketForNextJourney(rocket);
                     timerManager.removeTimer(timerName);
 
                     setCurrentlyTravellingToAsteroid(rocket, false);
                     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 } else {
-                    showNotification(`${capitaliseString(rocket)} has reached ${destination} and started mining Antimatter!`, 'info');
+                    showNotification(`${getRocketUserName(rocket)} has reached ${destination} and started mining Antimatter!`, 'info');
                     timerManager.removeTimer(timerName);
     
                     if (travelTimerDescriptionElement) {             
@@ -4529,8 +4541,7 @@ export function fuelRockets() {
         const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
 
         if (newFuelQuantity >= fullLevel) {
-            const formattedRocket = rocket.slice(0, -1) + " " + rocket.slice(-1);
-            showNotification(`${capitaliseString(formattedRocket)} is ready for Launch!`, 'info');
+            showNotification(`${getRocketUserName(rocket)} is ready for Launch!`, 'info');
             if (!getRocketsFuellerStartedArray().includes(rocket + 'FuelledUp')) {
                 setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
             }
@@ -4648,7 +4659,7 @@ export function updateRocketDescription() {
 export function launchRocket(rocket) {
     setLaunchedRockets(rocket, 'add');
     document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
-    showNotification(`${capitaliseString(rocket).slice(0, -1)} ${rocket.slice(-1)} Launched!`, 'info');
+    showNotification(`${getRocketUserName(rocket)} Launched!`, 'info');
 }
 
 export function toggleAllPower() {

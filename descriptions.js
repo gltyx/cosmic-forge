@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getSaveName } from "./constantsAndGlobalVars.js";
+import { getTimerRateRatio, getSaveName, getRocketUserName } from "./constantsAndGlobalVars.js";
 import { getResourceDataObject } from "./resourceDataObject.js";
 
 export let gameIntroHeader;
@@ -59,10 +59,10 @@ export function initialiseDescriptions() {
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
-        'rocket 1': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
-        'rocket 2': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
-        'rocket 3': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
-        'rocket 4': "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        [getRocketUserName('rocket1').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        [getRocketUserName('rocket2').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        [getRocketUserName('rocket3').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
+        [getRocketUserName('rocket4').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
@@ -1274,10 +1274,15 @@ export function setOptionDescription(key1, value) {
     }
     Object.assign(optionDescriptions[key1], value);
 }
+
 export function getHeaderDescriptions(key) {
     return headerDescriptions[key];
 }
 
-export function setHeaderDescriptions(value) {
-    headerDescriptions[key] = value;
+export function setHeaderDescriptions(key, value) {
+    headerDescriptions[key] = value.toLowerCase();
+}
+
+export function replaceHeaderDescriptions(value) {
+    headerDescriptions = value;
 }

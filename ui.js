@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setRocketUserName,
     setCurrentDestinationDropdownText,
     getCurrentDestinationDropdownText,
     getCurrencySymbol,
@@ -65,7 +66,10 @@ import {
     getIsAntimatterBoostActive,
     setRocketsBuilt,
     setAntimatterSvgEventListeners,
-    setAntimatterUnlocked
+    setAntimatterUnlocked,
+    setCanFuelRockets,
+    setCanTravelToAsteroids,
+    getRocketUserName
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -81,6 +85,7 @@ import {
     gameIntroText,
     gameSaveNameCollect,
     initialiseDescriptions,
+    headerDescriptions
 } from "./descriptions.js";
 
 import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
@@ -1349,7 +1354,7 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         }
 
         let textLines = rocketInfo ? [
-            ['', `Rocket ${index + 1}`],
+            ['', `${getRocketUserName('rocket' + (index + 1))}`],
             ["Asteroid:", rocketInfo[1]],
             ["Complexity:", rocketInfo[2]],
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
@@ -1988,7 +1993,7 @@ function initializeTabEventListeners() {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'rocket1');
             setCurrentOptionPane('rocket1');
-            updateContent('Rocket 1', 'tab6', 'content');
+            updateContent(`${getRocketUserName('rocket1')}`, 'tab6', 'content');
         });
     });
 
@@ -1996,7 +2001,7 @@ function initializeTabEventListeners() {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'rocket2');
             setCurrentOptionPane('rocket2');
-            updateContent('Rocket 2', 'tab6', 'content');
+            updateContent(`${getRocketUserName('rocket2')}`, 'tab6', 'content');
         });
     });
 
@@ -2004,7 +2009,7 @@ function initializeTabEventListeners() {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'rocket3');
             setCurrentOptionPane('rocket3');
-            updateContent('Rocket 3', 'tab6', 'content');
+            updateContent(`${getRocketUserName('rocket3')}`, 'tab6', 'content');
         });
     });
 
@@ -2012,7 +2017,7 @@ function initializeTabEventListeners() {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'rocket4');
             setCurrentOptionPane('rocket4');
-            updateContent('Rocket 4', 'tab6', 'content');
+            updateContent(`${getRocketUserName('rocket4')}`, 'tab6', 'content');
         });
     });
 
@@ -2593,7 +2598,7 @@ export function switchFuelGaugeWhenFuellerBought(rocket, type) {
         } else {
             const optionContentElement = document.getElementById(`optionContentTab6`);
             optionContentElement.innerHTML = '';
-            drawTab6Content(`${capitaliseString(rocket).replace(/(\d+)/, ' $1')}`, optionContentElement);
+            drawTab6Content(`${getRocketUserName(rocket)}`, optionContentElement);
         }
 
     }
@@ -2728,6 +2733,18 @@ export function sortAsteroidTable(asteroidsArray, sortMethod) {
     return asteroidsArray;
 }
 
+export function renameRocket(rocketId, originalRocketKey) {
+    const newRocketName = document.getElementById(`${rocketId}NameField`).textContent.trim(); 
+    const newRocketKey = newRocketName.toLowerCase();
+
+    setRocketUserName(rocketId, newRocketName);
+
+    if (originalRocketKey in headerDescriptions) {
+        headerDescriptions[newRocketKey] = headerDescriptions[originalRocketKey];
+        delete headerDescriptions[originalRocketKey];
+    }
+}
+
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -2796,6 +2813,9 @@ grantAllTechsButton.addEventListener('click', () => {
             setTechSpecificUIItemsArray(fusionElement, 'fusionButton', techKey);
         }
     });
+
+    setCanFuelRockets(true);
+    setCanTravelToAsteroids(true);
 
     grantAllTechsButton.classList.add('red-disabled-text');
     setRenderedTechTree(false);
