@@ -1987,9 +1987,40 @@ function powerGenerationFuelChecks(element) {
                 fuelTypeElement.classList.add('green-ready-text');
                 fuelQuantityElement.classList.add('green-ready-text');
             }
-            fuelQuantityElement.textContent = Math.floor(fuelQuantity);
+            if (buildingNameString !== 'powerPlant2') {
+                fuelQuantityElement.textContent = Math.floor(fuelQuantity);
+            } else {
+                fuelQuantityElement.textContent = Math.floor(getCurrentStarSystemWeatherEfficiency()[1] * 100) + '% ' + getStarSystemDataObject('stars', [getCurrentStarSystem(), 'weather', getCurrentStarSystemWeatherEfficiency()[2]])[1];
+                colorSolarFuelElements(fuelTypeElement, fuelQuantityElement);
+            }
+            
         } 
     }
+}
+
+function colorSolarFuelElements(fuelTypeElement, fuelQuantityElement) {
+    const weather = getCurrentStarSystemWeatherEfficiency()[2];
+
+if (weather === 'rain' || weather === 'cloudy') {
+    fuelQuantityElement.classList.add('warning-orange-text');
+    fuelQuantityElement.classList.remove('red-disabled-text', 'green-ready-text');
+
+    fuelTypeElement.classList.add('warning-orange-text');
+    fuelTypeElement.classList.remove('red-disabled-text', 'green-ready-text');
+} else if (weather === 'volcano') {
+    fuelQuantityElement.classList.add('red-disabled-text');
+    fuelQuantityElement.classList.remove('warning-orange-text', 'green-ready-text');
+
+    fuelTypeElement.classList.add('red-disabled-text');
+    fuelTypeElement.classList.remove('warning-orange-text', 'green-ready-text');
+} else {
+    fuelQuantityElement.classList.add('green-ready-text');
+    fuelQuantityElement.classList.remove('warning-orange-text', 'red-disabled-text');
+
+    fuelTypeElement.classList.add('green-ready-text');
+    fuelTypeElement.classList.remove('warning-orange-text', 'red-disabled-text');
+}
+
 }
 
 function energyChecks(element) {
