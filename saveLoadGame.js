@@ -276,16 +276,13 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         }
                     }
                 };
-                saveData.version = 0.26;
             } else if (objectType === 'headerDescriptions') {
-                saveData.version = 0.26;
                 saveData.headerDescriptions = headerDescriptions;
             }
         }
 
         if (saveData.version < 0.27) {
             if (objectType === 'resourceData') {
-                saveData.version = 0.27;
                 //add a loop if necessary to change structure of all keys
                 if (!saveData.space.upgrades.spaceTelescope) {
                     saveData.space.upgrades.spaceTelescope = { 
@@ -302,6 +299,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 saveData = {
                     stars: {
                         spica: {
+                            mapSize: 5.504440179536064,
+                            startingStar: true,
                             starCode: 'SPC',
                             precipitationResourceCategory: 'compounds',
                             precipitationType: 'water',
@@ -314,9 +313,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         }
                     }
                 };
-                saveData.version = 0.27;
             } else if (objectType === 'headerDescriptions') {
-                
+
             }
         }
     

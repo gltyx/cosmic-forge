@@ -692,9 +692,11 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.26, //update this whenever changes are made to the structure
+    version: 0.27,
     stars: {
         spica: {
+            mapSize: 5.504440179536064, //only important for starting star
+            startingStar: true,
             starCode: 'SPC',
             precipitationResourceCategory: 'compounds',
             precipitationType: 'water',

@@ -37,6 +37,7 @@ export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
+export const STARTING_STAR_SYSTEM = 'spica';
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -52,7 +53,7 @@ let saveName = null;
 let lastSavedTimeStamp = null;
 let currentTheme = 'terminal';
 let autoSaveFrequency = 300000;
-let currentStarSystem = 'spica';
+let currentStarSystem = getStartingStarSystem();
 let currentStarSystemWeatherEfficiency = [];
 let currentPrecipitationRate = 0;
 let techRenderCounter = 0;
@@ -1329,6 +1330,10 @@ export function getCurrentStarSystem() {
 
 export function setCurrentStarSystem(value) {
     currentStarSystem = value;
+}
+
+export function getStartingStarSystem() {
+    return STARTING_STAR_SYSTEM;
 }
 
 export function eNCrQueen() {
