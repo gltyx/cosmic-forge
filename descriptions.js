@@ -810,7 +810,12 @@ export function initialiseDescriptions() {
             updateAt: "" 
         },
         spaceTelescopeSearchAsteroidRow: {
-            content1: `Search and discover Asteroids - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content1: `Search and discover Asteroids - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'energyUseSearchAsteroid']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: "" 
+        },
+        spaceTelescopeInvestigateStarRow: {
+            content1: `Study the Stars! - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'energyUseInvestigateStar']) * getTimerRateRatio())}KW / s`,
             content2: "",
             updateAt: "" 
         },

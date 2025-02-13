@@ -424,10 +424,12 @@ export function createOptionRow(
     }
 
     if (getCurrentOptionPane() === 'space telescope') {
-        if (objectSectionArgument2 === 'searchAsteroid' && !getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
-            wrapper.classList.add('invisible');
-        } else if (objectSectionArgument2 === 'searchAsteroid') {
-            wrapper.classList.remove('invisible');
+        if (['searchAsteroid', 'investigateStar'].includes(objectSectionArgument2)) {
+            if (!getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
+                wrapper.classList.add('invisible');
+            } else {
+                wrapper.classList.remove('invisible');
+            }
         }
     }
 

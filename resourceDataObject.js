@@ -2,7 +2,7 @@ import { replaceHeaderDescriptions } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.26, //update this whenever changes are made to the structure
+    version: 0.27, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -534,7 +534,8 @@ export let resourceData = {
                 resource1Price: [20000, 'steel', 'compounds'],
                 resource2Price: [15000, 'glass', 'compounds'],
                 resource3Price: [20000, 'silicon', 'resources'],
-                energyUse: 0.4,
+                energyUseSearchAsteroid: 0.4,
+                energyUseInvestigateStar: 0.7,
             },
             launchPad: { 
                 launchPadBoughtYet: false,

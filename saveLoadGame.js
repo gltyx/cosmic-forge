@@ -242,7 +242,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource1Price: [20000, 'steel', 'compounds'],
                         resource2Price: [15000, 'glass', 'compounds'],
                         resource3Price: [20000, 'silicon', 'resources'],
-                        energyUse: 0.7,
+                        energyUseSearchAsteroid: 0.4,
+                        energyUseInvestigateStar: 0.7
                     }
                 }
 
@@ -279,6 +280,43 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             } else if (objectType === 'headerDescriptions') {
                 saveData.version = 0.26;
                 saveData.headerDescriptions = headerDescriptions;
+            }
+        }
+
+        if (saveData.version < 0.27) {
+            if (objectType === 'resourceData') {
+                saveData.version = 0.27;
+                //add a loop if necessary to change structure of all keys
+                if (!saveData.space.upgrades.spaceTelescope) {
+                    saveData.space.upgrades.spaceTelescope = { 
+                        spaceTelescopeBoughtYet: false,
+                        price: 10000,
+                        resource1Price: [20000, 'steel', 'compounds'],
+                        resource2Price: [15000, 'glass', 'compounds'],
+                        resource3Price: [20000, 'silicon', 'resources'],
+                        energyUseSearchAsteroid: 0.4,
+                        energyUseInvestigateStar: 0.7
+                    }
+                }
+            } else if (objectType === 'starSystemsData') {
+                saveData = {
+                    stars: {
+                        spica: {
+                            starCode: 'SPC',
+                            precipitationResourceCategory: 'compounds',
+                            precipitationType: 'water',
+                            weather: {
+                                sunny: [30, '☀', 1, 'white'],
+                                cloudy: [47, '☁', 0.6, 'orange'],
+                                rain: [20, '☂', 0.4, 'orange'],
+                                volcano: [3, '⛰', 0.05, 'red']
+                            }
+                        }
+                    }
+                };
+                saveData.version = 0.27;
+            } else if (objectType === 'headerDescriptions') {
+                
             }
         }
     

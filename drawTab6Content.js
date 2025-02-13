@@ -1,6 +1,5 @@
-import { getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
-import { headerDescriptions, setHeaderDescriptions, getHeaderDescriptions } from './descriptions.js';
-import { timerManager, startTravelToAndFromAsteroidTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { getTimeLeftUntilStarInvestigationTimerFinishes, getCurrentlyInvestigatingStar, getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
+import { timerManager, startTravelToAndFromAsteroidTimer, startInvestigateStarTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -16,6 +15,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     createButton(`Build Space Telescope`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'spaceTelescope'], () => {
                         buildSpaceMiningBuilding('spaceTelescope', false);
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
+                        document.getElementById('spaceTelescopeInvestigateStarRow').classList.remove('invisible');
                         spaceBuildTelescopeRow.classList.add('invisible');
                         showNotification('Space Telescope Built!', 'info');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'spaceTelescope', 'cash', true, null, 'spaceMiningPurchase'),
@@ -48,8 +48,8 @@ export function drawTab6Content(heading, optionContentElement) {
                         startSearchAsteroidTimer([0, 'buttonClick']);
                     }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
                     createTextElement(
-                        `<div id="spaceTelescopeSearchProgressBar">`,
-                        'spaceTelescopeSearchProgressBarContainer',
+                        `<div id="spaceTelescopeSearchAsteroidProgressBar">`,
+                        'spaceTelescopeSearchAsteroidProgressBarContainer',
                         ['progress-bar-container', 'invisible']
                     ),                     
                     null,
@@ -69,13 +69,51 @@ export function drawTab6Content(heading, optionContentElement) {
                 );
                 optionContentElement.appendChild(spaceTelescopeSearchAsteroidRow);
 
+        const spaceTelescopeInvestigateStarRow = createOptionRow(
+                    'spaceTelescopeInvestigateStarRow',
+                    'Study Stars',
+                    'Study Stars',
+                    createButton(`Study Stars`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+                        startInvestigateStarTimer([0, 'buttonClick']);
+                    }, 'upgradeCheck', '', 'autoBuyer', 'investigateStar', 'time', true, null, 'spaceMiningPurchase'),
+                    createTextElement(
+                        `<div id="spaceTelescopeInvestigateStarProgressBar">`,
+                        'spaceTelescopeInvestigateStarProgressBarContainer',
+                        ['progress-bar-container', 'invisible']
+                    ),                     
+                    null,
+                    null,
+                    null,
+                    `Ready To Study`,
+                    '',
+                    'upgradeCheck',
+                    'autoBuyer',
+                    'investigateStar',
+                    'time',
+                    null,
+                    false,
+                    null,
+                    null,
+                    null
+                );
+                optionContentElement.appendChild(spaceTelescopeInvestigateStarRow);
+
                 if (getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
                     spaceBuildTelescopeRow.classList.add('invisible');
-                    timerManager.removeTimer('searchAsteroidTimer');
+                    
                     if (getCurrentlySearchingAsteroid()) {
+                        timerManager.removeTimer('searchAsteroidTimer');
                         deferredActions.push(() => {
                             const timeRemaining = getTimeLeftUntilAsteroidScannerTimerFinishes();
                             startSearchAsteroidTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
+                        });
+                    }
+                    
+                    if (getCurrentlyInvestigatingStar()) {
+                        timerManager.removeTimer('investigateStarTimer');
+                        deferredActions.push(() => {
+                            const timeRemaining = getTimeLeftUntilStarInvestigationTimerFinishes();
+                            startInvestigateStarTimer([timeRemaining, 'reEnterSpaceTelescopeScreen']);
                         });
                     }
                 }
