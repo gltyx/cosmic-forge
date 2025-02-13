@@ -2561,7 +2561,7 @@ function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
     if (hasRedDisabledText) {
         buyButton.classList.add('red-disabled-text');
     } else {
-        if (buyButton.innerHTML !== 'Built!') {
+        if (buyButton.innerHTML !== 'Built!' && buyButton.innerHTML !== 'Launched!') {
             buyButton.classList.remove('red-disabled-text');
         }
     }
@@ -2582,7 +2582,7 @@ function handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element) {
         }
     });
 
-    if (element.innerHTML === 'Built!') {
+    if (element.innerHTML === 'Built!' || element.innerHTML === 'Launched!') {
         element.classList.remove('green-ready-text');
         element.classList.add('red-disabled-text');
         const rocketNumber = element.dataset.resourceToFuseTo;
