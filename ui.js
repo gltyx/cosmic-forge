@@ -102,6 +102,7 @@ import {
     resetRocketForRefuelling,
     discoverAsteroid,
     buildSpaceMiningBuilding,
+    discoverStarData,
 
 } from './game.js';
 
@@ -2959,6 +2960,14 @@ add10AsteroidsButton.addEventListener('click', () => {
         discoverAsteroid(true);
     }
     showNotification('CHEAT! Discovered 10 Asteroids!', 'info');
+});
+
+const addStarButton = document.getElementById('addStarButton');
+addStarButton.addEventListener('click', () => {
+    for (let i = 0; i < 10; i++) {
+        discoverStarData(true);
+    }
+    showNotification('CHEAT! Discovered Star Data!', 'info');
 });
 
 const buildLaunchPadScannerAndAllRocketsButton = document.getElementById('buildLaunchPadScannerAndAllRocketsButton');
