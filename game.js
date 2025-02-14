@@ -140,6 +140,9 @@ import {
     getCanTravelToAsteroids,
     getCurrentDestinationDropdownText,
     getBaseInvestigateStarTimerDuration,
+    getStarVisionIncrement,
+    getStarVisionDistance,
+    setStarVisionDistance,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -179,6 +182,7 @@ import {
  import { newsTickerContent } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
+import { drawTab5Content } from './drawTab5Content.js';
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -266,7 +270,7 @@ export function startGame() {
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
     startInitialTimers();
-    startSpaceRelatedTimers();
+    //startSpaceRelatedTimers();
     startNewsTickerTimer();
     gameLoop();
 }
@@ -3656,7 +3660,7 @@ export function startInvestigateStarTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getStarInvestigationDuration() : adjustment[0];
     
-            //searchDuration = 8000; //DEBUG
+            searchDuration = 8000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentInvestigateStarTimerDurationTotal(searchDuration);
@@ -3670,7 +3674,7 @@ export function startInvestigateStarTimer(adjustment) {
                 const timeLeftUI = Math.max(Math.floor((searchDuration - counter) / 1000), 0);
                 
                 if (counter >= searchDuration) {
-                    discoverStarData(false);
+                    extendStarDataRange(false);
                     timerManager.removeTimer(timerName);
                     if (searchTimerDescriptionElement) {             
                         searchTimerDescriptionElement.innerText = 'Ready To Study';
@@ -4908,8 +4912,18 @@ function handlePowerAllButtonState() {
     }
 }
 
-export function discoverStarData(debug) {
-    console.log('Star Data Discovered!');
+export function extendStarDataRange(debug) {
+    const increment = getStarVisionIncrement();
+    const currentRange = getStarVisionDistance();
+
+    setStarVisionDistance(currentRange + increment);
+
+    if (getCurrentOptionPane() === 'star map') {
+        drawTab5Content('Star Map', null);
+    }
+    if (!debug) {
+        showNotification('Star Study Complete!</br></br>Take a look at the Star Map!', 'info');
+    }
 }
 
 export function discoverAsteroid(debug) {

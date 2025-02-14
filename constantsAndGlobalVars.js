@@ -87,8 +87,9 @@ let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
-let starVisionDistance = 0.1;
+let starVisionDistance = 1; //0
 let starMapMode = 'normal';
+let starVisionIncrement = 1;
 
 let miningObject = {
     rocket1: null,
@@ -375,6 +376,7 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketUserName = rocketUserName;
     gameState.headerDescriptions = headerDescriptions;
     gameState.starVisionDistance = starVisionDistance;
+    gameState.starVisionIncrement = starVisionIncrement;
 
     // Flags
     gameState.flags = {
@@ -459,6 +461,7 @@ export function restoreGameStatus(gameState, type) {
             rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
             rocketUserName = gameState.rocketUserName ?? {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
             starVisionDistance = gameState.starVisionDistance ?? 5;
+            starVisionIncrement = gameState.starVisionIncrement ?? 1;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1856,6 +1859,14 @@ export function getStarMapMode() {
 
 export function setStarMapMode(value) {
     starMapMode = value;
+}
+
+export function getStarVisionIncrement() {
+    return starVisionIncrement ?? 1;
+}
+
+export function setStarVisionIncrement(value) {
+    starVisionIncrement = value;
 }
 
 const IMAGE_URLS = {

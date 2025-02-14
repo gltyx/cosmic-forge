@@ -106,7 +106,7 @@ import {
     resetRocketForRefuelling,
     discoverAsteroid,
     buildSpaceMiningBuilding,
-    discoverStarData,
+    extendStarDataRange,
 
 } from './game.js';
 
@@ -1001,6 +1001,13 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             if (mapMode === 'distance') {
                 starElement.style.backgroundColor = getStarColor(distance);
             }
+
+            const result = checkIfInterestingStarIsInStarDataAlready(starElement.name);
+            if (result) {
+                console.log(starElement.name + ' already in star data');
+            } else {
+                generateStarDataAndAddToDataObject(starElement, distance);
+            }
         } else {
             starElement.style.width = `${star.width / 2}px`;
             starElement.style.height = `${star.height / 2}px`;
@@ -1018,6 +1025,9 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         
         if (isInteresting) {
             starElement.addEventListener('click', () => {
+                //check star resource object if it is there, if not, add it, another function when entering tab shows the list of stars in the side menu
+                const starData = getStarSystemDataObject('stars');
+                const starCount = Object.keys(starData).length;
                 if (star.name === currentStar.name) {
                     console.log(`Distance from current star to ${star.name}: 0 units`);
                     return;
@@ -1027,8 +1037,6 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         }
         
         starfieldContainer.appendChild(starElement);
-                console.log(starElement.classList); 
-                console.log('Map mode:', mapMode);
     });
 }
 
@@ -1043,6 +1051,15 @@ function getSeededRandomInRange(seed, min, max) {
 function seededRandom(seed) {
     let x = Math.sin(seed++) * STAR_SEED;
     return x - Math.floor(x);
+}
+
+function checkIfInterestingStarIsInStarDataAlready(star) {
+    const starData = getStarSystemDataObject('stars');
+    return star in starData;
+}
+
+function generateStarDataAndAddToDataObject(starElement, distance) {
+    console.log('creating star data for ' + starElement.id);
 }
 
 
@@ -3026,9 +3043,9 @@ add10AsteroidsButton.addEventListener('click', () => {
 
 const addStarButton = document.getElementById('addStarButton');
 addStarButton.addEventListener('click', () => {
-    for (let i = 0; i < 10; i++) {
-        discoverStarData(true);
-    }
+    // for (let i = 0; i < 10; i++) {
+        extendStarDataRange(true);
+    // }
     showNotification('CHEAT! Discovered Star Data!', 'info');
 });
 
