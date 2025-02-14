@@ -701,10 +701,10 @@ export let starSystems = {
             precipitationResourceCategory: 'compounds',
             precipitationType: 'water',
             weather: {
-                sunny: [30, '☀', 1, 'white'],
-                cloudy: [47, '☁', 0.6, 'orange'],
-                rain: [20, '☂', 0.4, 'orange'],
-                volcano: [3, '⛰', 0.05, 'red']
+                sunny: [30, '☀', 1, 'green-ready-text'],
+                cloudy: [47, '☁', 0.6, 'orange-warning-text'],
+                rain: [20, '☂', 0.4, 'orange-warning-text'],
+                volcano: [3, '⛰', 0.05, 'red-disabled-text']
             }
         }
     }
