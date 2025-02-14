@@ -63,6 +63,7 @@ let techRenderCounter = 0;
 let tempRowValue = null;
 let currencySymbol = '$';
 let sortAsteroidMethod = 'rarity';
+let sortStarMethod = 'distance';
 let increaseStorageFactor = 2;
 let saleResourcePreviews = {};
 let saleCompoundPreviews = {};
@@ -1759,6 +1760,14 @@ export function setSortAsteroidMethod(value) {
 
 export function getSortAsteroidMethod() {
     return sortAsteroidMethod;
+}
+
+export function setSortStarMethod(value) {
+    sortStarMethod = value;
+}
+
+export function getSortStarMethod() {
+    return sortStarMethod;
 }
 
 export function getRocketTravelSpeed() {

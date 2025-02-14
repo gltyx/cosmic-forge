@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setSortStarMethod,
+    getSortStarMethod,
     getStarVisionDistance,
     setStarVisionDistance,
     STAR_SEED,
@@ -1063,19 +1065,90 @@ function generateStarDataAndAddToDataObject(starElement, distance) {
     console.log('creating star data for ' + starElement.id);
     console.log('distance is ' + distance + 'ly');
 
+    const weatherTypes = {
+        sunny: ['☀', 'green-ready-text'],
+        cloudy: ['☁', 'warning-orange-text'],
+        rain: ['☂', 'warning-orange-text'],
+        volcano: ['⛰', 'red-disabled-text']
+    };
+
+    let weatherProbabilities = {
+        sunny: 0,
+        cloudy: 0,
+        rain: 0,
+        volcano: 0
+    };
+
+    let totalProbability = 0;
+    Object.keys(weatherProbabilities).forEach(type => {
+        weatherProbabilities[type] = Math.floor(Math.random() * 25);
+        totalProbability += weatherProbabilities[type];
+    });
+
+    const scalingFactor = 100 / totalProbability;
+    Object.keys(weatherProbabilities).forEach(type => {
+        weatherProbabilities[type] = Math.round(weatherProbabilities[type] * scalingFactor);
+    });
+
+    const difference = 100 - Object.values(weatherProbabilities).reduce((acc, val) => acc + val, 0);
+    if (difference !== 0) {
+        weatherProbabilities.sunny += difference;
+    }
+
+    let weatherTendency = [];
+    let maxProbability = 0;
+    Object.keys(weatherProbabilities).forEach(type => {
+        if (weatherProbabilities[type] > maxProbability) {
+            maxProbability = weatherProbabilities[type];
+            weatherTendency = [weatherTypes[type][0], weatherProbabilities[type], weatherTypes[type][1]];
+        }
+    });
+
+    const randomPrecipitationType = calculatePrecipitationType();
+    
     const newStarData = {
         startingStar: false,
         starCode: starElement.id.toUpperCase(),
         name: starElement.id.toLowerCase(),
         distance: distance,
-        precipitationResourceCategory: 'TODO precipitation code generator',
-        precipitationType: 'TODO precipitation code generator',
-
+        precipitationResourceCategory: 'compounds',
+        precipitationType: randomPrecipitationType,
+        weather: {
+            sunny: [weatherProbabilities.sunny, weatherTypes.sunny[0], 1, weatherTypes.sunny[1]],
+            cloudy: [weatherProbabilities.cloudy, weatherTypes.cloudy[0], 0.6, weatherTypes.cloudy[1]],
+            rain: [weatherProbabilities.rain, weatherTypes.rain[0], 0.4, weatherTypes.rain[1]],
+            volcano: [weatherProbabilities.volcano, weatherTypes.volcano[0], 0.05, weatherTypes.volcano[1]]
+        },
+        weatherTendency: weatherTendency
     };
 
     setStarSystemDataObject(newStarData, 'stars', [starElement.id.toLowerCase()]);
 }
 
+export function calculatePrecipitationType() {
+    const precipitationWeights = [
+        { type: "titanium", weight: 2 },
+        { type: "water", weight: 50 },
+        { type: "glass", weight: 17 },
+        { type: "diesel", weight: 25 },
+        { type: "concrete", weight: 0 },
+        { type: "steel", weight: 6 }
+    ];
+    
+    const weightedPrecipitationTypes = [];
+    let cumulativeWeight = 0;
+    
+    precipitationWeights.forEach(({ type, weight }) => {
+        cumulativeWeight += weight;
+        weightedPrecipitationTypes.push({ type, cumulativeWeight });
+    });
+    
+    const randomValue = Math.floor(Math.random() * 100);
+    
+    const selectedPrecipitationType = weightedPrecipitationTypes.find(({ cumulativeWeight }) => randomValue < cumulativeWeight);
+    
+    return selectedPrecipitationType ? selectedPrecipitationType.type : "water";
+}
 
 export function sortTechRows(now) {
     if (now) {
@@ -2803,6 +2876,60 @@ export function handleSortAsteroidClick(sortMethod) {
     const optionContentElement = document.getElementById(`optionContentTab6`);
     optionContentElement.innerHTML = '';
     drawTab6Content('Asteroids', optionContentElement);
+}
+
+export function handleSortStarClick(sortMethod) {
+    setSortStarMethod(sortMethod);
+    const optionContentElement = document.getElementById(`optionContentTab5`);
+    optionContentElement.innerHTML = '';
+    drawTab5Content('Star Data', optionContentElement);
+}
+
+export function sortStarTable(starsObject, sortMethod) {
+    const labels = {
+        distance: document.getElementById('starLegendDistance'),
+        name: document.getElementById('starLegendName'),
+        weather: document.getElementById('starLegendWeatherProb'),
+        precipitationType: document.getElementById('starLegendPrecipitationType')
+    };
+
+    Object.values(labels).forEach(label => label.classList.remove('sort-by'));
+
+    if (labels[sortMethod]) {
+        labels[sortMethod].classList.add('sort-by');
+    }
+
+    Object.entries(labels).forEach(([key, label]) => {
+        if (key !== sortMethod) {
+            label.classList.add('no-sort');
+        }
+    });
+
+    let sortedEntries = Object.entries(starsObject).sort(([keyA, starA], [keyB, starB]) => {
+        switch (sortMethod) {
+            case "name":
+                return keyA.localeCompare(keyB);
+            case "distance":
+                return starA.distance - starB.distance;
+            case "weather":
+                const weatherPriority = {
+                    "☀": 1,
+                    "☁": 2,
+                    "☂": 3,
+                    "⛰": 4
+                };
+                const weatherIconA = starA.weatherTendency[0]; 
+                const weatherIconB = starB.weatherTendency[0];
+
+                return weatherPriority[weatherIconA] - weatherPriority[weatherIconB];
+            case "precipitationType":
+                return starA.precipitationType.localeCompare(starB.precipitationType);
+            default:
+                return 0;
+        }
+    });
+
+    return Object.fromEntries(sortedEntries);
 }
 
 export function sortAsteroidTable(asteroidsArray, sortMethod) {
