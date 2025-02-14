@@ -41,6 +41,11 @@ export function drawTab5Content(heading, optionContentElement) {
     }
 
     if (heading === 'Star Data') {
-        
+        //create a set of collapsed rows that when expanded, show star data and if rebirthing show what buffs it will give
+        //the idea is discover stars until you can no longer be arsed, but knowing they give more ascendency points (rebirth points)
+        //when you reach the point you want to rebirth, you select a star and assuming you have the right technology, and resources, and antimatter, then you can rebirth on that star
+        //the game will start again but you will carry antimatter and ascendency points through with you
+        //the last tab will unlock after the first rebirth where we open a market allowing purchase of buffs from antimatter left over and very strong ones from ascendency points
+        //these will be permanent buffs
     }
 }
