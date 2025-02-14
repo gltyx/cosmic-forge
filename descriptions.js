@@ -54,6 +54,7 @@ export function initialiseDescriptions() {
         titanium: "Titanium is a strong, lightweight, and corrosion-resistant metal, neede for advanced construction.",
 
         'star map': "This is a map of the known galaxy.",
+        'star data': "Here you can find information about studied stars.",
 
         'antimatter': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",

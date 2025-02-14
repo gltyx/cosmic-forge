@@ -2768,6 +2768,8 @@ function handleSpaceUpgradeResourceType(element) {
 
 function checkStatusAndSetTextClasses(element) {
 
+    starChecks();
+
     if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
         checkTravelToDescriptions(element); //not return as this does not affect element and so still need to check element
     }
@@ -2809,6 +2811,13 @@ function checkStatusAndSetTextClasses(element) {
 
     if (element.classList.contains('building-purchase')) {
         setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
+    }
+}
+
+function starChecks() {
+    const starData = getStarSystemDataObject('stars');
+    if (Object.keys(starData).length > 1) {
+        document.getElementById('starDataOption').parentElement.parentElement.classList.remove('invisible');
     }
 }
 
@@ -4921,6 +4930,7 @@ export function extendStarDataRange(debug) {
     if (getCurrentOptionPane() === 'star map') {
         drawTab5Content('Star Map', null);
     }
+
     if (!debug) {
         showNotification('Star Study Complete!</br></br>Take a look at the Star Map!', 'info');
     }

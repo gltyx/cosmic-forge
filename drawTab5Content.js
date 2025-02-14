@@ -39,4 +39,8 @@ export function drawTab5Content(heading, optionContentElement) {
         starContainer.innerHTML = '';     
         generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode());
     }
+
+    if (heading === 'Star Data') {
+        
+    }
 }

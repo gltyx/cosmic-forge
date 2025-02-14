@@ -78,8 +78,10 @@ import {
 import {
     getResourceDataObject,
     getStarSystemDataObject,
+    setStarSystemDataObject,
     setAutoBuyerTierLevel,
     setResourceDataObject,
+
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -954,7 +956,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         "Vega","Azelfafage","Maia","Arkab Prior","Thuban","Izar","Ruchbah","Albireo","Almaaz","Dschubba",
         "Algieba","Gomeisa","Hoedus II","Cebalrai","Nashira","Muscida","Kitalpha","Hyadum I","Eltanin","Yildun",
         "Biham","Zubeneschamali","Alpherg","Alcor","Polaris","Pleione","Spica","Chara","Sadachbia","Rasalgethi",
-        "Barnard's Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
+        "Barnards Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
       ];
     let currentStar = null;
 
@@ -1002,9 +1004,9 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                 starElement.style.backgroundColor = getStarColor(distance);
             }
 
-            const result = checkIfInterestingStarIsInStarDataAlready(starElement.name);
+            const result = checkIfInterestingStarIsInStarDataAlready(starElement.id.toLowerCase());
             if (result) {
-                console.log(starElement.name + ' already in star data');
+                console.log(starElement.id.toLowerCase() + ' already in star data');
             } else {
                 generateStarDataAndAddToDataObject(starElement, distance);
             }
@@ -1024,8 +1026,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         starElement.style.top = `${star.top}px`;
         
         if (isInteresting) {
-            starElement.addEventListener('click', () => {
-                //check star resource object if it is there, if not, add it, another function when entering tab shows the list of stars in the side menu
+            starElement.addEventListener('click', () => {  //still to decide if needed
                 const starData = getStarSystemDataObject('stars');
                 const starCount = Object.keys(starData).length;
                 if (star.name === currentStar.name) {
@@ -1060,6 +1061,19 @@ function checkIfInterestingStarIsInStarDataAlready(star) {
 
 function generateStarDataAndAddToDataObject(starElement, distance) {
     console.log('creating star data for ' + starElement.id);
+    console.log('distance is ' + distance + 'ly');
+
+    const newStarData = {
+        startingStar: false,
+        starCode: starElement.id.toUpperCase(),
+        name: starElement.id.toLowerCase(),
+        distance: distance,
+        precipitationResourceCategory: 'TODO precipitation code generator',
+        precipitationType: 'TODO precipitation code generator',
+
+    };
+
+    setStarSystemDataObject(newStarData, 'stars', [starElement.id.toLowerCase()]);
 }
 
 
@@ -2088,6 +2102,14 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star map');
             setCurrentOptionPane('star map');
             updateContent('Star Map', 'tab5', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab5"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'star data');
+            setCurrentOptionPane('star data');
+            updateContent('Star Data', 'tab5', 'content');
         });
     });
 

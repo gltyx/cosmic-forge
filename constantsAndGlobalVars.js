@@ -87,7 +87,7 @@ let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
-let starVisionDistance = 1; //0
+let starVisionDistance = 0; //0
 let starMapMode = 'normal';
 let starVisionIncrement = 1;
 
@@ -460,7 +460,7 @@ export function restoreGameStatus(gameState, type) {
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
             rocketUserName = gameState.rocketUserName ?? {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
-            starVisionDistance = gameState.starVisionDistance ?? 5;
+            starVisionDistance = gameState.starVisionDistance ?? 0;
             starVisionIncrement = gameState.starVisionIncrement ?? 1;
 
             // Flags
@@ -1846,7 +1846,7 @@ export function setRocketUserName(key, value) {
 }
 
 export function getStarVisionDistance() {
-    return starVisionDistance ?? 5;
+    return starVisionDistance ?? 0;
 }
 
 export function setStarVisionDistance(value) {
