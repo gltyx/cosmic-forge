@@ -702,8 +702,8 @@ export let starSystems = {
             precipitationType: 'water',
             weather: {
                 sunny: [30, '☀', 1, 'green-ready-text'],
-                cloudy: [47, '☁', 0.6, 'orange-warning-text'],
-                rain: [20, '☂', 0.4, 'orange-warning-text'],
+                cloudy: [47, '☁', 0.6, 'warning-orange-text'],
+                rain: [20, '☂', 0.4, 'warning-orange-text'],
                 volcano: [3, '⛰', 0.05, 'red-disabled-text']
             }
         }
