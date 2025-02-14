@@ -387,6 +387,7 @@ button {
 /* THEMEABLE CSS */
 /* Dark Theme Variables */
 :root {
+    --twinkle-scale: 1.2;
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
@@ -1105,7 +1106,13 @@ body {
 }
 
 .save-name-margin,
-.save-load-button {
+.save-load-button
+{
+    margin-left: 50px;
+}
+
+.star-option-button
+{
     margin-left: 50px;
 }
 
@@ -1354,13 +1361,19 @@ button.red-disabled-text {
 .current-star {
     position: absolute;
     background-color: var(--star-color-prominent);
-    animation: twinkle 1.5s infinite alternate ease-in-out;
+    animation: twinkleCurrentStar 2s infinite alternate ease-in-out;
     border: 3px solid var(--current-star-border) !important;
 }
 
-@keyframes twinkle {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.2); opacity: 0.8; }
+@keyframes twinkleCurrentStar {
+    0% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    100% { 
+        transform: scale(var(--twinkle-scale)); 
+        opacity: 0.8;
+    }
 }
 
 .star {
@@ -1374,6 +1387,21 @@ button.red-disabled-text {
     position: absolute;
     background-color: var(--text-color);
     opacity: 0.6;
+    --twinkle-scale: 1.2;
+    animation: twinkle infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0% { 
+        transform: scale(1); 
+        opacity: 1; 
+        filter: brightness(55%);
+    }
+    100% { 
+        transform: scale(var(--twinkle-scale)); 
+        opacity: 0.8; 
+        filter: brightness(50%);
+    }
 }
 
 .current-star:hover,
@@ -1383,7 +1411,7 @@ button.red-disabled-text {
 
 .current-star::after,
 .star::after {
-    content: attr(title);
+    content: attr(titler);
     position: absolute;
     bottom: 120%;
     left: 50%;
@@ -1473,7 +1501,13 @@ canvas {
     padding: 3px;
 }
 
-.rename-button-container {
+.star-map-name-field {
+    display: inline-block;
+    width: auto;
+    height: auto;
+}
+
+.header-button-container {
     display: inline-block;
     width: auto;
     height: auto;

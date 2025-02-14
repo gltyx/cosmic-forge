@@ -1,5 +1,8 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getStarVisionDistance,
+    setStarVisionDistance,
+    STAR_SEED,
     getStartingStarSystem,
     setRocketUserName,
     setCurrentDestinationDropdownText,
@@ -920,132 +923,126 @@ export function updateDescriptionRow(rowKey, targetProperty) {
     }
 }
 
-export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1) {
+function getStarColor(distance) {
+    const maxDistance = 100;
+    const minDistance = 0;
+    const normalizedDistance = Math.min(Math.max(distance, minDistance), maxDistance) / maxDistance;
+
+    if (normalizedDistance <= 0) return "rgb(255, 255, 255)"; // White at 0 light-years
+    if (normalizedDistance <= 0.25) return `rgb(${255}, ${255 - normalizedDistance * 255}, ${255 - normalizedDistance * 255})`; // White to Green
+    if (normalizedDistance <= 0.5) return `rgb(${255}, ${255}, ${0 + (normalizedDistance - 0.25) * 1020})`; // Green to Yellow
+    return `rgb(${255}, ${255 - (normalizedDistance - 0.5) * 510}, ${0})`; // Yellow to Red
+}
+
+export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode) {
     const stars = [];
     const starDistanceData = {};
-
     const minSize = 2;
     const maxSize = 6;
-
     const containerRect = starfieldContainer.getBoundingClientRect();
     const containerWidth = containerRect.width;
     const containerHeight = containerRect.height;
     const containerLeft = containerRect.left;
     const containerTop = containerRect.top;
+    const starNames = [
+        "Sirius","Canopus","Arcturus","Sadalmelik","Capella","Rigel","Procyon","Betelgeuse","Altair","Aldebaran",
+        "Sterope","Antares","Pollux","Fomalhaut","Deneb","Mimosa","Regulus","Adhara","Castor","Shaula",
+        "Bellatrix","Elnath","Miaplacidus","Alnilam","Alnair","Alioth","Alnitak","Dubhe","Mirfak","Wezen",
+        "Sargas","Kaus Australis","Avior","Alkaid","Menkalinan","Atria","Alhena","Peacock","Tureis","Nunki",
+        "Mirzam","Alphard","Rasalhague","Caph","Zubenelgenubi","Electra","Hamal","Mintaka","Alsephina","Menkent",
+        "Enif","Tiaki","Ascella","Algol","Markab","Suhail","Zeta Ophiuchi","Kochab","Ankaa","Denebola",
+        "Vega","Azelfafage","Maia","Arkab Prior","Thuban","Izar","Ruchbah","Albireo","Almaaz","Dschubba",
+        "Algieba","Gomeisa","Hoedus II","Cebalrai","Nashira","Muscida","Kitalpha","Hyadum I","Eltanin","Yildun",
+        "Biham","Zubeneschamali","Alpherg","Alcor","Polaris","Pleione","Spica","Chara","Sadachbia","Rasalgethi",
+        "Barnard's Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
+      ];
+    let currentStar = null;
 
-    const starNames= ["Absolutno","Acamar","Achernar","Achird","Acrab","Acrux","Acubens","Adhafera","Adhara","Adhil","Ain","Ainalrami","Aiolos","Aladfar","Alasia","Alathfar†","Albaldah","Albali","Albireo","Alchiba","Alcor","Alcyone","Aldebaran","Alderamin","Aldhanab","Aldhibah","Aldulfin","Alfirk","Algedi","Algenib","Algieba","Algol","Algorab","Alhena","Alioth","Aljanah","Alkaid","Alkalurops","Alkaphrah","Alkarab","Alkes","Almaaz","Almach","Alnair","Alnasl","Alnilam","Alnitak","Alniyat","Alphard","Alphecca","Alpheratz","Alpherg","Alrakis","Alrescha","Alruba","Alsafi","Alsciaukat","Alsephina","Alshain","Alshat","Altair","Altais","Alterf","Aludra","Alula Australis","Alula Borealis","Alya","Alzirr","Amadioha","Amansinaya","Anadolu","Añañuca","Ancha","Angetenar","Aniara","Ankaa","Anser","Antares","Arcalís","Arcturus","Arkab Posterior","Arkab Prior","Arneb","Ascella","Asellus Australis","Asellus Borealis","Ashlesha","Asellus Primus†","Asellus Secundus†","Asellus Tertius†","Aspidiske","Asterope","Atakoraka","Athebyne","Atik","Atlas","Atria","Avior","Axólotl","Ayeyarwady","Azelfafage","Azha","Azmidi","Baekdu","Barnard's Star","Baten Kaitos","Batsũ̀","Beemim","Beid","Belel","Bélénos","Bellatrix","Berehynia","Betelgeuse","Bharani","Bibhā","Biham","Bosona","Botein","Brachium","Bubup","Buna","Bunda","Canopus","Capella","Caph","Castor","Castula","Cebalrai","Ceibo","Celaeno","Cervantes","Chalawan","Chamukuy","Chaophraya","Chara","Chasoň","Chechia","Chertan","Citadelle","Citalá","Cocibolca","Copernicus","Cor Caroli","Cujam","Cursa","Dabih","Dalim","Danfeng","Deneb","Deneb Algedi","Denebola","Diadem","Dilmun","Dingolay","Diphda","Dìwö","Diya","Dofida","Dombay","Dschubba","Dubhe","Dziban","Ebla","Edasich","Electra","Elgafar","Elkurud","Elnath","Eltanin","Emiw","Enif","Errai","Fafnir","Fang","Fawaris","Felis","Felixvarela","Filetdor","Flegetonte","Fomalhaut","Formosa","Franz","Fulu","Fumalsamakah","Funi","Furud","Fuyue","Gacrux","Gakyid","Gar","Garnet Star†","Geminga","Giausar","Gienah","Ginan","Gloas","Gnomon","Gomeisa","Graffias†","Guahayona","Grumium","Gudja","Gumala","Guniibuu","Hadar","Haedus","Hamal","Hassaleh","Hatysa","Helvetios","Heze","Hoggar","Homam","Horna","Hunahpú","Hunor","Iklil","Illyrian","Imai","Inquill","Intan","Intercrus","Irena","Itonda","Izar","Jabbah","Jishui","Kaffaljidhma","Kaewkosin","Kalausi","Kamuy","Kang","Karaka","Kaus Australis","Kaus Borealis","Kaus Media","Kaveh","Keid","Khambalia","Kitalpha","Kochab","Koeia","Koit","Komondor","Kornephoros","Kosjenka","Kraz","Kuma†","Kurhah","La Superba","Larawag","Lerna","Lesath","Libertas","Lich","Liesma","Lilii Borea","Lionrock","Lucilinburhuc","Lusitânia","Maasym","Macondo","Mago","Mahasim","Mahsati","Maia","Malmok","Marfik","Markab","Markeb","Márohu","Marsic","Matar","Matza","Maru","Mazaalai","Mebsuta","Megrez","Meissa","Mekbuda","Meleph","Menkalinan","Menkar","Menkent","Menkib","Merak","Merga","Meridiana","Merope","Mesarthim","Miaplacidus","Mimosa","Minchir","Minelauva","Mintaka","Mira","Mirach","Miram","Mirfak","Mirzam","Misam","Mizar","Moldoveanu","Mönch","Montuno","Morava","Moriah","Mothallah","Mouhoun","Mpingo","Muliphein","Muphrid","Muscida","Musica","Muspelheim","Nahn","Naledi","Naos","Nashira","Násti","Natasha","Navi†","Nekkar","Nembus","Nenque","Nervia","Nihal","Nikawiy","Noquisi","Nosaxa","Nunki","Nusakan","Nushagak","Nyamien","Ogma","Okab","Orkaria","Paikauhale","Parumleo","Peacock","Petra","Phact","Phecda","Pherkad","Phoenicia","Piautos","Pincoya","Pipirima","Pipoltr","Pleione","Poerava","Polaris","Polaris Australis","Polis","Pollux","Porrima","Praecipua","Prima Hyadum","Procyon","Propus","Proxima Centauri","Ran","Rana","Rapeto","Rasalas","Rasalgethi","Rasalhague","Rastaban","Regor†","Regulus","Revati","Rigel","Rigil Kentaurus","Rosalíadecastro","Rotanev","Ruchbah","Rukbat","Sabik","Saclateni","Sadachbia","Sadalbari","Sadalmelik","Sadalsuud","Sadr","Sagarmatha","Saiph","Salm","Sāmaya","Sansuna","Sargas","Sarin","Sceptrum","Scheat","Schedar","Secunda Hyadum","Segin","Seginus","Sham","Shama","Sharjah","Shaula","Sheliak","Sheratan","Sika","Sirius","Situla","Skat","Solaris","Spica","Sterrennacht","Stribor","Sualocin","Subra","Suhail","Sulafat","Syrma","Tabit","Taika","Taiyangshou","Taiyi","Talitha","Tangra","Tania Australis","Tania Borealis","Tapecue","Tarazed","Tarf","Taygeta","Tegmine","Tejat","Terebellum","Tevel","Thabit†","Theemin","Thuban","Tiaki","Tianguan","Tianyi","Timir","Tislit","Titawin","Tojil","Toliman","Tonatiuh","Torcular","Tuiren","Tupã","Tupi","Tureis","Ukdah","Uklun","Unukalhai","Unurgunite","Uruk","Uúba","Vega","Veritate","Vindemiatrix","Wasat","Wattle","Wazn","Wezen","Wouri","Wurren","Xamidimura","Xihe","Xuange","Yed Posterior","Yed Prior","Yildun","Zaniah","Zaurak","Zembra","Zhang","Zibal","Zosma","Zubenelgenubi","Zubenelhakrabi","Zubeneschamali"];
-
-    const usedNames = new Set();
-
-    // Generate stars
     for (let i = 0; i < numberOfStars; i++) {
-        const star = document.createElement('div');
-
-        let size = getSeededRandomInRange(seed + i, minSize, maxSize);
+        const name = starNames.length > 0 ? starNames.splice(Math.floor(seededRandom(seed - i * 1.2) * starNames.length), 1)[0] : `Star${i}`;
+        const size = getSeededRandomInRange(seed + i, minSize, maxSize);
         const x = getSeededRandomInRange(seed + i + numberOfStars, 0, containerWidth) + containerLeft;
         const y = getSeededRandomInRange(seed + i + numberOfStars * 2, 0, containerHeight) + containerTop;
         const z = getSeededRandomInRange(seed + i + numberOfStars * 3, 10, 100000);
-
-        let name;
-        if (starNames.length > 0) {
-            const index = Math.floor(seededRandom(seed - i * 1.2) * starNames.length);
-            name = starNames[index];
-            starNames.splice(index, 1);
-            usedNames.add(name);
-        } else {
-            name = `Star${i}`;
-        }
-
-        if (size === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'mapSize'])) {
-            star.classList.add('current-star');
-            size = size * 3;
-        }
-
-        const isInteresting = size > maxSize - 0.45 || name === getCurrentStarSystem(); //CHANGE THIS VALUE 0.45 WHEN FILTERING BY DISTANCE
-
-        if (isInteresting) {
-            star.classList.add('star');
-            star.id = name;
-            star.style.width = `${size * 1.6}px`;
-            star.style.height = `${size * 1.6}px`;
-            star.style.left = `${x}px`;
-            star.style.top = `${y}px`;
-            star.title = name;
-
-            const width = size * 1.6;
-            const height = size * 1.6;
-            const left = x;
-            const top = y;
-            
-            stars.push({ name, x, y, z, width, height, left, top });
-
-            star.addEventListener('click', function() {
-                const currentStar = stars.find(s => s.name === `${capitaliseString(getCurrentStarSystem())}`);  // Replace 'currentStarName' with logic for the actual current star
-                if (!currentStar) return;
-            
-                const currentStarX = currentStar.left + currentStar.width / 2;
-                const currentStarY = currentStar.top + currentStar.height / 2;
-                const currentStarZ = currentStar.z;
-            
-                const clickedStarX = x + width / 2;
-                const clickedStarY = y + height / 2;
-                const clickedStarZ = z;
-            
-                if (star.id === currentStar.name) {
-                    console.log(`Distance from current star to ${star.title}: 0 units`);
-                    return;
-                }
-            
-                const distance = calculate3DDistance(currentStarX, currentStarY, currentStarZ, clickedStarX, clickedStarY, clickedStarZ);
-                console.log(`Distance from current star to ${star.title}: ${distance.toFixed(2)} units`);
-            });
-            
-            
-        } else {
-            star.id = `noneInterestingStar${i}`;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.left = `${x}px`;
-            star.style.top = `${y}px`;
-
-            star.classList.add('star-uninteresting');
-            star.title = '';
-        }
-
-        starfieldContainer.appendChild(star);
+        stars.push({ name, x, y, z, size, width: size * 1.1, height: size * 1.1, left: x, top: y });
     }
 
-    const currentStar = stars.find(star => star.name === capitaliseString(getCurrentStarSystem()));
+    currentStar = stars.find(star => star.name === capitaliseString(getCurrentStarSystem()));
     stars.forEach(star => {
-        const distance = calculate3DDistance(
-            parseFloat(currentStar.left) + parseFloat(currentStar.width) / 2,
-            parseFloat(currentStar.top) + parseFloat(currentStar.height) / 2,
+        starDistanceData[star.name] = calculate3DDistance(
+            currentStar.left + currentStar.width / 2,
+            currentStar.top + currentStar.height / 2,
             currentStar.z,
-            parseFloat(star.left) + parseFloat(star.width) / 2,
-            parseFloat(star.top) + parseFloat(star.height) / 2,
+            star.left + star.width / 2,
+            star.top + star.height / 2,
             star.z
         );
-        
-        
-        starDistanceData[star.name] = distance;
     });
-    console.log(starDistanceData);
 
-    function calculate3DDistance(x1, y1, z1, x2, y2, z2) {
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const dz = z2 - z1;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
+    stars.forEach(star => {
+        const distance = starDistanceData[star.name];
+        const isInteresting = distance <= getStarVisionDistance() || star.name === currentStar.name;
+        const starElement = document.createElement('div');
+        starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
+        starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
+        if (starElement.id === capitaliseString(getCurrentStarSystem())) {
+            starElement.setAttribute('titler', `${star.name}`);
+        } else {
+            starElement.setAttribute('titler', `${star.name} (${distance}ly)`);
+        }  
+        
+        if (star.name === currentStar.name) {
+            starElement.classList.add('current-star');
+            starElement.style.width = `${star.width * 4}px`;
+            starElement.style.height = `${star.height * 4}px`;
+        } else if (isInteresting) {
+            starElement.style.width = `${star.width * 2}px`;
+            starElement.style.height = `${star.height * 2}px`;
+            if (mapMode === 'distance') {
+                starElement.style.backgroundColor = getStarColor(distance);
+            }
+        } else {
+            starElement.style.width = `${star.width / 2}px`;
+            starElement.style.height = `${star.height / 2}px`;
+            const randomDuration = (Math.random() * 1 + 0.5).toFixed(2);
+            starElement.style.animationDuration = `${randomDuration}s`;
+            if (mapMode === 'in range') {
+                starElement.classList.add('invisible');
+            } else {
+                starElement.classList.remove('invisible');
+            }
+        }
+        
+        starElement.style.left = `${star.left}px`;
+        starElement.style.top = `${star.top}px`;
+        
+        if (isInteresting) {
+            starElement.addEventListener('click', () => {
+                if (star.name === currentStar.name) {
+                    console.log(`Distance from current star to ${star.name}: 0 units`);
+                    return;
+                }
+                console.log(`Distance from current star to ${star.name}: ${distance.toFixed(2)} units`);
+            });
+        }
+        
+        starfieldContainer.appendChild(starElement);
+                console.log(starElement.classList); 
+                console.log('Map mode:', mapMode);
+    });
+}
 
-    function getSeededRandomInRange(seed, min, max) {
-        return seededRandom(seed) * (max - min) + min;
-    }
+function calculate3DDistance(x1, y1, z1, x2, y2, z2) {
+    return parseFloat((Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2) / 1000).toFixed(2));
+}
 
-    function seededRandom(seed) {
-        let x = Math.sin(seed++) * 53;
-        return x - Math.floor(x);
-    }
+function getSeededRandomInRange(seed, min, max) {
+    return seededRandom(seed) * (max - min) + min;
+}
+
+function seededRandom(seed) {
+    let x = Math.sin(seed++) * STAR_SEED;
+    return x - Math.floor(x);
 }
 
 

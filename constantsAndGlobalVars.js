@@ -38,6 +38,9 @@ export const ROCKET_TRAVEL_SPEED = 0.1;
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 export const STARTING_STAR_SYSTEM = 'spica';
+export const STAR_SEED = 53;
+export const STAR_FIELD_SEED = 80;
+export const NUMBER_OF_STARS = 100;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -84,6 +87,8 @@ let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
+let starVisionDistance = 0.1;
+let starMapMode = 'normal';
 
 let miningObject = {
     rocket1: null,
@@ -369,6 +374,7 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketDirection = rocketDirection;
     gameState.rocketUserName = rocketUserName;
     gameState.headerDescriptions = headerDescriptions;
+    gameState.starVisionDistance = starVisionDistance;
 
     // Flags
     gameState.flags = {
@@ -452,6 +458,7 @@ export function restoreGameStatus(gameState, type) {
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
             rocketUserName = gameState.rocketUserName ?? {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
+            starVisionDistance = gameState.starVisionDistance ?? 5;
 
             // Flags
             setAutoSaveToggle(gameState.flags.autoSaveToggle);
@@ -1835,12 +1842,21 @@ export function setRocketUserName(key, value) {
     rocketUserName[key] = value;
 }
 
+export function getStarVisionDistance() {
+    return starVisionDistance ?? 5;
+}
 
+export function setStarVisionDistance(value) {
+    starVisionDistance = value;
+}
 
+export function getStarMapMode() {
+    return starMapMode ?? 'normal';
+}
 
-
-
-
+export function setStarMapMode(value) {
+    starMapMode = value;
+}
 
 const IMAGE_URLS = {
     resources: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

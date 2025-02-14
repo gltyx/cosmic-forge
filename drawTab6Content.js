@@ -414,7 +414,7 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
     
     headerRow.innerHTML = `
         <div id="${rocketId}NameField" class="rocket-name-field" spellcheck="false" contenteditable="true">${getRocketUserName(rocketId)}</div>
-        <div id="${rocketId}-rename-btn" class="rename-button-container"></div>
+        <div id="${rocketId}-rename-btn" class="header-button-container"></div>
     `;
 
     const maxLength = 12;
