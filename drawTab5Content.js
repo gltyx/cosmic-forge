@@ -73,7 +73,7 @@ export function drawTab5Content(heading, optionContentElement) {
                 (event) => handleSortStarClick('weather')
             ),
             createTextElement(
-                `Precipitation:`,
+                `Precipitation`,
                 'starLegendPrecipitationType',
                 ['sort-by', 'label-star'],
                 (event) => handleSortStarClick('precipitationType')
