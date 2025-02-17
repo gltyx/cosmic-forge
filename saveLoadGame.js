@@ -299,16 +299,16 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 saveData = {
                     stars: {
                         spica: {
-                            mapSize: 5.504440179536064,
+                            mapSize: 5.504440179536064, //only important for starting star
                             startingStar: true,
                             starCode: 'SPC',
                             precipitationResourceCategory: 'compounds',
                             precipitationType: 'water',
                             weather: {
-                                sunny: [30, '☀', 1, 'white'],
-                                cloudy: [47, '☁', 0.6, 'orange'],
-                                rain: [20, '☂', 0.4, 'orange'],
-                                volcano: [3, '⛰', 0.05, 'red']
+                                sunny: [30, '☀', 1, 'green-ready-text'],
+                                cloudy: [47, '☁', 0.6, 'warning-orange-text'],
+                                rain: [20, '☂', 0.4, 'warning-orange-text'],
+                                volcano: [3, '⛰', 0.05, 'red-disabled-text']
                             }
                         }
                     }
