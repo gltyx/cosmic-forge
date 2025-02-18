@@ -2186,6 +2186,38 @@ function initializeTabEventListeners() {
         });
     });
 
+    document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'help 1');
+            setCurrentOptionPane('help 1');
+            updateContent('Help 1', 'tab8', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab8"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'help 2');
+            setCurrentOptionPane('help 2');
+            updateContent('Help 2', 'tab8', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab8"][class*="option6"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'help 3');
+            setCurrentOptionPane('help 3');
+            updateContent('Help 3', 'tab8', 'content');
+        });
+    });
+    
+    document.querySelectorAll('[class*="tab8"][class*="option7"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'help 4');
+            setCurrentOptionPane('help 4');
+            updateContent('Help 4', 'tab8', 'content');
+        });    
+    });
+
     const tabsContainer = document.getElementById('tabsContainer');
 
     if (tabsContainer) {
