@@ -766,7 +766,7 @@ export function createHtmlTextArea(id, classList = [], headerText = '', bodyText
             innerTextString += `<span class="${headerClasses.join(' ')}">${header}</span>`;
         }
         if (header && body) {
-            innerTextString += '<br/>';
+            innerTextString += '<br/><br/>';
         }
         if (body) {
             innerTextString += `<span class="${bodyClasses.join(' ')}">${body}</span>`;

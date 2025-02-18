@@ -1115,17 +1115,19 @@ body {
 }
 
 .help-sub-header-seperator {
-    border-top: 2px dotted var(--text-color);
+    border-top: 1px dashed var(--text-color);
 }
 
 .help-sub-header-text {
-    margin-left: 10px;
+    padding-left: 10px;
     font-weight: bold;
     font-size: 2rem;
+    display: inline-block;
 }
 
 .help-sub-body-text {
-    margin-left: 30px;
+    padding-left: 30px;
+    display: inline-block;
 }
 
 .save-name-margin,
