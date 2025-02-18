@@ -1,8 +1,42 @@
-import { getImageUrls, getCurrentTheme, setCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
-import { toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
+import { createHtmlTextArea, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
+import { getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
+    if (heading === 'Get Started') {
+        const getStartedRow = createOptionRow(
+            'getStartedRow',
+            null,
+            '',
+            createHtmlTextArea(
+                'getStartedTextArea', 
+                ['help-container', 'help-container-margin'], 
+                getHelpContent(getCurrentOptionPane(), 'subHeadings'),
+                getHelpContent(getCurrentOptionPane(), 'subBodys'),
+                ['help-sub-header-text'],
+                ['help-sub-body-text']
+            ),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%']
+        );
+    
+        optionContentElement.appendChild(getStartedRow);
+    }
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
             'settingsCurrencySymbolRow',

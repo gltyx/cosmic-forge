@@ -75,6 +75,7 @@
     padding: 0;
 }
 
+.help-container,
 .export-save {
     pointer-events: none;
 }
@@ -1105,6 +1106,17 @@ body {
     margin-left: 5px;
 }
 
+.help-sub-header-text {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.help-sub-body-text {
+    margin-left: 30px;
+}
+
+.help-container-margin,
 .save-name-margin,
 .save-load-button
 {

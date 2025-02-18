@@ -745,6 +745,43 @@ export function createTextElement(text, id, classList, onClick) {
     return div;
 }
 
+export function createHtmlTextArea(id, classList = [], headerText = '', bodyText = '', headerClasses = [], bodyClasses = []) {
+    const div = document.createElement('div');
+    const headers = headerText ? headerText : [];
+    const bodies = bodyText ? bodyText : [];
+    let innerTextString = '';
+    
+    for (let i = 0; i < Math.max(headers.length, bodies.length); i++) {
+        const header = headers[i] || '';
+        const body = bodies[i] || '';
+
+        if (header) {
+            innerTextString += `<span class="${headerClasses.join(' ')}">${header}</span>`;
+        }
+        if (header && body) {
+            innerTextString += '<br/>';
+        }
+        if (body) {
+            innerTextString += `<span class="${bodyClasses.join(' ')}">${body}</span>`;
+        }
+
+        if (i < Math.max(headers.length, bodies.length) - 1) {
+            innerTextString += '<br/><br/>'
+        }
+    }
+
+    div.id = id;
+    div.innerHTML = innerTextString;
+
+    if (Array.isArray(classList)) {
+        div.classList.add(...classList);
+    } else if (typeof classList === 'string') {
+        div.classList.add(classList);
+    }
+
+    return div;
+}
+
 export function createTextFieldArea(id, classList = [], placeholder = '', innerTextString) {
     const textArea = document.createElement('textarea');
     
@@ -2188,9 +2225,9 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'help 1');
-            setCurrentOptionPane('help 1');
-            updateContent('Help 1', 'tab8', 'content');
+            setLastScreenOpenRegister('tab8', 'get started');
+            setCurrentOptionPane('get started');
+            updateContent('Get Started', 'tab8', 'content');
         });
     });
     

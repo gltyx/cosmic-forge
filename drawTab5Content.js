@@ -1,5 +1,5 @@
 import { sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
-import { getSortStarMethod, setSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
+import { getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString } from './utilityFunctions.js';
 
@@ -108,7 +108,7 @@ export function drawTab5Content(heading, optionContentElement) {
             const weatherIconSpan = `<span class="${weatherTendency[2]}">${weatherTendency[0]}</span>`;
             const weatherText = `${weatherIconSpan} (${weatherTendency[1]}%)`;
 
-            const starRow = createOptionRow(
+            const starDataRow = createOptionRow(
                 `${starRowName}`,
                 null,
                 [`${capitaliseString(nameStar)}:`],
@@ -151,7 +151,7 @@ export function drawTab5Content(heading, optionContentElement) {
                 [true, '10%', '90%']
             );
 
-            optionContentElement.appendChild(starRow);
+            optionContentElement.appendChild(starDataRow);
         });
     }
 }

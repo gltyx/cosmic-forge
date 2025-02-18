@@ -8,6 +8,7 @@ export let headerDescriptions;
 export let techNotificationMessages;
 export let optionDescriptions;
 export let newsTickerContent;
+export let helpContent;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -65,6 +66,7 @@ export function initialiseDescriptions() {
         [getRocketUserName('rocket3').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         [getRocketUserName('rocket4').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         
+        'get started': "Learn how to get started in Cosmic Forge.",
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
@@ -1270,6 +1272,16 @@ export function initialiseDescriptions() {
     };
 }
 
+helpContent = {
+    'get started': {
+        subHeading1: "Welcome!",
+        subBody1: "Welcome To Cosmic Forge!",
+
+        subHeading2: "Introduction:",
+        subBody2: "Cosmic Forge is an incremental game."
+    }
+}
+
 export function getOptionDescription(key1) {
     return optionDescriptions[key1];
 }
@@ -1291,4 +1303,20 @@ export function setHeaderDescriptions(key, value) {
 
 export function replaceHeaderDescriptions(value) {
     headerDescriptions = value;
+}
+
+export function getHelpContent(section, type) {
+    const currentSection = helpContent[section];
+
+    if (type === 'subHeadings') {
+        return Object.keys(currentSection)
+            .filter(key => key.startsWith('subHeading'))
+            .map(key => currentSection[key]);
+    } else if (type === 'subBodys') {
+        return Object.keys(currentSection)
+            .filter(key => key.startsWith('subBody'))
+            .map(key => currentSection[key]);
+    }
+
+    return [];
 }
