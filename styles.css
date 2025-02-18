@@ -75,7 +75,11 @@
     padding: 0;
 }
 
-.help-container,
+.help-container {
+    width: 100%;
+    pointer-events: none;
+}
+
 .export-save {
     pointer-events: none;
 }
@@ -892,6 +896,10 @@ body {
     margin: 10px 0 10px 30px;
 }
 
+.input-container.no-left-margin {
+    margin-left: 0 !important;
+}
+
 .select-container select:focus {
     border-color: var(--tab-selected-bg-color);
     outline: none;
@@ -1106,6 +1114,10 @@ body {
     margin-left: 5px;
 }
 
+.help-sub-header-seperator {
+    border-top: 2px dotted var(--text-color);
+}
+
 .help-sub-header-text {
     margin-left: 10px;
     font-weight: bold;
@@ -1116,7 +1128,6 @@ body {
     margin-left: 30px;
 }
 
-.help-container-margin,
 .save-name-margin,
 .save-load-button
 {

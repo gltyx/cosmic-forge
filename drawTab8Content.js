@@ -32,7 +32,8 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             '',
-            [true, 'invisible', '100%']
+            [true, 'invisible', '100%'],
+            ['no-left-margin']
         );
     
         optionContentElement.appendChild(getStartedRow);
