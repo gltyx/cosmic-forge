@@ -55,12 +55,6 @@ export function drawTab5Content(heading, optionContentElement) {
             null,
             `Sort By:`,
             createTextElement(
-                `Name`,
-                'starLegendName',
-                ['no-sort', 'label-star'],
-                (event) => handleSortStarClick('name')
-            ),
-            createTextElement(
                 `Distance`,
                 'starLegendDistance',
                 ['sort-by', 'label-star'],
@@ -78,7 +72,18 @@ export function drawTab5Content(heading, optionContentElement) {
                 ['sort-by', 'label-star'],
                 (event) => handleSortStarClick('precipitationType')
             ),
-            null,
+            createTextElement(
+                `Fuel (AM)`,
+                'starLegendFuel',
+                ['no-sort', 'label-star'],
+                (event) => handleSortStarClick('fuel')
+            ),
+            createTextElement(
+                `AP`,
+                'starLegendAscendencyPoints',
+                ['no-sort', 'label-star'],
+                (event) => handleSortStarClick('ascendencyPoints')
+            ),
             ``,
             '',
             null,
@@ -90,7 +95,7 @@ export function drawTab5Content(heading, optionContentElement) {
             null,
             null,
             'star',
-            [true, '25%', '75%']
+            [true, '10%', '90%']
         );
     
         optionContentElement.appendChild(starLegendRow);
@@ -98,7 +103,7 @@ export function drawTab5Content(heading, optionContentElement) {
         let sortedStars = sortStarTable(starsObject, getSortStarMethod());
 
         Object.entries(sortedStars).forEach(([nameStar, star]) => {
-            const { distance, name, weatherTendency, precipitationType } = star;
+            const { distance, fuel, ascendencyPoints, name, weatherTendency, precipitationType } = star;
             const starRowName = `starRow_${name}`;
             const weatherIconSpan = `<span class="${weatherTendency[2]}">${weatherTendency[0]}</span>`;
             const weatherText = `${weatherIconSpan} (${weatherTendency[1]}%)`;
@@ -107,11 +112,6 @@ export function drawTab5Content(heading, optionContentElement) {
                 `${starRowName}`,
                 null,
                 [`${capitaliseString(nameStar)}:`],
-                createTextElement(
-                    `${capitaliseString(name)}`,
-                    'starInfoContainerName',
-                    ['value-star', 'name-star']
-                ),
                 createTextElement(
                     `${distance.toFixed(2)} ly`,
                     'starInfoContainerDistance',
@@ -126,8 +126,17 @@ export function drawTab5Content(heading, optionContentElement) {
                     `${capitaliseString(precipitationType)}`,
                     'starInfoContainerPrecipitationType',
                     ['value-star']
-                ),  
-                null,
+                ),
+                createTextElement(
+                    `${fuel}`,
+                    'starInfoContainerFuel',
+                    ['value-star', 'fuel-star', 'notation']
+                ),
+                createTextElement(
+                    `${ascendencyPoints}`,
+                    'starInfoContainerAscendencyPoints',
+                    ['value-star', 'fuel-star', 'notation']
+                ),
                 ``,
                 '',
                 null,
@@ -139,7 +148,7 @@ export function drawTab5Content(heading, optionContentElement) {
                 null,
                 null,
                 'star',
-                [true, '25%', '75%']
+                [true, '10%', '90%']
             );
 
             optionContentElement.appendChild(starRow);

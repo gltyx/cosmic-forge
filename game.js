@@ -5135,7 +5135,142 @@ export function resetRocketForRefuelling(rocket) {
     console.log('refuel button pressed for ' + rocket);
 }
 
+export function generateStarDataAndAddToDataObject(starElement, distance) {
+    console.log('creating star data for ' + starElement.id);
+    console.log('distance is ' + distance + 'ly');
 
+    const fuel = calculateAntimatterRequired(distance);
+    const ascendencyPoints = calculateAscendencyPoints(distance);
+
+    const weatherTypes = {
+        sunny: ['☀', 'green-ready-text'],
+        cloudy: ['☁', 'warning-orange-text'],
+        rain: ['☂', 'warning-orange-text'],
+        volcano: ['⛰', 'red-disabled-text']
+    };
+
+    let weatherProbabilities = {
+        sunny: 0,
+        cloudy: 0,
+        rain: 0,
+        volcano: 0
+    };
+
+    let totalProbability = 0;
+    Object.keys(weatherProbabilities).forEach(type => {
+        weatherProbabilities[type] = Math.floor(Math.random() * 25);
+        totalProbability += weatherProbabilities[type];
+    });
+
+    const scalingFactor = 100 / totalProbability;
+    Object.keys(weatherProbabilities).forEach(type => {
+        weatherProbabilities[type] = Math.round(weatherProbabilities[type] * scalingFactor);
+    });
+
+    const difference = 100 - Object.values(weatherProbabilities).reduce((acc, val) => acc + val, 0);
+    if (difference !== 0) {
+        weatherProbabilities.sunny += difference;
+    }
+
+    let weatherTendency = [];
+    let maxProbability = 0;
+    Object.keys(weatherProbabilities).forEach(type => {
+        if (weatherProbabilities[type] > maxProbability) {
+            maxProbability = weatherProbabilities[type];
+            weatherTendency = [weatherTypes[type][0], weatherProbabilities[type], weatherTypes[type][1]];
+        }
+    });
+
+    const randomPrecipitationType = calculatePrecipitationType();
+
+    const newStarData = {
+        startingStar: false,
+        starCode: starElement.id.toUpperCase(),
+        name: starElement.id.toLowerCase(),
+        distance: distance,
+        fuel: fuel,
+        ascendencyPoints: ascendencyPoints,
+        precipitationResourceCategory: 'compounds',
+        precipitationType: randomPrecipitationType,
+        weather: {
+            sunny: [weatherProbabilities.sunny, weatherTypes.sunny[0], 1, weatherTypes.sunny[1]],
+            cloudy: [weatherProbabilities.cloudy, weatherTypes.cloudy[0], 0.6, weatherTypes.cloudy[1]],
+            rain: [weatherProbabilities.rain, weatherTypes.rain[0], 0.4, weatherTypes.rain[1]],
+            volcano: [weatherProbabilities.volcano, weatherTypes.volcano[0], 0.05, weatherTypes.volcano[1]]
+        },
+        weatherTendency: weatherTendency
+    };
+
+    setStarSystemDataObject(newStarData, 'stars', [starElement.id.toLowerCase()]);
+}
+
+export function calculateAscendencyPoints(distance) {
+    const MIN_DISTANCE = 1;
+    const MAX_DISTANCE = 100;
+    const MIN_AP = 1;
+    const MAX_AP = 5;
+    
+    if (distance >= 97.5) return MAX_AP;
+
+    let normalizedDistance = (distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE);
+    normalizedDistance = Math.max(0, Math.min(1, normalizedDistance));
+    
+    const exponent = 2.5;
+    let ascendencyPoints = MIN_AP + (MAX_AP - MIN_AP) * Math.pow(normalizedDistance, exponent);
+    ascendencyPoints = Math.min(4, Math.round(ascendencyPoints));
+    
+    let modifiedAP = ascendencyPoints;
+    if (ascendencyPoints > 1 && ascendencyPoints < 5) {
+        if (Math.random() < 0.2) {
+            modifiedAP -= 1;
+        }
+    }
+    
+    console.log(`Original AP: ${ascendencyPoints}, Modified AP: ${modifiedAP}`);
+    
+    return modifiedAP;
+}
+
+export function calculateAntimatterRequired(distance) {
+    const MIN_DISTANCE = 1;
+    const MAX_DISTANCE = 100;
+    const MIN_COST = Math.floor(Math.random() * (10000 - 9000 + 1)) + 9000;
+    const MAX_COST = Math.floor(Math.random() * (160000 - 150000 + 1)) + 150000;
+
+    let normalizedDistance = (distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE);
+
+    normalizedDistance = Math.max(0, Math.min(1, normalizedDistance));
+
+    const exponent = 2.5;
+    const antimatterRequired = MIN_COST + (MAX_COST - MIN_COST) * Math.pow(normalizedDistance, exponent);
+
+    return Math.round(antimatterRequired);
+}
+
+export function calculatePrecipitationType() {
+    const precipitationWeights = [
+        { type: "titanium", weight: 2 },
+        { type: "water", weight: 50 },
+        { type: "glass", weight: 17 },
+        { type: "diesel", weight: 25 },
+        { type: "concrete", weight: 0 },
+        { type: "steel", weight: 6 }
+    ];
+
+    const weightedPrecipitationTypes = [];
+    let cumulativeWeight = 0;
+
+    precipitationWeights.forEach(({ type, weight }) => {
+        cumulativeWeight += weight;
+        weightedPrecipitationTypes.push({ type, cumulativeWeight });
+    });
+
+    const randomValue = Math.floor(Math.random() * 100);
+
+    const selectedPrecipitationType = weightedPrecipitationTypes.find(({ cumulativeWeight }) => randomValue < cumulativeWeight);
+
+    return selectedPrecipitationType ? selectedPrecipitationType.type : "water";
+}
 
 //===============================================================================================================
 
