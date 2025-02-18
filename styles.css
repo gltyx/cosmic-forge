@@ -1114,7 +1114,7 @@ body {
     margin-left: 5px;
 }
 
-.help-sub-header-seperator {
+.sub-header-seperator {
     border-top: 1px dashed var(--text-color);
 }
 

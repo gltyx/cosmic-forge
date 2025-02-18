@@ -774,7 +774,7 @@ export function createHtmlTextArea(id, classList = [], headerText = '', bodyText
 
         if (i < Math.max(headers.length, bodies.length) - 1) {
             innerTextString += '<br/><br/>';
-            innerTextString += `<div class="help-sub-header-seperator" style="width: 100%; height: 10px;"></div>`;
+            innerTextString += `<div class="sub-header-seperator" style="width: 100%; height: 10px;"></div>`;
         }
     }
 
