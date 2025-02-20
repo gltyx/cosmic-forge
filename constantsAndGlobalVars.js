@@ -821,7 +821,11 @@ export function setSaleCompoundPreview(compound, amount) {
     setCompoundSalePreview(compound, calculatedAmount);
 }
 
-export function setCreateCompoundPreview(compoundToCreate, amount) {
+export function setCreateCompoundPreview(compoundToCreate, dropDownString) {
+    let amount = /^[A-Za-z]/.test(dropDownString) 
+    ? dropDownString 
+    : dropDownString.split(" ")[0];
+    
     const type1 = getResourceDataObject('compounds', [compoundToCreate, 'createsFrom1'])[1];
     const type2 = getResourceDataObject('compounds', [compoundToCreate, 'createsFrom2'])[1];
     const type3 = getResourceDataObject('compounds', [compoundToCreate, 'createsFrom3'])[1];
