@@ -283,7 +283,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
 
         if (saveData.version < 0.27) {
             if (objectType === 'resourceData') {
-                //add a loop if necessary to change structure of all keys
                 if (!saveData.space.upgrades.spaceTelescope) {
                     saveData.space.upgrades.spaceTelescope = { 
                         spaceTelescopeBoughtYet: false,
@@ -299,7 +298,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 saveData = {
                     stars: {
                         spica: {
-                            mapSize: 5.504440179536064, //only important for starting star
+                            mapSize: 5.504440179536064,
                             startingStar: true,
                             starCode: 'SPC',
                             precipitationResourceCategory: 'compounds',

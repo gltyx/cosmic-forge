@@ -2,7 +2,7 @@ import { replaceHeaderDescriptions } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.26, //update this whenever changes are made to the structure
+    version: 0.27, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -534,7 +534,8 @@ export let resourceData = {
                 resource1Price: [20000, 'steel', 'compounds'],
                 resource2Price: [15000, 'glass', 'compounds'],
                 resource3Price: [20000, 'silicon', 'resources'],
-                energyUse: 0.4,
+                energyUseSearchAsteroid: 0.4,
+                energyUseInvestigateStar: 0.7,
             },
             launchPad: { 
                 launchPadBoughtYet: false,
@@ -691,17 +692,19 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.26, //update this whenever changes are made to the structure
+    version: 0.27,
     stars: {
         spica: {
+            mapSize: 5.504440179536064, //only important for starting star
+            startingStar: true,
             starCode: 'SPC',
             precipitationResourceCategory: 'compounds',
             precipitationType: 'water',
             weather: {
-                sunny: [30, '☀', 1, 'white'],
-                cloudy: [47, '☁', 0.6, 'orange'],
-                rain: [20, '☂', 0.4, 'orange'],
-                volcano: [3, '⛰', 0.05, 'red']
+                sunny: [30, '☀', 1, 'green-ready-text'],
+                cloudy: [47, '☁', 0.6, 'warning-orange-text'],
+                rain: [20, '☂', 0.4, 'warning-orange-text'],
+                volcano: [3, '⛰', 0.05, 'red-disabled-text']
             }
         }
     }
