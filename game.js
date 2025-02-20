@@ -353,7 +353,7 @@ export async function gameLoop() {
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
-        checkPowerForSpaceTelescopeTimer(['searchAsteroid', 'investigateStar']);
+        checkPowerForSpaceTelescopeTimer(['searchAsteroidTimer', 'investigateStarTimer']);
 
         monitorTechTree();
         
@@ -1834,9 +1834,9 @@ export function checkPowerForSpaceTelescopeTimer(timers) {
     timers.forEach(timerName => {
         const searchTimer = timerManager.getTimer(timerName);
         if (searchTimer) {
-            if (timerName === 'searchAsteroid' && getAsteroidTimerCanContinue()) {
+            if (timerName === 'searchAsteroidTimer' && getAsteroidTimerCanContinue()) {
                 searchTimer.resume();
-            } else if (timerName === 'investigateStar' && getStarInvestigationTimerCanContinue()) {
+            } else if (timerName === 'investigateStarTimer' && getStarInvestigationTimerCanContinue()) {
                 searchTimer.resume();
             } else {
                 searchTimer.pause();
@@ -2551,7 +2551,7 @@ function setUpResourcePricesNamesCategories(resource, type, spaceUpgradeType, bu
 }
 
 function checkIfHaveEnoughResourceForUpgradeAndSetState(element, quantity, price) {
-    if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price) {
+    if (element.dataset.conditionCheck === 'upgradeCheck' && quantity >= price && element.dataset.argumentCheckQuantity !== 'time') {
         element.classList.remove('red-disabled-text');
     } else {
         element.classList.add('red-disabled-text');
@@ -2591,8 +2591,14 @@ function setStateOfDescriptionLabelsForAutoBuyers(element, price, quantity, reso
                 }
             }
         });
-    } else {
+    } else if (element.dataset.argumentCheckQuantity !== 'time') {
         element.classList.remove('red-disabled-text');
+    } else if (element.dataset.argumentCheckQuantity === 'time') {
+        if (getPowerOnOff()) {
+            element.classList.remove('red-disabled-text');
+        } else {
+            element.classList.add('red-disabled-text');
+        }
     }
 }
 
