@@ -2909,8 +2909,14 @@ export function sortStarTable(starsObject, sortMethod) {
                 };
                 const weatherIconA = starA.weatherTendency[0]; 
                 const weatherIconB = starB.weatherTendency[0];
+                const weatherProbabilityA = starA.weatherTendency[1];
+                const weatherProbabilityB = starB.weatherTendency[1];
 
-                return weatherPriority[weatherIconA] - weatherPriority[weatherIconB];
+                if (weatherPriority[weatherIconA] !== weatherPriority[weatherIconB]) {
+                    return weatherPriority[weatherIconA] - weatherPriority[weatherIconB];
+                }
+
+                return weatherProbabilityB - weatherProbabilityA;
             case "precipitationType":
                 return starA.precipitationType.localeCompare(starB.precipitationType);
             case "fuel":

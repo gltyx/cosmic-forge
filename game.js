@@ -3675,7 +3675,7 @@ export function startInvestigateStarTimer(adjustment) {
             const searchInterval = getTimerUpdateInterval();
             let searchDuration = adjustment[0] === 0 ? getStarInvestigationDuration() : adjustment[0];
     
-            searchDuration = 8000; //DEBUG
+            //searchDuration = 8000; //DEBUG
     
             if (adjustment[0] === 0) {
                 setCurrentInvestigateStarTimerDurationTotal(searchDuration);
