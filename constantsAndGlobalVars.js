@@ -381,17 +381,17 @@ export function captureGameStatusForSaving(type) {
 
     // Flags
     gameState.flags = {
-        autoSaveToggle: getAutoSaveToggle(),
-        weatherEffectSettingToggle: getWeatherEffectSetting(),
-        newsTickerSetting: getNewsTickerSetting(),
-        notificationsToggle: getNotificationsToggle(),
-        techRenderChange: getTechRenderChange(),
-        losingEnergy: getLosingEnergy(),
-        powerOnOff: getPowerOnOff(),
-        trippedStatus: getTrippedStatus(),
-        currentlySearchingAsteroid: getCurrentlySearchingAsteroid(),
-        currentlyInvestigatingStar: getCurrentlyInvestigatingStar(),
-        telescopeReadyToSearch: getTelescopeReadyToSearch(),
+        autoSaveToggle: autoSaveToggle,
+        weatherEffectSettingToggle: weatherEffectSettingToggle,
+        newsTickerSetting: newsTickerSetting,
+        notificationsToggle: notificationsToggle,
+        techRenderChange: techRenderChange,
+        losingEnergy: losingEnergy,
+        powerOnOff: powerOnOff,
+        trippedStatus: trippedStatus,
+        currentlySearchingAsteroid: currentlySearchingAsteroid,
+        currentlyInvestigatingStar: currentlyInvestigatingStar,
+        telescopeReadyToSearch: telescopeReadyToSearch,
         currentlyTravellingToAsteroid: currentlyTravellingToAsteroid,
         rocketReadyToTravel: rocketReadyToTravel,
         antimatterUnlocked: antimatterUnlocked,
@@ -465,22 +465,22 @@ export function restoreGameStatus(gameState, type) {
             starVisionIncrement = gameState.starVisionIncrement ?? 1;
 
             // Flags
-            setAutoSaveToggle(gameState.flags.autoSaveToggle);
-            setNotificationsToggle(gameState.flags.notificationsToggle);
-            setWeatherEffectSetting(gameState.flags.weatherEffectSettingToggle);
-            setNewsTickerSetting(gameState.flags.newsTickerSetting);
-            setTechRenderChange(gameState.flags.techRenderChange);
-            setLosingEnergy(gameState.flags.losingEnergy);
-            setPowerOnOff(gameState.flags.powerOnOff);
-            setTrippedStatus(gameState.flags.trippedStatus);
-            setCurrentlySearchingAsteroid(gameState.flags.currentlySearchingAsteroid);
-            setCurrentlyInvestigatingStar(gameState.flags.currentlyInvestigatingStar);
-            setTelescopeReadyToSearch(gameState.flags.telescopeReadyToSearch);
-            currentlyTravellingToAsteroid = gameState.flags.currentlyTravellingToAsteroid ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
-            rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? {rocket1: true, rocket2: true, rocket3: true, rocket4: true};
+            autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
+            notificationsToggle = gameState.flags.notificationsToggle ?? true;
+            weatherEffectSettingToggle = gameState.flags.weatherEffectSettingToggle ?? true;
+            newsTickerSetting = gameState.flags.newsTickerSetting ?? true;
+            techRenderChange = gameState.flags.techRenderChange ?? false;
+            losingEnergy = gameState.flags.losingEnergy ?? false;
+            powerOnOff = gameState.flags.powerOnOff ?? false;
+            trippedStatus = gameState.flags.trippedStatus ?? false;
+            currentlySearchingAsteroid = gameState.flags.currentlySearchingAsteroid ?? false;
+            currentlyInvestigatingStar = gameState.flags.currentlyInvestigatingStar ?? false;
+            telescopeReadyToSearch = gameState.flags.telescopeReadyToSearch ?? true;            
+            currentlyTravellingToAsteroid = gameState.flags.currentlyTravellingToAsteroid ?? { rocket1: false, rocket2: false, rocket3: false, rocket4: false };
+            rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? { rocket1: true, rocket2: true, rocket3: true, rocket4: true };
             antimatterUnlocked = gameState.flags.antimatterUnlocked ?? false;
             canTravelToAsteroids = gameState.flags.canTravelToAsteroids ?? false;
-            canFuelRockets = gameState.flags.canFuelRockets ?? false;
+            canFuelRockets = gameState.flags.canFuelRockets ?? false;            
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
