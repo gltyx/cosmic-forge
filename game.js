@@ -4582,7 +4582,7 @@ export function offlineGains(switchedFocus) {
             const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
             const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
     
-            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 100);
     
             timerManager.removeTimer('searchAsteroidTimer');
             startSearchAsteroidTimer([remainingTime, 'offlineGains']);
@@ -4592,7 +4592,7 @@ export function offlineGains(switchedFocus) {
             const timeLeft = getTimeLeftUntilStarInvestigationTimerFinishes();
             const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
     
-            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 1);
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 100);
     
             timerManager.removeTimer('investigateStarTimer');
             startInvestigateStarTimer([remainingTime, 'offlineGains']);
