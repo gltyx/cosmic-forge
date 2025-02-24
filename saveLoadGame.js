@@ -281,18 +281,16 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.27) {
+        if (saveData.version < 0.28) {
             if (objectType === 'resourceData') {
-                if (!saveData.space.upgrades.spaceTelescope) {
-                    saveData.space.upgrades.spaceTelescope = { 
-                        spaceTelescopeBoughtYet: false,
-                        price: 10000,
-                        resource1Price: [20000, 'steel', 'compounds'],
-                        resource2Price: [15000, 'glass', 'compounds'],
-                        resource3Price: [20000, 'silicon', 'resources'],
-                        energyUseSearchAsteroid: 0.4,
-                        energyUseInvestigateStar: 0.7
-                    }
+                saveData.space.upgrades.spaceTelescope = { 
+                    spaceTelescopeBoughtYet: false,
+                    price: 10000,
+                    resource1Price: [20000, 'steel', 'compounds'],
+                    resource2Price: [15000, 'glass', 'compounds'],
+                    resource3Price: [20000, 'silicon', 'resources'],
+                    energyUseSearchAsteroid: 0.4,
+                    energyUseInvestigateStar: 0.7
                 }
             } else if (objectType === 'starSystemsData') {
                 saveData = {

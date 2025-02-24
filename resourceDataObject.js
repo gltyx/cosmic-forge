@@ -2,7 +2,7 @@ import { replaceHeaderDescriptions } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.27, //update this whenever changes are made to the structure
+    version: 0.28, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
