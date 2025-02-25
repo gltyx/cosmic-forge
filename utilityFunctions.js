@@ -4,3 +4,21 @@ export function capitaliseString(str) {
     }
     return '';
 }
+
+export function capitaliseWordsWithRomanNumerals(str) {
+    const romanNumerals = new Set([
+        'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x',
+        'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'
+    ]);
+    
+    if (str) {
+        return str
+            .split(' ')
+            .map(word => {
+                const lowerWord = word.toLowerCase();
+                return romanNumerals.has(lowerWord) ? lowerWord.toUpperCase() : word.charAt(0).toUpperCase() + word.slice(1);
+            })
+            .join(' ');
+    }
+    return '';
+}

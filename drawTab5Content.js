@@ -1,7 +1,7 @@
 import { sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
 import { getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getStarSystemDataObject } from './resourceDataObject.js';
-import { capitaliseString } from './utilityFunctions.js';
+import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 
 export function drawTab5Content(heading, optionContentElement) {
     if (heading === 'Star Map') {
@@ -111,7 +111,7 @@ export function drawTab5Content(heading, optionContentElement) {
             const starDataRow = createOptionRow(
                 `${starRowName}`,
                 null,
-                [`${capitaliseString(nameStar)}:`],
+                [`${capitaliseWordsWithRomanNumerals(nameStar)}:`],
                 createTextElement(
                     `${distance.toFixed(2)} ly`,
                     'starInfoContainerDistance',
