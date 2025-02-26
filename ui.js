@@ -2203,9 +2203,9 @@ function initializeTabEventListeners() {
     document.querySelectorAll('[class*="tab6"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setHasAntimatterSvgRightBoxDataChanged(null);
-            setLastScreenOpenRegister('tab6', 'antimatter');
-            setCurrentOptionPane('antimatter');
-            updateContent('Antimatter', 'tab6', 'content');
+            setLastScreenOpenRegister('tab6', 'mining');
+            setCurrentOptionPane('mining');
+            updateContent('Mining', 'tab6', 'content');
         });
     });
     
@@ -2243,25 +2243,25 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'help 2');
-            setCurrentOptionPane('help 2');
-            updateContent('Help 2', 'tab8', 'content');
+            setLastScreenOpenRegister('tab8', 'concepts - early');
+            setCurrentOptionPane('concepts - early');
+            updateContent('Concepts - Early', 'tab8', 'content');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'help 3');
-            setCurrentOptionPane('help 3');
-            updateContent('Help 3', 'tab8', 'content');
+            setLastScreenOpenRegister('tab8', 'concepts - mid');
+            setCurrentOptionPane('concepts - mid');
+            updateContent('Concepts - Mid', 'tab8', 'content');
         });
     });
     
     document.querySelectorAll('[class*="tab8"][class*="option7"]').forEach(function(element) {
         element.addEventListener('click', function() {
-            setLastScreenOpenRegister('tab8', 'help 4');
-            setCurrentOptionPane('help 4');
-            updateContent('Help 4', 'tab8', 'content');
+            setLastScreenOpenRegister('tab8', 'concepts - late');
+            setCurrentOptionPane('concepts - late');
+            updateContent('Concepts - Late', 'tab8', 'content');
         });    
     });
 

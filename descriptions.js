@@ -57,7 +57,7 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
 
-        'antimatter': "This shows Antimatter being produced, where, and by which Rocket Miner.",
+        'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
@@ -67,6 +67,9 @@ export function initialiseDescriptions() {
         [getRocketUserName('rocket4').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         
         'get started': "Learn how to get started in Cosmic Forge.",
+        'concepts - early': "Early game concepts.",
+        'concepts - mid': "Mid game concepts.",
+        'concepts - late': "Late game concepts pre rebirth.",
         visual: "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
@@ -1275,7 +1278,98 @@ export function initialiseDescriptions() {
 helpContent = {
     'get started': {
         subHeading1: "Introduction",
-        subBody1: "Cosmic Forge in a nutshell is an incremental game.  However it is much more than that, and hopefully it will give you hours of gaming pleasure.<br/><br/>When you start the game, it is going to look pretty bleak, which it is, as you have been abandoned on a planet in the Spica system with nothing but a great understanding of the universe, and the ability to harness Hydrogen.  As you gain more of this basic building block, you will be able to sell it and gain some Cash.<br/><br/>Anyway, before going any further, open the Resources Tab, and expand the Gases section, and you will note there is a section called Hydrogen.  Click this and the Resources section will open.  Although it can look overwhelming at first, the concept is pretty simple.  At the top you will see a dropdown which allows you to set an amount of stock to sell, and a sell button.  This sells your Hydrogen for Cash, which you can see at the top left of the screen.<br/><br/>With some Cash in your pocket it is time to set about the goal, which is to ascend to the stars!  Quite a heavy task from a few coins and some Hydrogen atoms, I am sure you will agree, but fear not!<br/><br/>Next if you look below this section, you have a Gain button, that, when clicked adds a Hydrogen atom to your stocks.  You need to store this atom, and thats where the next section comes in.  If you gain so much Hydrogen that your storage is full, then you can trade all but one atom for an increase in storage, although making you gain the Hydrogen again, you can now collect twice as much!<br/><br/>This is great but a bit labour intensive.  To get around this, if you look below, you will see that there is a section allowing you to build a Hydrogen Generator, from now on called an Auto Buyer.  With this Auto Buyer, you can sit back and relax, while the Hydrogen is gained all by itself until the storage is full, which will make life easier for sure.<br/><br/>Now that the pressure is off a bit, next you will note there is a Research Tab, and opening this will give you access to some more information, and more importantly the concept of Research Points!  You can build a Science Kit which will start to generate you Research Points, very slowly at first, but this can grow very quickly.  Use the first batch you generate to open the Technology section and research your first technology, 'Knowledge Sharing'.<br/><br/>Congratulations you have just understood the main concept of Cosmic Forge, which is grinding and buying rewards with the profits.<br/><br/>Eventually you will be able to use this loop to discover new elements and grow those numbers beyond what you ever imagined!<br/><br/>Thanks for reading, now feel free to explore some other topics in the Help section to give you some more context!"
+        subBody1: "Cosmic Forge in a nutshell is an incremental game.  However it is much more than that, and hopefully it will give you hours of gaming pleasure.<br/><br/>When you start the game, it is going to look pretty bleak, which it is, as you have been abandoned on a planet in the Spica system with nothing but a great understanding of the universe, and the ability to harness Hydrogen.  As you gain more of this basic building block, you will be able to sell it and gain some Cash.<br/><br/>Anyway, before going any further, open the Resources Tab, and expand the Gases section, and you will note there is a section called Hydrogen.  Click this and the Resources section will open.  Although it can look overwhelming at first, the concept is pretty simple.  At the top you will see a dropdown which allows you to set an amount of stock to sell, and a sell button.  This sells your Hydrogen for Cash, which you can see at the top left of the screen.<br/><br/>With some Cash in your pocket it is time to set about the goal, which is to ascend to the stars!  Quite a heavy task from a few coins and some Hydrogen atoms, I am sure you will agree, but fear not!<br/><br/>Next if you look below this section, you have a Gain button, that, when clicked adds a Hydrogen atom to your stocks.  You need to store this atom, and thats where the next section comes in.  If you gain so much Hydrogen that your storage is full, then you can trade all but one atom for an increase in storage, although making you gain the Hydrogen again, you can now collect twice as much!<br/><br/>This is great but a bit labour intensive.  To get around this, if you look below, you will see that there is a section allowing you to build a Hydrogen Generator, from now on called an Auto Buyer.  With this Auto Buyer, you can sit back and relax, while the Hydrogen is gained all by itself until the storage is full, which will make life easier for sure.<br/><br/>Now that the pressure is off a bit, next you will note there is a Research Tab, and opening this will give you access to some more information, and more importantly the concept of Research Points!  You can build a Science Kit which will start to generate you Research Points, very slowly at first, but this can grow very quickly.  Use the first batch you generate to open the Technology section and research your first technology, 'Knowledge Sharing'.<br/><br/>Congratulations you have just understood the main concept of Cosmic Forge, which is grinding and buying rewards with the profits.<br/><br/>Eventually you will be able to use this loop to discover new elements and grow those numbers beyond what you ever imagined!<br/><br/>Thanks for reading, now feel free to explore some other topics in the Cosmicopedia to give you some more context!"
+    },
+    'concepts - early': {
+        subHeading1: "Resources",
+        subBody1: "Resources are the building blocks of the game. They can be manually gathered, sold, used to buy upgrades, fused to create other Resources, or later on, used in the creation of advanced Compounds.",
+
+        subHeading2: "Manual Gain",
+        subBody2: "The Resources all have a button that when clicked, adds 1 to the quantity of that Resource, while the total quantity is less than the storage limit. This is useful in the early stages of the game as a way to get small amounts of Resources to get things kicked off!",
+
+        subHeading3: "Sell",
+        subBody3: "Using the dropdown to choose a suitable quantity, and then clicking the Sell button, will exchange the chosen quantity of Resource (or later on, Compound) for Cash which can be used towards buying certain upgrades.",
+
+        subHeading4: "Storage",
+        subBody4: "Each Resource and Compound has a Storage limit. If the Storage is full, no more of that Resource can be gained until some are used or Storage is increased. Upgrading Storage uses all but 1 of your stocks of that Resource or Compound.",
+
+        subHeading5: "Auto Buyers",
+        subBody5: "Auto Buyers allow you to automate the collection of Resources once unlocked. They work continuously in the background, freeing you up to focus on other tasks. That is until the Storage is full. Some require Energy to operate.",
+
+        subHeading6: "Research Points",
+        subBody6: "Research Points are gained by Research Upgrades and are used to unlock new technologies.",
+
+        subHeading7: "Research Upgrades",
+        subBody7: "Research Upgrades allow you to generate Research Points, although some require Energy to operate.",
+
+        subHeading8: "Technology",
+        subBody8: "Technology unlocks powerful upgrades and new game mechanics. Most techs have prerequisites and a cost in Research Points.",
+
+        subHeading9: "Compounds",
+        subBody9: "Compounds are more advanced materials that require multiple Resources to create. They are needed for mid to late game mechanics.",
+
+        subHeading10: "Fusion",
+        subBody10: "Fusion is a process that allows you to create Resources from more basic Resources.",
+
+        subHeading11: "News Ticker",
+        subBody11: "The News Ticker displays very important (honestly!) information, and can sometimes yield secret buffs, so keep an eye on it at all times!",
+    },
+    'concepts - mid': {
+        subHeading1: "Energy Generation & Consumption",
+        subBody1: "Energy is needed to power a lot of Upgrades, such as some Auto Buyers, and Research Upgrades, and then Consumed in a lot of later game mechanics, and if this is the case, it will be indicated in the description for the feature. There are Energy Production facilities, and Energy Storage facilities.",
+
+        subHeading2: "Power Buildings",
+        subBody2: "Power Buildings generate Energy, and there are various types. They Consume Fuel while running, which can sometimes be Compounds, and in other cases Solar power.",
+
+        subHeading3: "Batteries",
+        subBody3: "Batteries store excess Energy for use when Generation is insufficient, for example if there are not enough Power Buildings following the purchase of an Upgrade, or if the Fuel is exhausted for a particular Power Building. Upgrading Battery capacity is key to maintaining Energy flow, while expanding Upgrades that consume Energy.",
+
+        subHeading4: "Weather",
+        subBody4: "Weather affects various in-game mechanics, including Energy Production. It can affect the launching of Rockets, and can provide extra Resources through Precipitation. The prevailing Weather, and indeed the Resource provided by Precipitation can vary depending on the Star that is being played (a late game mechanic).",
+
+        subHeading5: "Space Mining",
+        subBody5: "Space Mining allows for the extraction of rare Antimatter from Asteroids.",
+
+        subHeading6: "Space Telescope",
+        subBody6: "The Space Telescope is used to scan for Asteroids that can be Mined by your Rocket Miners, and in the Late Game, to Study Stars.  Using the Space Telescope requires a lot of Energy, and it has a high build cost.",
+
+        subHeading7: "Asteroids",
+        subBody7: "Asteroids contain Antimatter. Mining asteroids requires the Construction and Launching of Rocket Miners. Some Asteroids are easy to Travel To and Mine, whereas others require more time. The quantity of Antimatter varies, and so the Asteroids have different classes based on their quality. If you are really lucky, you may even find a Legendary Asteroid and have it named after you!",
+
+        subHeading8: "Launch Pad",
+        subBody8: "The Launch Pad is a prerequisite to building Rocket Miners.  It is an expensive Upgrade, and once built, you can see the number of Rocket Miners you have, and their stages of Construction, or Launch state.",
+
+        subHeading9: "Rocket Miners - Building",
+        subBody9: "You can build up to 4 Rocket Miners using advanced Compounds and a lot of Cash, provided you have built a Launch Pad. They each require a number of modules or Parts to build, which get progressively more expensive.  By default they are named as Rocket 1 etc but can be renamed.",
+
+        subHeading10: "Rocket Miners - Launching & Travelling",
+        subBody10: "Rockets must be Fuelled and Launched. They can Travel To to any Asteroid you have discovered with the Space Telescope, provided they are Fuelled and Launched.  Fuelling requires Power and time, and Launching requires good weather.  Once Launched, you can select a destination for your rocket from the discovered Asteroids dropdown, and then click to Travel To it.",
+
+        subHeading11: "Rocket Miners - Mining",
+        subBody11: "Once a Rocket Miner has travelled to an Asteroid, it will automatically Mine Antimatter from the Asteroid until it is exhausted, and will then return and require Fuelling to be used again.  While at an Asteroid, a Rocket Miner can Mine faster if the Boost option is used, available in the Mining panel."
+    },
+    'concepts - late': {
+        subHeading1: "Star Map",
+        subBody1: "The Star Map provides a view of the known Universe, and although it is discovered relatively early in the Game, it comes in to play much later.  Once you start to Study Stars, you can use this Star Map and the Star Data table to plan out your post Rebirth options.",
+
+        subHeading2: "Antimatter",
+        subBody2: "Antimatter is an advanced Resource used as Starship Fuel, and is a key component in progressing towards Rebirthing and completing the Game.  It is Mined from Asteroids using Rocket Miners.",
+
+        subHeading3: "Starship - Construction",
+        subBody3: "Building a Starship is a major milestone. Starships can travel to distant star systems and permit Rebirthing.",
+
+        subHeading4: "Starship - Travelling",
+        subBody4: "Starships can Travel To Studied Star systems, each offering unique Weather, Resources, and challenges.",
+
+        subHeading5: "Ascendency Points (AP)",
+        subBody5: "Ascendency Points (AP) are earned by Travelling To Stars. Simply put, the further away the Star is, the more AP will be granted upon Rebirth. They can be spent in the Galactic Market.",
+
+        subHeading6: "Rebirth",
+        subBody6: "Rebirth resets progress but grants Ascendency Points (AP), the first one unlocks the Galactic Market where AP can be spent.",
+
+        subHeading7: "Galactic Market",
+        subBody7: "The Galactic market is the last major Unlock of the game, and arrives after the first Rebirth.  In it, you can spend AP for permanent Upgrades to make subsequent runs much easier.",
+
     }
 }
 

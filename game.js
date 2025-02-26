@@ -372,8 +372,8 @@ export async function gameLoop() {
         monitorRevealCompoundsCheck();
 
         if (getAntimatterUnlocked() && getCurrentTab()[1] === 'Space Mining') {
-            if (getElements().antimatterOption.parentElement.parentElement.classList.contains('invisible')) {
-                getElements().antimatterOption.parentElement.parentElement.classList.remove('invisible');
+            if (getElements().miningOption.parentElement.parentElement.classList.contains('invisible')) {
+                getElements().miningOption.parentElement.parentElement.classList.remove('invisible');
             }
         }
 
@@ -1714,8 +1714,8 @@ function updateAntimatterAndDiagram() {
                 }
             }
  
-            getElements().antimatterRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
-            getElements().antimatterQuantity.innerText = `${Math.floor(antimatterTotalQuantity)}`;
+            getElements().miningRate.innerText = `${(totalAntimatterExtractionRate * getTimerRateRatio()).toFixed(2)} / s`;
+            getElements().miningQuantity.innerText = `${Math.floor(antimatterTotalQuantity)}`;
 
             if (quantityPercentage > 90) {
                 quantityAntimatterClass = 'ready-text';
@@ -1738,7 +1738,7 @@ function updateAntimatterAndDiagram() {
     //console.log(totalAntimatterExtractionRate);
     setResourceDataObject(totalAntimatterExtractionRate, 'antimatter', ['rate']);
 
-    if (getCurrentOptionPane() === 'antimatter') {
+    if (getCurrentOptionPane() === 'mining') {
         const svgElement = document.getElementById('antimatterSvg');
 
         drawAntimatterFlowDiagram(rocketData, svgElement);

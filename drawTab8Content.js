@@ -4,40 +4,11 @@ import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copyS
 import { getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
-    if (heading === 'Get Started') {
-        const getStartedRow = createOptionRow(
-            'getStartedRow',
-            null,
-            '',
-            createHtmlTextArea(
-                'getStartedTextArea', 
-                ['help-container', 'help-container-margin'], 
-                getHelpContent(getCurrentOptionPane(), 'subHeadings'),
-                getHelpContent(getCurrentOptionPane(), 'subBodys'),
-                ['help-sub-header-text'],
-                ['help-sub-body-text']
-            ),
-            null,
-            null,
-            null,
-            null,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            null,
-            false,
-            null,
-            null,
-            '',
-            [true, 'invisible', '100%'],
-            ['no-left-margin']
-        );
-    
-        optionContentElement.appendChild(getStartedRow);
-    }
+    if (heading === 'Get Started') createHelpSectionRow('getStartedRow');
+    if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow');
+    if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow');
+    if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow');
+
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
             'settingsCurrencySymbolRow',
@@ -422,5 +393,40 @@ export function drawTab8Content(heading, optionContentElement) {
         if (autoSaveFrequencyElement) {
             autoSaveFrequencyElement.value = getAutoSaveFrequency();
         }
+    }
+
+    function createHelpSectionRow(rowId) {
+        const helpRow = createOptionRow(
+            rowId,
+            null,
+            '',
+            createHtmlTextArea(
+                `${rowId}TextArea`,
+                ['help-container', 'help-container-margin'],
+                getHelpContent(getCurrentOptionPane(), 'subHeadings'),
+                getHelpContent(getCurrentOptionPane(), 'subBodys'),
+                ['help-sub-header-text'],
+                ['help-sub-body-text']
+            ),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%'],
+            ['no-left-margin']
+        );
+    
+        optionContentElement.appendChild(helpRow);
     }
 }

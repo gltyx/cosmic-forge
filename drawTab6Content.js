@@ -335,7 +335,7 @@ export function drawTab6Content(heading, optionContentElement) {
         });
     } 
     
-    if (heading === 'Antimatter') {
+    if (heading === 'Mining') {
             const antimatterSvgRow = createOptionRow(
                 'antimatterSvgRow',
                 null,
