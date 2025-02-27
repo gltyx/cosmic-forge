@@ -145,6 +145,7 @@ import {
     getStarVisionIncrement,
     getStarVisionDistance,
     setStarVisionDistance,
+    getBackgroundAudio,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -187,6 +188,49 @@ import {
 import { drawTab5Content } from './drawTab5Content.js';
 
 //---------------------------------------------------------------------------------------------------------
+class BackgroundAudioPlayer {
+    constructor() {
+        this.audio = new Audio('./resources/bgAmbience.mp3');
+        this.audio.loop = true;
+        this.audio.volume = 0.7;
+        this.isPlaying = false;
+    }
+
+    update() {
+        if (getBackgroundAudio()) {
+            if (!this.isPlaying) {
+                this.resume();
+            }
+        } else {
+            if (this.isPlaying) {
+                this.pause();
+            }
+        }
+    }
+
+    play() {
+        this.audio.play().then(() => {
+            this.isPlaying = true;
+        }).catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    }
+
+    pause() {
+        this.audio.pause();
+        this.isPlaying = false;
+    }
+
+    resume() {
+        this.audio.play().then(() => {
+            this.isPlaying = true;
+        }).catch(error => {
+            console.error("Error resuming audio:", error);
+        });
+    }
+}
+
+export const backgroundAudio = new BackgroundAudioPlayer();
 
 class TimerManager {
     constructor() {
@@ -287,6 +331,7 @@ export function startSpaceRelatedTimers(value) {
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
+        backgroundAudio.update();
         const elements = document.querySelectorAll('.notation');
 
         showHideDynamicColumns();

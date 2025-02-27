@@ -1,8 +1,8 @@
-import { replaceHeaderDescriptions } from "./descriptions.js";
+import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.27, //update this whenever changes are made to the structure
+    version: 0.29, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -689,10 +689,13 @@ export let resourceData = {
         rate: 0,
         storageCapacity: 100000
     },
+    ascendencyPoints: {
+        quantity: 0,
+    }
 };
 
 export let starSystems = {
-    version: 0.27,
+    version: 0.29,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star
@@ -723,9 +726,9 @@ export function restoreStarSystemsDataObject(value) {
     starSystems = value;
 }
 
-export function restoreHeaderDescriptionsObject(value) {
-    value = migrateResourceData(value, 'headerDescriptions');
-    replaceHeaderDescriptions(value);
+export function restoreRocketNamesObject(value) {
+    value = migrateResourceData(value, 'rocketNames');
+    replaceRocketNames(value);
 }
 
 export function getStarSystemWeather(starSystem) {

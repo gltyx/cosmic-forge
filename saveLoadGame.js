@@ -277,7 +277,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     }
                 };
             } else if (objectType === 'rocketNames') {
-                //saveData.rocketNames = rocketNames;
             }
         }
 
@@ -311,7 +310,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     }
                 };
             } else if (objectType === 'rocketNames') {
-                // saveData.rocketNames = rocketNames;
             }
         }
 

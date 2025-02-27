@@ -161,7 +161,6 @@ let currentOptionPane = null;
 let notationType = 'normalCondensed';
 
 //FLAGS
-// let audioMuted;
 // let languageChangedFlag;
 
 let checkRocketFuellingStatus = {
@@ -185,6 +184,7 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let backgroundAudio = false;
 let saveExportCloudFlag = false;
 let autoSaveToggle = false;
 let newsTickerSetting = true;
@@ -396,7 +396,8 @@ export function captureGameStatusForSaving(type) {
         rocketReadyToTravel: rocketReadyToTravel,
         antimatterUnlocked: antimatterUnlocked,
         canTravelToAsteroids: canTravelToAsteroids,
-        canFuelRockets: canFuelRockets
+        canFuelRockets: canFuelRockets,
+        backgroundAudio: backgroundAudio,
     }
 
     return gameState;
@@ -480,7 +481,8 @@ export function restoreGameStatus(gameState, type) {
             rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? { rocket1: true, rocket2: true, rocket3: true, rocket4: true };
             antimatterUnlocked = gameState.flags.antimatterUnlocked ?? false;
             canTravelToAsteroids = gameState.flags.canTravelToAsteroids ?? false;
-            canFuelRockets = gameState.flags.canFuelRockets ?? false;            
+            canFuelRockets = gameState.flags.canFuelRockets ?? false;
+            backgroundAudio = gameState.flags.backgroundAudio ?? false;          
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -493,6 +495,7 @@ export function restoreGameStatus(gameState, type) {
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
             const weatherEffectSettingToggleElement = document.getElementById('weatherEffectSettingToggle');
             const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
+            const backgroundAudioToggleElement = document.getElementById('backgroundAudioToggle');
 
             if (autoSaveFrequencyElement) {
                 autoSaveFrequencyElement.value = getAutoSaveFrequency();
@@ -512,6 +515,10 @@ export function restoreGameStatus(gameState, type) {
 
             if (newsTickerSettingToggleElement) {
                 newsTickerSettingToggleElement.checked = getNewsTickerSetting();
+            }
+
+            if (backgroundAudioToggleElement) {
+                backgroundAudioToggleElement.checked = getBackgroundAudio();
             }
 
             setCurrentPrecipitationRate(0);
@@ -1349,6 +1356,14 @@ export function setCurrentStarSystem(value) {
 
 export function getStartingStarSystem() {
     return STARTING_STAR_SYSTEM;
+}
+
+export function setBackgroundAudio(value) {
+    backgroundAudio = value ?? false;
+}
+
+export function getBackgroundAudio() {
+    return backgroundAudio;
 }
 
 export function eNCrQueen() {

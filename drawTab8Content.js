@@ -1,4 +1,4 @@
-import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag } from './constantsAndGlobalVars.js';
+import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio } from './constantsAndGlobalVars.js';
 import { createHtmlTextArea, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getHelpContent } from './descriptions.js';
@@ -236,6 +236,36 @@ export function drawTab8Content(heading, optionContentElement) {
         const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
         if (newsTickerSettingToggleElement) {
             newsTickerSettingToggleElement.checked = getNewsTickerSetting();
+        }
+
+        const backGroundAudioRow = createOptionRow(
+            'backGroundAudioRow',
+            null,
+            'Background Ambience Audio:',
+            createToggleSwitch('backGroundAudioToggle', false, (isEnabled) => {
+                setBackgroundAudio(isEnabled);
+            }, null),
+            null,
+            null,
+            null,
+            null,
+            'Toggle the Background Ambience on or off.',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(backGroundAudioRow);
+
+        const backGroundAudioToggleElement = document.getElementById('backGroundAudioToggle');
+        if (backGroundAudioToggleElement) {
+            backGroundAudioToggleElement.checked = getBackgroundAudio();
         }
     }
 
