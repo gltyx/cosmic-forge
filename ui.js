@@ -1718,7 +1718,7 @@ export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
     antimatterRateBarOuter.style.height = "100%";
     antimatterRateBarOuter.style.border = "2px solid var(--text-color)";
     antimatterRateBarOuter.style.borderRadius = "10px";
-    antimatterRateBarOuter.style.backgroundColor = "var(--bg-color)";
+    antimatterRateBarOuter.style.backgroundColor = "var(--container-bg-color)";
     antimatterRateBarOuter.style.transition = "background-color 0.3s ease-in-out";
     antimatterRateBarOuter.setAttribute("id", 'svgRateBarOuter');
 
