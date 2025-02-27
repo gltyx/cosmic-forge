@@ -189,7 +189,7 @@ class BoostSoundManager {
             }
 
             const audio = new Audio("./sounds/boostAntimatter.mp3");
-            audio.volume = 0.5;
+            audio.volume = 0.4;
             this.boostSounds.add(audio);
 
             audio.play().catch(error => {
