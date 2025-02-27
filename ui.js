@@ -2412,8 +2412,16 @@ function specialMessageBuilder(message, prizeCategory) {
 
             const visible = !getElements()[message.item + 'Option'].parentElement.parentElement.classList.contains('invisible');
             if (message.condition === 'visible' && visible) {
-                const currentResourceQuantity = getResourceDataObject(message.category, [message.item, 'quantity']);
-                const resourceStorageCapacity = getResourceDataObject(message.category, [message.item, 'storageCapacity']);
+                let currentResourceQuantity, resourceStorageCapacity;
+
+                if (message.category === "antimatter") {
+                    currentResourceQuantity = getResourceDataObject("antimatter", ["quantity"]);
+                    resourceStorageCapacity = getResourceDataObject("antimatter", ["storageCapacity"]);
+                } else {
+                    currentResourceQuantity = getResourceDataObject(message.category, [message.item, "quantity"]);
+                    resourceStorageCapacity = getResourceDataObject(message.category, [message.item, "storageCapacity"]);
+                }
+
                 const difference = resourceStorageCapacity - currentResourceQuantity;
             
                 if (difference === 0) {
@@ -2505,7 +2513,14 @@ function addOneOffEventListeners() {
 
     oneOffElement.addEventListener('click', function () {
         const multiplier = parseFloat(this.getAttribute('data-multiplier'));
-        const categoryArray = JSON.parse(this.getAttribute('data-category'));
+
+        let categoryArray;
+        if (this.getAttribute("data-category") === "antimatter") {
+            categoryArray = ["antimatter"];
+        } else {
+            categoryArray = JSON.parse(this.getAttribute("data-category"));
+        }
+
         let item = this.getAttribute('data-item');
 
         if (item.startsWith('[') && item.endsWith(']')) {
@@ -2590,6 +2605,10 @@ function addOneOffEventListeners() {
                     }
                 }
             });
+        } else if (type === 'adder') {
+            const itemToAddType = categoryArray;
+            const quantityToAdd = multiplier;
+            setResourceDataObject(getResourceDataObject(itemToAddType, ['quantity']) + quantityToAdd, itemToAddType, ['quantity']);
         }
 
         this.style.pointerEvents = 'none';

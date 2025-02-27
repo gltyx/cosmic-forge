@@ -314,6 +314,18 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
 
             }
         }
+
+        if (saveData.version < 0.29) {
+            if (objectType === 'resourceData') {
+                saveData.ascendencyPoints = { 
+                    quantity: 0,
+                }
+            } else if (objectType === 'starSystemsData') {
+
+            } else if (objectType === 'headerDescriptions') {
+
+            }
+        }
     
         saveData.version += 0.01;
     }   

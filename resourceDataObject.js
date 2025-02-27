@@ -689,10 +689,13 @@ export let resourceData = {
         rate: 0,
         storageCapacity: 100000
     },
+    ascendencyPoints: {
+        quantity: 0,
+    }
 };
 
 export let starSystems = {
-    version: 0.27,
+    version: 0.29,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star

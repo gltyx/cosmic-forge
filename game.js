@@ -1,4 +1,6 @@
 import {
+    getAscendencyPoints,
+    setAscendencyPoints,
     getRocketUserName,
     setRocketUserName,
     getCanFuelRockets,
@@ -536,9 +538,22 @@ function updateStats() {
 
     //stat5
     updateAntimatterStat();
+
+    //stat6
+    updateAP();
     
     //stat8
     getTimeInStatCell();
+}
+
+function updateAP() {
+    const statLabelElement = document.getElementById('stat6').closest('.stat-cell').querySelector('.stat-label');
+    statLabelElement.innerHTML = 'AP:';
+    if (getAscendencyPoints() > 0) {
+        document.getElementById('stat6').innerHTML = `<span class="green-ready-text">${getAscendencyPoints()}</span>`;
+    } else {
+        document.getElementById('stat6').innerHTML = `<span class="red-disabled-text">0</span>`;
+    }
 }
 
 function updateAntimatterStat() {

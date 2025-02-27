@@ -23,7 +23,7 @@ export function initialiseDescriptions() {
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
         'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',
-        'Star Map': 'Here you can explore the galaxy and discover new stars and planets.',
+        'Interstellar': 'Here you can explore the galaxy and discover new stars and planets.',
         'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
         'Energy': 'Here you can buy upgrades for generating power which is needed for more advanced buildings.',
         'Space Mining': 'Here you can build vessels to mine asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
@@ -92,7 +92,7 @@ export function initialiseDescriptions() {
         scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
         hydroCarbons: 'HydroCarbons Researched\n\nYou can gain access to Diesel Fuel once you have Compounds unlocked!',
         nanoTubeTechnology: 'Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!',
-        stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked The Star Map!',
+        stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked Interstellar tab!',
         fusionEfficiencyI: 'Fusion Efficiency I Researched\n\n20% Boost to Fusion returns!',
         fusionEfficiencyII: 'Fusion Efficiency II Researched\n\nFurther 20% Boost to Fusion returns!',
         fusionEfficiencyIII: 'Fusion Efficiency III Researched\n\n100% Fusion returns!',
@@ -1041,7 +1041,25 @@ export function initialiseDescriptions() {
                 category: ["resources", "compounds"],
                 item: ["all", "tier1"],
                 linkWord: "here"
-            }     
+            },
+            {
+                id: 12,
+                body: "Get 100 free Antimatter here!",
+                type: ["adder", 100],
+                condition: "visible",
+                category: "antimatter",
+                item: "quantity",
+                linkWord: "here"
+            },            
+            {
+                id : 13,
+                body: "Get 1 free AP here!",
+                type: ["adder", 1],
+                condition: "visible",
+                category: "ascendencyPoints",
+                item: "quantity",
+                linkWord: "here"
+            }
         ],
         prize: [
             {
