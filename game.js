@@ -3503,8 +3503,8 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
-    //return Math.floor(distance / speed);  //DEBUG
-    return 10000;
+    return Math.floor(distance / speed);  
+    //return 10000; //DEBUG
 }
 
 export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction) {
