@@ -4,6 +4,7 @@ import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
 import { replaceRocketNames, rocketNames } from './descriptions.js';
+import { boostSoundManager } from './audioManager.js';
 
 //DEBUG
 export let debugFlag = false;
@@ -1836,6 +1837,14 @@ export function getIsAntimatterBoostActive() {
 }
 
 export function setIsAntimatterBoostActive(value) {
+    if (getSfx() && value) {
+        boostSoundManager.startBoostLoop();
+    }
+
+    if (!value) {
+        boostSoundManager.stopBoostLoop();
+    }
+
     isAntimatterBoostActive = value;
 }
 

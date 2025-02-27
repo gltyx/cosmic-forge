@@ -123,6 +123,8 @@ import {
     capitaliseString 
 } from './utilityFunctions.js';
 
+import { playClickSfx, playSwipeSfx, sfxPlayer } from './audioManager.js';
+
 import { drawTab1Content } from './drawTab1Content.js';
 import { drawTab2Content } from './drawTab2Content.js';
 import { drawTab3Content } from './drawTab3Content.js';
@@ -192,7 +194,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     startGame();
 
     notificationContainer = getElements().notificationContainer;
-    // Event listeners
 
     document.addEventListener('keydown', (event) => {
         if (event.code === 'NumpadSubtract') {
@@ -202,6 +203,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.querySelectorAll('.collapsible-header').forEach(header => {
         header.addEventListener('click', function () {
+            playSwipeSfx();
             const content = this.nextElementSibling;
             content.classList.toggle('open');
             this.classList.toggle('active');
@@ -209,8 +211,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     //handleLanguageChange(getLanguageSelected()); //if we are using localise later on
-
-    //initializeTabEventListeners();
 
     const powerAllButton = document.getElementById('activateGridButton');
     powerAllButton.addEventListener('click', () => {
@@ -281,6 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 export function updateContent(heading, tab, type) {
+    playClickSfx();
     const optionDescriptionElements = getElements().optionPaneDescriptions;
     let optionDescription;
 
@@ -614,6 +615,7 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
         optionDiv.innerHTML = option.text;
 
         optionDiv.addEventListener('click', (event) => {
+            playClickSfx();
             const value = event.target.getAttribute('data-value');
             const selectedOption = options.find(option => option.value == value);
             dropdownText.innerHTML = selectedOption ? selectedOption.text : 'Select an option';
@@ -629,6 +631,7 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
     });
 
     dropdown.addEventListener('click', (event) => {
+        playSwipeSfx();
         event.stopPropagation();
 
         const isVisible = dropdownOptions.classList.contains('show');
@@ -657,7 +660,6 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
     return selectContainer;
 }
 
-
 export function createToggleSwitch(id, isChecked, onChange, extraClasses) {
     const toggleContainer = document.createElement('div');
     toggleContainer.classList.add('toggle-container');
@@ -669,6 +671,7 @@ export function createToggleSwitch(id, isChecked, onChange, extraClasses) {
 
     toggle.addEventListener('change', (event) => {
         const isEnabled = event.target.checked;
+        playSwipeSfx();
         onChange(isEnabled);
     });
 
@@ -727,7 +730,15 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
         }
     }
 
-    button.addEventListener('click', onClick);
+    button.addEventListener('click', () => {
+        if (objectSectionArgument1 && objectSectionArgument1 === 'storage') {
+            sfxPlayer.playAudio('increaseStorage');
+        } else {
+            playClickSfx();
+        }
+        onClick();
+    });
+    
 
     if (disableKeyboardForButton) {
         button.setAttribute('tabindex', '-1');
@@ -1948,7 +1959,6 @@ function reorderTabs(newOrder) {
     initializeTabEventListeners();
 }
 
-
 function initializeTabEventListeners() {
     let fuseButton;
 
@@ -2276,6 +2286,7 @@ function initializeTabEventListeners() {
     
         tabs.forEach((tab) => {
             tab.addEventListener('click', () => {
+                playClickSfx();
                 const dynamicIndex = parseInt(tab.id.replace('tab', ''), 10);
     
                 setCurrentTab([dynamicIndex, document.getElementById('tab' + dynamicIndex).textContent]);
@@ -2516,6 +2527,7 @@ function addOneOffEventListeners() {
     const oneOffElement = document.getElementById('prizeTickerSpan');
 
     oneOffElement.addEventListener('click', function () {
+        sfxPlayer.playAudio('goodPrize');
         const multiplier = parseFloat(this.getAttribute('data-multiplier'));
 
         let categoryArray;
@@ -2642,6 +2654,7 @@ function addPrizeEventListeners() {
     const prizeElement = document.getElementById('prizeTickerSpan');
     if (prizeElement) {
         prizeElement.addEventListener('click', function () {
+            sfxPlayer.playAudio('goodPrize');
             const prizeType = this.getAttribute('data-prize-type');
             const category = this.getAttribute('data-category');
             const item = this.getAttribute('data-item');
@@ -2681,34 +2694,41 @@ function addWackyEffectsEventListeners() {
 
         switch (effectItem) {
             case 'wave':
+                //add sound effect
                 targetElement = prizeTickerSpan.parentElement.parentElement;
                 newAnimation += ', waveAnimation 2s infinite alternate ease-in-out';
                 prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'disco':
+                //add sound effect
                 targetElement = prizeTickerSpan.parentElement;
                 prizeTickerSpan.classList.add('disco');
                 break;
             case 'bounce':
+                //add sound effect
                 targetElement = prizeTickerSpan.parentElement.parentElement;
                 newAnimation += ', bounceAnimation 1s infinite ease-in-out';
                 prizeTickerSpan.style.opacity = '0.8';
                 break;
             case 'fade':
+                //add sound effect
                 newAnimation += ', fadeAnimation 1s infinite alternate';
                 prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'glitch':
+                //add sound effect
                 targetElement = prizeTickerSpan.parentElement.parentElement;
                 newAnimation += ', glitchAnimation 0.1s infinite';
                 prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'wobble':
+                //add sound effect
                 targetElement = prizeTickerSpan.parentElement.parentElement;
                 newAnimation += ', wobbleAnimation 1s infinite ease-in-out';
                 prizeTickerSpan.style.opacity = '0.5';
                 break;
             case 'boo':
+                //add sound effect
                 prizeTickerSpan.classList.remove('boo');
                 break;
             default:

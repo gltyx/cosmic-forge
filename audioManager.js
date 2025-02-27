@@ -1,4 +1,4 @@
-import { getCurrentStarSystemWeatherEfficiency, getBackgroundAudio, getSfx } from "./constantsAndGlobalVars.js";
+import { getIsAntimatterBoostActive, getCurrentStarSystemWeatherEfficiency, getBackgroundAudio, getSfx } from "./constantsAndGlobalVars.js";
 
 class WeatherAmbienceManager {
     constructor() {
@@ -108,12 +108,20 @@ export const backgroundAudio = new BackgroundAudioPlayer();
 class SfxPlayer {
     constructor() {
         this.sounds = {
+            "swipe": "./sounds/clickSwitch.mp3",
+            "click": "./sounds/clickButton.mp3",
+            "increaseStorage": "./sounds/increaseStorage.mp3",
+            "goodPrize": "./sounds/goodPrize.mp3",
             "asteroidScan": "./sounds/asteroidScan.mp3",
             "powerOff": "./sounds/powerOff.mp3",
             "powerOn": "./sounds/powerOn.mp3",
             "powerTripped": "./sounds/powerTripped.mp3",
             "rocketLaunch": "./sounds/rocketLaunch.mp3",
-            "starStudy": "./sounds/starStudy.mp3"
+            "rocketLand": "./sounds/rocketLand.mp3",
+            "starStudy": "./sounds/starStudy.mp3",
+            "buildTelescope": "./sounds/buildTelescope.mp3",
+            "buildLaunchPad": "./sounds/buildLaunchPad.mp3",
+            "fuelRocket": "./sounds/fuelRocket.mp3",
         };
         this.activeSounds = new Map();
     }
@@ -161,6 +169,67 @@ class SfxPlayer {
 }
 
 export const sfxPlayer = new SfxPlayer();
+
+class BoostSoundManager {
+    constructor() {
+        this.boostSounds = new Set();
+        this.boostInterval = null;
+        this.boostSoundStarted = false;
+    }
+
+    startBoostLoop() {
+        if (this.boostSoundStarted || !getSfx()) return;
+
+        this.boostSoundStarted = true;
+
+        const playBoostSound = () => {
+            if (!getIsAntimatterBoostActive()) {
+                this.stopBoostLoop();
+                return;
+            }
+
+            const audio = new Audio("./sounds/boostAntimatter.mp3");
+            audio.volume = 0.5;
+            this.boostSounds.add(audio);
+
+            audio.play().catch(error => {
+                console.error("Error playing boost sound:", error);
+            });
+
+            audio.addEventListener("ended", () => {
+                this.boostSounds.delete(audio);
+            });
+        };
+
+        playBoostSound();
+        this.boostInterval = setInterval(playBoostSound, 500);
+    }
+
+    stopBoostLoop() {
+        if (!this.boostSoundStarted) return;
+
+        this.boostSoundStarted = false;
+        clearInterval(this.boostInterval);
+        this.boostInterval = null;
+
+        this.boostSounds.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+
+        this.boostSounds.clear();
+    }
+}
+
+export const boostSoundManager = new BoostSoundManager();
+
+export function playClickSfx() {
+    sfxPlayer.playAudio("click");
+}
+
+export function playSwipeSfx() {
+    sfxPlayer.playAudio("swipe");
+}
 
 window.addEventListener('blur', () => {
     weatherAmbienceManager.pauseAll();

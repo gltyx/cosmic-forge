@@ -3,7 +3,7 @@ import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCap
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
-import { sfxPlayer } from './audioManager.js';
+import { sfxPlayer, playClickSfx } from './audioManager.js';
 
 export function drawTab2Content(heading, optionContentElement) {
     let toggleButtonText;

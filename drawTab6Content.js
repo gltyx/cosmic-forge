@@ -15,6 +15,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     'Space Telescope:',
                     createButton(`Build Space Telescope`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'spaceTelescope'], () => {
                         buildSpaceMiningBuilding('spaceTelescope', false);
+                        sfxPlayer.playAudio('buildTelescope', false);
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
                         document.getElementById('spaceTelescopeInvestigateStarRow').classList.remove('invisible');
                         spaceBuildTelescopeRow.classList.add('invisible');
@@ -129,6 +130,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     'Launch Pad:',
                     createButton(`Build Launch Pad`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check', 'launchPad'], () => {
                         buildSpaceMiningBuilding('launchPad', false);
+                        sfxPlayer.playAudio('buildLaunchPad', false);
                         document.getElementById('spaceRocket1BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket2BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');
@@ -467,6 +469,7 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
         'Fuel:',
         createButton(`Fuel Rocket`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', rocketId], () => {
             setRocketsFuellerStartedArray(rocketId, 'add');
+            sfxPlayer.playAudio('fuelRocket', false);
             switchFuelGaugeWhenFuellerBought(rocketId, 'normal');
         }, 'upgradeCheck', '', 'autoBuyer', null, 'cash', true, 'tier1', 'rocketFuel'),
         createTextElement(`<div id="${rocketId}FuellingProgressBar">`, `${rocketId}FuellingProgressBarContainer`, ['progress-bar-container', 'invisible']),

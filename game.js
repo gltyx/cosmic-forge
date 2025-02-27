@@ -3623,6 +3623,7 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
             
             if (counter >= travelDuration) {
                 if (direction) {
+                    sfxPlayer.playAudio("rocketLand", false);
                     showNotification(`${
                         getRocketUserName(rocket)} has returned to be refuelled!`, 'info');
                     resetRocketForNextJourney(rocket);
