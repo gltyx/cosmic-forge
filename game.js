@@ -5147,8 +5147,6 @@ export function boostAntimatterRate(start) {
                 setIsAntimatterBoostActive(false);
                 setHasAntimatterSvgRightBoxDataChanged(null);  
         }
-    } else {
-        console.error('Rate bar inner element not found!');
     }
 }
 

@@ -25,7 +25,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
-import { headerDescriptions } from './descriptions.js';
+import { rocketNames } from './descriptions.js';
 
 let autoSaveTimer = null;
 let firebaseConfig;
@@ -276,8 +276,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         }
                     }
                 };
-            } else if (objectType === 'headerDescriptions') {
-                saveData.headerDescriptions = headerDescriptions;
+            } else if (objectType === 'rocketNames') {
+                //saveData.rocketNames = rocketNames;
             }
         }
 
@@ -310,8 +310,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         }
                     }
                 };
-            } else if (objectType === 'headerDescriptions') {
-
+            } else if (objectType === 'rocketNames') {
+                // saveData.rocketNames = rocketNames;
             }
         }
 
@@ -322,8 +322,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 }
             } else if (objectType === 'starSystemsData') {
 
-            } else if (objectType === 'headerDescriptions') {
-
+            } else if (objectType === 'rocketNames') {
+                saveData.rocketDescription = 'Build the launch pad to launch built rockets and mine asteroids for Antimatter.'
             }
         }
     

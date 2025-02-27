@@ -75,24 +75,24 @@ import {
     setAntimatterUnlocked,
     setCanFuelRockets,
     setCanTravelToAsteroids,
-    getRocketUserName
+    getRocketUserName,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
     getStarSystemDataObject,
     setAutoBuyerTierLevel,
     setResourceDataObject,
-
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
-    getHeaderDescriptions,
+    getRocketNames,
     getOptionDescription,
     gameIntroHeader,
     gameIntroText,
     gameSaveNameCollect,
     initialiseDescriptions,
-    headerDescriptions
+    rocketNames,
+    getHeaderDescriptions,
 } from "./descriptions.js";
 
 import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
@@ -345,7 +345,11 @@ export function updateContent(heading, tab, type) {
                 break;
             case 'tab6':
                 optionDescriptionElement = optionDescriptionElements[5];
-                optionDescriptionElement.textContent = optionDescription;
+                if (getCurrentOptionPane().startsWith('rocket')) {
+                    optionDescriptionElement.textContent = getRocketNames('rocketDescription');
+                } else {
+                    optionDescriptionElement.textContent = optionDescription;
+                }
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab6Content(heading, optionContentElement);
                 break;
@@ -3016,9 +3020,9 @@ export function renameRocket(rocketId, originalRocketKey) {
 
     setRocketUserName(rocketId, newRocketName);
 
-    if (originalRocketKey in headerDescriptions) {
-        headerDescriptions[newRocketKey] = headerDescriptions[originalRocketKey];
-        delete headerDescriptions[originalRocketKey];
+    if (originalRocketKey in rocketNames) {
+        rocketNames[newRocketKey] = rocketNames[originalRocketKey];
+        delete rocketNames[originalRocketKey];
     }
 }
 

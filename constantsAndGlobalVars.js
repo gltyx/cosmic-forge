@@ -1,9 +1,9 @@
-import { restoreHeaderDescriptionsObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
+import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
-import { replaceHeaderDescriptions, headerDescriptions } from './descriptions.js';
+import { replaceRocketNames, rocketNames } from './descriptions.js';
 
 //DEBUG
 export let debugFlag = false;
@@ -375,7 +375,7 @@ export function captureGameStatusForSaving(type) {
     gameState.destinationAsteroid = destinationAsteroid;
     gameState.rocketDirection = rocketDirection;
     gameState.rocketUserName = rocketUserName;
-    gameState.headerDescriptions = headerDescriptions;
+    gameState.rocketNames = rocketNames;
     gameState.starVisionDistance = starVisionDistance;
     gameState.starVisionIncrement = starVisionIncrement;
 
@@ -417,10 +417,10 @@ export function restoreGameStatus(gameState, type) {
                 gameState.starSystems = starSystems;
             }
             
-            if (gameState.headerDescriptions) {
-                restoreHeaderDescriptionsObject(JSON.parse(JSON.stringify(gameState.headerDescriptions)));
+            if (gameState.rocketNames) {
+                restoreRocketNamesObject(JSON.parse(JSON.stringify(gameState.rocketNames)));
             } else {
-                gameState.headerDescriptions = headerDescriptions;
+                gameState.rocketNames = rocketNames;
             }            
 
             // Global variables
@@ -487,7 +487,7 @@ export function restoreGameStatus(gameState, type) {
             setLastSavedTimeStamp(gameState.timeStamp);
             offlineGains(false);
 
-            replaceHeaderDescriptions(gameState.headerDescriptions);
+            //replaceRocketNames(gameState.rocketNames);
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
