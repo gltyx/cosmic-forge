@@ -3,6 +3,7 @@ import { timerManager, startTravelToAndFromAsteroidTimer, startInvestigateStarTi
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
+import { sfxPlayer } from './audioManager.js'
 
 export function drawTab6Content(heading, optionContentElement) {
     const asteroids = getAsteroidArray();
@@ -46,6 +47,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     'Scan Asteroids',
                     createButton(`Scan Asteroids`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                         startSearchAsteroidTimer([0, 'buttonClick']);
+                        sfxPlayer.playAudio('asteroidScan', false);
                     }, 'upgradeCheck', '', 'autoBuyer', 'searchAsteroid', 'time', true, null, 'spaceMiningPurchase'),
                     createTextElement(
                         `<div id="spaceTelescopeSearchAsteroidProgressBar">`,
@@ -75,6 +77,7 @@ export function drawTab6Content(heading, optionContentElement) {
                     'Study Stars',
                     createButton(`Study Stars`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                         startInvestigateStarTimer([0, 'buttonClick']);
+                        sfxPlayer.playAudio('starStudy', false);
                     }, 'upgradeCheck', '', 'autoBuyer', 'investigateStar', 'time', true, null, 'spaceMiningPurchase'),
                     createTextElement(
                         `<div id="spaceTelescopeInvestigateStarProgressBar">`,
@@ -404,7 +407,6 @@ function setFuellingVisibility(rocket, params) {
     if (!fuellingState && !fuelledUpState && !launchedState) {
         document.getElementById(`${rocket}FuellingProgressBar`).style.width = '0%';
         document.getElementById(`${rocket}FuellingProgressBarContainer`).classList.add('invisible');
-        
     }
 }
 
@@ -470,6 +472,7 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
         createTextElement(`<div id="${rocketId}FuellingProgressBar">`, `${rocketId}FuellingProgressBarContainer`, ['progress-bar-container', 'invisible']),
         createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', `${rocketId}-launch-button`, 'invisible'], () => {
             launchRocket(rocketId);
+            sfxPlayer.playAudio('rocketLaunch', false);
         }, 'upgradeCheck', '', null, null, null, true, null, null),
         null,
         null,

@@ -185,53 +185,10 @@ import {
  import { newsTickerContent } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
-import { drawTab5Content } from './drawTab5Content.js';
+ import { drawTab5Content } from './drawTab5Content.js';
+ import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
 
 //---------------------------------------------------------------------------------------------------------
-class BackgroundAudioPlayer {
-    constructor() {
-        this.audio = new Audio('./resources/bgAmbience.mp3');
-        this.audio.loop = true;
-        this.audio.volume = 0.7;
-        this.isPlaying = false;
-    }
-
-    update() {
-        if (getBackgroundAudio()) {
-            if (!this.isPlaying) {
-                this.resume();
-            }
-        } else {
-            if (this.isPlaying) {
-                this.pause();
-            }
-        }
-    }
-
-    play() {
-        this.audio.play().then(() => {
-            this.isPlaying = true;
-        }).catch(error => {
-            console.error("Audio playback failed:", error);
-        });
-    }
-
-    pause() {
-        this.audio.pause();
-        this.isPlaying = false;
-    }
-
-    resume() {
-        this.audio.play().then(() => {
-            this.isPlaying = true;
-        }).catch(error => {
-            console.error("Error resuming audio:", error);
-        });
-    }
-}
-
-export const backgroundAudio = new BackgroundAudioPlayer();
-
 class TimerManager {
     constructor() {
         this.timers = new Map();
@@ -332,6 +289,7 @@ export function startSpaceRelatedTimers(value) {
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         backgroundAudio.update();
+        weatherAmbienceManager.update();
         const elements = document.querySelectorAll('.notation');
 
         showHideDynamicColumns();
@@ -1769,6 +1727,7 @@ function updateAntimatterAndDiagram() {
 
                 if (!getRocketDirection(`rocket${i}`)) {
                     setRocketDirection(`rocket${i}`, true); //set rocket returning
+                    sfxPlayer.playAudio('rocketLaunch', false);
                     startTravelToAndFromAsteroidTimer([0, 'returning'], `rocket${i}`, getRocketDirection(`rocket${i}`));
                     boostAntimatterRate(false);
                 }
@@ -3471,6 +3430,8 @@ function startInitialTimers() {
         const powerOnNow = getPowerOnOff();
         let powerOnAfterSwitch;
 
+        const initialPowerState = getPowerOnOff();
+
         if (!batteryBought) {
             const totalRate = newEnergyRate - getTotalEnergyUse();
             setPowerOnOff(totalRate > 0);
@@ -3478,6 +3439,13 @@ function startInitialTimers() {
         } else {
             setPowerOnOff(currentEnergyQuantity > 0.00001);
             powerOnAfterSwitch = getPowerOnOff();
+        }
+
+        if (powerOnAfterSwitch !== initialPowerState) {
+            if (!getPowerOnOff()) {
+                sfxPlayer.playAudio("powerOff", "powerOn");
+                sfxPlayer.playAudio("powerTripped", false);
+            }
         }
 
         if (!getPowerOnOff() && powerOnNow !== powerOnAfterSwitch) {
@@ -4487,6 +4455,7 @@ export function addOrRemoveUsedPerSecForFuelRate(fuelType, activateButtonElement
     } else { //if deactivating by clicking button
         setResourceDataObject(currentFuelRate + totalFuelBurnForBuildingType, fuelCategory, [fuelType, 'rate']);
         setActivatedFuelBurnObject(fuelType, false);
+        sfxPlayer.playAudio('powerOff', 'powerOn');
         return false;
     }
 }
@@ -4947,6 +4916,7 @@ export function toggleAllPower() {
         }
 
         setPowerOnOff(true);
+        sfxPlayer.playAudio('powerOn', 'powerOff');
     } else {
         toggleBuildingTypeOnOff('powerPlant1', false);
         startUpdateTimersAndRates('powerPlant1', 'toggle');
@@ -4958,6 +4928,7 @@ export function toggleAllPower() {
         startUpdateTimersAndRates('powerPlant3', 'toggle');
 
         setPowerOnOff(false);
+        sfxPlayer.playAudio('powerOff', 'powerOn');
     }
 }
 

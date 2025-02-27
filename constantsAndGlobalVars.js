@@ -184,6 +184,7 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let sfx = false;
 let backgroundAudio = false;
 let saveExportCloudFlag = false;
 let autoSaveToggle = false;
@@ -398,6 +399,7 @@ export function captureGameStatusForSaving(type) {
         canTravelToAsteroids: canTravelToAsteroids,
         canFuelRockets: canFuelRockets,
         backgroundAudio: backgroundAudio,
+        sfx: sfx,
     }
 
     return gameState;
@@ -482,7 +484,9 @@ export function restoreGameStatus(gameState, type) {
             antimatterUnlocked = gameState.flags.antimatterUnlocked ?? false;
             canTravelToAsteroids = gameState.flags.canTravelToAsteroids ?? false;
             canFuelRockets = gameState.flags.canFuelRockets ?? false;
-            backgroundAudio = gameState.flags.backgroundAudio ?? false;          
+            backgroundAudio = gameState.flags.backgroundAudio ?? false;      
+            sfx = gameState.flags.sfx ?? false;
+    
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -496,6 +500,8 @@ export function restoreGameStatus(gameState, type) {
             const weatherEffectSettingToggleElement = document.getElementById('weatherEffectSettingToggle');
             const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
             const backgroundAudioToggleElement = document.getElementById('backgroundAudioToggle');
+            const sfxToggleElement = document.getElementById('sfxToggle');
+
 
             if (autoSaveFrequencyElement) {
                 autoSaveFrequencyElement.value = getAutoSaveFrequency();
@@ -520,6 +526,10 @@ export function restoreGameStatus(gameState, type) {
             if (backgroundAudioToggleElement) {
                 backgroundAudioToggleElement.checked = getBackgroundAudio();
             }
+
+            if (sfxToggleElement) {
+                sfxToggleElement.checked = getSfx();
+            }            
 
             setCurrentPrecipitationRate(0);
             stopWeatherEffect();
@@ -1360,6 +1370,14 @@ export function getStartingStarSystem() {
 
 export function setBackgroundAudio(value) {
     backgroundAudio = value ?? false;
+}
+
+export function getSfx() {
+    return sfx;
+}
+
+export function setSfx(value) {
+    sfx = value ?? false;
 }
 
 export function getBackgroundAudio() {

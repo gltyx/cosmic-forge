@@ -3,6 +3,7 @@ import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCap
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
+import { sfxPlayer } from './audioManager.js';
 
 export function drawTab2Content(heading, optionContentElement) {
     let toggleButtonText;
@@ -119,6 +120,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', 'toggle');
                 setPowerOnOff(true);
+                sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant1', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
@@ -163,6 +165,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', 'toggle');
                 setPowerOnOff(true);
+                sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant2', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0])}:`, 'powerPlant2FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getCurrentStarSystemWeatherEfficiency()[1]}%`, 'powerPlant2FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
@@ -207,6 +210,7 @@ export function drawTab2Content(heading, optionContentElement) {
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', 'toggle');
                 setPowerOnOff(true);
+                sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant3', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0])}:`, 'powerPlant3FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0], 'quantity'])}`, 'powerPlant3FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),

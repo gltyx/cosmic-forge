@@ -1,4 +1,4 @@
-import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio } from './constantsAndGlobalVars.js';
+import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx } from './constantsAndGlobalVars.js';
 import { createHtmlTextArea, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getHelpContent } from './descriptions.js';
@@ -241,7 +241,7 @@ export function drawTab8Content(heading, optionContentElement) {
         const backGroundAudioRow = createOptionRow(
             'backGroundAudioRow',
             null,
-            'Background Ambience Audio:',
+            'Background Ambience Sound:',
             createToggleSwitch('backGroundAudioToggle', false, (isEnabled) => {
                 setBackgroundAudio(isEnabled);
             }, null),
@@ -249,7 +249,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             null,
-            'Toggle the Background Ambience on or off.',
+            'Toggle Background Ambience on or off.',
             null,
             null,
             null,
@@ -267,6 +267,36 @@ export function drawTab8Content(heading, optionContentElement) {
         if (backGroundAudioToggleElement) {
             backGroundAudioToggleElement.checked = getBackgroundAudio();
         }
+
+        const sfxAudioRow = createOptionRow(
+            'sfxAudioRow',
+            null,
+            'Sound Effects:',
+            createToggleSwitch('sfxToggle', false, (isEnabled) => {
+                setSfx(isEnabled);
+            }, null),
+            null,
+            null,
+            null,
+            null,
+            'Toggle Sound Effects on or off.',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null
+        );
+        optionContentElement.appendChild(sfxAudioRow);
+        
+        const sfxToggleElement = document.getElementById('sfxToggle');
+        if (sfxToggleElement) {
+            sfxToggleElement.checked = getSfx();
+        }        
     }
 
     if (heading === 'Saving / Loading') {   
