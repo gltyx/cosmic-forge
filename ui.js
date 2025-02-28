@@ -519,7 +519,7 @@ export function createOptionRow(
         const description = document.createElement('label');
         description.classList.add('notation');
     
-        if (rowCategory === 'building' || rowCategory === 'spaceMiningPurchase') {
+        if (rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase') {
             description.classList.add('building-purchase');
         }
     
@@ -527,7 +527,7 @@ export function createOptionRow(
         description.innerHTML = descriptionText;
     
         if (dataConditionCheck) {
-            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'science' || rowCategory === 'tech') {
+            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase' || rowCategory === 'science' || rowCategory === 'tech') {
                 description.classList.add('red-disabled-text', 'resource-cost-sell-check');
             } else if (rowCategory === 'compound') {
                 description.classList.add('red-disabled-text', 'compound-cost-sell-check');
@@ -2153,6 +2153,14 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star data');
             setCurrentOptionPane('star data');
             updateContent('Star Data', 'tab5', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab5"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'star ship');
+            setCurrentOptionPane('star ship');
+            updateContent('Star Ship', 'tab5', 'content');
         });
     });
 

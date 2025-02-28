@@ -1104,6 +1104,10 @@ body {
 #rocket2PartsCountText,
 #rocket3PartsCountText,
 #rocket4PartsCountText,
+#ssStructuralPartsCountText,
+#ssLifeSupportPartsCountText,
+#ssAntimatterEnginePartsCountText,
+#ssFleetHangarPartsCountText,
 [class*="-travel-to-asteroid-button"],
 [class*="-launch-button"]
 {

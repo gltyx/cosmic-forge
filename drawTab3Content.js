@@ -1066,7 +1066,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('orbitalConstruction');
                         showNotification(techNotificationMessages.orbitalConstruction, 'info');
                         setRenderedTechTree(false);
-                        //document.getElementById('starship').parentElement.parentElement.classList.remove('invisible');
+                        document.getElementById('starShipOption').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'orbitalConstruction', null, 'research', true, null, 'tech'),
                     null,
                     null,

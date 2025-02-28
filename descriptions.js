@@ -58,6 +58,7 @@ export function initialiseDescriptions() {
 
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
+        'star ship': "Here you can build your Star Ship to travel to studied Stars and explore the galaxy.",
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",

@@ -293,8 +293,6 @@ export async function gameLoop() {
             checkAndRevealNewBuildings(type);
         });
 
-        checkAndRevealNewBuildings('space');
-
         monitorRevealResourcesCheck();
         monitorRevealCompoundsCheck();
 
@@ -410,13 +408,23 @@ function checkAndRevealNewBuildings(type) {
     switch (type) {
         case 'energy':
             elements = getResourceDataObject('buildings', ['energy', 'upgrades']);
+            for (const key in elements) {
+                if (elements.hasOwnProperty(key)) {
+                    const upgrade = elements[key];
+                    const revealedTech = upgrade.revealedBy;
+                    if (getTechUnlockedArray().includes(revealedTech)) {
+                        const elementUpgradeOptionElement = key + 'Option';
+                        document.getElementById(elementUpgradeOptionElement).parentElement.parentElement.classList.remove('invisible');
+                    }
+                }
+            }
             break;
         case 'space':
             element = document.getElementById('launchPad');
             if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1] === 'Space Mining') {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
-                element.parentElement.parentElement.classList.remove('add');
+                element.parentElement.parentElement.classList.add('invisible');
             }
             element = document.getElementById('asteroids');
             if (getAsteroidArray().length > 0 && getCurrentTab()[1] === 'Space Mining') {
@@ -424,18 +432,15 @@ function checkAndRevealNewBuildings(type) {
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
             }
-            return;
-    }
-
-    for (const key in elements) {
-        if (elements.hasOwnProperty(key)) {
-            const upgrade = elements[key];
-            const revealedTech = upgrade.revealedBy;
-            if (getTechUnlockedArray().includes(revealedTech)) {
-                const elementUpgradeOptionElement = key + 'Option';
-                document.getElementById(elementUpgradeOptionElement).parentElement.parentElement.classList.remove('invisible');
+            break;
+        case 'starShip':
+            element = document.getElementById('starShipOption');
+            if (getTechUnlockedArray().includes('orbitalConstruction') && getCurrentTab()[1] === 'Interstellar') {
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.add('invisible');
             }
-        }
+            break;
     }
 }
 

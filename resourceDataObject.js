@@ -531,7 +531,7 @@ export let resourceData = {
             spaceTelescope: { 
                 spaceTelescopeBoughtYet: false,
                 price: 10000,
-                resource1Price: [20000, 'steel', 'compounds'],
+                resource1Price: [20000, 'iron', 'resources'],
                 resource2Price: [15000, 'glass', 'compounds'],
                 resource3Price: [20000, 'silicon', 'resources'],
                 energyUseSearchAsteroid: 0.4,
@@ -540,9 +540,9 @@ export let resourceData = {
             launchPad: { 
                 launchPadBoughtYet: false,
                 price: 40000,
-                resource1Price: [10000, 'steel', 'compounds'],
+                resource1Price: [10000, 'iron', 'resources'],
                 resource2Price: [1000, 'titanium', 'compounds'],
-                resource3Price: [0, '', ''],
+                resource3Price: [20000, 'concrete', 'compounds'],
             },
             rocket1: {
                 builtParts: 0,
@@ -607,6 +607,47 @@ export let resourceData = {
                     normalProgression: false,
                     tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 8000, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 1.0 },
                 },
+            },
+            ssStructural: {
+                builtParts: 0,
+                parts: 20,
+                price: 6000,
+                resource1Price: [8000, 'steel', 'compounds'],
+                resource2Price: [3000, 'titanium', 'compounds'],
+                resource3Price: [9000, 'silicon', 'resources'],
+                setPrice: 'ssStructuralPrice',
+            },
+            ssLifeSupport: {
+                builtParts: 0,
+                parts: 10,
+                price: 15000,
+                resource1Price: [10000, 'glass', 'compounds'],
+                resource2Price: [100000, 'oxygen', 'resources'],
+                resource3Price: [30000, 'water', 'compounds'],
+                setPrice: 'ssLifeSupportPrice',
+            },
+            ssAntimatterEngine: {
+                builtParts: 0,
+                parts: 16,
+                price: 12000,
+                resource1Price: [7000, 'steel', 'compounds'],
+                resource2Price: [4000, 'titanium', 'compounds'],
+                resource3Price: [20000, 'neon', 'resources'],
+                setPrice: 'ssAntimatterEnginePrice',
+                autoBuyer: {
+                    currentTierLevel: 1,
+                    normalProgression: false,
+                    tier1: { nameUpgrade: 'Fuel', screen: 'star ship', place: 'starShipAutobuyer1Row', price: 20000, rate: 0.02, quantity: 0, setPrice: 'starShipAB1Price', energyUse: 4.0 },
+                }
+            },
+            ssFleetHangar: {
+                builtParts: 0,
+                parts: 1,
+                price: 100000,
+                resource1Price: [80000, 'glass', 'compounds'],
+                resource2Price: [40000, 'titanium', 'compounds'],
+                resource3Price: [150000, 'steel', 'compounds'],
+                setPrice: 'ssFleetHangarPrice'
             }
         }
     },
@@ -844,4 +885,12 @@ export function getRocketParts(rocket) {
 
 export function getRocketPartsNeededInTotalPerRocket(rocket) {
     return resourceData.space.upgrades[rocket].parts;
+}
+
+export function getStarShipParts(starShipModule) {
+    return resourceData.space.upgrades[starShipModule].builtParts;
+}
+
+export function getStarShipPartsNeededInTotalPerModule(starShipModule) {
+    return resourceData.space.upgrades[starShipModule].parts;
 }

@@ -1,7 +1,8 @@
 import { sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
-import { getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
-import { getStarSystemDataObject } from './resourceDataObject.js';
+import { getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
+import { getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
+import { gain } from './game.js';
 
 export function drawTab5Content(heading, optionContentElement) {
     if (heading === 'Star Map') {
@@ -153,6 +154,50 @@ export function drawTab5Content(heading, optionContentElement) {
 
             optionContentElement.appendChild(starDataRow);
         });
+    }
+
+    if (heading === 'Star Ship') {
+        const starShipModules = [
+            { id: 'ssStructural', label: 'Structural' },
+            { id: 'ssLifeSupport', label: 'Life Support Module' },
+            { id: 'ssAntimatterEngine', label: 'Antimatter Engine' },
+            { id: 'ssFleetHangar', label: 'Fleet Hangar' }
+        ];
+
+        starShipModules.forEach(module => {
+            const starshipComponentBuildRow = createOptionRow(
+                `space${capitaliseString(module.id)}BuildRow`,
+                null,
+                `${module.label}:`,
+                createButton(`Build Module`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+                    gain(1, `${module.id}BuiltPartsQuantity`, module.id, false, null, 'space', 'space')
+                }, 'upgradeCheck', '', 'spaceUpgrade', module.id, 'cash', true, null, 'starShipPurchase'),
+                createTextElement(
+                    `Built: <span id="${module.id}BuiltPartsQuantity">${getStarShipParts(module.id)}</span> / <span id="${module.id}TotalPartsQuantity">${getStarShipPartsNeededInTotalPerModule(module.id)}</span>`,
+                    `${module.id}PartsCountText`,
+                    []
+                ),
+                null,
+                null,
+                null,
+                `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', module.id, 'price'])}, 
+                ${getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[1])}`,
+                '',
+                'upgradeCheck',
+                'spaceUpgrade',
+                module.id,
+                'cash',
+                null,
+                false,
+                null,
+                null,
+                'starShipPurchase'
+            );
+            optionContentElement.appendChild(starshipComponentBuildRow);
+        });
+        
     }
 }
 
