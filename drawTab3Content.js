@@ -1,4 +1,4 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTechSpecificUIItemsArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
@@ -172,7 +172,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('hydrogenFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('hydrogenFusion');
-                        setTechSpecificUIItemsArray('hydrogen', 'fusionButton', 'hydrogenFusion');
                         updateDescriptionRow('hydrogenSellRow', 'content2');
                         showNotification(techNotificationMessages.hydrogenFusion, 'info');
                         setRenderedTechTree(false);
@@ -204,7 +203,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('heliumFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('heliumFusion');
-                        setTechSpecificUIItemsArray('helium', 'fusionButton', 'heliumFusion');
                         updateDescriptionRow('heliumSellRow', 'content2');
                         showNotification(techNotificationMessages.heliumFusion, 'info');
                         setRenderedTechTree(false);
@@ -236,7 +234,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('carbonFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('carbonFusion');
-                        setTechSpecificUIItemsArray('carbon', 'fusionButton', 'carbonFusion');
                         updateDescriptionRow('carbonSellRow', 'content2');
                         showNotification(techNotificationMessages.carbonFusion, 'info');
                         setRenderedTechTree(false);
@@ -268,7 +265,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('neonFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neonFusion');
-                        setTechSpecificUIItemsArray('neon', 'fusionButton', 'neonFusion');
                         updateDescriptionRow('neonSellRow', 'content2');
                         showNotification(techNotificationMessages.neonFusion, 'info');
                         setRenderedTechTree(false);
@@ -300,7 +296,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('oxygenFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('oxygenFusion');
-                        setTechSpecificUIItemsArray('oxygen', 'fusionButton', 'oxygenFusion');
                         updateDescriptionRow('oxygenSellRow', 'content2');
                         showNotification(techNotificationMessages.oxygenFusion, 'info');
                         setRenderedTechTree(false);
@@ -332,7 +327,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('siliconFusion', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('siliconFusion');
-                        setTechSpecificUIItemsArray('silicon', 'fusionButton', 'siliconFusion');
                         updateDescriptionRow('siliconSellRow', 'content2');
                         showNotification(techNotificationMessages.siliconFusion, 'info');
                         setRenderedTechTree(false);
@@ -610,7 +604,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('stellarCartography', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('stellarCartography');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'stellarCartography');
                         showNotification(techNotificationMessages.stellarCartography, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'stellarCartography', null, 'research', true, null, 'tech'),
@@ -641,7 +634,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('basicPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('basicPowerGeneration');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'basicPowerGeneration');
                         showNotification(techNotificationMessages.basicPowerGeneration, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', true, null, 'tech'),
@@ -672,7 +664,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('sodiumIonPowerStorage', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('sodiumIonPowerStorage');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'sodiumIonPowerStorage');
                         showNotification(techNotificationMessages.sodiumIonPowerStorage, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'sodiumIonPowerStorage', null, 'research', true, null, 'tech'),
@@ -703,7 +694,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('advancedPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('advancedPowerGeneration');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'advancedPowerGeneration');
                         showNotification(techNotificationMessages.advancedPowerGeneration, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'advancedPowerGeneration', null, 'research', true, null, 'tech'),
@@ -734,7 +724,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('solarPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('solarPowerGeneration');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'solarPowerGeneration');
                         showNotification(techNotificationMessages.solarPowerGeneration, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'solarPowerGeneration', null, 'research', true, null, 'tech'),
@@ -765,7 +754,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('rocketComposites', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('rocketComposites');
-                        setTechSpecificUIItemsArray('tab6', 'tab6', 'rocketComposites');
                         const resourceObject = getResourceDataObject('resources');
                         Object.keys(resourceObject).forEach(key => {
                             if (getResourceDataObject('resources', [key, 'upgrades', 'autoBuyer', 'normalProgression']) === true) {
@@ -865,7 +853,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('compounds', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('compounds');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'compounds');
                         showNotification(techNotificationMessages.compounds, 'info');
                         setRenderedTechTree(false);
                         setAllCompoundsToZeroQuantity();
@@ -897,7 +884,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('steelFoundries', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('steelFoundries');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'steelFoundries');
                         showNotification(techNotificationMessages.steelFoundries, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'steelFoundries', null, 'research', true, null, 'tech'),
@@ -928,7 +914,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('giganticTurbines', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('giganticTurbines');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'giganticTurbines');
                         showNotification(techNotificationMessages.giganticTurbines, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'giganticTurbines', null, 'research', true, null, 'tech'),
@@ -959,7 +944,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('atmosphericTelescopes', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('atmosphericTelescopes');
-                        setTechSpecificUIItemsArray('tab3', 'tab3', 'atmosphericTelescopes');
                         showNotification(techNotificationMessages.atmosphericTelescopes, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', true, null, 'tech'),
@@ -990,7 +974,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyI', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyI');
-                        setTechSpecificUIItemsArray('', '', 'fusionEfficiencyI');
                         showNotification(techNotificationMessages.fusionEfficiencyI, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyI', null, 'research', true, null, 'tech'),
@@ -1021,7 +1004,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyII');
-                        setTechSpecificUIItemsArray('', '', 'fusionEfficiencyII');
                         showNotification(techNotificationMessages.fusionEfficiencyII, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', true, null, 'tech'), 
@@ -1052,7 +1034,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyIII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyIII');
-                        setTechSpecificUIItemsArray('', '', 'fusionEfficiencyIII');
                         showNotification(techNotificationMessages.fusionEfficiencyIII, 'info');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyIII', null, 'research', true, null, 'tech'),
@@ -1073,6 +1054,161 @@ export function drawTab3Content(heading, optionContentElement) {
                     'tech'
                 )
             },
+            {
+                techName: 'orbitalConstruction',
+                row: createOptionRow(
+                    'techOrbitalConstructionRow',
+                    null,
+                    'Orbital Construction:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('orbitalConstruction', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('orbitalConstruction');
+                        showNotification(techNotificationMessages.orbitalConstruction, 'info');
+                        setRenderedTechTree(false);
+                        //document.getElementById('starship').parentElement.parentElement.classList.remove('invisible');
+                    }, 'techUnlock', '', 'orbitalConstruction', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['orbitalConstruction', 'price'])} Research${getResourceDataObject('techs', ['orbitalConstruction', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="orbitalConstructionPrereq">${getResourceDataObject('techs', ['orbitalConstruction', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'orbitalConstruction',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'antimatterEngines',
+                row: createOptionRow(
+                    'techAntimatterEnginesRow',
+                    null,
+                    'Antimatter Engines:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('antimatterEngines', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('antimatterEngines');
+                        showNotification(techNotificationMessages.antimatterEngines, 'info');
+                        setRenderedTechTree(false);
+                        // unblock button to build engine parts
+                    }, 'techUnlock', '', 'antimatterEngines', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['antimatterEngines', 'price'])} Research${getResourceDataObject('techs', ['antimatterEngines', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="antimatterEnginesPrereq">${getResourceDataObject('techs', ['antimatterEngines', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'antimatterEngines',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'FTLTravelTheory',
+                row: createOptionRow(
+                    'techFTLTravelTheoryRow',
+                    null,
+                    'FTL Travel Theory:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('FTLTravelTheory', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('FTLTravelTheory');
+                        showNotification(techNotificationMessages.FTLTravelTheory, 'info');
+                        setRenderedTechTree(false);
+                        // allow launching of starship
+                    }, 'techUnlock', '', 'FTLTravelTheory', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['FTLTravelTheory', 'price'])} Research${getResourceDataObject('techs', ['FTLTravelTheory', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="FTLTravelTheoryPrereq">${getResourceDataObject('techs', ['FTLTravelTheory', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'FTLTravelTheory',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'lifeSupportSystems',
+                row: createOptionRow(
+                    'techLifeSupportSystemsRow',
+                    null,
+                    'Life Support Systems:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('lifeSupportSystems', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('lifeSupportSystems');
+                        showNotification(techNotificationMessages.lifeSupportSystems, 'info');
+                        setRenderedTechTree(false);
+                        // unblock button to build starship habitation modules
+                    }, 'techUnlock', '', 'lifeSupportSystems', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['lifeSupportSystems', 'price'])} Research${getResourceDataObject('techs', ['lifeSupportSystems', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="lifeSupportSystemsPrereq">${getResourceDataObject('techs', ['lifeSupportSystems', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'lifeSupportSystems',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'starshipFleets',
+                row: createOptionRow(
+                    'techStarshipFleetsRow',
+                    null,
+                    'Starship Fleets:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('starshipFleets', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('starshipFleets');
+                        showNotification(techNotificationMessages.starshipFleets, 'info');
+                        setRenderedTechTree(false);
+                        // unblock button to build starship defensive and offensive systems
+                    }, 'techUnlock', '', 'starshipFleets', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['starshipFleets', 'price'])} Research${getResourceDataObject('techs', ['starshipFleets', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="starshipFleetsPrereq">${getResourceDataObject('techs', ['starshipFleets', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'starshipFleets',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            }                       
         ];
 
         rows.forEach(item => {

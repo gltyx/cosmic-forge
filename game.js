@@ -2390,7 +2390,9 @@ function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, tec
 
                     const techSpan = document.createElement('span');
                     techSpan.textContent = tech.trim();
-                    const techSpanArrayName = tech.charAt(0).toLowerCase() + tech.slice(1).replace(/\s+/g, '');
+                    const techSpanArrayName = /^[A-Z]{2,}/.test(tech.split(' ')[0]) 
+                    ? tech.replace(/\s+/g, '')
+                    : tech.charAt(0).toLowerCase() + tech.slice(1).replace(/\s+/g, '');
 
                     if (getTechUnlockedArray().includes(techSpanArrayName)) {
                         techSpan.classList.add('green-ready-text');

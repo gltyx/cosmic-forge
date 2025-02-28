@@ -23,7 +23,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.29;
+export const GAME_VERSION_FOR_SAVES = 0.30;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -75,7 +75,6 @@ let itemsToIncreasePrice = {};
 let techUnlockedArray = [];
 let revealedTechArray = [];
 let upcomingTechArray = [];
-let techSpecificUIItemsArray = {};
 let unlockedResourcesArray = ['hydrogen'];
 let unlockedCompoundsArray = [];
 let temporaryRowsRepo = null;
@@ -354,7 +353,6 @@ export function captureGameStatusForSaving(type) {
     gameState.techUnlockedArray = techUnlockedArray;
     gameState.revealedTechArray = revealedTechArray;
     gameState.upcomingTechArray = upcomingTechArray;
-    gameState.techSpecificUIItemsArray = techSpecificUIItemsArray;
     gameState.unlockedResourcesArray = unlockedResourcesArray;
     gameState.unlockedCompoundsArray = unlockedResourcesArray;
     gameState.activatedFuelBurnObject = activatedFuelBurnObject;
@@ -442,7 +440,6 @@ export function restoreGameStatus(gameState, type) {
             techUnlockedArray = gameState.techUnlockedArray;
             revealedTechArray = gameState.revealedTechArray;
             upcomingTechArray = gameState.upcomingTechArray;
-            techSpecificUIItemsArray = gameState.techSpecificUIItemsArray;
             unlockedResourcesArray = gameState.unlockedResourcesArray;
             unlockedCompoundsArray = gameState.unlockedCompoundsArray;
             activatedFuelBurnObject = gameState.activatedFuelBurnObject;
@@ -1186,20 +1183,6 @@ export function getUnlockedCompoundsArray() {
 
 export function setUnlockedCompoundsArray(value) {
     unlockedCompoundsArray.unshift(value);
-}
-
-export function setTechSpecificUIItemsArray(key, type, value) {
-    if (!techSpecificUIItemsArray[key]) {
-        techSpecificUIItemsArray[key] = {};
-    }
-    techSpecificUIItemsArray[key][type] = value;
-}
-
-export function getTechSpecificUIItemsArray(key, type) {
-    if (techSpecificUIItemsArray[key] && techSpecificUIItemsArray[key][type]) {
-        return techSpecificUIItemsArray[key][type];
-    }
-    return null;
 }
 
 export function getOriginalFrameNumbers() {

@@ -18,7 +18,6 @@ import {
     getImageUrls,
     setUnlockedCompoundsArray,
     setUnlockedResourcesArray,
-    setTechSpecificUIItemsArray,
     setTechUnlockedArray,
     getNewsTickerScrollDuration,
     oneOffPrizesAlreadyClaimedArray,
@@ -730,16 +729,15 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
         }
     }
 
-    button.addEventListener('click', () => {
+    button.addEventListener('click', function(event) {
         if (objectSectionArgument1 && objectSectionArgument1 === 'storage') {
             sfxPlayer.playAudio('increaseStorage');
         } else {
             playClickSfx();
         }
-        onClick();
+        onClick(event);
     });
     
-
     if (disableKeyboardForButton) {
         button.setAttribute('tabindex', '-1');
         button.addEventListener('keydown', (event) => {
@@ -3097,22 +3095,8 @@ grantAllTechsButton.addEventListener('click', () => {
     const techArray = getResourceDataObject('techs');
     setResourceDataObject(getResourceDataObject('research', ['quantity']) + 1000000, 'research', ['quantity']);
 
-    const fusionKeys = [
-        'hydrogenFusion',
-        'heliumFusion',
-        'carbonFusion',
-        'neonFusion',
-        'oxygenFusion',
-        'siliconFusion',
-    ];
-
     Object.keys(techArray).forEach((techKey) => {
         setTechUnlockedArray(techKey);
-
-        if (fusionKeys.includes(techKey)) {
-            const fusionElement = techKey.split('Fusion')[0];
-            setTechSpecificUIItemsArray(fusionElement, 'fusionButton', techKey);
-        }
     });
 
     setCanFuelRockets(true);
