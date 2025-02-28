@@ -50,6 +50,7 @@ let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket
 let asteroidArray = [];
 let prize = [];
 let rocketsBuilt = [];
+let starShipModulesBuilt = [];
 let rocketsFuellerStartedArray = [];
 let launchedRockets = [];
 let cachedRenderedTechTree = null;
@@ -361,6 +362,7 @@ export function captureGameStatusForSaving(type) {
     gameState.notationType = getNotationType();
     gameState.oneOffPrizesAlreadyClaimedArray = oneOffPrizesAlreadyClaimedArray;
     gameState.rocketsBuilt = rocketsBuilt;
+    gameState.starShipModulesBuilt = starShipModulesBuilt;
     gameState.rocketsFuellerStartedArray = rocketsFuellerStartedArray;
     gameState.launchedRockets = launchedRockets;
     gameState.baseSearchTimerDuration = baseSearchAsteroidTimerDuration;
@@ -448,6 +450,7 @@ export function restoreGameStatus(gameState, type) {
             setNotationType(gameState.notationType);
             oneOffPrizesAlreadyClaimedArray = gameState.oneOffPrizesAlreadyClaimedArray;
             rocketsBuilt = gameState.rocketsBuilt;
+            starShipModulesBuilt = gameState.starShipModulesBuilt ?? [''];
             rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray ?? [''];
             launchedRockets = gameState.launchedRockets ?? [''];
             baseSearchAsteroidTimerDuration = gameState.baseSearchTimerDuration ?? 120000;
@@ -1560,6 +1563,14 @@ export function setRocketsBuilt(value) {
 
 export function getRocketsBuilt() {
     return rocketsBuilt;
+}
+
+export function setStarShipModulesBuilt(value) {
+    starShipModulesBuilt.push(value);
+}
+
+export function getStarShipModulesBuilt() {
+    return starShipModulesBuilt ?? [''];
 }
 
 export function changeAsteroidArray(key, property, value) {

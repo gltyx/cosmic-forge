@@ -58,6 +58,8 @@ import {
     setCheckRocketFuellingStatus,
     getRocketsFuellerStartedArray,
     setRocketsFuellerStartedArray,
+    setStarShipModulesBuilt,
+    getStarShipModulesBuilt,
     setRocketsBuilt,
     getRocketsBuilt,
     getWeatherEffectOn,
@@ -2679,41 +2681,45 @@ function handleRocketFuellingChecksAndOneOffPurchases(element, price) {
 
 function handleSpaceUpgradeResourceType(element) {
     const dataName = element.dataset.resourceToFuseTo;
-    if (dataName.includes('rocket')) {
+    if (dataName.includes('rocket') || dataName.startsWith('ss')) {
         const builtParts = getResourceDataObject('space', ['upgrades', dataName, 'builtParts']);
         const totalParts = getResourceDataObject('space', ['upgrades', dataName, 'parts']);
 
-        const rocketPartBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
+        const partBuyButton = element.parentElement.parentElement.querySelector('.input-container button');
 
         const hasRedDisabledTextSpan = Array.from(element.querySelectorAll('span')).some(span => 
             span.classList.contains('red-disabled-text')
         );
 
         if (hasRedDisabledTextSpan) {
-            rocketPartBuyButton.classList.add('red-disabled-text');
+            partBuyButton.classList.add('red-disabled-text');
         }
 
         if (builtParts === totalParts) {
             const builtPartsElement = document.getElementById(`${dataName}BuiltPartsQuantity`);
             const totalPartsElement = document.getElementById(`${dataName}TotalPartsQuantity`);
-            rocketPartBuyButton.classList.add('red-disabled-text');
+            partBuyButton.classList.add('red-disabled-text');
             element.classList.add('green-ready-text');
             builtPartsElement.classList.add('green-ready-text');
             totalPartsElement.classList.add('green-ready-text');
             element.classList.remove('red-disabled-text');
             element.textContent = 'Built!';
-            if (getLaunchedRockets().includes(dataName)) {
+            if (dataName.includes('rocket') && getLaunchedRockets().includes(dataName)) {
                 element.textContent = 'Launched!';
             }
         }
-        const rocketsBuiltArray = getRocketsBuilt();
-        for (let i = 1; i <= 4; i++) {
-            const rocketElement = document.getElementById('rocket' + i);
-            if (rocketElement) {
-                if (rocketsBuiltArray.includes('rocket' + i)) {
-                    rocketElement.parentElement.parentElement.classList.remove('invisible');
-                } else {
-                    rocketElement.parentElement.parentElement.classList.add('invisible');
+
+        if (dataName.includes('rocket')) {
+            const rocketsBuiltArray = getRocketsBuilt();
+
+            for (let i = 1; i <= 4; i++) {
+                const element = document.getElementById('rocket' + i);
+                if (element) {
+                    if (rocketsBuiltArray.includes('rocket' + i)) {
+                        element.parentElement.parentElement.classList.remove('invisible');
+                    } else {
+                        element.parentElement.parentElement.classList.add('invisible');
+                    }
                 }
             }
         }
@@ -2930,7 +2936,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         currentQuantity = getResourceDataObject('research', ['upgrades', item, 'quantity']); 
     } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
         currentQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
-    } else if ((item && item.startsWith('rocket'))) {
+    } else if ((item && (item.startsWith('rocket') || item.startsWith('ss')))) {
         currentQuantity = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
     } else if (item && item === 'autoBuyer') {
         currentQuantity = getResourceDataObject(itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
@@ -2978,8 +2984,12 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             const builtParts = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
             const totalParts = getResourceDataObject('space', ['upgrades', item, 'parts']);
 
-            if (builtParts === totalParts) {
+            if (builtParts === totalParts && item.startsWith('rocket')) {
                 setRocketsBuilt(item);
+            }
+
+            if (builtParts === totalParts && item.startsWith('ss')) {
+                setStarShipModulesBuilt(item);
             }
         }
     }    

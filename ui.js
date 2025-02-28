@@ -69,6 +69,8 @@ import {
     setSortAsteroidMethod,
     getAsteroidArray,
     getIsAntimatterBoostActive,
+    setStarShipModulesBuilt,
+    getStarShipModulesBuilt,
     setRocketsBuilt,
     setAntimatterSvgEventListeners,
     setAntimatterUnlocked,
