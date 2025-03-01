@@ -831,7 +831,7 @@ function checkAndIncreasePrices() {
                 const { currentPrice, setPriceTarget, typeOfResourceCompound } = priceIncreaseObject[priceIncrease];
                 if (setPriceTarget.startsWith('science')) {
                     setNewItemPrice(currentPrice, setPriceTarget, null, null, null);
-                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery') || setPriceTarget.startsWith('rocket')) { //add new building types if needed will have a bug here if add any more it will go to the else block
+                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery') || setPriceTarget.startsWith('rocket') || setPriceTarget.startsWith('ss')) { //add new building types if needed will have a bug here if add any more it will go to the else block
                     if (priceIncrease === "cash") {
                         setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncrease);
                     } else {
@@ -924,7 +924,7 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             if (resource3Price > 0) {
                 setResourceDataObject(newResource3Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource3Price']);
             }
-        } else if (elementName.startsWith('rocket')) {
+        } else if (elementName.startsWith('rocket') || elementName.startsWith('ss')) {
             const strippedElementName = elementName.slice(0, -5);
             if (optionalResource === 'cash') {
                 setResourceDataObject(newCurrencyPrice, 'space', ['upgrades', strippedElementName, 'price']);
