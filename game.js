@@ -159,7 +159,8 @@ import {
     getStarSystemWeather,
     setStarSystemWeather,
     getRocketPartsNeededInTotalPerRocket,
-    getRocketParts
+    getRocketParts,
+    getStarShipPartsNeededInTotalPerModule
 } from "./resourceDataObject.js";
 
 import { 
@@ -999,7 +1000,9 @@ function getAllQuantities() {
     const resourceKeys = Object.keys(getResourceDataObject('resources'));
     const compoundKeys = Object.keys(getResourceDataObject('compounds'));
     const rockets = Object.keys(getResourceDataObject('space', ['upgrades']))
-    .filter(part => part !== 'launchPad' && part !== 'spaceTelescope');
+    .filter(rocket => rocket.startsWith('rocket'));
+    const starshipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
+    .filter(module => module.startsWith('ss'));
 
     const allQuantities = {};
 
@@ -1024,8 +1027,12 @@ function getAllQuantities() {
     if (getCurrentOptionPane() === 'launch pad') {
         rockets.forEach(rocket => {
             allQuantities[rocket] = getResourceDataObject('space', ['upgrades', rocket, 'builtParts']);
-        })
-    }
+        });
+    } else if (getCurrentOptionPane() === 'star ship') {
+        starshipModules.forEach(module => {
+            allQuantities[module] = getResourceDataObject('space', ['upgrades', module, 'builtParts']);
+        });
+    }       
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
     allQuantities.battery1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'quantity']);
@@ -1144,6 +1151,58 @@ function getAllElements(resourcesArray, compoundsArray) {
     
         allElements.rocket4BuiltParts = null;
         allElements.rocket4TotalParts = null;
+    }   
+    
+    if (getCurrentOptionPane() === 'launch pad') {
+        allElements.rocket1BuiltParts = document.getElementById('rocket1BuiltPartsQuantity');
+        allElements.rocket1TotalParts = document.getElementById('rocket1TotalPartsQuantity');
+    
+        allElements.rocket2BuiltParts = document.getElementById('rocket2BuiltPartsQuantity');
+        allElements.rocket2TotalParts = document.getElementById('rocket2TotalPartsQuantity');
+    
+        allElements.rocket3BuiltParts = document.getElementById('rocket3BuiltPartsQuantity');
+        allElements.rocket3TotalParts = document.getElementById('rocket3TotalPartsQuantity');
+    
+        allElements.rocket4BuiltParts = document.getElementById('rocket4BuiltPartsQuantity');
+        allElements.rocket4TotalParts = document.getElementById('rocket4TotalPartsQuantity');
+    } else {
+        allElements.rocket1BuiltParts = null;
+        allElements.rocket1TotalParts = null;
+    
+        allElements.rocket2BuiltParts = null;
+        allElements.rocket2TotalParts = null;
+    
+        allElements.rocket3BuiltParts = null;
+        allElements.rocket3TotalParts = null;
+    
+        allElements.rocket4BuiltParts = null;
+        allElements.rocket4TotalParts = null;
+    }
+    
+    if (getCurrentOptionPane() === 'star ship') {
+        allElements.ssStructuralBuiltParts = document.getElementById('ssStructuralBuiltPartsQuantity');
+        allElements.ssStructuralTotalParts = document.getElementById('ssStructuralTotalPartsQuantity');
+    
+        allElements.ssLifeSupportBuiltParts = document.getElementById('ssLifeSupportBuiltPartsQuantity');
+        allElements.ssLifeSupportTotalParts = document.getElementById('ssLifeSupportTotalPartsQuantity');
+    
+        allElements.ssAntimatterEngineBuiltParts = document.getElementById('ssAntimatterEngineBuiltPartsQuantity');
+        allElements.ssAntimatterEngineTotalParts = document.getElementById('ssAntimatterEngineTotalPartsQuantity');
+    
+        allElements.ssFleetHangarBuiltParts = document.getElementById('ssFleetHangarBuiltPartsQuantity');
+        allElements.ssFleetHangarTotalParts = document.getElementById('ssFleetHangarTotalPartsQuantity');
+    } else {
+        allElements.ssStructuralBuiltParts = null;
+        allElements.ssStructuralTotalParts = null;
+    
+        allElements.ssLifeSupportBuiltParts = null;
+        allElements.ssLifeSupportTotalParts = null;
+    
+        allElements.ssAntimatterEngineBuiltParts = null;
+        allElements.ssAntimatterEngineTotalParts = null;
+    
+        allElements.ssFleetHangarBuiltParts = null;
+        allElements.ssFleetHangarTotalParts = null;
     }    
 
     allElements.research = getElements().researchQuantity;
@@ -1182,8 +1241,9 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
     const scienceElements = getScienceResourceDescriptionElements();
     const buildingsElements = getBuildingResourceDescriptionElements();
     const spaceMiningElements = getSpaceMiningResourceDescriptionElements();
+    const starShipElements = getStarShipResourceDescriptionElements();
 
-    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements);
+    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements, starShipElements);
 
     return elements;
 }
@@ -1352,6 +1412,79 @@ function getBuildingResourceDescriptionElements() {
     };
 }
 
+function getStarShipResourceDescriptionElements() {
+    const ssStructuralBuyDescElement = document.getElementById('structuralDescription');
+    const ssStructuralBuyPrice = getResourceDataObject('space', ['upgrades', 'ssStructural', 'price']);
+    const ssStructuralBuyResource1Price = getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource1Price'])[0];
+    const ssStructuralBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource2Price'])[0];
+    const ssStructuralBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource3Price'])[0];
+
+    const ssLifeSupportBuyDescElement = document.getElementById('lifeSupportModuleDescription');
+    const ssLifeSupportBuyPrice = getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'price']);
+    const ssLifeSupportBuyResource1Price = getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource1Price'])[0];
+    const ssLifeSupportBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource2Price'])[0];
+    const ssLifeSupportBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource3Price'])[0];
+
+    const ssAntimatterEngineBuyDescElement = document.getElementById('antimatterEngineDescription');
+    const ssAntimatterEngineBuyPrice = getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'price']);
+    const ssAntimatterEngineBuyResource1Price = getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource1Price'])[0];
+    const ssAntimatterEngineBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource2Price'])[0];
+    const ssAntimatterEngineBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource3Price'])[0];
+
+    const ssFleetHangarBuyDescElement = document.getElementById('fleetHangarDescription');
+    const ssFleetHangarBuyPrice = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'price']);
+    const ssFleetHangarBuyResource1Price = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource1Price'])[0];
+    const ssFleetHangarBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource2Price'])[0];
+    const ssFleetHangarBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource3Price'])[0];
+    
+    return {
+        ssStructuralBuy: { 
+            element: ssStructuralBuyDescElement,
+            price: ssStructuralBuyPrice,
+            resource1Price: ssStructuralBuyResource1Price,
+            resource2Price: ssStructuralBuyResource2Price,
+            resource3Price: ssStructuralBuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStructural', 'resource3Price'])[1])
+        },
+        ssLifeSupportBuy: { 
+            element: ssLifeSupportBuyDescElement,
+            price: ssLifeSupportBuyPrice,
+            resource1Price: ssLifeSupportBuyResource1Price,
+            resource2Price: ssLifeSupportBuyResource2Price,
+            resource3Price: ssLifeSupportBuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssLifeSupport', 'resource3Price'])[1])
+        },
+        ssAntimatterEngineBuy: { 
+            element: ssAntimatterEngineBuyDescElement,
+            price: ssAntimatterEngineBuyPrice,
+            resource1Price: ssAntimatterEngineBuyResource1Price,
+            resource2Price: ssAntimatterEngineBuyResource2Price,
+            resource3Price: ssAntimatterEngineBuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssAntimatterEngine', 'resource3Price'])[1])
+        },
+        ssFleetHangarBuy: { 
+            element: ssFleetHangarBuyDescElement,
+            price: ssFleetHangarBuyPrice,
+            resource1Price: ssFleetHangarBuyResource1Price,
+            resource2Price: ssFleetHangarBuyResource2Price,
+            resource3Price: ssFleetHangarBuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource3Price'])[1])
+        }
+    };
+}
+
 function getSpaceMiningResourceDescriptionElements() {
     const spaceTelescopeBuyDescElement = document.getElementById('spaceTelescopeDescription');
     const spaceTelescopeBuyPrice = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'price']);
@@ -1456,7 +1589,7 @@ function getSpaceMiningResourceDescriptionElements() {
             string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource2Price'])[1]),
             string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'rocket4', 'resource3Price'])[1])
         }
-    };    
+    };       
 }
 
 function updateRates() {
@@ -1505,11 +1638,15 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
             }
         }
 
-        if (item.startsWith('rocket')) {
-            const quantityRocketBuilding = allQuantities[item];
-            if (quantityRocketBuilding || quantityRocketBuilding === 0) {
-                const rocketPartsCountText = document.getElementById(`${item}PartsCountText`);
-                rocketPartsCountText.innerHTML = `Built: <span id="${item}BuiltPartsQuantity">${quantityRocketBuilding}</span> / <span id="${item}TotalPartsQuantity">${getRocketPartsNeededInTotalPerRocket(item)}</span>`;
+        if (item.startsWith('rocket') || item.startsWith('ss')) {
+            const quantity = allQuantities[item];
+            if (quantity || quantity === 0) {
+                const partsCountText = document.getElementById(`${item}PartsCountText`);
+                const getTotalPartsNeeded = item.startsWith('rocket') 
+                    ? getRocketPartsNeededInTotalPerRocket 
+                    : getStarShipPartsNeededInTotalPerModule;
+
+                partsCountText.innerHTML = `Built: <span id="${item}BuiltPartsQuantity">${quantity}</span> / <span id="${item}TotalPartsQuantity">${getTotalPartsNeeded(item)}</span>`;
             }
         }
     }
@@ -1519,10 +1656,10 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
         let resource2Price;
         let resource3Price;
 
-        if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) { //adapt this to write the resources and price string correctly
+        if (allDescriptionElements.hasOwnProperty(allDescriptionElement)) {
             const price = allDescriptionElements[allDescriptionElement].price;
 
-            if (allDescriptionElement.endsWith("Buy")) { //if cn cost cash or resources ie science or building
+            if (allDescriptionElement.endsWith("Buy")) { //if can cost cash or resources ie science or building
                 resource1Price = allDescriptionElements[allDescriptionElement].resource1Price;
                 resource2Price = allDescriptionElements[allDescriptionElement].resource2Price;
                 resource3Price = allDescriptionElements[allDescriptionElement].resource3Price;
