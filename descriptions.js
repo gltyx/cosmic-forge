@@ -11,6 +11,7 @@ export let optionDescriptions;
 export let newsTickerContent;
 export let helpContent;
 export let rocketNames;
+export let starNames;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -1428,6 +1429,19 @@ helpContent = {
     }
 }
 
+starNames = [
+    "Sirius","Canopus","Arcturus","Sadalmelik","Capella","Rigel","Procyon","Betelgeuse","Altair","Aldebaran",
+    "Sterope","Antares","Pollux","Fomalhaut","Deneb","Mimosa","Regulus","Adhara","Castor","Shaula",
+    "Bellatrix","Elnath","Miaplacidus","Alnilam","Alnair","Alioth","Alnitak","Dubhe","Mirfak","Wezen",
+    "Sargas","Kaus Australis","Avior","Alkaid","Menkalinan","Atria","Alhena","Peacock","Tureis","Nunki",
+    "Mirzam","Alphard","Rasalhague","Caph","Zubenelgenubi","Electra","Hamal","Mintaka","Alsephina","Menkent",
+    "Enif","Tiaki","Ascella","Algol","Markab","Suhail","Zeta Ophiuchi","Kochab","Ankaa","Denebola",
+    "Vega","Azelfafage","Maia","Arkab Prior","Thuban","Izar","Ruchbah","Albireo","Almaaz","Dschubba",
+    "Algieba","Gomeisa","Hoedus II","Cebalrai","Nashira","Muscida","Kitalpha","Hyadum I","Eltanin","Yildun",
+    "Biham","Zubeneschamali","Alpherg","Alcor","Polaris","Pleione","Spica","Chara","Sadachbia","Rasalgethi",
+    "Barnards Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
+];
+
 export function getOptionDescription(key1) {
     return optionDescriptions[key1];
 }
@@ -1457,6 +1471,10 @@ export function setRocketNames(key, value) {
 
 export function replaceRocketNames(value) {
     rocketNames = value;
+}
+
+export function getStarNames() {
+    return [...starNames];
 }
 
 export function getHelpContent(section, type) {

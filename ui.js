@@ -94,6 +94,7 @@ import {
     initialiseDescriptions,
     rocketNames,
     getHeaderDescriptions,
+    getStarNames,
 } from "./descriptions.js";
 
 import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
@@ -1023,18 +1024,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
     const containerHeight = containerRect.height;
     const containerLeft = containerRect.left;
     const containerTop = containerRect.top;
-    const starNames = [
-        "Sirius","Canopus","Arcturus","Sadalmelik","Capella","Rigel","Procyon","Betelgeuse","Altair","Aldebaran",
-        "Sterope","Antares","Pollux","Fomalhaut","Deneb","Mimosa","Regulus","Adhara","Castor","Shaula",
-        "Bellatrix","Elnath","Miaplacidus","Alnilam","Alnair","Alioth","Alnitak","Dubhe","Mirfak","Wezen",
-        "Sargas","Kaus Australis","Avior","Alkaid","Menkalinan","Atria","Alhena","Peacock","Tureis","Nunki",
-        "Mirzam","Alphard","Rasalhague","Caph","Zubenelgenubi","Electra","Hamal","Mintaka","Alsephina","Menkent",
-        "Enif","Tiaki","Ascella","Algol","Markab","Suhail","Zeta Ophiuchi","Kochab","Ankaa","Denebola",
-        "Vega","Azelfafage","Maia","Arkab Prior","Thuban","Izar","Ruchbah","Albireo","Almaaz","Dschubba",
-        "Algieba","Gomeisa","Hoedus II","Cebalrai","Nashira","Muscida","Kitalpha","Hyadum I","Eltanin","Yildun",
-        "Biham","Zubeneschamali","Alpherg","Alcor","Polaris","Pleione","Spica","Chara","Sadachbia","Rasalgethi",
-        "Barnards Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
-      ];
+    const starNames = getStarNames();
     let currentStar = null;
 
     for (let i = 0; i < numberOfStars; i++) {
