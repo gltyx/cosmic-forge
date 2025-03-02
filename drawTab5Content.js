@@ -165,7 +165,8 @@ export function drawTab5Content(heading, optionContentElement) {
             { id: 'ssStructural', label: 'Structural' },
             { id: 'ssLifeSupport', label: 'Life Support Module' },
             { id: 'ssAntimatterEngine', label: 'Antimatter Engine' },
-            { id: 'ssFleetHangar', label: 'Fleet Hangar' }
+            { id: 'ssFleetHangar', label: 'Fleet Hangar' },
+            { id: 'ssStellarScanner', label: 'Stellar Scanner' }
         ];
 
         starShipModules.forEach(module => {

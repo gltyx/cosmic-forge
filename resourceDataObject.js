@@ -652,6 +652,16 @@ export let resourceData = {
                 resource2Price: [40000, 'titanium', 'compounds'],
                 resource3Price: [150000, 'steel', 'compounds'],
                 setPrice: 'ssFleetHangarPrice'
+            },
+            ssStellarScanner: {
+                finished: false,
+                builtParts: 0,
+                parts: 8,
+                price: 5000,
+                resource1Price: [3000, 'glass', 'compounds'],
+                resource2Price: [4000, 'silicon', 'resources'],
+                resource3Price: [6000, 'neon', 'resources'],
+                setPrice: 'ssStellarScannerPrice'
             }
         }
     },
@@ -729,7 +739,8 @@ export let resourceData = {
         antimatterEngines: { appearsAt: [65000, "orbitalConstruction", "neutronCapture", "FTLTravelTheory"], prereqs: ['Orbital Construction', 'Neutron Capture', 'FTL Travel Theory'], price: 78000, idForRenderPosition: 9101 },
         FTLTravelTheory: { appearsAt: [60000, "neutronCapture", "planetaryNavigation", "advancedFuels"], prereqs: ['Neutron Capture', 'Planetary Navigation', 'Advanced Fuels'], price: 65000, idForRenderPosition: 9102 },
         lifeSupportSystems: { appearsAt: [55000, "orbitalConstruction", "nanoTubeTechnology", "quantumComputing"], prereqs: ['Orbital Construction', 'Nano Tube Technology', 'Quantum Computing'], price: 60000, idForRenderPosition: 9103 },
-        starshipFleets: { appearsAt: [80000, "FTLTravelTheory", "antimatterEngines", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Antimatter Engines', 'Orbital Construction'], price: 100000, idForRenderPosition: 9104 }
+        starshipFleets: { appearsAt: [80000, "FTLTravelTheory", "antimatterEngines", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Antimatter Engines', 'Orbital Construction'], price: 100000, idForRenderPosition: 9104 },
+        stellarScanners: { appearsAt: [70000, "FTLTravelTheory", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Orbital Construction'], price: 72000, idForRenderPosition: 9105 }
     },    
     currency: {
         cash: 10,

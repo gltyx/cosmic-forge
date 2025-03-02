@@ -467,7 +467,8 @@ function checkAndRevealNewBuildings(type) {
                     ssStructural: 'orbitalConstruction',
                     ssLifeSupport: 'lifeSupportSystems',
                     ssAntimatterEngine: 'antimatterEngines',
-                    ssFleetHangar: 'starshipFleets'
+                    ssFleetHangar: 'starshipFleets',
+                    ssStellarScanner: 'stellarScanners',
                 };
                 
                 Object.keys(ssModules).forEach(ssModule => {
@@ -1229,6 +1230,9 @@ function getAllElements(resourcesArray, compoundsArray) {
     
         allElements.ssFleetHangarBuiltParts = document.getElementById('ssFleetHangarBuiltPartsQuantity');
         allElements.ssFleetHangarTotalParts = document.getElementById('ssFleetHangarTotalPartsQuantity');
+        
+        allElements.ssStellarScannerBuiltParts = document.getElementById('ssStellarScannerBuiltPartsQuantity');
+        allElements.ssStellarScannerTotalParts = document.getElementById('ssStellarScannerTotalPartsQuantity');
     } else {
         allElements.ssStructuralBuiltParts = null;
         allElements.ssStructuralTotalParts = null;
@@ -1241,6 +1245,9 @@ function getAllElements(resourcesArray, compoundsArray) {
     
         allElements.ssFleetHangarBuiltParts = null;
         allElements.ssFleetHangarTotalParts = null;
+
+        allElements.ssStellarScannerBuiltParts = null;
+        allElements.ssStellarScannerTotalParts = null;
     }    
 
     allElements.research = getElements().researchQuantity;
@@ -1475,6 +1482,11 @@ function getStarShipResourceDescriptionElements() {
     const ssFleetHangarBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource2Price'])[0];
     const ssFleetHangarBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource3Price'])[0];
     
+    const ssStellarScannerBuyDescElement = document.getElementById('stellarScannerDescription');
+    const ssStellarScannerBuyPrice = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'price']);
+    const ssStellarScannerBuyResource1Price = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource1Price'])[0];
+    const ssStellarScannerBuyResource2Price = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource2Price'])[0];
+    const ssStellarScannerBuyResource3Price = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource3Price'])[0];
     return {
         ssStructuralBuy: { 
             element: ssStructuralBuyDescElement,
@@ -1519,6 +1531,17 @@ function getStarShipResourceDescriptionElements() {
             string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource1Price'])[1]),
             string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource2Price'])[1]),
             string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssFleetHangar', 'resource3Price'])[1])
+        },
+        ssStellarScannerBuy: { 
+            element: ssStellarScannerBuyDescElement,
+            price: ssStellarScannerBuyPrice,
+            resource1Price: ssStellarScannerBuyResource1Price,
+            resource2Price: ssStellarScannerBuyResource2Price,
+            resource3Price: ssStellarScannerBuyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'resource3Price'])[1])
         }
     };
 }
@@ -5335,9 +5358,6 @@ export function resetRocketForRefuelling(rocket) {
 }
 
 export function generateStarDataAndAddToDataObject(starElement, distance) {
-    console.log('creating star data for ' + starElement.id);
-    console.log('distance is ' + distance + 'ly');
-
     const fuel = calculateAntimatterRequired(distance);
     const ascendencyPoints = calculateAscendencyPoints(distance);
 

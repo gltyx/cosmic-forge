@@ -1097,7 +1097,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('antimatterEngines');
                         showNotification(techNotificationMessages.antimatterEngines, 'info');
                         setRenderedTechTree(false);
-                        // unblock button to build engine parts
                     }, 'techUnlock', '', 'antimatterEngines', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1128,7 +1127,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('FTLTravelTheory');
                         showNotification(techNotificationMessages.FTLTravelTheory, 'info');
                         setRenderedTechTree(false);
-                        // allow launching of starship
                     }, 'techUnlock', '', 'FTLTravelTheory', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1159,7 +1157,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('lifeSupportSystems');
                         showNotification(techNotificationMessages.lifeSupportSystems, 'info');
                         setRenderedTechTree(false);
-                        // unblock button to build starship habitation modules
                     }, 'techUnlock', '', 'lifeSupportSystems', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1190,7 +1187,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('starshipFleets');
                         showNotification(techNotificationMessages.starshipFleets, 'info');
                         setRenderedTechTree(false);
-                        // unblock button to build starship defensive and offensive systems
                     }, 'techUnlock', '', 'starshipFleets', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1208,7 +1204,37 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'tech'
                 )
-            }                       
+            },
+            {
+                techName: 'stellarScanners',
+                row: createOptionRow(
+                    'techStellarScannersRow',
+                    null,
+                    'Stellar Scanners:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('stellarScanners', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('stellarScanners');
+                        showNotification(techNotificationMessages.stellarScanners, 'info');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'stellarScanners', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['stellarScanners', 'price'])} Research${getResourceDataObject('techs', ['stellarScanners', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="stellarScannersPrereq">${getResourceDataObject('techs', ['stellarScanners', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'stellarScanners',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            }                                  
         ];
 
         rows.forEach(item => {

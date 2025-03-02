@@ -120,6 +120,7 @@ export function initialiseDescriptions() {
         FTLTravelTheory: 'FTL Travel Theory Researched\n\nYou can now research how to travel faster than light!',
         lifeSupportSystems: 'Life Support Systems Researched\n\nYou can now sustain life in deep space!',
         starshipFleets: 'Starship Fleets Researched\n\nYou can now construct Starship Offensive capabilities!',
+        stellarScanners: 'Stellar Scanners Researched\n\nWhen you arrive at a new Star System you can see details of alien life and if it poses a threat!',
     };
 
     optionDescriptions = {
@@ -805,7 +806,12 @@ export function initialiseDescriptions() {
         },
         techStarshipFleetsRow: {
             content1: "Unlock Starship Fleets to build and command interstellar armadas.",
-            content2: "Unlock Starship Fleets to build and command interstellar armadas.<br><br><span class='green-ready-text'>Unlock Fleet Section in InterStellar Tab</span>",
+            content2: "Unlock Starship Fleets to build and command interstellar armadas.<br><br><span class='green-ready-text'>Allow building of Fleet Hangar onboard the Star Ship!</span>",
+            updateAt: ""
+        },  
+        techStellarScannersRow: {
+            content1: "Unlock Stellar Scanners to identify life signatures around Star Systems.",
+            content2: "Unlock Stellar Scanners to identify life signatures around Star Systems.<br><br><span class='green-ready-text'>Allow building of Stellar Scanner onboard the Star Ship!</span>",
             updateAt: ""
         },               
         energyPowerPlant1Row: {
