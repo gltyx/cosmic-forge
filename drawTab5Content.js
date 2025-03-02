@@ -14,7 +14,7 @@ export function drawTab5Content(heading, optionContentElement) {
         `;
         
         const starButtonContainer = headerRow.querySelector('#starButtonContainer');
-        const buttons = ['Normal', 'Distance', 'In Range'];
+        const buttons = ['Normal', 'Distance', 'Studied', 'In Range'];
         
         buttons.forEach(button => {
             const buttonElement = createButton(button, ['option-button', 'star-option-button'], () => { 

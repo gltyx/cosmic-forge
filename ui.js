@@ -989,7 +989,7 @@ export function updateDescriptionRow(rowKey, targetProperty) {
     }
 }
 
-function getStarColor(distance) {
+function getStarColorForDistanceFilterButton(distance) {
     const maxDistance = 100;
     const minDistance = 0;
     const normalizedDistance = Math.min(Math.max(distance, minDistance), maxDistance) / maxDistance;
@@ -998,6 +998,19 @@ function getStarColor(distance) {
     if (normalizedDistance <= 0.25) return `rgb(${255}, ${255 - normalizedDistance * 255}, ${255 - normalizedDistance * 255})`; // White to Green
     if (normalizedDistance <= 0.5) return `rgb(${255}, ${255}, ${0 + (normalizedDistance - 0.25) * 1020})`; // Green to Yellow
     return `rgb(${255}, ${255 - (normalizedDistance - 0.5) * 510}, ${0})`; // Yellow to Red
+}
+
+function getStarColorForTravel(fuelRequired) {
+    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+    const canTravel = currentAntimatter >= fuelRequired;
+    const themeElement = document.querySelector('[data-theme]') || document.documentElement;
+
+    const computedStyles = getComputedStyle(themeElement);
+    const readyTextColor = computedStyles.getPropertyValue('--ready-text').trim();
+    const disabledTextColor = computedStyles.getPropertyValue('--disabled-text').trim();
+
+    const color = canTravel ? readyTextColor : disabledTextColor;
+    return color;
 }
 
 export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode) {
@@ -1064,22 +1077,23 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         } else if (isInteresting) {
             starElement.style.width = `${star.width * 2}px`;
             starElement.style.height = `${star.height * 2}px`;
-            if (mapMode === 'distance') {
-                starElement.style.backgroundColor = getStarColor(distance);
-            }
-
             const result = checkIfInterestingStarIsInStarDataAlready(starElement.id.toLowerCase());
             if (result) {
                 console.log(starElement.id.toLowerCase() + ' already in star data');
             } else {
                 generateStarDataAndAddToDataObject(starElement, distance);
             }
+            if (mapMode === 'distance') {
+                starElement.style.backgroundColor = getStarColorForDistanceFilterButton(distance);
+            } else if (mapMode === 'in range') {
+                starElement.style.backgroundColor = getStarColorForTravel(getStarSystemDataObject('stars', [star.name.toLowerCase()]).fuel);
+            }
         } else {
             starElement.style.width = `${star.width / 2}px`;
             starElement.style.height = `${star.height / 2}px`;
             const randomDuration = (Math.random() * 1 + 0.5).toFixed(2);
             starElement.style.animationDuration = `${randomDuration}s`;
-            if (mapMode === 'in range') {
+            if (mapMode === 'studied') {
                 starElement.classList.add('invisible');
             } else {
                 starElement.classList.remove('invisible');
@@ -1143,8 +1157,9 @@ function drawStarConnectionLine(fromStar, toStar) {
     const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
     const canTravel = fuelNeeded <= currentAntimatter;
 
-    const rootStyles = getComputedStyle(document.documentElement);
-    const lineColor = canTravel ? rootStyles.getPropertyValue('--ready-text') : rootStyles.getPropertyValue('--disabled-text');
+    const themeElement = document.querySelector('[data-theme]') || document.documentElement;
+    const themeStyles = getComputedStyle(themeElement);
+    const lineColor = canTravel ? themeStyles.getPropertyValue('--ready-text') : themeStyles.getPropertyValue('--disabled-text');
     const labelColor = lineColor;
 
     const fromX = fromStar.left + fromStar.width * 2;
