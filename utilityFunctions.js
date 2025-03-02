@@ -11,7 +11,7 @@ export function capitaliseWordsWithRomanNumerals(str) {
         'xi', 'xii', 'xiii', 'xiv', 'xv', 'xvi', 'xvii', 'xviii', 'xix', 'xx'
     ]);
     
-    if (str) {
+    if (str && str !== '') {
         return str
             .split(' ')
             .map(word => {

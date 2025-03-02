@@ -45,6 +45,11 @@ export function drawTab5Content(heading, optionContentElement) {
             drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
             const starData = getStarSystemDataObject('stars');
             createStarDestinationRow(starData[getDestinationStar()], 'travelling');
+            const descriptionDiv = document.getElementById('starDestinationDescription');
+            if (descriptionDiv) {
+                descriptionDiv.classList.remove('invisible');
+            }
+            //add invisible to button move a function
         }
     }
 

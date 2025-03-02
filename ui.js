@@ -2465,10 +2465,15 @@ function initializeTabEventListeners() {
                         document.getElementById('descriptionContentTab5').innerHTML = getHeaderDescriptions('star map');
                     }
                 } else {
-                    if (getStarShipTravelling()) {
+                    if (getStarShipTravelling() && getCurrentOptionPane() === 'star map') {
                         drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
                         const starData = getStarSystemDataObject('stars');
                         createStarDestinationRow(starData[getDestinationStar()], 'travelling');
+                        const descriptionDiv = document.getElementById('starDestinationDescription');
+                        if (descriptionDiv && getStarShipTravelling()) {
+                            descriptionDiv.classList.remove('invisible');
+                        }
+                        //add invisible to button move a function
                     }
                 }
     
