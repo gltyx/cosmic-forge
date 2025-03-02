@@ -109,14 +109,18 @@ export function drawTab5Content(heading, optionContentElement) {
             const weatherIconSpan = `<span class="${weatherTendency[2]}">${weatherTendency[0]}</span>`;
             const weatherText = `${weatherIconSpan} (${weatherTendency[1]}%)`;
 
+            const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+            const hasEnoughFuel = currentAntimatter >= fuel;
+            const fuelClass = hasEnoughFuel ? 'green-ready-text' : 'red-disabled-text';
+        
             const starDataRow = createOptionRow(
                 `${starRowName}`,
                 null,
-                [`${capitaliseWordsWithRomanNumerals(nameStar)}:`],
+                [`${capitaliseWordsWithRomanNumerals(nameStar)}:`, fuelClass],
                 createTextElement(
                     `${distance.toFixed(2)} ly`,
                     'starInfoContainerDistance',
-                    ['value-star', 'distance-star']
+                    ['value-star', 'distance-star', fuelClass]
                 ), 
                 createTextElement(
                     weatherText,
@@ -131,7 +135,7 @@ export function drawTab5Content(heading, optionContentElement) {
                 createTextElement(
                     `${fuel}`,
                     'starInfoContainerFuel',
-                    ['value-star', 'fuel-star', 'notation']
+                    ['value-star', 'fuel-star', 'notation', fuelClass]
                 ),
                 createTextElement(
                     `${ascendencyPoints}`,
@@ -151,9 +155,9 @@ export function drawTab5Content(heading, optionContentElement) {
                 'star',
                 [true, '10%', '90%']
             );
-
+        
             optionContentElement.appendChild(starDataRow);
-        });
+        });        
     }
 
     if (heading === 'Star Ship') {

@@ -1098,6 +1098,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                     return;
                 }
                 console.log(`Distance from current star to ${star.name}: ${distance.toFixed(2)} units`);
+                drawStarConnectionLine(currentStar, star);
             });
         }
         
@@ -1121,6 +1122,68 @@ function seededRandom(seed) {
 function checkIfInterestingStarIsInStarDataAlready(star) {
     const starData = getStarSystemDataObject('stars');
     return star in starData;
+}
+
+export function removeStarConnectionTooltip() {
+    const starConnectionLineElement = document.getElementById('star-connection-line');
+    const starConnectionLabelElement = document.getElementById('star-connection-label');
+    if (starConnectionLineElement) {
+        starConnectionLineElement.remove();
+    }
+    if (starConnectionLabelElement) {
+        starConnectionLabelElement.remove();
+    }
+}
+
+function drawStarConnectionLine(fromStar, toStar) {
+    removeStarConnectionTooltip();
+
+    const toStarData = getStarSystemDataObject('stars', [toStar.name.toLowerCase()]);
+    const fuelNeeded = toStarData.fuel;
+    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+    const canTravel = fuelNeeded <= currentAntimatter;
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const lineColor = canTravel ? rootStyles.getPropertyValue('--ready-text') : rootStyles.getPropertyValue('--disabled-text');
+    const labelColor = lineColor;
+
+    const fromX = fromStar.left + fromStar.width * 2;
+    const fromY = fromStar.top + fromStar.height * 2;
+    const toX = toStar.left + toStar.width;
+    const toY = toStar.top + toStar.height;
+
+    const distance = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
+    const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
+
+    const lineElement = document.createElement('div');
+    lineElement.id = 'star-connection-line';
+    lineElement.classList.add('star-connection-line');
+    lineElement.style.width = `${distance}px`;
+    lineElement.style.transform = `rotate(${angle}deg)`;
+    lineElement.style.left = `${fromX}px`;
+    lineElement.style.top = `${fromY}px`;
+
+    lineElement.style.background = `linear-gradient(to right, 
+        transparent 14px, 
+        ${lineColor} 14px, 
+        ${lineColor} calc(100% - 10px), 
+        transparent calc(100% - 10px)
+    )`;
+
+    const labelElement = document.createElement('div');
+    labelElement.id = 'star-connection-label';
+    labelElement.classList.add('star-connection-label');
+    labelElement.innerText = `Antimatter Fuel: ${fuelNeeded}`;
+    labelElement.style.color = labelColor;
+
+    const centerX = (fromX + toX) / 2;
+    const centerY = (fromY + toY) / 2;
+    labelElement.style.left = `${centerX}px`;
+    labelElement.style.top = `${centerY}px`;
+
+    const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
+    tooltipLayer.appendChild(lineElement);
+    tooltipLayer.appendChild(labelElement);
 }
 
 export function sortTechRows(now) {
@@ -1393,7 +1456,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
     ctx.fillText('Con.', consLabelX, height + 20);
 }
 
-export function updateDynamicColumns() {
+export function updateDynamicUiContent() {
     if (!document.getElementById('energyConsumptionStats').classList.contains('invisible')) {
         const powerPlant1PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'purchasedRate']);
         const powerPlant2PurchasedRate = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
@@ -1409,6 +1472,10 @@ export function updateDynamicColumns() {
 
     if (getCurrentOptionPane() !== 'tech tree') {
         setTechTreeDrawnYet(false);
+    }
+
+    if (getCurrentOptionPane() !== 'star map') {
+        removeStarConnectionTooltip();
     }
 }
 
@@ -2295,6 +2362,7 @@ function initializeTabEventListeners() {
         tabs.forEach((tab) => {
             tab.addEventListener('click', () => {
                 playClickSfx();
+
                 const dynamicIndex = parseInt(tab.id.replace('tab', ''), 10);
     
                 setCurrentTab([dynamicIndex, document.getElementById('tab' + dynamicIndex).textContent]);
@@ -2304,6 +2372,10 @@ function initializeTabEventListeners() {
                 let content = tab.textContent;
                 if (content === '☰') {
                     content = 'Settings';
+                }
+
+                if (content !== 'Interstellar') {
+                    removeStarConnectionTooltip();
                 }
     
                 if (!getLastScreenOpenRegister(`tab${dynamicIndex}`)) {

@@ -169,7 +169,7 @@ import {
     showNotification,
     showTabsUponUnlock,
     getTimeInStatCell,
-    updateDynamicColumns,
+    updateDynamicUiContent,
     checkOrderOfTabs,
     showNewsTickerMessage,
     startWeatherEffect,
@@ -217,8 +217,8 @@ export async function gameLoop() {
         weatherAmbienceManager.update();
         const elements = document.querySelectorAll('.notation');
 
-        showHideDynamicColumns();
-        updateDynamicColumns();
+        showHideDynamicUiContent();
+        updateDynamicUiContent();
         showTabsUponUnlock();
         checkOrderOfTabs();
         
@@ -382,7 +382,7 @@ function updateRocketNames() {
     }
 }
 
-function showHideDynamicColumns() {
+function showHideDynamicUiContent() {
     if (getCurrentOptionPane() === 'energy storage' || getCurrentOptionPane() === 'power plant' || getCurrentOptionPane() === 'solar power plant' || getCurrentOptionPane() === 'advanced power plant') {
         document.getElementById('energyConsumptionStats').classList.remove('invisible');
     } else {
