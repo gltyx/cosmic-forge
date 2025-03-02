@@ -92,6 +92,9 @@ let currentDestinationDropdownText = 'Select an option';
 let starVisionDistance = 0; //0
 let starMapMode = 'normal';
 let starVisionIncrement = 1;
+let destinationStar = null;
+let fromStarObject = null;
+let toStarObject = null;
 
 let miningObject = {
     rocket1: null,
@@ -211,6 +214,7 @@ let antimatterSvgEventListeners = false;
 let canTravelToAsteroids = false;
 let canFuelRockets = false;
 let starShipBuilt = false;
+let starShipTravelling = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -381,6 +385,9 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketNames = rocketNames;
     gameState.starVisionDistance = starVisionDistance;
     gameState.starVisionIncrement = starVisionIncrement;
+    gameState.destinationStar = destinationStar;
+    gameState.fromStarObject = fromStarObject;
+    gameState.toStarObject = toStarObject;
 
     // Flags
     gameState.flags = {
@@ -403,6 +410,7 @@ export function captureGameStatusForSaving(type) {
         backgroundAudio: backgroundAudio,
         sfx: sfx,
         starShipBuilt: starShipBuilt,
+        starShipTravelling: starShipTravelling,
     }
 
     return gameState;
@@ -469,6 +477,9 @@ export function restoreGameStatus(gameState, type) {
             rocketUserName = gameState.rocketUserName ?? {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
             starVisionDistance = gameState.starVisionDistance ?? 0;
             starVisionIncrement = gameState.starVisionIncrement ?? 1;
+            destinationStar = gameState.destinationStar ?? null;
+            fromStarObject = gameState.fromStarObject ?? null;
+            toStarObject = gameState.toStarObject ?? null;
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -490,6 +501,7 @@ export function restoreGameStatus(gameState, type) {
             backgroundAudio = gameState.flags.backgroundAudio ?? false;      
             sfx = gameState.flags.sfx ?? false;
             starShipBuilt = gameState.flags.starShipBuilt ?? false;
+            starShipTravelling = gameState.flags.starShipTravelling ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1934,6 +1946,38 @@ export function getStarShipBuilt() {
 
 export function setStarShipBuilt(value) {
     starShipBuilt = value;
+}
+
+export function getDestinationStar() {
+    return destinationStar ?? null;
+}
+
+export function setDestinationStar(value) {
+    destinationStar = value;
+}
+
+export function getStarShipTravelling() {
+    return starShipTravelling ?? false;
+}
+
+export function setStarShipTravelling(value) {
+    starShipTravelling = value;
+}
+
+export function getFromStarObject() {
+    return fromStarObject ?? null;
+}
+
+export function setFromStarObject(value) {
+    fromStarObject = value;
+}
+
+export function getToStarObject() {
+    return toStarObject ?? null;
+}
+
+export function setToStarObject(value) {
+    toStarObject = value;
 }
 
 const IMAGE_URLS = {

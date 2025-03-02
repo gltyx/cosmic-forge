@@ -1,5 +1,5 @@
-import { sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
-import { getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
+import { drawStarConnectionLine, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
+import { getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { gain } from './game.js';
@@ -41,6 +41,11 @@ export function drawTab5Content(heading, optionContentElement) {
         const starContainer = document.querySelector('#optionContentTab5');   
         starContainer.innerHTML = '';     
         generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode());
+        if (getStarShipTravelling()) {
+            drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
+            const starData = getStarSystemDataObject('stars');
+            createStarDestinationRow(starData[getDestinationStar()], 'travelling');
+        }
     }
 
     if (heading === 'Star Data') {        
@@ -202,7 +207,30 @@ export function drawTab5Content(heading, optionContentElement) {
             );
             optionContentElement.appendChild(starshipComponentBuildRow);
         });
-        
+
+        const destinationStar = getDestinationStar();
+        const starShipTravelRow = createOptionRow(
+            `spaceStarShipTravelRow`,
+            null,
+            `Travelling To:`,
+            createTextElement(`${capitaliseWordsWithRomanNumerals(destinationStar || '')}`, `starShipDestinationStar`, ['green-ready-text', 'destination-text']),
+            createTextElement(`<div id="spaceTravelToStarProgressBar">`, `spaceTravelToStarProgressBarContainer`, ['progress-bar-container']),
+            null,                               
+            null,
+            null,
+            `Travelling...`,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            'travel'
+        );
+        optionContentElement.appendChild(starShipTravelRow);
     }
 }
 

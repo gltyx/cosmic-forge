@@ -1,4 +1,6 @@
 import {
+    getStarShipTravelling,
+    setStarShipTravelling,
     setStarShipBuilt,
     getAscendencyPoints,
     setAscendencyPoints,
@@ -288,6 +290,9 @@ export async function gameLoop() {
         elementsStarInfoRowCheck.forEach((elementStarInfoRowCheck) => {
             checkStatusAndSetTextClasses(elementStarInfoRowCheck);
         });
+
+        starChecks();
+        starShipUiChecks();
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
@@ -2930,9 +2935,6 @@ function handleSpaceUpgradeResourceType(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
-
-    starChecks();
-
     if ([...element.classList].some(clas => clas.includes('travel-starship'))) {
         return checkTravelToStarElements(element);
     }
@@ -2988,44 +2990,60 @@ function starChecks(element) {
     }
 }
 
+function starShipUiChecks() {
+    if (getCurrentOptionPane() === 'star ship') {
+        const travelToDestinationStarRow = document.getElementById('spaceStarShipTravelRow');
+        if (travelToDestinationStarRow) {
+            if (getStarShipTravelling()) {
+                travelToDestinationStarRow.classList.remove('invisible');
+            } else {
+                travelToDestinationStarRow.classList.add('invisible');
+            }
+        }
+    }
+}
+
 function checkTravelToStarElements(element) {
     let starData = null;
-    if (getCurrentOptionPane() !== 'star map') return;
 
-    const starNameElement = document.getElementById('starDestinationName');
-    if (!starNameElement) return;
+    if (getCurrentOptionPane() === 'star map') {
+        const starNameElement = document.getElementById('starDestinationName');
+        if (!starNameElement) return;
 
-    const starName = starNameElement.innerText.substring(starNameElement.innerText.indexOf(' ') + 1).toLowerCase();
-    const starSystemData = getStarSystemDataObject('stars');
+        const starName = starNameElement.innerText.substring(starNameElement.innerText.indexOf(' ') + 1).toLowerCase();
+        const starSystemData = getStarSystemDataObject('stars');
 
-    if (starSystemData.hasOwnProperty(starName)) {
-        starData = getStarSystemDataObject('stars', [starName]);
-        if (!starData) return;
+        if (starSystemData.hasOwnProperty(starName)) {
+            starData = getStarSystemDataObject('stars', [starName]);
+            if (!starData) return;
+        } else {
+            return;
+        }
+
+        const fuelNeeded = starData.fuel;
+        const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+        const canTravel = currentAntimatter >= fuelNeeded && getTechUnlockedArray().includes('FTLTravelTheory');
+
+        if (element.classList.contains('travel-starship-button')) {
+            element.classList.toggle('red-disabled-text', !canTravel);
+            element.classList.toggle('green-ready-text', canTravel);
+            return;
+        }
+
+        const themeElement = document.querySelector('[data-theme]');
+        if (!themeElement) return;
+
+        const themeStyles = getComputedStyle(themeElement);
+        const readyColor = themeStyles.getPropertyValue('--ready-text').trim();
+        const disabledColor = themeStyles.getPropertyValue('--disabled-text').trim();
+
+        const labelElement = element.querySelector('span:first-child');
+        if (!labelElement) return;
+
+        labelElement.style.color = canTravel ? readyColor : disabledColor;
     } else {
         return;
     }
-
-    const fuelNeeded = starData.fuel;
-    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
-    const canTravel = currentAntimatter >= fuelNeeded && getTechUnlockedArray().includes('FTLTravelTheory');
-
-    if (element.classList.contains('travel-starship-button')) {
-        element.classList.toggle('red-disabled-text', !canTravel);
-        element.classList.toggle('green-ready-text', canTravel);
-        return;
-    }
-
-    const themeElement = document.querySelector('[data-theme]');
-    if (!themeElement) return;
-
-    const themeStyles = getComputedStyle(themeElement);
-    const readyColor = themeStyles.getPropertyValue('--ready-text').trim();
-    const disabledColor = themeStyles.getPropertyValue('--disabled-text').trim();
-
-    const labelElement = element.querySelector('span:first-child');
-    if (!labelElement) return;
-
-    labelElement.style.color = canTravel ? readyColor : disabledColor;
 }
 
 function checkTravelToDescriptions(element) {
