@@ -410,6 +410,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                             },
                         },
                         ssStructural: {
+                            finished: false,
                             builtParts: 0,
                             parts: 20,
                             price: 6000,
@@ -419,6 +420,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                             setPrice: 'ssStructuralPrice',
                         },
                         ssLifeSupport: {
+                            finished: false,
                             builtParts: 0,
                             parts: 10,
                             price: 15000,
@@ -428,6 +430,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                             setPrice: 'ssLifeSupportPrice',
                         },
                         ssAntimatterEngine: {
+                            finished: false,
                             builtParts: 0,
                             parts: 16,
                             price: 12000,
@@ -442,6 +445,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                             }
                         },
                         ssFleetHangar: {
+                            finished: false,
                             builtParts: 0,
                             parts: 1,
                             price: 100000,

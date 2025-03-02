@@ -1,4 +1,5 @@
 import {
+    setStarShipBuilt,
     getAscendencyPoints,
     setAscendencyPoints,
     getRocketUserName,
@@ -148,6 +149,7 @@ import {
     getStarVisionDistance,
     setStarVisionDistance,
     getBackgroundAudio,
+    getStarShipBuilt,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -257,6 +259,7 @@ export async function gameLoop() {
         
         updateStats();
         updateRocketNames();
+        checkIfStarShipBuilt();
 
         if (getItemsToDeduct() && Object.keys(getItemsToDeduct()).length > 0) {
             checkAndDeductResources();
@@ -279,6 +282,11 @@ export async function gameLoop() {
         const elementsItemsCheck = document.querySelectorAll('.resource-cost-sell-check, .compound-cost-sell-check');
         elementsItemsCheck.forEach((elementItemCheck) => {
             checkStatusAndSetTextClasses(elementItemCheck);
+        });
+
+        const elementsStarInfoRowCheck = document.querySelectorAll('[class*="travel-starship"]');
+        elementsStarInfoRowCheck.forEach((elementStarInfoRowCheck) => {
+            checkStatusAndSetTextClasses(elementStarInfoRowCheck);
         });
 
         handlePowerAllButtonState();
@@ -374,6 +382,17 @@ export async function gameLoop() {
     }
 }
 
+function checkIfStarShipBuilt() {
+    const starShipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
+    .filter(module => module.startsWith('ss'));
+
+    const allModulesFinished = starShipModules.every(starShipModule => 
+        getResourceDataObject('space', ['upgrades', starShipModule, 'finished'])
+    );
+
+    setStarShipBuilt(allModulesFinished);
+}
+
 function updateRocketNames() {
     if (getCurrentTab()[1] === 'Space Mining') {
         for (let i = 1; i <= 4; i++) {
@@ -454,7 +473,7 @@ function checkAndRevealNewBuildings(type) {
                 Object.keys(ssModules).forEach(ssModule => {
                     const rowElement = document.getElementById(`space${capitaliseString(ssModule)}BuildRow`);
                     if (rowElement) {
-                        if (getTechUnlockedArray().includes(ssModules[ssModule])) {
+                        if (getTechUnlockedArray().includes(ssModules[ssModule]) && !getStarShipBuilt()) {
                             rowElement.classList.remove('invisible');
                         } else {
                             rowElement.classList.add('invisible');
@@ -2860,6 +2879,11 @@ function handleSpaceUpgradeResourceType(element) {
             totalPartsElement.classList.add('green-ready-text');
             element.classList.remove('red-disabled-text');
             element.textContent = 'Built!';
+
+            if (dataName.includes('ss') && !getResourceDataObject('space', ['upgrades', dataName, 'finished'])) {
+                setResourceDataObject(true, 'space', ['upgrades', dataName, 'finished']);
+            }
+
             if (dataName.includes('rocket') && getLaunchedRockets().includes(dataName)) {
                 element.textContent = 'Launched!';
             }
@@ -2885,6 +2909,10 @@ function handleSpaceUpgradeResourceType(element) {
 function checkStatusAndSetTextClasses(element) {
 
     starChecks();
+
+    if ([...element.classList].some(clas => clas.includes('travel-starship'))) {
+        return checkTravelToStarElements(element);
+    }
 
     if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
         checkTravelToDescriptions(element); //not return as this does not affect element and so still need to check element
@@ -2930,11 +2958,51 @@ function checkStatusAndSetTextClasses(element) {
     }
 }
 
-function starChecks() {
+function starChecks(element) {
     const starData = getStarSystemDataObject('stars');
     if (Object.keys(starData).length > 1) {
         document.getElementById('starDataOption').parentElement.parentElement.classList.remove('invisible');
     }
+}
+
+function checkTravelToStarElements(element) {
+    let starData = null;
+    if (getCurrentOptionPane() !== 'star map') return;
+
+    const starNameElement = document.getElementById('starDestinationName');
+    if (!starNameElement) return;
+
+    const starName = starNameElement.innerText.substring(starNameElement.innerText.indexOf(' ') + 1).toLowerCase();
+    const starSystemData = getStarSystemDataObject('stars');
+
+    if (starSystemData.hasOwnProperty(starName)) {
+        starData = getStarSystemDataObject('stars', [starName]);
+        if (!starData) return;
+    } else {
+        return;
+    }
+
+    const fuelNeeded = starData.fuel;
+    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+    const canTravel = currentAntimatter >= fuelNeeded && getTechUnlockedArray().includes('FTLTravelTheory');
+
+    if (element.classList.contains('travel-starship-button')) {
+        element.classList.toggle('red-disabled-text', !canTravel);
+        element.classList.toggle('green-ready-text', canTravel);
+        return;
+    }
+
+    const themeElement = document.querySelector('[data-theme]');
+    if (!themeElement) return;
+
+    const themeStyles = getComputedStyle(themeElement);
+    const readyColor = themeStyles.getPropertyValue('--ready-text').trim();
+    const disabledColor = themeStyles.getPropertyValue('--disabled-text').trim();
+
+    const labelElement = element.querySelector('span:first-child');
+    if (!labelElement) return;
+
+    labelElement.style.color = canTravel ? readyColor : disabledColor;
 }
 
 function checkTravelToDescriptions(element) {
@@ -5339,26 +5407,24 @@ export function calculateAscendencyPoints(distance) {
     const MIN_DISTANCE = 1;
     const MAX_DISTANCE = 100;
     const MIN_AP = 1;
-    const MAX_AP = 5;
-    
+    const MAX_AP = 50;
+
     if (distance >= 97.5) return MAX_AP;
 
     let normalizedDistance = (distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE);
     normalizedDistance = Math.max(0, Math.min(1, normalizedDistance));
-    
+
     const exponent = 2.5;
     let ascendencyPoints = MIN_AP + (MAX_AP - MIN_AP) * Math.pow(normalizedDistance, exponent);
-    ascendencyPoints = Math.min(4, Math.round(ascendencyPoints));
-    
+    ascendencyPoints = Math.min(MAX_AP - 1, Math.round(ascendencyPoints)); // Ensures max is 49 until 97.5
+
     let modifiedAP = ascendencyPoints;
-    if (ascendencyPoints > 1 && ascendencyPoints < 5) {
+    if (ascendencyPoints > 1 && ascendencyPoints < MAX_AP) {
         if (Math.random() < 0.2) {
-            modifiedAP -= 1;
+            modifiedAP -= Math.ceil(Math.random() * Math.max(1, modifiedAP * 0.1)); // Small random reduction
         }
     }
-    
-    console.log(`Original AP: ${ascendencyPoints}, Modified AP: ${modifiedAP}`);
-    
+
     return modifiedAP;
 }
 

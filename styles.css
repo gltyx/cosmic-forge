@@ -1134,6 +1134,10 @@ body {
     display: inline-block;
 }
 
+#starDestinationName,
+#starDestinationDistance,
+#starDestinationFuel,
+#starDestinationButton,
 .save-name-margin,
 .save-load-button
 {
@@ -1147,6 +1151,11 @@ body {
 
 .destination-text {
     margin-right: 20px;
+}
+
+.no-vertical-padding {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 button.red-disabled-text {
@@ -1435,11 +1444,13 @@ button.red-disabled-text {
     }
 }
 
+.star-uninteresting:hover,
 .current-star:hover,
 .star:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);
 }
 
+.star-uninteresting::after,
 .current-star::after,
 .star::after {
     content: attr(titler);
@@ -1458,6 +1469,7 @@ button.red-disabled-text {
     transition: opacity 0.3s ease-in-out;
 }
 
+.star-uninteresting:hover::after,
 .current-star:hover::after,
 .star:hover::after {
     visibility: visible;

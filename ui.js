@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getStarShipBuilt,
+    setStarShipBuilt,
     setSortStarMethod,
     getSortStarMethod,
     getStarVisionDistance,
@@ -1055,7 +1057,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         const starElement = document.createElement('div');
         starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
         starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
-        if (starElement.id === capitaliseString(getCurrentStarSystem())) {
+        if (starElement.classList.contains('star-uninteresting') || starElement.id === capitaliseString(getCurrentStarSystem())) {
             starElement.setAttribute('titler', `${star.name}`);
         } else {
             starElement.setAttribute('titler', `${star.name} (${distance}ly)`);
@@ -1068,10 +1070,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         } else if (isInteresting) {
             starElement.style.width = `${star.width * 2}px`;
             starElement.style.height = `${star.height * 2}px`;
-            const result = checkIfInterestingStarIsInStarDataAlready(starElement.id.toLowerCase());
-            if (result) {
-                console.log(starElement.id.toLowerCase() + ' already in star data');
-            } else {
+            if (!checkIfInterestingStarIsInStarDataAlready(starElement.id.toLowerCase())) {
                 generateStarDataAndAddToDataObject(starElement, distance);
             }
             if (mapMode === 'distance') {
@@ -1093,42 +1092,61 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         
         starElement.style.left = `${star.left}px`;
         starElement.style.top = `${star.top}px`;
-        
-        if (isInteresting) {
-            starElement.addEventListener('click', () => {  //still to decide if needed
+    
+        starElement.addEventListener('click', () => {
+            if (isInteresting) {
                 const starData = getStarSystemDataObject('stars');
-                const starCount = Object.keys(starData).length;
                 if (star.name === currentStar.name) {
-                    console.log(`Distance from current star to ${star.name}: 0 units`);
                     return;
                 }
-                console.log(`Distance from current star to ${star.name}: ${distance.toFixed(2)} units`);
-                drawStarConnectionLine(currentStar, star);
-                createStarDestinationRow(starData[star.name.toLowerCase()]);
-            });
-        }
+                drawStarConnectionLine(currentStar, star, true);
+                createStarDestinationRow(starData[star.name.toLowerCase()], true);
+            } else {
+                drawStarConnectionLine(currentStar, star, false);
+                createStarDestinationRow(star.name, false);
+            }
+        });
         
         starfieldContainer.appendChild(starElement);
     });
 }
 
-function createStarDestinationRow(starData) {
+function createStarDestinationRow(starData, isInteresting) {
     const elementRow = document.getElementById('descriptionContentTab5');
     if (!elementRow) return;
+    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+    const themeElement = document.querySelector('[data-theme]');
+    if (!themeElement) return;
+
+    const themeStyles = getComputedStyle(themeElement);
+    const readyTextColor = themeStyles.getPropertyValue('--ready-text').trim();
+    const disabledTextColor = themeStyles.getPropertyValue('--disabled-text').trim();
+
+    const canTravel = isInteresting ? currentAntimatter >= starData.fuel : false;
+    const textColor = canTravel ? readyTextColor : disabledTextColor;
 
     elementRow.innerHTML = `
-        <div class="option-row-main d-flex">
-            <div id="starDestinationName">${capitaliseString(starData.name)}</div>
-            <div id="starDestinationDistance">${starData.distance.toFixed(2)} ly</div>
-            <div id="starDestinationFuel">${starData.fuel}</div>
+        <div class="option-row-main d-flex no-vertical-padding">
+            <div id="starDestinationName">Name: ${isInteresting ? capitaliseWordsWithRomanNumerals(starData.name) : starData}</div>
+            <div id="starDestinationDistance" class="travel-starship-info">Distance: <span style="color: ${textColor};">${isInteresting ? `${starData.distance.toFixed(2)}ly` : '???'}</span></div>
+            <div id="starDestinationFuel" class="travel-starship-info">Fuel: <span style="color: ${textColor};">${isInteresting ? `${starData.fuel} AM` : '???'}</span></div>
             <div id="starDestinationButton"></div>
         </div>
     `;
 
     const buttonContainer = document.getElementById('starDestinationButton');
-    const button = createButton('Travel');
+    const button = createButton(`Travel`, ['option-button', 'red-disabled-text', 'travel-starship-button'], () => {
+        console.log(`Traveling to ${starData.name}...`);
+    }, 'upgradeCheck', '', 'autoBuyer', 'travelToStar', 'time', true, null, 'starShipPurchase');
+
+    if (getStarShipBuilt() && isInteresting) {
+        button.classList.remove('invisible');
+    } else {
+        button.classList.add('invisible');
+    }
     buttonContainer.appendChild(button);
 }
+
 
 function calculate3DDistance(x1, y1, z1, x2, y2, z2) {
     return parseFloat((Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2) / 1000).toFixed(2));
@@ -1159,13 +1177,21 @@ export function removeStarConnectionTooltip() {
     }
 }
 
-function drawStarConnectionLine(fromStar, toStar) {
+function drawStarConnectionLine(fromStar, toStar, isInteresting) {
     removeStarConnectionTooltip();
 
-    const toStarData = getStarSystemDataObject('stars', [toStar.name.toLowerCase()]);
-    const fuelNeeded = toStarData.fuel;
+    let toStarData;
+    let fuelNeeded = 0;
+    let apGranted = 0;
+
+    if (isInteresting) {
+        toStarData = getStarSystemDataObject('stars', [toStar.name.toLowerCase()]);
+        fuelNeeded = toStarData.fuel;
+        apGranted = toStarData.ascendencyPoints;  
+    }
+
     const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
-    const canTravel = fuelNeeded <= currentAntimatter;
+    const canTravel = isInteresting && fuelNeeded <= currentAntimatter;
 
     const themeElement = document.querySelector('[data-theme]') || document.documentElement;
     const themeStyles = getComputedStyle(themeElement);
@@ -1198,8 +1224,13 @@ function drawStarConnectionLine(fromStar, toStar) {
     const labelElement = document.createElement('div');
     labelElement.id = 'star-connection-label';
     labelElement.classList.add('star-connection-label');
-    labelElement.innerText = `Antimatter Fuel: ${fuelNeeded}`;
+    labelElement.innerHTML = isInteresting 
+        ? `Antimatter: ${fuelNeeded}<br>AP: ${apGranted}` 
+        : `??? <br> ???`;
     labelElement.style.color = labelColor;
+    labelElement.style.textAlign = 'center';
+    labelElement.style.border = `1px dashed ${labelColor}`;
+    labelElement.style.borderRadius = '10px';
 
     const centerX = (fromX + toX) / 2;
     const centerY = (fromY + toY) / 2;
@@ -2401,6 +2432,9 @@ function initializeTabEventListeners() {
 
                 if (content !== 'Interstellar') {
                     removeStarConnectionTooltip();
+                    if (document.getElementById('descriptionContentTab5')) {
+                        document.getElementById('descriptionContentTab5').innerHTML = getHeaderDescriptions('star map');
+                    }
                 }
     
                 if (!getLastScreenOpenRegister(`tab${dynamicIndex}`)) {

@@ -210,6 +210,7 @@ let isAntimatterBoostActive = false;
 let antimatterSvgEventListeners = false;
 let canTravelToAsteroids = false;
 let canFuelRockets = false;
+let starShipBuilt = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -401,6 +402,7 @@ export function captureGameStatusForSaving(type) {
         canFuelRockets: canFuelRockets,
         backgroundAudio: backgroundAudio,
         sfx: sfx,
+        starShipBuilt: starShipBuilt,
     }
 
     return gameState;
@@ -487,7 +489,7 @@ export function restoreGameStatus(gameState, type) {
             canFuelRockets = gameState.flags.canFuelRockets ?? false;
             backgroundAudio = gameState.flags.backgroundAudio ?? false;      
             sfx = gameState.flags.sfx ?? false;
-    
+            starShipBuilt = gameState.flags.starShipBuilt ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1924,6 +1926,14 @@ export function getAscendencyPoints() {
 
 export function setAscendencyPoints(value) {
     setResourceDataObject(value, 'ascendencyPoints', ['quantity']);
+}
+
+export function getStarShipBuilt() {
+    return starShipBuilt;
+}
+
+export function setStarShipBuilt(value) {
+    starShipBuilt = value;
 }
 
 const IMAGE_URLS = {

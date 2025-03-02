@@ -609,6 +609,7 @@ export let resourceData = {
                 },
             },
             ssStructural: {
+                finished: false,
                 builtParts: 0,
                 parts: 20,
                 price: 6000,
@@ -618,6 +619,7 @@ export let resourceData = {
                 setPrice: 'ssStructuralPrice',
             },
             ssLifeSupport: {
+                finished: false,
                 builtParts: 0,
                 parts: 10,
                 price: 15000,
@@ -627,6 +629,7 @@ export let resourceData = {
                 setPrice: 'ssLifeSupportPrice',
             },
             ssAntimatterEngine: {
+                finished: false,
                 builtParts: 0,
                 parts: 16,
                 price: 12000,
@@ -641,6 +644,7 @@ export let resourceData = {
                 }
             },
             ssFleetHangar: {
+                finished: false,
                 builtParts: 0,
                 parts: 1,
                 price: 100000,
