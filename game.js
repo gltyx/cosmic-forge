@@ -443,6 +443,25 @@ function checkAndRevealNewBuildings(type) {
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
             }
+            if (getCurrentOptionPane() === 'star ship') {
+                const ssModules = {
+                    ssStructural: 'orbitalConstruction',
+                    ssLifeSupport: 'lifeSupportSystems',
+                    ssAntimatterEngine: 'antimatterEngines',
+                    ssFleetHangar: 'starshipFleets'
+                };
+                
+                Object.keys(ssModules).forEach(ssModule => {
+                    const rowElement = document.getElementById(`space${capitaliseString(ssModule)}BuildRow`);
+                    if (rowElement) {
+                        if (getTechUnlockedArray().includes(ssModules[ssModule])) {
+                            rowElement.classList.remove('invisible');
+                        } else {
+                            rowElement.classList.add('invisible');
+                        }
+                    }
+                });
+            }
             break;
     }
 }
