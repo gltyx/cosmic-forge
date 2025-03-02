@@ -122,7 +122,8 @@ import {
 // } from './localization.js';
 
 import { 
-    capitaliseString 
+    capitaliseString, 
+    capitaliseWordsWithRomanNumerals
 } from './utilityFunctions.js';
 
 import { playClickSfx, playSwipeSfx, sfxPlayer } from './audioManager.js';
@@ -1103,11 +1104,30 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                 }
                 console.log(`Distance from current star to ${star.name}: ${distance.toFixed(2)} units`);
                 drawStarConnectionLine(currentStar, star);
+                createStarDestinationRow(starData[star.name.toLowerCase()]);
             });
         }
         
         starfieldContainer.appendChild(starElement);
     });
+}
+
+function createStarDestinationRow(starData) {
+    const elementRow = document.getElementById('descriptionContentTab5');
+    if (!elementRow) return;
+
+    elementRow.innerHTML = `
+        <div class="option-row-main d-flex">
+            <div id="starDestinationName">${capitaliseString(starData.name)}</div>
+            <div id="starDestinationDistance">${starData.distance.toFixed(2)} ly</div>
+            <div id="starDestinationFuel">${starData.fuel}</div>
+            <div id="starDestinationButton"></div>
+        </div>
+    `;
+
+    const buttonContainer = document.getElementById('starDestinationButton');
+    const button = createButton('Travel');
+    buttonContainer.appendChild(button);
 }
 
 function calculate3DDistance(x1, y1, z1, x2, y2, z2) {
