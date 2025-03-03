@@ -36,7 +36,7 @@ export const BUILDING_TYPES = ['energy', 'space', 'starShip'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
-export const STARSHIP_TRAVEL_SPEED = 36000; //3600000 one real hour per light year
+export const STARSHIP_TRAVEL_SPEED = 3600; //3600000 one real hour per light year
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 export const STARTING_STAR_SYSTEM = 'spica';
@@ -97,6 +97,7 @@ let starVisionIncrement = 1;
 let destinationStar = null;
 let fromStarObject = null;
 let toStarObject = null;
+let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
 
 let miningObject = {
@@ -396,6 +397,7 @@ export function captureGameStatusForSaving(type) {
     gameState.destinationStar = destinationStar;
     gameState.fromStarObject = fromStarObject;
     gameState.toStarObject = toStarObject;
+    gameState.currentStarObject = currentStarObject;
     gameState.starShipStatus = starShipStatus;
 
     // Flags
@@ -491,6 +493,7 @@ export function restoreGameStatus(gameState, type) {
             destinationStar = gameState.destinationStar ?? null;
             fromStarObject = gameState.fromStarObject ?? null;
             toStarObject = gameState.toStarObject ?? null;
+            currentStarObject = gameState.currentStarObject ?? null;
             starShipStatus = gameState.starShipStatus ?? ['preconstruction', null];
 
             // Flags
@@ -2010,6 +2013,14 @@ export function getToStarObject() {
 
 export function setToStarObject(value) {
     toStarObject = value;
+}
+
+export function getCurrentStarObject(value) {
+    return currentStarObject;
+}
+
+export function setCurrentStarObject(value) {
+    currentStarObject = value;
 }
 
 export function getStarShipArrowPosition() {

@@ -197,10 +197,11 @@ import {
     switchFuelGaugeWhenFuellerBought,
     showWeatherNotification,
     generateStarfield,
-    drawStarConnectionLine,
+    drawStarConnectionDrawings,
     createStarDestinationRow,
     spaceTravelButtonHideAndShowDescription,
-    removeStarConnectionTooltip
+    removeStarConnectionTooltip,
+    removeOrbitCircle
 } from "./ui.js";
 
 import { 
@@ -3021,6 +3022,11 @@ function starShipUiChecks() {
             }
         }
     }
+
+    if (getCurrentOptionPane() !== 'star map' || getCurrentTab()[1] !== 'Interstellar') {
+        removeStarConnectionTooltip();
+        removeOrbitCircle();
+    }
 }
 
 function checkTravelToStarElements(element) {
@@ -3066,9 +3072,13 @@ function checkTravelToStarElements(element) {
 
         labelElement.style.color = getStarShipTravelling() ? readyColor : (canTravel ? readyColor : disabledColor);
 
-        if (getStarShipTravelling() && getCurrentTab()[1] === "Interstellar") {       
-            drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
+        if (getStarShipTravelling() && getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] !== 'orbiting') {       
+            drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'travelling');
             spaceTravelButtonHideAndShowDescription();
+        } else if (getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] === 'orbiting') {
+            labelElement.textContent = 'Orbiting...'
+            drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'orbiting');
+            document.getElementById('starDestinationDescription').textContent = 'Orbiting...';
         }
     } else {
         return;
@@ -3076,7 +3086,7 @@ function checkTravelToStarElements(element) {
 }
 
 function checkTravelToDescriptions(element) {
-    const rocket = getCurrentOptionPane(); //only applicable if on a rocket screen, which we are by this point
+    const rocket = getCurrentOptionPane();
     if (getCurrentlyTravellingToAsteroid(rocket)) {
         if (getRocketDirection(rocket)) {
             const timerElement = timerManager.getTimer(`${rocket}TravelReturnTimer`);
@@ -4927,7 +4937,7 @@ export function offlineGains(switchedFocus) {
             startInvestigateStarTimer([remainingTime, 'offlineGains']);
         }
 
-        if (getStarShipTravelling()) {
+        if (getStarShipTravelling() && getStarShipStatus()[0] === 'travelling') {
             const timeLeft = getTimeLeftUntilTravelToDestinationStarTimerFinishes();
             const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
     

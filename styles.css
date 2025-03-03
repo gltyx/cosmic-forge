@@ -1414,7 +1414,6 @@ button.red-disabled-text {
 .current-star {
     position: absolute;
     background-color: var(--star-color-prominent);
-    animation: twinkleCurrentStar 2s infinite alternate ease-in-out;
     border: 3px solid var(--current-star-border) !important;
 }
 

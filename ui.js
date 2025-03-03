@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getStarShipStatus,
     getStarShipArrowPosition,
     setStarShipArrowPosition,
     getFromStarObject,
@@ -1010,13 +1011,13 @@ function getStarColorForDistanceFilterButton(distance) {
     const minDistance = 0;
     const normalizedDistance = Math.min(Math.max(distance, minDistance), maxDistance) / maxDistance;
 
-    if (normalizedDistance <= 0) return "rgb(255, 255, 255)"; // White at 0 light-years
-    if (normalizedDistance <= 0.25) return `rgb(${255}, ${255 - normalizedDistance * 255}, ${255 - normalizedDistance * 255})`; // White to Green
-    if (normalizedDistance <= 0.5) return `rgb(${255}, ${255}, ${0 + (normalizedDistance - 0.25) * 1020})`; // Green to Yellow
-    return `rgb(${255}, ${255 - (normalizedDistance - 0.5) * 510}, ${0})`; // Yellow to Red
+    if (normalizedDistance <= 0) return "rgb(255, 255, 255)";
+    if (normalizedDistance <= 0.25) return `rgb(${255}, ${255 - normalizedDistance * 255}, ${255 - normalizedDistance * 255})`;
+    if (normalizedDistance <= 0.5) return `rgb(${255}, ${255}, ${0 + (normalizedDistance - 0.25) * 1020})`;
+    return `rgb(${255}, ${255 - (normalizedDistance - 0.5) * 510}, ${0})`;
 }
 
-function getStarColorForTravel(fuelRequired) {
+function getStarColorForTravel(fuelRequired, starName) {
     const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
     const canTravel = currentAntimatter >= fuelRequired;
     const themeElement = document.querySelector('[data-theme]') || document.documentElement;
@@ -1025,7 +1026,11 @@ function getStarColorForTravel(fuelRequired) {
     const readyTextColor = computedStyles.getPropertyValue('--ready-text').trim();
     const disabledTextColor = computedStyles.getPropertyValue('--disabled-text').trim();
 
-    const color = canTravel ? readyTextColor : disabledTextColor;
+    let color = canTravel ? readyTextColor : disabledTextColor;
+
+    if (starName === getDestinationStar() && getStarShipStatus()[0] === 'orbiting') {
+        color = readyTextColor;
+    }
     return color;
 }
 
@@ -1088,7 +1093,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             if (mapMode === 'distance') {
                 starElement.style.backgroundColor = getStarColorForDistanceFilterButton(distance);
             } else if (mapMode === 'in range') {
-                starElement.style.backgroundColor = getStarColorForTravel(getStarSystemDataObject('stars', [star.name.toLowerCase()]).fuel);
+                starElement.style.backgroundColor = getStarColorForTravel(getStarSystemDataObject('stars', [star.name.toLowerCase()]).fuel, star.name.toLowerCase());
             }
         } else {
             starElement.style.width = `${star.width / 2}px`;
@@ -1114,11 +1119,11 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                     }
                     setFromStarObject(currentStar);
                     setToStarObject(star);
-                    drawStarConnectionLine(currentStar, star, true);
+                    drawStarConnectionDrawings(currentStar, star, true);
                     createStarDestinationRow(starData[star.name.toLowerCase()], true);
                     setDestinationStar(starData[star.name.toLowerCase()].name);
                 } else {
-                    drawStarConnectionLine(currentStar, star, false);
+                    drawStarConnectionDrawings(currentStar, star, false);
                     createStarDestinationRow(star.name, false);
                 }
             }
@@ -1201,92 +1206,181 @@ export function removeStarConnectionTooltip() {
     }
 }
 
-export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
+export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
     removeStarConnectionTooltip();
 
-    let toStarData;
-    let fuelNeeded = 0;
-    let apGranted = 0;
+    let lineElement = null;
+    let labelElement = null;
+    let arrowHead = null;
 
-    if (isInteresting === 'travelling') {
-        fromStar = getFromStarObject();
-        toStarData = getStarSystemDataObject('stars', [toStar.toLowerCase()]);
-        toStar = getToStarObject();
-        fuelNeeded = toStarData.fuel;
-        apGranted = toStarData.ascendencyPoints;  
-    } else if (isInteresting) {
-        toStarData = getStarSystemDataObject('stars', [toStar.name.toLowerCase()]);
-        fuelNeeded = toStarData.fuel;
-        apGranted = toStarData.ascendencyPoints;  
+    if (isInteresting !== 'orbiting') {
+        let toStarData;
+        let fuelNeeded = 0;
+        let apGranted = 0;
+    
+        if (isInteresting === 'travelling') {
+            fromStar = getFromStarObject();
+            toStarData = getStarSystemDataObject('stars', [toStar.toLowerCase()]);
+            toStar = getToStarObject();
+            fuelNeeded = toStarData.fuel;
+            apGranted = toStarData.ascendencyPoints;  
+        } else if (isInteresting) {
+            toStarData = getStarSystemDataObject('stars', [toStar.name.toLowerCase()]);
+            fuelNeeded = toStarData.fuel;
+            apGranted = toStarData.ascendencyPoints;  
+        }
+    
+        const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+        const canTravel = isInteresting && fuelNeeded <= currentAntimatter;
+    
+        const themeElement = document.querySelector('[data-theme]') || document.documentElement;
+        const themeStyles = getComputedStyle(themeElement);
+        let lineColor = canTravel ? themeStyles.getPropertyValue('--ready-text') : themeStyles.getPropertyValue('--disabled-text');
+        const labelColor = lineColor;
+    
+        const fromX = fromStar.left + fromStar.width * 2;
+        const fromY = fromStar.top + fromStar.height * 2;
+        const toX = toStar.left + toStar.width;
+        const toY = toStar.top + toStar.height;
+    
+        const distance = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
+        const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
+    
+        lineElement = document.createElement('div');
+        lineElement.id = 'star-connection-line';
+        lineElement.classList.add('star-connection-line');
+        lineElement.style.width = `${distance}px`;
+        lineElement.style.transform = `rotate(${angle}deg)`;
+        lineElement.style.left = `${fromX}px`;
+        lineElement.style.top = `${fromY}px`;
+    
+        if (getStarShipTravelling()) {
+            lineColor = themeStyles.getPropertyValue('--text-color');
+            lineElement.style.borderTop = `1px dashed ${lineColor}`;
+    
+            lineElement.style.maskImage = `linear-gradient(to right, 
+                transparent 14px, 
+                black 14px, 
+                black calc(100% - 10px), 
+                transparent calc(100% - 10px)
+            )`;
+        } else {
+            lineElement.style.background = `linear-gradient(to right, 
+                transparent 14px, 
+                ${lineColor} 14px, 
+                ${lineColor} calc(100% - 10px), 
+                transparent calc(100% - 10px)
+            )`;
+        }
+    
+        if (!getStarShipTravelling()) {
+            labelElement = document.createElement('div');
+            labelElement.id = 'star-connection-label';
+            labelElement.classList.add('star-connection-label');
+            labelElement.innerHTML = isInteresting 
+                ? `Antimatter: ${fuelNeeded}<br>AP: ${apGranted}` 
+                : `??? <br> ???`;
+            labelElement.style.color = labelColor;
+            labelElement.style.textAlign = 'center';
+            labelElement.style.border = `1px dashed ${labelColor}`;
+            labelElement.style.borderRadius = '10px';
+        
+            const centerX = (fromX + toX) / 2;
+            const centerY = (fromY + toY) / 2;
+            labelElement.style.left = `${centerX}px`;
+            labelElement.style.top = `${centerY}px`;
+        } else {
+            arrowHead = drawStarShipArrowhead(fromStar, toStar, isInteresting, null);
+        }
     }
 
-    const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
-    const canTravel = isInteresting && fuelNeeded <= currentAntimatter;
+    const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
+    if (lineElement) {
+        tooltipLayer.appendChild(lineElement);
+    }
+    if (labelElement) {
+        tooltipLayer.appendChild(labelElement);
+    }
+    if (arrowHead) {
+        tooltipLayer.appendChild(arrowHead);
+    }
+
+    if (getStarShipStatus()[0] === 'orbiting' && getCurrentTab()[1] === 'Interstellar' && getCurrentOptionPane() === 'star map') {
+        const orbitCircle = drawOrbitCircle(getToStarObject());
+        if (orbitCircle) {
+            tooltipLayer.appendChild(orbitCircle);
+            arrowHead = drawStarShipArrowhead(getFromStarObject(), getToStarObject(), isInteresting, orbitCircle);
+            tooltipLayer.appendChild(arrowHead);
+        }
+    }
+}
+
+function drawOrbitCircle(toStar) {
+    removeOrbitCircle();
 
     const themeElement = document.querySelector('[data-theme]') || document.documentElement;
     const themeStyles = getComputedStyle(themeElement);
-    let lineColor = canTravel ? themeStyles.getPropertyValue('--ready-text') : themeStyles.getPropertyValue('--disabled-text');
-    const labelColor = lineColor;
+    const borderColor = themeStyles.getPropertyValue('--text-color');
+
+    const orbitCircle = document.createElement('div');
+    orbitCircle.id = 'orbit-circle';
+    orbitCircle.classList.add('orbit-circle');
+    orbitCircle.style.position = 'absolute';
+    orbitCircle.style.border = `2px dotted ${borderColor}`;
+    orbitCircle.style.borderRadius = '50%';
+    orbitCircle.style.background = 'transparent';
+
+    const starElement = document.getElementById(toStar.name);
+    if (!starElement) return null;
+
+    const starRect = starElement.getBoundingClientRect();
+    const starSize = starRect.width;
+    const orbitSize = starSize * 3;
+
+    orbitCircle.style.width = `${orbitSize}px`;
+    orbitCircle.style.height = `${orbitSize}px`;
+
+    const orbitCenterX = starRect.left + starSize / 2;
+    const orbitCenterY = starRect.top + starSize / 2;
+
+    orbitCircle.style.left = `${orbitCenterX - orbitSize / 2}px`;
+    orbitCircle.style.top = `${orbitCenterY - orbitSize / 2}px`;
+
+    return orbitCircle;
+}
+
+function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
+    const arrowHead = document.createElement('div');
+    arrowHead.id = 'arrowheadStarship';
+    arrowHead.classList.add('arrowhead-starship');
+    let arrowPosition = getStarShipArrowPosition();
 
     const fromX = fromStar.left + fromStar.width * 2;
     const fromY = fromStar.top + fromStar.height * 2;
     const toX = toStar.left + toStar.width;
     const toY = toStar.top + toStar.height;
 
-    const distance = Math.sqrt((toX - fromX) ** 2 + (toY - fromY) ** 2);
     const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
 
-    const lineElement = document.createElement('div');
-    lineElement.id = 'star-connection-line';
-    lineElement.classList.add('star-connection-line');
-    lineElement.style.width = `${distance}px`;
-    lineElement.style.transform = `rotate(${angle}deg)`;
-    lineElement.style.left = `${fromX}px`;
-    lineElement.style.top = `${fromY}px`;
-
-    if (getStarShipTravelling()) {
-        lineColor = themeStyles.getPropertyValue('--text-color');
-        lineElement.style.borderTop = `1px dashed ${lineColor}`;
-
-        lineElement.style.maskImage = `linear-gradient(to right, 
-            transparent 14px, 
-            black 14px, 
-            black calc(100% - 10px), 
-            transparent calc(100% - 10px)
-        )`;
-    } else {
-        lineElement.style.background = `linear-gradient(to right, 
-            transparent 14px, 
-            ${lineColor} 14px, 
-            ${lineColor} calc(100% - 10px), 
-            transparent calc(100% - 10px)
-        )`;
-    }
-
-    let arrowPosition = getStarShipArrowPosition();
-    let labelElement = null;
-    let arrowHead = null;
-
-    if (!getStarShipTravelling()) {
-        labelElement = document.createElement('div');
-        labelElement.id = 'star-connection-label';
-        labelElement.classList.add('star-connection-label');
-        labelElement.innerHTML = isInteresting 
-            ? `Antimatter: ${fuelNeeded}<br>AP: ${apGranted}` 
-            : `??? <br> ???`;
-        labelElement.style.color = labelColor;
-        labelElement.style.textAlign = 'center';
-        labelElement.style.border = `1px dashed ${labelColor}`;
-        labelElement.style.borderRadius = '10px';
+    if (isInteresting === 'orbiting' && orbitCircle) {
+        const orbitRect = orbitCircle.getBoundingClientRect();
+        const orbitRadius = orbitRect.width / 2;
     
-        const centerX = (fromX + toX) / 2;
-        const centerY = (fromY + toY) / 2;
-        labelElement.style.left = `${centerX}px`;
-        labelElement.style.top = `${centerY}px`;
+        const centerX = orbitRect.left + orbitRadius;
+        const centerY = orbitRect.top + orbitRadius;
+        const angleDeg = 45;
+        const angleRad = (angleDeg * Math.PI) / 180;
+
+        const arrowX = centerX + orbitRadius * Math.cos(angleRad);
+        const arrowY = centerY + orbitRadius * Math.sin(angleRad);
+
+        const tangentAngleDeg = angleDeg + 90;
+        const arrowSize = 12;
+
+        arrowHead.style.left = `${arrowX - arrowSize / 2}px`;
+        arrowHead.style.top = `${arrowY - arrowSize / 2}px`;
+        arrowHead.style.transform = `rotate(${tangentAngleDeg}deg)`;
     } else {
-        arrowHead = document.createElement('div');
-        arrowHead.id = 'arrowheadStarship';
-        arrowHead.classList.add('arrowhead-starship');
         arrowHead.style.transform = `rotate(${angle + 90}deg)`;
         
         const arrowSize = 12;
@@ -1302,13 +1396,13 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
         arrowHead.style.top = `${arrowY - tipOffsetY - (arrowSize / 2)}px`; 
     }
 
-    const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
-    tooltipLayer.appendChild(lineElement);
-    if (labelElement) {
-        tooltipLayer.appendChild(labelElement);
-    }
-    if (arrowHead) {
-        tooltipLayer.appendChild(arrowHead);
+    return arrowHead;
+}
+
+export function removeOrbitCircle() {
+    const existingOrbitCircle = document.getElementById('orbit-circle');
+    if (existingOrbitCircle) {
+        existingOrbitCircle.remove();
     }
 }
 
@@ -2507,7 +2601,7 @@ function initializeTabEventListeners() {
                     }
                 } else {
                     if (getStarShipTravelling() && getCurrentOptionPane() === 'star map') {
-                        drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
+                        drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'travelling');
                         const starData = getStarSystemDataObject('stars');
                         createStarDestinationRow(starData[getDestinationStar()], 'travelling');
                         spaceTravelButtonHideAndShowDescription();
