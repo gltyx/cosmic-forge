@@ -1263,6 +1263,7 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
         )`;
     }
 
+    let arrowPosition = getStarShipArrowPosition();
     let labelElement = null;
     let arrowHead = null;
 
@@ -1288,7 +1289,6 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
         arrowHead.classList.add('arrowhead-starship');
         arrowHead.style.transform = `rotate(${angle + 90}deg)`;
         
-        const arrowPosition = getStarShipArrowPosition();
         const arrowSize = 12;
         const halfBase = 8;
         

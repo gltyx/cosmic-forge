@@ -161,6 +161,10 @@ import {
     getStarShipBuilt,
     getDestinationStar,
     setStarShipArrowPosition,
+    NUMBER_OF_STARS,
+    STAR_FIELD_SEED,
+    getStarMapMode,
+    getStarShipArrowPosition
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -191,7 +195,12 @@ import {
     setBatteryIndicator,
     drawAntimatterFlowDiagram,
     switchFuelGaugeWhenFuellerBought,
-    showWeatherNotification
+    showWeatherNotification,
+    generateStarfield,
+    drawStarConnectionLine,
+    createStarDestinationRow,
+    spaceTravelButtonHideAndShowDescription,
+    removeStarConnectionTooltip
 } from "./ui.js";
 
 import { 
@@ -3056,6 +3065,11 @@ function checkTravelToStarElements(element) {
         if (!labelElement) return;
 
         labelElement.style.color = getStarShipTravelling() ? readyColor : (canTravel ? readyColor : disabledColor);
+
+        if (getStarShipTravelling() && getCurrentTab()[1] === "Interstellar") {       
+            drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
+            spaceTravelButtonHideAndShowDescription();
+        }
     } else {
         return;
     }
@@ -3920,36 +3934,37 @@ export function startTravelToDestinationStarTimer(adjustment) {
         timerManager.addTimer(timerName, travelInterval, () => {
             const travelTimerDescriptionElement = document.getElementById('travellingToDescription');
             counter += travelInterval;
-
+        
             const timeLeft = Math.max(travelDuration - counter, 0);
             const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
             
             if (counter >= travelDuration) {
                 showNotification(`StarShip has reached orbit of the ${capitaliseWordsWithRomanNumerals(destination)} system!`, 'info');
                 timerManager.removeTimer(timerName);
-
+        
                 if (travelTimerDescriptionElement) {             
                     travelTimerDescriptionElement.innerText = 'Orbiting ' + capitaliseWordsWithRomanNumerals(destination);
                 }
-
+        
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(0);
                 setStarShipStatus(['orbiting', destination]);
             } else {
-                setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft); 
+                setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);
+                const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
+                const normalizedElapsedTime = elapsedTime / getStarTravelDuration();
+
                 if (travelTimerDescriptionElement) { 
                     travelTimerDescriptionElement.classList.remove('red-disabled-text');
                     travelTimerDescriptionElement.classList.add('green-ready-text');
                     travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
-                    
-                    const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
-                    const progressBarPercentage = (elapsedTime / getStarTravelDuration()) * 100;
+
                     if (document.getElementById(`spaceTravelToStarProgressBar`)) {
-                        document.getElementById(`spaceTravelToStarProgressBar`).style.width = `${progressBarPercentage}%`;
+                        document.getElementById(`spaceTravelToStarProgressBar`).style.width = `${normalizedElapsedTime * 100}%`;
                     }
-                    setStarShipArrowPosition(progressBarPercentage / 100);
                 }
+                setStarShipArrowPosition(normalizedElapsedTime);
             }
-        });
+        });        
     }
 }
 
