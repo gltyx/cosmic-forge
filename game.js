@@ -1,4 +1,7 @@
 import {
+    getStarShipTravelSpeed,
+    getStarTravelDuration,
+    setStarTravelDuration,
     getStarShipTravelling,
     setStarShipTravelling,
     setStarShipBuilt,
@@ -19,6 +22,8 @@ import {
     getAntimatterUnlocked,
     setMiningObject,
     getMiningObject,
+    setTimeLeftUntilTravelToDestinationStarTimerFinishes,
+    getTimeLeftUntilTravelToDestinationStarTimerFinishes,
     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes,
     getTimeLeftUntilRocketTravelToAsteroidTimerFinishes,
     getRocketTravelSpeed,
@@ -152,6 +157,8 @@ import {
     setStarVisionDistance,
     getBackgroundAudio,
     getStarShipBuilt,
+    getDestinationStar,
+    setStarShipArrowPosition,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -207,12 +214,13 @@ export function startGame() {
     gameLoop();
 }
 
-export function startSpaceRelatedTimers(value) {
+export function startSpaceRelatedTimers(value) { //not active
     startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), value]);
     startInvestigateStarTimer([getTimeLeftUntilStarInvestigationTimerFinishes(), value]);
     for (let i = 1; i <= 4; i++) {
         startTravelToAndFromAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), value], 'rocket' + i, getRocketDirection('rocket' + i));
     }
+    startTravelToDestinationStarTimer([getTimeLeftUntilTravelToDestinationStarTimerFinishes(), value]);
 }
 
 export async function gameLoop() {
@@ -3776,6 +3784,15 @@ function startInitialTimers() {
     }
 }
 
+function calculateStarTravelDuration(destination) {
+    const starData = getStarSystemDataObject('stars', [destination]);
+    if (!starData) return;
+
+    const distance = starData.distance;
+    return distance * getStarShipTravelSpeed();
+}
+
+
 function calculateRocketTravelDuration(destinationAsteroid) {
     const asteroidsArray = getAsteroidArray();
     const targetAsteroid = asteroidsArray.find(obj => obj.hasOwnProperty(destinationAsteroid));
@@ -3867,6 +3884,60 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
                     if (document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`)) {
                         document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocket)}`).style.width = `${progressBarPercentage}%`;
                     }
+                }
+            }
+        });
+    }
+}
+
+export function startTravelToDestinationStarTimer(adjustment) {
+    if (adjustment[1] === 'offlineGains' && !getStarShipTravelling()) {
+        return;
+    }
+
+    setStarShipTravelling(true);
+
+    let destination = getDestinationStar();
+    let timerName = 'starShipTravelToDestinationStarTimer';
+    
+    if (!timerManager.getTimer(timerName)) {
+        let counter = 0;
+        const travelInterval = getTimerUpdateInterval();
+        let travelDuration = adjustment[0] === 0 ? calculateStarTravelDuration(destination) : adjustment[0];
+
+        if (adjustment[0] === 0) {
+            setStarTravelDuration(travelDuration);
+        }
+        
+        timerManager.addTimer(timerName, travelInterval, () => {
+            const travelTimerDescriptionElement = document.getElementById('travellingToDescription');
+            counter += travelInterval;
+
+            const timeLeft = Math.max(travelDuration - counter, 0);
+            const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
+            
+            if (counter >= travelDuration) {
+                showNotification(`StarShip has reached orbit of the ${destination} system!`, 'info');
+                timerManager.removeTimer(timerName);
+
+                if (travelTimerDescriptionElement) {             
+                    travelTimerDescriptionElement.innerText = 'Orbiting ' + destination;
+                }
+
+                setTimeLeftUntilTravelToDestinationStarTimerFinishes(0);
+            } else {
+                setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft); 
+                if (travelTimerDescriptionElement) { 
+                    travelTimerDescriptionElement.classList.remove('red-disabled-text');
+                    travelTimerDescriptionElement.classList.add('green-ready-text');
+                    travelTimerDescriptionElement.innerText = `Travelling ... ${timeLeftUI}s`;
+                    
+                    const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
+                    const progressBarPercentage = (elapsedTime / getStarTravelDuration()) * 100;
+                    if (document.getElementById(`spaceTravelToStarProgressBar`)) {
+                        document.getElementById(`spaceTravelToStarProgressBar`).style.width = `${progressBarPercentage}%`;
+                    }
+                    setStarShipArrowPosition(progressBarPercentage / 100);
                 }
             }
         });
@@ -4830,6 +4901,16 @@ export function offlineGains(switchedFocus) {
     
             timerManager.removeTimer('investigateStarTimer');
             startInvestigateStarTimer([remainingTime, 'offlineGains']);
+        }
+
+        if (getStarShipTravelling()) {
+            const timeLeft = getTimeLeftUntilTravelToDestinationStarTimerFinishes();
+            const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+    
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 100);
+    
+            timerManager.removeTimer('starShipTravelToDestinationStarTimer');
+            startTravelToDestinationStarTimer([remainingTime, 'offlineGains']);
         }
     
         const rocketTravelDurationObject = getRocketTravelDuration();

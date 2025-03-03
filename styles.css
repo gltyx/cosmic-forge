@@ -1270,7 +1270,8 @@ button.red-disabled-text {
 #spaceTravelToAsteroidProgressBarRocket3Container,
 #spaceTravelToAsteroidProgressBarRocket4Container,
 #spaceTelescopeSearchAsteroidProgressBarContainer,
-#spaceTelescopeInvestigateStarProgressBarContainer
+#spaceTelescopeInvestigateStarProgressBarContainer,
+#spaceTravelToStarProgressBarContainer
  {
     background-color: var(--disabled-text);
     height: 25px;
@@ -1287,7 +1288,8 @@ button.red-disabled-text {
  #spaceTravelToAsteroidProgressBarRocket3,
  #spaceTravelToAsteroidProgressBarRocket4,
  #spaceTelescopeSearchAsteroidProgressBar,
- #spaceTelescopeInvestigateStarProgressBar
+ #spaceTelescopeInvestigateStarProgressBar,
+ #spaceTravelToStarProgressBar
  {
     background-color: var(--text-color);
     width: 0%;

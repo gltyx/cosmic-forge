@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getStarShipArrowPosition,
+    setStarShipArrowPosition,
     getFromStarObject,
     setFromStarObject,
     getToStarObject,
@@ -124,6 +126,7 @@ import {
     buildSpaceMiningBuilding,
     extendStarDataRange,
     generateStarDataAndAddToDataObject,
+    startTravelToDestinationStarTimer,
 
 } from './game.js';
 
@@ -1152,21 +1155,10 @@ export function createStarDestinationRow(starData, isInteresting) {
     const buttonContainer = document.getElementById('starDestinationButton');
     const button = createButton(`Travel`, ['option-button', 'red-disabled-text', 'travel-starship-button'], () => {
         console.log(`Traveling to ${starData.name}...`);
-        setStarShipTravelling(true);
         showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000);
-            const descriptionDiv = document.getElementById('starDestinationDescription');
-            if (descriptionDiv) {
-                descriptionDiv.classList.remove('invisible');
-            }
-
-            button.classList.add('invisible');
+        startTravelToDestinationStarTimer([0, 'buttonClick'], false);
+        spaceTravelButtonHideAndShowDescription();
     }, 'upgradeCheck', '', 'autoBuyer', 'travelToStar', 'time', true, null, 'starShipPurchase');
-
-    if (getStarShipBuilt() && isInteresting) {
-        button.classList.remove('invisible');
-    } else {
-        button.classList.add('invisible');
-    }
     buttonContainer.appendChild(button);
 }
 
@@ -1291,7 +1283,7 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
         arrowHead.classList.add('arrowhead-starship');
         arrowHead.style.transform = `rotate(${angle + 90}deg)`;
         
-        const arrowPosition = 0.5;
+        const arrowPosition = getStarShipArrowPosition();
         const arrowSize = 12;
         const halfBase = 8;
         

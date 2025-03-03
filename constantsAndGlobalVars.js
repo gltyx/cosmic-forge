@@ -36,6 +36,7 @@ export const BUILDING_TYPES = ['energy', 'space', 'starShip'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
+export const STARSHIP_TRAVEL_SPEED = 36000;
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 export const STARTING_STAR_SYSTEM = 'spica';
@@ -86,6 +87,7 @@ let baseInvestigateStarTimerDuration = 800000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let currentInvestigateStarTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
+let timeLeftUntilTravelToDestinationStarTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
@@ -116,6 +118,8 @@ let rocketTravelDuration = {
     rocket3: 0,
     rocket4: 0
 }
+
+let starTravelDuration = 0;
 
 let destinationAsteroid = {
     rocket1: null,
@@ -215,6 +219,7 @@ let canTravelToAsteroids = false;
 let canFuelRockets = false;
 let starShipBuilt = false;
 let starShipTravelling = false;
+let starShipArrowPosition = 0;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -373,11 +378,13 @@ export function captureGameStatusForSaving(type) {
     gameState.baseSearchTimerDuration = baseSearchAsteroidTimerDuration;
     gameState.timeLeftUntilAsteroidScannerTimerFinishes = timeLeftUntilAsteroidScannerTimerFinishes;
     gameState.timeLeftUntilStarInvestigationTimerFinishes = timeLeftUntilStarInvestigationTimerFinishes;
+    gameState.timeLeftUntilTravelToDestinationStarTimerFinishes = timeLeftUntilTravelToDestinationStarTimerFinishes;
     gameState.currentAsteroidSearchTimerDurationTotal = currentAsteroidSearchTimerDurationTotal;
     gameState.currentInvestigateStarTimerDurationTotal = currentInvestigateStarTimerDurationTotal;
     gameState.timeLeftUntilRocketTravelToAsteroidTimerFinishes = timeLeftUntilRocketTravelToAsteroidTimerFinishes;
     gameState.asteroidArray = asteroidArray;
     gameState.rocketTravelDuration = rocketTravelDuration;
+    gameState.starTravelDuration = starTravelDuration;
     gameState.miningObject = miningObject;
     gameState.destinationAsteroid = destinationAsteroid;
     gameState.rocketDirection = rocketDirection;
@@ -467,10 +474,12 @@ export function restoreGameStatus(gameState, type) {
             timeLeftUntilAsteroidScannerTimerFinishes = gameState.timeLeftUntilAsteroidScannerTimerFinishes ?? 0;
             timeLeftUntilStarInvestigationTimerFinishes = gameState.timeLeftUntilStarInvestigationTimerFinishes ?? 0;
             timeLeftUntilRocketTravelToAsteroidTimerFinishes = gameState.timeLeftUntilRocketTravelToAsteroidTimerFinishes ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
+            timeLeftUntilTravelToDestinationStarTimerFinishes = gameState.timeLeftUntilTravelToDestinationStarTimerFinishes ?? 0;
             currentAsteroidSearchTimerDurationTotal = gameState.currentAsteroidSearchTimerDurationTotal ?? 0;
             currentInvestigateStarTimerDurationTotal = gameState.currentInvestigateStarTimerDurationTotal ?? 0;
             asteroidArray = (gameState.asteroidArray ?? []).filter(item => item !== '') || null;
             rocketTravelDuration = gameState.rocketTravelDuration ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
+            starTravelDuration = gameState.starTravelDuration ?? 0;
             miningObject = gameState.miningObject ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             destinationAsteroid = gameState.destinationAsteroid ?? {rocket1: null, rocket2: null, rocket3: null, rocket4: null};
             rocketDirection = gameState.rocketDirection ?? {rocket1: false, rocket2: false, rocket3: false, rocket4: false};
@@ -1708,6 +1717,14 @@ export function setTimeLeftUntilAsteroidScannerTimerFinishes(value) {
     timeLeftUntilAsteroidScannerTimerFinishes = value ?? 0;
 }
 
+export function getTimeLeftUntilTravelToDestinationStarTimerFinishes() {
+    return timeLeftUntilTravelToDestinationStarTimerFinishes;
+}
+
+export function setTimeLeftUntilTravelToDestinationStarTimerFinishes(value) {
+    timeLeftUntilTravelToDestinationStarTimerFinishes = value ?? 0;
+}
+
 export function getTimeLeftUntilStarInvestigationTimerFinishes() {
     return timeLeftUntilStarInvestigationTimerFinishes;
 }
@@ -1788,6 +1805,14 @@ export function getRocketTravelDuration() {
     return rocketTravelDuration;
 }
 
+export function setStarTravelDuration(value) {
+    starTravelDuration = value;
+}
+
+export function getStarTravelDuration() {
+    return starTravelDuration;
+}
+
 export function setDestinationAsteroid(key, value) {
     destinationAsteroid[key] = value;
 }
@@ -1818,6 +1843,10 @@ export function getSortStarMethod() {
 
 export function getRocketTravelSpeed() {
     return ROCKET_TRAVEL_SPEED;
+}
+
+export function getStarShipTravelSpeed() {
+    return STARSHIP_TRAVEL_SPEED;
 }
 
 export function getAntimatterUnlocked() {
@@ -1978,6 +2007,14 @@ export function getToStarObject() {
 
 export function setToStarObject(value) {
     toStarObject = value;
+}
+
+export function getStarShipArrowPosition() {
+    return starShipArrowPosition ?? 0;
+}
+
+export function setStarShipArrowPosition(value) {
+    starShipArrowPosition = value;
 }
 
 const IMAGE_URLS = {
