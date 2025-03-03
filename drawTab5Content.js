@@ -1,4 +1,4 @@
-import { drawStarConnectionLine, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
+import { spaceTravelButtonHideAndShowDescription, drawStarConnectionLine, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
 import { getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
@@ -45,11 +45,7 @@ export function drawTab5Content(heading, optionContentElement) {
             drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
             const starData = getStarSystemDataObject('stars');
             createStarDestinationRow(starData[getDestinationStar()], 'travelling');
-            const descriptionDiv = document.getElementById('starDestinationDescription');
-            if (descriptionDiv) {
-                descriptionDiv.classList.remove('invisible');
-            }
-            //add invisible to button move a function
+            spaceTravelButtonHideAndShowDescription();
         }
     }
 

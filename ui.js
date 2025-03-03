@@ -1224,7 +1224,7 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
 
     const themeElement = document.querySelector('[data-theme]') || document.documentElement;
     const themeStyles = getComputedStyle(themeElement);
-    const lineColor = canTravel ? themeStyles.getPropertyValue('--ready-text') : themeStyles.getPropertyValue('--disabled-text');
+    let lineColor = canTravel ? themeStyles.getPropertyValue('--ready-text') : themeStyles.getPropertyValue('--disabled-text');
     const labelColor = lineColor;
 
     const fromX = fromStar.left + fromStar.width * 2;
@@ -1243,32 +1243,71 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
     lineElement.style.left = `${fromX}px`;
     lineElement.style.top = `${fromY}px`;
 
-    lineElement.style.background = `linear-gradient(to right, 
-        transparent 14px, 
-        ${lineColor} 14px, 
-        ${lineColor} calc(100% - 10px), 
-        transparent calc(100% - 10px)
-    )`;
+    if (getStarShipTravelling()) {
+        lineColor = themeStyles.getPropertyValue('--text-color');
+        lineElement.style.borderTop = `1px dashed ${lineColor}`;
 
-    const labelElement = document.createElement('div');
-    labelElement.id = 'star-connection-label';
-    labelElement.classList.add('star-connection-label');
-    labelElement.innerHTML = isInteresting 
-        ? `Antimatter: ${fuelNeeded}<br>AP: ${apGranted}` 
-        : `??? <br> ???`;
-    labelElement.style.color = labelColor;
-    labelElement.style.textAlign = 'center';
-    labelElement.style.border = `1px dashed ${labelColor}`;
-    labelElement.style.borderRadius = '10px';
+        lineElement.style.maskImage = `linear-gradient(to right, 
+            transparent 14px, 
+            black 14px, 
+            black calc(100% - 10px), 
+            transparent calc(100% - 10px)
+        )`;
+    } else {
+        lineElement.style.background = `linear-gradient(to right, 
+            transparent 14px, 
+            ${lineColor} 14px, 
+            ${lineColor} calc(100% - 10px), 
+            transparent calc(100% - 10px)
+        )`;
+    }
 
-    const centerX = (fromX + toX) / 2;
-    const centerY = (fromY + toY) / 2;
-    labelElement.style.left = `${centerX}px`;
-    labelElement.style.top = `${centerY}px`;
+    let labelElement = null;
+    let arrowHead = null;
+
+    if (!getStarShipTravelling()) {
+        labelElement = document.createElement('div');
+        labelElement.id = 'star-connection-label';
+        labelElement.classList.add('star-connection-label');
+        labelElement.innerHTML = isInteresting 
+            ? `Antimatter: ${fuelNeeded}<br>AP: ${apGranted}` 
+            : `??? <br> ???`;
+        labelElement.style.color = labelColor;
+        labelElement.style.textAlign = 'center';
+        labelElement.style.border = `1px dashed ${labelColor}`;
+        labelElement.style.borderRadius = '10px';
+    
+        const centerX = (fromX + toX) / 2;
+        const centerY = (fromY + toY) / 2;
+        labelElement.style.left = `${centerX}px`;
+        labelElement.style.top = `${centerY}px`;
+    } else {
+        arrowHead = document.createElement('div');
+        arrowHead.classList.add('arrowhead-starship');
+        arrowHead.style.transform = `rotate(${angle + 90}deg)`;
+        
+        const arrowPosition = 0.5;
+        const arrowSize = 12;
+        const halfBase = 8;
+        
+        const arrowX = fromX + (toX - fromX) * arrowPosition;
+        const arrowY = fromY + (toY - fromY) * arrowPosition;
+
+        const tipOffsetX = (arrowSize / 2) * Math.cos(angle * (Math.PI / 180));
+        const tipOffsetY = (arrowSize / 2) * Math.sin(angle * (Math.PI / 180));
+
+        arrowHead.style.left = `${arrowX - tipOffsetX - halfBase}px`;
+        arrowHead.style.top = `${arrowY - tipOffsetY - (arrowSize / 2)}px`; 
+    }
 
     const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
     tooltipLayer.appendChild(lineElement);
-    tooltipLayer.appendChild(labelElement);
+    if (labelElement) {
+        tooltipLayer.appendChild(labelElement);
+    }
+    if (arrowHead) {
+        tooltipLayer.appendChild(arrowHead);
+    }
 }
 
 export function sortTechRows(now) {
@@ -2469,11 +2508,7 @@ function initializeTabEventListeners() {
                         drawStarConnectionLine(getCurrentStarSystem(), getDestinationStar(), 'travelling');
                         const starData = getStarSystemDataObject('stars');
                         createStarDestinationRow(starData[getDestinationStar()], 'travelling');
-                        const descriptionDiv = document.getElementById('starDestinationDescription');
-                        if (descriptionDiv && getStarShipTravelling()) {
-                            descriptionDiv.classList.remove('invisible');
-                        }
-                        //add invisible to button move a function
+                        spaceTravelButtonHideAndShowDescription();
                     }
                 }
     
@@ -2494,6 +2529,17 @@ function initializeTabEventListeners() {
             });
         });
     }  
+}
+
+export function spaceTravelButtonHideAndShowDescription() {
+    const descriptionDiv = document.getElementById('starDestinationDescription');
+    const buttonDiv = document.getElementById('starDestinationButton');
+    if (descriptionDiv && getStarShipTravelling()) {
+        descriptionDiv.classList.remove('invisible');
+    }
+    if (buttonDiv && getStarShipTravelling()) {
+        buttonDiv.classList.add('invisible');
+    }
 }
 
 export function showNewsTickerMessage(newsTickerContainer) {

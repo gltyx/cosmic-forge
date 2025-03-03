@@ -1135,10 +1135,20 @@ body {
     display: inline-block;
 }
 
+.arrowhead-starship {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 12px solid var(--text-color);
+}
+
 #starDestinationName,
 #starDestinationDistance,
 #starDestinationFuel,
 #starDestinationButton,
+#starDestinationDescription,
 .save-name-margin,
 .save-load-button
 {
