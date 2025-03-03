@@ -1,4 +1,6 @@
 import {
+    setStarShipStatus,
+    getStarShipStatus,
     getStarShipTravelSpeed,
     getStarTravelDuration,
     setStarTravelDuration,
@@ -193,7 +195,8 @@ import {
 } from "./ui.js";
 
 import { 
-    capitaliseString
+    capitaliseString,
+    capitaliseWordsWithRomanNumerals
  } from './utilityFunctions.js';
 
  import { newsTickerContent } from './descriptions.js';
@@ -3032,6 +3035,10 @@ function checkTravelToStarElements(element) {
         const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
         const canTravel = currentAntimatter >= fuelNeeded && getTechUnlockedArray().includes('FTLTravelTheory');
 
+        if (canTravel && !getStarShipTravelling())  {
+            setStarShipStatus(['readyForTravel', null]);
+        }
+
         if (element.classList.contains('travel-starship-button')) {
             element.classList.toggle('red-disabled-text', !canTravel);
             element.classList.toggle('green-ready-text', canTravel);
@@ -3048,7 +3055,7 @@ function checkTravelToStarElements(element) {
         const labelElement = element.querySelector('span:first-child');
         if (!labelElement) return;
 
-        labelElement.style.color = canTravel ? readyColor : disabledColor;
+        labelElement.style.color = getStarShipTravelling() ? readyColor : (canTravel ? readyColor : disabledColor);
     } else {
         return;
     }
@@ -3899,6 +3906,7 @@ export function startTravelToDestinationStarTimer(adjustment) {
 
     let destination = getDestinationStar();
     let timerName = 'starShipTravelToDestinationStarTimer';
+    setStarShipStatus(['travelling', destination]);
     
     if (!timerManager.getTimer(timerName)) {
         let counter = 0;
@@ -3917,14 +3925,15 @@ export function startTravelToDestinationStarTimer(adjustment) {
             const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
             
             if (counter >= travelDuration) {
-                showNotification(`StarShip has reached orbit of the ${destination} system!`, 'info');
+                showNotification(`StarShip has reached orbit of the ${capitaliseWordsWithRomanNumerals(destination)} system!`, 'info');
                 timerManager.removeTimer(timerName);
 
                 if (travelTimerDescriptionElement) {             
-                    travelTimerDescriptionElement.innerText = 'Orbiting ' + destination;
+                    travelTimerDescriptionElement.innerText = 'Orbiting ' + capitaliseWordsWithRomanNumerals(destination);
                 }
 
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(0);
+                setStarShipStatus(['orbiting', destination]);
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft); 
                 if (travelTimerDescriptionElement) { 

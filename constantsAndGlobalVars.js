@@ -97,6 +97,7 @@ let starVisionIncrement = 1;
 let destinationStar = null;
 let fromStarObject = null;
 let toStarObject = null;
+let starShipStatus = ['preconstruction', null];
 
 let miningObject = {
     rocket1: null,
@@ -395,6 +396,7 @@ export function captureGameStatusForSaving(type) {
     gameState.destinationStar = destinationStar;
     gameState.fromStarObject = fromStarObject;
     gameState.toStarObject = toStarObject;
+    gameState.starShipStatus = starShipStatus;
 
     // Flags
     gameState.flags = {
@@ -489,6 +491,7 @@ export function restoreGameStatus(gameState, type) {
             destinationStar = gameState.destinationStar ?? null;
             fromStarObject = gameState.fromStarObject ?? null;
             toStarObject = gameState.toStarObject ?? null;
+            starShipStatus = gameState.starShipStatus ?? ['preconstruction', null];
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -2015,6 +2018,14 @@ export function getStarShipArrowPosition() {
 
 export function setStarShipArrowPosition(value) {
     starShipArrowPosition = value;
+}
+
+export function getStarShipStatus() {
+    return starShipStatus ?? ['preconstruction', null];
+}
+
+export function setStarShipStatus(value) {
+    starShipStatus = value;
 }
 
 const IMAGE_URLS = {

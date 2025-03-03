@@ -1157,11 +1157,16 @@ export function createStarDestinationRow(starData, isInteresting) {
         console.log(`Traveling to ${starData.name}...`);
         showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000);
         startTravelToDestinationStarTimer([0, 'buttonClick'], false);
+        spendAntimatterOnFuelForStarShip(starData.fuel);
         spaceTravelButtonHideAndShowDescription();
     }, 'upgradeCheck', '', 'autoBuyer', 'travelToStar', 'time', true, null, 'starShipPurchase');
     buttonContainer.appendChild(button);
 }
 
+function spendAntimatterOnFuelForStarShip(fuelNeeded) {
+    const antimatterLeft = Math.max(0, Math.floor(getResourceDataObject('antimatter', ['quantity']) - fuelNeeded));
+    setResourceDataObject(antimatterLeft, 'antimatter', ['quantity']);
+}
 
 function calculate3DDistance(x1, y1, z1, x2, y2, z2) {
     return parseFloat((Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2) / 1000).toFixed(2));
