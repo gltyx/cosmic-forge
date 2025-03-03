@@ -3015,7 +3015,7 @@ function starShipUiChecks() {
     if (getCurrentOptionPane() === 'star ship') {
         const travelToDestinationStarRow = document.getElementById('spaceStarShipTravelRow');
         if (travelToDestinationStarRow) {
-            if (getStarShipTravelling()) {
+            if (getStarShipTravelling() && getStarShipStatus()[0] === 'travelling') {
                 travelToDestinationStarRow.classList.remove('invisible');
             } else {
                 travelToDestinationStarRow.classList.add('invisible');
@@ -3080,8 +3080,6 @@ function checkTravelToStarElements(element) {
             drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'orbiting');
             document.getElementById('starDestinationDescription').textContent = 'Orbiting...';
         }
-    } else {
-        return;
     }
 }
 
