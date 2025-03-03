@@ -1192,11 +1192,15 @@ function checkIfInterestingStarIsInStarDataAlready(star) {
 export function removeStarConnectionTooltip() {
     const starConnectionLineElement = document.getElementById('star-connection-line');
     const starConnectionLabelElement = document.getElementById('star-connection-label');
+    const starConnectionArrowHeadElement = document.getElementById('arrowheadStarship');
     if (starConnectionLineElement) {
         starConnectionLineElement.remove();
     }
     if (starConnectionLabelElement) {
         starConnectionLabelElement.remove();
+    }
+    if (starConnectionArrowHeadElement) {
+        starConnectionArrowHeadElement.remove();
     }
 }
 
@@ -1283,6 +1287,7 @@ export function drawStarConnectionLine(fromStar, toStar, isInteresting) {
         labelElement.style.top = `${centerY}px`;
     } else {
         arrowHead = document.createElement('div');
+        arrowHead.id = 'arrowheadStarship';
         arrowHead.classList.add('arrowhead-starship');
         arrowHead.style.transform = `rotate(${angle + 90}deg)`;
         
