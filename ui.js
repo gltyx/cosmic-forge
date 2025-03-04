@@ -1103,7 +1103,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             starElement.style.height = `${star.height / 2}px`;
             const randomDuration = (Math.random() * 1 + 0.5).toFixed(2);
             starElement.style.animationDuration = `${randomDuration}s`;
-            if (mapMode === 'studied') {
+            if (mapMode === 'studied' || mapMode === 'in range') {
                 starElement.classList.add('invisible');
             } else {
                 starElement.classList.remove('invisible');
