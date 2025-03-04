@@ -777,6 +777,13 @@ export let starSystems = {
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
 
+export function copyStarDataToDestinationStarField(starName) {
+    const stars = getStarSystemDataObject('stars');
+
+    stars.destinationStar = JSON.parse(JSON.stringify(stars[starName]));
+}
+
+
 export function restoreResourceDataObject(value) {
     value = migrateResourceData(value, 'resourceData');
     resourceData = value;

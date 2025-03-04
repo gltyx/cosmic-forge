@@ -1,10 +1,10 @@
-import { spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
+import { createHtmlTextArea, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
 import { setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
-import { getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
+import { copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
-import { gain } from './game.js';
+import { generateDestinationStarData, gain } from './game.js';
 
-export function drawTab5Content(heading, optionContentElement) {
+export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw) {
     if (heading === 'Star Map') {
         const headerRow = document.getElementById('headerContentTab5');
         
@@ -167,97 +167,331 @@ export function drawTab5Content(heading, optionContentElement) {
     }
 
     if (heading === 'Star Ship') {
-        const starShipModules = [
-            { id: 'ssStructural', label: 'Structural' },
-            { id: 'ssLifeSupport', label: 'Life Support Module' },
-            { id: 'ssAntimatterEngine', label: 'Antimatter Engine' },
-            { id: 'ssFleetHangar', label: 'Fleet Hangar' },
-            { id: 'ssStellarScanner', label: 'Stellar Scanner' }
-        ];
-
-        starShipModules.forEach(module => {
-            const starshipComponentBuildRow = createOptionRow(
-                `space${capitaliseString(module.id)}BuildRow`,
+        if (!starDestinationInfoRedraw) {
+            const starShipModules = [
+                { id: 'ssStructural', label: 'Structural' },
+                { id: 'ssLifeSupport', label: 'Life Support Module' },
+                { id: 'ssAntimatterEngine', label: 'Antimatter Engine' },
+                { id: 'ssFleetHangar', label: 'Fleet Hangar' },
+                { id: 'ssStellarScanner', label: 'Stellar Scanner' }
+            ];
+    
+            starShipModules.forEach(module => {
+                const starshipComponentBuildRow = createOptionRow(
+                    `space${capitaliseString(module.id)}BuildRow`,
+                    null,
+                    `${module.label}:`,
+                    createButton(`Build Module`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+                        gain(1, `${module.id}BuiltPartsQuantity`, module.id, false, null, 'space', 'space')
+                    }, 'upgradeCheck', '', 'spaceUpgrade', module.id, 'cash', true, null, 'starShipPurchase'),
+                    createTextElement(
+                        `Built: <span id="${module.id}BuiltPartsQuantity">${getStarShipParts(module.id)}</span> / <span id="${module.id}TotalPartsQuantity">${getStarShipPartsNeededInTotalPerModule(module.id)}</span>`,
+                        `${module.id}PartsCountText`,
+                        []
+                    ),
+                    null,
+                    null,
+                    null,
+                    `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', module.id, 'price'])}, 
+                    ${getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[1])}, 
+                    ${getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[1])}, 
+                    ${getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[1])}`,
+                    '',
+                    'upgradeCheck',
+                    'spaceUpgrade',
+                    module.id,
+                    'cash',
+                    null,
+                    false,
+                    null,
+                    null,
+                    'starShipPurchase'
+                );
+                optionContentElement.appendChild(starshipComponentBuildRow);
+            });
+    
+            const destinationStar = getDestinationStar();
+            const starShipTravelRow = createOptionRow(
+                `spaceStarShipTravelRow`,
                 null,
-                `${module.label}:`,
-                createButton(`Build Module`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                    gain(1, `${module.id}BuiltPartsQuantity`, module.id, false, null, 'space', 'space')
-                }, 'upgradeCheck', '', 'spaceUpgrade', module.id, 'cash', true, null, 'starShipPurchase'),
-                createTextElement(
-                    `Built: <span id="${module.id}BuiltPartsQuantity">${getStarShipParts(module.id)}</span> / <span id="${module.id}TotalPartsQuantity">${getStarShipPartsNeededInTotalPerModule(module.id)}</span>`,
-                    `${module.id}PartsCountText`,
-                    []
-                ),
+                `Travelling To:`,
+                createTextElement(`${capitaliseWordsWithRomanNumerals(destinationStar || '')}`, `starShipDestinationStar`, ['green-ready-text', 'destination-text']),
+                createTextElement(`<div id="spaceTravelToStarProgressBar">`, `spaceTravelToStarProgressBarContainer`, ['progress-bar-container']),
+                null,                               
                 null,
                 null,
-                null,
-                `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', module.id, 'price'])}, 
-                ${getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource1Price'])[1])}, 
-                ${getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource2Price'])[1])}, 
-                ${getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', module.id, 'resource3Price'])[1])}`,
+                `Travelling...`,
                 '',
-                'upgradeCheck',
-                'spaceUpgrade',
-                module.id,
-                'cash',
+                null,
+                null,
+                null,
+                null,
                 null,
                 false,
                 null,
                 null,
-                'starShipPurchase'
+                'travel'
             );
-            optionContentElement.appendChild(starshipComponentBuildRow);
-        });
+            optionContentElement.appendChild(starShipTravelRow);
+    
+            const starShipStellarScannerRow = createOptionRow(
+                `spaceStarShipStellarScannerRow`,
+                null,
+                `Perform System Scan:`,
+                createButton(`Scan System`, ['option-button', 'green-ready-text'], () => {
+                    setDestinationStarScanned(true);
+                    copyStarDataToDestinationStarField(destinationStar);
+                    generateDestinationStarData();
+                    showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`);
+    
+                    drawTab5Content('Star Ship', optionContentElement, true);
+                }, '', '', '', null, '', true, null, ''),
+                null,
+                null,                               
+                null,
+                null,
+                `Scan ${capitaliseWordsWithRomanNumerals(destinationStar)} System`,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+            optionContentElement.appendChild(starShipStellarScannerRow);
+        }
 
-        const destinationStar = getDestinationStar();
-        const starShipTravelRow = createOptionRow(
-            `spaceStarShipTravelRow`,
-            null,
-            `Travelling To:`,
-            createTextElement(`${capitaliseWordsWithRomanNumerals(destinationStar || '')}`, `starShipDestinationStar`, ['green-ready-text', 'destination-text']),
-            createTextElement(`<div id="spaceTravelToStarProgressBar">`, `spaceTravelToStarProgressBarContainer`, ['progress-bar-container']),
-            null,                               
-            null,
-            null,
-            `Travelling...`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            'travel'
-        );
-        optionContentElement.appendChild(starShipTravelRow);
+        if (getDestinationStarScanned()) {
+            drawLifeformData(optionContentElement);
+        }
 
-        const starShipStellarScannerRow = createOptionRow(
-            `spaceStarShipStellarScannerRow`,
-            null,
-            `Perform System Scan:`,
-            createButton(`Scan System`, ['option-button', 'green-ready-text'], () => {
-                setDestinationStarScanned(true);
-                showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`);
-            }, '', '', '', null, '', true, null, ''),
-            null,
-            null,                               
-            null,
-            null,
-            `Scan ${capitaliseWordsWithRomanNumerals(destinationStar)} System`,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            ''
-        );
-        optionContentElement.appendChild(starShipStellarScannerRow);
+        function drawLifeformData(optionContentElement) {
+            const starData = getStarSystemDataObject('stars', ['destinationStar']);
+        
+            const starNameRow = createOptionRow(
+                'starNameRow',
+                null,
+                'Star Name:',
+                createTextElement(
+                    capitaliseWordsWithRomanNumerals(getDestinationStar()),
+                    'starNameText',
+                    ['value-text']
+                ),
+                null,
+                null,
+                null,
+                null,
+                '',
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+
+            const lifeRow = createOptionRow(
+                'lifeDetectedRow',
+                null,
+                'Life Detected:',
+                createTextElement(
+                    starData.lifeDetected ? 'Yes' : 'No',
+                    'lifeDetectedText',
+                    [starData.lifeDetected ? 'green-ready-text' : 'red-disabled-text']
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const civilizationRow = createOptionRow(
+                'civilizationLevelRow',
+                null,
+                'Civilization Level:',
+                createTextElement(
+                    starData.civilizationLevel || 'None',
+                    'civilizationLevelText',
+                    ['value-text']
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const populationRow = createOptionRow(
+                'populationRow',
+                null,
+                'Population Estimate:',
+                createTextElement(
+                    starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A',
+                    'populationText',
+                    ['value-text']
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const threatRow = createOptionRow(
+                'threatLevelRow',
+                null,
+                'Threat Level:',
+                createTextElement(
+                    starData.threatLevel,
+                    'threatLevelText',
+                    [`threat-${starData.threatLevel.toLowerCase()}`]
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const defenseRow = createOptionRow(
+                'defenseRatingRow',
+                null,
+                'Defense Rating:',
+                createTextElement(
+                    starData.defenseRating,
+                    'defenseRatingText',
+                    ['value-text']
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const fleetRow = createOptionRow(
+                'enemyFleetsRow',
+                null,
+                'Enemy Fleets:',
+                createTextElement(`Land: ${starData.enemyFleets.land}`, 'fleetLandText', ['value-text']),
+                createTextElement(`Air: ${starData.enemyFleets.air}`, 'fleetAirText', ['value-text']),
+                createTextElement(`Sea: ${starData.enemyFleets.sea}`, 'fleetSeaText', ['value-text']),                            
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            const anomaliesText = starData.anomalies.length > 0 
+                ? starData.anomalies.map(a => `${a.name} (${a.effect})`).join('<br/>') 
+                : 'None';
+        
+            const anomaliesRow = createOptionRow(
+                'anomaliesRow',
+                null,
+                'Anomalies:',
+                createHtmlTextArea(
+                    'anomaliesTextArea',
+                    ['value-text'],
+                    '',
+                    anomaliesText,
+                    ['header-text'],
+                    ['body-text']
+                ),
+                null,
+                null,                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                ''
+            );
+        
+            optionContentElement.appendChild(starNameRow);
+            optionContentElement.appendChild(lifeRow);
+            optionContentElement.appendChild(civilizationRow);
+            optionContentElement.appendChild(populationRow);
+            optionContentElement.appendChild(threatRow);
+            optionContentElement.appendChild(defenseRow);
+            optionContentElement.appendChild(fleetRow);
+            optionContentElement.appendChild(anomaliesRow);
+        }
     }
 }
 

@@ -5330,7 +5330,7 @@ export function extendStarDataRange(debug) {
     setStarVisionDistance(currentRange + increment);
 
     if (getCurrentOptionPane() === 'star map') {
-        drawTab5Content('Star Map', null);
+        drawTab5Content('Star Map', null, false);
     }
 
     if (!debug) {
@@ -5666,6 +5666,201 @@ export function calculatePrecipitationType() {
 
     return selectedPrecipitationType ? selectedPrecipitationType.type : "water";
 }
+
+export function generateDestinationStarData() {
+    const existingData = getStarSystemDataObject('stars', ['destinationStar']) || {};
+
+    const lifeDetected = generateLifeDetection(); 
+    const lifeformTraits = lifeDetected ? generateLifeformTraits() : [];
+    const civilizationLevel = lifeDetected ? generateCivilizationLevel() : null;
+    const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : null;
+    
+    const threatLevel = lifeDetected ? generateThreatLevel(civilizationLevel, population, lifeformTraits) : "None";
+    const defenseRating = lifeDetected ? generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) : 0;
+    const enemyFleets = lifeDetected ? generateEnemyFleets(threatLevel, population, lifeformTraits) : 0;
+    
+    const anomalies = generateAnomalies();
+
+    const updatedData = {
+        ...existingData,
+        lifeDetected,
+        lifeformTraits,
+        civilizationLevel,
+        populationEstimate: population,
+        threatLevel,
+        defenseRating,
+        enemyFleets,
+        anomalies
+    };
+
+    setStarSystemDataObject(updatedData, 'stars', ['destinationStar']);
+}
+
+function generateLifeDetection() {
+    return Math.random() < 0.99;
+}
+
+function generateLifeformTraits() {
+    const primaryTraits = ["Aggressive", "Diplomatic"];
+    const habitatTraits = ["Land Dwelling", "Aquatic", "Atmosphere Dwelling"];
+    const extraTraits = ["Armored", "Hive Mind", "Heat Resistant", "Cold Resistant"];
+
+    const primaryTrait = primaryTraits[Math.floor(Math.random() * primaryTraits.length)];
+    const habitatTrait = habitatTraits[Math.floor(Math.random() * habitatTraits.length)];
+    const extraTrait = extraTraits[Math.floor(Math.random() * extraTraits.length)];
+
+    return [primaryTrait, habitatTrait, extraTrait];
+}
+
+function generateCivilizationLevel() {
+    const civilizationLevels = [
+        "Unsentient",
+        "Industrial",
+        "Spacefaring"
+    ];
+
+    return civilizationLevels[Math.floor(Math.random() * civilizationLevels.length)];
+}
+
+function generatePopulationEstimate(lifeformTraits) {
+    let population = Math.floor(Math.random() * (50000000 - 1000000 + 1)) + 1000000;
+    
+    if (lifeformTraits.includes("Hive Mind")) {
+        population *= 4;
+    }
+
+    return population;
+}
+
+function generateThreatLevel(civilizationLevel, population, lifeformTraits) {
+    let threatLevel = "None";
+
+    if (civilizationLevel === "Unsentient") {
+        return threatLevel;
+    }
+
+    if (civilizationLevel === "Industrial") {
+        if (population >= 10000000) {
+            threatLevel = "Moderate";
+        } else {
+            threatLevel = "Low";
+        }
+    } else if (civilizationLevel === "Spacefaring") {
+        if (population >= 50000000) {
+            threatLevel = "Extreme";
+        } else if (population >= 10000000) {
+            threatLevel = "High";
+        } else {
+            threatLevel = "Moderate";
+        }
+    }
+
+    if (lifeformTraits.includes("Diplomatic") && threatLevel !== "None") {
+        const threatLevels = ["None", "Low", "Moderate", "High", "Extreme"];
+        const currentIndex = threatLevels.indexOf(threatLevel);
+        threatLevel = threatLevels[Math.max(0, currentIndex - 1)];
+    }
+
+    return threatLevel;
+}
+
+function generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) {
+    const maxDefense = 100;
+    let defenseRating = 0;
+
+    if (civilizationLevel === "Unsentient") {
+        return defenseRating;
+    }
+
+    const threatMultipliers = {
+        "None": 0,
+        "Low": 0.2,
+        "Moderate": 0.4,
+        "High": 0.7,
+        "Extreme": 1
+    };
+
+    const civilizationBonus = civilizationLevel === "Spacefaring" ? 1 : 0.5;
+
+    defenseRating = Math.round(maxDefense * threatMultipliers[threatLevel] * civilizationBonus);
+
+    if (lifeformTraits.includes("Armored")) {
+        defenseRating = Math.min(maxDefense, defenseRating + 10);
+    }
+
+    const minDefense = Math.max(1, defenseRating - 10);
+    const maxDefenseAdjusted = Math.min(100, defenseRating + 10);
+
+    return Math.floor(Math.random() * (maxDefenseAdjusted - minDefense + 1)) + minDefense;
+}
+
+function generateEnemyFleets(threatLevel, population, lifeformTraits) {
+    const threatFleetMultipliers = {
+        "None": 0,
+        "Low": 0.00000002,      
+        "Moderate": 0.00000005,
+        "High": 0.0000001,
+        "Extreme": 0.0000002
+    };
+
+    let totalFleets = Math.floor(population * threatFleetMultipliers[threatLevel] * 100);
+
+    if (lifeformTraits.includes("Diplomatic")) {
+        totalFleets = Math.floor(totalFleets * 0.5);
+    }
+
+    if (totalFleets === 0) return { land: 0, air: 0, sea: 0 };
+
+    let primaryType;
+    if (lifeformTraits.includes("Land Dwelling")) primaryType = "land";
+    else if (lifeformTraits.includes("Atmosphere Dwelling")) primaryType = "air";
+    else if (lifeformTraits.includes("Aquatic")) primaryType = "sea";
+    else primaryType = ["land", "air", "sea"][Math.floor(Math.random() * 3)];
+
+    const primaryFleets = Math.floor(totalFleets * 0.6);
+    let remainingFleets = totalFleets - primaryFleets;
+
+    let secondaryFleets = Math.floor(Math.random() * (remainingFleets + 1));
+    let tertiaryFleets = remainingFleets - secondaryFleets;
+
+    let fleetDistribution = { land: 0, air: 0, sea: 0 };
+    fleetDistribution[primaryType] = primaryFleets;
+
+    let otherTypes = ["land", "air", "sea"].filter(type => type !== primaryType);
+    fleetDistribution[otherTypes[0]] = secondaryFleets;
+    fleetDistribution[otherTypes[1]] = tertiaryFleets;
+
+    return fleetDistribution;
+}
+
+function generateAnomalies() {
+    const possibleAnomalies = [
+        { name: "Electromagnetic Surge", effect: "Reduces enemy defense by 20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy" },
+        { name: "Fortified Magnetic Field", effect: "Increases enemy defense by 20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy" },
+        { name: "Plasma Instability", effect: "Increases player attack power by 15%", value: 15, type: "player-attack-buff", counter: "player-attack-debuff", target: "player" },
+        { name: "Energy Dampening Field", effect: "Reduces player attack power by 15%", value: -15, type: "player-attack-debuff", counter: "player-attack-buff", target: "player" },
+        { name: "Atmospheric Disturbance", effect: "Reduces enemy air fleet presence by 30%", value: -30, type: "air-debuff", counter: "air-buff", target: "enemy" },
+        { name: "High-Altitude Jet Streams", effect: "Boosts enemy air fleet strength by 20%", value: 20, type: "air-buff", counter: "air-debuff", target: "enemy" },
+        { name: "Seismic Instability", effect: "Reduces enemy land fleet presence by 30%", value: -30, type: "land-debuff", counter: "land-buff", target: "enemy" },
+        { name: "Tectonic Shift", effect: "Boosts enemy land fleet strength by 20%", value: 20, type: "land-buff", counter: "land-debuff", target: "enemy" },
+        { name: "Deep Ocean Currents", effect: "Reduces enemy sea fleet presence by 30%", value: -30, type: "sea-debuff", counter: "sea-buff", target: "enemy" },
+        { name: "Dark Matter Flux", effect: "Boosts enemy sea fleet strength by 20%", value: 20, type: "sea-buff", counter: "sea-debuff", target: "enemy" }
+    ];
+
+    const shuffled = possibleAnomalies.sort(() => Math.random() - 0.5);
+
+    let selectedAnomalies = [];
+    
+    for (let anomaly of shuffled) {
+        if (!selectedAnomalies.some(a => a.type === anomaly.counter)) {
+            selectedAnomalies.push(anomaly);
+        }
+        if (selectedAnomalies.length === 2) break;
+    }
+
+    return selectedAnomalies;
+}
+
 
 //===============================================================================================================
 

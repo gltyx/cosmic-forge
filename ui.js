@@ -365,7 +365,7 @@ export function updateContent(heading, tab, type) {
                 optionDescriptionElement = optionDescriptionElements[4];
                 optionDescriptionElement.textContent = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-                drawTab5Content(heading, optionContentElement);
+                drawTab5Content(heading, optionContentElement, false);
                 break;
             case 'tab6':
                 optionDescriptionElement = optionDescriptionElements[5];
@@ -3290,7 +3290,7 @@ export function handleSortStarClick(sortMethod) {
     setSortStarMethod(sortMethod);
     const optionContentElement = document.getElementById(`optionContentTab5`);
     optionContentElement.innerHTML = '';
-    drawTab5Content('Star Data', optionContentElement);
+    drawTab5Content('Star Data', optionContentElement, false);
 }
 
 export function sortStarTable(starsObject, sortMethod) {
