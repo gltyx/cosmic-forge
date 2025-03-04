@@ -1,4 +1,9 @@
 import {
+    getStellarScannerRange,
+    getDestinationStarScanned,
+    setDestinationStarScanned,
+    setStellarScannerBuilt,
+    getStellarScannerBuilt,
     setStarShipStatus,
     getStarShipStatus,
     getStarShipTravelSpeed,
@@ -414,6 +419,9 @@ export async function gameLoop() {
 function checkIfStarShipBuilt() {
     const starShipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
     .filter(module => module.startsWith('ss'));
+
+    const stellarScannerFinished = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'finished']) === true;
+    setStellarScannerBuilt(stellarScannerFinished);
 
     const allModulesFinished = starShipModules.every(starShipModule => 
         getResourceDataObject('space', ['upgrades', starShipModule, 'finished'])
@@ -3017,11 +3025,30 @@ function starChecks(element) {
 function starShipUiChecks() {
     if (getCurrentOptionPane() === 'star ship') {
         const travelToDestinationStarRow = document.getElementById('spaceStarShipTravelRow');
+        const scanDestinationStarRow = document.getElementById('spaceStarShipStellarScannerRow');
+        const destinationStarDetailsRow = document.getElementById('spaceDestinationStgarDetailsRow');
+
         if (travelToDestinationStarRow) {
             if (getStarShipTravelling() && getStarShipStatus()[0] === 'travelling') {
                 travelToDestinationStarRow.classList.remove('invisible');
             } else {
                 travelToDestinationStarRow.classList.add('invisible');
+            }
+        }
+
+        if (scanDestinationStarRow) {
+            if (!getDestinationStarScanned() && (getStarShipArrowPosition() > getStellarScannerRange() || getStarShipStatus()[0] === 'orbiting')) {
+                scanDestinationStarRow.classList.remove('invisible');
+            } else {
+                scanDestinationStarRow.classList.add('invisible');
+            }
+        }
+
+        if (destinationStarDetailsRow) {
+            if (getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting') { // && getStarShipStatus()[0] add invading, landing etc however it is
+                destinationStarDetailsRow.classList.remove('invisible');
+            } else {
+                destinationStarDetailsRow.classList.add('invisible');
             }
         }
     }
@@ -3039,12 +3066,8 @@ function starShipUiChecks() {
         tooltipLayer.appendChild(arrowHead);
     }
 
-    const upgrades = getResourceDataObject('space', ['upgrades']);
-
-    if (
-        upgrades &&
-        !getStarShipTravelling() && getStarShipStatus()[0] !== 'readyForTravel' && 
-        Object.entries(upgrades)
+    if (getResourceDataObject('space', ['upgrades']) && !getStarShipTravelling() && getStarShipStatus()[0] !== 'readyForTravel' && 
+        Object.entries(getResourceDataObject('space', ['upgrades']))
             .filter(([key]) => key.startsWith('ss'))
             .every(([, upgrade]) => upgrade.finished === true)
     ) {

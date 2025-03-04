@@ -43,6 +43,7 @@ export const STARTING_STAR_SYSTEM = 'spica';
 export const STAR_SEED = 53;
 export const STAR_FIELD_SEED = 80;
 export const NUMBER_OF_STARS = 100;
+export const STELLAR_SCANNER_RANGE = 0.75;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -222,6 +223,8 @@ let canFuelRockets = false;
 let starShipBuilt = false;
 let starShipTravelling = false;
 let starShipArrowPosition = 0;
+let stellarScannerBuilt = false;
+let destinationStarScanned = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -399,6 +402,7 @@ export function captureGameStatusForSaving(type) {
     gameState.toStarObject = toStarObject;
     gameState.currentStarObject = currentStarObject;
     gameState.starShipStatus = starShipStatus;
+    gameState.destinationStar = destinationStar;
 
     // Flags
     gameState.flags = {
@@ -422,6 +426,8 @@ export function captureGameStatusForSaving(type) {
         sfx: sfx,
         starShipBuilt: starShipBuilt,
         starShipTravelling: starShipTravelling,
+        stellarScannerBuilt: stellarScannerBuilt,
+        destinationStarScanned: destinationStarScanned
     }
 
     return gameState;
@@ -495,6 +501,7 @@ export function restoreGameStatus(gameState, type) {
             toStarObject = gameState.toStarObject ?? null;
             currentStarObject = gameState.currentStarObject ?? null;
             starShipStatus = gameState.starShipStatus ?? ['preconstruction', null];
+            destinationStar = gameState.destinationStar ?? null;
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -517,6 +524,8 @@ export function restoreGameStatus(gameState, type) {
             sfx = gameState.flags.sfx ?? false;
             starShipBuilt = gameState.flags.starShipBuilt ?? false;
             starShipTravelling = gameState.flags.starShipTravelling ?? false;
+            stellarScannerBuilt = gameState.flags.stellarScannerBuilt ?? false;
+            destinationStarScanned = gameState.flags.destinationStarScanned ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2037,6 +2046,26 @@ export function getStarShipStatus() {
 
 export function setStarShipStatus(value) {
     starShipStatus = value;
+}
+
+export function getStellarScannerBuilt() {
+    return stellarScannerBuilt ?? false;
+}
+
+export function setStellarScannerBuilt(value) {
+    stellarScannerBuilt = value;
+}
+
+export function getDestinationStarScanned() {
+    return destinationStarScanned;
+}
+
+export function setDestinationStarScanned(value) {
+    destinationStarScanned = value;
+}
+
+export function getStellarScannerRange() {
+    return STELLAR_SCANNER_RANGE;
 }
 
 const IMAGE_URLS = {

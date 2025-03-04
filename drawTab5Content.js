@@ -1,5 +1,5 @@
-import { spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield } from './ui.js';
-import { getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
+import { spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
+import { setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { gain } from './game.js';
@@ -232,6 +232,32 @@ export function drawTab5Content(heading, optionContentElement) {
             'travel'
         );
         optionContentElement.appendChild(starShipTravelRow);
+
+        const starShipStellarScannerRow = createOptionRow(
+            `spaceStarShipStellarScannerRow`,
+            null,
+            `Perform System Scan:`,
+            createButton(`Scan System`, ['option-button', 'green-ready-text'], () => {
+                setDestinationStarScanned(true);
+                showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned! Check the Fleets Section!`);
+            }, '', '', '', null, '', true, null, ''),
+            null,
+            null,                               
+            null,
+            null,
+            `Scan ${capitaliseWordsWithRomanNumerals(destinationStar)} System`,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            ''
+        );
+        optionContentElement.appendChild(starShipStellarScannerRow);
     }
 }
 
