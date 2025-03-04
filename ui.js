@@ -91,6 +91,8 @@ import {
     setCanTravelToAsteroids,
     getRocketUserName,
     setDestinationAsteroid,
+    setCurrentStarObject,
+    getCurrentStarObject,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1050,7 +1052,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
     for (let i = 0; i < numberOfStars; i++) {
         const name = starNames.length > 0 ? starNames.splice(Math.floor(seededRandom(seed - i * 1.2) * starNames.length), 1)[0] : `Star${i}`;
         const size = getSeededRandomInRange(seed + i, minSize, maxSize);
-        const x = getSeededRandomInRange(seed + i + numberOfStars, 0, containerWidth) + containerLeft;
+        const x = getSeededRandomInRange(seed + i + numberOfStars, 0, containerWidth - 30) + containerLeft;
         const y = getSeededRandomInRange(seed + i + numberOfStars * 2, 0, containerHeight) + containerTop;
         const z = getSeededRandomInRange(seed + i + numberOfStars * 3, 10, 100000);
         stars.push({ name, x, y, z, size, width: size * 1.1, height: size * 1.1, left: x, top: y });
@@ -1084,6 +1086,7 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             starElement.classList.add('current-star');
             starElement.style.width = `${star.width * 4}px`;
             starElement.style.height = `${star.height * 4}px`;
+            setCurrentStarObject(currentStar);
         } else if (isInteresting) {
             starElement.style.width = `${star.width * 2}px`;
             starElement.style.height = `${star.height * 2}px`;
@@ -1294,7 +1297,14 @@ export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
         }
     }
 
+    let orbitCircle;
+
     const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
+
+    if (getStarShipStatus()[0] === 'orbiting' && getCurrentTab()[1] === 'Interstellar' && getCurrentOptionPane() === 'star map') {
+        orbitCircle = drawOrbitCircle(getToStarObject());
+    }
+
     if (lineElement) {
         tooltipLayer.appendChild(lineElement);
     }
@@ -1304,18 +1314,14 @@ export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
     if (arrowHead) {
         tooltipLayer.appendChild(arrowHead);
     }
-
-    if (getStarShipStatus()[0] === 'orbiting' && getCurrentTab()[1] === 'Interstellar' && getCurrentOptionPane() === 'star map') {
-        const orbitCircle = drawOrbitCircle(getToStarObject());
-        if (orbitCircle) {
-            tooltipLayer.appendChild(orbitCircle);
-            arrowHead = drawStarShipArrowhead(getFromStarObject(), getToStarObject(), isInteresting, orbitCircle);
-            tooltipLayer.appendChild(arrowHead);
-        }
+    if (orbitCircle) {
+        tooltipLayer.appendChild(orbitCircle);
+        arrowHead = drawStarShipArrowhead(getFromStarObject(), getToStarObject(), isInteresting, orbitCircle);
+        tooltipLayer.appendChild(arrowHead);
     }
 }
 
-function drawOrbitCircle(toStar) {
+export function drawOrbitCircle(toStar) {
     removeOrbitCircle();
 
     const themeElement = document.querySelector('[data-theme]') || document.documentElement;
@@ -1350,11 +1356,11 @@ function drawOrbitCircle(toStar) {
     return orbitCircle;
 }
 
-function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
+export function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
+    document.querySelectorAll('.arrowhead-starship').forEach(arrow => arrow.remove());
     const arrowHead = document.createElement('div');
     arrowHead.id = 'arrowheadStarship';
     arrowHead.classList.add('arrowhead-starship');
-    let arrowPosition = getStarShipArrowPosition();
 
     const fromX = fromStar.left + fromStar.width * 2;
     const fromY = fromStar.top + fromStar.height * 2;
@@ -1363,7 +1369,7 @@ function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
 
     const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
 
-    if (isInteresting === 'orbiting' && orbitCircle) {
+    if ((isInteresting === 'orbiting' || isInteresting === 'readyForTravel') && orbitCircle) {
         const orbitX = orbitCircle.offsetLeft;
         const orbitY = orbitCircle.offsetTop;
         const orbitRadius = orbitCircle.offsetWidth / 2;
@@ -1383,6 +1389,7 @@ function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
         arrowHead.style.top = `${arrowY - arrowSize / 2}px`;
         arrowHead.style.transform = `rotate(${tangentAngleDeg}deg)`;
     } else {
+        let arrowPosition = getStarShipArrowPosition();
         arrowHead.style.transform = `rotate(${angle + 90}deg)`;
         
         const arrowSize = 12;
@@ -2635,7 +2642,7 @@ export function spaceTravelButtonHideAndShowDescription() {
     if (descriptionDiv && getStarShipTravelling()) {
         descriptionDiv.classList.remove('invisible');
     }
-    if (buttonDiv && getStarShipTravelling()) {
+    if (buttonDiv && (getStarShipTravelling() || !getStarShipBuilt())) {
         buttonDiv.classList.add('invisible');
     }
 }

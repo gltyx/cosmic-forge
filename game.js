@@ -164,7 +164,8 @@ import {
     NUMBER_OF_STARS,
     STAR_FIELD_SEED,
     getStarMapMode,
-    getStarShipArrowPosition
+    getStarShipArrowPosition,
+    getCurrentStarObject
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -201,7 +202,9 @@ import {
     createStarDestinationRow,
     spaceTravelButtonHideAndShowDescription,
     removeStarConnectionTooltip,
-    removeOrbitCircle
+    removeOrbitCircle,
+    drawOrbitCircle,
+    drawStarShipArrowhead
 } from "./ui.js";
 
 import { 
@@ -3027,12 +3030,36 @@ function starShipUiChecks() {
         removeStarConnectionTooltip();
         removeOrbitCircle();
     }
+
+    if (getCurrentOptionPane() === 'star map' && getStarShipStatus()[0] === 'readyForTravel') {
+        const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
+        const orbitCircle = drawOrbitCircle(getCurrentStarObject());
+        tooltipLayer.appendChild(orbitCircle);
+        const arrowHead = drawStarShipArrowhead('', '', 'readyForTravel', orbitCircle);
+        tooltipLayer.appendChild(arrowHead);
+    }
+
+    const upgrades = getResourceDataObject('space', ['upgrades']);
+
+    if (
+        upgrades &&
+        !getStarShipTravelling() && getStarShipStatus()[0] !== 'readyForTravel' && 
+        Object.entries(upgrades)
+            .filter(([key]) => key.startsWith('ss'))
+            .every(([, upgrade]) => upgrade.finished === true)
+    ) {
+        setStarShipStatus(['readyForTravel', null]);
+    }
 }
 
 function checkTravelToStarElements(element) {
     let starData = null;
 
     if (getCurrentOptionPane() === 'star map') {
+        if (!getStarShipBuilt()) {
+            spaceTravelButtonHideAndShowDescription();
+        }
+        
         const starNameElement = document.getElementById('starDestinationName');
         if (!starNameElement) return;
 
@@ -3049,10 +3076,6 @@ function checkTravelToStarElements(element) {
         const fuelNeeded = starData.fuel;
         const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
         const canTravel = currentAntimatter >= fuelNeeded && getTechUnlockedArray().includes('FTLTravelTheory');
-
-        if (canTravel && !getStarShipTravelling())  {
-            setStarShipStatus(['readyForTravel', null]);
-        }
 
         if (element.classList.contains('travel-starship-button')) {
             element.classList.toggle('red-disabled-text', !canTravel);
@@ -3074,6 +3097,7 @@ function checkTravelToStarElements(element) {
 
         if (getStarShipTravelling() && getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] !== 'orbiting') {       
             drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'travelling');
+            removeOrbitCircle();
             spaceTravelButtonHideAndShowDescription();
         } else if (getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] === 'orbiting') {
             labelElement.textContent = 'Orbiting...'
