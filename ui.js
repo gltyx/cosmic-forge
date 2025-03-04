@@ -106,6 +106,8 @@ import {
     getOptionDescription,
     gameIntroHeader,
     gameIntroText,
+    launchStarShipWarningHeader,
+    launchStarShipWarningText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -198,6 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             toggleGameFullScreen();
         }
         const handleClick = async () => {
+            document.querySelector('.fullScreenContainer').style.display = 'none';
             showHideModal();
             try {
                 await loadGameFromCloud(); 
@@ -1162,14 +1165,56 @@ export function createStarDestinationRow(starData, isInteresting) {
 
     const buttonContainer = document.getElementById('starDestinationButton');
     const button = createButton(`Travel`, ['option-button', 'red-disabled-text', 'travel-starship-button'], () => {
-        console.log(`Traveling to ${starData.name}...`);
-        showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000);
-        startTravelToDestinationStarTimer([0, 'buttonClick'], false);
-        spendAntimatterOnFuelForStarShip(starData.fuel);
-        spaceTravelButtonHideAndShowDescription();
+        showLaunchWarningModal(true);
     }, 'upgradeCheck', '', 'autoBuyer', 'travelToStar', 'time', true, null, 'starShipPurchase');
     buttonContainer.appendChild(button);
 }
+
+function showLaunchWarningModal(show) {
+    const modalContainer = getElements().modalContainer;
+    const overlay = getElements().overlay;
+    const launchConfirmButton = document.getElementById('launchConfirmButton');
+    const launchCancelButton = document.getElementById('launchCancelButton');
+
+    if (show) {
+        document.getElementById('modalButton').classList.add('invisible');
+        document.getElementById('modalSaveButton').classList.add('invisible');
+        launchConfirmButton.classList.remove('invisible');
+        launchCancelButton.classList.remove('invisible');
+
+        const headerText = launchStarShipWarningHeader;
+        let content = launchStarShipWarningText;
+        populateModal(headerText, content);
+
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+
+        launchConfirmButton.onclick = function () {
+            const destinationStar = getDestinationStar();
+            const starData = getStarSystemDataObject('stars', [destinationStar]);
+            showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000);
+            startTravelToDestinationStarTimer([0, 'buttonClick'], false);
+            spendAntimatterOnFuelForStarShip(starData.fuel);
+            spaceTravelButtonHideAndShowDescription();
+            showHideModal();
+        };
+
+        launchCancelButton.onclick = function () {
+            showHideModal();
+        };
+    } else {
+        showHideModal();
+    }
+}
+
+function closeLaunchWarningModal() {
+    const modalContainer = getElements().modalContainer;
+    const overlay = getElements().overlay;
+
+    modalContainer.style.display = 'none';
+    overlay.style.display = 'none';
+}
+
 
 function spendAntimatterOnFuelForStarShip(fuelNeeded) {
     const antimatterLeft = Math.max(0, Math.floor(getResourceDataObject('antimatter', ['quantity']) - fuelNeeded));
