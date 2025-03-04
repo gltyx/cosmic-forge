@@ -239,7 +239,7 @@ export function drawTab5Content(heading, optionContentElement) {
             `Perform System Scan:`,
             createButton(`Scan System`, ['option-button', 'green-ready-text'], () => {
                 setDestinationStarScanned(true);
-                showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned! Check the Fleets Section!`);
+                showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`);
             }, '', '', '', null, '', true, null, ''),
             null,
             null,                               
