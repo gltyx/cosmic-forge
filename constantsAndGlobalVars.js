@@ -1388,16 +1388,16 @@ export function setBackgroundAudio(value) {
     backgroundAudio = value ?? false;
 }
 
+export function getBackgroundAudio() {
+    return backgroundAudio;
+}
+
 export function getSfx() {
     return sfx;
 }
 
 export function setSfx(value) {
     sfx = value ?? false;
-}
-
-export function getBackgroundAudio() {
-    return backgroundAudio;
 }
 
 export function eNCrQueen() {

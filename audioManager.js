@@ -238,6 +238,8 @@ window.addEventListener('blur', () => {
 });
 
 window.addEventListener('focus', () => {
-    weatherAmbienceManager.resumeAll();
-    backgroundAudio.play();
+    if (getBackgroundAudio()) {
+        weatherAmbienceManager.resumeAll();
+        backgroundAudio.play();
+    }
 });
