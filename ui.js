@@ -1333,15 +1333,16 @@ function drawOrbitCircle(toStar) {
     const starElement = document.getElementById(toStar.name);
     if (!starElement) return null;
 
-    const starRect = starElement.getBoundingClientRect();
-    const starSize = starRect.width;
+    const starX = starElement.offsetLeft;
+    const starY = starElement.offsetTop;
+    const starSize = starElement.offsetWidth;
     const orbitSize = starSize * 3;
 
     orbitCircle.style.width = `${orbitSize}px`;
     orbitCircle.style.height = `${orbitSize}px`;
 
-    const orbitCenterX = starRect.left + starSize / 2;
-    const orbitCenterY = starRect.top + starSize / 2;
+    const orbitCenterX = starX + starSize / 2;
+    const orbitCenterY = starY + starSize / 2;
 
     orbitCircle.style.left = `${orbitCenterX - orbitSize / 2}px`;
     orbitCircle.style.top = `${orbitCenterY - orbitSize / 2}px`;
@@ -1363,11 +1364,12 @@ function drawStarShipArrowhead(fromStar, toStar, isInteresting, orbitCircle) {
     const angle = Math.atan2(toY - fromY, toX - fromX) * (180 / Math.PI);
 
     if (isInteresting === 'orbiting' && orbitCircle) {
-        const orbitRect = orbitCircle.getBoundingClientRect();
-        const orbitRadius = orbitRect.width / 2;
-    
-        const centerX = orbitRect.left + orbitRadius;
-        const centerY = orbitRect.top + orbitRadius;
+        const orbitX = orbitCircle.offsetLeft;
+        const orbitY = orbitCircle.offsetTop;
+        const orbitRadius = orbitCircle.offsetWidth / 2;
+
+        const centerX = orbitX + orbitRadius;
+        const centerY = orbitY + orbitRadius;
         const angleDeg = 45;
         const angleRad = (angleDeg * Math.PI) / 180;
 
