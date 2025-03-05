@@ -132,6 +132,7 @@ import {
     extendStarDataRange,
     generateStarDataAndAddToDataObject,
     startTravelToDestinationStarTimer,
+    addToResourceAllTimeStat,
 
 } from './game.js';
 
@@ -1236,6 +1237,7 @@ function showLaunchWarningModal(show) {
             startTravelToDestinationStarTimer([0, 'buttonClick'], false);
             spendAntimatterOnFuelForStarShip(starData.fuel);
             spaceTravelButtonHideAndShowDescription();
+            addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated');
             showHideModal();
         };
 

@@ -1,5 +1,5 @@
 import { setCanFuelRockets, setCanTravelToAsteroids, getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
-import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates } from './game.js';
+import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
@@ -12,7 +12,8 @@ export function drawTab3Content(heading, optionContentElement) {
             null,
             'Science Kit:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resources'),
+                gain(1, 'scienceKitQuantity', 'scienceKit', false, null, 'scienceUpgrade', 'resources');
+                addToResourceAllTimeStat(1, 'scienceKits');
                     deferredActions.push(() => {
                         if (getCanAffordDeferred()) {
                             startUpdateTimersAndRates('scienceKit');
@@ -44,6 +45,7 @@ export function drawTab3Content(heading, optionContentElement) {
             'Open Science Club:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceClubQuantity', 'scienceClub', false, null, 'scienceUpgrade', 'resources');
+                addToResourceAllTimeStat(1, 'scienceClubs');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateTimersAndRates('scienceClub');
@@ -75,6 +77,7 @@ export function drawTab3Content(heading, optionContentElement) {
             'Open Science Lab:',
             createButton(`Add ${getResourceDataObject('research', ['upgrades', 'scienceLab', 'rate']) * getTimerRateRatio()} Research /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'scienceLabQuantity', 'scienceLab', false, null, 'scienceUpgrade', 'resources');
+                addToResourceAllTimeStat(1, 'scienceLabs');
                 deferredActions.push(() => {
                     if (getCanAffordDeferred()) {
                         startUpdateTimersAndRates('scienceLab');

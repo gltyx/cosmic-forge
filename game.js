@@ -430,6 +430,7 @@ function checkIfStarShipBuilt() {
     
         setStarShipBuilt(allMandatoryModulesFinished);
         if (allMandatoryModulesFinished) {
+            addToResourceAllTimeStat(1, 'starShipBuilt');
             showNotification('Star Ship can now be launched!', 'info');
         }
     }
@@ -1933,6 +1934,7 @@ function updateAntimatterAndDiagram() {
 
             if (getAntimatterUnlocked()) {
                 setResourceDataObject(antimatterTotalQuantity + totalAntimatterExtractionRate, 'antimatter', ['quantity']);
+                addToResourceAllTimeStat(totalAntimatterExtractionRate, 'antimatter');
             }
         }
     } 
@@ -3680,8 +3682,10 @@ function startInitialTimers() {
         const currentResearchRateUnpowered = getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower']);
         if (getPowerOnOff()) {
             setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
+            addToResourceAllTimeStat(currentResearchRate, 'researchPoints');
         } else {
             setResourceDataObject(currentResearchQuantity + currentResearchRateUnpowered, 'research', ['quantity']);
+            addToResourceAllTimeStat(currentResearchRateUnpowered, 'researchPoints');
         }
     });
     
@@ -3847,9 +3851,9 @@ function startInitialTimers() {
         selectNewWeather();
     
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        //const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
 
-        const randomDurationInMs = 10000; //DEBUG For Testing Weather
+        //const randomDurationInMs = 10000; //DEBUG For Testing Weather
 
         const durationInSeconds = randomDurationInMs / 1000;
 
@@ -4981,6 +4985,7 @@ export function offlineGains(switchedFocus) {
     
         const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
         setResourceDataObject(currentResearchQuantity + offlineGains.research, 'research', ['quantity']);
+        addToResourceAllTimeStat(offlineGains.research, 'researchPoints');
     
         const currentFuelQuantityRockets = getRocketsFuellerStartedArray().filter(rocket => !rocket.includes('FuelledUp'));
         currentFuelQuantityRockets.forEach(rocket => {
@@ -5059,6 +5064,7 @@ export function offlineGains(switchedFocus) {
         });
         
         setResourceDataObject(currentAntimatterQuantity + offlineGainsAntimatter, 'antimatter', ['quantity']);
+        addToResourceAllTimeStat(offlineGainsAntimatter, 'antimatter');
         
         if (!switchedFocus) {
             showNotification('Offline Gains Added!', 'info');
@@ -5980,10 +5986,6 @@ function generateRaceName(civilizationLevel) {
 
     raceName = raceName.length <= 14 ? raceName : raceName.substring(0, 14);
     return raceName.charAt(0).toUpperCase() + raceName.slice(1);
-}
-
-export function calculateAnticipatedAP() {
-    return 'Not Done Yet!'
 }
 
 export function addToResourceAllTimeStat(amountToAdd, item) {

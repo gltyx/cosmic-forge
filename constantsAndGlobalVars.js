@@ -2,7 +2,7 @@ import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystems
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
-import { calculateAnticipatedAP, offlineGains, startNewsTickerTimer } from './game.js';
+import { offlineGains, startNewsTickerTimer } from './game.js';
 import { replaceRocketNames, rocketNames } from './descriptions.js';
 import { boostSoundManager } from './audioManager.js';
 
@@ -201,6 +201,8 @@ let currentRunNumber = 0;
 let currentRunTimer = 0;
 let totalUniqueNewsTickersGenerated = 0;
 let totalNewsTickerPrizesCollected = 0;
+let apAnticipatedThisRun = 0;
+let allTimeStarShipsBuilt = 0;
 
 //FLAGS
 // let languageChangedFlag;
@@ -465,6 +467,10 @@ export const statFunctionsSets = {
     "set_scienceKits": setStatScienceKits,
     "set_scienceClubs": setStatScienceClubs,
     "set_scienceLabs": setStatScienceLabs,
+
+    "set_antimatter": setStatAntimatter,
+    "set_apAnticipated": setStatApAnticipated,
+    "set_starShipBuilt": setStatStarShipBuilt,
 };
 
 export function setGameStateVariable(value) {
@@ -582,6 +588,8 @@ export function captureGameStatusForSaving(type) {
     gameState.currentRunTimer = currentRunTimer;
     gameState.totalUniqueNewsTickersGenerated = totalUniqueNewsTickersGenerated;
     gameState.totalNewsTickerPrizesCollected = totalNewsTickerPrizesCollected;
+    gameState.apAnticipatedThisRun = apAnticipatedThisRun;
+    gameState.allTimeStarShipsBuilt = allTimeStarShipsBuilt;
 
 
     // Flags
@@ -711,6 +719,8 @@ export function restoreGameStatus(gameState, type) {
             currentRunTimer = gameState.currentRunTimer ?? 0;
             totalUniqueNewsTickersGenerated = gameState.totalUniqueNewsTickersGenerated ?? 0;
             totalNewsTickerPrizesCollected = gameState.totalNewsTickerPrizesCollected ?? 0;
+            apAnticipatedThisRun = gameState.apAnticipatedThisRun ?? 0;
+            allTimeStarShipsBuilt = gameState.allTimeStarShipsBuilt ?? 0;
 
 
             // Flags
@@ -2327,11 +2337,11 @@ function getStatNewsTickerPrizesCollected() {
     return totalNewsTickerPrizesCollected;
 }
 
-function getStatTheme() {
+function getStatTheme() {//
     return capitaliseString(getCurrentTheme());
 }
 
-function getStatTotalAntimatterMined() {
+function getStatTotalAntimatterMined() {//
     return allTimeTotalAntimatterMined;
 }
 
@@ -2355,20 +2365,20 @@ function getStatTotalStarShipsLaunched() {
     return allTimeTotalStarShipsLaunched;
 }
 
-function getStatStarSystem() {
+function getStatStarSystem() {//
     return capitaliseWordsWithRomanNumerals(getCurrentStarSystem());
 }
 
-function getStatCurrentWeather() {
+function getStatCurrentWeather() {//
     return document.getElementById('stat7').textContent.trim().slice(-1);
 }
 
-function getStatCash() {
+function getStatCash() {//
     return document.getElementById('cashStat').textContent;
 }
 
-function getStatApAnticipated() {
-    return calculateAnticipatedAP();
+function getStatApAnticipated() {//
+    return apAnticipatedThisRun;
 }
 
 function getStatAntimatter() {
@@ -2534,8 +2544,8 @@ function getStatStarsStudied() {
     return 1;
 }
 
-function getStatStarShipBuilt() {
-    return 1;
+function getStatStarShipBuilt() {//
+    return allTimeStarShipsBuilt;
 }
 
 function getStatStarShipDistanceTravelled() {
@@ -2665,6 +2675,18 @@ function setStatScienceClubs(valueToAdd) {
 
 function setStatScienceLabs(valueToAdd) {
     allTimeTotalScienceLabs += valueToAdd;
+}
+
+function setStatAntimatter(valueToAdd) {
+    allTimeTotalAntimatterMined += valueToAdd;
+}
+
+function setStatApAnticipated(valueToAdd) {
+    apAnticipatedThisRun += valueToAdd;
+}
+
+function setStatStarShipBuilt(valueToAdd) {
+    apAnticipatedThisRun += valueToAdd;
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------
