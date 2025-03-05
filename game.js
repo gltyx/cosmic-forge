@@ -5965,6 +5965,10 @@ function generateRaceName(civilizationLevel) {
     return raceName.charAt(0).toUpperCase() + raceName.slice(1);
 }
 
+export function calculateAnticipatedAP() {
+    return 'Not Done Yet!'
+}
+
 //===============================================================================================================
 
 export function setGameState(newState) {

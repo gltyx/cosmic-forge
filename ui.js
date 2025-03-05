@@ -3482,9 +3482,11 @@ export function getStats(statFunctions) {
 }
 
 function determineClassColor(value) {
-    console.log(value);
-    if (value === 'No' || value === 0) {
+    if (value === 'No' || value === 0 || value === 'OFF' || value === '⛰') {
         return 'red-disabled-text';
+    }
+    if (value === '☁' || value === '☂') {
+        return 'warning-orange-text';
     }
     return 'green-ready-text';
 }

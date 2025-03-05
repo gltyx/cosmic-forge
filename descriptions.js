@@ -1365,7 +1365,7 @@ statisticsContent = {
         subHeading5: "Run Time",
         subBody5: "100d 18h 10m 32s",
 
-        subHeading6: "Total News Tickers Seen",
+        subHeading6: "Total Unique News Tickers Seen",
         subBody6: "1000",
 
         subHeading7: "News Ticker Prizes Collected",

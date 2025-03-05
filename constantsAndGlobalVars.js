@@ -1,8 +1,8 @@
 import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
-import { capitaliseString } from './utilityFunctions.js';
-import { offlineGains, startNewsTickerTimer } from './game.js';
+import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
+import { calculateAnticipatedAP, offlineGains, startNewsTickerTimer } from './game.js';
 import { replaceRocketNames, rocketNames } from './descriptions.js';
 import { boostSoundManager } from './audioManager.js';
 
@@ -171,6 +171,37 @@ let currentTab = [1, 'Resources'];
 let currentOptionPane = null;
 let notationType = 'normalCondensed';
 
+//STATS PAGE LOGGERS
+let allTimeTotalHydrogen = 0;
+let allTimeTotalHelium = 0;
+let allTimeTotalCarbon = 0;
+let allTimeTotalNeon = 0;
+let allTimeTotalOxygen = 0;
+let allTimeTotalSodium = 0;
+let allTimeTotalSilicon = 0;
+let allTimeTotalIron = 0;
+let allTimeTotalDiesel = 0;
+let allTimeTotalGlass = 0;
+let allTimeTotalSteel = 0;
+let allTimeTotalConcrete = 0;
+let allTimeTotalWater = 0;
+let allTimeTotalTitanium = 0;
+let allTimeTotalResearchPoints = 0;
+let allTimeTotalScienceKits = 0;
+let allTimeTotalScienceClubs = 0;
+let allTimeTotalScienceLabs = 0;
+let allTimeTotalRocketsLaunched = 0;
+let allTimeTotalStarShipsLaunched = 0;
+let allTimeTotalAsteroidsDiscovered = 0;
+let allTimeTotalLegendaryAsteroidsDiscovered = 0;
+let allTimeTotalStarsStudied = 0;
+let allTimeTotalAntimatterMined = 0;
+let allTimeTotalApGain = 0;
+let currentRunNumber = 0;
+let currentRunTimer = 0;
+let totalUniqueNewsTickersGenerated = 0;
+let totalNewsTickerPrizesCollected = 0;
+
 //FLAGS
 // let languageChangedFlag;
 
@@ -225,6 +256,8 @@ let starShipTravelling = false;
 let starShipArrowPosition = 0;
 let stellarScannerBuilt = false;
 let destinationStarScanned = false;
+
+
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -324,7 +357,7 @@ export const statFunctions = {
     "stat_totalApGain": getStatTotalApGain,
     "stat_run": getStatRun,
     "stat_runTime": getStatRunTime,
-    "stat_totalNewsTickersSeen": getStatTotalNewsTickersSeen,
+    "stat_totalUniqueNewsTickersSeen": getStatTotalUniqueNewsTickersSeen,
     "stat_newsTickerPrizesCollected": getStatNewsTickerPrizesCollected,
     "stat_theme": getStatTheme,
     "stat_totalAntimatterMined": getStatTotalAntimatterMined,
@@ -494,6 +527,36 @@ export function captureGameStatusForSaving(type) {
     gameState.currentStarObject = currentStarObject;
     gameState.starShipStatus = starShipStatus;
     gameState.destinationStar = destinationStar;
+    gameState.allTimeTotalHydrogen = allTimeTotalHydrogen;
+    gameState.allTimeTotalHelium = allTimeTotalHelium;
+    gameState.allTimeTotalCarbon = allTimeTotalCarbon;
+    gameState.allTimeTotalNeon = allTimeTotalNeon;
+    gameState.allTimeTotalOxygen = allTimeTotalOxygen;
+    gameState.allTimeTotalSodium = allTimeTotalSodium;
+    gameState.allTimeTotalSilicon = allTimeTotalSilicon;
+    gameState.allTimeTotalIron = allTimeTotalIron;
+    gameState.allTimeTotalDiesel = allTimeTotalDiesel;
+    gameState.allTimeTotalGlass = allTimeTotalGlass;
+    gameState.allTimeTotalSteel = allTimeTotalSteel;
+    gameState.allTimeTotalConcrete = allTimeTotalConcrete;
+    gameState.allTimeTotalWater = allTimeTotalWater;
+    gameState.allTimeTotalTitanium = allTimeTotalTitanium;
+    gameState.allTimeTotalResearchPoints = allTimeTotalResearchPoints;
+    gameState.allTimeTotalScienceKits = allTimeTotalScienceKits;
+    gameState.allTimeTotalScienceClubs = allTimeTotalScienceClubs;
+    gameState.allTimeTotalScienceLabs = allTimeTotalScienceLabs;
+    gameState.allTimeTotalRocketsLaunched = allTimeTotalRocketsLaunched;
+    gameState.allTimeTotalStarShipsLaunched = allTimeTotalStarShipsLaunched;
+    gameState.allTimeTotalAsteroidsDiscovered = allTimeTotalAsteroidsDiscovered;
+    gameState.allTimeTotalLegendaryAsteroidsDiscovered = allTimeTotalLegendaryAsteroidsDiscovered;
+    gameState.allTimeTotalStarsStudied = allTimeTotalStarsStudied;
+    gameState.allTimeTotalAntimatterMined = allTimeTotalAntimatterMined;
+    gameState.allTimeTotalApGain = allTimeTotalApGain;
+    gameState.currentRunNumber = currentRunNumber;
+    gameState.currentRunTimer = currentRunTimer;
+    gameState.totalUniqueNewsTickersGenerated = totalUniqueNewsTickersGenerated;
+    gameState.totalNewsTickerPrizesCollected = totalNewsTickerPrizesCollected;
+
 
     // Flags
     gameState.flags = {
@@ -593,6 +656,36 @@ export function restoreGameStatus(gameState, type) {
             currentStarObject = gameState.currentStarObject ?? null;
             starShipStatus = gameState.starShipStatus ?? ['preconstruction', null];
             destinationStar = gameState.destinationStar ?? null;
+            allTimeTotalHydrogen = gameState.allTimeTotalHydrogen ?? 0;
+            allTimeTotalHelium = gameState.allTimeTotalHelium ?? 0;
+            allTimeTotalCarbon = gameState.allTimeTotalCarbon ?? 0;
+            allTimeTotalNeon = gameState.allTimeTotalNeon ?? 0;
+            allTimeTotalOxygen = gameState.allTimeTotalOxygen ?? 0;
+            allTimeTotalSodium = gameState.allTimeTotalSodium ?? 0;
+            allTimeTotalSilicon = gameState.allTimeTotalSilicon ?? 0;
+            allTimeTotalIron = gameState.allTimeTotalIron ?? 0;
+            allTimeTotalDiesel = gameState.allTimeTotalDiesel ?? 0;
+            allTimeTotalGlass = gameState.allTimeTotalGlass ?? 0;
+            allTimeTotalSteel = gameState.allTimeTotalSteel ?? 0;
+            allTimeTotalConcrete = gameState.allTimeTotalConcrete ?? 0;
+            allTimeTotalWater = gameState.allTimeTotalWater ?? 0;
+            allTimeTotalTitanium = gameState.allTimeTotalTitanium ?? 0;
+            allTimeTotalResearchPoints = gameState.allTimeTotalResearchPoints ?? 0;
+            allTimeTotalScienceKits = gameState.allTimeTotalScienceKits ?? 0;
+            allTimeTotalScienceClubs = gameState.allTimeTotalScienceClubs ?? 0;
+            allTimeTotalScienceLabs = gameState.allTimeTotalScienceLabs ?? 0;
+            allTimeTotalRocketsLaunched = gameState.allTimeTotalRocketsLaunched ?? 0;
+            allTimeTotalStarShipsLaunched = gameState.allTimeTotalStarShipsLaunched ?? 0;
+            allTimeTotalAsteroidsDiscovered = gameState.allTimeTotalAsteroidsDiscovered ?? 0;
+            allTimeTotalLegendaryAsteroidsDiscovered = gameState.allTimeTotalLegendaryAsteroidsDiscovered ?? 0;
+            allTimeTotalStarsStudied = gameState.allTimeTotalStarsStudied ?? 0;
+            allTimeTotalAntimatterMined = gameState.allTimeTotalAntimatterMined ?? 0;
+            allTimeTotalApGain = gameState.allTimeTotalApGain ?? 0;
+            currentRunNumber = gameState.currentRunNumber ?? 0;
+            currentRunTimer = gameState.currentRunTimer ?? 0;
+            totalUniqueNewsTickersGenerated = gameState.totalUniqueNewsTickersGenerated ?? 0;
+            totalNewsTickerPrizesCollected = gameState.totalNewsTickerPrizesCollected ?? 0;
+
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -2162,171 +2255,193 @@ export function getStellarScannerRange() {
 //stat retrievers-------------------------------------------------------------------------------------------------------
 
 function getStatPioneer() {
-    return 1;
+    return getSaveName();
 }
 
 function getStatCurrentAp() {
-    return 1;
+    return getAscendencyPoints();
 }
 
 function getStatTotalApGain() {
-    return 1;
+    return allTimeTotalApGain;
 }
 
 function getStatRun() {
-    return 1;
+    return currentRunNumber;
 }
 
 function getStatRunTime() {
-    return 1;
+    function formatTime(milliseconds) {
+        let totalSeconds = Math.floor(milliseconds / 1000);
+        let days = Math.floor(totalSeconds / (3600 * 24));
+        totalSeconds %= (3600 * 24);
+        let hours = Math.floor(totalSeconds / 3600);
+        totalSeconds %= 3600;
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = totalSeconds % 60;
+
+        let timeString = '';
+        if (days > 0) timeString += `${days}d `;
+        if (hours > 0) timeString += `${hours}h `;
+        if (minutes > 0) timeString += `${minutes}m `;
+        if (seconds > 0 || timeString === '') timeString += `${seconds}s`;
+
+        return timeString.trim();
+    }
+
+    return formatTime(currentRunTimer);
 }
 
-function getStatTotalNewsTickersSeen() {
-    return 1;
+
+function getStatTotalUniqueNewsTickersSeen() {
+    return totalUniqueNewsTickersGenerated;
 }
 
 function getStatNewsTickerPrizesCollected() {
-    return 1;
+    return totalNewsTickerPrizesCollected;
 }
 
 function getStatTheme() {
-    return 1;
+    return capitaliseString(getCurrentTheme());
 }
 
 function getStatTotalAntimatterMined() {
-    return 1;
+    return allTimeTotalAntimatterMined;
 }
 
 function getStatTotalAsteroidsDiscovered() {
-    return 1;
+    return allTimeTotalAsteroidsDiscovered;
 }
 
 function getStatTotalLegendaryAsteroidsDiscovered() {
-    return 1;
+    return allTimeTotalLegendaryAsteroidsDiscovered;
 }
 
 function getStatTotalStarsStudied() {
-    return 1;
+    return allTimeTotalStarsStudied;
 }
 
 function getStatTotalRocketsLaunched() {
-    return 1;
+    return allTimeTotalRocketsLaunched;
 }
 
 function getStatTotalStarShipsLaunched() {
-    return 1;
+    return allTimeTotalStarShipsLaunched;
 }
 
 function getStatStarSystem() {
-    return 1;
+    return capitaliseWordsWithRomanNumerals(getCurrentStarSystem());
 }
 
 function getStatCurrentWeather() {
-    return 1;
+    return document.getElementById('stat7').textContent.trim().slice(-1);
 }
 
 function getStatCash() {
-    return 1;
+    return document.getElementById('cashStat').textContent;
 }
 
 function getStatApAnticipated() {
-    return 1;
+    return calculateAnticipatedAP();
 }
 
 function getStatAntimatter() {
-    return 1;
+    return resourceData.antimatter.quantity;
 }
 
 function getStatHydrogen() {
-    return 1;
+    return allTimeTotalHydrogen;
 }
 
 function getStatHelium() {
-    return 1;
+    return allTimeTotalHelium;
 }
 
 function getStatCarbon() {
-    return 1;
+    return allTimeTotalCarbon;
 }
 
 function getStatNeon() {
-    return 1;
+    return allTimeTotalNeon;
 }
 
 function getStatOxygen() {
-    return 1;
+    return allTimeTotalOxygen;
 }
 
 function getStatSodium() {
-    return 1;
+    return allTimeTotalSodium;
 }
 
 function getStatSilicon() {
-    return 1;
+    return allTimeTotalSilicon;
 }
 
 function getStatIron() {
-    return 1;
+    return allTimeTotalIron;
 }
 
 function getStatDiesel() {
-    return 1;
+    return allTimeTotalDiesel;
 }
 
 function getStatGlass() {
-    return 1;
+    return allTimeTotalGlass;
 }
 
 function getStatSteel() {
-    return 1;
+    return allTimeTotalSteel;
 }
 
 function getStatConcrete() {
-    return 1;
+    return allTimeTotalConcrete;
 }
 
 function getStatWater() {
-    return 1;
+    return allTimeTotalWater;
 }
 
 function getStatTitanium() {
-    return 1;
+    return allTimeTotalTitanium;
 }
 
 function getStatResearchPoints() {
-    return 1;
+    return allTimeTotalResearchPoints;
 }
 
 function getStatScienceKits() {
-    return 1;
+    return allTimeTotalScienceKits;
 }
 
 function getStatScienceClubs() {
-    return 1;
+    return allTimeTotalScienceClubs;
 }
 
 function getStatScienceLabs() {
-    return 1;
+    return allTimeTotalScienceLabs;
 }
 
 function getStatTechsUnlocked() {
-    return 1;
+    return getTechUnlockedArray().length;
 }
 
 function getStatPower() {
-    return 1;
+    return document.getElementById('stat3').textContent.split(' ')[1];
 }
 
 function getStatTotalEnergy() {
-    return 1;
+    return document.getElementById('stat2').textContent.split(' ')[1];
 }
 
 function getStatTotalProduction() {
-    return 1;
-}
+    return (resourceData.buildings.energy.upgrades.powerPlant1.quantity * resourceData.buildings.energy.upgrades.powerPlant1.rate 
+        + resourceData.buildings.energy.upgrades.powerPlant2.quantity * resourceData.buildings.energy.upgrades.powerPlant2.rate
+        + resourceData.buildings.energy.upgrades.powerPlant3.quantity * resourceData.buildings.energy.upgrades.powerPlant3.rate)
+        .toFixed(2) + ' kW';
+} 
 
 function getStatTotalConsumption() {
-    return 1;
+    return getTotalEnergyUse();
 }
 
 function getStatTotalBatteryStorage() {
