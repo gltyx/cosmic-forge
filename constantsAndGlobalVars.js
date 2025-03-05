@@ -317,6 +317,97 @@ export function setElements() {
     };
 }
 
+export const statFunctions = {
+    // Overview
+    "stat_pioneer": getStatPioneer,
+    "stat_currentAp": getStatCurrentAp,
+    "stat_totalApGain": getStatTotalApGain,
+    "stat_run": getStatRun,
+    "stat_runTime": getStatRunTime,
+    "stat_totalNewsTickersSeen": getStatTotalNewsTickersSeen,
+    "stat_newsTickerPrizesCollected": getStatNewsTickerPrizesCollected,
+    "stat_theme": getStatTheme,
+    "stat_totalAntimatterMined": getStatTotalAntimatterMined,
+    "stat_totalAsteroidsDiscovered": getStatTotalAsteroidsDiscovered,
+    "stat_totalLegendaryAsteroidsDiscovered": getStatTotalLegendaryAsteroidsDiscovered,
+    "stat_totalStarsStudied": getStatTotalStarsStudied,
+    "stat_totalRocketsLaunched": getStatTotalRocketsLaunched,
+    "stat_totalStarShipsLaunched": getStatTotalStarShipsLaunched,
+
+    // Run
+    "stat_starSystem": getStatStarSystem,
+    "stat_currentWeather": getStatCurrentWeather,
+    "stat_cash": getStatCash,
+    "stat_apAnticipated": getStatApAnticipated,
+    "stat_antimatter": getStatAntimatter,
+
+    // Resources
+    "stat_hydrogen": getStatHydrogen,
+    "stat_helium": getStatHelium,
+    "stat_carbon": getStatCarbon,
+    "stat_neon": getStatNeon,
+    "stat_oxygen": getStatOxygen,
+    "stat_sodium": getStatSodium,
+    "stat_silicon": getStatSilicon,
+    "stat_iron": getStatIron,
+
+    // Compounds
+    "stat_diesel": getStatDiesel,
+    "stat_glass": getStatGlass,
+    "stat_steel": getStatSteel,
+    "stat_concrete": getStatConcrete,
+    "stat_water": getStatWater,
+    "stat_titanium": getStatTitanium,
+
+    // Research
+    "stat_researchPoints": getStatResearchPoints,
+    "stat_scienceKits": getStatScienceKits,
+    "stat_scienceClubs": getStatScienceClubs,
+    "stat_scienceLabs": getStatScienceLabs,
+    "stat_techsUnlocked": getStatTechsUnlocked,
+
+    // Energy
+    "stat_power": getStatPower,
+    "stat_totalEnergy": getStatTotalEnergy,
+    "stat_totalProduction": getStatTotalProduction,
+    "stat_totalConsumption": getStatTotalConsumption,
+    "stat_totalBatteryStorage": getStatTotalBatteryStorage,
+    "stat_timesTripped": getStatTimesTripped,
+    "stat_basicPowerPlants": getStatBasicPowerPlants,
+    "stat_advancedPowerPlants": getStatAdvancedPowerPlants,
+    "stat_solarPowerPlants": getStatSolarPowerPlants,
+    "stat_sodiumIonBatteries": getStatSodiumIonBatteries,
+    "stat_battery2": getStatBattery2,
+    "stat_battery3": getStatBattery3,
+
+    // Space Mining
+    "stat_spaceTelescopeBuilt": getStatSpaceTelescopeBuilt,
+    "stat_launchPadBuilt": getStatLaunchPadBuilt,
+    "stat_rocketsBuilt": getStatRocketsBuilt,
+    "stat_rocketWithMostLaunches": getStatRocketWithMostLaunches,
+    "stat_asteroidsDiscovered": getStatAsteroidsDiscovered,
+    "stat_asteroidsVisited": getStatAsteroidsVisited,
+    "stat_antimatterMined": getStatAntimatterMined,
+
+    // Interstellar
+    "stat_starsStudied": getStatStarsStudied,
+    "stat_starShipBuilt": getStatStarShipBuilt,
+    "stat_starShipDistanceTravelled": getStatStarShipDistanceTravelled,
+    "stat_systemScanned": getStatSystemScanned,
+    "stat_fleetAttackStrength": getStatFleetAttackStrength,
+    "stat_fleet1": getStatFleet1,
+    "stat_fleet2": getStatFleet2,
+    "stat_fleet3": getStatFleet3,
+    "stat_fleet4": getStatFleet4,
+    "stat_fleet5": getStatFleet5,
+    "stat_enemy": getStatEnemy,
+    "stat_enemyTotalDefenceOvercome": getStatEnemyTotalDefenceOvercome,
+    "stat_enemyTotalDefenceRemaining": getStatEnemyTotalDefenceRemaining,
+    "stat_apFromStarVoyage": getStatApFromStarVoyage,
+    "stat_apFromConquest": getStatApFromConquest,
+    "stat_totalApOnRebirth": getStatTotalApOnRebirth
+};
+
 export function setGameStateVariable(value) {
     gameState = value;
 }
@@ -2067,6 +2158,304 @@ export function setDestinationStarScanned(value) {
 export function getStellarScannerRange() {
     return STELLAR_SCANNER_RANGE;
 }
+
+//stat retrievers-------------------------------------------------------------------------------------------------------
+
+function getStatPioneer() {
+    return 1;
+}
+
+function getStatCurrentAp() {
+    return 1;
+}
+
+function getStatTotalApGain() {
+    return 1;
+}
+
+function getStatRun() {
+    return 1;
+}
+
+function getStatRunTime() {
+    return 1;
+}
+
+function getStatTotalNewsTickersSeen() {
+    return 1;
+}
+
+function getStatNewsTickerPrizesCollected() {
+    return 1;
+}
+
+function getStatTheme() {
+    return 1;
+}
+
+function getStatTotalAntimatterMined() {
+    return 1;
+}
+
+function getStatTotalAsteroidsDiscovered() {
+    return 1;
+}
+
+function getStatTotalLegendaryAsteroidsDiscovered() {
+    return 1;
+}
+
+function getStatTotalStarsStudied() {
+    return 1;
+}
+
+function getStatTotalRocketsLaunched() {
+    return 1;
+}
+
+function getStatTotalStarShipsLaunched() {
+    return 1;
+}
+
+function getStatStarSystem() {
+    return 1;
+}
+
+function getStatCurrentWeather() {
+    return 1;
+}
+
+function getStatCash() {
+    return 1;
+}
+
+function getStatApAnticipated() {
+    return 1;
+}
+
+function getStatAntimatter() {
+    return 1;
+}
+
+function getStatHydrogen() {
+    return 1;
+}
+
+function getStatHelium() {
+    return 1;
+}
+
+function getStatCarbon() {
+    return 1;
+}
+
+function getStatNeon() {
+    return 1;
+}
+
+function getStatOxygen() {
+    return 1;
+}
+
+function getStatSodium() {
+    return 1;
+}
+
+function getStatSilicon() {
+    return 1;
+}
+
+function getStatIron() {
+    return 1;
+}
+
+function getStatDiesel() {
+    return 1;
+}
+
+function getStatGlass() {
+    return 1;
+}
+
+function getStatSteel() {
+    return 1;
+}
+
+function getStatConcrete() {
+    return 1;
+}
+
+function getStatWater() {
+    return 1;
+}
+
+function getStatTitanium() {
+    return 1;
+}
+
+function getStatResearchPoints() {
+    return 1;
+}
+
+function getStatScienceKits() {
+    return 1;
+}
+
+function getStatScienceClubs() {
+    return 1;
+}
+
+function getStatScienceLabs() {
+    return 1;
+}
+
+function getStatTechsUnlocked() {
+    return 1;
+}
+
+function getStatPower() {
+    return 1;
+}
+
+function getStatTotalEnergy() {
+    return 1;
+}
+
+function getStatTotalProduction() {
+    return 1;
+}
+
+function getStatTotalConsumption() {
+    return 1;
+}
+
+function getStatTotalBatteryStorage() {
+    return 1;
+}
+
+function getStatTimesTripped() {
+    return 1;
+}
+
+function getStatBasicPowerPlants() {
+    return 1;
+}
+
+function getStatAdvancedPowerPlants() {
+    return 1;
+}
+
+function getStatSolarPowerPlants() {
+    return 1;
+}
+
+function getStatSodiumIonBatteries() {
+    return 1;
+}
+
+function getStatBattery2() {
+    return 1;
+}
+
+function getStatBattery3() {
+    return 1;
+}
+
+function getStatSpaceTelescopeBuilt() {
+    return 1;
+}
+
+function getStatLaunchPadBuilt() {
+    return 1;
+}
+
+function getStatRocketsBuilt() {
+    return 1;
+}
+
+function getStatRocketWithMostLaunches() {
+    return 1;
+}
+
+function getStatAsteroidsDiscovered() {
+    return 1;
+}
+
+function getStatAsteroidsVisited() {
+    return 1;
+}
+
+function getStatAntimatterMined() {
+    return 1;
+}
+
+function getStatStarsStudied() {
+    return 1;
+}
+
+function getStatStarShipBuilt() {
+    return 1;
+}
+
+function getStatStarShipDistanceTravelled() {
+    return 1;
+}
+
+function getStatSystemScanned() {
+    return 1;
+}
+
+function getStatFleetAttackStrength() {
+    return 1;
+}
+
+function getStatFleet1() {
+    return 1;
+}
+
+function getStatFleet2() {
+    return 1;
+}
+
+function getStatFleet3() {
+    return 1;
+}
+
+function getStatFleet4() {
+    return 1;
+}
+
+function getStatFleet5() {
+    return 1;
+}
+
+function getStatEnemy() {
+    return 1;
+}
+
+function getStatEnemyTotalDefenceOvercome() {
+    return 1;
+}
+
+function getStatEnemyTotalDefenceRemaining() {
+    return 1;
+}
+
+function getStatApFromStarVoyage() {
+    return 'Yes';
+}
+
+function getStatApFromConquest() {
+    return 'No';
+}
+
+function getStatTotalApOnRebirth() {
+    return 0;
+}
+
+
+
+//image urls----------------------------------------------------------------------------------------------------------------------
 
 const IMAGE_URLS = {
     resources: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

@@ -142,7 +142,8 @@ import {
 
 import { 
     capitaliseString, 
-    capitaliseWordsWithRomanNumerals
+    capitaliseWordsWithRomanNumerals,
+    toCamelCase
 } from './utilityFunctions.js';
 
 import { playClickSfx, playSwipeSfx, sfxPlayer } from './audioManager.js';
@@ -833,7 +834,6 @@ export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, s
     const div = document.createElement('div');
     let innerTextString = '';
 
-    // Add 'center-statistics' class for centering the content
     classList.push('center-statistics');
 
     for (let i = 0; i < mainHeadings.length; i++) {
@@ -849,7 +849,8 @@ export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, s
                 innerTextString += `<span class="${subHeaderClasses.join(' ')}">${header}</span>: `;
             }
             if (body) {
-                innerTextString += `<span class="${subBodyClasses.join(' ')}">${body}</span><br/>`;
+                const camelCaseId = `stat_${toCamelCase(header)}`;
+                innerTextString += `<span id="${camelCaseId}" class="${subBodyClasses.join(' ')}">${body}</span><br/>`;
             }
         }
 
@@ -3466,6 +3467,26 @@ export function renameRocket(rocketId, originalRocketKey) {
         rocketNames[newRocketKey] = rocketNames[originalRocketKey];
         delete rocketNames[originalRocketKey];
     }
+}
+
+export function getStats(statFunctions) {
+    Object.keys(statFunctions).forEach(stat => {
+        const statElement = document.getElementById(stat);
+        if (statElement) {
+            const statValue = statFunctions[stat]();
+            statElement.innerHTML = `<span>${statValue}</span>`;
+            const classColor = determineClassColor(statValue);
+            statElement.firstChild.classList.add(classColor);
+        }
+    });
+}
+
+function determineClassColor(value) {
+    console.log(value);
+    if (value === 'No' || value === 0) {
+        return 'red-disabled-text';
+    }
+    return 'green-ready-text';
 }
 
 //-------------------------------------------------------------------------------------------------

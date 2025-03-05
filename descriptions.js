@@ -1353,39 +1353,46 @@ statisticsContent = {
         subHeading1: "Pioneer",
         subBody1: "Leigh",
 
-        subHeading2: "Run",
-        subBody2: "1",
+        subHeading2: "Current AP",
+        subBody2: "10000",
 
-        subHeading3: "Run Time",
-        subBody3: "100d 18h 10m 32s",
+        subHeading3: "Total AP Gain",
+        subBody3: "10000",
 
-        subHeading4: "Total News Tickers Seen",
-        subBody4: "1000",
+        subHeading4: "Run",
+        subBody4: "1",
 
-        subHeading5: "News Ticker Prizes Collected",
-        subBody5: "10",
+        subHeading5: "Run Time",
+        subBody5: "100d 18h 10m 32s",
 
-        subHeading6: "Theme",
-        subBody6: "Terminal",
+        subHeading6: "Total News Tickers Seen",
+        subBody6: "1000",
 
-        subHeading7: "Total Antimatter Mined",
-        subBody7: "10000",
+        subHeading7: "News Ticker Prizes Collected",
+        subBody7: "10",
 
-        subHeading8: "Total Asteroids Discovered",
-        subBody8: "50",
+        subHeading8: "Theme",
+        subBody8: "Terminal",
 
-        subHeading9: "Total Legendary Asteroids Discovered",
-        subBody9: "5",
+        subHeading9: "Total Antimatter Mined",
+        subBody9: "10000",
 
-        subHeading10: "Total Stars Studied",
-        subBody10: "25",
+        subHeading10: "Total Asteroids Discovered",
+        subBody10: "50",
 
-        subHeading11: "Total Rockets Launched",
-        subBody11: "156",
+        subHeading11: "Total Legendary Asteroids Discovered",
+        subBody11: "5",
 
-        subHeading12: "Total Star Ships Launched",
-        subBody12: "3"
+        subHeading12: "Total Stars Studied",
+        subBody12: "25",
+
+        subHeading13: "Total Rockets Launched",
+        subBody13: "156",
+
+        subHeading14: "Total Star Ships Launched",
+        subBody14: "3"
     },
+
     'run': {
         subHeading1: "Star System",
         subBody1: "Spica",
@@ -1396,8 +1403,8 @@ statisticsContent = {
         subHeading3: "Cash",
         subBody3: "10000",
 
-        subHeading4: "AP",
-        subBody4: "10",
+        subHeading4: "AP Anticipated",
+        subBody4: "3",
 
         subHeading5: "Antimatter",
         subBody5: "10000"
@@ -1520,7 +1527,57 @@ statisticsContent = {
 
         subHeading7: "Antimatter Mined",
         subBody7: "3000"
+    },
+    'interstellar': {
+        subHeading1: "Stars Studied",
+        subBody1: "5",
+
+        subHeading2: "Star Ship Built",
+        subBody2: "Yes",
+
+        subHeading3: "Star Ship Distance Travelled",
+        subBody3: "0ly",
+
+        subHeading4: "System Scanned",
+        subBody4: "No",
+
+        subHeading5: "Fleet Attack Strength",
+        subBody5: "10000",
+
+        subHeading6: "Fleet1",
+        subBody6: "8",
+
+        subHeading7: "Fleet2",
+        subBody7: "12",
+
+        subHeading8: "Fleet3",
+        subBody8: "8",
+
+        subHeading9: "Fleet4",
+        subBody9: "2",
+
+        subHeading10: "Fleet5",
+        subBody10: "2",
+
+        subHeading11: "Enemy",
+        subBody11: "Xythians",
+
+        subHeading12: "Enemy Total Defence Overcome",
+        subBody12: "10000",
+
+        subHeading13: "Enemy Total Defence Remaining",
+        subBody13: "10000",
+
+        subHeading14: "AP From Star Voyage",
+        subBody14: "1",
+
+        subHeading15: "AP From Conquest",
+        subBody15: "3",
+
+        subHeading16: "Total AP on Rebirth",
+        subBody16: "4"
     }
+
 }
 
 helpContent = {

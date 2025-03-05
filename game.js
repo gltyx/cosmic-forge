@@ -1,4 +1,5 @@
 import {
+    statFunctions,
     getStellarScannerRange,
     getDestinationStarScanned,
     setDestinationStarScanned,
@@ -209,7 +210,8 @@ import {
     removeStarConnectionTooltip,
     removeOrbitCircle,
     drawOrbitCircle,
-    drawStarShipArrowhead
+    drawStarShipArrowhead,
+    getStats
 } from "./ui.js";
 
 import { 
@@ -531,6 +533,7 @@ function checkAndRevealNewBuildings(type) {
 }
 
 function updateStats() {
+    //top bar
     //stat1
     const cash = getResourceDataObject('currency', ['cash']);
     if (getCurrencySymbol() !== "€") {
@@ -560,6 +563,11 @@ function updateStats() {
     
     //stat8
     getTimeInStatCell();
+
+    //stats page
+    if (getCurrentOptionPane() === 'statistics') {
+        getStats(statFunctions);
+    }
 }
 
 function updateAP() {
