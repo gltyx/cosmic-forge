@@ -417,17 +417,24 @@ export async function gameLoop() {
 }
 
 function checkIfStarShipBuilt() {
-    const starShipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
-    .filter(module => module.startsWith('ss'));
+    if (!getStarShipBuilt())  {
+        const starShipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
+        .filter(module => module.startsWith('ss') && !module.startsWith('ssStellarScanner'));
 
-    const stellarScannerFinished = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'finished']) === true;
-    setStellarScannerBuilt(stellarScannerFinished);
+        const allMandatoryModulesFinished = starShipModules.every(starShipModule => 
+            getResourceDataObject('space', ['upgrades', starShipModule, 'finished'])
+        );
+    
+        setStarShipBuilt(allMandatoryModulesFinished);
+        if (allMandatoryModulesFinished) {
+            showNotification('Star Ship can now be launched!', 'info');
+        }
+    }
 
-    const allModulesFinished = starShipModules.every(starShipModule => 
-        getResourceDataObject('space', ['upgrades', starShipModule, 'finished'])
-    );
-
-    setStarShipBuilt(allModulesFinished);
+    if (!getStellarScannerBuilt()) {
+        const stellarScannerFinished = getResourceDataObject('space', ['upgrades', 'ssStellarScanner', 'finished']) === true;
+        setStellarScannerBuilt(stellarScannerFinished);
+    }
 }
 
 function updateRocketNames() {
@@ -5671,15 +5678,16 @@ export function generateDestinationStarData() {
     const existingData = getStarSystemDataObject('stars', ['destinationStar']) || {};
 
     const lifeDetected = generateLifeDetection(); 
-    const lifeformTraits = lifeDetected ? generateLifeformTraits() : [];
     const civilizationLevel = lifeDetected ? generateCivilizationLevel() : null;
+    const lifeformTraits = lifeDetected ? generateLifeformTraits(civilizationLevel) : [];
     const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : null;
-    
+    const raceName = generateRaceName(civilizationLevel);
+
     const threatLevel = lifeDetected ? generateThreatLevel(civilizationLevel, population, lifeformTraits) : "None";
     const defenseRating = lifeDetected ? generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) : 0;
     const enemyFleets = lifeDetected ? generateEnemyFleets(threatLevel, population, lifeformTraits) : 0;
     
-    const anomalies = generateAnomalies();
+    const anomalies = generateAnomalies(civilizationLevel);
 
     const updatedData = {
         ...existingData,
@@ -5687,6 +5695,7 @@ export function generateDestinationStarData() {
         lifeformTraits,
         civilizationLevel,
         populationEstimate: population,
+        raceName,
         threatLevel,
         defenseRating,
         enemyFleets,
@@ -5700,10 +5709,14 @@ function generateLifeDetection() {
     return Math.random() < 0.99;
 }
 
-function generateLifeformTraits() {
-    const primaryTraits = ["Aggressive", "Diplomatic"];
-    const habitatTraits = ["Land Dwelling", "Aquatic", "Atmosphere Dwelling"];
-    const extraTraits = ["Armored", "Hive Mind", "Heat Resistant", "Cold Resistant"];
+function generateLifeformTraits(civilizationLevel) {
+    const primaryTraits = [["Aggressive", "red-disabled-text"], ["Diplomatic", "green-ready-text"]];
+    const habitatTraits = [["Terrans", ""], ["Aquatic", ""], ["Aerialians", ""]];
+    const extraTraits = [["Armored", "red-disabled-text"], ["Hive Mind", "red-disabled-text"], ["Heat Resistant", "warning-orange-text"], ["Cold Resistant", "warning-orange-text"]];
+
+    if (civilizationLevel === 'Unsentient') {
+        return [['N/A', ''], ['N/A', ''], ['N/A', '']];
+    }
 
     const primaryTrait = primaryTraits[Math.floor(Math.random() * primaryTraits.length)];
     const habitatTrait = habitatTraits[Math.floor(Math.random() * habitatTraits.length)];
@@ -5713,19 +5726,21 @@ function generateLifeformTraits() {
 }
 
 function generateCivilizationLevel() {
-    const civilizationLevels = [
-        "Unsentient",
-        "Industrial",
-        "Spacefaring"
-    ];
+    const randomValue = Math.random();
 
-    return civilizationLevels[Math.floor(Math.random() * civilizationLevels.length)];
+    if (randomValue < 0.1) {
+        return "Unsentient";
+    } else if (randomValue < 0.55) {
+        return "Industrial";
+    } else {
+        return "Spacefaring";
+    }
 }
 
 function generatePopulationEstimate(lifeformTraits) {
     let population = Math.floor(Math.random() * (50000000 - 1000000 + 1)) + 1000000;
-    
-    if (lifeformTraits.includes("Hive Mind")) {
+
+    if (lifeformTraits.some(trait => trait[0] === "Hive Mind")) {
         population *= 4;
     }
 
@@ -5755,11 +5770,11 @@ function generateThreatLevel(civilizationLevel, population, lifeformTraits) {
         }
     }
 
-    if (lifeformTraits.includes("Diplomatic") && threatLevel !== "None") {
+    if (lifeformTraits.some(trait => trait[0] === "Diplomatic") && threatLevel !== "None") {
         const threatLevels = ["None", "Low", "Moderate", "High", "Extreme"];
         const currentIndex = threatLevels.indexOf(threatLevel);
         threatLevel = threatLevels[Math.max(0, currentIndex - 1)];
-    }
+    }    
 
     return threatLevel;
 }
@@ -5784,9 +5799,9 @@ function generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) {
 
     defenseRating = Math.round(maxDefense * threatMultipliers[threatLevel] * civilizationBonus);
 
-    if (lifeformTraits.includes("Armored")) {
+    if (lifeformTraits.some(trait => trait[0] === "Armored")) {
         defenseRating = Math.min(maxDefense, defenseRating + 10);
-    }
+    }    
 
     const minDefense = Math.max(1, defenseRating - 10);
     const maxDefenseAdjusted = Math.min(100, defenseRating + 10);
@@ -5805,16 +5820,16 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
 
     let totalFleets = Math.floor(population * threatFleetMultipliers[threatLevel] * 100);
 
-    if (lifeformTraits.includes("Diplomatic")) {
+    if (lifeformTraits.some(trait => trait[0] === "Diplomatic")) {
         totalFleets = Math.floor(totalFleets * 0.5);
-    }
+    }    
 
     if (totalFleets === 0) return { land: 0, air: 0, sea: 0 };
 
     let primaryType;
-    if (lifeformTraits.includes("Land Dwelling")) primaryType = "land";
-    else if (lifeformTraits.includes("Atmosphere Dwelling")) primaryType = "air";
-    else if (lifeformTraits.includes("Aquatic")) primaryType = "sea";
+    if (lifeformTraits.some(trait => trait[0] === "Terrans")) primaryType = "land";
+    else if (lifeformTraits.some(trait => trait[0] === "Aerialians")) primaryType = "air";
+    else if (lifeformTraits.some(trait => trait[0] === "Aquatic")) primaryType = "sea";    
     else primaryType = ["land", "air", "sea"][Math.floor(Math.random() * 3)];
 
     const primaryFleets = Math.floor(totalFleets * 0.6);
@@ -5833,19 +5848,23 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     return fleetDistribution;
 }
 
-function generateAnomalies() {
+function generateAnomalies(civilizationLevel) {
     const possibleAnomalies = [
-        { name: "Electromagnetic Surge", effect: "Reduces enemy defense by 20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy" },
-        { name: "Fortified Magnetic Field", effect: "Increases enemy defense by 20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy" },
-        { name: "Plasma Instability", effect: "Increases player attack power by 15%", value: 15, type: "player-attack-buff", counter: "player-attack-debuff", target: "player" },
-        { name: "Energy Dampening Field", effect: "Reduces player attack power by 15%", value: -15, type: "player-attack-debuff", counter: "player-attack-buff", target: "player" },
-        { name: "Atmospheric Disturbance", effect: "Reduces enemy air fleet presence by 30%", value: -30, type: "air-debuff", counter: "air-buff", target: "enemy" },
-        { name: "High-Altitude Jet Streams", effect: "Boosts enemy air fleet strength by 20%", value: 20, type: "air-buff", counter: "air-debuff", target: "enemy" },
-        { name: "Seismic Instability", effect: "Reduces enemy land fleet presence by 30%", value: -30, type: "land-debuff", counter: "land-buff", target: "enemy" },
-        { name: "Tectonic Shift", effect: "Boosts enemy land fleet strength by 20%", value: 20, type: "land-buff", counter: "land-debuff", target: "enemy" },
-        { name: "Deep Ocean Currents", effect: "Reduces enemy sea fleet presence by 30%", value: -30, type: "sea-debuff", counter: "sea-buff", target: "enemy" },
-        { name: "Dark Matter Flux", effect: "Boosts enemy sea fleet strength by 20%", value: 20, type: "sea-buff", counter: "sea-debuff", target: "enemy" }
+        { name: "Electromagnetic Surge", effect: "Enemy defense -20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy", class: "green-ready-text" },
+        { name: "Fortified Magnetic Field", effect: "Enemy defense +20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy", class: "red-disabled-text" },
+        { name: "Plasma Instability", effect: "Player attack power +15%", value: 15, type: "player-attack-buff", counter: "player-attack-debuff", target: "player", class: "green-ready-text" },
+        { name: "Energy Dampening Field", effect: "Player attack -15%", value: -15, type: "player-attack-debuff", counter: "player-attack-buff", target: "player", class: "red-disabled-text" },
+        { name: "Atmospheric Disturbance", effect: "Enemy air fleets -30%", value: -30, type: "air-debuff", counter: "air-buff", target: "enemy", class: "green-ready-text" },
+        { name: "High-Altitude Jet Streams", effect: "Enemy air fleets +20%", value: 20, type: "air-buff", counter: "air-debuff", target: "enemy", class: "red-disabled-text" },
+        { name: "Seismic Instability", effect: "Enemy land fleets -30%", value: -30, type: "land-debuff", counter: "land-buff", target: "enemy", class: "green-ready-text" },
+        { name: "Tectonic Shift", effect: "Enemy land fleets +20%", value: 20, type: "land-buff", counter: "land-debuff", target: "enemy", class: "red-disabled-text" },
+        { name: "Deep Ocean Currents", effect: "Enemy sea fleets -30%", value: -30, type: "sea-debuff", counter: "sea-buff", target: "enemy", class: "green-ready-text" },
+        { name: "Dark Matter Flux", effect: "Enemy sea fleets +20%", value: 20, type: "sea-buff", counter: "sea-debuff", target: "enemy", class: "red-disabled-text" }
     ];
+
+    if (civilizationLevel === 'Unsentient') {
+        return [{ name: "None", effect: "", value: 0, type: "", counter: "", target: "", class: "" }];
+    }
 
     const shuffled = possibleAnomalies.sort(() => Math.random() - 0.5);
 
@@ -5861,6 +5880,54 @@ function generateAnomalies() {
     return selectedAnomalies;
 }
 
+function generateRaceName(civilizationLevel) {
+
+    if (civilizationLevel === 'Unsentient') {
+        const unsentientRaces = ['Floral', 'Bacterial', 'Cellular', 'Fungal', 'Mossy', 'Lichenous', 'Microbial', 'Protozoan'];
+        return unsentientRaces[Math.floor(Math.random() * unsentientRaces.length)];
+    }
+
+    const useStarName = Math.random() < 0.5;
+    let starName = getDestinationStar().split(" ")[0].toLowerCase();
+
+    const prefixes = [
+        "Xy", "Za", "Vo", "Thra", "Kro", "Mora", "Dra", "Nexa", "Vex", "Zy",
+        "Tero", "Qua", "Joro", "Phy", "Uro", "Grex", "Sylo", "Fero", "Wex", "Dexo",
+        "Byra", "Tarn", "Oza", "Kly", "Mexo", "Pha", "Voro", "Dren", "Sora", "Lumo",
+        "Xero", "Trilo", "Bry", "Nyth", "Quen", "Kyra", "Drano", "Luth", "Zylo", "Omex"
+    ];
+    
+    const middles = [
+        "vi", "lor", "thar", "quon", "zar", "mion", "rax", "drel", "vex", "nex",
+        "phy", "ryn", "sol", "tarn", "bex", "thyl", "zor", "phel", "kyn", "threx",
+        "lyx", "vor", "drix", "quar", "meth", "syl", "tor", "zarn", "lex", "dyn"
+    ];
+    
+    const suffixes = [
+        "ites", "ians", "nths", "oids", "ari", "ans", "eths", "ors", "ex", "ar",
+        "oth", "orn", "yx", "eth", "al", "os", "ith", "une", "yn", "um",
+        "orax", "eron", "ara", "oza", "exo", "yss", "ithil", "onis", "uva", "quix"
+    ];
+
+    let raceName;
+
+    if (useStarName) {
+        let prefix = Math.random() < 0.5 ? prefixes[Math.floor(Math.random() * prefixes.length)] : "";
+        let middle = Math.random() < 0.5 ? middles[Math.floor(Math.random() * middles.length)] : "";
+        let suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+        raceName = `${prefix}${starName}${middle}${suffix}`;
+    } else {
+        let prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        let middle = middles[Math.floor(Math.random() * middles.length)];
+        let suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+
+        raceName = `${prefix}${middle}${suffix}`;
+    }
+
+    raceName = raceName.length <= 14 ? raceName : raceName.substring(0, 14);
+    return raceName.charAt(0).toUpperCase() + raceName.slice(1);
+}
 
 //===============================================================================================================
 

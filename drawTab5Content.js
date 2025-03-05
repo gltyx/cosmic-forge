@@ -54,8 +54,8 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
         let starsData = getStarSystemDataObject('stars');
         
         let starsObject = Object.fromEntries(
-            Object.entries(starsData).filter(([starName]) => starName !== currentStarName)
-        );
+            Object.entries(starsData).filter(([starName]) => starName !== currentStarName && starName !== 'destinationStar')
+        );        
 
         const starLegendRow = createOptionRow(
             `starLegendRow`,
@@ -281,37 +281,18 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                     'starNameText',
                     ['value-text']
                 ),
-                null,
-                null,
-                null,
-                null,
-                '',
-                '',
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null,
-                null,
-                ''
-            );
-
-            const lifeRow = createOptionRow(
-                'lifeDetectedRow',
-                null,
-                'Life Detected:',
                 createTextElement(
-                    starData.lifeDetected ? 'Yes' : 'No',
-                    'lifeDetectedText',
-                    [starData.lifeDetected ? 'green-ready-text' : 'red-disabled-text']
-                ),
+                    `<span class="ap-destination-star-element-right">AP: <span class="green-ready-text">${starData.ascendencyPoints}</span></span>
+                    Life: <span class="${getStellarScannerBuilt() ? (starData.lifeDetected ? 'green-ready-text' : 'red-disabled-text') : 'red-disabled-text'}">
+                        ${getStellarScannerBuilt() ? (starData.lifeDetected ? 'Yes' : 'No') : '???'}
+                    </span>`,
+                    'apContainer',
+                    ['value-text', 'ap-destination-star-element']
+                ),                             
                 null,
-                null,                               
                 null,
                 null,
-                ``,
+                '',
                 '',
                 null,
                 null,
@@ -321,45 +302,24 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 false,
                 null,
                 null,
-                ''
-            );
+                '',
+                [true, '15%', '85%']
+            );            
         
             const civilizationRow = createOptionRow(
                 'civilizationLevelRow',
                 null,
-                'Civilization Level:',
+                'Civilization:',
                 createTextElement(
-                    starData.civilizationLevel || 'None',
+                    getStellarScannerBuilt() ? (starData.raceName) : `<span class="red-disabled-text">???</span>`,
                     'civilizationLevelText',
                     ['value-text']
                 ),
-                null,
-                null,                               
-                null,
-                null,
-                ``,
-                '',
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null,
-                null,
-                ''
-            );
-        
-            const populationRow = createOptionRow(
-                'populationRow',
-                null,
-                'Population Estimate:',
                 createTextElement(
-                    starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A',
-                    'populationText',
-                    ['value-text']
-                ),
-                null,
+                    `<span class="ap-destination-star-element-right">Type: <span class="${getStellarScannerBuilt() ? (starData.civilizationLevel === 'Unsentient' ? 'green-ready-text' : starData.civilizationLevel === 'Industrial' ? 'warning-orange-text' : 'red-disabled-text') : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.civilizationLevel : '???'}</span></span>`,
+                    'apContainer',
+                    ['value-text', 'ap-destination-star-element']
+                ),    
                 null,                               
                 null,
                 null,
@@ -373,45 +333,92 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 false,
                 null,
                 null,
-                ''
-            );
+                '',
+                [true, '15%', '85%']
+            );            
         
+            const traitsText = getStellarScannerBuilt() 
+            ? starData.lifeformTraits.map(trait => 
+                `<span class="${trait[1]}">${trait[0]}</span>`
+            ).join(", ") 
+            : `<span class="red-disabled-text">???</span>`;
+        
+        const populationText = getStellarScannerBuilt() 
+            ? (starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A') 
+            : `<span class="red-disabled-text">???</span>`;
+        
+        const populationRow = createOptionRow(
+            'populationRow',
+            null,
+            'Population:',
+            createTextElement(
+                populationText,
+                'populationText',
+                ['value-text']
+            ),
+            createTextElement(
+                `<span class="ap-destination-star-element-right">Traits: <span class="value-text">${traitsText}</span></span>`,
+                'traitsText',
+                ['value-text', 'ap-destination-star-element']
+            ),
+            null,                               
+            null,
+            null,
+            ``,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, '15%', '85%']
+        );              
+        
+            let defenseClass = "";
+            let defenseText = `${getStellarScannerBuilt() ? starData.defenseRating : '???'}%`;
+            
+            if (getStellarScannerBuilt()) {
+                if (starData.defenseRating > 75) {
+                    defenseClass = "red-disabled-text";
+                } else if (starData.defenseRating >= 50) {
+                    defenseClass = "warning-orange-text";
+                } else {
+                    defenseClass = "green-ready-text";
+                }
+            } else {
+                defenseClass = "red-disabled-text";
+            }
+            
+            let threatLevelClass = "";
+            const threatLevel = getStellarScannerBuilt() ? starData.threatLevel : '???';
+            if (threatLevel === "None" || threatLevel === "Low") {
+                threatLevelClass = "green-ready-text";
+            } else if (threatLevel === "Moderate" || threatLevel === "High") {
+                threatLevelClass = "warning-orange-text";
+            } else if (threatLevel === "Extreme") {
+                threatLevelClass = "red-disabled-text";
+            } else {
+                threatLevelClass = "red-disabled-text";
+            }
+            
             const threatRow = createOptionRow(
                 'threatLevelRow',
                 null,
                 'Threat Level:',
                 createTextElement(
-                    starData.threatLevel,
+                    `<span class="${threatLevelClass}">${threatLevel}</span>`,
                     'threatLevelText',
-                    [`threat-${starData.threatLevel.toLowerCase()}`]
+                    [threatLevelClass]
                 ),
-                null,
-                null,                               
-                null,
-                null,
-                ``,
-                '',
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null,
-                null,
-                ''
-            );
-        
-            const defenseRow = createOptionRow(
-                'defenseRatingRow',
-                null,
-                'Defense Rating:',
                 createTextElement(
-                    starData.defenseRating,
+                    `<span class="ap-destination-star-element-right">Defense: <span class="value-text ${defenseClass}">${defenseText}</span></span>`,
                     'defenseRatingText',
-                    ['value-text']
+                    ['value-text', 'ap-destination-star-element']
                 ),
-                null,
                 null,                               
                 null,
                 null,
@@ -425,50 +432,30 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 false,
                 null,
                 null,
-                ''
-            );
+                '',
+                [true, '15%', '85%']
+            );                                           
         
             const fleetRow = createOptionRow(
                 'enemyFleetsRow',
                 null,
                 'Enemy Fleets:',
-                createTextElement(`Land: ${starData.enemyFleets.land}`, 'fleetLandText', ['value-text']),
-                createTextElement(`Air: ${starData.enemyFleets.air}`, 'fleetAirText', ['value-text']),
-                createTextElement(`Sea: ${starData.enemyFleets.sea}`, 'fleetSeaText', ['value-text']),                            
-                null,
-                null,
-                ``,
-                '',
-                null,
-                null,
-                null,
-                null,
-                null,
-                false,
-                null,
-                null,
-                ''
-            );
-        
-            const anomaliesText = starData.anomalies.length > 0 
-                ? starData.anomalies.map(a => `${a.name} (${a.effect})`).join('<br/>') 
-                : 'None';
-        
-            const anomaliesRow = createOptionRow(
-                'anomaliesRow',
-                null,
-                'Anomalies:',
-                createHtmlTextArea(
-                    'anomaliesTextArea',
-                    ['value-text'],
-                    '',
-                    anomaliesText,
-                    ['header-text'],
-                    ['body-text']
+                createTextElement(
+                    `Land: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.land : '???'}</span>`,
+                    'fleetLandText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Air: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.air : '???'}</span>`,
+                    'fleetAirText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Sea: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.sea : '???'}</span>`,
+                    'fleetSeaText',
+                    ['value-text', 'ap-destination-star-element']
                 ),
                 null,
-                null,                               
-                null,
                 null,
                 ``,
                 '',
@@ -480,15 +467,50 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 false,
                 null,
                 null,
-                ''
-            );
+                '',
+                [true, '15%', '85%']
+            );                    
+        
+            const anomaliesText = starData.anomalies.length > 0
+            ? starData.anomalies.map(a => 
+                a.name === 'None' 
+                ? `${a.name}`
+                : `${a.name}: <span class="${a.class}">${a.effect}</span>`
+            ).join('<br/>') 
+            : 'None';               
+        
+        
+        const anomaliesRow = createOptionRow(
+            'anomaliesRow',
+            null,
+            'Anomalies:',
+            createTextElement(
+                anomaliesText,
+                'anomaliesTextField'
+                ['value-text'],
+            ),
+            null,
+            null,
+            null,
+            null,
+            ``,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, '15%', '85%']
+        );        
         
             optionContentElement.appendChild(starNameRow);
-            optionContentElement.appendChild(lifeRow);
             optionContentElement.appendChild(civilizationRow);
             optionContentElement.appendChild(populationRow);
             optionContentElement.appendChild(threatRow);
-            optionContentElement.appendChild(defenseRow);
             optionContentElement.appendChild(fleetRow);
             optionContentElement.appendChild(anomaliesRow);
         }

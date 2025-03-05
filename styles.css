@@ -1123,9 +1123,15 @@ body {
 #ssFleetHangarPartsCountText,
 #ssStellarScannerPartsCountText,
 [class*="-travel-to-asteroid-button"],
-[class*="-launch-button"]
+[class*="-launch-button"],
+[class*="-destination-star-element"]
 {
     margin-left: 30px;
+}
+
+[class*="-destination-star-element-right"]
+{
+    margin-right: 30px;
 }
 
 .fuel-quantity {
@@ -1163,11 +1169,7 @@ body {
 #starDestinationButton,
 #starDestinationDescription,
 .save-name-margin,
-.save-load-button
-{
-    margin-left: 50px;
-}
-
+.save-load-button,
 .star-option-button
 {
     margin-left: 50px;
