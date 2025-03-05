@@ -50,6 +50,7 @@ export let gameState;
 
 let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
+let alreadySeenNewsTickerArray = [];
 let prize = [];
 let rocketsBuilt = [];
 let starShipModulesBuilt = [];
@@ -199,7 +200,6 @@ let allTimeTotalAntimatterMined = 0;
 let allTimeTotalApGain = 0;
 let currentRunNumber = 0;
 let currentRunTimer = 0;
-let totalUniqueNewsTickersGenerated = 0;
 let totalNewsTickerPrizesCollected = 0;
 let apAnticipatedThisRun = 0;
 let allTimeStarShipsBuilt = 0;
@@ -440,7 +440,6 @@ export const statFunctionsGets = {
     "stat_enemyTotalDefenceRemaining": getStatEnemyTotalDefenceRemaining,
     "stat_apFromStarVoyage": getStatApFromStarVoyage,
     "stat_apFromConquest": getStatApFromConquest,
-    "stat_totalApOnRebirth": getStatTotalApOnRebirth
 };
 
 export const statFunctionsSets = {
@@ -586,10 +585,10 @@ export function captureGameStatusForSaving(type) {
     gameState.allTimeTotalApGain = allTimeTotalApGain;
     gameState.currentRunNumber = currentRunNumber;
     gameState.currentRunTimer = currentRunTimer;
-    gameState.totalUniqueNewsTickersGenerated = totalUniqueNewsTickersGenerated;
     gameState.totalNewsTickerPrizesCollected = totalNewsTickerPrizesCollected;
     gameState.apAnticipatedThisRun = apAnticipatedThisRun;
     gameState.allTimeStarShipsBuilt = allTimeStarShipsBuilt;
+    gameState.alreadySeenNewsTickerArray = alreadySeenNewsTickerArray;
 
 
     // Flags
@@ -717,10 +716,10 @@ export function restoreGameStatus(gameState, type) {
             allTimeTotalApGain = gameState.allTimeTotalApGain ?? 0;
             currentRunNumber = gameState.currentRunNumber ?? 0;
             currentRunTimer = gameState.currentRunTimer ?? 0;
-            totalUniqueNewsTickersGenerated = gameState.totalUniqueNewsTickersGenerated ?? 0;
             totalNewsTickerPrizesCollected = gameState.totalNewsTickerPrizesCollected ?? 0;
             apAnticipatedThisRun = gameState.apAnticipatedThisRun ?? 0;
             allTimeStarShipsBuilt = gameState.allTimeStarShipsBuilt ?? 0;
+            alreadySeenNewsTickerArray = gameState.alreadySeenNewsTickerArray ?? [];
 
 
             // Flags
@@ -1601,6 +1600,10 @@ export function setTrippedStatus(value) {
     trippedStatus = value;
 }
 
+export function getAlreadySeenNewsTickerArray() {
+    return alreadySeenNewsTickerArray;
+}
+
 export function getCurrentStarSystem() {
     return currentStarSystem;
 }
@@ -2328,9 +2331,8 @@ function getStatRunTime() {
     return formatTime(currentRunTimer);
 }
 
-
 function getStatTotalUniqueNewsTickersSeen() {
-    return totalUniqueNewsTickersGenerated;
+    return alreadySeenNewsTickerArray.length;
 }
 
 function getStatNewsTickerPrizesCollected() {
@@ -2381,87 +2383,87 @@ function getStatApAnticipated() {//
     return apAnticipatedThisRun;
 }
 
-function getStatAntimatter() {
+function getStatAntimatter() {//
     return resourceData.antimatter.quantity;
 }
 
-function getStatHydrogen() {
+function getStatHydrogen() {//
     return allTimeTotalHydrogen;
 }
 
-function getStatHelium() {
+function getStatHelium() {//
     return allTimeTotalHelium;
 }
 
-function getStatCarbon() {
+function getStatCarbon() {//
     return allTimeTotalCarbon;
 }
 
-function getStatNeon() {
+function getStatNeon() {//
     return allTimeTotalNeon;
 }
 
-function getStatOxygen() {
+function getStatOxygen() {//
     return allTimeTotalOxygen;
 }
 
-function getStatSodium() {
+function getStatSodium() {//
     return allTimeTotalSodium;
 }
 
-function getStatSilicon() {
+function getStatSilicon() {//
     return allTimeTotalSilicon;
 }
 
-function getStatIron() {
+function getStatIron() {//
     return allTimeTotalIron;
 }
 
-function getStatDiesel() {
+function getStatDiesel() {//
     return allTimeTotalDiesel;
 }
 
-function getStatGlass() {
+function getStatGlass() {//
     return allTimeTotalGlass;
 }
 
-function getStatSteel() {
+function getStatSteel() {//
     return allTimeTotalSteel;
 }
 
-function getStatConcrete() {
+function getStatConcrete() {//
     return allTimeTotalConcrete;
 }
 
-function getStatWater() {
+function getStatWater() {//
     return allTimeTotalWater;
 }
 
-function getStatTitanium() {
+function getStatTitanium() {//
     return allTimeTotalTitanium;
 }
 
-function getStatResearchPoints() {
+function getStatResearchPoints() {//
     return allTimeTotalResearchPoints;
 }
 
-function getStatScienceKits() {
+function getStatScienceKits() {//
     return allTimeTotalScienceKits;
 }
 
-function getStatScienceClubs() {
+function getStatScienceClubs() {//
     return allTimeTotalScienceClubs;
 }
 
-function getStatScienceLabs() {
+function getStatScienceLabs() {//
     return allTimeTotalScienceLabs;
 }
 
-function getStatTechsUnlocked() {
+function getStatTechsUnlocked() {//
     return getTechUnlockedArray().length;
 }
 
-function getStatPower() {
+function getStatPower() {//
     return document.getElementById('stat3').textContent.split(' ')[1];
 }
 
@@ -2469,7 +2471,7 @@ function getStatTotalEnergy() {
     return document.getElementById('stat2').textContent.split(' ')[1];
 }
 
-function getStatTotalProduction() {
+function getStatTotalProduction() {//
     return (resourceData.buildings.energy.upgrades.powerPlant1.quantity * resourceData.buildings.energy.upgrades.powerPlant1.rate 
         + resourceData.buildings.energy.upgrades.powerPlant2.quantity * resourceData.buildings.energy.upgrades.powerPlant2.rate
         + resourceData.buildings.energy.upgrades.powerPlant3.quantity * resourceData.buildings.energy.upgrades.powerPlant3.rate)
@@ -2593,15 +2595,11 @@ function getStatEnemyTotalDefenceRemaining() {
 }
 
 function getStatApFromStarVoyage() {
-    return 'Yes';
+    return 1;
 }
 
 function getStatApFromConquest() {
-    return 'No';
-}
-
-function getStatTotalApOnRebirth() {
-    return 0;
+    return 1;
 }
 
 //setters
@@ -2686,7 +2684,11 @@ function setStatApAnticipated(valueToAdd) {
 }
 
 function setStatStarShipBuilt(valueToAdd) {
-    apAnticipatedThisRun += valueToAdd;
+    allTimeStarShipsBuilt += valueToAdd;
+}
+
+export function setAlreadySeenNewsTickerArray(value) {
+    alreadySeenNewsTickerArray.push(value);
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setAlreadySeenNewsTickerArray,
+    getAlreadySeenNewsTickerArray,
     getStarShipStatus,
     getStarShipArrowPosition,
     setStarShipArrowPosition,
@@ -2765,9 +2767,11 @@ export function showNewsTickerMessage(newsTickerContainer) {
             if (getOneOffPrizesAlreadyClaimedArray().includes(randomIndex)) {
                 message = false;
             } else {
+                addMessageToSeenArray(message.id);
                 message = specialMessageBuilder(message, category);
             }
         } else {
+            addMessageToSeenArray(message.id)
             message = specialMessageBuilder(message, category);
         }
     }
@@ -2775,8 +2779,17 @@ export function showNewsTickerMessage(newsTickerContainer) {
     if (message === false || message === undefined) {
         showNewsTickerMessage(newsTickerContainer);
     } else {
+        if (category === 'noPrize') {
+            addMessageToSeenArray(randomIndex);
+        }
         displayNewsTickerMessage(message);
     }  
+}
+
+function addMessageToSeenArray(id) {
+    if (!getAlreadySeenNewsTickerArray().includes(id)) {
+        setAlreadySeenNewsTickerArray(id);
+    }
 }
 
 function displayNewsTickerMessage(message) {

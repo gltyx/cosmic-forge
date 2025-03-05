@@ -949,48 +949,55 @@ export function initialiseDescriptions() {
                 body: "Stretch Me!",
                 item: "wave",
                 linkWord: "Stretch Me!",
-                class: ""
+                class: "",
+                id: 1000
             },
             {
                 body: "🕺💃 D.I.S.C.O. 🕺💃",
                 item: "disco",
                 linkWord: "🕺💃 D.I.S.C.O. 🕺💃",
-                class: ""
+                class: "",
+                id: 1001
             },
             {
                 body: "Boing!",
                 item: "bounce",
                 linkWord: "Boing!",
-                class: ""
+                class: "",
+                id: 1002
             },
             {
                 body: "There Or Not?",
                 item: "fade",
                 linkWord: "There Or Not?",
-                class: ""
+                class: "",
+                id: 1003
             },
             {
                 body: "Bzzzzzzz!",
                 item: "glitch",
                 linkWord: "Bzzzzzzz!",
-                class: ""
+                class: "",
+                id: 1004
             },
             {
                 body: "Wibble Wobble!",
                 item: "wobble",
                 linkWord: "Wibble Wobble!",
-                class: ""
+                class: "",
+                id: 1005
             },
             {
                 body: "Dont Click This: Boo!",
                 item: "boo",
                 linkWord: "Boo!",
-                class: "boo"
+                class: "boo",
+                id: 1006
             }     
         ],        
         oneOff: [
             {
-                id : 0,
+                id : 3000,
                 body: "Double storage capacity of all unlocked resources here!",
                 type: ["storageMultiplier", 2],
                 condition: "visible",
@@ -999,7 +1006,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 1,
+                id : 3001,
                 body: "Double storage capacity of all unlocked compounds here!",
                 type: ["storageMultiplier", 2],
                 condition: "visible",
@@ -1008,7 +1015,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 2,
+                id : 3002,
                 body: "Double storage capacity of all unlocked resources and compounds here!",
                 type: ["storageMultiplier", 2],
                 condition: "visible",
@@ -1017,7 +1024,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 3,
+                id : 3003,
                 body: "Double storage capacity of tier 1 batteries here!",
                 type: ["storageMultiplier", 2],
                 condition: "",
@@ -1026,7 +1033,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {   
-                id : 4,
+                id : 3004,
                 body: "Double storage capacity of tier 2 batteries here!",
                 type: ["storageMultiplier", 2],
                 condition: "",
@@ -1035,7 +1042,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 5,
+                id : 3005,
                 body: "Double storage capacity of tier 3 batteries here!",
                 type: ["storageMultiplier", 2],
                 condition: "",
@@ -1044,7 +1051,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 6,
+                id : 3006,
                 body: "Double output of all basic Power Plants here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1053,7 +1060,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 7,
+                id : 3007,
                 body: "Double output of all Solar Power Plants here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1062,7 +1069,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 8,
+                id : 3008,
                 body: "Double output of all Advanced Power Plants here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1071,7 +1078,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },            
             {
-                id : 9,
+                id : 3009,
                 body: "Double output of Tier 1 Auto Buyers for all unlocked resources here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1080,7 +1087,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 10,
+                id : 3010,
                 body: "Double output of Tier 1 Auto Buyers for all unlocked compounds here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1089,7 +1096,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id : 11,
+                id : 3011,
                 body: "Double output of Tier 1 Auto Buyers for all unlocked resources and compounds here!",
                 type: ["rateMultiplier", 2],
                 condition: "",
@@ -1098,7 +1105,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },
             {
-                id: 12,
+                id: 3012,
                 body: "Get 100 free Antimatter here!",
                 type: ["adder", 100],
                 condition: "visible",
@@ -1107,7 +1114,7 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },            
             {
-                id : 13,
+                id : 3013,
                 body: "Get 1 free AP here!",
                 type: ["adder", 1],
                 condition: "visible",
@@ -1123,7 +1130,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "hydrogen",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2000
             },
             {
                 body: "Click here to get xxx free Helium!",
@@ -1131,7 +1139,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "helium",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2001
             },
             {
                 body: "Click here to get xxx free Carbon!",
@@ -1139,7 +1148,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "carbon",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2002
             },
             {
                 body: "Click here to get xxx free Neon!",
@@ -1147,7 +1157,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "neon",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2003
             },
             {
                 body: "Click here to get xxx free Oxygen!",
@@ -1155,7 +1166,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "oxygen",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2004
             },
             {
                 body: "Click here to get xxx free Sodium!",
@@ -1163,7 +1175,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "sodium",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2005
             },
             {
                 body: "Click here to get xxx free Silicon!",
@@ -1171,7 +1184,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "silicon",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2006
             },
             {
                 body: "Click here to get xxx free Iron!",
@@ -1179,7 +1193,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "resources",
                 item: "iron",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2007
             },
             {
                 body: "Click here to get xxx free Diesel!",
@@ -1187,7 +1202,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "diesel",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2008
             },
             {
                 body: "Click here to get xxx free Glass!",
@@ -1195,7 +1211,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "glass",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2009
             },
             {
                 body: "Click here to get xxx free Steel!",
@@ -1203,7 +1220,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "steel",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2010
             },
             {
                 body: "Click here to get xxx free Concrete!",
@@ -1211,7 +1229,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "concrete",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2011
             },
             {
                 body: "Click here to get xxx free Titanium!",
@@ -1219,7 +1238,8 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "titanium",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2012
             },
             {
                 body: "Click here to get xxx free Water!",
@@ -1227,10 +1247,11 @@ export function initialiseDescriptions() {
                 condition: "visible",
                 category: "compounds",
                 item: "water",
-                linkWord: "here"
+                linkWord: "here",
+                id: 2013
             }
         ],
-        noPrize: [        
+        noPrize: [   //push index as id      
             "A hummingbird's heart can beat over 1,200 times per minute.",
             "The shortest commercial flight in the world lasts just 57 seconds.",
             "The Eiffel Tower can grow by up to 15 cm during hot weather.",
@@ -1572,9 +1593,6 @@ statisticsContent = {
 
         subHeading15: "AP From Conquest",
         subBody15: "3",
-
-        subHeading16: "Total AP on Rebirth",
-        subBody16: "4"
     }
 }
 
