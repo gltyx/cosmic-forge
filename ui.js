@@ -2628,6 +2628,14 @@ function initializeTabEventListeners() {
         });    
     });
 
+    document.querySelectorAll('[class*="tab8"][class*="option8"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab8', 'statistics');
+            setCurrentOptionPane('statistics');
+            updateContent('Statistics', 'tab8', 'content');
+        });    
+    });
+
     const tabsContainer = document.getElementById('tabsContainer');
 
     if (tabsContainer) {

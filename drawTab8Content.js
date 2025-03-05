@@ -9,6 +9,10 @@ export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow');
     if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow');
 
+    if (heading === 'Statistics') {
+    
+    }
+
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
             'settingsCurrencySymbolRow',
