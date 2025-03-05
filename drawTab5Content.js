@@ -347,15 +347,18 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 [true, '15%', '85%']
             );            
         
-            const traitsText = getStellarScannerBuilt() 
-            ? starData.lifeformTraits.map(trait => 
-                `<span class="${trait[1]}">${trait[0]}</span>`
-            ).join(", ") 
-            : `<span class="red-disabled-text">???</span>`;
+        const traitsText = getStellarScannerBuilt() 
+        ? starData.lifeformTraits.map(trait => 
+            `<span class="${trait[1]}">${trait[0]}</span>`
+        ).join(", ") 
+        : `<span class="red-disabled-text">???</span>`;
         
         const populationText = getStellarScannerBuilt() 
-            ? (starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A') 
-            : `<span class="red-disabled-text">???</span>`;
+        ? (starData.civilizationLevel === 'Unsentient' 
+            ? 'N/A' 
+            : (starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A')) 
+        : `<span class="red-disabled-text">???</span>`;
+        
         
         const populationRow = createOptionRow(
             'populationRow',
