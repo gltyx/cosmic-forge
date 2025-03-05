@@ -1392,7 +1392,6 @@ statisticsContent = {
         subHeading14: "Total Star Ships Launched",
         subBody14: "3"
     },
-
     'run': {
         subHeading1: "Star System",
         subBody1: "Spica",
@@ -1577,7 +1576,6 @@ statisticsContent = {
         subHeading16: "Total AP on Rebirth",
         subBody16: "4"
     }
-
 }
 
 helpContent = {
@@ -1674,7 +1672,6 @@ helpContent = {
 
         subHeading7: "Galactic Market",
         subBody7: "The Galactic market is the last major Unlock of the game, and arrives after the first Rebirth.  In it, you can spend AP for permanent Upgrades to make subsequent runs much easier.",
-
     }
 }
 
@@ -1765,12 +1762,9 @@ export function getStatisticsContent(type) {
                     subSectionArray.push(subBody);
                 }
             }
-
             subSections.push(subSectionArray);
         });
-
         return subSections;
     }
-
     return [];
 }

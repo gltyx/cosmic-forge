@@ -350,7 +350,7 @@ export function setElements() {
     };
 }
 
-export const statFunctions = {
+export const statFunctionsGets = {
     // Overview
     "stat_pioneer": getStatPioneer,
     "stat_currentAp": getStatCurrentAp,
@@ -439,6 +439,32 @@ export const statFunctions = {
     "stat_apFromStarVoyage": getStatApFromStarVoyage,
     "stat_apFromConquest": getStatApFromConquest,
     "stat_totalApOnRebirth": getStatTotalApOnRebirth
+};
+
+export const statFunctionsSets = {
+    //resources
+    "set_hydrogen": setStatHydrogen,
+    "set_helium": setStatHelium,
+    "set_carbon": setStatCarbon,
+    "set_neon": setStatNeon,
+    "set_oxygen": setStatOxygen,
+    "set_sodium": setStatSodium,
+    "set_silicon": setStatSilicon,
+    "set_iron": setStatIron,
+
+    // Compounds
+    "set_diesel": setStatDiesel,
+    "set_glass": setStatGlass,
+    "set_steel": setStatSteel,
+    "set_concrete": setStatConcrete,
+    "set_water": setStatWater,
+    "set_titanium": setStatTitanium,
+
+    // Research
+    "set_researchPoints": setStatResearchPoints,
+    "set_scienceKits": setStatScienceKits,
+    "set_scienceClubs": setStatScienceClubs,
+    "set_scienceLabs": setStatScienceLabs,
 };
 
 export function setGameStateVariable(value) {
@@ -2568,7 +2594,78 @@ function getStatTotalApOnRebirth() {
     return 0;
 }
 
+//setters
+function setStatHydrogen(valueToAdd) {
+    allTimeTotalHydrogen += valueToAdd;
+}
 
+function setStatHelium(valueToAdd) {
+    allTimeTotalHelium += valueToAdd;
+}
+
+function setStatCarbon(valueToAdd) {
+    allTimeTotalCarbon += valueToAdd;
+}
+
+function setStatNeon(valueToAdd) {
+    allTimeTotalNeon += valueToAdd;
+}
+
+function setStatOxygen(valueToAdd) {
+    allTimeTotalOxygen += valueToAdd;
+}
+
+function setStatSodium(valueToAdd) {
+    allTimeTotalSodium += valueToAdd;
+}
+
+function setStatSilicon(valueToAdd) {
+    allTimeTotalSilicon += valueToAdd;
+}
+
+function setStatIron(valueToAdd) {
+    allTimeTotalIron += valueToAdd;
+}
+
+function setStatDiesel(valueToAdd) {
+    allTimeTotalDiesel += valueToAdd;
+}
+
+function setStatGlass(valueToAdd) {
+    allTimeTotalGlass += valueToAdd;
+}
+
+function setStatSteel(valueToAdd) {
+    allTimeTotalSteel += valueToAdd;
+}
+
+function setStatConcrete(valueToAdd) {
+    allTimeTotalConcrete += valueToAdd;
+}
+
+function setStatWater(valueToAdd) {
+    allTimeTotalWater += valueToAdd;
+}
+
+function setStatTitanium(valueToAdd) {
+    allTimeTotalTitanium += valueToAdd;
+}
+
+function setStatResearchPoints(valueToAdd) {
+    allTimeTotalResearchPoints += valueToAdd;
+}
+
+function setStatScienceKits(valueToAdd) {
+    allTimeTotalScienceKits += valueToAdd;
+}
+
+function setStatScienceClubs(valueToAdd) {
+    allTimeTotalScienceClubs += valueToAdd;
+}
+
+function setStatScienceLabs(valueToAdd) {
+    allTimeTotalScienceLabs += valueToAdd;
+}
 
 //image urls----------------------------------------------------------------------------------------------------------------------
 

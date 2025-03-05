@@ -90,10 +90,10 @@ export let resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 1300,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 1300,
+            storageCapacity: 130,
             currentSecondaryIncreasePrice: 0,
             revealedYet: false,
             upgrades: {

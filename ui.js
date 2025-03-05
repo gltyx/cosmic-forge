@@ -3474,7 +3474,7 @@ export function getStats(statFunctions) {
         const statElement = document.getElementById(stat);
         if (statElement) {
             const statValue = statFunctions[stat]();
-            statElement.innerHTML = `<span>${statValue}</span>`;
+            statElement.innerHTML = `<span>${(typeof statValue === 'number' && !Number.isInteger(statValue)) ? Math.floor(statValue) : statValue}</span>`;
             const classColor = determineClassColor(statValue);
             statElement.firstChild.classList.add(classColor);
         }
