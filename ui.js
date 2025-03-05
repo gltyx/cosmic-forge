@@ -791,7 +791,7 @@ export function createTextElement(text, id, classList, onClick) {
     return div;
 }
 
-export function createHtmlTextArea(id, classList = [], headerText = '', bodyText = '', headerClasses = [], bodyClasses = []) {
+export function createHtmlTextAreaProse(id, classList = [], headerText = '', bodyText = '', headerClasses = [], bodyClasses = []) {
     const div = document.createElement('div');
     const headers = headerText ? headerText : [];
     const bodies = bodyText ? bodyText : [];
@@ -815,6 +815,45 @@ export function createHtmlTextArea(id, classList = [], headerText = '', bodyText
             innerTextString += '<br/><br/>';
             innerTextString += `<div class="sub-header-seperator" style="width: 100%; height: 10px;"></div>`;
         }
+    }
+
+    div.id = id;
+    div.innerHTML = innerTextString;
+
+    if (Array.isArray(classList)) {
+        div.classList.add(...classList);
+    } else if (typeof classList === 'string') {
+        div.classList.add(classList);
+    }
+
+    return div;
+}
+
+export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, subHeadings, subBodys, mainHeaderClasses = [], subHeaderClasses = [], subBodyClasses = []) {
+    const div = document.createElement('div');
+    let innerTextString = '';
+
+    // Add 'center-statistics' class for centering the content
+    classList.push('center-statistics');
+
+    for (let i = 0; i < mainHeadings.length; i++) {
+        const mainHeading = capitaliseString(mainHeadings[i]);
+
+        innerTextString += `<span class="${mainHeaderClasses.join(' ')}">${mainHeading}</span><br/>`;
+
+        for (let j = 0; j < subHeadings[i].length; j++) {
+            const header = capitaliseString(subHeadings[i][j] || '');
+            const body = capitaliseString(subBodys[i][j] || '');
+
+            if (header) {
+                innerTextString += `<span class="${subHeaderClasses.join(' ')}">${header}</span>: `;
+            }
+            if (body) {
+                innerTextString += `<span class="${subBodyClasses.join(' ')}">${body}</span><br/>`;
+            }
+        }
+
+        innerTextString += '<br/>';
     }
 
     div.id = id;

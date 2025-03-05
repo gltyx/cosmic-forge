@@ -10,6 +10,7 @@ export let techNotificationMessages;
 export let optionDescriptions;
 export let newsTickerContent;
 export let helpContent;
+export let statisticsContent;
 export let rocketNames;
 export let starNames;
 export let launchStarShipWarningHeader;
@@ -1347,6 +1348,181 @@ export function initialiseDescriptions() {
     };
 }
 
+statisticsContent = {
+    'overview': {
+        subHeading1: "Pioneer",
+        subBody1: "Leigh",
+
+        subHeading2: "Run",
+        subBody2: "1",
+
+        subHeading3: "Run Time",
+        subBody3: "100d 18h 10m 32s",
+
+        subHeading4: "Total News Tickers Seen",
+        subBody4: "1000",
+
+        subHeading5: "News Ticker Prizes Collected",
+        subBody5: "10",
+
+        subHeading6: "Theme",
+        subBody6: "Terminal",
+
+        subHeading7: "Total Antimatter Mined",
+        subBody7: "10000",
+
+        subHeading8: "Total Asteroids Discovered",
+        subBody8: "50",
+
+        subHeading9: "Total Legendary Asteroids Discovered",
+        subBody9: "5",
+
+        subHeading10: "Total Stars Studied",
+        subBody10: "25",
+
+        subHeading11: "Total Rockets Launched",
+        subBody11: "156",
+
+        subHeading12: "Total Star Ships Launched",
+        subBody12: "3"
+    },
+    'run': {
+        subHeading1: "Star System",
+        subBody1: "Spica",
+
+        subHeading2: "Current Weather",
+        subBody2: "☀",
+
+        subHeading3: "Cash",
+        subBody3: "10000",
+
+        subHeading4: "AP",
+        subBody4: "10",
+
+        subHeading5: "Antimatter",
+        subBody5: "10000"
+    },
+    'resources': {
+        subHeading1: "Hydrogen",
+        subBody1: "10000",
+
+        subHeading2: "Helium",
+        subBody2: "10000",
+
+        subHeading3: "Carbon",
+        subBody3: "10000",
+
+        subHeading4: "Neon",
+        subBody4: "10000",
+
+        subHeading5: "Oxygen",
+        subBody5: "10000",
+
+        subHeading6: "Sodium",
+        subBody6: "10000",
+
+        subHeading7: "Silicon",
+        subBody7: "10000",
+
+        subHeading8: "Iron",
+        subBody8: "10000"
+    },
+    'compounds': {
+        subHeading1: "Diesel",
+        subBody1: "10000",
+
+        subHeading2: "Glass",
+        subBody2: "10000",
+
+        subHeading3: "Steel",
+        subBody3: "10000",
+
+        subHeading4: "Concrete",
+        subBody4: "10000",
+
+        subHeading5: "Water",
+        subBody5: "10000",
+
+        subHeading6: "Titanium",
+        subBody6: "10000"
+    },
+    'research': {
+        subHeading1: "Research Points",
+        subBody1: "10000",
+
+        subHeading2: "Science Kits",
+        subBody2: "10000",
+
+        subHeading3: "Science Clubs",
+        subBody3: "10000",
+
+        subHeading4: "Science Labs",
+        subBody4: "10000",
+
+        subHeading5: "Techs Unlocked",
+        subBody5: "10000 / 38 (make dynamic)"
+    },
+    'energy': {
+        subHeading1: "Power",
+        subBody1: "ON",
+
+        subHeading2: "Total Energy",
+        subBody2: "10000 kW",
+
+        subHeading3: "Total Production",
+        subBody3: "10000 kW",
+
+        subHeading4: "Total Consumption",
+        subBody4: "10000 kW",
+
+        subHeading5: "Total Battery Storage",
+        subBody5: "10000 kWh",
+
+        subHeading6: "Times Tripped",
+        subBody6: "10000",
+
+        subHeading7: "Basic Power Plants",
+        subBody7: "10000",
+
+        subHeading8: "Advanced Power Plants",
+        subBody8: "10000",
+
+        subHeading9: "Solar Power Plants",
+        subBody9: "10000",
+
+        subHeading10: "Sodium Ion Batteries",
+        subBody10: "10000",
+
+        subHeading11: "Battery2",
+        subBody11: "10000",
+
+        subHeading12: "Battery3",
+        subBody12: "10000"
+    },
+    'spaceMining': {
+        subHeading1: "Space Telescope Built",
+        subBody1: "Yes",
+
+        subHeading2: "Launch Pad Built",
+        subBody2: "Yes",
+
+        subHeading3: "Rockets Built",
+        subBody3: "4",
+
+        subHeading4: "Rocket With Most Launches",
+        subBody4: "Leigh1",
+
+        subHeading5: "Asteroids Discovered",
+        subBody5: "15",
+
+        subHeading6: "Asteroids Visited",
+        subBody6: "10",
+
+        subHeading7: "Antimatter Mined",
+        subBody7: "3000"
+    }
+}
+
 helpContent = {
     'get started': {
         subHeading1: "Introduction",
@@ -1504,6 +1680,39 @@ export function getHelpContent(section, type) {
         return Object.keys(currentSection)
             .filter(key => key.startsWith('subBody'))
             .map(key => currentSection[key]);
+    }
+
+    return [];
+}
+
+export function getStatisticsContent(type) {
+    const mainHeadings = Object.keys(statisticsContent);
+
+    if (type === 'mainHeadings') {
+        return mainHeadings;
+    }
+
+    if (type === 'subHeadings' || type === 'subBodys') {
+        let subSections = [];
+
+        mainHeadings.forEach(mainHeading => {
+            const subSectionsForMainHeading = statisticsContent[mainHeading];
+            let subSectionArray = [];
+            
+            for (let i = 1; i <= Object.keys(subSectionsForMainHeading).length / 2; i++) {
+                const subHeading = subSectionsForMainHeading[`subHeading${i}`] || '';
+                const subBody = subSectionsForMainHeading[`subBody${i}`] || '';
+                if (type === 'subHeadings') {
+                    subSectionArray.push(subHeading);
+                } else if (type === 'subBodys') {
+                    subSectionArray.push(subBody);
+                }
+            }
+
+            subSections.push(subSectionArray);
+        });
+
+        return subSections;
     }
 
     return [];

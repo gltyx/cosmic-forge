@@ -1,17 +1,14 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx } from './constantsAndGlobalVars.js';
-import { createHtmlTextArea, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { createHtmlTextAreaStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
-import { getHelpContent } from './descriptions.js';
+import { getStatisticsContent, getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Get Started') createHelpSectionRow('getStartedRow');
     if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow');
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow');
     if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow');
-
-    if (heading === 'Statistics') {
-    
-    }
+    if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow');
 
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
@@ -464,7 +461,7 @@ export function drawTab8Content(heading, optionContentElement) {
             rowId,
             null,
             '',
-            createHtmlTextArea(
+            createHtmlTextAreaProse(
                 `${rowId}TextArea`,
                 ['help-container', 'help-container-margin'],
                 getHelpContent(getCurrentOptionPane(), 'subHeadings'),
@@ -493,4 +490,41 @@ export function drawTab8Content(heading, optionContentElement) {
     
         optionContentElement.appendChild(helpRow);
     }
+
+    function createStatisticsSectionRow(rowId) {
+        const statisticsRow = createOptionRow(
+            rowId,
+            null,
+            '',
+            createHtmlTextAreaStatistics(
+                `${rowId}TextArea`,
+                ['help-container', 'help-container-margin', 'center-statistics'],
+                getStatisticsContent('mainHeadings'),  // Get the main headings
+                getStatisticsContent('subHeadings'),   // Get the subheadings
+                getStatisticsContent('subBodys'),      // Get the sub-body content
+                ['help-sub-header-text'],              // Classes for mainHeadings
+                ['help-sub-body-text'],              // Classes for subHeadings
+                ['green-ready-text']                 // Classes for subBody
+            ),                      
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%'],
+            ['no-left-margin']
+        );
+    
+        optionContentElement.appendChild(statisticsRow);
+    }    
 }
