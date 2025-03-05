@@ -3058,6 +3058,10 @@ function starShipUiChecks() {
                 destinationStarDetailsRow.classList.add('invisible');
             }
         }
+
+        if (getDestinationStarScanned()) {
+            document.getElementById('descriptionContentTab5').innerHTML = 'Here you can analyse the findings of your System Scan!';
+        }
     }
 
     if (getCurrentOptionPane() !== 'star map' || getCurrentTab()[1] !== 'Interstellar') {
@@ -5684,10 +5688,13 @@ export function generateDestinationStarData() {
     const raceName = generateRaceName(civilizationLevel);
 
     const threatLevel = lifeDetected ? generateThreatLevel(civilizationLevel, population, lifeformTraits) : "None";
-    const defenseRating = lifeDetected ? generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) : 0;
-    const enemyFleets = lifeDetected ? generateEnemyFleets(threatLevel, population, lifeformTraits) : 0;
+    let defenseRating = lifeDetected ? generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) : 0;
+    let enemyFleets = lifeDetected ? generateEnemyFleets(threatLevel, population, lifeformTraits) : 0;
     
-    const anomalies = generateAnomalies(civilizationLevel);
+    let anomalies = generateAnomalies(civilizationLevel, defenseRating, enemyFleets);
+    defenseRating = anomalies[1];
+    enemyFleets = anomalies[2];
+    anomalies = anomalies[0];
 
     const updatedData = {
         ...existingData,
@@ -5848,7 +5855,7 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     return fleetDistribution;
 }
 
-function generateAnomalies(civilizationLevel) {
+function generateAnomalies(civilizationLevel, defenseLevel, enemyFleets) {
     const possibleAnomalies = [
         { name: "Electromagnetic Surge", effect: "Enemy defense -20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy", class: "green-ready-text" },
         { name: "Fortified Magnetic Field", effect: "Enemy defense +20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy", class: "red-disabled-text" },
@@ -5863,21 +5870,41 @@ function generateAnomalies(civilizationLevel) {
     ];
 
     if (civilizationLevel === 'Unsentient') {
-        return [{ name: "None", effect: "", value: 0, type: "", counter: "", target: "", class: "" }];
+        return [{ name: "None", effect: "", value: 0, type: "", counter: "", target: "", class: "" }, defenseLevel, enemyFleets];
     }
 
     const shuffled = possibleAnomalies.sort(() => Math.random() - 0.5);
-
     let selectedAnomalies = [];
-    
+    let modifiedDefense = defenseLevel;
+    let modifiedEnemyFleets = { ...enemyFleets };
+    let fleetChanges = { air: {}, land: {}, sea: {} };
+
     for (let anomaly of shuffled) {
         if (!selectedAnomalies.some(a => a.type === anomaly.counter)) {
             selectedAnomalies.push(anomaly);
+
+            if (anomaly.type.includes("enemy-defense")) {
+                modifiedDefense += (anomaly.value / 100) * modifiedDefense;
+            } else if (!anomaly.type.includes("player")) {
+                let fleetType = anomaly.type.split('-')[0];
+
+                if (modifiedEnemyFleets[fleetType] !== undefined) {
+                    let changeAmount = (anomaly.value / 100) * modifiedEnemyFleets[fleetType];
+                    modifiedEnemyFleets[fleetType] = Math.floor(modifiedEnemyFleets[fleetType] + changeAmount);
+
+                    let classType = anomaly.value > 0 ? "red-disabled-text" : "green-ready-text";
+
+                    fleetChanges[fleetType] = {
+                        value: Math.floor(changeAmount),
+                        class: classType
+                    };
+                }
+            }
         }
         if (selectedAnomalies.length === 2) break;
     }
 
-    return selectedAnomalies;
+    return [selectedAnomalies, modifiedDefense, { ...modifiedEnemyFleets, fleetChanges }];
 }
 
 function generateRaceName(civilizationLevel) {

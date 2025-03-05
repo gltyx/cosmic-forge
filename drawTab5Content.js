@@ -289,7 +289,17 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                     'apContainer',
                     ['value-text', 'ap-destination-star-element']
                 ),                             
-                null,
+                createTextElement(
+                    `<span class="ap-destination-star-element-right">
+                        Weather: <span class="${starData.weatherTendency[2]}">${starData.weatherTendency[0]}</span> 
+                        (<span class="probability-text">${starData.weatherTendency[1]}</span>%) - 
+                        <span class="${starData.precipitation !== 'water' ? 'green-ready-text' : ''}">
+                            ${capitaliseString(starData.precipitationType)}
+                        </span>
+                    </span>`,
+                    'weatherContainer',
+                    ['value-text', 'ap-destination-star-element']
+                ),                
                 null,
                 null,
                 '',
@@ -441,20 +451,26 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Enemy Fleets:',
                 createTextElement(
-                    `Land: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.land : '???'}</span>`,
+                    `Land: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.land.class || '') : 'red-disabled-text'}">
+                        ${getStellarScannerBuilt() ? starData.enemyFleets.land : '???'}
+                    </span>`,
                     'fleetLandText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(
-                    `Air: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.air : '???'}</span>`,
+                    `Air: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.air.class || '') : 'red-disabled-text'}">
+                        ${getStellarScannerBuilt() ? starData.enemyFleets.air : '???'}
+                    </span>`,
                     'fleetAirText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(
-                    `Sea: <span class="${getStellarScannerBuilt() ? 'green-ready-text' : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.enemyFleets.sea : '???'}</span>`,
+                    `Sea: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.sea.class || '') : 'red-disabled-text'}">
+                        ${getStellarScannerBuilt() ? starData.enemyFleets.sea : '???'}
+                    </span>`,
                     'fleetSeaText',
                     ['value-text', 'ap-destination-star-element']
-                ),
+                ),                              
                 null,
                 null,
                 ``,
