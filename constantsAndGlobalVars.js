@@ -23,7 +23,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.30;
+export const GAME_VERSION_FOR_SAVES = 0.321;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -766,6 +766,7 @@ export function restoreGameStatus(gameState, type) {
             offlineGains(false);
 
             //replaceRocketNames(gameState.rocketNames);
+            fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray);
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
             const autoSaveFrequencyElement = document.getElementById('autoSaveFrequency');
@@ -814,6 +815,24 @@ export function restoreGameStatus(gameState, type) {
     });
 }
 
+function fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray) { //for fixing saves broken by my carelessness in migration.
+    if (rocketsBuilt.length > 0) {
+        setResourceDataObject(true, 'space', ['upgrades', 'launchPad', 'launchPadBoughtYet']);
+    
+        if (!canFuelRockets && getTechUnlockedArray().includes('advancedFuels')) {
+            canFuelRockets = true;
+        }
+    
+        rocketsBuilt.forEach(rocket => {
+            const partsRequired = getResourceDataObject('space', ['upgrades', rocket, 'parts']);
+            setResourceDataObject(partsRequired, 'space', ['upgrades', rocket, 'builtParts']);
+        });
+    }
+    
+    if (asteroidArray.length > 0 || starVisionDistance > 0) {
+        setResourceDataObject(true, 'space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet']);
+    }
+}
 
 // export function setLocalization(value) {
 //     localization = value;

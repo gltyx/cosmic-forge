@@ -2,7 +2,7 @@ import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.30, //update this whenever changes are made to the structure
+    version: 0.321, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -637,11 +637,6 @@ export let resourceData = {
                 resource2Price: [4000, 'titanium', 'compounds'],
                 resource3Price: [20000, 'neon', 'resources'],
                 setPrice: 'ssAntimatterEnginePrice',
-                autoBuyer: {
-                    currentTierLevel: 1,
-                    normalProgression: false,
-                    tier1: { nameUpgrade: 'Fuel', screen: 'star ship', place: 'starShipAutobuyer1Row', price: 20000, rate: 0.02, quantity: 0, setPrice: 'starShipAB1Price', energyUse: 4.0 },
-                }
             },
             ssFleetHangar: {
                 finished: false,
@@ -756,7 +751,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.30,
+    version: 0.321,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star

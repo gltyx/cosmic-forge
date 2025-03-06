@@ -13,6 +13,8 @@ import {
     getAutoSaveToggle,
     getSaveData,
     eNCrQueen,
+    getRocketsBuilt,
+    getAsteroidArray,
     // getLanguage, 
     // setLanguageChangedFlag, 
     // getLanguageChangedFlag 
@@ -26,6 +28,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
 import { rocketNames } from './descriptions.js';
+import { setResourceDataObject } from './resourceDataObject.js';
 
 let autoSaveTimer = null;
 let firebaseConfig;
@@ -123,6 +126,7 @@ export async function loadGameFromCloud() {
 
             const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
             const gameState = JSON.parse(decompressedJson);
+            console.log(gameState); //DEBUG GAME SAVES
 
             await initialiseLoadedGame(gameState, 'cloud');
             showNotification('Game loaded successfully!', 'info');
@@ -283,7 +287,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
         if (saveData.version < 0.28) {
             if (objectType === 'resourceData') {
                 saveData.space.upgrades.spaceTelescope = { 
-                    spaceTelescopeBoughtYet: false,
                     price: 10000,
                     resource1Price: [20000, 'steel', 'compounds'],
                     resource2Price: [15000, 'glass', 'compounds'],
@@ -325,147 +328,174 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.30) {
+        if (saveData.version < 0.321) {
             if (objectType === 'resourceData') {
-                saveData.space = {
+                saveData.space = saveData.space || {};
+
+                Object.assign(saveData.space, {
                     upgrades: {
-                        spaceTelescope: { 
-                            spaceTelescopeBoughtYet: false,
+                        spaceTelescope: Object.assign(saveData.space.upgrades?.spaceTelescope || {}, {
                             price: 10000,
                             resource1Price: [20000, 'iron', 'resources'],
                             resource2Price: [15000, 'glass', 'compounds'],
                             resource3Price: [20000, 'silicon', 'resources'],
                             energyUseSearchAsteroid: 0.4,
                             energyUseInvestigateStar: 0.7,
-                        },
-                        launchPad: { 
-                            launchPadBoughtYet: false,
+                        }),
+                        launchPad: Object.assign(saveData.space.upgrades?.launchPad || {}, {
                             price: 40000,
                             resource1Price: [10000, 'iron', 'resources'],
                             resource2Price: [1000, 'titanium', 'compounds'],
                             resource3Price: [20000, 'concrete', 'compounds'],
-                        },
-                        rocket1: {
-                            builtParts: 0,
+                        }),
+                        rocket1: Object.assign(saveData.space.upgrades?.rocket1 || {}, {
                             parts: 15,
                             price: 1000,
                             resource1Price: [1000, 'glass', 'compounds'],
                             resource2Price: [1000, 'titanium', 'compounds'],
                             resource3Price: [3000, 'steel', 'compounds'],
                             setPrice: 'rocket1Price',
-                            fuelQuantity: 0,
-                            fuelQuantityToLaunch: 10000, //10000
-                            autoBuyer: {
+                            fuelQuantityToLaunch: 10000,
+                            autoBuyer: Object.assign(saveData.space.upgrades?.rocket1?.autoBuyer || {}, {
                                 currentTierLevel: 1,
                                 normalProgression: false,
-                                tier1: { nameUpgrade: 'Fuel', screen: 'rocket1', place: 'rocket1Autobuyer1Row', price: 5000, rate: 0.02, quantity: 0, setPrice: 'rocket1AB1Price', energyUse: 0.7 },
-                            },
-                        },
-                        rocket2: {
-                            builtParts: 0,
+                                tier1: { 
+                                    nameUpgrade: 'Fuel', 
+                                    screen: 'rocket1', 
+                                    place: 'rocket1Autobuyer1Row', 
+                                    price: 5000, 
+                                    rate: 0.02, 
+                                    quantity: 0, 
+                                    setPrice: 'rocket1AB1Price', 
+                                    energyUse: 0.7 
+                                },
+                            }),
+                        }),
+                        rocket2: Object.assign(saveData.space.upgrades?.rocket2 || {}, {
                             parts: 20,
                             price: 1000,
                             resource1Price: [1000, 'glass', 'compounds'],
                             resource2Price: [1000, 'titanium', 'compounds'],
                             resource3Price: [3000, 'steel', 'compounds'],
                             setPrice: 'rocket2Price',
-                            fuelQuantity: 0,
                             fuelQuantityToLaunch: 12000,
-                            autoBuyer: {
+                            autoBuyer: Object.assign(saveData.space.upgrades?.rocket2?.autoBuyer || {}, {
                                 currentTierLevel: 1,
                                 normalProgression: false,
-                                tier1: { nameUpgrade: 'Fuel', screen: 'rocket2', place: 'rocket2Autobuyer1Row', price: 6000, rate: 0.02, quantity: 0, setPrice: 'rocket2AB1Price', energyUse: 0.8 },
-                            },
-                        },
-                        rocket3: {
-                            builtParts: 0,
+                                tier1: { 
+                                    nameUpgrade: 'Fuel', 
+                                    screen: 'rocket2', 
+                                    place: 'rocket2Autobuyer1Row', 
+                                    price: 6000, 
+                                    rate: 0.02, 
+                                    quantity: 0, 
+                                    setPrice: 'rocket2AB1Price', 
+                                    energyUse: 0.8 
+                                },
+                            }),
+                        }),
+                        rocket3: Object.assign(saveData.space.upgrades?.rocket3 || {}, {
                             parts: 25,
                             price: 1000,
                             resource1Price: [1000, 'glass', 'compounds'],
                             resource2Price: [1000, 'titanium', 'compounds'],
                             resource3Price: [3000, 'steel', 'compounds'],
                             setPrice: 'rocket3Price',
-                            fuelQuantity: 0,
                             fuelQuantityToLaunch: 14000,
-                            autoBuyer: {
+                            autoBuyer: Object.assign(saveData.space.upgrades?.rocket3?.autoBuyer || {}, {
                                 currentTierLevel: 1,
                                 normalProgression: false,
-                                tier1: { nameUpgrade: 'Fuel', screen: 'rocket3', place: 'rocket3Autobuyer1Row', price: 7000, rate: 0.02, quantity: 0, setPrice: 'rocket3AB1Price', energyUse: 0.9 },
-                            },
-                        },
-                        rocket4: {
-                            builtParts: 0,
+                                tier1: { 
+                                    nameUpgrade: 'Fuel', 
+                                    screen: 'rocket3', 
+                                    place: 'rocket3Autobuyer1Row', 
+                                    price: 7000, 
+                                    rate: 0.02, 
+                                    quantity: 0, 
+                                    setPrice: 'rocket3AB1Price', 
+                                    energyUse: 0.9 
+                                },
+                            }),
+                        }),
+                        rocket4: Object.assign(saveData.space.upgrades?.rocket4 || {}, {
                             parts: 30,
                             price: 1000,
                             resource1Price: [1000, 'glass', 'compounds'],
                             resource2Price: [1000, 'titanium', 'compounds'],
                             resource3Price: [3000, 'steel', 'compounds'],
                             setPrice: 'rocket4Price',
-                            fuelQuantity: 0,
                             fuelQuantityToLaunch: 16000,
-                            autoBuyer: {
+                            autoBuyer: Object.assign(saveData.space.upgrades?.rocket4?.autoBuyer || {}, {
                                 currentTierLevel: 1,
                                 normalProgression: false,
-                                tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 8000, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 1.0 },
-                            },
-                        },
-                        ssStructural: {
-                            finished: false,
-                            builtParts: 0,
-                            parts: 20,
-                            price: 6000,
-                            resource1Price: [8000, 'steel', 'compounds'],
-                            resource2Price: [3000, 'titanium', 'compounds'],
-                            resource3Price: [9000, 'silicon', 'resources'],
-                            setPrice: 'ssStructuralPrice',
-                        },
-                        ssLifeSupport: {
-                            finished: false,
-                            builtParts: 0,
-                            parts: 10,
-                            price: 15000,
-                            resource1Price: [10000, 'glass', 'compounds'],
-                            resource2Price: [100000, 'oxygen', 'resources'],
-                            resource3Price: [30000, 'water', 'compounds'],
-                            setPrice: 'ssLifeSupportPrice',
-                        },
-                        ssAntimatterEngine: {
-                            finished: false,
-                            builtParts: 0,
-                            parts: 16,
-                            price: 12000,
-                            resource1Price: [7000, 'steel', 'compounds'],
-                            resource2Price: [4000, 'titanium', 'compounds'],
-                            resource3Price: [20000, 'neon', 'resources'],
-                            setPrice: 'ssAntimatterEnginePrice',
-                            autoBuyer: {
-                                currentTierLevel: 1,
-                                normalProgression: false,
-                                tier1: { nameUpgrade: 'Fuel', screen: 'star ship', place: 'starShipAutobuyer1Row', price: 20000, rate: 0.02, quantity: 0, setPrice: 'starShipAB1Price', energyUse: 4.0 },
-                            }
-                        },
-                        ssFleetHangar: {
-                            finished: false,
-                            builtParts: 0,
-                            parts: 1,
-                            price: 100000,
-                            resource1Price: [80000, 'glass', 'compounds'],
-                            resource2Price: [40000, 'titanium', 'compounds'],
-                            resource3Price: [150000, 'steel', 'compounds'],
-                            setPrice: 'ssFleetHangarPrice'
-                        },
-                        ssStellarScanner: {
-                            finished: false,
-                            builtParts: 0,
-                            parts: 8,
-                            price: 5000,
-                            resource1Price: [3000, 'glass', 'compounds'],
-                            resource2Price: [4000, 'silicon', 'resources'],
-                            resource3Price: [6000, 'neon', 'resources'],
-                            setPrice: 'ssStellarScannerPrice'
-                        }
+                                tier1: { 
+                                    nameUpgrade: 'Fuel', 
+                                    screen: 'rocket4', 
+                                    place: 'rocket4Autobuyer1Row', 
+                                    price: 8000, 
+                                    rate: 0.02, 
+                                    quantity: 0, 
+                                    setPrice: 'rocket4AB1Price', 
+                                    energyUse: 1.0 
+                                },
+                            }),
+                        }),
                     }
-                }
+                });
+
+                Object.assign(saveData.space.upgrades, {
+                    ssStructural: {
+                        finished: false,
+                        builtParts: 0,
+                        parts: 20,
+                        price: 6000,
+                        resource1Price: [8000, 'steel', 'compounds'],
+                        resource2Price: [3000, 'titanium', 'compounds'],
+                        resource3Price: [9000, 'silicon', 'resources'],
+                        setPrice: 'ssStructuralPrice',
+                    },
+                    ssLifeSupport: {
+                        finished: false,
+                        builtParts: 0,
+                        parts: 10,
+                        price: 15000,
+                        resource1Price: [10000, 'glass', 'compounds'],
+                        resource2Price: [100000, 'oxygen', 'resources'],
+                        resource3Price: [30000, 'water', 'compounds'],
+                        setPrice: 'ssLifeSupportPrice',
+                    },
+                    ssAntimatterEngine: {
+                        finished: false,
+                        builtParts: 0,
+                        parts: 16,
+                        price: 12000,
+                        resource1Price: [7000, 'steel', 'compounds'],
+                        resource2Price: [4000, 'titanium', 'compounds'],
+                        resource3Price: [20000, 'neon', 'resources'],
+                        setPrice: 'ssAntimatterEnginePrice',
+                    },
+                    ssFleetHangar: {
+                        finished: false,
+                        builtParts: 0,
+                        parts: 1,
+                        price: 100000,
+                        resource1Price: [80000, 'glass', 'compounds'],
+                        resource2Price: [40000, 'titanium', 'compounds'],
+                        resource3Price: [150000, 'steel', 'compounds'],
+                        setPrice: 'ssFleetHangarPrice'
+                    },
+                    ssStellarScanner: {
+                        finished: false,
+                        builtParts: 0,
+                        parts: 8,
+                        price: 5000,
+                        resource1Price: [3000, 'glass', 'compounds'],
+                        resource2Price: [4000, 'silicon', 'resources'],
+                        resource3Price: [6000, 'neon', 'resources'],
+                        setPrice: 'ssStellarScannerPrice'
+                    }
+                });
+
                 if (!saveData.techs.orbitalConstruction) { saveData.techs.orbitalConstruction = { appearsAt: [45000, "planetaryNavigation", "rocketComposites", ""], prereqs: ['Planetary Navigation', 'Rocket Composites'], price: 50000, idForRenderPosition: 9100 } }
                 if (!saveData.techs.antimatterEngines) { saveData.techs.antimatterEngines = { appearsAt: [65000, "orbitalConstruction", "neutronCapture", "FTLravelTheory"], prereqs: ['Orbital Construction', 'Neutron Capture', 'FTL Travel Theory'], price: 78000, idForRenderPosition: 9101 } }
                 if (!saveData.techs.FTLTravelTheory) { saveData.techs.FTLTravelTheory = { appearsAt: [60000, "neutronCapture", "planetaryNavigation", "advancedFuels"], prereqs: ['Neutron Capture', 'Planetary Navigation', 'Advanced Fuels'], price: 65000, idForRenderPosition: 9102 } }
