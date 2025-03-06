@@ -2,7 +2,7 @@ import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.35, //update this whenever changes are made to the structure
+    version: 0.39, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -751,7 +751,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.35,
+    version: 0.39,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star

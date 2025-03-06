@@ -517,7 +517,6 @@ function checkAndRevealNewBuildings(type) {
                     ssLifeSupport: 'lifeSupportSystems',
                     ssAntimatterEngine: 'antimatterEngines',
                     ssFleetHangar: 'starshipFleets',
-                    ssStellarScanner: 'stellarScanners',
                 };
                 
                 Object.keys(ssModules).forEach(ssModule => {
@@ -530,6 +529,15 @@ function checkAndRevealNewBuildings(type) {
                         }
                     }
                 });
+                
+                const stellarScannerRow = document.getElementById(`spaceSsStellarScannerBuildRow`);
+                if (stellarScannerRow) {
+                    if (getStellarScannerBuilt() || (getStarShipStatus()[0] !== 'readyForTravel' && getStarShipStatus()[0] !== 'preconstruction')) {
+                        stellarScannerRow.classList.add('invisible');
+                    } else {
+                        stellarScannerRow.classList.remove('invisible');
+                    }
+                }               
             }
             break;
     }
@@ -3037,7 +3045,7 @@ function checkStatusAndSetTextClasses(element) {
     }
 }
 
-function starChecks(element) {
+function starChecks() {
     const starData = getStarSystemDataObject('stars');
     if (Object.keys(starData).length > 1) {
         document.getElementById('starDataOption').parentElement.parentElement.classList.remove('invisible');
@@ -3048,7 +3056,7 @@ function starShipUiChecks() {
     if (getCurrentOptionPane() === 'star ship') {
         const travelToDestinationStarRow = document.getElementById('spaceStarShipTravelRow');
         const scanDestinationStarRow = document.getElementById('spaceStarShipStellarScannerRow');
-        const destinationStarDetailsRow = document.getElementById('spaceDestinationStgarDetailsRow');
+        const destinationStarDetailsRow = document.getElementById('spaceDestinationStarDetailsRow');
 
         if (travelToDestinationStarRow) {
             if (getStarShipTravelling() && getStarShipStatus()[0] === 'travelling') {
@@ -3075,7 +3083,7 @@ function starShipUiChecks() {
         }
 
         if (getDestinationStarScanned()) {
-            document.getElementById('descriptionContentTab5').innerHTML = 'Here you can analyse the findings of your System Scan!';
+            getStellarScannerBuilt() ? document.getElementById('descriptionContentTab5').innerHTML = 'Here you can analyse the findings of your System Scan!' : document.getElementById('descriptionContentTab5').innerHTML = 'Without a Stellar Scanner fitted, you cannot determine anything, Good Luck!';
         }
     }
 
@@ -5725,10 +5733,12 @@ export function calculatePrecipitationType() {
 export function generateDestinationStarData() {
     const existingData = getStarSystemDataObject('stars', ['destinationStar']) || {};
 
-    const lifeDetected = generateLifeDetection(); 
-    const civilizationLevel = lifeDetected ? generateCivilizationLevel() : null;
+    const lifeDetected = generateLifeDetection();
+    //const lifeDetected = false; 
+    const civilizationLevel = lifeDetected ? generateCivilizationLevel() : 'None';
+    //const civilizationLevel = 'Unsentient';
     const lifeformTraits = lifeDetected ? generateLifeformTraits(civilizationLevel) : [];
-    const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : null;
+    const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : 0;
     const raceName = generateRaceName(civilizationLevel);
 
     const threatLevel = lifeDetected ? generateThreatLevel(civilizationLevel, population, lifeformTraits) : "None";
@@ -5957,6 +5967,10 @@ function generateRaceName(civilizationLevel) {
     if (civilizationLevel === 'Unsentient') {
         const unsentientRaces = ['Floral', 'Bacterial', 'Cellular', 'Fungal', 'Mossy', 'Lichenous', 'Microbial', 'Protozoan'];
         return unsentientRaces[Math.floor(Math.random() * unsentientRaces.length)];
+    }
+
+    if (civilizationLevel === 'None') {
+        return 'None';
     }
 
     const useStarName = Math.random() < 0.5;

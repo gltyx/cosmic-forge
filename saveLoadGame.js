@@ -328,7 +328,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.321) {
+        if (saveData.version < 0.38) {
             if (objectType === 'resourceData') {
                 saveData.space = saveData.space || {};
 
@@ -497,7 +497,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 });
 
                 if (!saveData.techs.orbitalConstruction) { saveData.techs.orbitalConstruction = { appearsAt: [45000, "planetaryNavigation", "rocketComposites", ""], prereqs: ['Planetary Navigation', 'Rocket Composites'], price: 50000, idForRenderPosition: 9100 } }
-                if (!saveData.techs.antimatterEngines) { saveData.techs.antimatterEngines = { appearsAt: [65000, "orbitalConstruction", "neutronCapture", "FTLravelTheory"], prereqs: ['Orbital Construction', 'Neutron Capture', 'FTL Travel Theory'], price: 78000, idForRenderPosition: 9101 } }
+                if (!saveData.techs.antimatterEngines) { saveData.techs.antimatterEngines = { appearsAt: [65000, "orbitalConstruction", "neutronCapture", "FTLTravelTheory"], prereqs: ['Orbital Construction', 'Neutron Capture', 'FTL Travel Theory'], price: 78000, idForRenderPosition: 9101 } }
                 if (!saveData.techs.FTLTravelTheory) { saveData.techs.FTLTravelTheory = { appearsAt: [60000, "neutronCapture", "planetaryNavigation", "advancedFuels"], prereqs: ['Neutron Capture', 'Planetary Navigation', 'Advanced Fuels'], price: 65000, idForRenderPosition: 9102 } }
                 if (!saveData.techs.lifeSupportSystems) { saveData.techs.lifeSupportSystems = { appearsAt: [55000, "orbitalConstruction", "nanoTubeTechnology", "quantumComputing"], prereqs: ['Orbital Construction', 'Nano Tube Technology', 'Quantum Computing'], price: 60000, idForRenderPosition: 9103 } }
                 if (!saveData.techs.starshipFleets) { saveData.techs.starshipFleets = { appearsAt: [80000, "FTLTravelTheory", "antimatterEngines", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Antimatter Engines', 'Orbital Construction'], price: 100000, idForRenderPosition: 9104 } }

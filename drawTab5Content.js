@@ -321,15 +321,31 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Civilization:',
                 createTextElement(
-                    getStellarScannerBuilt() ? (starData.raceName) : `<span class="red-disabled-text">???</span>`,
+                    getStellarScannerBuilt() 
+                        ? (starData.raceName === 'None' 
+                            ? '<span class="green-ready-text">None</span>' 
+                            : starData.raceName)
+                        : `<span class="red-disabled-text">???</span>`,
                     'civilizationLevelText',
                     ['value-text']
-                ),
+                ),                
                 createTextElement(
-                    `<span class="ap-destination-star-element-right">Type: <span class="${getStellarScannerBuilt() ? (starData.civilizationLevel === 'Unsentient' ? 'green-ready-text' : starData.civilizationLevel === 'Industrial' ? 'warning-orange-text' : 'red-disabled-text') : 'red-disabled-text'}">${getStellarScannerBuilt() ? starData.civilizationLevel : '???'}</span></span>`,
+                    `<span class="ap-destination-star-element-right">Type: 
+                        <span class="${getStellarScannerBuilt() 
+                            ? (starData.civilizationLevel === 'Unsentient' 
+                                ? 'green-ready-text' 
+                                : starData.civilizationLevel === 'Industrial' 
+                                    ? 'warning-orange-text' 
+                                    : starData.civilizationLevel === 'None' 
+                                        ? 'green-ready-text' 
+                                        : 'red-disabled-text') 
+                            : 'red-disabled-text'}">
+                            ${getStellarScannerBuilt() ? starData.civilizationLevel : '???'}
+                        </span>
+                    </span>`,
                     'apContainer',
                     ['value-text', 'ap-destination-star-element']
-                ),    
+                ),                    
                 null,                               
                 null,
                 null,
@@ -392,7 +408,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
         );              
         
             let defenseClass = "";
-            let defenseText = `${getStellarScannerBuilt() ? starData.defenseRating : '???'}%`;
+            let defenseText = `${getStellarScannerBuilt() ? starData.defenseRating + '%' : '???'}`;
             
             if (getStellarScannerBuilt()) {
                 if (starData.defenseRating > 75) {
@@ -454,26 +470,50 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Enemy Fleets:',
                 createTextElement(
-                    `Land: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.land.class || '') : 'red-disabled-text'}">
-                        ${getStellarScannerBuilt() ? starData.enemyFleets.land : '???'}
+                    `Land: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.land 
+                                : '???')}
                     </span>`,
                     'fleetLandText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(
-                    `Air: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.air.class || '') : 'red-disabled-text'}">
-                        ${getStellarScannerBuilt() ? starData.enemyFleets.air : '???'}
+                    `Air: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.air.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.air 
+                                : '???')}
                     </span>`,
                     'fleetAirText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(
-                    `Sea: <span class="${getStellarScannerBuilt() ? (starData.enemyFleets.fleetChanges.sea.class || '') : 'red-disabled-text'}">
-                        ${getStellarScannerBuilt() ? starData.enemyFleets.sea : '???'}
+                    `Sea: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.sea.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.sea 
+                                : '???')}
                     </span>`,
                     'fleetSeaText',
                     ['value-text', 'ap-destination-star-element']
-                ),                              
+                ),                                                 
                 null,
                 null,
                 ``,
@@ -490,14 +530,22 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 [true, '15%', '85%']
             );                    
         
-            const anomaliesText = starData.anomalies.length > 0
-            ? starData.anomalies.map(a => 
-                a.name === 'None' 
-                ? `${a.name}`
-                : `${a.name}: <span class="${a.class}">${a.effect}</span>`
-            ).join('<br/>') 
-            : 'None';               
+        let anomaliesText = (getStellarScannerBuilt() && starData.anomalies.length > 0)
+        ? starData.anomalies.map(a => {
+            if (a.name === 'None') {
+                return `<span>N/A</span>`;
+            }
+            return `${a.name}: <span class="${a.class}">${a.effect}</span>`;
+        }).join('<br/>')
+        : '<span class="red-disabled-text">???</span>';
         
+        if (starData.anomalies.length === 0) {
+            anomaliesText = '<span>None</span>';
+        }
+
+        if (starData.civilizationLevel === 'None') {
+            anomaliesText = '<span>N/A</span>';
+        }
         
         const anomaliesRow = createOptionRow(
             'anomaliesRow',
