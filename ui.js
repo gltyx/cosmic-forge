@@ -2965,6 +2965,7 @@ function addOneOffEventListeners() {
     const oneOffElement = document.getElementById('prizeTickerSpan');
 
     oneOffElement.addEventListener('click', function () {
+        addToResourceAllTimeStat(1, 'newsTickerPrizesCollected');
         sfxPlayer.playAudio('goodPrize');
         const multiplier = parseFloat(this.getAttribute('data-multiplier'));
 
@@ -3063,6 +3064,11 @@ function addOneOffEventListeners() {
             const itemToAddType = categoryArray;
             const quantityToAdd = multiplier;
             setResourceDataObject(getResourceDataObject(itemToAddType, ['quantity']) + quantityToAdd, itemToAddType, ['quantity']);
+            if (itemToAddType === 'antimatter') {
+                addToResourceAllTimeStat(quantityToAdd, 'antimatter');
+            } else if (itemToAddType === 'ascendencyPoints') {
+                addToResourceAllTimeStat(quantityToAdd, 'totalApGain')
+            }
         }
 
         this.style.pointerEvents = 'none';
@@ -3096,15 +3102,17 @@ function addPrizeEventListeners() {
             const prizeType = this.getAttribute('data-prize-type');
             const category = this.getAttribute('data-category');
             const item = this.getAttribute('data-item');
-            const data1 = parseInt(this.getAttribute('data-data1'));
+            const quantityToAdd = parseInt(this.getAttribute('data-data1'));
+            addToResourceAllTimeStat(1, 'newsTickerPrizesCollected');
 
             switch (prizeType) {
-                case 'giftResource':
+                case 'giftResource': //storage checks already done before getting here
                     setResourceDataObject(
-                        getResourceDataObject(category, [item, 'quantity']) + data1,
+                        getResourceDataObject(category, [item, 'quantity']) + quantityToAdd,
                         category,
                         [item, 'quantity']
                     );
+                    addToResourceAllTimeStat(quantityToAdd, item);
                     break;
                 default:
                     break;

@@ -470,6 +470,8 @@ export const statFunctionsSets = {
     "set_antimatter": setStatAntimatter,
     "set_apAnticipated": setStatApAnticipated,
     "set_starShipBuilt": setStatStarShipBuilt,
+    "set_newsTickerPrizesCollected": setStatNewsTickerPrizesCollected,
+    "set_totalApGain": setStatTotalApGain,
 };
 
 export function setGameStateVariable(value) {
@@ -2685,6 +2687,14 @@ function setStatApAnticipated(valueToAdd) {
 
 function setStatStarShipBuilt(valueToAdd) {
     allTimeStarShipsBuilt += valueToAdd;
+}
+
+function setStatNewsTickerPrizesCollected(valueToAdd) {
+    totalNewsTickerPrizesCollected += valueToAdd;
+}
+
+function setStatTotalApGain(valueToAdd) {
+    allTimeTotalApGain += valueToAdd;
 }
 
 export function setAlreadySeenNewsTickerArray(value) {
