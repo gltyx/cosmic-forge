@@ -2,7 +2,7 @@ import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystems
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
-import { offlineGains, startNewsTickerTimer } from './game.js';
+import { getBatteryLevel, offlineGains, startNewsTickerTimer } from './game.js';
 import { replaceRocketNames, rocketNames } from './descriptions.js';
 import { boostSoundManager } from './audioManager.js';
 
@@ -206,6 +206,7 @@ let totalNewsTickerPrizesCollected = 0;
 let apAnticipatedThisRun = 0;
 let allTimeStarShipsBuilt = 0;
 let starShipTravelDistance = 0;
+let allTimesTripped = 0;
 
 //FLAGS
 // let languageChangedFlag;
@@ -478,6 +479,9 @@ export const statFunctionsSets = {
     "set_starShipTravelDistance": setStatStarShipTravelDistance,
     "set_totalLegendaryAsteroidsDiscovered": setStatTotalLegendaryAsteroidsDiscovered,
     "set_totalAsteroidsDiscovered": setStatTotalAsteroidsDiscovered,
+    "set_totalRocketsLaunched": setStatTotalRocketsLaunched,
+    "set_starShipLaunched": setStatStarShipLaunched,
+    "set_allTimesTripped": setStatTimesTripped,
 };
 
 export function setGameStateVariable(value) {
@@ -600,6 +604,7 @@ export function captureGameStatusForSaving(type) {
     gameState.alreadySeenNewsTickerArray = alreadySeenNewsTickerArray;
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
+    gameState.allTimesTripped = allTimesTripped;
 
 
     // Flags
@@ -734,6 +739,7 @@ export function restoreGameStatus(gameState, type) {
             alreadySeenNewsTickerArray = gameState.alreadySeenNewsTickerArray ?? [];
             runNumber = gameState.runNumber ?? 1;
             starShipTravelDistance = gameState.starShipTravelDistance ?? 0;
+            allTimesTripped = gameState.allTimesTripped ?? 0;
 
 
             // Flags
@@ -2388,11 +2394,11 @@ function getStatTotalLegendaryAsteroidsDiscovered() {//
     return allTimeTotalLegendaryAsteroidsDiscovered;
 }
 
-function getStatTotalRocketsLaunched() {
+function getStatTotalRocketsLaunched() {//
     return allTimeTotalRocketsLaunched;
 }
 
-function getStatTotalStarShipsLaunched() {
+function getStatTotalStarShipsLaunched() {//
     return allTimeTotalStarShipsLaunched;
 }
 
@@ -2511,12 +2517,12 @@ function getStatTotalConsumption() {//
     return Math.floor(getTotalEnergyUse() * getTimerRateRatio()) + ' KW / s';
 }
 
-function getStatTotalBatteryStorage() {
-    return 1;
+function getStatTotalBatteryStorage() {//
+    return Math.floor(getResourceDataObject('buildings', ['energy', 'storageCapacity']) / 1000)  + ' MWh';
 }
 
-function getStatTimesTripped() {
-    return 1;
+function getStatTimesTripped() {//
+    return allTimesTripped;
 }
 
 function getStatBasicPowerPlants() {
@@ -2740,6 +2746,20 @@ function setStatTotalAsteroidsDiscovered(valueToAdd) {
     allTimeTotalAsteroidsDiscovered += valueToAdd;
 }
 
+function setStatTotalRocketsLaunched(valueToAdd) {
+    allTimeTotalRocketsLaunched += valueToAdd;
+}
+
+function setStatStarShipLaunched(valueToAdd) {
+    allTimeTotalStarShipsLaunched += valueToAdd;
+}
+
+function setStatTimesTripped(valueToAdd) {
+    allTimesTripped += valueToAdd;
+}
+
+
+
 export function setAlreadySeenNewsTickerArray(value) {
     alreadySeenNewsTickerArray.push(value);
 }
@@ -2747,7 +2767,7 @@ export function setAlreadySeenNewsTickerArray(value) {
 //image urls----------------------------------------------------------------------------------------------------------------------
 
 const IMAGE_URLS = {
-    resources: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    'resources': `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠋⠙⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿⠁⠀⠀⠈⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⢀⣀⣤⣤⣀⣀⡀⠀⢸⠃⠀⠀⠀⠀⠘⡇⠀⢀⣀⣀⣤⣤⣀⡀⠀⠀⠀
@@ -2762,7 +2782,7 @@ const IMAGE_URLS = {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷⡀⠀⠀⢀⣾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢷⣄⣠⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`,
-    compounds: `
+    'compounds': `
 ⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⠿⠛⠋⠉⠉⠙⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -2777,7 +2797,7 @@ const IMAGE_URLS = {
 ⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣷⣶⣶⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠈⠛⠿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 `,
-    energy: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡴⠂
+    'energy': `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡴⠂
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⡿⠋⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⠟⠋⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀
@@ -2792,7 +2812,7 @@ const IMAGE_URLS = {
 ⠀⠀⠀⠀⣠⣴⣿⣿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⣠⣾⡿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠠⠞⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`,
-    research: `
+    'research': `
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣾⣿⣷⠄⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣷⣄⠙⠿⠏⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠻⣿⣿⣿⣿⡦⠀⠀⠀⠀⠀⠀⠀⠀
@@ -2836,7 +2856,7 @@ const IMAGE_URLS = {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠲⠀⢰⣿⣿⣿⣿⣿⣆⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣿⣿⣿⣿⡀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠛⠃⠀`,
-    settings: `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+    'settings': `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⡀⠀⠀⠀⠀⣠⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣶⣤⣤⣶⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⣠⣶⣤⣀⣀⣠⣼⣿⠿⠛⠋⠉⠉⠙⠛⠿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀

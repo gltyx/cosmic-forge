@@ -1,5 +1,5 @@
 import { getTimeLeftUntilStarInvestigationTimerFinishes, getCurrentlyInvestigatingStar, getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
-import { startTravelToAndFromAsteroidTimer, startInvestigateStarTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding } from './game.js';
+import { startTravelToAndFromAsteroidTimer, startInvestigateStarTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding, addToResourceAllTimeStat } from './game.js';
 import { timerManager } from './timerManager.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
@@ -477,6 +477,7 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
         createButton(`Power Off!`, ['option-button', 'red-disabled-text', 'rocket-fuelled-check', `${rocketId}-launch-button`, 'invisible'], () => {
             launchRocket(rocketId);
             sfxPlayer.playAudio('rocketLaunch', false);
+            addToResourceAllTimeStat(1, 'totalRocketsLaunched');
         }, 'upgradeCheck', '', null, null, null, true, null, null),
         null,
         null,

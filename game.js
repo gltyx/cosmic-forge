@@ -3778,6 +3778,7 @@ function startInitialTimers() {
             if (!getPowerOnOff()) {
                 sfxPlayer.playAudio("powerOff", "powerOn");
                 sfxPlayer.playAudio("powerTripped", false);
+                addToResourceAllTimeStat(1, 'allTimesTripped');
             }
         }
 

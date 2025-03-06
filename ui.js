@@ -1239,6 +1239,7 @@ function showLaunchWarningModal(show) {
             startTravelToDestinationStarTimer([0, 'buttonClick'], false);
             spendAntimatterOnFuelForStarShip(starData.fuel);
             spaceTravelButtonHideAndShowDescription();
+            addToResourceAllTimeStat(1, 'starShipLaunched');
             addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated');
             showHideModal();
         };
@@ -3509,7 +3510,7 @@ function determineClassColor(value) {
     if (value === 'No' || value === 0 || value === 'OFF' || value === '⛰') {
         return 'red-disabled-text';
     }
-    if (value === '☁' || value === '☂') {
+    if (value === '☁' || value === '☂' || value === 'TRIPPED') {
         return 'warning-orange-text';
     }
     return 'green-ready-text';
