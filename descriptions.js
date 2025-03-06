@@ -1404,14 +1404,11 @@ statisticsContent = {
         subHeading11: "Total Legendary Asteroids Discovered",
         subBody11: "5",
 
-        subHeading12: "Total Stars Studied",
-        subBody12: "25",
+        subHeading12: "Total Rockets Launched",
+        subBody12: "156",
 
-        subHeading13: "Total Rockets Launched",
-        subBody13: "156",
-
-        subHeading14: "Total Star Ships Launched",
-        subBody14: "3"
+        subHeading13: "Total Star Ships Launched",
+        subBody13: "3"
     },
     'run': {
         subHeading1: "Star System",
@@ -1549,7 +1546,7 @@ statisticsContent = {
         subBody7: "3000"
     },
     'interstellar': {
-        subHeading1: "Stars Studied",
+        subHeading1: "Star Study Range",
         subBody1: "5",
 
         subHeading2: "Star Ship Built",

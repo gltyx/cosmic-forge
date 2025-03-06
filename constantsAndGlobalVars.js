@@ -101,6 +101,7 @@ let fromStarObject = null;
 let toStarObject = null;
 let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
+let runNumber = 1;
 
 let miningObject = {
     rocket1: null,
@@ -195,7 +196,7 @@ let allTimeTotalRocketsLaunched = 0;
 let allTimeTotalStarShipsLaunched = 0;
 let allTimeTotalAsteroidsDiscovered = 0;
 let allTimeTotalLegendaryAsteroidsDiscovered = 0;
-let allTimeTotalStarsStudied = 0;
+let starStudyRange = 0;
 let allTimeTotalAntimatterMined = 0;
 let allTimeTotalApGain = 0;
 let currentRunNumber = 0;
@@ -203,6 +204,7 @@ let currentRunTimer = 0;
 let totalNewsTickerPrizesCollected = 0;
 let apAnticipatedThisRun = 0;
 let allTimeStarShipsBuilt = 0;
+let starShipTravelDistance = 0;
 
 //FLAGS
 // let languageChangedFlag;
@@ -365,7 +367,6 @@ export const statFunctionsGets = {
     "stat_totalAntimatterMined": getStatTotalAntimatterMined,
     "stat_totalAsteroidsDiscovered": getStatTotalAsteroidsDiscovered,
     "stat_totalLegendaryAsteroidsDiscovered": getStatTotalLegendaryAsteroidsDiscovered,
-    "stat_totalStarsStudied": getStatTotalStarsStudied,
     "stat_totalRocketsLaunched": getStatTotalRocketsLaunched,
     "stat_totalStarShipsLaunched": getStatTotalStarShipsLaunched,
 
@@ -425,7 +426,7 @@ export const statFunctionsGets = {
     "stat_antimatterMined": getStatAntimatterMined,
 
     // Interstellar
-    "stat_starsStudied": getStatStarsStudied,
+    "stat_starStudyRange": getStatStarStudyRange,
     "stat_starShipBuilt": getStatStarShipBuilt,
     "stat_starShipDistanceTravelled": getStatStarShipDistanceTravelled,
     "stat_systemScanned": getStatSystemScanned,
@@ -472,6 +473,8 @@ export const statFunctionsSets = {
     "set_starShipBuilt": setStatStarShipBuilt,
     "set_newsTickerPrizesCollected": setStatNewsTickerPrizesCollected,
     "set_totalApGain": setStatTotalApGain,
+    "set_starStudyRange": setStatStarStudyRange,
+    "set_starShipTravelDistance": setStatStarShipTravelDistance,
 };
 
 export function setGameStateVariable(value) {
@@ -582,7 +585,7 @@ export function captureGameStatusForSaving(type) {
     gameState.allTimeTotalStarShipsLaunched = allTimeTotalStarShipsLaunched;
     gameState.allTimeTotalAsteroidsDiscovered = allTimeTotalAsteroidsDiscovered;
     gameState.allTimeTotalLegendaryAsteroidsDiscovered = allTimeTotalLegendaryAsteroidsDiscovered;
-    gameState.allTimeTotalStarsStudied = allTimeTotalStarsStudied;
+    gameState.allTimeTotalStarsStudied = starStudyRange;
     gameState.allTimeTotalAntimatterMined = allTimeTotalAntimatterMined;
     gameState.allTimeTotalApGain = allTimeTotalApGain;
     gameState.currentRunNumber = currentRunNumber;
@@ -591,6 +594,8 @@ export function captureGameStatusForSaving(type) {
     gameState.apAnticipatedThisRun = apAnticipatedThisRun;
     gameState.allTimeStarShipsBuilt = allTimeStarShipsBuilt;
     gameState.alreadySeenNewsTickerArray = alreadySeenNewsTickerArray;
+    gameState.runNumber = runNumber;
+    gameState.starShipTravelDistance = starShipTravelDistance;
 
 
     // Flags
@@ -713,7 +718,7 @@ export function restoreGameStatus(gameState, type) {
             allTimeTotalStarShipsLaunched = gameState.allTimeTotalStarShipsLaunched ?? 0;
             allTimeTotalAsteroidsDiscovered = gameState.allTimeTotalAsteroidsDiscovered ?? 0;
             allTimeTotalLegendaryAsteroidsDiscovered = gameState.allTimeTotalLegendaryAsteroidsDiscovered ?? 0;
-            allTimeTotalStarsStudied = gameState.allTimeTotalStarsStudied ?? 0;
+            starStudyRange = gameState.allTimeTotalStarsStudied ?? 0;
             allTimeTotalAntimatterMined = gameState.allTimeTotalAntimatterMined ?? 0;
             allTimeTotalApGain = gameState.allTimeTotalApGain ?? 0;
             currentRunNumber = gameState.currentRunNumber ?? 0;
@@ -722,6 +727,8 @@ export function restoreGameStatus(gameState, type) {
             apAnticipatedThisRun = gameState.apAnticipatedThisRun ?? 0;
             allTimeStarShipsBuilt = gameState.allTimeStarShipsBuilt ?? 0;
             alreadySeenNewsTickerArray = gameState.alreadySeenNewsTickerArray ?? [];
+            runNumber = gameState.runNumber ?? 1;
+            starShipTravelDistance = gameState.starShipTravelDistance ?? 0;
 
 
             // Flags
@@ -2295,20 +2302,20 @@ export function getStellarScannerRange() {
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
 
-function getStatPioneer() {
+function getStatPioneer() {//
     return getSaveName();
 }
 
-function getStatCurrentAp() {
+function getStatCurrentAp() {//
     return getAscendencyPoints();
 }
 
-function getStatTotalApGain() {
+function getStatTotalApGain() {//
     return allTimeTotalApGain;
 }
 
-function getStatRun() {
-    return currentRunNumber;
+function getStatRun() {//
+    return runNumber; //TODO add setter when rebirth implemented
 }
 
 function getStatRunTime() {
@@ -2333,11 +2340,11 @@ function getStatRunTime() {
     return formatTime(currentRunTimer);
 }
 
-function getStatTotalUniqueNewsTickersSeen() {
+function getStatTotalUniqueNewsTickersSeen() {//
     return alreadySeenNewsTickerArray.length;
 }
 
-function getStatNewsTickerPrizesCollected() {
+function getStatNewsTickerPrizesCollected() {//
     return totalNewsTickerPrizesCollected;
 }
 
@@ -2355,10 +2362,6 @@ function getStatTotalAsteroidsDiscovered() {
 
 function getStatTotalLegendaryAsteroidsDiscovered() {
     return allTimeTotalLegendaryAsteroidsDiscovered;
-}
-
-function getStatTotalStarsStudied() {
-    return allTimeTotalStarsStudied;
 }
 
 function getStatTotalRocketsLaunched() {
@@ -2516,16 +2519,16 @@ function getStatBattery3() {
     return 1;
 }
 
-function getStatSpaceTelescopeBuilt() {
-    return 1;
+function getStatSpaceTelescopeBuilt() {//
+    return getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet']) ? "Yes" : "No";
 }
 
-function getStatLaunchPadBuilt() {
-    return 1;
+function getStatLaunchPadBuilt() {//
+    return getResourceDataObject('space', ['upgrades', 'launchPad', 'launchPadBoughtYet']) ? "Yes" : "No";
 }
 
-function getStatRocketsBuilt() {
-    return 1;
+function getStatRocketsBuilt() {//
+    return getRocketsBuilt().length;
 }
 
 function getStatRocketWithMostLaunches() {
@@ -2544,20 +2547,20 @@ function getStatAntimatterMined() {
     return 1;
 }
 
-function getStatStarsStudied() {
-    return 1;
+function getStatStarStudyRange() {//
+    return `${starStudyRange} ly`;
 }
 
 function getStatStarShipBuilt() {//
     return allTimeStarShipsBuilt;
 }
 
-function getStatStarShipDistanceTravelled() {
-    return 1;
+function getStatStarShipDistanceTravelled() {//
+    return `${starShipTravelDistance} ly`;
 }
 
-function getStatSystemScanned() {
-    return 1;
+function getStatSystemScanned() {//
+    return destinationStarScanned ? "Yes" : "No";
 }
 
 function getStatFleetAttackStrength() {
@@ -2695,6 +2698,14 @@ function setStatNewsTickerPrizesCollected(valueToAdd) {
 
 function setStatTotalApGain(valueToAdd) {
     allTimeTotalApGain += valueToAdd;
+}
+
+function setStatStarStudyRange(value) {
+    starStudyRange = value;
+}
+
+function setStatStarShipTravelDistance(value) {
+    starShipTravelDistance = value;
 }
 
 export function setAlreadySeenNewsTickerArray(value) {

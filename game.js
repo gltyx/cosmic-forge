@@ -4028,6 +4028,10 @@ export function startTravelToDestinationStarTimer(adjustment) {
         
             const timeLeft = Math.max(travelDuration - counter, 0);
             const timeLeftUI = `${Math.floor(Math.max(Math.floor((travelDuration - counter) / 1000), 0))}`;
+
+            const starData = getStarSystemDataObject('stars', [destination]);
+            const distance = starData.distance;    
+            let distanceTravelled;    
             
             if (counter >= travelDuration) {
                 showNotification(`StarShip has reached orbit of the ${capitaliseWordsWithRomanNumerals(destination)} system!`, 'info');
@@ -4039,6 +4043,7 @@ export function startTravelToDestinationStarTimer(adjustment) {
         
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(0);
                 setStarShipStatus(['orbiting', destination]);
+                distanceTravelled = distance;
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);
                 const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
@@ -4054,7 +4059,9 @@ export function startTravelToDestinationStarTimer(adjustment) {
                     }
                 }
                 setStarShipArrowPosition(normalizedElapsedTime);
+                distanceTravelled = ((distance * (normalizedElapsedTime * 100)) / 100).toFixed(2);
             }
+            addToResourceAllTimeStat(distanceTravelled, 'starShipTravelDistance');
         });        
     }
 }
@@ -5370,6 +5377,7 @@ export function extendStarDataRange(debug) {
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);
+    addToResourceAllTimeStat(currentRange + increment, 'starStudyRange');
 
     if (getCurrentOptionPane() === 'star map') {
         drawTab5Content('Star Map', null, false);
