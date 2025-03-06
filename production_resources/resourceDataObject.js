@@ -2,7 +2,7 @@ import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.29, //update this whenever changes are made to the structure
+    version: 0.321, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -90,10 +90,10 @@ export let resourceData = {
             screenName: 'carbon',
             saleValue: 0.1,
             salePreviewElement: 'sellCarbonDescription',
-            quantity: 1300,
+            quantity: 0,
             rate: 0,
             usedForFuelPerSec: 0,
-            storageCapacity: 1300,
+            storageCapacity: 130,
             currentSecondaryIncreasePrice: 0,
             revealedYet: false,
             upgrades: {
@@ -531,7 +531,7 @@ export let resourceData = {
             spaceTelescope: { 
                 spaceTelescopeBoughtYet: false,
                 price: 10000,
-                resource1Price: [20000, 'steel', 'compounds'],
+                resource1Price: [20000, 'iron', 'resources'],
                 resource2Price: [15000, 'glass', 'compounds'],
                 resource3Price: [20000, 'silicon', 'resources'],
                 energyUseSearchAsteroid: 0.4,
@@ -540,9 +540,9 @@ export let resourceData = {
             launchPad: { 
                 launchPadBoughtYet: false,
                 price: 40000,
-                resource1Price: [10000, 'steel', 'compounds'],
+                resource1Price: [10000, 'iron', 'resources'],
                 resource2Price: [1000, 'titanium', 'compounds'],
-                resource3Price: [0, '', ''],
+                resource3Price: [20000, 'concrete', 'compounds'],
             },
             rocket1: {
                 builtParts: 0,
@@ -607,6 +607,56 @@ export let resourceData = {
                     normalProgression: false,
                     tier1: { nameUpgrade: 'Fuel', screen: 'rocket4', place: 'rocket4Autobuyer1Row', price: 8000, rate: 0.02, quantity: 0, setPrice: 'rocket4AB1Price', energyUse: 1.0 },
                 },
+            },
+            ssStructural: {
+                finished: false,
+                builtParts: 0,
+                parts: 20,
+                price: 6000,
+                resource1Price: [8000, 'steel', 'compounds'],
+                resource2Price: [3000, 'titanium', 'compounds'],
+                resource3Price: [9000, 'silicon', 'resources'],
+                setPrice: 'ssStructuralPrice',
+            },
+            ssLifeSupport: {
+                finished: false,
+                builtParts: 0,
+                parts: 10,
+                price: 15000,
+                resource1Price: [10000, 'glass', 'compounds'],
+                resource2Price: [100000, 'oxygen', 'resources'],
+                resource3Price: [30000, 'water', 'compounds'],
+                setPrice: 'ssLifeSupportPrice',
+            },
+            ssAntimatterEngine: {
+                finished: false,
+                builtParts: 0,
+                parts: 16,
+                price: 12000,
+                resource1Price: [7000, 'steel', 'compounds'],
+                resource2Price: [4000, 'titanium', 'compounds'],
+                resource3Price: [20000, 'neon', 'resources'],
+                setPrice: 'ssAntimatterEnginePrice',
+            },
+            ssFleetHangar: {
+                finished: false,
+                builtParts: 0,
+                parts: 1,
+                price: 100000,
+                resource1Price: [80000, 'glass', 'compounds'],
+                resource2Price: [40000, 'titanium', 'compounds'],
+                resource3Price: [150000, 'steel', 'compounds'],
+                setPrice: 'ssFleetHangarPrice'
+            },
+            ssStellarScanner: {
+                finished: false,
+                builtParts: 0,
+                parts: 8,
+                price: 5000,
+                resource1Price: [3000, 'glass', 'compounds'],
+                resource2Price: [4000, 'silicon', 'resources'],
+                resource3Price: [6000, 'neon', 'resources'],
+                setPrice: 'ssStellarScannerPrice'
             }
         }
     },
@@ -659,9 +709,9 @@ export let resourceData = {
         solarPowerGeneration: { appearsAt: [12000, "steelFoundries", "glassManufacture"], prereqs: ['Steel Foundries', 'Glass Manufacture'], price: 15000, idForRenderPosition: 53 },
         giganticTurbines: { appearsAt: [4200, "hydroCarbons", ""], prereqs: ['HydroCarbons'], price: 4800, idForRenderPosition: 54 },
         advancedPowerGeneration: { appearsAt: [6000, "giganticTurbines", "basicPowerGeneration"], prereqs: ['Gigantic Turbines', 'Basic Power Generation'], price: 8000, idForRenderPosition: 55 },
-        rocketComposites: { appearsAt: [28000, "neutronCapture", "nanoTubeTechnology", "steelFoundries"], prereqs: ['Neutron Capture', 'Nano Tube Technology', 'Steel Foundries'], price: 34000, idForRenderPosition: 55 },
-        advancedFuels: { appearsAt: [25000, "hydroCarbons", "neutronCapture", "advancedPowerGeneration"], prereqs: ['HydroCarbons', 'Neutron Capture', 'Advanced Power Generation'], price: 30000, idForRenderPosition: 56 },
-        planetaryNavigation: { appearsAt: [27000, "atmosphericTelescopes", "rocketComposites", "quantumComputing"], prereqs: ['Atmospheric Telescopes', 'Rocket Composites', 'Quantum Computing'], price: 29000, idForRenderPosition: 57 },
+        rocketComposites: { appearsAt: [28000, "neutronCapture", "nanoTubeTechnology", "steelFoundries"], prereqs: ['Neutron Capture', 'Nano Tube Technology', 'Steel Foundries'], price: 34000, idForRenderPosition: 56 },
+        advancedFuels: { appearsAt: [25000, "hydroCarbons", "neutronCapture", "advancedPowerGeneration"], prereqs: ['HydroCarbons', 'Neutron Capture', 'Advanced Power Generation'], price: 30000, idForRenderPosition: 57 },
+        planetaryNavigation: { appearsAt: [27000, "atmosphericTelescopes", "rocketComposites", "quantumComputing"], prereqs: ['Atmospheric Telescopes', 'Rocket Composites', 'Quantum Computing'], price: 29000, idForRenderPosition: 58 },
         neonFusion: { appearsAt: [5000, "carbonFusion", ""], prereqs: ['Carbon Fusion'], price: 5750, idForRenderPosition: 60 },
         oxygenFusion: { appearsAt: [7000, "neonFusion", ""], prereqs: ['Neon Fusion'], price: 8000, idForRenderPosition: 70 },
         compounds: { appearsAt: [8000, "hydrogenFusion", "carbonFusion"], prereqs: ['Hydrogen Fusion', 'Carbon Fusion'], price: 9000, idForRenderPosition: 70 },
@@ -679,7 +729,13 @@ export let resourceData = {
         atmosphericTelescopes: { appearsAt: [9000, "glassManufacture", "stellarCartography"], prereqs: ['Glass Manufacture', 'Stellar Cartography'], price: 10000, idForRenderPosition: 700 },
         fusionEfficiencyI: { appearsAt: [1500, "fusionTheory", ""], prereqs: ['Fusion Theory'], price: 1750, idForRenderPosition: 9000 },
         fusionEfficiencyII: { appearsAt: [3000, "fusionEfficiencyI", ""], prereqs: ['Fusion Efficiency I'], price: 3500, idForRenderPosition: 9010 },
-        fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficiency II'], price: 10000, idForRenderPosition: 9030 }
+        fusionEfficiencyIII: { appearsAt: [9000, "fusionEfficiencyII", ""], prereqs: ['Fusion Efficiency II'], price: 10000, idForRenderPosition: 9030 },
+        orbitalConstruction: { appearsAt: [45000, "planetaryNavigation", "rocketComposites", ""], prereqs: ['Planetary Navigation', 'Rocket Composites'], price: 50000, idForRenderPosition: 9100 },
+        antimatterEngines: { appearsAt: [65000, "orbitalConstruction", "neutronCapture", "FTLTravelTheory"], prereqs: ['Orbital Construction', 'Neutron Capture', 'FTL Travel Theory'], price: 78000, idForRenderPosition: 9101 },
+        FTLTravelTheory: { appearsAt: [60000, "neutronCapture", "planetaryNavigation", "advancedFuels"], prereqs: ['Neutron Capture', 'Planetary Navigation', 'Advanced Fuels'], price: 65000, idForRenderPosition: 9102 },
+        lifeSupportSystems: { appearsAt: [55000, "orbitalConstruction", "nanoTubeTechnology", "quantumComputing"], prereqs: ['Orbital Construction', 'Nano Tube Technology', 'Quantum Computing'], price: 60000, idForRenderPosition: 9103 },
+        starshipFleets: { appearsAt: [80000, "FTLTravelTheory", "antimatterEngines", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Antimatter Engines', 'Orbital Construction'], price: 100000, idForRenderPosition: 9104 },
+        stellarScanners: { appearsAt: [70000, "FTLTravelTheory", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Orbital Construction'], price: 72000, idForRenderPosition: 9105 }
     },    
     currency: {
         cash: 10,
@@ -695,7 +751,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.29,
+    version: 0.321,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star
@@ -715,6 +771,13 @@ export let starSystems = {
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function copyStarDataToDestinationStarField(starName) {
+    const stars = getStarSystemDataObject('stars');
+
+    stars.destinationStar = JSON.parse(JSON.stringify(stars[starName]));
+}
+
 
 export function restoreResourceDataObject(value) {
     value = migrateResourceData(value, 'resourceData');
@@ -839,4 +902,12 @@ export function getRocketParts(rocket) {
 
 export function getRocketPartsNeededInTotalPerRocket(rocket) {
     return resourceData.space.upgrades[rocket].parts;
+}
+
+export function getStarShipParts(starShipModule) {
+    return resourceData.space.upgrades[starShipModule].builtParts;
+}
+
+export function getStarShipPartsNeededInTotalPerModule(starShipModule) {
+    return resourceData.space.upgrades[starShipModule].parts;
 }
