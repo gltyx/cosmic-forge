@@ -198,6 +198,7 @@ let allTimeTotalAsteroidsDiscovered = 0;
 let allTimeTotalLegendaryAsteroidsDiscovered = 0;
 let starStudyRange = 0;
 let allTimeTotalAntimatterMined = 0;
+let antimatterMinedThisRun = 0;
 let allTimeTotalApGain = 0;
 let currentRunNumber = 0;
 let currentRunTimer = 0;
@@ -420,7 +421,6 @@ export const statFunctionsGets = {
     "stat_spaceTelescopeBuilt": getStatSpaceTelescopeBuilt,
     "stat_launchPadBuilt": getStatLaunchPadBuilt,
     "stat_rocketsBuilt": getStatRocketsBuilt,
-    "stat_rocketWithMostLaunches": getStatRocketWithMostLaunches,
     "stat_asteroidsDiscovered": getStatAsteroidsDiscovered,
     "stat_asteroidsVisited": getStatAsteroidsVisited,
     "stat_antimatterMined": getStatAntimatterMined,
@@ -469,12 +469,15 @@ export const statFunctionsSets = {
     "set_scienceLabs": setStatScienceLabs,
 
     "set_antimatter": setStatAntimatter,
+    "set_antimatterThisRun": setStatAntimatterThisRun,
     "set_apAnticipated": setStatApAnticipated,
     "set_starShipBuilt": setStatStarShipBuilt,
     "set_newsTickerPrizesCollected": setStatNewsTickerPrizesCollected,
     "set_totalApGain": setStatTotalApGain,
     "set_starStudyRange": setStatStarStudyRange,
     "set_starShipTravelDistance": setStatStarShipTravelDistance,
+    "set_totalLegendaryAsteroidsDiscovered": setStatTotalLegendaryAsteroidsDiscovered,
+    "set_totalAsteroidsDiscovered": setStatTotalAsteroidsDiscovered,
 };
 
 export function setGameStateVariable(value) {
@@ -587,6 +590,7 @@ export function captureGameStatusForSaving(type) {
     gameState.allTimeTotalLegendaryAsteroidsDiscovered = allTimeTotalLegendaryAsteroidsDiscovered;
     gameState.allTimeTotalStarsStudied = starStudyRange;
     gameState.allTimeTotalAntimatterMined = allTimeTotalAntimatterMined;
+    gameState.antimatterMinedThisRun = antimatterMinedThisRun;
     gameState.allTimeTotalApGain = allTimeTotalApGain;
     gameState.currentRunNumber = currentRunNumber;
     gameState.currentRunTimer = currentRunTimer;
@@ -720,6 +724,7 @@ export function restoreGameStatus(gameState, type) {
             allTimeTotalLegendaryAsteroidsDiscovered = gameState.allTimeTotalLegendaryAsteroidsDiscovered ?? 0;
             starStudyRange = gameState.allTimeTotalStarsStudied ?? 0;
             allTimeTotalAntimatterMined = gameState.allTimeTotalAntimatterMined ?? 0;
+            antimatterMinedThisRun = gameState.antimatterMinedThisRun ?? 0;
             allTimeTotalApGain = gameState.allTimeTotalApGain ?? 0;
             currentRunNumber = gameState.currentRunNumber ?? 0;
             currentRunTimer = gameState.currentRunTimer ?? 0;
@@ -2356,11 +2361,11 @@ function getStatTotalAntimatterMined() {//
     return allTimeTotalAntimatterMined;
 }
 
-function getStatTotalAsteroidsDiscovered() {
+function getStatTotalAsteroidsDiscovered() {//
     return allTimeTotalAsteroidsDiscovered;
 }
 
-function getStatTotalLegendaryAsteroidsDiscovered() {
+function getStatTotalLegendaryAsteroidsDiscovered() {//
     return allTimeTotalLegendaryAsteroidsDiscovered;
 }
 
@@ -2472,19 +2477,19 @@ function getStatPower() {//
     return document.getElementById('stat3').textContent.split(' ')[1];
 }
 
-function getStatTotalEnergy() {
-    return document.getElementById('stat2').textContent.split(' ')[1];
+function getStatTotalEnergy() {//
+    return document.getElementById('stat2').textContent;
 }
 
 function getStatTotalProduction() {//
-    return (resourceData.buildings.energy.upgrades.powerPlant1.quantity * resourceData.buildings.energy.upgrades.powerPlant1.rate 
+    return Math.floor((resourceData.buildings.energy.upgrades.powerPlant1.quantity * resourceData.buildings.energy.upgrades.powerPlant1.rate 
         + resourceData.buildings.energy.upgrades.powerPlant2.quantity * resourceData.buildings.energy.upgrades.powerPlant2.rate
-        + resourceData.buildings.energy.upgrades.powerPlant3.quantity * resourceData.buildings.energy.upgrades.powerPlant3.rate)
-        .toFixed(2) + ' kW';
-} 
+        + resourceData.buildings.energy.upgrades.powerPlant3.quantity * resourceData.buildings.energy.upgrades.powerPlant3.rate) 
+        * getTimerRateRatio()) + ' KW / s';
+}
 
-function getStatTotalConsumption() {
-    return getTotalEnergyUse();
+function getStatTotalConsumption() {//
+    return Math.floor(getTotalEnergyUse() * getTimerRateRatio()) + ' KW / s';
 }
 
 function getStatTotalBatteryStorage() {
@@ -2531,12 +2536,8 @@ function getStatRocketsBuilt() {//
     return getRocketsBuilt().length;
 }
 
-function getStatRocketWithMostLaunches() {
-    return 1;
-}
-
-function getStatAsteroidsDiscovered() {
-    return 1;
+function getStatAsteroidsDiscovered() {//
+    return getAsteroidArray().length;
 }
 
 function getStatAsteroidsVisited() {
@@ -2684,6 +2685,10 @@ function setStatAntimatter(valueToAdd) {
     allTimeTotalAntimatterMined += valueToAdd;
 }
 
+function setStatAntimatterThisRun(valueToAdd) {
+    antimatterMinedThisRun += valueToAdd;
+}
+
 function setStatApAnticipated(valueToAdd) {
     apAnticipatedThisRun += valueToAdd;
 }
@@ -2706,6 +2711,14 @@ function setStatStarStudyRange(value) {
 
 function setStatStarShipTravelDistance(value) {
     starShipTravelDistance = value;
+}
+
+function setStatTotalLegendaryAsteroidsDiscovered(valueToAdd) {
+    allTimeTotalLegendaryAsteroidsDiscovered += valueToAdd;
+}
+
+function setStatTotalAsteroidsDiscovered(valueToAdd) {
+    allTimeTotalAsteroidsDiscovered += valueToAdd;
 }
 
 export function setAlreadySeenNewsTickerArray(value) {

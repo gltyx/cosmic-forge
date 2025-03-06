@@ -3066,6 +3066,7 @@ function addOneOffEventListeners() {
             setResourceDataObject(getResourceDataObject(itemToAddType, ['quantity']) + quantityToAdd, itemToAddType, ['quantity']);
             if (itemToAddType === 'antimatter') {
                 addToResourceAllTimeStat(quantityToAdd, 'antimatter');
+                addToResourceAllTimeStat(quantityToAdd, 'antimatterThisRun');
             } else if (itemToAddType === 'ascendencyPoints') {
                 addToResourceAllTimeStat(quantityToAdd, 'totalApGain')
             }

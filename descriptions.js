@@ -1491,16 +1491,16 @@ statisticsContent = {
         subBody1: "ON",
 
         subHeading2: "Total Energy",
-        subBody2: "10000 kW",
+        subBody2: "10000 KW",
 
         subHeading3: "Total Production",
-        subBody3: "10000 kW",
+        subBody3: "10000 KW",
 
         subHeading4: "Total Consumption",
-        subBody4: "10000 kW",
+        subBody4: "10000 KW",
 
         subHeading5: "Total Battery Storage",
-        subBody5: "10000 kWh",
+        subBody5: "10000 MWh",
 
         subHeading6: "Times Tripped",
         subBody6: "10000",
@@ -1533,17 +1533,14 @@ statisticsContent = {
         subHeading3: "Rockets Built",
         subBody3: "4",
 
-        subHeading4: "Rocket With Most Launches",
-        subBody4: "Leigh1",
+        subHeading4: "Asteroids Discovered",
+        subBody4: "15",
 
-        subHeading5: "Asteroids Discovered",
-        subBody5: "15",
+        subHeading5: "Asteroids Visited",
+        subBody5: "10",
 
-        subHeading6: "Asteroids Visited",
-        subBody6: "10",
-
-        subHeading7: "Antimatter Mined",
-        subBody7: "3000"
+        subHeading6: "Antimatter Mined",
+        subBody6: "3000"
     },
     'interstellar': {
         subHeading1: "Star Study Range",

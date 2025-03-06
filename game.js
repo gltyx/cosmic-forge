@@ -1935,6 +1935,7 @@ function updateAntimatterAndDiagram() {
             if (getAntimatterUnlocked()) {
                 setResourceDataObject(antimatterTotalQuantity + totalAntimatterExtractionRate, 'antimatter', ['quantity']);
                 addToResourceAllTimeStat(totalAntimatterExtractionRate, 'antimatter');
+                addToResourceAllTimeStat(totalAntimatterExtractionRate, 'antimatterThisRun');
             }
         }
     } 
@@ -5072,6 +5073,7 @@ export function offlineGains(switchedFocus) {
         
         setResourceDataObject(currentAntimatterQuantity + offlineGainsAntimatter, 'antimatter', ['quantity']);
         addToResourceAllTimeStat(offlineGainsAntimatter, 'antimatter');
+        addToResourceAllTimeStat(offlineGainsAntimatter, 'antimatterThisRun');
         
         if (!switchedFocus) {
             showNotification('Offline Gains Added!', 'info');
@@ -5394,6 +5396,8 @@ export function discoverAsteroid(debug) {
         return;
     }
 
+    addToResourceAllTimeStat(1, 'totalAsteroidsDiscovered');
+
     const starCode = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'starCode']);
     const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
@@ -5406,6 +5410,7 @@ export function discoverAsteroid(debug) {
     const keyName = Object.keys(asteroid)[0];
     if (!debug) {
         if (asteroid[keyName].specialName) {
+            addToResourceAllTimeStat(1, 'totalLegendaryAsteroidsDiscovered');
             showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info');
         } else {
             showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
