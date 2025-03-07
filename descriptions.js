@@ -79,7 +79,8 @@ export function initialiseDescriptions() {
         'visual': "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
-        'statistics': `<span class="stats-all-time-text">Statistic Title</span> - All time. <span class="stats-text">Statistic Title</span> - This run.`,
+        'statistics': `Here you can see your progress in the game.`,
+
     };
 
     rocketNames = {

@@ -1,5 +1,5 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx } from './constantsAndGlobalVars.js';
-import { createHtmlTextAreaStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
 
@@ -496,7 +496,7 @@ export function drawTab8Content(heading, optionContentElement) {
             rowId,
             null,
             '',
-            createHtmlTextAreaStatistics(
+            createHtmlTableStatistics(
                 `${rowId}TextArea`,
                 ['help-container', 'help-container-margin', 'center-statistics'],
                 getStatisticsContent('mainHeadings'),  // Get the main headings

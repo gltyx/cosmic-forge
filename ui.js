@@ -833,7 +833,7 @@ export function createHtmlTextAreaProse(id, classList = [], headerText = '', bod
     return div;
 }
 
-export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, subHeadings, subBodys, mainHeaderClasses = [], subHeaderClasses = [], subBodyClasses = []) {
+export function createHtmlTableStatistics(id, classList = [], mainHeadings, subHeadings, subBodys, mainHeaderClasses = [], subHeaderClasses = [], subBodyClasses = []) {
     const div = document.createElement('div');
     let innerTextString = '';
 
@@ -844,33 +844,67 @@ export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, s
 
         innerTextString += `<span class="${mainHeaderClasses.join(' ')}">${mainHeading}</span><br/>`;
 
-        const notationHeaders = ['Cash', 'Hydrogen ', 'Helium ', 'Carbon ', 'Neon ', 'Oxygen ', 'Sodium ', 'Silicon ', 'Iron ', 'Diesel ', 'Glass ', 'Concrete ', 'Steel ', 'Water ', 'Titanium ', 'Research Points '];
+        innerTextString += `
+        <table class="statistics-table">
+            <thead>
+                ${i === 0 ? '' : `
+                    <tr class="first-row">
+                        <td class="left-column"></td>
+                        <td class="middle-column">Current Run</td>
+                        <td class="right-column">All Time</td>
+                    </tr>
+                `}
+            </thead>
+            <tbody>
+    `;
+
+        const notationHeaders = ['Cash', 'Hydrogen', 'Helium', 'Carbon', 'Neon', 'Oxygen', 'Sodium', 'Silicon', 'Iron', 'Diesel', 'Glass', 'Concrete', 'Steel', 'Water', 'Titanium', 'Research Points'];
 
         for (let j = 0; j < subHeadings[i].length; j++) {
             let header = capitaliseString(subHeadings[i][j] || '');
             const body = capitaliseString(subBodys[i][j] || '');
-        
-            let colonClass = 'stats-text';
-            if (header.endsWith(' ')) {
-                colonClass = 'stats-all-time-text';
-            }
-        
-            const headerClasses = [...subHeaderClasses, colonClass];
-        
+            const isAllTimeHeader = header.endsWith(' ');
+            const headerClasses = [...subHeaderClasses];
+            const bodyClasses = [...subBodyClasses];
+
             if (header) {
-                innerTextString += `<span class="${headerClasses.join(' ')}">${header}</span><span class="${colonClass}">:</span> `;
-            }
-            if (body) {
-                const bodyClasses = [...subBodyClasses];
                 if (notationHeaders.includes(header)) {
                     bodyClasses.push('notation');
                 }
-                const camelCaseId = `stat_${toCamelCase(header.trim())}`;
-                innerTextString += `<span id="${camelCaseId}" class="${bodyClasses.join(' ')}">${body}</span><br/>`;
+                header += ':';
             }
-        }                              
 
-        innerTextString += '<br/>';
+            if (i === 0) {
+                innerTextString += `
+                    <tr>
+                        <td class="left-column"><span class="${headerClasses.join(' ')}">${header}</span></td>
+                        <td class="middle-column" style="text-align: left;">
+                            <span id="stat_${toCamelCase(header.replace(':', '').trim())}" class="${bodyClasses.join(' ')}">${body}</span>
+                        </td>
+                        <td class="right-column"></td>
+                    </tr>
+                `;
+            } else {
+                innerTextString += `
+                    <tr>
+                        <td class="left-column"><span class="${headerClasses.join(' ')}">${header}</span></td>
+                        <td class="middle-column">
+                            ${!isAllTimeHeader ? `<span id="stat_${toCamelCase(header.replace(':', '').trim())}" class="${bodyClasses.join(' ')}">${body}</span>` : ''}
+                        </td>
+                        <td class="right-column">
+                            ${isAllTimeHeader ? `<span id="stat_${toCamelCase(header.replace(':', '').trim())}" class="${bodyClasses.join(' ')}">${body}</span>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }
+            
+        }
+
+        innerTextString += `
+                </tbody>
+            </table>
+            <br/>
+        `;
     }
 
     div.id = id;
