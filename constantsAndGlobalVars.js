@@ -48,6 +48,8 @@ export const STELLAR_SCANNER_RANGE = 0.75;
 //GLOBAL VARIABLES
 export let gameState;
 
+let gameStartTimeStamp = null;
+let runStartTimeStamp = null;
 let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
 let alreadySeenNewsTickerArray = [];
@@ -365,6 +367,7 @@ export function setElements() {
 
 export const statFunctionsGets = {
     // Overview
+    "stat_totalTimePlayed": getStatTotalTimePlayed,
     "stat_pioneer": getStatPioneer,
     "stat_currentAp": getStatCurrentAp,
     "stat_totalApGain": getStatTotalApGain,
@@ -618,6 +621,8 @@ export function captureGameStatusForSaving(type) {
     gameState.allTimeBattery2Built = allTimeBattery2Built;
     gameState.allTimeBattery3Built = allTimeBattery3Built;
     gameState.asteroidsMinedThisRun = asteroidsMinedThisRun;
+    gameState.runStartTimeStamp = runStartTimeStamp;
+    gameState.gameStartTimeStamp = gameStartTimeStamp;
 
 
     // Flags
@@ -760,6 +765,8 @@ export function restoreGameStatus(gameState, type) {
             allTimeBattery2Built = gameState.allTimeBattery2Built ?? 0;
             allTimeBattery3Built = gameState.allTimeBattery3Built ?? 0;
             asteroidsMinedThisRun = gameState.asteroidsMinedThisRun ?? 0;
+            runStartTimeStamp = gameState.runStartTimeStamp ?? null;
+            gameStartTimeStamp = gameState.gameStartTimeStamp ?? null;
 
 
             // Flags
@@ -2368,26 +2375,32 @@ function getStatRun() {//
     return runNumber; //TODO add setter when rebirth implemented
 }
 
+function getStatTotalTimePlayed() {
+    const elapsedMilliseconds = Date.now() - getGameStartTime();
+    return formatTime(elapsedMilliseconds);
+}
+
 function getStatRunTime() {
-    function formatTime(milliseconds) {
-        let totalSeconds = Math.floor(milliseconds / 1000);
-        let days = Math.floor(totalSeconds / (3600 * 24));
-        totalSeconds %= (3600 * 24);
-        let hours = Math.floor(totalSeconds / 3600);
-        totalSeconds %= 3600;
-        let minutes = Math.floor(totalSeconds / 60);
-        let seconds = totalSeconds % 60;
+    const elapsedMilliseconds = Date.now() - getRunStartTime();
+    return formatTime(elapsedMilliseconds);
+}
 
-        let timeString = '';
-        if (days > 0) timeString += `${days}d `;
-        if (hours > 0) timeString += `${hours}h `;
-        if (minutes > 0) timeString += `${minutes}m `;
-        if (seconds > 0 || timeString === '') timeString += `${seconds}s`;
+function formatTime(milliseconds) {
+    let totalSeconds = Math.floor(milliseconds / 1000);
+    let days = Math.floor(totalSeconds / (3600 * 24));
+    totalSeconds %= (3600 * 24);
+    let hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = totalSeconds % 60;
 
-        return timeString.trim();
-    }
+    let timeString = '';
+    if (days > 0) timeString += `${days}d `;
+    if (hours > 0) timeString += `${hours}h `;
+    if (minutes > 0) timeString += `${minutes}m `;
+    if (seconds > 0 || timeString === '') timeString += `${seconds}s`;
 
-    return formatTime(currentRunTimer);
+    return timeString.trim();
 }
 
 function getStatTotalUniqueNewsTickersSeen() {//
@@ -2800,6 +2813,22 @@ function setStatAsteroidsMined(valueToAdd) {
 
 export function setAlreadySeenNewsTickerArray(value) {
     alreadySeenNewsTickerArray.push(value);
+}
+
+export function setGameStartTime() {
+    gameStartTimeStamp = Date.now();
+}
+
+export function setRunStartTime() {
+    runStartTimeStamp = Date.now();
+}
+
+export function getGameStartTime() {
+    return gameStartTimeStamp;
+}
+
+export function getRunStartTime() {
+    return runStartTimeStamp;
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------

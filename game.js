@@ -1,4 +1,8 @@
 import {
+    getGameStartTime,
+    getRunStartTime,
+    setGameStartTime,
+    setRunStartTime,
     statFunctionsGets,
     statFunctionsSets,
     getStellarScannerRange,
@@ -229,6 +233,12 @@ import {
 
 //--------------------------------------------------------------------------------------------------------
 export function startGame() {
+    if (!getGameStartTime()) {
+        setGameStartTime();
+    }
+    if (!getRunStartTime()) {
+        setRunStartTime();
+    }
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     initializeAutoSave();
