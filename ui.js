@@ -326,7 +326,7 @@ export function updateContent(heading, tab, type) {
     if (type === 'intro') {
         optionDescription = getHeaderDescriptions([heading]);
         optionDescriptionElement = optionDescriptionElements[tabNumber - 1];
-        optionDescriptionElement.textContent = optionDescription;
+        optionDescriptionElement.innerHTML = optionDescription;
         optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
 
         const asciiArt = getImageUrls();
@@ -343,53 +343,53 @@ export function updateContent(heading, tab, type) {
         switch (tab) {
             case 'tab1':
                 optionDescriptionElement = optionDescriptionElements[0];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab1Content(heading, optionContentElement);
                 break;
             case 'tab2':
                 optionDescriptionElement = optionDescriptionElements[1];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab2Content(heading, optionContentElement);
                 break;
             case 'tab3':
                 optionDescriptionElement = optionDescriptionElements[2];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab3Content(heading, optionContentElement);
                 break;
             case 'tab4':
                 optionDescriptionElement = optionDescriptionElements[3];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab4Content(heading, optionContentElement);
                 break;
             case 'tab5':
                 optionDescriptionElement = optionDescriptionElements[4];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab5Content(heading, optionContentElement, false);
                 break;
             case 'tab6':
                 optionDescriptionElement = optionDescriptionElements[5];
                 if (getCurrentOptionPane().startsWith('rocket')) {
-                    optionDescriptionElement.textContent = getRocketNames('rocketDescription');
+                    optionDescriptionElement.innerHTML = getRocketNames('rocketDescription');
                 } else {
-                    optionDescriptionElement.textContent = optionDescription;
+                    optionDescriptionElement.innerHTML = optionDescription;
                 }
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab6Content(heading, optionContentElement);
                 break;
             case 'tab7':
                 optionDescriptionElement = optionDescriptionElements[6];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab7Content(heading, optionContentElement);
                 break;
             case 'tab8':
                 optionDescriptionElement = optionDescriptionElements[7];
-                optionDescriptionElement.textContent = optionDescription;
+                optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
                 drawTab8Content(heading, optionContentElement);
                 break;
@@ -844,18 +844,31 @@ export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, s
 
         innerTextString += `<span class="${mainHeaderClasses.join(' ')}">${mainHeading}</span><br/>`;
 
-        for (let j = 0; j < subHeadings[i].length; j++) {
-            const header = capitaliseString(subHeadings[i][j] || '');
-            const body = capitaliseString(subBodys[i][j] || '');
+        const notationHeaders = ['Cash', 'Hydrogen ', 'Helium ', 'Carbon ', 'Neon ', 'Oxygen ', 'Sodium ', 'Silicon ', 'Iron ', 'Diesel ', 'Glass ', 'Concrete ', 'Steel ', 'Water ', 'Titanium ', 'Research Points '];
 
+        for (let j = 0; j < subHeadings[i].length; j++) {
+            let header = capitaliseString(subHeadings[i][j] || '');
+            const body = capitaliseString(subBodys[i][j] || '');
+        
+            let colonClass = 'stats-text';
+            if (header.endsWith(' ')) {
+                colonClass = 'green-ready-text';
+            }
+        
+            const headerClasses = [...subHeaderClasses, colonClass];
+        
             if (header) {
-                innerTextString += `<span class="${subHeaderClasses.join(' ')}">${header}</span>: `;
+                innerTextString += `<span class="${headerClasses.join(' ')}">${header}</span><span class="${colonClass}">:</span> `;
             }
             if (body) {
-                const camelCaseId = `stat_${toCamelCase(header)}`;
-                innerTextString += `<span id="${camelCaseId}" class="${subBodyClasses.join(' ')}">${body}</span><br/>`;
+                const bodyClasses = [...subBodyClasses];
+                if (notationHeaders.includes(header)) {
+                    bodyClasses.push('notation');
+                }
+                const camelCaseId = `stat_${toCamelCase(header.trim())}`;
+                innerTextString += `<span id="${camelCaseId}" class="${bodyClasses.join(' ')}">${body}</span><br/>`;
             }
-        }
+        }                              
 
         innerTextString += '<br/>';
     }

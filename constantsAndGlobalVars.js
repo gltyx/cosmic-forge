@@ -207,6 +207,13 @@ let apAnticipatedThisRun = 0;
 let allTimeStarShipsBuilt = 0;
 let starShipTravelDistance = 0;
 let allTimesTripped = 0;
+let allTimeBasicPowerPlantsBuilt = 0;
+let allTimeAdvancedPowerPlantsBuilt = 0;
+let allTimeSolarPowerPlantsBuilt = 0;
+let allTimeSodiumIonBatteriesBuilt = 0;
+let allTimeBattery2Built = 0;
+let allTimeBattery3Built = 0;
+let asteroidsMinedThisRun = 0;
 
 //FLAGS
 // let languageChangedFlag;
@@ -423,8 +430,7 @@ export const statFunctionsGets = {
     "stat_launchPadBuilt": getStatLaunchPadBuilt,
     "stat_rocketsBuilt": getStatRocketsBuilt,
     "stat_asteroidsDiscovered": getStatAsteroidsDiscovered,
-    "stat_asteroidsVisited": getStatAsteroidsVisited,
-    "stat_antimatterMined": getStatAntimatterMined,
+    "stat_asteroidsMined": getStatAsteroidsMined,
 
     // Interstellar
     "stat_starStudyRange": getStatStarStudyRange,
@@ -445,7 +451,6 @@ export const statFunctionsGets = {
 };
 
 export const statFunctionsSets = {
-    //resources
     "set_hydrogen": setStatHydrogen,
     "set_helium": setStatHelium,
     "set_carbon": setStatCarbon,
@@ -454,34 +459,35 @@ export const statFunctionsSets = {
     "set_sodium": setStatSodium,
     "set_silicon": setStatSilicon,
     "set_iron": setStatIron,
-
-    // Compounds
     "set_diesel": setStatDiesel,
     "set_glass": setStatGlass,
     "set_steel": setStatSteel,
     "set_concrete": setStatConcrete,
     "set_water": setStatWater,
     "set_titanium": setStatTitanium,
-
-    // Research
     "set_researchPoints": setStatResearchPoints,
     "set_scienceKits": setStatScienceKits,
     "set_scienceClubs": setStatScienceClubs,
     "set_scienceLabs": setStatScienceLabs,
-
     "set_antimatter": setStatAntimatter,
-    "set_antimatterThisRun": setStatAntimatterThisRun,
-    "set_apAnticipated": setStatApAnticipated,
-    "set_starShipBuilt": setStatStarShipBuilt,
+    "set_antimatterThisRun": setStatAntimatterThisRun, //resetRun
+    "set_apAnticipated": setStatApAnticipated, //resetRun
     "set_newsTickerPrizesCollected": setStatNewsTickerPrizesCollected,
     "set_totalApGain": setStatTotalApGain,
-    "set_starStudyRange": setStatStarStudyRange,
-    "set_starShipTravelDistance": setStatStarShipTravelDistance,
+    "set_starStudyRange": setStatStarStudyRange,  //resetRun
+    "set_starShipTravelDistance": setStatStarShipTravelDistance,  //resetRun
     "set_totalLegendaryAsteroidsDiscovered": setStatTotalLegendaryAsteroidsDiscovered,
     "set_totalAsteroidsDiscovered": setStatTotalAsteroidsDiscovered,
     "set_totalRocketsLaunched": setStatTotalRocketsLaunched,
     "set_starShipLaunched": setStatStarShipLaunched,
     "set_allTimesTripped": setStatTimesTripped,
+    "set_allTimeBasicPowerPlantsBuilt": setStatBasicPowerPlants,
+    "set_allTimeAdvancedPowerPlantsBuilt": setStatAdvancedPowerPlants,
+    "set_allTimeSolarPowerPlantsBuilt": setStatSolarPowerPlants,
+    "set_allTimeSodiumIonBatteriesBuilt": setStatSodiumIonBatteries,
+    "set_allTimeBattery2Built": setStatBattery2,
+    "set_allTimeBattery3Built": setStatBattery3,
+    "set_asteroidsMined": setStatAsteroidsMined, //resetRun
 };
 
 export function setGameStateVariable(value) {
@@ -605,6 +611,13 @@ export function captureGameStatusForSaving(type) {
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
     gameState.allTimesTripped = allTimesTripped;
+    gameState.allTimeBasicPowerPlantsBuilt = allTimeBasicPowerPlantsBuilt;
+    gameState.allTimeAdvancedPowerPlantsBuilt = allTimeAdvancedPowerPlantsBuilt;
+    gameState.allTimeSolarPowerPlantsBuilt = allTimeSolarPowerPlantsBuilt;
+    gameState.allTimeSodiumIonBatteriesBuilt = allTimeSodiumIonBatteriesBuilt;
+    gameState.allTimeBattery2Built = allTimeBattery2Built;
+    gameState.allTimeBattery3Built = allTimeBattery3Built;
+    gameState.asteroidsMinedThisRun = asteroidsMinedThisRun;
 
 
     // Flags
@@ -740,6 +753,13 @@ export function restoreGameStatus(gameState, type) {
             runNumber = gameState.runNumber ?? 1;
             starShipTravelDistance = gameState.starShipTravelDistance ?? 0;
             allTimesTripped = gameState.allTimesTripped ?? 0;
+            allTimeBasicPowerPlantsBuilt = gameState.allTimeBasicPowerPlantsBuilt ?? 0;
+            allTimeAdvancedPowerPlantsBuilt = gameState.allTimeAdvancedPowerPlantsBuilt ?? 0;
+            allTimeSolarPowerPlantsBuilt = gameState.allTimeSolarPowerPlantsBuilt ?? 0;
+            allTimeSodiumIonBatteriesBuilt = gameState.allTimeSodiumIonBatteriesBuilt ?? 0;
+            allTimeBattery2Built = gameState.allTimeBattery2Built ?? 0;
+            allTimeBattery3Built = gameState.allTimeBattery3Built ?? 0;
+            asteroidsMinedThisRun = gameState.asteroidsMinedThisRun ?? 0;
 
 
             // Flags
@@ -2525,28 +2545,28 @@ function getStatTimesTripped() {//
     return allTimesTripped;
 }
 
-function getStatBasicPowerPlants() {
-    return 1;
+function getStatBasicPowerPlants() {//
+    return allTimeBasicPowerPlantsBuilt;
 }
 
-function getStatAdvancedPowerPlants() {
-    return 1;
+function getStatAdvancedPowerPlants() {//
+    return allTimeAdvancedPowerPlantsBuilt;
 }
 
-function getStatSolarPowerPlants() {
-    return 1;
+function getStatSolarPowerPlants() {//
+    return allTimeSolarPowerPlantsBuilt;
 }
 
-function getStatSodiumIonBatteries() {
-    return 1;
+function getStatSodiumIonBatteries() {//
+    return allTimeSodiumIonBatteriesBuilt;
 }
 
-function getStatBattery2() {
-    return 1;
+function getStatBattery2() {//
+    return allTimeBattery2Built;
 }
 
-function getStatBattery3() {
-    return 1;
+function getStatBattery3() {//
+    return allTimeBattery3Built;
 }
 
 function getStatSpaceTelescopeBuilt() {//
@@ -2565,12 +2585,8 @@ function getStatAsteroidsDiscovered() {//
     return getAsteroidArray().length;
 }
 
-function getStatAsteroidsVisited() {
-    return 1;
-}
-
-function getStatAntimatterMined() {
-    return 1;
+function getStatAsteroidsMined() {
+    return asteroidsMinedThisRun;
 }
 
 function getStatStarStudyRange() {//
@@ -2578,7 +2594,7 @@ function getStatStarStudyRange() {//
 }
 
 function getStatStarShipBuilt() {//
-    return allTimeStarShipsBuilt;
+    return starShipBuilt ? "Yes" : "No";
 }
 
 function getStatStarShipDistanceTravelled() {//
@@ -2718,10 +2734,6 @@ function setStatApAnticipated(valueToAdd) {
     apAnticipatedThisRun += valueToAdd;
 }
 
-function setStatStarShipBuilt(valueToAdd) {
-    allTimeStarShipsBuilt += valueToAdd;
-}
-
 function setStatNewsTickerPrizesCollected(valueToAdd) {
     totalNewsTickerPrizesCollected += valueToAdd;
 }
@@ -2758,7 +2770,33 @@ function setStatTimesTripped(valueToAdd) {
     allTimesTripped += valueToAdd;
 }
 
+function setStatBasicPowerPlants(valueToAdd) {
+    allTimeBasicPowerPlantsBuilt += valueToAdd;
+}
 
+function setStatAdvancedPowerPlants(valueToAdd) {
+    allTimeAdvancedPowerPlantsBuilt += valueToAdd;
+}
+
+function setStatSolarPowerPlants(valueToAdd) {
+    allTimeSolarPowerPlantsBuilt += valueToAdd;
+}
+
+function setStatSodiumIonBatteries(valueToAdd) {
+    allTimeSodiumIonBatteriesBuilt += valueToAdd;
+}
+
+function setStatBattery2(valueToAdd) {
+    allTimeBattery2Built += valueToAdd;
+}
+
+function setStatBattery3(valueToAdd) {
+    allTimeBattery3Built += valueToAdd;
+}
+
+function setStatAsteroidsMined(valueToAdd) {
+    asteroidsMinedThisRun += valueToAdd;
+}
 
 export function setAlreadySeenNewsTickerArray(value) {
     alreadySeenNewsTickerArray.push(value);

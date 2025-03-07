@@ -3976,6 +3976,7 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
                     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 } else {
                     showNotification(`${getRocketUserName(rocket)} has reached ${destination} and started mining Antimatter!`, 'info');
+                    addToResourceAllTimeStat(1, 'asteroidsMined');
                     timerManager.removeTimer(timerName);
     
                     if (travelTimerDescriptionElement) {             

@@ -1,5 +1,4 @@
 import { getTimerRateRatio, getSaveName, getRocketUserName } from "./constantsAndGlobalVars.js";
-import { updateRocketDescription } from "./game.js";
 import { getResourceDataObject } from "./resourceDataObject.js";
 
 export let gameIntroHeader;
@@ -77,7 +76,7 @@ export function initialiseDescriptions() {
         'visual': "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
-        'statistics': "See a breakdown of your progress in the game."
+        'statistics': `<span class="green-ready-text">Statistic Title</span> - All time. <span class="stats-text">Statistic Title</span> - This run.`,
     };
 
     rocketNames = {
@@ -1371,116 +1370,116 @@ export function initialiseDescriptions() {
 
 statisticsContent = {
     'overview': {
-        subHeading1: "Pioneer",
+        subHeading1: "Pioneer ",
         subBody1: "Leigh",
 
-        subHeading2: "Current AP",
+        subHeading2: "Current AP ",
         subBody2: "10000",
 
-        subHeading3: "Total AP Gain",
+        subHeading3: "Total AP Gain ",
         subBody3: "10000",
 
-        subHeading4: "Run",
+        subHeading4: "Run ",
         subBody4: "1",
 
-        subHeading5: "Run Time",
-        subBody5: "100d 18h 10m 32s",
+        subHeading5: "Total Unique News Tickers Seen ",
+        subBody5: "1000",
 
-        subHeading6: "Total Unique News Tickers Seen",
-        subBody6: "1000",
+        subHeading6: "News Ticker Prizes Collected ",
+        subBody6: "10",
 
-        subHeading7: "News Ticker Prizes Collected",
-        subBody7: "10",
+        subHeading7: "Theme ",
+        subBody7: "Terminal",
 
-        subHeading8: "Theme",
-        subBody8: "Terminal",
+        subHeading8: "Total Antimatter Mined ",
+        subBody8: "10000",
 
-        subHeading9: "Total Antimatter Mined",
-        subBody9: "10000",
+        subHeading9: "Total Asteroids Discovered ",
+        subBody9: "50",
 
-        subHeading10: "Total Asteroids Discovered",
-        subBody10: "50",
+        subHeading10: "Total Legendary Asteroids Discovered ",
+        subBody10: "5",
 
-        subHeading11: "Total Legendary Asteroids Discovered",
-        subBody11: "5",
+        subHeading11: "Total Rockets Launched ",
+        subBody11: "156",
 
-        subHeading12: "Total Rockets Launched",
-        subBody12: "156",
-
-        subHeading13: "Total Star Ships Launched",
-        subBody13: "3"
+        subHeading12: "Total Star Ships Launched ",
+        subBody12: "3"
     },
     'run': {
-        subHeading1: "Star System",
-        subBody1: "Spica",
+        subHeading1: "Run Time",
+        subBody1: "100d 18h 10m 32s",
 
-        subHeading2: "Current Weather",
-        subBody2: "☀",
+        subHeading2: "Star System",
+        subBody2: "Spica",
 
-        subHeading3: "Cash",
-        subBody3: "10000",
+        subHeading3: "Current Weather",
+        subBody3: "☀",
 
-        subHeading4: "AP Anticipated",
-        subBody4: "3",
-
-        subHeading5: "Antimatter",
-        subBody5: "10000"
-    },
-    'resources': {
-        subHeading1: "Hydrogen",
-        subBody1: "10000",
-
-        subHeading2: "Helium",
-        subBody2: "10000",
-
-        subHeading3: "Carbon",
-        subBody3: "10000",
-
-        subHeading4: "Neon",
+        subHeading4: "Cash",
         subBody4: "10000",
 
-        subHeading5: "Oxygen",
+        subHeading5: "AP Anticipated",
+        subBody5: "3",
+
+        subHeading6: "Antimatter",
+        subBody6: "10000"
+    },
+    'resources': {
+        subHeading1: "Hydrogen ",
+        subBody1: "10000",
+
+        subHeading2: "Helium ",
+        subBody2: "10000",
+
+        subHeading3: "Carbon ",
+        subBody3: "10000",
+
+        subHeading4: "Neon ",
+        subBody4: "10000",
+
+        subHeading5: "Oxygen ",
         subBody5: "10000",
 
-        subHeading6: "Sodium",
+        subHeading6: "Sodium ",
         subBody6: "10000",
 
-        subHeading7: "Silicon",
+        subHeading7: "Silicon ",
         subBody7: "10000",
 
-        subHeading8: "Iron",
+        subHeading8: "Iron ",
         subBody8: "10000"
     },
     'compounds': {
-        subHeading1: "Diesel",
+        subHeading1: "Diesel ",
         subBody1: "10000",
 
-        subHeading2: "Glass",
+        subHeading2: "Glass ",
         subBody2: "10000",
 
-        subHeading3: "Steel",
+        subHeading3: "Steel ",
         subBody3: "10000",
 
-        subHeading4: "Concrete",
+        subHeading4: "Concrete ",
         subBody4: "10000",
 
-        subHeading5: "Water",
+        subHeading5: "Water ",
         subBody5: "10000",
 
-        subHeading6: "Titanium",
+        subHeading6: "Titanium ",
         subBody6: "10000"
     },
     'research': {
-        subHeading1: "Research Points",
+        subHeading1: "Research Points ",
         subBody1: "10000",
 
-        subHeading2: "Science Kits",
+        subHeading2: "Science Kits ",
         subBody2: "10000",
 
-        subHeading3: "Science Clubs",
+        subHeading3: "Science Clubs ",
         subBody3: "10000",
 
-        subHeading4: "Science Labs",
+        subHeading4: "Science Labs ",
         subBody4: "10000",
 
         subHeading5: "Techs Unlocked",
@@ -1505,22 +1504,22 @@ statisticsContent = {
         subHeading6: "Times Tripped",
         subBody6: "10000",
 
-        subHeading7: "Basic Power Plants",
+        subHeading7: "Basic Power Plants ",
         subBody7: "10000",
 
-        subHeading8: "Advanced Power Plants",
+        subHeading8: "Advanced Power Plants ",
         subBody8: "10000",
 
-        subHeading9: "Solar Power Plants",
+        subHeading9: "Solar Power Plants ",
         subBody9: "10000",
 
-        subHeading10: "Sodium Ion Batteries",
+        subHeading10: "Sodium Ion Batteries ",
         subBody10: "10000",
 
-        subHeading11: "Battery2",
+        subHeading11: "Battery2 ",
         subBody11: "10000",
 
-        subHeading12: "Battery3",
+        subHeading12: "Battery3 ",
         subBody12: "10000"
     },
     'spaceMining': {
@@ -1536,11 +1535,8 @@ statisticsContent = {
         subHeading4: "Asteroids Discovered",
         subBody4: "15",
 
-        subHeading5: "Asteroids Visited",
+        subHeading5: "Asteroids Mined",
         subBody5: "10",
-
-        subHeading6: "Antimatter Mined",
-        subBody6: "3000"
     },
     'interstellar': {
         subHeading1: "Star Study Range",

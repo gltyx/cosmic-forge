@@ -1,5 +1,5 @@
 import { getImageUrls, getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
-import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate } from './game.js';
+import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -14,8 +14,9 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Sodium Ion Battery:',
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resources'),
-                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                gain(1, 'battery1Quantity', 'battery1', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeSodiumIonBatteriesBuilt');
+                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']);
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery1');
             }, 'upgradeCheck', '', 'energy', 'battery1', 'cash', true, null, 'building'),
@@ -45,8 +46,9 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Battery 2:',
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery2', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resources'),
-                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                gain(1, 'battery2Quantity', 'battery2', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeBattery2Built');
+                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']);
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery2');
             }, 'upgradeCheck', '', 'energy', 'battery2', 'cash', true, null, 'building'),
@@ -73,8 +75,9 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Battery 3:',
             createButton(`Add ${Math.floor(getResourceDataObject('buildings', ['energy', 'upgrades', 'battery3', 'capacity']) / 1000)} MWh`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resources'),
-                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']),
+                gain(1, 'battery3Quantity', 'battery3', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeBattery3Built');
+                setResourceDataObject(true, 'buildings', ['energy', 'batteryBoughtYet']);
                 switchBatteryStatBarWhenBatteryBought();
                 setEnergyCapacity('battery3');
             }, 'upgradeCheck', '', 'energy', 'battery3', 'cash', true, null, 'building'),
@@ -109,7 +112,8 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'building-purchase-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources')
+                gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeBasicPowerPlantsBuilt');
                 addBuildingPotentialRate('powerPlant1');
                 if (getBuildingTypeOnOff('powerPlant1')) {
                     startUpdateTimersAndRates('powerPlant1', 'buy');
@@ -154,7 +158,8 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Solar Power Plant:',
             createButton(`Add (max) ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources')
+                gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeSolarPowerPlantsBuilt');
                 addBuildingPotentialRate('powerPlant2');
                 if (getBuildingTypeOnOff('powerPlant2')) {
                     startUpdateTimersAndRates('powerPlant2', 'buy');
@@ -199,7 +204,8 @@ export function drawTab2Content(heading, optionContentElement) {
             null,
             'Advanced Power Plant:',
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources')
+                gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources');
+                addToResourceAllTimeStat(1, 'allTimeAdvancedPowerPlantsBuilt');
                 addBuildingPotentialRate('powerPlant3');
                 if (getBuildingTypeOnOff('powerPlant3')) {
                     startUpdateTimersAndRates('powerPlant3', 'buy');

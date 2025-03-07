@@ -408,6 +408,10 @@ button {
     left: 0;
 }
 
+.stats-text {
+    color: var(--stats-this-run-text);
+}
+
 /* THEMEABLE CSS */
 /* Dark Theme Variables */
 :root {
@@ -415,6 +419,7 @@ button {
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
+    --stats-this-run-text: cyan;
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;
