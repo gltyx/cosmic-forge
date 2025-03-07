@@ -1155,6 +1155,11 @@ body {
 #ssAntimatterEnginePartsCountText,
 #ssFleetHangarPartsCountText,
 #ssStellarScannerPartsCountText,
+#fleetEnvoyQuantityText,
+#fleetScoutQuantityText,
+#fleetMarauderQuantityText,
+#fleetLandStalkerQuantityText,
+#fleetNavalStraferQuantityText,
 [class*="-travel-to-asteroid-button"],
 [class*="-launch-button"],
 [class*="-destination-star-element"]

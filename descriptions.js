@@ -1,5 +1,6 @@
 import { getTimerRateRatio, getSaveName, getRocketUserName } from "./constantsAndGlobalVars.js";
 import { getResourceDataObject } from "./resourceDataObject.js";
+import { capitaliseString } from "./utilityFunctions.js";
 
 export let gameIntroHeader;
 export let gameIntroText;
@@ -64,7 +65,7 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
         'star ship': "Here you can build and manage your Star Ship to travel to and scan studied Stars.",
-        'fleet hangar': "Here you can build your invasion fleets to conquer systems you travel to.",
+        'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
@@ -896,7 +897,6 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: "" 
         },
-        // content1: `Add an Advanced Water Mixer for better Water production`,
         spaceRocket1AutoBuyerRow: {
             content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket1', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
             content2: "",
@@ -919,6 +919,31 @@ export function initialiseDescriptions() {
         },
         spaceRocket4AutoBuyerRow: {
             content1: `Fuel and launch your mining vessel to start mining valuable Antimatter - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'rocket4', 'autoBuyer', 'tier1', 'energyUse']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceFleetEnvoyBuildRow: {
+            content1: `A special buildable once craft.  When built, you can send it on a diplomacy mission to gather information about sentient alien lifeforms residing in the discovered System.`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceFleetScoutBuildRow: {
+            content1: `A cheap, light craft good in large numbers. Gains a <span class="green-ready-text">&nbsp;${getResourceDataObject('space', ['upgrades', 'fleetScout', 'bonusPercentage'])}%&nbsp;</span> bonus against <span class="green-ready-text">&nbsp;${capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetScout', 'bonusGivenAgainstType']))}&nbsp;</span> fleets.`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceFleetMarauderBuildRow: {
+            content1: `A strong craft, designed for decimating enemy fleets. <span class="green-ready-text">&nbsp;${getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'bonusPercentage'])}%&nbsp;</span> bonus against <span class="green-ready-text">&nbsp;${capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'bonusGivenAgainstType']))}&nbsp;</span> fleets.`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceFleetLandStalkerBuildRow: {
+            content1: `If they don't fly, they fear this awesome machine! <span class="green-ready-text">&nbsp;${getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'bonusPercentage'])}%&nbsp;</span> bonus against <span class="green-ready-text">&nbsp;${capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'bonusGivenAgainstType']))}&nbsp;</span> fleets.`,
+            content2: "",
+            updateAt: ""
+        },
+        spaceFleetNavalStraferBuildRow: {
+            content1: `Naval fleets can be devastated in a heartbeat! Gains a <span class="green-ready-text">&nbsp;${getResourceDataObject('space', ['upgrades', 'fleetScout', 'bonusPercentage'])}%&nbsp;</span> bonus against <span class="green-ready-text">&nbsp;${capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'bonusGivenAgainstType']))}&nbsp;</span> fleets.`,
             content2: "",
             updateAt: ""
         },

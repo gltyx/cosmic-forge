@@ -126,7 +126,6 @@ export async function loadGameFromCloud() {
 
             const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
             const gameState = JSON.parse(decompressedJson);
-            console.log(gameState); //DEBUG GAME SAVES
 
             await initialiseLoadedGame(gameState, 'cloud');
             showNotification('Game loaded successfully!', 'info');
@@ -330,6 +329,11 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
 
         if (saveData.version < 0.38) {
             if (objectType === 'resourceData') {
+                saveData.fleets = {
+                    attackPower: 0,
+                    defensePower: 0
+                }
+
                 saveData.space = saveData.space || {};
 
                 Object.assign(saveData.space, {
@@ -493,6 +497,82 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource2Price: [4000, 'silicon', 'resources'],
                         resource3Price: [6000, 'neon', 'resources'],
                         setPrice: 'ssStellarScannerPrice'
+                    },
+                    fleetEnvoy: {
+                        envoyBuiltYet: false,
+                        maxCanBuild: 1,
+                        quantity: 0,
+                        price: 2000,
+                        resource1Price: [8000, 'hydrogen', 'resources'],
+                        resource2Price: [300, 'silicon', 'resources'],
+                        resource3Price: [120, 'titanium', 'compounds'],
+                        setPrice: 'fleetEnvoyPrice',
+                        bonusPercentage: null,
+                        baseAttackStrength: 0,
+                        bonusAgainstType: null,
+                        bonusAgainstTrait: null,
+                        defenseStrength: 0,
+                        joinsAttackDefense: false
+                    },
+                    fleetScout: {
+                        maxCanBuild: 100000,
+                        quantity: 0,
+                        price: 5000,
+                        resource1Price: [14000, 'hydrogen', 'resources'],
+                        resource2Price: [1000, 'silicon', 'resources'],
+                        resource3Price: [300, 'titanium', 'compounds'],
+                        setPrice: 'fleetScoutPrice',
+                        bonusPercentage: 20,
+                        baseAttackStrength: 2,
+                        bonusGivenAgainstType: 'air',
+                        bonusRemovedBy: 'Aerialians',
+                        defenseStrength: 2,
+                        joinsAttackDefense: true
+                    },
+                    fleetMarauder: {
+                        maxCanBuild: 100000,
+                        quantity: 0,
+                        price: 7500,
+                        resource1Price: [14000, 'helium', 'resources'],
+                        resource2Price: [2000, 'silicon', 'resources'],
+                        resource3Price: [600, 'titanium', 'compounds'],
+                        setPrice: 'fleetMarauderPrice',
+                        bonusPercentage: 20,
+                        baseAttackStrength: 4,
+                        bonusGivenAgainstType: 'air',
+                        bonusRemovedBy: 'Aerialians',
+                        defenseStrength: 3,
+                        joinsAttackDefense: true
+                    },
+                    fleetLandStalker: {
+                        maxCanBuild: 100000,
+                        quantity: 0,
+                        price: 9000,
+                        resource1Price: [22000, 'helium', 'resources'],
+                        resource2Price: [3000, 'silicon', 'resources'],
+                        resource3Price: [900, 'titanium', 'compounds'],
+                        setPrice: 'fleetLandStalkerPrice',
+                        bonusPercentage: 20,
+                        baseAttackStrength: 4,
+                        bonusGivenAgainstType: 'land',
+                        bonusRemovedBy: 'Terrans',
+                        defenseStrength: 0,
+                        joinsAttackDefense: true
+                    },
+                    fleetNavalStrafer: {
+                        maxCanBuild: 100000,
+                        quantity: 0,
+                        price: 8000,
+                        resource1Price: [26000, 'hydrogen', 'resources'],
+                        resource2Price: [4000, 'silicon', 'resources'],
+                        resource3Price: [1200, 'titanium', 'compounds'],
+                        setPrice: 'fleetNavalStraferPrice',
+                        bonusPercentage: 20,
+                        baseAttackStrength: 6,
+                        bonusGivenAgainstType: 'sea',
+                        bonusRemovedBy: 'Aquatic',
+                        defenseStrength: 0,
+                        joinsAttackDefense: true
                     }
                 });
 

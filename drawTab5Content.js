@@ -1,6 +1,6 @@
 import { createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
 import { setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
-import { copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
+import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { generateDestinationStarData, gain } from './game.js';
 
@@ -584,7 +584,49 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
     }
 
     if (heading === 'Fleet Hangar') {
-    
+        const fleetShips = [
+            { id: 'fleetEnvoy', label: 'Envoy' },
+            { id: 'fleetScout', label: 'Scout' },
+            { id: 'fleetMarauder', label: 'Marauder' },
+            { id: 'fleetLandStalker', label: 'Land Stalker' },
+            { id: 'fleetNavalStrafer', label: 'Naval Strafer' }
+        ];
+
+        fleetShips.forEach(fleetShip => {
+            const fleetShipBuildRow = createOptionRow(
+                `space${capitaliseString(fleetShip.id)}BuildRow`,
+                null,
+                `${fleetShip.label}:`,
+                createButton(`Comission`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+                    gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space')
+                }, 'upgradeCheck', '', 'spaceUpgrade', fleetShip.id, 'cash', true, null, 'fleetPurchase'),
+                createTextElement(
+                    fleetShip.id === 'fleetEnvoy' 
+                    ? `Quantity: <span id="${fleetShip.id}BuiltQuantity">${getFleetShips(fleetShip.id)}</span> / <span id="${fleetShip.id}BuiltQuantityMax">${getMaxFleetShip(fleetShip.id)}</span>`
+                    : `Quantity: <span id="${fleetShip.id}BuiltQuantity">${getFleetShips(fleetShip.id)}</span>`,
+                `${fleetShip.id}QuantityText`,
+                []
+                ),
+                null,
+                null,
+                null,
+                `${getCurrencySymbol() + getResourceDataObject('space', ['upgrades', fleetShip.id, 'price'])}, 
+                ${getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource1Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource1Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource2Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource2Price'])[1])}, 
+                ${getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource3Price'])[0]} ${capitaliseString(getResourceDataObject('space', ['upgrades', fleetShip.id, 'resource3Price'])[1])}`,
+                '',
+                'upgradeCheck',
+                'spaceUpgrade',
+                fleetShip.id,
+                'cash',
+                null,
+                false,
+                null,
+                null,
+                'fleetPurchase'
+            );
+            optionContentElement.appendChild(fleetShipBuildRow);
+        });
     }
 }
 

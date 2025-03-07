@@ -433,7 +433,7 @@ export function createOptionRow(
     descriptionRowContainer.id = labelId + 'Description';
     descriptionRowContainer.classList.add('option-row-description', 'd-flex');
     if(getOptionDescription(labelId)) {
-        descriptionRowContainer.textContent = getOptionDescription(labelId).content1;
+        descriptionRowContainer.innerHTML = getOptionDescription(labelId).content1;
     }
 
     // Main row container
