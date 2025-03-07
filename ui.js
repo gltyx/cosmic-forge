@@ -1045,10 +1045,13 @@ function hideNotification(notification) {
     }, 500);
 }
 
-function highlightActiveTab(activeIndex) {
+function highlightActiveTab(activeTabText) {
+    if (activeTabText.trim() === "???") return;
+
     const tabs = document.querySelectorAll('#tabsContainer .tab');
-    tabs.forEach((tab, index) => {
-        if (index === activeIndex) {
+
+    tabs.forEach(tab => {
+        if (tab.textContent.trim() === activeTabText.trim()) {
             tab.classList.add('selected');
         } else {
             tab.classList.remove('selected');
@@ -2378,6 +2381,28 @@ export function checkOrderOfTabs() {
     reorderTabs(unlockedTabs);
 }
 
+export function updateTabHotkeys() {
+    const tabs = Array.from(document.getElementById('tabsContainer').children);
+
+    document.removeEventListener('keydown', handleTabHotkeys);
+    
+    function handleTabHotkeys(event) {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+
+        const key = event.key;
+        if (key >= '1' && key <= String(tabs.length)) {
+            const tabIndex = parseInt(key, 10) - 1;
+            const tabElement = tabs[tabIndex];
+            
+            if (tabElement) {
+                tabElement.click();
+            }
+        }
+    }
+
+    document.addEventListener('keydown', handleTabHotkeys);
+}
+
 function reorderTabs(newOrder) {
     const tabsContainer = document.getElementById('tabsContainer');
     const tabs = Array.from(tabsContainer.children);
@@ -2390,6 +2415,7 @@ function reorderTabs(newOrder) {
     });
 
     initializeTabEventListeners();
+    updateTabHotkeys();
 }
 
 function initializeTabEventListeners() {
@@ -2735,7 +2761,7 @@ function initializeTabEventListeners() {
             updateContent('Statistics', 'tab8', 'content');
         });    
     });
-
+    
     const tabsContainer = document.getElementById('tabsContainer');
 
     if (tabsContainer) {

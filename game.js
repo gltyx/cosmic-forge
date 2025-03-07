@@ -216,7 +216,8 @@ import {
     removeOrbitCircle,
     drawOrbitCircle,
     drawStarShipArrowhead,
-    getStats
+    getStats,
+    updateTabHotkeys
 } from "./ui.js";
 
 import { 
@@ -241,6 +242,7 @@ export function startGame() {
     }
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
+    updateTabHotkeys();
     initializeAutoSave();
     startInitialTimers();
     //startSpaceRelatedTimers();
@@ -1827,6 +1829,10 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
 
 function manageTabSpecificUi() {
     const currentTab = getCurrentTab();
+    if (currentTab.includes("???")) {
+        return;
+    }
+
     const tabElements = document.querySelectorAll(`.tab-${currentTab}`);
     const allTabElements = document.querySelectorAll('[class^="tab-"]');
     allTabElements.forEach(element => {
