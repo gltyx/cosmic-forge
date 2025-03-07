@@ -852,7 +852,7 @@ export function createHtmlTextAreaStatistics(id, classList = [], mainHeadings, s
         
             let colonClass = 'stats-text';
             if (header.endsWith(' ')) {
-                colonClass = 'green-ready-text';
+                colonClass = 'stats-all-time-text';
             }
         
             const headerClasses = [...subHeaderClasses, colonClass];

@@ -412,14 +412,18 @@ button {
     color: var(--stats-this-run-text);
 }
 
-/* THEMEABLE CSS */
+.stats-all-time-text {
+    color: var(--stats-all-time-text);
+}
+
 /* Dark Theme Variables */
 :root {
     --twinkle-scale: 1.2;
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
-    --stats-this-run-text: cyan;
+    --stats-this-run-text: #87cefa; /* Soft blue for better contrast */
+    --stats-all-time-text: #ff80ff; /* Light magenta for contrast */
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;
@@ -442,10 +446,13 @@ button {
     --consumption-colors: #F44336, #E91E63, #9C27B0;
 }
 
+/* Light Theme Variables */
 [data-theme="light"] {
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
+    --stats-this-run-text: #2e7d32; /* Dark green for contrast on light background */
+    --stats-all-time-text: #00695c; /* Deep cyan for contrast */
     --bg-color: white;
     --text-color: black;
     --text-color-rgb: 0, 0, 0;
@@ -467,10 +474,13 @@ button {
     --consumption-colors: #ef5350, #f48fb1, #f8bbd0;
 }
 
+/* Frosty Theme Variables */
 [data-theme="frosty"] {
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
+    --stats-this-run-text: #1565c0; /* A vibrant blue for contrast on frosty light background */
+    --stats-all-time-text: #009688; /* Rich cyan for contrast */
     --bg-color: #e1f7ff;
     --text-color: #129fdb;
     --text-color-rgb: 18, 159, 219;
@@ -492,10 +502,13 @@ button {
     --consumption-colors: #e57373, #ef9a9a, #ffcdd2;
 }
 
+/* Summer Theme Variables */
 [data-theme="summer"] {
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
+    --stats-this-run-text: #e65100; /* Bright orange for contrast */
+    --stats-all-time-text: #6d4c41; /* Dark brown for contrast instead of yellow */
     --bg-color: #fffae6;
     --text-color: #8e5122;
     --text-color-rgb: 142, 81, 34;
@@ -517,24 +530,27 @@ button {
     --consumption-colors: #ff8a65, #ff7043, #d84315;
 }
 
+/* Forest Theme Variables */
 [data-theme="forest"] {
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
+    --stats-this-run-text: #32a132; /* Strong green for forest theme */
+    --stats-all-time-text: #7a4118; /* Bold magenta for contrast */
     --bg-color: #2f4f4f;
     --text-color: #7a4118;
     --text-color-rgb: 122, 65, 24;
     --text-hover-color: #91ca2e;
     --text-focus-color: #32a132;
-    --tab-bg-color: #1fa51f;
+    --tab-bg-color: #46a361;
     --tab-bg-hover: #0c4318;
     --tab-selected-bg-color: #91ca2e;
     --tab-border-color: #8b4513;
     --tab-invisible-bg-color: #2e8b57;
     --tab-invisible-text-color: #90ee90;
     --container-border-color: #228b22;
-    --container-bg-color: #98fb98;
-    --button-bg-color: #b5f1b5;
+    --container-bg-color: #46a361;
+    --button-bg-color: #87ca87;
     --button-bg-active: #c6f9c6;
     --star-color-prominent: #bdbf32;
     --current-star-border: #ff4500;
@@ -542,10 +558,13 @@ button {
     --consumption-colors: #d32f2f, #c62828, #b71c1c;
 }
 
+/* Terminal Theme Variables */
 [data-theme="terminal"] {
     --disabled-text: red;
     --ready-text: #fff;
     --warning-text: orange;
+    --stats-this-run-text: magenta; /* Much darker green for better contrast */
+    --stats-all-time-text: cyan; /* Cyan for contrast */
     --bg-color: black;
     --text-color: lime;
     --text-color-rgb: 0, 255, 0;
@@ -567,10 +586,13 @@ button {
     --consumption-colors: red, #f00, #800;
 }
 
+/* Dark Theme Variables */
 [data-theme="dark"] {
     --disabled-text: #ff0000;
     --ready-text: #00ff00;
     --warning-text: orange;
+    --stats-this-run-text: #90caf9; /* Light blue for dark theme contrast */
+    --stats-all-time-text: #8e24aa; /* Magenta for strong contrast */
     --bg-color: #000;
     --text-color: #c4c4c4;
     --text-color-rgb: 196, 196, 196;
