@@ -878,7 +878,7 @@ export function createHtmlTableStatistics(id, classList = [], mainHeadings, subH
                 innerTextString += `
                     <tr>
                         <td class="left-column"><span class="${headerClasses.join(' ')}">${header}</span></td>
-                        <td class="middle-column" style="text-align: left;">
+                        <td class="middle-column">
                             <span id="stat_${toCamelCase(header.replace(':', '').trim())}" class="${bodyClasses.join(' ')}">${body}</span>
                         </td>
                         <td class="right-column"></td>

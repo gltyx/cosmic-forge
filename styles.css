@@ -1561,9 +1561,11 @@ button.red-disabled-text {
 }
 
 .statistics-table {
-    width: 100%;
+    width: 80%;
+    align-items: center;
     border-collapse: collapse;
     margin-left: -5%;
+    font-size: 0.9rem;
 }
 
 .statistics-table td {
@@ -1580,12 +1582,12 @@ button.red-disabled-text {
 }
 
 .middle-column {
-    width: 25%;
+    width: auto;
     text-align: center;
 }
 
 .right-column {
-    width: 25%;
+    width: auto;
     text-align: center;
 }
 

@@ -1398,7 +1398,7 @@ export function initialiseDescriptions() {
 
 statisticsContent = {
     'overview': {
-        subHeading1: "Total Time Played ",
+        subHeading1: "Time Played ",
         subBody1: "0",
 
         subHeading2: "Pioneer ",
@@ -1407,13 +1407,13 @@ statisticsContent = {
         subHeading3: "Current AP ",
         subBody3: "10000",
 
-        subHeading4: "Total AP Gain ",
+        subHeading4: "AP Gain ",
         subBody4: "10000",
 
         subHeading5: "Run ",
         subBody5: "1",
 
-        subHeading6: "Total Unique News Tickers Seen ",
+        subHeading6: "Unique News Tickers Seen ",
         subBody6: "1000",
 
         subHeading7: "News Ticker Prizes Collected ",
@@ -1422,19 +1422,19 @@ statisticsContent = {
         subHeading8: "Theme ",
         subBody8: "Terminal",
 
-        subHeading9: "Total Antimatter Mined ",
+        subHeading9: "Antimatter Mined ",
         subBody9: "10000",
 
-        subHeading10: "Total Asteroids Discovered ",
+        subHeading10: "Asteroids Discovered ",
         subBody10: "50",
 
-        subHeading11: "Total Legendary Asteroids Discovered ",
+        subHeading11: "Legendary Asteroids Discovered ",
         subBody11: "5",
 
-        subHeading12: "Total Rockets Launched ",
+        subHeading12: "Rockets Launched ",
         subBody12: "156",
 
-        subHeading13: "Total Star Ships Launched ",
+        subHeading13: "Star Ships Launched ",
         subBody13: "3"
     },
     'run': {

@@ -367,20 +367,20 @@ export function setElements() {
 
 export const statFunctionsGets = {
     // Overview
-    "stat_totalTimePlayed": getStatTotalTimePlayed,
+    "stat_timePlayed": getStatTotalTimePlayed,
     "stat_pioneer": getStatPioneer,
     "stat_currentAp": getStatCurrentAp,
-    "stat_totalApGain": getStatTotalApGain,
+    "stat_apGain": getStatTotalApGain,
     "stat_run": getStatRun,
     "stat_runTime": getStatRunTime,
-    "stat_totalUniqueNewsTickersSeen": getStatTotalUniqueNewsTickersSeen,
+    "stat_uniqueNewsTickersSeen": getStatTotalUniqueNewsTickersSeen,
     "stat_newsTickerPrizesCollected": getStatNewsTickerPrizesCollected,
     "stat_theme": getStatTheme,
-    "stat_totalAntimatterMined": getStatTotalAntimatterMined,
-    "stat_totalAsteroidsDiscovered": getStatTotalAsteroidsDiscovered,
-    "stat_totalLegendaryAsteroidsDiscovered": getStatTotalLegendaryAsteroidsDiscovered,
-    "stat_totalRocketsLaunched": getStatTotalRocketsLaunched,
-    "stat_totalStarShipsLaunched": getStatTotalStarShipsLaunched,
+    "stat_antimatterMined": getStatTotalAntimatterMined,
+    "stat_asteroidsDiscovered": getStatTotalAsteroidsDiscovered,
+    "stat_legendaryAsteroidsDiscovered": getStatTotalLegendaryAsteroidsDiscovered,
+    "stat_rocketsLaunched": getStatTotalRocketsLaunched,
+    "stat_starShipsLaunched": getStatTotalStarShipsLaunched,
 
     // Run
     "stat_starSystem": getStatStarSystem,
