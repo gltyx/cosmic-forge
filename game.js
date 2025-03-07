@@ -335,6 +335,7 @@ export async function gameLoop() {
 
         starChecks();
         starShipUiChecks();
+        fleetHangarChecks();
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
@@ -344,7 +345,7 @@ export async function gameLoop() {
         
         const revealRowsCheck = document.querySelectorAll('.option-row');
         revealRowsCheck.forEach((revealRowCheck) => {
-            monitorRevealRowsChecks(revealRowCheck);
+            resourceAndCompoundMonitorRevealRowsChecks(revealRowCheck);
         });
 
         getBuildingTypes().forEach(type => {
@@ -440,7 +441,6 @@ function checkIfStarShipBuilt() {
     
         setStarShipBuilt(allMandatoryModulesFinished);
         if (allMandatoryModulesFinished) {
-            addToResourceAllTimeStat(1, 'starShipBuilt');
             showNotification('Star Ship can now be launched!', 'info');
         }
     }
@@ -548,6 +548,14 @@ function checkAndRevealNewBuildings(type) {
                         stellarScannerRow.classList.remove('invisible');
                     }
                 }               
+            }
+            break;
+        case 'fleetHangar':
+            element = document.getElementById('fleetHangarOption');
+            if (getStarShipBuilt() && getCurrentTab()[1] === 'Interstellar') {
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.add('invisible');
             }
             break;
     }
@@ -2018,7 +2026,7 @@ function monitorTechTree() {
     });
 }
 
-function monitorRevealRowsChecks(element) {
+function resourceAndCompoundMonitorRevealRowsChecks(element) {
     if (element.classList.contains('invisible') && element.dataset.conditionCheck === 'techUnlock') { //reveal techs check
         if (getRevealedTechArray().includes(element.dataset.type)) {
             element.classList.remove('invisible');
@@ -3116,6 +3124,12 @@ function starShipUiChecks() {
             .every(([, upgrade]) => upgrade.finished === true)
     ) {
         setStarShipStatus(['readyForTravel', null]);
+    }
+}
+
+function fleetHangarChecks() {
+    if (getCurrentOptionPane() === 'fleet hangar') {
+    
     }
 }
 

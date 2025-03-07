@@ -582,6 +582,10 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
             optionContentElement.appendChild(anomaliesRow);
         }
     }
+
+    if (heading === 'Fleet Hangar') {
+    
+    }
 }
 
         //the idea is discover stars until you can no longer be arsed, but knowing they give more ascendency points (rebirth points)

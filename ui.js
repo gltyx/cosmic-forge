@@ -2565,6 +2565,14 @@ function initializeTabEventListeners() {
         });
     });
 
+    document.querySelectorAll('[class*="tab5"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'fleet hangar');
+            setCurrentOptionPane('fleet hangar');
+            updateContent('Fleet Hangar', 'tab5', 'content');
+        });
+    });
+
     document.querySelectorAll('[class*="tab6"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'launch pad');
@@ -3513,13 +3521,13 @@ export function getStats(statFunctions) {
         if (statElement) {
             const statValue = statFunctions[stat]();
             statElement.innerHTML = `<span>${(typeof statValue === 'number' && !Number.isInteger(statValue)) ? Math.floor(statValue) : statValue}</span>`;
-            const classColor = determineClassColor(statValue);
+            const classColor = determineStatClassColor(statValue);
             statElement.firstChild.classList.add(classColor);
         }
     });
 }
 
-function determineClassColor(value) {
+function determineStatClassColor(value) {
     if (value === 'No' || value === 0 || value === 'OFF' || value === '⛰') {
         return 'red-disabled-text';
     }

@@ -64,11 +64,13 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
         'star ship': "Here you can build and manage your Star Ship to travel to and scan studied Stars.",
+        'fleet hangar': "Here you can build your invasion fleets to conquer systems you travel to.",
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
+
         'get started': "Learn how to get started in Cosmic Forge.",
         'concepts - early': "Early game concepts.",
         'concepts - mid': "Mid game concepts.",
