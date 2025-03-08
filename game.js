@@ -1376,31 +1376,31 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
 }
 
 function getFleetResourceDescriptionElements() {
-    const fleetEnvoyDescElement = document.getElementById('fleetEnvoyDescription');
+    const fleetEnvoyDescElement = document.getElementById('envoyDescription');
     const fleetEnvoyPrice = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'price']);
     const fleetEnvoyResource1Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource1Price'])[0];
     const fleetEnvoyResource2Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource2Price'])[0];
     const fleetEnvoyResource3Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource3Price'])[0];
 
-    const fleetScoutDescElement = document.getElementById('fleetScoutDescription');
+    const fleetScoutDescElement = document.getElementById('scoutDescription');
     const fleetScoutPrice = getResourceDataObject('space', ['upgrades', 'fleetScout', 'price']);
     const fleetScoutResource1Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource1Price'])[0];
     const fleetScoutResource2Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource2Price'])[0];
     const fleetScoutResource3Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource3Price'])[0];
 
-    const fleetMarauderDescElement = document.getElementById('fleetMarauderDescription');
+    const fleetMarauderDescElement = document.getElementById('marauderDescription');
     const fleetMarauderPrice = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'price']);
     const fleetMarauderResource1Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource1Price'])[0];
     const fleetMarauderResource2Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource2Price'])[0];
     const fleetMarauderResource3Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource3Price'])[0];
 
-    const fleetLandStalkerDescElement = document.getElementById('fleetLandStalkerDescription');
+    const fleetLandStalkerDescElement = document.getElementById('landStalkerDescription');
     const fleetLandStalkerPrice = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'price']);
     const fleetLandStalkerResource1Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource1Price'])[0];
     const fleetLandStalkerResource2Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource2Price'])[0];
     const fleetLandStalkerResource3Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource3Price'])[0];
 
-    const fleetNavalStraferDescElement = document.getElementById('fleetNavalStraferDescription');
+    const fleetNavalStraferDescElement = document.getElementById('navalStraferDescription');
     const fleetNavalStraferPrice = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'price']);
     const fleetNavalStraferResource1Price = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource1Price'])[0];
     const fleetNavalStraferResource2Price = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource2Price'])[0];
@@ -1886,9 +1886,11 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
             const quantity = allQuantities[item];
             if (quantity || quantity === 0) {
                 const quantityText = document.getElementById(`${item}QuantityText`);
-                quantityText.innerHTML = `Built: <span id="${item}BuiltQuantity">${quantity}</span> / <span id="${item}BuiltQuantityMax">${getMaxFleetShip(item)}</span>`;
+                quantityText.innerHTML = item === 'fleetEnvoy'
+                    ? `Quantity: <span id="${item}BuiltQuantity">${quantity}</span> / <span id="${item}BuiltQuantityMax">${getMaxFleetShip(item)}</span>`
+                    : `Quantity: <span id="${item}BuiltQuantity">${quantity}</span>`;
             }
-        }
+        }        
     }
 
     for (const allDescriptionElement in allDescriptionElements) {
@@ -3457,6 +3459,18 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
         }
     }
 };
+
+export function increaseAttackAndDefensePower(fleetShipId) {
+    if (fleetShipId !== 'fleetEnvoy') {
+        const currentAttackPower = getResourceDataObject('fleets', ['attackPower']);
+        const currentDefensePower = getResourceDataObject('fleets', ['defensePower']);
+        const attackPowerToAdd = getResourceDataObject('space', ['upgrades', fleetShipId, 'baseAttackStrength']);
+        const defensePowerToAdd = getResourceDataObject('space', ['upgrades', fleetShipId, 'defenseStrength']);
+
+        setResourceDataObject(Math.floor(currentAttackPower + attackPowerToAdd), 'fleets', ['attackPower']);
+        setResourceDataObject(Math.floor(currentDefensePower + defensePowerToAdd), 'fleets', ['defensePower']);
+    }   
+}
 
 export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemType) {
     let resourceType;

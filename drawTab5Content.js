@@ -2,7 +2,7 @@ import { createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawS
 import { setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
-import { generateDestinationStarData, gain } from './game.js';
+import { increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
 export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw) {
     if (heading === 'Star Map') {
@@ -599,6 +599,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 `${fleetShip.label}:`,
                 createButton(`Comission`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                     gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space')
+                    increaseAttackAndDefensePower(fleetShip.id)
                 }, 'upgradeCheck', '', 'spaceUpgrade', fleetShip.id, 'cash', true, null, 'fleetPurchase'),
                 createTextElement(
                     fleetShip.id === 'fleetEnvoy' 

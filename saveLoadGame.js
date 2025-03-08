@@ -327,7 +327,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.38) {
+        if (saveData.version < 0.40) {
             if (objectType === 'resourceData') {
                 saveData.fleets = {
                     attackPower: 0,
@@ -594,4 +594,3 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
 
     return saveData;
 }
-
