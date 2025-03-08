@@ -44,6 +44,7 @@ export const STAR_SEED = 53;
 export const STAR_FIELD_SEED = 80;
 export const NUMBER_OF_STARS = 100;
 export const STELLAR_SCANNER_RANGE = 0.75;
+export const OFFLINE_GAINS_RATE = 0.334;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -1445,6 +1446,10 @@ export function setCompoundSalePreview(compound, value) {
                 compoundQuantity + ' ' + compoundCapitalised + ')';
         }
     } 
+}
+
+export function getOfflineGainsRate() {
+    return OFFLINE_GAINS_RATE;
 }
 
 export function getCompoundCreatePreview(key) {

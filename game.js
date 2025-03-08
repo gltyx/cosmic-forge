@@ -176,7 +176,8 @@ import {
     STAR_FIELD_SEED,
     getStarMapMode,
     getStarShipArrowPosition,
-    getCurrentStarObject
+    getCurrentStarObject,
+    getOfflineGainsRate
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -5155,12 +5156,11 @@ export function offlineGains(switchedFocus) {
             compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
             energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
             research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
-            rocket1: 0,
-            rocket2: 0,
-            rocket3: 0,
-            rocket4: 0,
-            antimatter: combinedValues.rate.antimatter * getTimerRateRatio() * timeDifferenceInSeconds
         };
+
+        Object.keys(offlineGains).forEach(key => { //this plus antimatter at bottom nerfs the offline gains rate
+            offlineGains[key] = Math.floor(offlineGains[key] * getOfflineGainsRate());
+        });
     
         Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
             const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
@@ -5263,9 +5263,9 @@ export function offlineGains(switchedFocus) {
             }
         });
         
-        setResourceDataObject(currentAntimatterQuantity + offlineGainsAntimatter, 'antimatter', ['quantity']);
-        addToResourceAllTimeStat(offlineGainsAntimatter, 'antimatter');
-        addToResourceAllTimeStat(offlineGainsAntimatter, 'antimatterThisRun');
+        setResourceDataObject(Math.floor((currentAntimatterQuantity + offlineGainsAntimatter) * getOfflineGainsRate()), 'antimatter', ['quantity']);
+        addToResourceAllTimeStat(Math.floor(offlineGainsAntimatter * getOfflineGainsRate()), 'antimatter');
+        addToResourceAllTimeStat(Math.floor(offlineGainsAntimatter * getOfflineGainsRate()), 'antimatterThisRun');        
         
         if (!switchedFocus) {
             showNotification('Offline Gains Added!', 'info');
