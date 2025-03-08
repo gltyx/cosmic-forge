@@ -547,7 +547,7 @@ export function createOptionRow(
         const description = document.createElement('label');
         description.classList.add('notation');
     
-        if (rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase') {
+        if (rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase' || rowCategory === 'fleetPurchase') {
             description.classList.add('building-purchase');
         }
     
@@ -555,7 +555,7 @@ export function createOptionRow(
         description.innerHTML = descriptionText;
     
         if (dataConditionCheck) {
-            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase' || rowCategory === 'science' || rowCategory === 'tech') {
+            if (rowCategory === 'resource' || rowCategory === 'building' || rowCategory === 'spaceMiningPurchase' || rowCategory === 'starShipPurchase' || rowCategory === 'fleetPurchase' || rowCategory === 'science' || rowCategory === 'tech') {
                 description.classList.add('red-disabled-text', 'resource-cost-sell-check');
             } else if (rowCategory === 'compound') {
                 description.classList.add('red-disabled-text', 'compound-cost-sell-check');

@@ -189,7 +189,8 @@ import {
     setStarSystemWeather,
     getRocketPartsNeededInTotalPerRocket,
     getRocketParts,
-    getStarShipPartsNeededInTotalPerModule
+    getStarShipPartsNeededInTotalPerModule,
+    getMaxFleetShip
 } from "./resourceDataObject.js";
 
 import { 
@@ -955,7 +956,7 @@ function checkAndIncreasePrices() {
                 const { currentPrice, setPriceTarget, typeOfResourceCompound } = priceIncreaseObject[priceIncrease];
                 if (setPriceTarget.startsWith('science')) {
                     setNewItemPrice(currentPrice, setPriceTarget, null, null, null);
-                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery') || setPriceTarget.startsWith('rocket') || setPriceTarget.startsWith('ss')) { //add new building types if needed will have a bug here if add any more it will go to the else block
+                } else if (setPriceTarget.startsWith('power') || setPriceTarget.startsWith('battery') || setPriceTarget.startsWith('rocket') || setPriceTarget.startsWith('ss') || setPriceTarget.startsWith('fleet')) { //add new building types if needed will have a bug here if add any more it will go to the else block
                     if (priceIncrease === "cash") {
                         setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncrease);
                     } else {
@@ -1030,7 +1031,6 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             newResource3Price = [newResource3Price, resource3Name, resource3Category];
         }
         
-
         if (elementName.startsWith('science')) {
             const strippedElementName = elementName.slice(0, -5);        
             setResourceDataObject(newCurrencyPrice, 'research', ['upgrades', strippedElementName, 'price']);
@@ -1048,7 +1048,7 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             if (resource3Price > 0) {
                 setResourceDataObject(newResource3Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource3Price']);
             }
-        } else if (elementName.startsWith('rocket') || elementName.startsWith('ss')) {
+        } else if (elementName.startsWith('rocket') || elementName.startsWith('ss') || elementName.startsWith('fleet')) {
             const strippedElementName = elementName.slice(0, -5);
             if (optionalResource === 'cash') {
                 setResourceDataObject(newCurrencyPrice, 'space', ['upgrades', strippedElementName, 'price']);
@@ -1879,6 +1879,14 @@ function updateUIQuantities(allQuantities, allStorages, allElements, allDescript
                     : getStarShipPartsNeededInTotalPerModule;
 
                 partsCountText.innerHTML = `Built: <span id="${item}BuiltPartsQuantity">${quantity}</span> / <span id="${item}TotalPartsQuantity">${getTotalPartsNeeded(item)}</span>`;
+            }
+        }
+
+        if (item.startsWith('fleet')) {
+            const quantity = allQuantities[item];
+            if (quantity || quantity === 0) {
+                const quantityText = document.getElementById(`${item}QuantityText`);
+                quantityText.innerHTML = `Built: <span id="${item}BuiltQuantity">${quantity}</span> / <span id="${item}BuiltQuantityMax">${getMaxFleetShip(item)}</span>`;
             }
         }
     }
@@ -2979,6 +2987,10 @@ function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
 }
 
 function handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element) {
+    if (element.dataset.rowCategory === 'fleetPurchase') {
+        return;
+    }
+
     const upgradeTypes = ['launchPad', 'spaceTelescope'];
 
     upgradeTypes.forEach(upgradeType => {
@@ -3103,6 +3115,34 @@ function handleSpaceUpgradeResourceType(element) {
                 }
             }
         }
+    } else if (dataName.startsWith('fleet')) {
+        const quantity = getResourceDataObject('space', ['upgrades', dataName, 'quantity']);
+        const maxQuantity = getResourceDataObject('space', ['upgrades', dataName, 'maxCanBuild']);
+
+        const buyButton = element.parentElement.parentElement.querySelector('.input-container button');
+
+        const hasRedDisabledTextSpan = Array.from(element.querySelectorAll('span')).some(span => 
+            span.classList.contains('red-disabled-text')
+        );
+
+        if (hasRedDisabledTextSpan) {
+            buyButton.classList.add('red-disabled-text');
+        }
+
+        if (quantity === maxQuantity) {
+            const quantityElement = document.getElementById(`${dataName}BuiltQuantity`);
+            const maxQuantityElement = document.getElementById(`${dataName}BuiltQuantityMax`);
+            buyButton.classList.add('red-disabled-text');
+            element.classList.add('green-ready-text');
+            quantityElement.classList.add('green-ready-text');
+            maxQuantityElement.classList.add('green-ready-text');
+            element.classList.remove('red-disabled-text');
+            element.textContent = 'Built!';
+
+            if (dataName.includes('fleetEnvoy') && !getResourceDataObject('space', ['upgrades', dataName, 'envoyBuiltYet'])) {
+                setResourceDataObject(true, 'space', ['upgrades', dataName, 'envoyBuiltYet']);
+            }
+        }
     }
 }
 
@@ -3114,6 +3154,10 @@ function checkStatusAndSetTextClasses(element) {
     if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
         checkTravelToDescriptions(element); //not return as this does not affect element and so still need to check element
     }
+
+    // if (element.dataset.rowCategory && element.dataset.rowCategory === 'fleetPurchase') {
+    //     return checkFleetElements(element);
+    // }
     
     if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
         return travelToAsteroidChecks(element);
@@ -3221,7 +3265,7 @@ function starShipUiChecks() {
 
 function fleetHangarChecks() {
     if (getCurrentOptionPane() === 'fleet hangar') {
-    
+        document.getElementById('descriptionContentTab5').innerHTML = `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
     }
 }
 
@@ -3278,6 +3322,10 @@ function checkTravelToStarElements(element) {
             document.getElementById('starDestinationDescription').textContent = 'Orbiting...';
         }
     }
+}
+
+function checkFleetElements(element) {
+
 }
 
 function checkTravelToDescriptions(element) {
@@ -3437,6 +3485,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         currentQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', item, 'quantity']);
     } else if ((item && (item.startsWith('rocket') || item.startsWith('ss')))) {
         currentQuantity = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
+    } else if ((item && (item.startsWith('fleet')))) {
+        currentQuantity = getResourceDataObject('space', ['upgrades', item, 'quantity']);
     } else if (item && item === 'autoBuyer') {
         currentQuantity = getResourceDataObject(itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']);
     } else {
@@ -3479,7 +3529,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         } else if (resourceType === 'research') {
             getElements()[elementId].classList.remove('green-ready-text');
             setResourceDataObject(currentQuantity + incrementAmount, 'research', ['quantity']);
-        } else if (resourceType === 'space') {
+        } else if (resourceType === 'space' && !item.startsWith('fleet')) {
             setResourceDataObject(currentQuantity + incrementAmount, 'space', ['upgrades', item, 'builtParts']);
             const builtParts = getResourceDataObject('space', ['upgrades', item, 'builtParts']);
             const totalParts = getResourceDataObject('space', ['upgrades', item, 'parts']);
@@ -3491,6 +3541,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             if (builtParts === totalParts && item.startsWith('ss')) {
                 setStarShipModulesBuilt(item);
             }
+        } else if (item.startsWith('fleet')) {
+            setResourceDataObject(currentQuantity + incrementAmount, 'space', ['upgrades', item, 'quantity']);
         }
     }    
 
