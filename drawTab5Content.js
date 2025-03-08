@@ -597,7 +597,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 `space${capitaliseString(fleetShip.id)}BuildRow`,
                 null,
                 `${fleetShip.label}:`,
-                createButton(`Comission`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
+                createButton(`Build`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                     gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space')
                     increaseAttackAndDefensePower(fleetShip.id)
                 }, 'upgradeCheck', '', 'spaceUpgrade', fleetShip.id, 'cash', true, null, 'fleetPurchase'),
