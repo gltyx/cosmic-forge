@@ -1127,6 +1127,8 @@ function getAllQuantities() {
     .filter(rocket => rocket.startsWith('rocket'));
     const starshipModules = Object.keys(getResourceDataObject('space', ['upgrades']))
     .filter(module => module.startsWith('ss'));
+    const fleetShips = Object.keys(getResourceDataObject('space', ['upgrades']))
+    .filter(module => module.startsWith('fleet'));
 
     const allQuantities = {};
 
@@ -1156,7 +1158,11 @@ function getAllQuantities() {
         starshipModules.forEach(module => {
             allQuantities[module] = getResourceDataObject('space', ['upgrades', module, 'builtParts']);
         });
-    }       
+    } else if (getCurrentOptionPane() === 'fleet hangar') {
+        fleetShips.forEach(ship => {
+            allQuantities[ship] = getResourceDataObject('space', ['upgrades', ship, 'quantity']);
+        });
+    }        
 
     allQuantities.energy = getResourceDataObject('buildings', ['energy', 'quantity']);
     allQuantities.battery1 = getResourceDataObject('buildings', ['energy', 'upgrades', 'battery1', 'quantity']);
@@ -1249,33 +1255,7 @@ function getAllElements(resourcesArray, compoundsArray) {
     allElements.powerPlant3 = getElements().powerPlant3Quantity;
 
     allElements.spaceTelescope = null;
-    allElements.launchPad = null;
-
-    if (getCurrentOptionPane() === 'launch pad') {
-        allElements.rocket1BuiltParts = document.getElementById('rocket1BuiltPartsQuantity');
-        allElements.rocket1TotalParts = document.getElementById('rocket1TotalPartsQuantity');
-    
-        allElements.rocket2BuiltParts = document.getElementById('rocket2BuiltPartsQuantity');
-        allElements.rocket2TotalParts = document.getElementById('rocket2TotalPartsQuantity');
-    
-        allElements.rocket3BuiltParts = document.getElementById('rocket3BuiltPartsQuantity');
-        allElements.rocket3TotalParts = document.getElementById('rocket3TotalPartsQuantity');
-    
-        allElements.rocket4BuiltParts = document.getElementById('rocket4BuiltPartsQuantity');
-        allElements.rocket4TotalParts = document.getElementById('rocket4TotalPartsQuantity');
-    } else {
-        allElements.rocket1BuiltParts = null;
-        allElements.rocket1TotalParts = null;
-    
-        allElements.rocket2BuiltParts = null;
-        allElements.rocket2TotalParts = null;
-    
-        allElements.rocket3BuiltParts = null;
-        allElements.rocket3TotalParts = null;
-    
-        allElements.rocket4BuiltParts = null;
-        allElements.rocket4TotalParts = null;
-    }   
+    allElements.launchPad = null;  
     
     if (getCurrentOptionPane() === 'launch pad') {
         allElements.rocket1BuiltParts = document.getElementById('rocket1BuiltPartsQuantity');
@@ -1335,6 +1315,22 @@ function getAllElements(resourcesArray, compoundsArray) {
         allElements.ssStellarScannerTotalParts = null;
     }    
 
+    if (getCurrentOptionPane() === 'fleet hangar') {
+        allElements.fleetEnvoyQuantity = document.getElementById('fleetEnvoyBuiltQuantity');
+        allElements.fleetEnvoyMax = document.getElementById('fleetEnvoyBuiltQuantityMax');
+        allElements.fleetScoutQuantity = document.getElementById('fleetScoutBuiltQuantity');
+        allElements.fleetMarauderQuantity = document.getElementById('fleetMarauderBuiltQuantity');
+        allElements.fleetLandStalkerQuantity = document.getElementById('fleetLandStalkerBuiltQuantity');
+        allElements.fleetNavalStraferQuantity = document.getElementById('fleetNavalStraferBuiltQuantity');
+    } else {
+        allElements.fleetEnvoyQuantity = null;
+        allElements.fleetEnvoyMax = null;
+        allElements.fleetScoutQuantity = null;
+        allElements.fleetMarauderQuantity = null;
+        allElements.fleetLandStalkerQuantity = null;
+        allElements.fleetNavalStraferQuantity = null;
+    } 
+
     allElements.research = getElements().researchQuantity;
     allElements.scienceKit = getElements().scienceKitQuantity;
     allElements.scienceClub = getElements().scienceClubQuantity;
@@ -1372,10 +1368,101 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
     const buildingsElements = getBuildingResourceDescriptionElements();
     const spaceMiningElements = getSpaceMiningResourceDescriptionElements();
     const starShipElements = getStarShipResourceDescriptionElements();
+    const fleetElements = getFleetResourceDescriptionElements();
 
-    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements, starShipElements);
+    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements, starShipElements, fleetElements);
 
     return elements;
+}
+
+function getFleetResourceDescriptionElements() {
+    const fleetEnvoyDescElement = document.getElementById('fleetEnvoyDescription');
+    const fleetEnvoyPrice = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'price']);
+    const fleetEnvoyResource1Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource1Price'])[0];
+    const fleetEnvoyResource2Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource2Price'])[0];
+    const fleetEnvoyResource3Price = getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource3Price'])[0];
+
+    const fleetScoutDescElement = document.getElementById('fleetScoutDescription');
+    const fleetScoutPrice = getResourceDataObject('space', ['upgrades', 'fleetScout', 'price']);
+    const fleetScoutResource1Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource1Price'])[0];
+    const fleetScoutResource2Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource2Price'])[0];
+    const fleetScoutResource3Price = getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource3Price'])[0];
+
+    const fleetMarauderDescElement = document.getElementById('fleetMarauderDescription');
+    const fleetMarauderPrice = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'price']);
+    const fleetMarauderResource1Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource1Price'])[0];
+    const fleetMarauderResource2Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource2Price'])[0];
+    const fleetMarauderResource3Price = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource3Price'])[0];
+
+    const fleetLandStalkerDescElement = document.getElementById('fleetLandStalkerDescription');
+    const fleetLandStalkerPrice = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'price']);
+    const fleetLandStalkerResource1Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource1Price'])[0];
+    const fleetLandStalkerResource2Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource2Price'])[0];
+    const fleetLandStalkerResource3Price = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource3Price'])[0];
+
+    const fleetNavalStraferDescElement = document.getElementById('fleetNavalStraferDescription');
+    const fleetNavalStraferPrice = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'price']);
+    const fleetNavalStraferResource1Price = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource1Price'])[0];
+    const fleetNavalStraferResource2Price = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource2Price'])[0];
+    const fleetNavalStraferResource3Price = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource3Price'])[0];
+
+    return {
+        fleetEnvoyBuy: { 
+            element: fleetEnvoyDescElement,
+            price: fleetEnvoyPrice,
+            resource1Price: fleetEnvoyResource1Price,
+            resource2Price: fleetEnvoyResource2Price,
+            resource3Price: fleetEnvoyResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'resource3Price'])[1])
+        },
+        fleetScoutBuy: { 
+            element: fleetScoutDescElement,
+            price: fleetScoutPrice,
+            resource1Price: fleetScoutResource1Price,
+            resource2Price: fleetScoutResource2Price,
+            resource3Price: fleetScoutResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetScout', 'resource3Price'])[1])
+        },
+        fleetMarauderBuy: { 
+            element: fleetMarauderDescElement,
+            price: fleetMarauderPrice,
+            resource1Price: fleetMarauderResource1Price,
+            resource2Price: fleetMarauderResource2Price,
+            resource3Price: fleetMarauderResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'resource3Price'])[1])
+        },
+        fleetLandStalkerBuy: { 
+            element: fleetLandStalkerDescElement,
+            price: fleetLandStalkerPrice,
+            resource1Price: fleetLandStalkerResource1Price,
+            resource2Price: fleetLandStalkerResource2Price,
+            resource3Price: fleetLandStalkerResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'resource3Price'])[1])
+        },
+        fleetNavalStraferBuy: { 
+            element: fleetNavalStraferDescElement,
+            price: fleetNavalStraferPrice,
+            resource1Price: fleetNavalStraferResource1Price,
+            resource2Price: fleetNavalStraferResource2Price,
+            resource3Price: fleetNavalStraferResource3Price,
+            string1: getCurrencySymbol(),
+            string2: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource1Price'])[1]),
+            string3: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource2Price'])[1]),
+            string4: capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'resource3Price'])[1])
+        }
+    };
 }
 
 function getScienceResourceDescriptionElements() {
@@ -1470,7 +1557,6 @@ function getBuildingResourceDescriptionElements() {
     const powerPlant3BuyResource1Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource1Price'])[0];
     const powerPlant3BuyResource2Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource2Price'])[0];
     const powerPlant3BuyResource3Price = getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'resource3Price'])[0];
-
 
     return {
         battery1Buy: { 
