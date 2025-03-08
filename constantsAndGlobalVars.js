@@ -36,7 +36,7 @@ export const BUILDING_TYPES = ['energy', 'space', 'starShip', 'fleetHangar'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const ROCKET_TRAVEL_SPEED = 0.1;
-export const STARSHIP_TRAVEL_SPEED = 3600000; //3600000 one real hour per light year
+export const STARSHIP_TRAVEL_SPEED = 36000; //3600000 one real hour per light year
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 export const STARTING_STAR_SYSTEM = 'spica';
@@ -62,7 +62,7 @@ let cachedRenderedTechTree = null;
 let saveName = null;
 let lastSavedTimeStamp = null;
 let currentTheme = 'terminal';
-let autoSaveFrequency = 300000;
+let autoSaveFrequency = 60000;
 let currentStarSystem = getStartingStarSystem();
 let currentStarSystemWeatherEfficiency = [];
 let currentPrecipitationRate = 0;
@@ -244,7 +244,7 @@ let rocketReadyToTravel = {
 let sfx = false;
 let backgroundAudio = false;
 let saveExportCloudFlag = false;
-let autoSaveToggle = false;
+let autoSaveToggle = true;
 let newsTickerSetting = true;
 let weatherEffectSettingToggle = true;
 let notificationsToggle = true;
@@ -377,7 +377,7 @@ export const statFunctionsGets = {
     "stat_newsTickerPrizesCollected": getStatNewsTickerPrizesCollected,
     "stat_theme": getStatTheme,
     "stat_antimatterMined": getStatTotalAntimatterMined,
-    "stat_asteroidsDiscovered": getStatTotalAsteroidsDiscovered,
+    "stat_totalAsteroidsDiscovered": getStatTotalAsteroidsDiscovered,
     "stat_legendaryAsteroidsDiscovered": getStatTotalLegendaryAsteroidsDiscovered,
     "stat_rocketsLaunched": getStatTotalRocketsLaunched,
     "stat_starShipsLaunched": getStatTotalStarShipsLaunched,
@@ -2712,7 +2712,9 @@ function setStatConcrete(valueToAdd) {
 }
 
 function setStatWater(valueToAdd) {
-    allTimeTotalWater += valueToAdd;
+    if (getTechUnlockedArray().includes('compounds')) {
+        allTimeTotalWater += valueToAdd;
+    }
 }
 
 function setStatTitanium(valueToAdd) {

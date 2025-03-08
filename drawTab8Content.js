@@ -316,7 +316,7 @@ export function drawTab8Content(heading, optionContentElement) {
                 setAutoSaveFrequency(parseInt(value));
                 initializeAutoSave();
             }),
-            createToggleSwitch('autoSaveToggle', false, (isEnabled) => {
+            createToggleSwitch('autoSaveToggle', true, (isEnabled) => {
                 setAutoSaveToggle(isEnabled),
                 initializeAutoSave();
             }, ['toggle-switch-spacing']),

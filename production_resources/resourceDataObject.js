@@ -2,7 +2,7 @@ import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.321, //update this whenever changes are made to the structure
+    version: 0.40, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -657,6 +657,82 @@ export let resourceData = {
                 resource2Price: [4000, 'silicon', 'resources'],
                 resource3Price: [6000, 'neon', 'resources'],
                 setPrice: 'ssStellarScannerPrice'
+            },
+            fleetEnvoy: {
+                envoyBuiltYet: false,
+                maxCanBuild: 1,
+                quantity: 0,
+                price: 2000,
+                resource1Price: [8000, 'hydrogen', 'resources'],
+                resource2Price: [300, 'silicon', 'resources'],
+                resource3Price: [120, 'titanium', 'compounds'],
+                setPrice: 'fleetEnvoyPrice',
+                bonusPercentage: null,
+                baseAttackStrength: 0,
+                bonusAgainstType: null,
+                bonusAgainstTrait: null,
+                defenseStrength: 0,
+                joinsAttackDefense: false
+            },
+            fleetScout: {
+                maxCanBuild: 100000,
+                quantity: 0,
+                price: 5000,
+                resource1Price: [14000, 'hydrogen', 'resources'],
+                resource2Price: [1000, 'silicon', 'resources'],
+                resource3Price: [300, 'titanium', 'compounds'],
+                setPrice: 'fleetScoutPrice',
+                bonusPercentage: 10,
+                baseAttackStrength: 2,
+                bonusGivenAgainstType: 'air',
+                bonusRemovedBy: 'Aerialians',
+                defenseStrength: 2,
+                joinsAttackDefense: true
+            },
+            fleetMarauder: {
+                maxCanBuild: 100000,
+                quantity: 0,
+                price: 7500,
+                resource1Price: [14000, 'helium', 'resources'],
+                resource2Price: [2000, 'silicon', 'resources'],
+                resource3Price: [600, 'titanium', 'compounds'],
+                setPrice: 'fleetMarauderPrice',
+                bonusPercentage: 15,
+                baseAttackStrength: 4,
+                bonusGivenAgainstType: 'air',
+                bonusRemovedBy: 'Aerialians',
+                defenseStrength: 3,
+                joinsAttackDefense: true
+            },
+            fleetLandStalker: {
+                maxCanBuild: 100000,
+                quantity: 0,
+                price: 9000,
+                resource1Price: [22000, 'helium', 'resources'],
+                resource2Price: [3000, 'silicon', 'resources'],
+                resource3Price: [900, 'titanium', 'compounds'],
+                setPrice: 'fleetLandStalkerPrice',
+                bonusPercentage: 20,
+                baseAttackStrength: 4,
+                bonusGivenAgainstType: 'land',
+                bonusRemovedBy: 'Terrans',
+                defenseStrength: 0,
+                joinsAttackDefense: true
+            },
+            fleetNavalStrafer: {
+                maxCanBuild: 100000,
+                quantity: 0,
+                price: 8000,
+                resource1Price: [26000, 'hydrogen', 'resources'],
+                resource2Price: [4000, 'silicon', 'resources'],
+                resource3Price: [1200, 'titanium', 'compounds'],
+                setPrice: 'fleetNavalStraferPrice',
+                bonusPercentage: 15,
+                baseAttackStrength: 6,
+                bonusGivenAgainstType: 'sea',
+                bonusRemovedBy: 'Aquatic',
+                defenseStrength: 0,
+                joinsAttackDefense: true
             }
         }
     },
@@ -747,11 +823,15 @@ export let resourceData = {
     },
     ascendencyPoints: {
         quantity: 0,
+    },
+    fleets: {
+        attackPower: 0,
+        defensePower: 0
     }
 };
 
 export let starSystems = {
-    version: 0.321,
+    version: 0.40,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //only important for starting star
@@ -910,4 +990,12 @@ export function getStarShipParts(starShipModule) {
 
 export function getStarShipPartsNeededInTotalPerModule(starShipModule) {
     return resourceData.space.upgrades[starShipModule].parts;
+}
+
+export function getFleetShips(fleetShip) {
+    return resourceData.space.upgrades[fleetShip].quantity;
+}
+
+export function getMaxFleetShip(fleetShip) {
+    return resourceData.space.upgrades[fleetShip].maxCanBuild;
 }

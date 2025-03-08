@@ -1,1 +1,4 @@
 resource calculations are not right when burning fuel in a power station, start with carbon, pretty deep bug
+
+tech tree not updating when research points grow to reveal more
+stats bugs in general

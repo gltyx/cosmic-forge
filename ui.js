@@ -847,7 +847,7 @@ export function createHtmlTableStatistics(id, classList = [], mainHeadings, subH
         innerTextString += `
         <table class="statistics-table">
             <thead>
-                ${i === 0 ? '' : `
+                ${i === 0 || i === 1 ? '' : `  <!-- Only include the headers for tables after the first and second --> 
                     <tr class="first-row">
                         <td class="left-column"></td>
                         <td class="middle-column">Current Run</td>
@@ -856,7 +856,7 @@ export function createHtmlTableStatistics(id, classList = [], mainHeadings, subH
                 `}
             </thead>
             <tbody>
-    `;
+        `;
 
         const notationHeaders = ['Cash', 'Hydrogen', 'Helium', 'Carbon', 'Neon', 'Oxygen', 'Sodium', 'Silicon', 'Iron', 'Diesel', 'Glass', 'Concrete', 'Steel', 'Water', 'Titanium', 'Research Points'];
 
@@ -874,7 +874,8 @@ export function createHtmlTableStatistics(id, classList = [], mainHeadings, subH
                 header += ':';
             }
 
-            if (i === 0) {
+            // Apply special rule for the first and second tables (i === 0 or i === 1)
+            if (i === 0 || i === 1) {
                 innerTextString += `
                     <tr>
                         <td class="left-column"><span class="${headerClasses.join(' ')}">${header}</span></td>
@@ -2761,6 +2762,16 @@ function initializeTabEventListeners() {
             updateContent('Statistics', 'tab8', 'content');
         });    
     });
+
+    const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
+    rowSideMenuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            rowSideMenuItems.forEach(i => i.classList.remove('row-side-menu-selected'));
+
+            this.classList.add('row-side-menu-selected');
+        });
+    });
+
     
     const tabsContainer = document.getElementById('tabsContainer');
 

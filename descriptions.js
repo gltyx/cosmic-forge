@@ -180,7 +180,7 @@ export function initialiseDescriptions() {
         },
         neonSellRow: {
             content1: "Here you can sell Neon for cash",
-            content2: "Here you can sell Neon for cash or fuse it into Silver",
+            content2: "Here you can sell Neon for cash or fuse it into Oxygen",
             updateAt: "neonFusion"
         },
         neonGainRow: {
@@ -1425,7 +1425,7 @@ statisticsContent = {
         subHeading9: "Antimatter Mined ",
         subBody9: "10000",
 
-        subHeading10: "Asteroids Discovered ",
+        subHeading10: "Total Asteroids Discovered ",
         subBody10: "50",
 
         subHeading11: "Legendary Asteroids Discovered ",

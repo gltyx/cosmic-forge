@@ -1444,6 +1444,10 @@ button.red-disabled-text {
     color: var(--text-hover-color);
 }
 
+.row-side-menu-selected {
+    background-color: rgba(var(--text-color-rgb), 0.2);
+}
+
 .collapsible-arrow {
     transition: transform 0.3s ease;
     color: var(--arrow-hover-color);
