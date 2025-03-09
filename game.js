@@ -3329,7 +3329,7 @@ function checkDiplomacyButtons(element) {
         active = true;
     }
 
-    if (getDiplomacyPossible()) { 
+    if (getDiplomacyPossible() && civilizationLevel !== 'None' && civilizationLevel !== 'Unsentient') { 
         const classList = element.classList;
 
         switch (true) {
