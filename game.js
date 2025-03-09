@@ -562,7 +562,7 @@ function checkAndRevealNewBuildings(type) {
                         .map(key => data[key].quantity);
                 })();
             
-                if (getDestinationStarScanned() && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+                if (getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
                     element.parentElement.parentElement.classList.remove('invisible');
                 } else {
                     element.parentElement.parentElement.classList.add('invisible');
@@ -3275,12 +3275,25 @@ function starShipUiChecks() {
 function fleetHangarChecks() {
     if (getCurrentOptionPane() === 'fleet hangar') {
         document.getElementById('descriptionContentTab5').innerHTML = `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+        if (getStarShipStatus()[0] !== 'preconstruction' && getStarShipStatus()[0] !== 'readyForTravel' && !getStellarScannerBuilt()) {
+            if (document.getElementById('spaceFleetEnvoyBuildRow')) {
+                document.getElementById('spaceFleetEnvoyBuildRow').classList.add('invisible');
+            }
+        }
     }
 }
 
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`;
+        if (!getStellarScannerBuilt()) {
+            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('receptionStatusRow').classList.add('invisible');
+            document.getElementById('intelligenceRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        }
     }
 }
 
@@ -3379,10 +3392,6 @@ function checkTravelToStarElements(element) {
             document.getElementById('starDestinationDescription').textContent = 'Orbiting...';
         }
     }
-}
-
-function checkFleetElements(element) {
-
 }
 
 function checkTravelToDescriptions(element) {
@@ -5317,7 +5326,7 @@ export function offlineGains(switchedFocus) {
             }
         });
         
-        setResourceDataObject(Math.floor((currentAntimatterQuantity + offlineGainsAntimatter) * getOfflineGainsRate()), 'antimatter', ['quantity']);
+        setResourceDataObject(Math.floor(currentAntimatterQuantity + (offlineGainsAntimatter * getOfflineGainsRate())), 'antimatter', ['quantity']);
         addToResourceAllTimeStat(Math.floor(offlineGainsAntimatter * getOfflineGainsRate()), 'antimatter');
         addToResourceAllTimeStat(Math.floor(offlineGainsAntimatter * getOfflineGainsRate()), 'antimatterThisRun');        
         

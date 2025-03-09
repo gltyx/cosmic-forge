@@ -771,13 +771,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 '',
                 [true, '15%', '85%']
-            );            
-        
-        const populationText = getStellarScannerBuilt() 
-        ? (starData.civilizationLevel === 'Unsentient' 
-            ? 'N/A' 
-            : (starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A')) 
-        : `<span class="red-disabled-text">???</span>`;                                                 
+            );                                                           
         
             const fleetRow = createOptionRow(
                 'enemyFleetsRow',

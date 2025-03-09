@@ -970,7 +970,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         diplomacyOptionsRow: {
-            content1: "If available, click to try to intimidate or improve relations",
+            content1: "If available, and Envoy built, click to try to intimidate or improve relations",
             content2: "",
             updateAt: ""
         },

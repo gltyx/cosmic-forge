@@ -1134,14 +1134,14 @@ cursor: pointer;
     border: solid 2px var(--disabled-text) !important;
 }
 
-.progress-container {
+.diplomacy-impression-bar-container {
     position: relative;
     width: 100%;
     height: 30px;
     z-index: 1000;
 }
 
-.progress-text {
+.diplomacy-impression-bar-text {
     position: absolute;
     top: -5px;
     right: 10px;
@@ -1152,7 +1152,7 @@ cursor: pointer;
 }
 
 
-.l-shape-horizontal {
+.diplomacy-impression-bar-underbar-horizontal {
     position: absolute;
     top: -10px;
     left: 0;
@@ -1162,7 +1162,7 @@ cursor: pointer;
     z-index: 1000;
 }
 
-.progress-horizontal {
+.diplomacy-impression-bar-horizontal {
     position: absolute;
     top: -10px;
     left: 0;

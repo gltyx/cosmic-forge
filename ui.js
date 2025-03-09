@@ -3617,38 +3617,39 @@ function determineStatClassColor(value) {
 }
 
 export function createColoniseOpinionProgressBar(parentElement) {
-    const progressContainer = document.createElement("div");
-    progressContainer.classList.add("progress-container");
+    const diplomacyImpressionBarContainer = document.createElement("div");
+    diplomacyImpressionBarContainer.classList.add("diplomacy-impression-bar-container");
+    diplomacyImpressionBarContainer.id = 'diplomacyImpressionBar';
 
-    const lShapeHorizontal = document.createElement("div");
-    lShapeHorizontal.classList.add("l-shape-horizontal");
+    const underBar = document.createElement("div");
+    underBar.classList.add("diplomacy-impression-bar-underbar-horizontal");
 
-    const progressHorizontal = document.createElement("div");
-    progressHorizontal.classList.add("progress-horizontal");
+    const percentageBar = document.createElement("div");
+    percentageBar.classList.add("diplomacy-impression-bar-horizontal");
 
     const progressText = document.createElement("span");
-    progressText.classList.add("progress-text");
+    progressText.classList.add("diplomacy-impression-bar-text");
     progressText.textContent = "Opinion: 0%";
 
-    progressContainer.appendChild(lShapeHorizontal);
-    progressContainer.appendChild(progressHorizontal);
-    progressContainer.appendChild(progressText);
+    diplomacyImpressionBarContainer.appendChild(underBar);
+    diplomacyImpressionBarContainer.appendChild(percentageBar);
+    diplomacyImpressionBarContainer.appendChild(progressText);
 
-    parentElement.appendChild(progressContainer);
+    parentElement.appendChild(diplomacyImpressionBarContainer);
 }
 
 export function setColoniseOpinionProgressBar(value, parentElement) {
     value = Math.max(0, Math.min(100, value));
 
-    const horizontalBar = parentElement.querySelector(".progress-horizontal");
-    const progressText = parentElement.querySelector(".progress-text");
+    const horizontalBar = parentElement.querySelector(".diplomacy-impression-bar-horizontal");
+    const barText = parentElement.querySelector(".diplomacy-impression-bar-text");
 
     const rect = parentElement.getBoundingClientRect();
     const horizontalWidth = rect.width;
 
-    const progressPixels = (value / 100) * horizontalWidth;
-    horizontalBar.style.width = `${progressPixels}px`;
-    progressText.textContent = `Impression: ${value}%`;
+    const percentageBarFill = (value / 100) * horizontalWidth;
+    horizontalBar.style.width = `${percentageBarFill}px`;
+    barText.textContent = `Impression: ${value}%`;
 }
 
 //-------------------------------------------------------------------------------------------------
