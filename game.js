@@ -6433,12 +6433,16 @@ function bullyEnemy(starData) {
 
     let outcome = "";
 
-    if (powerRatio > 1.5 && enemyTraitMain === "Diplomatic") {
+    if (powerRatio > 2 && enemyTraitMain === "Diplomatic") {
         outcome = Math.random() < 0.3 ? "scared" : "surrender";
-    } else if (powerRatio > 1.2 && enemyTraitMain !== "Aggressive") {
+    } else if (powerRatio >= 1.2 && enemyTraitMain !== "Aggressive") {
         outcome = Math.random() < 0.3 ? "attack" : "scared";
-    } else if (powerRatio < 0.6 || enemyTraitMain === "Aggressive") {
-        outcome = "attack";
+    } else if (powerRatio < 1.2 || enemyTraitMain === "Aggressive") {
+        if (enemyTraitMain === 'Diplomatic') {
+            outcome = Math.random() < 0.5 ? "attack" : "laugh";
+        } else {
+            outcome = "attack";
+        }
     } else {
         outcome = "laugh";
         currentImpression -= 10;
