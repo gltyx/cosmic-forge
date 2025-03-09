@@ -272,8 +272,8 @@ let starShipTravelling = false;
 let starShipArrowPosition = 0;
 let stellarScannerBuilt = false;
 let destinationStarScanned = false;
-
-
+let diplomacyPossible = true;
+let fleetChangedSinceLastDiplomacy = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -625,7 +625,6 @@ export function captureGameStatusForSaving(type) {
     gameState.runStartTimeStamp = runStartTimeStamp;
     gameState.gameStartTimeStamp = gameStartTimeStamp;
 
-
     // Flags
     gameState.flags = {
         autoSaveToggle: autoSaveToggle,
@@ -649,7 +648,8 @@ export function captureGameStatusForSaving(type) {
         starShipBuilt: starShipBuilt,
         starShipTravelling: starShipTravelling,
         stellarScannerBuilt: stellarScannerBuilt,
-        destinationStarScanned: destinationStarScanned
+        destinationStarScanned: destinationStarScanned,
+        diplomacyPossible: diplomacyPossible
     }
 
     return gameState;
@@ -793,6 +793,7 @@ export function restoreGameStatus(gameState, type) {
             starShipTravelling = gameState.flags.starShipTravelling ?? false;
             stellarScannerBuilt = gameState.flags.stellarScannerBuilt ?? false;
             destinationStarScanned = gameState.flags.destinationStarScanned ?? false;
+            diplomacyPossible = gameState.flags.diplomacyPossible ?? true;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2360,6 +2361,22 @@ export function setDestinationStarScanned(value) {
 
 export function getStellarScannerRange() {
     return STELLAR_SCANNER_RANGE;
+}
+
+export function setDiplomacyPossible(value) {
+    diplomacyPossible = value
+}
+
+export function getDiplomacyPossible() {
+    return diplomacyPossible;
+}
+
+export function setFleetChangedSinceLastDiplomacy(value) {
+    fleetChangedSinceLastDiplomacy = value
+}
+
+export function getFleetChangedSinceLastDiplomacy() {
+    return fleetChangedSinceLastDiplomacy;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

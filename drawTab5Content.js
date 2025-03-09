@@ -1,8 +1,8 @@
-import { createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
-import { setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
+import { createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
+import { setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
-import { increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
+import { calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
 export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw) {
     if (heading === 'Star Map') {
@@ -598,8 +598,9 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 `${fleetShip.label}:`,
                 createButton(`Build`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
-                    gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space')
-                    increaseAttackAndDefensePower(fleetShip.id)
+                    gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space');
+                    increaseAttackAndDefensePower(fleetShip.id);
+                    setFleetChangedSinceLastDiplomacy(true);
                 }, 'upgradeCheck', '', 'spaceUpgrade', fleetShip.id, 'cash', true, null, 'fleetPurchase'),
                 createTextElement(
                     fleetShip.id === 'fleetEnvoy' 
@@ -631,7 +632,224 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
     }
 
     if (heading === 'Colonise') {
+        const starData = getStarSystemDataObject('stars', ['destinationStar']);
+        calculateModifiedAttitude(starData);
 
+        createColoniseOpinionProgressBar(optionContentElement);
+        setColoniseOpinionProgressBar(starData.currentImpression, optionContentElement);
+        
+            const diplomacyOptionsRow = createOptionRow(
+                'diplomacyOptionsRow',
+                null,
+                'Relations:',
+                createButton(`Bully`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'bully'], () => {
+                    updateDiplomacyOpinion('bully');
+                }, null, null, null, null, null, true, null, 'diplomacy'),
+                createButton(`Passive`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'passive'], () => {
+                    updateDiplomacyOpinion('passive');
+                }, null, null, null, null, null, true, null, 'diplomacy'),                            
+                createButton(`Harmony`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'harmony'], () => {
+                    updateDiplomacyOpinion('harmony');
+                }, null, null, null, null, null, true, null, 'diplomacy'),               
+                createButton(`Plead`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'plead'], () => {
+                    updateDiplomacyOpinion('plead');
+                }, null, null, null, null, null, true, null, 'diplomacy'),
+                createButton(`Disengage`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'disengage'], () => {
+                    updateDiplomacyOpinion('disengage');
+                }, null, null, null, null, null, true, null, 'diplomacy'),
+                '',
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                '',
+                [true, '15%', '85%']
+            );  
+
+            const attitude = starData.attitude;
+            const attitudeClass = attitude === "Neutral" || attitude === 'None'
+                ? ""
+                : attitude === "Receptive" || attitude === "Scared"
+                    ? "green-ready-text"
+                    : attitude === "Reserved"
+                        ? "warning-orange-text"
+                        : "red-disabled-text";            
+
+            const threatLevel = starData.threatLevel;
+            const threatLevelClass = threatLevel === "None" || threatLevel === "Low"
+                ? "green-ready-text"
+                : threatLevel === "Moderate" || threatLevel === "High"
+                    ? "warning-orange-text"
+                    : "red-disabled-text";
+
+            const receptionStatusRow = createOptionRow(
+                'receptionStatusRow',
+                null,
+                'Attitude:',              
+                createTextElement(
+                    `<span class="${attitudeClass}">${attitude}</span>`,
+                    'attitudeText',
+                    ['value-text', 'intelligence-element']
+                ),  
+                createTextElement(
+                    `Threat: <span class="${threatLevelClass}">${threatLevel}</span>`,
+                    'threatLevelText',
+                    [threatLevelClass, 'intelligence-element']
+                ),                
+                null,                              
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                '',
+                [true, '15%', '85%']
+            );  
+            
+            const traitsText = starData.lifeformTraits
+            .slice(0, 2)
+            .map(trait => `<span class="${trait[1]}">${trait[0]}</span>`)
+            .join(", ");
+        
+            const defenseText = `${starData.defenseRating}%`;
+            const defenseClass = starData.defenseRating > 75 
+                ? "red-disabled-text" 
+                : starData.defenseRating >= 50 
+                    ? "warning-orange-text" 
+                    : "green-ready-text"; 
+        
+            const intelligenceRow = createOptionRow(
+                'intelligenceRow',
+                null,
+                'Intelligence:',              
+                createTextElement(
+                    `<span class="${
+                        starData.civilizationLevel === 'Unsentient' || starData.civilizationLevel === 'None'
+                            ? 'green-ready-text'
+                            : starData.civilizationLevel === 'Industrial'
+                                ? 'warning-orange-text'
+                                : 'red-disabled-text'
+                    }">
+                        ${starData.civilizationLevel}
+                    </span>`,
+                    'apContainer',
+                    ['value-text', 'intelligence-element']
+                ),  
+                createTextElement(
+                    `<span class="value-text">${traitsText}</span>`,
+                    'traitsText',
+                    ['value-text', 'intelligence-element']
+                ),                  
+                createTextElement(
+                    `Defense: <span class="value-text ${defenseClass}">${defenseText}</span>`,
+                    'defenseRatingText',
+                    ['value-text', 'intelligence-element']
+                ),                               
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                '',
+                [true, '15%', '85%']
+            );            
+        
+        const populationText = getStellarScannerBuilt() 
+        ? (starData.civilizationLevel === 'Unsentient' 
+            ? 'N/A' 
+            : (starData.populationEstimate ? starData.populationEstimate.toLocaleString() : 'N/A')) 
+        : `<span class="red-disabled-text">???</span>`;                                                 
+        
+            const fleetRow = createOptionRow(
+                'enemyFleetsRow',
+                null,
+                'Enemy Fleets:',
+                createTextElement(
+                    `Land: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.land 
+                                : '???')}
+                    </span>`,
+                    'fleetLandText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Air: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.air.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.air 
+                                : '???')}
+                    </span>`,
+                    'fleetAirText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Sea: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.sea.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.sea 
+                                : '???')}
+                    </span>`,
+                    'fleetSeaText',
+                    ['value-text', 'ap-destination-star-element']
+                ),                                                 
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                '',
+                [true, '15%', '85%']
+            );       
+        
+            optionContentElement.appendChild(diplomacyOptionsRow);
+            optionContentElement.appendChild(receptionStatusRow);
+            optionContentElement.appendChild(intelligenceRow);
+            optionContentElement.appendChild(fleetRow);
+
+            setFleetChangedSinceLastDiplomacy(false);
     }
 }
 

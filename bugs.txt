@@ -2,3 +2,6 @@ resource calculations are not right when burning fuel in a power station, start 
 
 tech tree not updating when research points grow to reveal more
 stats bugs in general
+
+bully - to use to intimidate if more powerful than enemy and they are not scared or belligerent
+passive - to do nothing and see what their reaction is

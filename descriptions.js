@@ -969,6 +969,16 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
+        diplomacyOptionsRow: {
+            content1: "If available, click to try to intimidate or improve relations",
+            content2: "",
+            updateAt: ""
+        },
+        receptionStatusRow: {
+            content1: "You can communicate with civilized species, unless they are Scared or Belligerent.",
+            content2: "",
+            updateAt: ""
+        },
     };
 
     newsTickerContent = {

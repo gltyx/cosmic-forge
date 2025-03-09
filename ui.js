@@ -3616,51 +3616,40 @@ function determineStatClassColor(value) {
     return 'green-ready-text';
 }
 
-function createLProgressBar(parentElement) {
+export function createColoniseOpinionProgressBar(parentElement) {
     const progressContainer = document.createElement("div");
     progressContainer.classList.add("progress-container");
 
     const lShapeHorizontal = document.createElement("div");
     lShapeHorizontal.classList.add("l-shape-horizontal");
 
-    const lShapeVertical = document.createElement("div");
-    lShapeVertical.classList.add("l-shape-vertical");
-
     const progressHorizontal = document.createElement("div");
     progressHorizontal.classList.add("progress-horizontal");
 
-    const progressVertical = document.createElement("div");
-    progressVertical.classList.add("progress-vertical");
+    const progressText = document.createElement("span");
+    progressText.classList.add("progress-text");
+    progressText.textContent = "Opinion: 0%";
 
     progressContainer.appendChild(lShapeHorizontal);
-    progressContainer.appendChild(lShapeVertical);
     progressContainer.appendChild(progressHorizontal);
-    progressContainer.appendChild(progressVertical);
+    progressContainer.appendChild(progressText);
 
-    document.parentElement.appendChild(progressContainer);
+    parentElement.appendChild(progressContainer);
 }
 
-function setLProgress(value) {
+export function setColoniseOpinionProgressBar(value, parentElement) {
     value = Math.max(0, Math.min(100, value));
 
-    const horizontalBar = document.querySelector(".progress-horizontal");
-    const verticalBar = document.querySelector(".progress-vertical");
+    const horizontalBar = parentElement.querySelector(".progress-horizontal");
+    const progressText = parentElement.querySelector(".progress-text");
 
-    const horizontalWidth = window.innerWidth;
-    const verticalHeight = window.innerHeight - 50;
+    const rect = parentElement.getBoundingClientRect();
+    const horizontalWidth = rect.width;
 
-    const totalLength = horizontalWidth + verticalHeight;
-    const progressPixels = (value / 100) * totalLength;
-
-    if (progressPixels <= horizontalWidth) {
-        horizontalBar.style.width = `${progressPixels}px`;
-        verticalBar.style.height = `0px`;
-    } else {
-        horizontalBar.style.width = `${horizontalWidth}px`;
-        verticalBar.style.height = `${progressPixels - horizontalWidth}px`;
-    }
+    const progressPixels = (value / 100) * horizontalWidth;
+    horizontalBar.style.width = `${progressPixels}px`;
+    progressText.textContent = `Impression: ${value}%`;
 }
-
 
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------

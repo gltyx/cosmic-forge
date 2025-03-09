@@ -1,4 +1,8 @@
 import {
+    getFleetChangedSinceLastDiplomacy,
+    setFleetChangedSinceLastDiplomacy,
+    setDiplomacyPossible,
+    getDiplomacyPossible,
     getGameStartTime,
     getRunStartTime,
     setGameStartTime,
@@ -317,25 +321,10 @@ export async function gameLoop() {
             checkAndIncreasePrices();
         }
 
-        const elementsEnergy = document.querySelectorAll('.energy-check');
-        elementsEnergy.forEach((elementEnergyCheck) => {
-            checkStatusAndSetTextClasses(elementEnergyCheck);
-        });
-
-        const elementsFuel = document.querySelectorAll('.fuel-check');
-        elementsFuel.forEach((elementFuelCheck) => {
-            checkStatusAndSetTextClasses(elementFuelCheck);
-        });
-
-        const elementsItemsCheck = document.querySelectorAll('.resource-cost-sell-check, .compound-cost-sell-check');
-        elementsItemsCheck.forEach((elementItemCheck) => {
-            checkStatusAndSetTextClasses(elementItemCheck);
-        });
-
-        const elementsStarInfoRowCheck = document.querySelectorAll('[class*="travel-starship"]');
-        elementsStarInfoRowCheck.forEach((elementStarInfoRowCheck) => {
-            checkStatusAndSetTextClasses(elementStarInfoRowCheck);
-        });
+        const elementsToCheck = document.querySelectorAll(
+            '.energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
+        );
+        elementsToCheck.forEach(checkStatusAndSetTextClasses);        
 
         starChecks();
         starShipUiChecks();
@@ -573,7 +562,7 @@ function checkAndRevealNewBuildings(type) {
                         .map(key => data[key].quantity);
                 })();
             
-                if (getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+                if (getDestinationStarScanned() && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
                     element.parentElement.parentElement.classList.remove('invisible');
                 } else {
                     element.parentElement.parentElement.classList.add('invisible');
@@ -3171,13 +3160,13 @@ function checkStatusAndSetTextClasses(element) {
         return checkTravelToStarElements(element);
     }
 
+    if (element.classList.contains('diplomacy-button')) {
+        return checkDiplomacyButtons(element);
+    }
+
     if ([...element.classList].some(clas => clas.includes('travel-to-asteroid-button'))) {
         checkTravelToDescriptions(element); //not return as this does not affect element and so still need to check element
     }
-
-    // if (element.dataset.rowCategory && element.dataset.rowCategory === 'fleetPurchase') {
-    //     return checkFleetElements(element);
-    // }
     
     if ((element.dataset.resourceToFuseTo === 'travelToAsteroid') && getCurrentOptionPane().startsWith('rocket')) {
         return travelToAsteroidChecks(element);
@@ -3294,6 +3283,48 @@ function coloniseChecks() {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`;
     }
 }
+
+function checkDiplomacyButtons(element) {
+    const starData = getStarSystemDataObject('stars', ['destinationStar']);
+    const civilizationLevel = starData.civilizationLevel;
+
+    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') return;
+
+    const enemyTraitMain = starData.lifeformTraits[0];
+    const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
+    const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
+
+    let active = false;
+
+    if (getDiplomacyPossible()) { 
+        const classList = element.classList;
+    
+        switch (true) {
+            case classList.contains('passive'):
+            case classList.contains('harmony'):
+            case classList.contains('disengage'):
+                active = true;
+                break;
+
+            case classList.contains('bully') && playerAttackPower > enemyPower:
+                active = true;
+                break;
+
+            case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
+                active = true;
+                break;
+        }
+    }    
+
+    if (active) {
+        element.classList.remove('red-disabled-text');
+        element.classList.add('green-ready-text');
+    } else {
+        element.classList.add('red-disabled-text');
+        element.classList.remove('green-ready-text');
+    }
+}
+
 
 function checkTravelToStarElements(element) {
     let starData = null;
@@ -5958,6 +5989,7 @@ export function generateDestinationStarData() {
     anomalies = anomalies[0];
 
     const initialImpression = calculateInitialImpression(lifeformTraits, civilizationLevel, threatLevel, enemyFleets, population);
+    const attitude = calculateAttitude(initialImpression, civilizationLevel);
     const currentImpression = initialImpression;
 
     const updatedData = {
@@ -5972,7 +6004,8 @@ export function generateDestinationStarData() {
         enemyFleets,
         anomalies, 
         initialImpression,
-        currentImpression
+        currentImpression,
+        attitude
     };
 
     setStarSystemDataObject(updatedData, 'stars', ['destinationStar']);
@@ -6228,6 +6261,10 @@ function generateRaceName(civilizationLevel) {
 }
 
 function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLevel, enemyFleets, population) {
+    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') {
+        return 100;
+    }
+
     let impression = 35;
     console.log(`Starting impression: ${impression}`);
 
@@ -6291,7 +6328,53 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     impression = Math.max(0, Math.min(80, impression));
     console.log(`Final impression (clamped to 0-80 range): ${impression}`);
 
+    setDiplomacyPossible(impression > 10);
     return impression;
+}
+
+function calculateAttitude(impression, civilizationLevel) {
+    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') return 'None';
+    if (impression >= 60) {
+        return "Receptive";
+    } else if (impression >= 45) {
+        return "Neutral";
+    } else if (impression >= 10) {
+        return "Reserved";
+    } else {
+        return "Belligerent";
+    }
+}
+
+export function calculateModifiedAttitude(starData) {
+    const civilizationLevel = starData.civilizationLevel;
+    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None' || !getDiplomacyPossible() || !getFleetChangedSinceLastDiplomacy()) return;
+
+    const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
+    const enemyTraitMain = starData.lifeformTraits[0][0];
+    const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
+    
+    let initialImpression = starData.initialImpression;
+    let currentImpression = starData.currentImpression;
+
+    let powerDifference = playerAttackPower - enemyPower;
+    let bonus = Math.floor(Math.abs(powerDifference) / 10);
+    
+    if (powerDifference !== 0) {
+        if (enemyTraitMain === 'Diplomatic') {
+            currentImpression += powerDifference > 0 ? bonus : -bonus;
+        } else if (enemyTraitMain === 'Aggressive') {
+            currentImpression += powerDifference > 0 ? Math.floor(bonus / 2) : -Math.floor(bonus / 2);
+        }
+    }
+    
+    const minImpression = Math.max(0, initialImpression - 10);
+    const maxImpression = Math.min(100, initialImpression + 10);
+    currentImpression = Math.max(minImpression, Math.min(maxImpression, currentImpression));
+
+    const newAttitude = calculateAttitude(currentImpression, civilizationLevel);
+
+    setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+    setStarSystemDataObject(newAttitude, 'stars', ['destinationStar', 'attitude']);
 }
 
 export function addToResourceAllTimeStat(amountToAdd, item) {
