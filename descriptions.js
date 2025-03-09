@@ -65,8 +65,8 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
         'star ship': "Here you can build and manage your Star Ship to travel to and scan studied Stars.",
-        'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
-        'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`,
+        'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
+        'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",

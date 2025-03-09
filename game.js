@@ -3285,7 +3285,7 @@ function fleetHangarChecks() {
 
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
-        document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`;
+        document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
         if (!getStellarScannerBuilt()) {
             colonisePrepareWarUI();
         }
@@ -3293,13 +3293,27 @@ function coloniseChecks() {
 }
 
 function colonisePrepareWarUI() {
-    //modal to tell player situation
-    document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-    document.getElementById('receptionStatusRow').classList.add('invisible');
-    document.getElementById('intelligenceRow').classList.add('invisible');
-    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+    if (getStellarScannerBuilt()) {
+        showWarModal(true);
+    } else {
+        showWarModal(false);
+    }
+}
+
+function showWarModal(canBackOut) {
+        // //move al this to the modal function
+        // setDiplomacyPossible(false);
+        // document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        // document.getElementById('receptionStatusRow').classList.add('invisible');
+        // document.getElementById('intelligenceRow').classList.add('invisible');
+        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+    if (canBackOut) {
+
+    } else {
+
+    }
 }
 
 function checkDiplomacyButtons(element) {
@@ -3317,20 +3331,23 @@ function checkDiplomacyButtons(element) {
     if (getDiplomacyPossible()) { 
         const classList = element.classList;
     
-        switch (true) {
-            case classList.contains('passive'):
-            case classList.contains('harmony'):
-            case classList.contains('disengage'):
-                active = true;
-                break;
-
-            case classList.contains('bully') && playerAttackPower > enemyPower:
-                active = true;
-                break;
-
-            case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
-                active = true;
-                break;
+        if (classList.contains('disengage')) {
+            active = true;
+        } else {
+            switch (true) {
+                case classList.contains('passive'):
+                case classList.contains('harmony'):
+                    active = true;
+                    break;
+    
+                case classList.contains('bully') && playerAttackPower > enemyPower:
+                    active = true;
+                    break;
+    
+                case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
+                    active = true;
+                    break;
+            }
         }
     }    
 
@@ -6407,7 +6424,7 @@ export function updateDiplomacySituation(buttonPressed) {
             
             break;
         case 'disengage':
-            
+            colonisePrepareWarUI();
             break;
     }
 }
