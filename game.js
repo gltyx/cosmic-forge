@@ -340,6 +340,7 @@ export async function gameLoop() {
         starChecks();
         starShipUiChecks();
         fleetHangarChecks();
+        coloniseChecks();
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
@@ -562,6 +563,22 @@ function checkAndRevealNewBuildings(type) {
                 element.parentElement.parentElement.classList.add('invisible');
             }
             break;
+            case 'colonise':
+                element = document.getElementById('coloniseOption');
+                const quantitiesFleets = (() => {
+                    const data = getResourceDataObject('space', ['upgrades']);
+                    
+                    return Object.keys(data)
+                        .filter(key => key.startsWith('fleet'))
+                        .map(key => data[key].quantity);
+                })();
+            
+                if (getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+                    element.parentElement.parentElement.classList.remove('invisible');
+                } else {
+                    element.parentElement.parentElement.classList.add('invisible');
+                }
+                break;            
     }
 }
 
@@ -3269,6 +3286,12 @@ function starShipUiChecks() {
 function fleetHangarChecks() {
     if (getCurrentOptionPane() === 'fleet hangar') {
         document.getElementById('descriptionContentTab5').innerHTML = `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+    }
+}
+
+function coloniseChecks() {
+    if (getCurrentOptionPane() === 'colonise') {
+        document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`;
     }
 }
 

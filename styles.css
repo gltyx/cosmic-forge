@@ -1134,6 +1134,50 @@ body {
     border: solid 2px var(--disabled-text) !important;
 }
 
+.progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+.l-shape-horizontal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 50px;
+    background-color: var(--container-bg-color);
+}
+
+.l-shape-vertical {
+    position: absolute;
+    top: 50px;
+    left: calc(100vw - 50px);
+    width: 50px;
+    height: calc(100vh - 50px);
+    background-color: var(--container-bg-color);
+}
+
+.progress-horizontal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 0%;
+    background-color: limegreen;
+}
+
+.progress-vertical {
+    position: absolute;
+    top: 50px;
+    left: calc(100vw - 50px);
+    width: 50px;
+    height: 0%;
+    background-color: limegreen;
+}
+
 .sell,
 .create,
 .fuse,

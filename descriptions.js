@@ -1,6 +1,6 @@
-import { getTimerRateRatio, getSaveName, getRocketUserName } from "./constantsAndGlobalVars.js";
+import { getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar } from "./constantsAndGlobalVars.js";
 import { getResourceDataObject } from "./resourceDataObject.js";
-import { capitaliseString } from "./utilityFunctions.js";
+import { capitaliseWordsWithRomanNumerals, capitaliseString } from "./utilityFunctions.js";
 
 export let gameIntroHeader;
 export let gameIntroText;
@@ -66,6 +66,7 @@ export function initialiseDescriptions() {
         'star data': "Here you can find information about studied stars.",
         'star ship': "Here you can build and manage your Star Ship to travel to and scan studied Stars.",
         'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
+        'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`,
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",

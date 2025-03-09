@@ -2634,6 +2634,14 @@ function initializeTabEventListeners() {
         });
     });
 
+    document.querySelectorAll('[class*="tab5"][class*="option5"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab5', 'colonise');
+            setCurrentOptionPane('colonise');
+            updateContent('Colonise', 'tab5', 'content');
+        });
+    });
+
     document.querySelectorAll('[class*="tab6"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
             setLastScreenOpenRegister('tab6', 'launch pad');
@@ -3607,6 +3615,52 @@ function determineStatClassColor(value) {
     }
     return 'green-ready-text';
 }
+
+function createLProgressBar(parentElement) {
+    const progressContainer = document.createElement("div");
+    progressContainer.classList.add("progress-container");
+
+    const lShapeHorizontal = document.createElement("div");
+    lShapeHorizontal.classList.add("l-shape-horizontal");
+
+    const lShapeVertical = document.createElement("div");
+    lShapeVertical.classList.add("l-shape-vertical");
+
+    const progressHorizontal = document.createElement("div");
+    progressHorizontal.classList.add("progress-horizontal");
+
+    const progressVertical = document.createElement("div");
+    progressVertical.classList.add("progress-vertical");
+
+    progressContainer.appendChild(lShapeHorizontal);
+    progressContainer.appendChild(lShapeVertical);
+    progressContainer.appendChild(progressHorizontal);
+    progressContainer.appendChild(progressVertical);
+
+    document.parentElement.appendChild(progressContainer);
+}
+
+function setLProgress(value) {
+    value = Math.max(0, Math.min(100, value));
+
+    const horizontalBar = document.querySelector(".progress-horizontal");
+    const verticalBar = document.querySelector(".progress-vertical");
+
+    const horizontalWidth = window.innerWidth;
+    const verticalHeight = window.innerHeight - 50;
+
+    const totalLength = horizontalWidth + verticalHeight;
+    const progressPixels = (value / 100) * totalLength;
+
+    if (progressPixels <= horizontalWidth) {
+        horizontalBar.style.width = `${progressPixels}px`;
+        verticalBar.style.height = `0px`;
+    } else {
+        horizontalBar.style.width = `${horizontalWidth}px`;
+        verticalBar.style.height = `${progressPixels - horizontalWidth}px`;
+    }
+}
+
 
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
