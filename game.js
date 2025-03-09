@@ -3287,14 +3287,19 @@ function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span>`;
         if (!getStellarScannerBuilt()) {
-            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('receptionStatusRow').classList.add('invisible');
-            document.getElementById('intelligenceRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            colonisePrepareWarUI();
         }
     }
+}
+
+function colonisePrepareWarUI() {
+    //modal to tell player situation
+    document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+    document.getElementById('receptionStatusRow').classList.add('invisible');
+    document.getElementById('intelligenceRow').classList.add('invisible');
+    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+    document.getElementById('diplomacyOptionsRow').classList.add('invisible');
 }
 
 function checkDiplomacyButtons(element) {
