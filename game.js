@@ -3342,11 +3342,10 @@ function checkDiplomacyButtons(element) {
                 active = true;
                 break;
 
-            case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
+            case classList.contains('vassalize') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
                 active = true;
                 break;
         }
-        
     }    
 
     if (active) {
@@ -6410,16 +6409,16 @@ export function calculateModifiedAttitude(starData) {
 export function updateDiplomacySituation(buttonPressed) {
     switch (buttonPressed) {
         case 'bully':
-            
+            bullyEnemy();
             break;
         case 'passive':
-            
+            chatAndExchangePleasentries();
             break;
         case 'harmony':
-            
+            tryToImproveImpression();
             break;
-        case 'plead':
-            
+        case 'vassalize':
+            tryToConvertEnemy();
             break;
         case 'conquest':
             colonisePrepareWarUI();
