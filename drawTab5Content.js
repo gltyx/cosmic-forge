@@ -4,7 +4,7 @@ import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, get
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
-export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw) {
+export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw, diplomacyRedraw) {
     if (heading === 'Star Map') {
         const headerRow = document.getElementById('headerContentTab5');
         
@@ -244,7 +244,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                     generateDestinationStarData();
                     showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`);
     
-                    drawTab5Content('Star Ship', optionContentElement, true);
+                    drawTab5Content('Star Ship', optionContentElement, true, false);
                 }, '', '', '', null, '', true, null, ''),
                 null,
                 null,                               
@@ -633,7 +633,10 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
 
     if (heading === 'Colonise') {
         const starData = getStarSystemDataObject('stars', ['destinationStar']);
-        calculateModifiedAttitude(starData);
+
+        if (!diplomacyRedraw) {
+            calculateModifiedAttitude(starData);
+        }
 
         createColoniseOpinionProgressBar(optionContentElement);
         setColoniseOpinionProgressBar(starData.currentImpression, optionContentElement);
@@ -643,19 +646,19 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Relations:',
                 createButton(`Bully`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'bully'], () => {
-                    updateDiplomacySituation('bully');
+                    updateDiplomacySituation('bully', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 createButton(`Passive`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'passive'], () => {
-                    updateDiplomacySituation('passive');
+                    updateDiplomacySituation('passive', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),                            
                 createButton(`Harmony`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'harmony'], () => {
-                    updateDiplomacySituation('harmony');
+                    updateDiplomacySituation('harmony', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),               
                 createButton(`Vassalize`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'vassalize'], () => {
-                    updateDiplomacySituation('vassalize');
+                    updateDiplomacySituation('vassalize', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 createButton(`Conquest`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'conquest'], () => {
-                    updateDiplomacySituation('conquest');
+                    updateDiplomacySituation('conquest', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 '',
                 '',

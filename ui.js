@@ -115,6 +115,9 @@ import {
     enterWarModeModalHeader,
     enterwarModeModalBackOutText,
     enterwarModeModalNoBackOutText,
+    enterWarModeInsultedText,
+    enterWarModeSurrenderText,
+    enterWarModeScaredText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -374,7 +377,7 @@ export function updateContent(heading, tab, type) {
                 optionDescriptionElement = optionDescriptionElements[4];
                 optionDescriptionElement.innerHTML = optionDescription;
                 optionDescriptionElement.style.border = `1px dashed var(--container-border-color)`;
-                drawTab5Content(heading, optionContentElement, false);
+                drawTab5Content(heading, optionContentElement, false, false);
                 break;
             case 'tab6':
                 optionDescriptionElement = optionDescriptionElements[5];
@@ -1308,52 +1311,63 @@ function showLaunchWarningModal(show) {
     }
 }
 
-export function showEnterWarModeModal(show, canBackout) {
+export function showEnterWarModeModal(reason) {
+    const canBackout = reason === "chooseWar";
+
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
     const enterWarModeConfirmButton = document.getElementById('enterWarModeConfirmButton');
     const enterWarModeCancelButton = document.getElementById('enterWarModeCancelButton');
 
-    if (show) {
-        document.getElementById('modalButton').classList.add('invisible');
-        document.getElementById('modalSaveButton').classList.add('invisible');
-        document.getElementById('launchConfirmButton').classList.add('invisible');
-        document.getElementById('launchCancelButton').classList.add('invisible');
-        enterWarModeConfirmButton.classList.remove('invisible');
+    document.getElementById('modalButton').classList.add('invisible');
+    document.getElementById('modalSaveButton').classList.add('invisible');
+    document.getElementById('launchConfirmButton').classList.add('invisible');
+    document.getElementById('launchCancelButton').classList.add('invisible');
+    enterWarModeConfirmButton.classList.remove('invisible');
 
-        const headerText = enterWarModeModalHeader;
-        let content;
+    const headerText = enterWarModeModalHeader;
+    let content;
 
-        if (canBackout) {
-            enterWarModeCancelButton.classList.remove('invisible');
-            content = enterwarModeModalBackOutText;
-        } else {
-            content = enterwarModeModalNoBackOutText;
-        }
-
-        populateModal(headerText, content);
-
-        modalContainer.style.display = 'flex';
-        overlay.style.display = 'flex';
-
-        enterWarModeConfirmButton.onclick = function () {
-            setDiplomacyPossible(false);
-            setWarMode(true);
-            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('receptionStatusRow').classList.add('invisible');
-            document.getElementById('intelligenceRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            showHideModal();
-        };
-
-        enterWarModeCancelButton.onclick = function () {
-            showHideModal();
-        };
+    if (canBackout) {
+        enterWarModeCancelButton.classList.remove('invisible');
+        content = enterwarModeModalBackOutText;
     } else {
-        showHideModal();
+        switch(reason) {
+            case "insulted":
+                content = enterWarModeInsultedText;
+                break;
+            case "scared":
+                content = enterWarModeScaredText;
+                break;
+            case "surrender":
+                content = enterWarModeSurrenderText;
+                break;
+            case "noScanner":
+                content = enterwarModeModalNoBackOutText;
+                break;
+        }
     }
+
+    populateModal(headerText, content);
+
+    modalContainer.style.display = 'flex';
+    overlay.style.display = 'flex';
+
+    enterWarModeConfirmButton.onclick = function () {
+        setDiplomacyPossible(false);
+        setWarMode(true);
+        document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        document.getElementById('receptionStatusRow').classList.add('invisible');
+        document.getElementById('intelligenceRow').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        showHideModal();
+    };
+
+    enterWarModeCancelButton.onclick = function () {
+        showHideModal();
+    };
 }
 
 function spendAntimatterOnFuelForStarShip(fuelNeeded) {
@@ -3507,7 +3521,7 @@ export function handleSortStarClick(sortMethod) {
     setSortStarMethod(sortMethod);
     const optionContentElement = document.getElementById(`optionContentTab5`);
     optionContentElement.innerHTML = '';
-    drawTab5Content('Star Data', optionContentElement, false);
+    drawTab5Content('Star Data', optionContentElement, false, false);
 }
 
 export function sortStarTable(starsObject, sortMethod) {

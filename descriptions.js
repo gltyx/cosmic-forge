@@ -18,6 +18,9 @@ export let launchStarShipWarningText;
 export let enterWarModeModalHeader;
 export let enterwarModeModalBackOutText;
 export let enterwarModeModalNoBackOutText;
+export let enterWarModeInsultedText;
+export let enterWarModeSurrenderText;
+export let enterWarModeScaredText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -33,6 +36,9 @@ export function initialiseDescriptions() {
     enterWarModeModalHeader = `CONQUEST!`;
     enterwarModeModalBackOutText = `You are disengaging diplomacy.<br><br>This means you can no longer engage in diplomacy,<br>or see intelligence except for enemy fleet statistics<br>and must undertake the conquest when ready.`;
     enterwarModeModalNoBackOutText = `You are now going to start the conquest.<br>Without intelligence you need to prepare your fleet thoroughly, good luck!`;
+    enterWarModeInsultedText = `Your threats have backfired!<br><br>The enemy is insulted by your intimidation tactics and has cut off<br>all diplomatic ties, and their defense is buffed by 10%.<br>War!`;  
+    enterWarModeSurrenderText = `The enemy has surrendered!<br><br>They recognize your superior strength and have chosen to yield without a fight.<br>You now have full control over the System, and no battle is necessary.`;  
+    enterWarModeScaredText = `The enemy is terrified of your power!<br><br>Diplomacy is closed but their fleet strength is halved due to deserters!`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

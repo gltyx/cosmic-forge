@@ -3289,18 +3289,14 @@ function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
         if (!getStellarScannerBuilt() || getWarMode()) {
-            colonisePrepareWarUI();
+            colonisePrepareWarUI('noScanner');
         }
     }
 }
 
-function colonisePrepareWarUI() {
+function colonisePrepareWarUI(reason) {
     if (!getWarMode()) {
-        if (getStellarScannerBuilt()) {
-            showWarModal(true);
-        } else {
-            showWarModal(false);
-        }
+        showEnterWarModeModal(reason);
     } else {
         document.getElementById('diplomacyImpressionBar').classList.add('invisible');
         document.getElementById('diplomacyOptionsRow').classList.add('invisible');
@@ -3309,10 +3305,6 @@ function colonisePrepareWarUI() {
         document.getElementById('diplomacyOptionsRow').classList.add('invisible');
         document.getElementById('diplomacyOptionsRow').classList.add('invisible');
     } 
-}
-
-function showWarModal(canBackOut) {
-    showEnterWarModeModal(true, canBackOut);
 }
 
 function checkDiplomacyButtons(element) {
@@ -5656,7 +5648,7 @@ export function extendStarDataRange(debug) {
     addToResourceAllTimeStat(currentRange + increment, 'starStudyRange');
 
     if (getCurrentOptionPane() === 'star map') {
-        drawTab5Content('Star Map', null, false);
+        drawTab5Content('Star Map', null, false, false);
     }
 
     if (!debug) {
@@ -6182,7 +6174,7 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     return fleetDistribution;
 }
 
-function generateAnomalies(defenseLevel, enemyFleets) {
+function generateAnomalies(defenseRating, enemyFleets) {
     const possibleAnomalies = [
         { name: "Electromagnetic Surge", effect: "Enemy defense -20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy", class: "green-ready-text" },
         { name: "Fortified Magnetic Field", effect: "Enemy defense +20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy", class: "red-disabled-text" },
@@ -6198,7 +6190,7 @@ function generateAnomalies(defenseLevel, enemyFleets) {
 
     const shuffled = possibleAnomalies.sort(() => Math.random() - 0.5);
     let selectedAnomalies = [];
-    let modifiedDefense = defenseLevel;
+    let modifiedDefense = defenseRating;
     let modifiedEnemyFleets = { ...enemyFleets };
     let fleetChanges = { air: {}, land: {}, sea: {} };
 
@@ -6406,25 +6398,94 @@ export function calculateModifiedAttitude(starData) {
     setStarSystemDataObject(newAttitude, 'stars', ['destinationStar', 'attitude']);
 }
 
-export function updateDiplomacySituation(buttonPressed) {
+export function updateDiplomacySituation(buttonPressed, starData) {
     switch (buttonPressed) {
         case 'bully':
-            bullyEnemy();
+            bullyEnemy(starData);
             break;
         case 'passive':
-            chatAndExchangePleasentries();
+            chatAndExchangePleasentries(starData);
             break;
         case 'harmony':
-            tryToImproveImpression();
+            tryToImproveImpression(starData);
             break;
         case 'vassalize':
-            tryToConvertEnemy();
+            tryToConvertEnemy(starData);
             break;
         case 'conquest':
-            colonisePrepareWarUI();
+            colonisePrepareWarUI('chooseWar');
             break;
     }
 }
+
+function bullyEnemy(starData) {
+    const enemyTraitMain = starData.lifeformTraits[0][0]; // Diplomatic or Aggressive
+    const enemyTraitExtra = starData.lifeformTraits[2][0]; // Armored or Hive Mind
+    const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
+    const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
+    const enemyDefense = starData.defenseRating;
+
+    let currentImpression = starData.currentImpression;
+    let attitude = starData.attitude;
+
+    const totalEnemyStrength = enemyPower + enemyDefense;
+    const powerRatio = playerAttackPower / totalEnemyStrength;
+
+    let outcome = "";
+
+    if (powerRatio > 1.5 && enemyTraitMain === "Diplomatic") {
+        outcome = Math.random() < 0.3 ? "scared" : "surrender";
+    } else if (powerRatio > 1.2 && enemyTraitMain !== "Aggressive") {
+        outcome = Math.random() < 0.3 ? "attack" : "scared";
+    } else if (powerRatio < 0.6 || enemyTraitMain === "Aggressive") {
+        outcome = "attack";
+    } else {
+        outcome = "laugh";
+        currentImpression -= 10;
+    }    
+
+    switch (outcome) {
+        case "surrender":
+            setStarSystemDataObject("Surrendered", 'stars', ['destinationStar', 'attitude']);
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'air']);
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'land']);
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'defenseRating']);
+            colonisePrepareWarUI('surrender');
+            break;
+        case "scared":
+            setStarSystemDataObject("Scared", 'stars', ['destinationStar', 'attitude']);
+            setStarSystemDataObject(Math.floor((starData.enemyFleets.air || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'air']);
+            setStarSystemDataObject(Math.floor((starData.enemyFleets.land || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'land']);
+            setStarSystemDataObject(Math.floor((starData.enemyFleets.sea || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'sea']);
+            colonisePrepareWarUI('scared');
+            break;
+        case "attack":
+            setStarSystemDataObject(Math.ceil(starData.defenseRating * 1.1), 'stars', ['destinationStar', 'defenseRating']);
+            colonisePrepareWarUI('insulted');
+            break;
+        case "laugh":
+            setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+            break;
+    }
+
+    const optionContentElement = document.getElementById(`optionContentTab5`);
+    optionContentElement.innerHTML = '';
+    drawTab5Content('Colonise', optionContentElement, false, true);
+}
+
+function chatAndExchangePleasentries(starData) {
+    // Implement passive diplomacy logic here
+}
+
+function tryToImproveImpression(starData) {
+    // Implement harmony diplomacy logic here
+}
+
+function tryToConvertEnemy(starData) {
+    // Implement vassalization logic here
+}
+
 
 export function addToResourceAllTimeStat(amountToAdd, item) {
     if (item !== 'solar') {
