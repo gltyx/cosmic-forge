@@ -1,5 +1,5 @@
 import { getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar } from "./constantsAndGlobalVars.js";
-import { getResourceDataObject } from "./resourceDataObject.js";
+import { getResourceDataObject, getStarSystemDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from "./utilityFunctions.js";
 
 export let gameIntroHeader;
@@ -15,6 +15,9 @@ export let rocketNames;
 export let starNames;
 export let launchStarShipWarningHeader;
 export let launchStarShipWarningText;
+export let enterWarModeModalHeader;
+export let enterwarModeModalBackOutText;
+export let enterwarModeModalNoBackOutText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -27,6 +30,9 @@ export function initialiseDescriptions() {
     gameIntroText = 'You find yourself with advanced knowledge but on a world with almost no material!<br>Begin by gathering Hydrogen and mastering the art of fusion to create Helium, Carbon, and beyond.<br> Explore new technologies to unlock powerful compounds, and one by one recreate the materials to create<br>a craft to explore and discover the secrets of the interstellar medium!<br><br>With each click, fusion, and discovery, you edge closer to fulfilling your destiny!<br><br>Good Luck!';
     launchStarShipWarningHeader = 'WARNING: POINT OF NO RETURN!';
     launchStarShipWarningText = 'Once your Starship is launched you may not retrieve it this run.<br>So please revise the Star Data section and ensure you really want to select this destination,<br>then please click OK to confirm, or CANCEL to check.';
+    enterWarModeModalHeader = `CONQUEST!`;
+    enterwarModeModalBackOutText = `You are disengaging diplomacy.<br><br>This means you can no longer engage in diplomacy,<br>or see intelligence except for enemy fleet statistics<br>and must undertake the conquest when ready.`;
+    enterwarModeModalNoBackOutText = `You are now going to start the conquest.<br>Without intelligence you need to prepare your fleet thoroughly, good luck!`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

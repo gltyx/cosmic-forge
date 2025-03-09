@@ -305,7 +305,8 @@ button {
   
 #modalButton,
 #modalSaveButton,
-#launchConfirmButton
+#launchConfirmButton,
+#enterWarModeConfirmButton
 {
     position: fixed;
     bottom: 12%;
@@ -314,7 +315,9 @@ button {
     transform: translateX(-50%);
 }
 
-#launchCancelButton {
+#launchCancelButton,
+#enterWarModeCancelButton
+{
     position: fixed;
     bottom: 5%;
     left: 50%;

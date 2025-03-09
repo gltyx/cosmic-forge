@@ -181,7 +181,8 @@ import {
     getStarMapMode,
     getStarShipArrowPosition,
     getCurrentStarObject,
-    getOfflineGainsRate
+    getOfflineGainsRate,
+    getWarMode
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -223,7 +224,8 @@ import {
     drawOrbitCircle,
     drawStarShipArrowhead,
     getStats,
-    updateTabHotkeys
+    updateTabHotkeys,
+    showEnterWarModeModal
 } from "./ui.js";
 
 import { 
@@ -3286,41 +3288,36 @@ function fleetHangarChecks() {
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
-        if (!getStellarScannerBuilt()) {
+        if (!getStellarScannerBuilt() || getWarMode()) {
             colonisePrepareWarUI();
         }
     }
 }
 
 function colonisePrepareWarUI() {
-    if (getStellarScannerBuilt()) {
-        showWarModal(true);
+    if (!getWarMode()) {
+        if (getStellarScannerBuilt()) {
+            showWarModal(true);
+        } else {
+            showWarModal(false);
+        }
     } else {
-        showWarModal(false);
-    }
+        document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        document.getElementById('receptionStatusRow').classList.add('invisible');
+        document.getElementById('intelligenceRow').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+    } 
 }
 
 function showWarModal(canBackOut) {
-        // //move al this to the modal function
-        // setDiplomacyPossible(false);
-        // document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        // document.getElementById('receptionStatusRow').classList.add('invisible');
-        // document.getElementById('intelligenceRow').classList.add('invisible');
-        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        // document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-    if (canBackOut) {
-
-    } else {
-
-    }
+    showEnterWarModeModal(true, canBackOut);
 }
 
 function checkDiplomacyButtons(element) {
     const starData = getStarSystemDataObject('stars', ['destinationStar']);
     const civilizationLevel = starData.civilizationLevel;
-
-    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') return;
 
     const enemyTraitMain = starData.lifeformTraits[0];
     const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
@@ -3328,27 +3325,28 @@ function checkDiplomacyButtons(element) {
 
     let active = false;
 
+    if (element.classList.contains('conquest')) {
+        active = true;
+    }
+
     if (getDiplomacyPossible()) { 
         const classList = element.classList;
-    
-        if (classList.contains('disengage')) {
-            active = true;
-        } else {
-            switch (true) {
-                case classList.contains('passive'):
-                case classList.contains('harmony'):
-                    active = true;
-                    break;
-    
-                case classList.contains('bully') && playerAttackPower > enemyPower:
-                    active = true;
-                    break;
-    
-                case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
-                    active = true;
-                    break;
-            }
+
+        switch (true) {
+            case classList.contains('passive'):
+            case classList.contains('harmony'):
+                active = true;
+                break;
+
+            case classList.contains('bully') && playerAttackPower > enemyPower:
+                active = true;
+                break;
+
+            case classList.contains('plead') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
+                active = true;
+                break;
         }
+        
     }    
 
     if (active) {
@@ -6423,7 +6421,7 @@ export function updateDiplomacySituation(buttonPressed) {
         case 'plead':
             
             break;
-        case 'disengage':
+        case 'conquest':
             colonisePrepareWarUI();
             break;
     }

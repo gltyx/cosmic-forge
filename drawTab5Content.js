@@ -654,8 +654,8 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 createButton(`Plead`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'plead'], () => {
                     updateDiplomacySituation('plead');
                 }, null, null, null, null, null, true, null, 'diplomacy'),
-                createButton(`Disengage`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'disengage'], () => {
-                    updateDiplomacySituation('disengage');
+                createButton(`Conquest`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'conquest'], () => {
+                    updateDiplomacySituation('conquest');
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 '',
                 '',

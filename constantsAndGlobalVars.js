@@ -273,6 +273,7 @@ let starShipArrowPosition = 0;
 let stellarScannerBuilt = false;
 let destinationStarScanned = false;
 let diplomacyPossible = true;
+let warMode = false;
 let fleetChangedSinceLastDiplomacy = false;
 
 //GETTER SETTER METHODS
@@ -649,7 +650,8 @@ export function captureGameStatusForSaving(type) {
         starShipTravelling: starShipTravelling,
         stellarScannerBuilt: stellarScannerBuilt,
         destinationStarScanned: destinationStarScanned,
-        diplomacyPossible: diplomacyPossible
+        diplomacyPossible: diplomacyPossible,
+        warMode: warMode,
     }
 
     return gameState;
@@ -794,6 +796,7 @@ export function restoreGameStatus(gameState, type) {
             stellarScannerBuilt = gameState.flags.stellarScannerBuilt ?? false;
             destinationStarScanned = gameState.flags.destinationStarScanned ?? false;
             diplomacyPossible = gameState.flags.diplomacyPossible ?? true;
+            warMode = gameState.flags.warMode ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2365,6 +2368,14 @@ export function getStellarScannerRange() {
 
 export function setDiplomacyPossible(value) {
     diplomacyPossible = value
+}
+
+export function getWarMode() {
+    return warMode;
+}
+
+export function setWarMode(value) {
+    warMode = value;
 }
 
 export function getDiplomacyPossible() {

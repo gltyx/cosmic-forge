@@ -1,5 +1,6 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setDiplomacyPossible,
     setAlreadySeenNewsTickerArray,
     getAlreadySeenNewsTickerArray,
     getStarShipStatus,
@@ -95,6 +96,7 @@ import {
     setDestinationAsteroid,
     setCurrentStarObject,
     getCurrentStarObject,
+    setWarMode,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -110,6 +112,9 @@ import {
     gameIntroText,
     launchStarShipWarningHeader,
     launchStarShipWarningText,
+    enterWarModeModalHeader,
+    enterwarModeModalBackOutText,
+    enterwarModeModalNoBackOutText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1303,14 +1308,53 @@ function showLaunchWarningModal(show) {
     }
 }
 
-function closeLaunchWarningModal() {
+export function showEnterWarModeModal(show, canBackout) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
+    const enterWarModeConfirmButton = document.getElementById('enterWarModeConfirmButton');
+    const enterWarModeCancelButton = document.getElementById('enterWarModeCancelButton');
 
-    modalContainer.style.display = 'none';
-    overlay.style.display = 'none';
+    if (show) {
+        document.getElementById('modalButton').classList.add('invisible');
+        document.getElementById('modalSaveButton').classList.add('invisible');
+        document.getElementById('launchConfirmButton').classList.add('invisible');
+        document.getElementById('launchCancelButton').classList.add('invisible');
+        enterWarModeConfirmButton.classList.remove('invisible');
+
+        const headerText = enterWarModeModalHeader;
+        let content;
+
+        if (canBackout) {
+            enterWarModeCancelButton.classList.remove('invisible');
+            content = enterwarModeModalBackOutText;
+        } else {
+            content = enterwarModeModalNoBackOutText;
+        }
+
+        populateModal(headerText, content);
+
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+
+        enterWarModeConfirmButton.onclick = function () {
+            setDiplomacyPossible(false);
+            setWarMode(true);
+            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('receptionStatusRow').classList.add('invisible');
+            document.getElementById('intelligenceRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            showHideModal();
+        };
+
+        enterWarModeCancelButton.onclick = function () {
+            showHideModal();
+        };
+    } else {
+        showHideModal();
+    }
 }
-
 
 function spendAntimatterOnFuelForStarShip(fuelNeeded) {
     const antimatterLeft = Math.max(0, Math.floor(getResourceDataObject('antimatter', ['quantity']) - fuelNeeded));
