@@ -6328,7 +6328,7 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     impression = Math.max(0, Math.min(80, impression));
     console.log(`Final impression (clamped to 0-80 range): ${impression}`);
 
-    setDiplomacyPossible(impression > 10);
+    setDiplomacyPossible(impression >= 10);
     return impression;
 }
 
@@ -6346,6 +6346,7 @@ function calculateAttitude(impression, civilizationLevel) {
 }
 
 export function calculateModifiedAttitude(starData) {
+    setDiplomacyPossible(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'envoyBuiltYet']) && starData.currentImpression >= 10)
     const civilizationLevel = starData.civilizationLevel;
     if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None' || !getDiplomacyPossible() || !getFleetChangedSinceLastDiplomacy()) return;
 
@@ -6366,7 +6367,7 @@ export function calculateModifiedAttitude(starData) {
             currentImpression += powerDifference > 0 ? Math.floor(bonus / 2) : -Math.floor(bonus / 2);
         }
     }
-    
+
     const minImpression = Math.max(0, initialImpression - 10);
     const maxImpression = Math.min(100, initialImpression + 10);
     currentImpression = Math.max(minImpression, Math.min(maxImpression, currentImpression));
