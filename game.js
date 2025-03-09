@@ -6392,6 +6392,26 @@ export function calculateModifiedAttitude(starData) {
     setStarSystemDataObject(newAttitude, 'stars', ['destinationStar', 'attitude']);
 }
 
+export function updateDiplomacySituation(buttonPressed) {
+    switch (buttonPressed) {
+        case 'bully':
+            
+            break;
+        case 'passive':
+            
+            break;
+        case 'harmony':
+            
+            break;
+        case 'plead':
+            
+            break;
+        case 'disengage':
+            
+            break;
+    }
+}
+
 export function addToResourceAllTimeStat(amountToAdd, item) {
     if (item !== 'solar') {
         const setFunction = statFunctionsSets[`set_${item}`];

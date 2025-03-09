@@ -2,7 +2,7 @@ import { createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, create
 import { setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
-import { calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
+import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
 export function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw) {
     if (heading === 'Star Map') {
@@ -643,19 +643,19 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Relations:',
                 createButton(`Bully`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'bully'], () => {
-                    updateDiplomacyOpinion('bully');
+                    updateDiplomacySituation('bully');
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 createButton(`Passive`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'passive'], () => {
-                    updateDiplomacyOpinion('passive');
+                    updateDiplomacySituation('passive');
                 }, null, null, null, null, null, true, null, 'diplomacy'),                            
                 createButton(`Harmony`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'harmony'], () => {
-                    updateDiplomacyOpinion('harmony');
+                    updateDiplomacySituation('harmony');
                 }, null, null, null, null, null, true, null, 'diplomacy'),               
                 createButton(`Plead`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'plead'], () => {
-                    updateDiplomacyOpinion('plead');
+                    updateDiplomacySituation('plead');
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 createButton(`Disengage`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'disengage'], () => {
-                    updateDiplomacyOpinion('disengage');
+                    updateDiplomacySituation('disengage');
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 '',
                 '',
