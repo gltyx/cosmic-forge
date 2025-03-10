@@ -20,6 +20,7 @@ export let enterwarModeModalBackOutText;
 export let enterwarModeModalNoBackOutText;
 export let enterWarModeInsultedText;
 export let enterWarModeSurrenderText;
+export let enterWarModeNotVassalizedText;
 export let enterWarModeScaredText;
 export let enterWarModeModalLaughAtProspect;
 export let enterWarModeModalLaughAndEnterWar;
@@ -44,6 +45,7 @@ export function initialiseDescriptions() {
     enterwarModeModalNoBackOutText = `You are now going to start the conquest.<br>Without intelligence you need to prepare your fleet thoroughly, good luck!`;
     enterWarModeInsultedText = `Your attempts have backfired!<br><br>The enemy is insulted by your bad manners and has cut off<br>all diplomatic ties!`;  
     enterWarModeSurrenderText = `The enemy has surrendered!<br><br>They recognize your superior strength and have chosen to yield without a fight.<br>You now have full control over the System, and no battle is necessary.`;  
+    enterWarModeNotVassalizedText = `Despite your attempts to vassalize and your good relation,<br>they just prefer being independent, so violence will be the only way to conquer the System!`;
     enterWarModeScaredText = `The enemy is terrified of your power!<br><br>Diplomacy is closed but their fleet strength is halved due to deserters!`;
     enterWarModeModalLaughAtProspect = `The enemy laughs at the prospect of your attempts to bully them!<br>Their impression of you has fallen!`;
     enterWarModeModalLaughAndEnterWar = `The enemy laughs at the prospect of your attempts to bully them!<br>They are now going to punish you!<br>War!`;

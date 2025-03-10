@@ -118,6 +118,7 @@ import {
     enterwarModeModalNoBackOutText,
     enterWarModeInsultedText,
     enterWarModeSurrenderText,
+    enterWarModeNotVassalizedText,
     enterWarModeScaredText,
     enterWarModeModalLaughAtProspect,
     enterWarModeModalLaughAndEnterWar,
@@ -1379,6 +1380,9 @@ export function showEnterWarModeModal(reason) {
                     break;
                 case "surrender":
                     content = enterWarModeSurrenderText + "<br><span class='green-ready-text'>Victory!</span>";
+                    break;
+                case "notVassalized":
+                    content = enterWarModeNotVassalizedText;
                     break;
                 case "noScanner":
                     content = enterwarModeModalNoBackOutText + "<br><span class='red-disabled-text'>Attacking Blind!</span>";

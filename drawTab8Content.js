@@ -499,12 +499,12 @@ export function drawTab8Content(heading, optionContentElement) {
             createHtmlTableStatistics(
                 `${rowId}TextArea`,
                 ['help-container', 'help-container-margin', 'center-statistics'],
-                getStatisticsContent('mainHeadings'),  // Get the main headings
-                getStatisticsContent('subHeadings'),   // Get the subheadings
-                getStatisticsContent('subBodys'),      // Get the sub-body content
-                ['help-sub-header-text'],              // Classes for mainHeadings
-                ['help-sub-body-text'],              // Classes for subHeadings
-                ['green-ready-text']                 // Classes for subBody
+                getStatisticsContent('mainHeadings'),
+                getStatisticsContent('subHeadings'),
+                getStatisticsContent('subBodys'),
+                ['help-sub-header-text'],
+                ['help-sub-body-text'],
+                ['green-ready-text']
             ),                      
             null,
             null,

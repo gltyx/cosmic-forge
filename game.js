@@ -3310,6 +3310,7 @@ function checkDiplomacyButtons(element) {
     const enemyTraitMain = starData.lifeformTraits[0];
     const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
     const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
+    const currentImpression = starData.currentImpression;
 
     let active = false;
 
@@ -3330,7 +3331,7 @@ function checkDiplomacyButtons(element) {
                 active = true;
                 break;
 
-            case classList.contains('vassalize') && playerAttackPower <= enemyPower && enemyTraitMain === 'Aggressive':
+            case classList.contains('vassalize') && playerAttackPower > (enemyPower * 1.5) && enemyTraitMain !== 'Aggressive' && currentImpression >= 95:
                 active = true;
                 break;
         }
@@ -6423,7 +6424,7 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             tryToImproveImpression(starData);
             break;
         case 'vassalize':
-            tryToConvertEnemy(starData);
+            tryToVassalizeEnemy(starData);
             break;
         case 'conquest':
             colonisePrepareWarUI('chooseWar');
@@ -6562,9 +6563,23 @@ function tryToImproveImpression(starData) {
     // Implement harmony diplomacy logic here
 }
 
-function tryToConvertEnemy(starData) {
-    // Implement vassalization logic here
+function tryToVassalizeEnemy() {
+    let probability = 0.75;
+
+    const vassalizeSuccess = Math.random() < probability;
+
+    if (vassalizeSuccess) {
+        setStarSystemDataObject("Surrendered", 'stars', ['destinationStar', 'attitude']);
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'air']);
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'land']);
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'defenseRating']);
+        colonisePrepareWarUI('surrender');
+    } else {
+        colonisePrepareWarUI('notVassalized');
+    }
 }
+
 
 
 export function addToResourceAllTimeStat(amountToAdd, item) {
