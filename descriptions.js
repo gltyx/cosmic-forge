@@ -21,6 +21,8 @@ export let enterwarModeModalNoBackOutText;
 export let enterWarModeInsultedText;
 export let enterWarModeSurrenderText;
 export let enterWarModeScaredText;
+export let enterWarModeModalLaughAtProspect;
+export let enterWarModeModalLaughAndEnterWar;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -39,6 +41,8 @@ export function initialiseDescriptions() {
     enterWarModeInsultedText = `Your threats have backfired!<br><br>The enemy is insulted by your intimidation tactics and has cut off<br>all diplomatic ties, and their defense is buffed by 10%.<br>War!`;  
     enterWarModeSurrenderText = `The enemy has surrendered!<br><br>They recognize your superior strength and have chosen to yield without a fight.<br>You now have full control over the System, and no battle is necessary.`;  
     enterWarModeScaredText = `The enemy is terrified of your power!<br><br>Diplomacy is closed but their fleet strength is halved due to deserters!`;
+    enterWarModeModalLaughAtProspect = `The enemy laughs at the prospect of your attempts to bully them!<br>Their impression of you has fallen!`;
+    enterWarModeModalLaughAndEnterWar = `The enemy laughs at the prospect of your attempts to bully them!<br>They are now going to punish you!<br>War!`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

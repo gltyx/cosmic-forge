@@ -6445,8 +6445,7 @@ function bullyEnemy(starData) {
         }
     } else {
         outcome = "laugh";
-        currentImpression -= 10;
-    }    
+    }  
 
     switch (outcome) {
         case "surrender":
@@ -6469,7 +6468,13 @@ function bullyEnemy(starData) {
             colonisePrepareWarUI('insulted');
             break;
         case "laugh":
+            currentImpression -= 10;
             setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+            if (currentImpression < 10) {
+                colonisePrepareWarUI('laughWar'); 
+            } else {
+                colonisePrepareWarUI('laugh');
+            }
             break;
     }
 

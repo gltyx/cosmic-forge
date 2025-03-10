@@ -118,6 +118,8 @@ import {
     enterWarModeInsultedText,
     enterWarModeSurrenderText,
     enterWarModeScaredText,
+    enterWarModeModalLaughAtProspect,
+    enterWarModeModalLaughAndEnterWar,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1345,6 +1347,12 @@ export function showEnterWarModeModal(reason) {
             case "noScanner":
                 content = enterwarModeModalNoBackOutText;
                 break;
+            case "laugh":
+                content = enterWarModeModalLaughAtProspect;
+                break;
+            case "laughWar":
+                content = enterWarModeModalLaughAndEnterWar;
+                break; 
         }
     }
 
@@ -1354,14 +1362,16 @@ export function showEnterWarModeModal(reason) {
     overlay.style.display = 'flex';
 
     enterWarModeConfirmButton.onclick = function () {
-        setDiplomacyPossible(false);
-        setWarMode(true);
-        document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        document.getElementById('receptionStatusRow').classList.add('invisible');
-        document.getElementById('intelligenceRow').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        if (reason !== 'laugh') {
+            setDiplomacyPossible(false);
+            setWarMode(true);
+            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('receptionStatusRow').classList.add('invisible');
+            document.getElementById('intelligenceRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        }
         showHideModal();
     };
 
