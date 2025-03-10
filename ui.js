@@ -103,6 +103,7 @@ import {
     getStarSystemDataObject,
     setAutoBuyerTierLevel,
     setResourceDataObject,
+    setStarSystemDataObject,
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -123,6 +124,7 @@ import {
     enterWarModeModalImproveToReceptive,
     enterWarModeModalNeutral,
     enterWarModeModalReserved,
+    enterWarModeModalPatience,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1317,79 +1319,164 @@ function showLaunchWarningModal(show) {
 }
 
 export function showEnterWarModeModal(reason) {
-    const canBackout = reason === "chooseWar";
+    return new Promise((resolve) => {
+        const canBackout = reason === "chooseWar";
 
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const enterWarModeConfirmButton = document.getElementById('enterWarModeConfirmButton');
-    const enterWarModeCancelButton = document.getElementById('enterWarModeCancelButton');
+        const modalContainer = getElements().modalContainer;
+        const overlay = getElements().overlay;
+        const enterWarModeConfirmButton = document.getElementById('enterWarModeConfirmButton');
+        const enterWarModeCancelButton = document.getElementById('enterWarModeCancelButton');
 
-    document.getElementById('modalButton').classList.add('invisible');
-    document.getElementById('modalSaveButton').classList.add('invisible');
-    document.getElementById('launchConfirmButton').classList.add('invisible');
-    document.getElementById('launchCancelButton').classList.add('invisible');
-    enterWarModeConfirmButton.classList.remove('invisible');
+        document.getElementById('modalButton').classList.add('invisible');
+        document.getElementById('modalSaveButton').classList.add('invisible');
+        document.getElementById('launchConfirmButton').classList.add('invisible');
+        document.getElementById('launchCancelButton').classList.add('invisible');
+        enterWarModeConfirmButton.classList.remove('invisible');
 
-    const headerText = enterWarModeModalHeader;
-    let content;
+        const starData = getStarSystemDataObject('stars', ['destinationStar']);
 
-    if (canBackout) {
-        enterWarModeCancelButton.classList.remove('invisible');
-        content = enterwarModeModalBackOutText;
-    } else {
-        switch(reason) {
-            case "insulted":
-                content = enterWarModeInsultedText;
-                break;
-            case "scared":
-                content = enterWarModeScaredText;
-                break;
-            case "surrender":
-                content = enterWarModeSurrenderText;
-                break;
-            case "noScanner":
-                content = enterwarModeModalNoBackOutText;
-                break;
-            case "laugh":
-                content = enterWarModeModalLaughAtProspect;
-                break;
-            case "laughWar":
-                content = enterWarModeModalLaughAndEnterWar;
-                break; 
-            case "reserved":
-                content = enterWarModeModalReserved;
-                break;
-            case "neutral":
-                content = enterWarModeModalNeutral;
-                break;
-            case "receptive":
-                content = enterWarModeModalImproveToReceptive;
-                break;
+        const headerText = enterWarModeModalHeader;
+        let content;
+        let latestDifferenceInImpression = starData.latestDifferenceInImpression;
+        let finalDifference = 0;
+        let percentageChange = 0;
+
+        if (reason === 'patience' || reason === 'receptive' || reason === 'reserved' || reason === 'neutral') {
+            if (reason === 'patience') {
+                finalDifference = starData.currentImpression - starData.initialImpression; 
+                adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference);
+            }
+
+            if (latestDifferenceInImpression !== 0) {
+                percentageChange = latestDifferenceInImpression;
+            }
         }
+
+        let spanClass = latestDifferenceInImpression < 0 ? 'red-disabled-text' : (latestDifferenceInImpression > 0 ? 'green-ready-text' : '');
+
+        if (canBackout) {
+            enterWarModeCancelButton.classList.remove('invisible');
+            content = enterwarModeModalBackOutText;
+        } else {
+            switch (reason) {
+                case "patience":
+                    spanClass = finalDifference < 0 ? 'red-disabled-text' : (finalDifference > 0 ? 'green-ready-text' : '');
+                    content = enterWarModeModalPatience + "<br>";
+                    const spanText = finalDifference === 0
+                    ? "No change in overall impression - Fleets unaffected."
+                    : (finalDifference < 0
+                        ? `Overall Impression Worsened - Enemy Fleets bolstered by ${Math.abs(finalDifference / 3).toFixed(2)}%`
+                        : `Overall Impression Improved - Enemy Fleets reduced by ${Math.abs(finalDifference / 3).toFixed(2)}%`);                
+
+                    content += `<span class="${spanClass}">${spanText}</span>`;
+                    setWarUI(true);
+                    break;
+                case "insulted":
+                    content = enterWarModeInsultedText + "<br><span class='red-disabled-text'>Enemy Defense Bolstered by 10%</span>";
+                    break;
+                case "scared":
+                    content = enterWarModeScaredText + "<br><span class='green-ready-text'>Half of the enemy fleets have deserted through fear!</span>";
+                    break;
+                case "surrender":
+                    content = enterWarModeSurrenderText + "<br><span class='green-ready-text'>Victory!</span>";
+                    break;
+                case "noScanner":
+                    content = enterwarModeModalNoBackOutText + "<br><span class='red-disabled-text'>Attacking Blind!</span>";
+                    break;
+                case "laugh":
+                    content = enterWarModeModalLaughAtProspect + "<br><span class='red-disabled-text'>Enemy Impression of you -10%</span>";
+                    break;
+                case "laughWar":
+                    content = enterWarModeModalLaughAndEnterWar + "<br><span class='red-disabled-text'>Immediate Closure of Diplomacy!</span>";
+                    break; 
+                case "reserved":
+                    content = enterWarModeModalReserved + (latestDifferenceInImpression !== 0 ? "<br><span class='" + spanClass + "'>Impression change: " + (latestDifferenceInImpression < 0 ? "-" : "") + Math.abs(percentageChange).toFixed(2) + "%</span>" : "");
+                    break;
+                case "neutral":
+                    content = enterWarModeModalNeutral + (latestDifferenceInImpression !== 0 ? "<br><span class='" + spanClass + "'>Impression change: " + (latestDifferenceInImpression < 0 ? "-" : "") + Math.abs(percentageChange).toFixed(2) + "%</span>" : "");
+                    break;
+                case "receptive":
+                    content = enterWarModeModalImproveToReceptive + (latestDifferenceInImpression !== 0 ? "<br><span class='" + spanClass + "'>Impression change: " + (latestDifferenceInImpression < 0 ? "-" : "") + Math.abs(percentageChange).toFixed(2) + "%</span>" : "");
+                    break;
+            }
+        }
+
+        populateModal(headerText, content);
+
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+
+        enterWarModeConfirmButton.onclick = function () {
+            if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive') {
+                setWarUI(true);
+            }
+
+            showHideModal();
+            resolve();
+        };
+
+        enterWarModeCancelButton.onclick = function () {
+            showHideModal();
+            resolve();
+        };
+    });
+}
+
+export function setWarUI(setWarState) {
+
+    if(setWarState) {
+        setDiplomacyPossible(false);
+        setWarMode(true);
     }
 
-    populateModal(headerText, content);
+    const diplomacyImpressionBar = document.getElementById('diplomacyImpressionBar');
+    const diplomacyOptionsRow = document.getElementById('diplomacyOptionsRow');
+    const receptionStatusRow = document.getElementById('receptionStatusRow');
+    const intelligenceRow = document.getElementById('intelligenceRow');
 
-    modalContainer.style.display = 'flex';
-    overlay.style.display = 'flex';
+    if (diplomacyImpressionBar) {
+        diplomacyImpressionBar.classList.add('invisible');
+    }
 
-    enterWarModeConfirmButton.onclick = function () {
-        if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive') {
-            setDiplomacyPossible(false);
-            setWarMode(true);
-            document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('receptionStatusRow').classList.add('invisible');
-            document.getElementById('intelligenceRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-            document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        }
-        showHideModal();
-    };
+    if (diplomacyOptionsRow) {
+        diplomacyOptionsRow.classList.add('invisible');
+    }
 
-    enterWarModeCancelButton.onclick = function () {
-        showHideModal();
-    };
+    if (receptionStatusRow) {
+        receptionStatusRow.classList.add('invisible');
+    }
+
+    if (intelligenceRow) {
+        intelligenceRow.classList.add('invisible');
+    }
+
+    if (diplomacyOptionsRow) {
+        diplomacyOptionsRow.classList.add('invisible');
+    }
+
+    if (diplomacyOptionsRow) {
+        diplomacyOptionsRow.classList.add('invisible');
+    }
+}
+
+function adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference) {
+    const percentageFactor = Math.floor(finalDifference / 3);
+
+    if (finalDifference < 0) {
+        starData.enemyFleets.air += Math.ceil(starData.enemyFleets.air * (percentageFactor / 100));
+        starData.enemyFleets.land += Math.ceil(starData.enemyFleets.land * (percentageFactor / 100));
+        starData.enemyFleets.sea += Math.ceil(starData.enemyFleets.sea * (percentageFactor / 100));
+    } else if (finalDifference > 0) {
+        starData.enemyFleets.air -= Math.floor(starData.enemyFleets.air * (Math.abs(percentageFactor) / 100));
+        starData.enemyFleets.land -= Math.floor(starData.enemyFleets.land * (Math.abs(percentageFactor) / 100));
+        starData.enemyFleets.sea -= Math.floor(starData.enemyFleets.sea * (Math.abs(percentageFactor) / 100));
+    }
+
+    setStarSystemDataObject(starData.enemyFleets.air, 'stars', ['destinationStar', 'enemyFleets', 'air']);
+    setStarSystemDataObject(starData.enemyFleets.land, 'stars', ['destinationStar', 'enemyFleets', 'land']);
+    setStarSystemDataObject(starData.enemyFleets.sea, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
+
+    return finalDifference;
 }
 
 function spendAntimatterOnFuelForStarShip(fuelNeeded) {

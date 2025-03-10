@@ -225,7 +225,8 @@ import {
     drawStarShipArrowhead,
     getStats,
     updateTabHotkeys,
-    showEnterWarModeModal
+    showEnterWarModeModal,
+    setWarUI
 } from "./ui.js";
 
 import { 
@@ -3294,16 +3295,11 @@ function coloniseChecks() {
     }
 }
 
-function colonisePrepareWarUI(reason) {
+async function colonisePrepareWarUI(reason) {
     if (!getWarMode()) {
-        showEnterWarModeModal(reason);
+        await showEnterWarModeModal(reason);
     } else {
-        document.getElementById('diplomacyImpressionBar').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        document.getElementById('receptionStatusRow').classList.add('invisible');
-        document.getElementById('intelligenceRow').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
-        document.getElementById('diplomacyOptionsRow').classList.add('invisible');
+        setWarUI(false);
     } 
 }
 
@@ -6012,7 +6008,15 @@ export function generateDestinationStarData() {
     const attitude = calculateAttitude(initialImpression, civilizationLevel);
     const currentImpression = initialImpression;
     const triedToBully = false;
-    const patience = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
+    const latestDifferenceInImpression = 0;
+    let patience = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
+
+    if (lifeformTraits[0][0] === "Diplomatic") {
+        patience += 1;
+    } else if (lifeformTraits[0][0] === "Aggressive") {
+        patience -= 1;
+    }
+    
 
     const updatedData = {
         ...existingData,
@@ -6027,6 +6031,7 @@ export function generateDestinationStarData() {
         anomalies, 
         initialImpression,
         currentImpression,
+        latestDifferenceInImpression,
         attitude,
         triedToBully,
         patience
@@ -6370,7 +6375,7 @@ function calculateAttitude(impression, civilizationLevel) {
 }
 
 export function calculateModifiedAttitude(starData) {
-    setDiplomacyPossible(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'envoyBuiltYet']) && starData.currentImpression >= 10)
+    setDiplomacyPossible(getResourceDataObject('space', ['upgrades', 'fleetEnvoy', 'envoyBuiltYet']) && starData.currentImpression >= 10);
     const civilizationLevel = starData.civilizationLevel;
     if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None' || !getDiplomacyPossible() || !getFleetChangedSinceLastDiplomacy()) return;
 
@@ -6396,9 +6401,13 @@ export function calculateModifiedAttitude(starData) {
     const maxImpression = Math.min(100, initialImpression + 10);
     currentImpression = Math.max(minImpression, Math.min(maxImpression, currentImpression));
 
-    const newAttitude = calculateAttitude(currentImpression, civilizationLevel);
+    const latestDifferenceInImpression = currentImpression - starData.currentImpression;
 
     setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+    setStarSystemDataObject(latestDifferenceInImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+
+    const newAttitude = calculateAttitude(currentImpression, civilizationLevel);
+
     setStarSystemDataObject(newAttitude, 'stars', ['destinationStar', 'attitude']);
 }
 
@@ -6408,7 +6417,7 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             bullyEnemy(starData);
             break;
         case 'passive':
-            chatAndExchangePleasentries(starData);
+            chatAndExchangePleasantries(starData);
             break;
         case 'harmony':
             tryToImproveImpression(starData);
@@ -6472,6 +6481,7 @@ function bullyEnemy(starData) {
         case "laugh":
             currentImpression -= 10;
             setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+            setStarSystemDataObject(-10, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
             if (currentImpression < 10) {
                 colonisePrepareWarUI('laughWar'); 
             } else {
@@ -6485,7 +6495,7 @@ function bullyEnemy(starData) {
     drawTab5Content('Colonise', optionContentElement, false, true);
 }
 
-function chatAndExchangePleasentries(starData) {
+async function chatAndExchangePleasantries(starData) {
     const enemyTraitMain = starData.lifeformTraits[0][0];
 
     let currentImpression = starData.currentImpression;
@@ -6522,16 +6532,20 @@ function chatAndExchangePleasentries(starData) {
 
     if (outcome === "Receptive") {
         currentImpression = Math.floor(Math.random() * (100 - 65 + 1)) + 65;
-        colonisePrepareWarUI('receptive');
+        setStarSystemDataObject(currentImpression - starData.currentImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+        await colonisePrepareWarUI('receptive');
     } else if (outcome === "Neutral") {
         currentImpression = Math.floor(Math.random() * (59 - 45 + 1)) + 45;
-        colonisePrepareWarUI('neutral');
+        setStarSystemDataObject(currentImpression - starData.currentImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+        await colonisePrepareWarUI('neutral');
     } else if (outcome === "Reserved") {
         currentImpression = Math.floor(Math.random() * (44 - 10 + 1)) + 10;
-        colonisePrepareWarUI('reserved');
+        setStarSystemDataObject(currentImpression - starData.currentImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+        await colonisePrepareWarUI('reserved');
     } else if (outcome === "Belligerent") {
         currentImpression = 0;
         setStarSystemDataObject(Math.ceil(starData.defenseRating * 1.1), 'stars', ['destinationStar', 'defenseRating']);
+        setStarSystemDataObject(-starData.currentImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
         colonisePrepareWarUI('insulted');
     }
 
@@ -6542,6 +6556,7 @@ function chatAndExchangePleasentries(starData) {
     optionContentElement.innerHTML = '';
     drawTab5Content('Colonise', optionContentElement, false, true);
 }
+
 
 function tryToImproveImpression(starData) {
     // Implement harmony diplomacy logic here
