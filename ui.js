@@ -1438,29 +1438,21 @@ export function setWarUI(setWarState) {
     const receptionStatusRow = document.getElementById('receptionStatusRow');
     const intelligenceRow = document.getElementById('intelligenceRow');
 
+    if (diplomacyOptionsRow) {
+        diplomacyOptionsRow.classList.add('invisible');
+    }
+
     if (diplomacyImpressionBar) {
         diplomacyImpressionBar.classList.add('invisible');
     }
 
-    if (diplomacyOptionsRow) {
-        diplomacyOptionsRow.classList.add('invisible');
-    }
+    // if (receptionStatusRow) {
+    //     receptionStatusRow.classList.add('invisible');
+    // }
 
-    if (receptionStatusRow) {
-        receptionStatusRow.classList.add('invisible');
-    }
-
-    if (intelligenceRow) {
-        intelligenceRow.classList.add('invisible');
-    }
-
-    if (diplomacyOptionsRow) {
-        diplomacyOptionsRow.classList.add('invisible');
-    }
-
-    if (diplomacyOptionsRow) {
-        diplomacyOptionsRow.classList.add('invisible');
-    }
+    // if (intelligenceRow) {
+    //     intelligenceRow.classList.add('invisible');
+    // }
 }
 
 function adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference) {

@@ -41,7 +41,7 @@ export function initialiseDescriptions() {
     launchStarShipWarningHeader = 'WARNING: POINT OF NO RETURN!';
     launchStarShipWarningText = 'Once your Starship is launched you may not retrieve it this run.<br>So please revise the Star Data section and ensure you really want to select this destination,<br>then please click OK to confirm, or CANCEL to check.';
     enterWarModeModalHeader = `CONQUEST!`;
-    enterwarModeModalBackOutText = `You are disengaging diplomacy.<br><br>This means you can no longer engage in diplomacy,<br>or see intelligence except for enemy fleet statistics<br>and must undertake the conquest when ready.`;
+    enterwarModeModalBackOutText = `You are disengaging diplomacy.<br><br>This means you can no longer engage in diplomacy,<br>and must undertake the conquest when ready to try and conquer the new System.`;
     enterwarModeModalNoBackOutText = `You are now going to start the conquest.<br>Without intelligence you need to prepare your fleet thoroughly, good luck!`;
     enterWarModeInsultedText = `Your attempts have backfired!<br><br>The enemy is insulted by your bad manners and has cut off<br>all diplomatic ties!`;  
     enterWarModeSurrenderText = `The enemy has surrendered!<br><br>They recognize your superior strength and have chosen to yield without a fight.<br>You now have full control over the System, and no battle is necessary.`;  
