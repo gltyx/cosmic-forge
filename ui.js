@@ -120,6 +120,9 @@ import {
     enterWarModeScaredText,
     enterWarModeModalLaughAtProspect,
     enterWarModeModalLaughAndEnterWar,
+    enterWarModeModalImproveToReceptive,
+    enterWarModeModalNeutral,
+    enterWarModeModalReserved,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1353,6 +1356,15 @@ export function showEnterWarModeModal(reason) {
             case "laughWar":
                 content = enterWarModeModalLaughAndEnterWar;
                 break; 
+            case "reserved":
+                content = enterWarModeModalReserved;
+                break;
+            case "neutral":
+                content = enterWarModeModalNeutral;
+                break;
+            case "receptive":
+                content = enterWarModeModalImproveToReceptive;
+                break;
         }
     }
 
@@ -1362,7 +1374,7 @@ export function showEnterWarModeModal(reason) {
     overlay.style.display = 'flex';
 
     enterWarModeConfirmButton.onclick = function () {
-        if (reason !== 'laugh') {
+        if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive') {
             setDiplomacyPossible(false);
             setWarMode(true);
             document.getElementById('diplomacyImpressionBar').classList.add('invisible');

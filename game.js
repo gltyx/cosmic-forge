@@ -6484,7 +6484,57 @@ function bullyEnemy(starData) {
 }
 
 function chatAndExchangePleasentries(starData) {
-    // Implement passive diplomacy logic here
+    const enemyTraitMain = starData.lifeformTraits[0][0];
+
+    let currentImpression = starData.currentImpression;
+    let attitude = starData.attitude;
+    const triedToBully = starData.triedToBully;
+
+    let outcome = attitude;
+
+    if (enemyTraitMain === "Diplomatic") {
+        if (triedToBully && Math.random() < 0.5) {
+            outcome = "Belligerent";
+        } else if (currentImpression >= 45) {
+            outcome = Math.random() < 0.6 ? "Receptive" : "Neutral";
+        } else {
+            outcome = Math.random() < 0.5 ? "Neutral" : "Reserved";
+        }
+    } else if (currentImpression >= 30) {
+        if (triedToBully && Math.random() < 0.5) {
+            outcome = "Belligerent";
+        } else {
+            outcome = "Neutral";
+        }
+    } else {
+        outcome = Math.random() < 0.5 ? "Reserved" : "Belligerent";
+        if (triedToBully) {
+            outcome = "Belligerent";
+        }
+    }
+
+    setStarSystemDataObject(outcome, 'stars', ['destinationStar', 'attitude']);
+
+    if (outcome === "Receptive") {
+        currentImpression = Math.floor(Math.random() * (100 - 65 + 1)) + 65;
+        colonisePrepareWarUI('receptive');
+    } else if (outcome === "Neutral") {
+        currentImpression = Math.floor(Math.random() * (59 - 45 + 1)) + 45;
+        colonisePrepareWarUI('neutral');
+    } else if (outcome === "Reserved") {
+        currentImpression = Math.floor(Math.random() * (44 - 10 + 1)) + 10;
+        colonisePrepareWarUI('reserved');
+    } else if (outcome === "Belligerent") {
+        currentImpression = 0;
+        setStarSystemDataObject(Math.ceil(starData.defenseRating * 1.1), 'stars', ['destinationStar', 'defenseRating']);
+        colonisePrepareWarUI('insulted');
+    }
+
+    setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+
+    const optionContentElement = document.getElementById(`optionContentTab5`);
+    optionContentElement.innerHTML = '';
+    drawTab5Content('Colonise', optionContentElement, false, true);
 }
 
 function tryToImproveImpression(starData) {
