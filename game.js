@@ -6011,6 +6011,7 @@ export function generateDestinationStarData() {
     const initialImpression = calculateInitialImpression(lifeformTraits, civilizationLevel, threatLevel, enemyFleets, population);
     const attitude = calculateAttitude(initialImpression, civilizationLevel);
     const currentImpression = initialImpression;
+    const triedToBully = false;
 
     const updatedData = {
         ...existingData,
@@ -6025,7 +6026,8 @@ export function generateDestinationStarData() {
         anomalies, 
         initialImpression,
         currentImpression,
-        attitude
+        attitude,
+        triedToBully
     };
 
     setStarSystemDataObject(updatedData, 'stars', ['destinationStar']);
@@ -6420,13 +6422,11 @@ export function updateDiplomacySituation(buttonPressed, starData) {
 
 function bullyEnemy(starData) {
     const enemyTraitMain = starData.lifeformTraits[0][0]; // Diplomatic or Aggressive
-    const enemyTraitExtra = starData.lifeformTraits[2][0]; // Armored or Hive Mind
     const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
     const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
     const enemyDefense = starData.defenseRating;
 
     let currentImpression = starData.currentImpression;
-    let attitude = starData.attitude;
 
     const totalEnemyStrength = enemyPower + enemyDefense;
     const powerRatio = playerAttackPower / totalEnemyStrength;

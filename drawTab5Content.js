@@ -1,6 +1,6 @@
 import { createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification } from './ui.js';
 import { setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode } from './constantsAndGlobalVars.js';
-import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject } from './resourceDataObject.js';
+import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
@@ -646,6 +646,7 @@ export function drawTab5Content(heading, optionContentElement, starDestinationIn
                 null,
                 'Relations:',
                 createButton(`Bully`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'bully'], () => {
+                    setStarSystemDataObject(true, 'stars', ['destinationStar', 'triedToBully']);
                     updateDiplomacySituation('bully', starData);
                 }, null, null, null, null, null, true, null, 'diplomacy'),
                 createButton(`Passive`, ['option-button', 'red-disabled-text', 'diplomacy-button', 'passive'], () => {
