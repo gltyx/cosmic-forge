@@ -5835,22 +5835,18 @@ export function boostAntimatterRate(start) {
     
     if (rateBarInner) {
         if (start) {
-            console.log('starting boost');
+            //console.log('starting boost');
             setIsAntimatterBoostActive(true);
             boostText.style.color = 'var(--ready-text)';
             svgRateBarOuter.style.backgroundColor = `rgba(var(--text-color-rgb), 0.6)`;
             rateBarInner.style.height = `${parseFloat(rateBarInner.style.height) * 2}%`;
             rateBarInner.style.backgroundColor = "var(--ready-text)";
         } else {
-                console.log('stopping boost');
+                //console.log('stopping boost');
                 setIsAntimatterBoostActive(false);
                 setHasAntimatterSvgRightBoxDataChanged(null);  
         }
     }
-}
-
-export function resetRocketForRefuelling(rocket) {
-    console.log('refuel button pressed for ' + rocket);
 }
 
 export function generateStarDataAndAddToDataObject(starElement, distance) {
@@ -6296,39 +6292,39 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     }
 
     let impression = 35;
-    console.log(`Starting impression: ${impression}`);
+    // console.log(`Starting impression: ${impression}`);
 
     if (lifeformTraits.some(trait => trait[0] === "Diplomatic")) {
         impression = 50;
-        console.log(`Diplomatic trait detected, setting impression to ${impression}`);
+        // console.log(`Diplomatic trait detected, setting impression to ${impression}`);
     } else if (lifeformTraits.some(trait => trait[0] === "Aggressive")) {
         impression = 20;
-        console.log(`Aggressive trait detected, setting impression to ${impression}`);
+        // console.log(`Aggressive trait detected, setting impression to ${impression}`);
     }
 
     if (lifeformTraits.some(trait => trait[0] === "Armored")) {
         impression -= 5;
-        console.log(`Armored trait detected, new impression: ${impression}`);
+        // console.log(`Armored trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Hive Mind")) {
         impression -= 10;
-        console.log(`Hive Mind trait detected, new impression: ${impression}`);
+        // console.log(`Hive Mind trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Heat Resistant")) {
         impression += 3;
-        console.log(`Heat Resistant trait detected, new impression: ${impression}`);
+        // console.log(`Heat Resistant trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Cold Resistant")) {
         impression += 3;
-        console.log(`Cold Resistant trait detected, new impression: ${impression}`);
+        // console.log(`Cold Resistant trait detected, new impression: ${impression}`);
     }
 
     if (civilizationLevel === "Industrial") {
         impression += 5;
-        console.log(`Industrial civilization detected, new impression: ${impression}`);
+        // console.log(`Industrial civilization detected, new impression: ${impression}`);
     } else if (civilizationLevel === "Spacefaring") {
         impression -= 5;
-        console.log(`Spacefaring civilization detected, new impression: ${impression}`);
+        // console.log(`Spacefaring civilization detected, new impression: ${impression}`);
     }
 
     const threatModifiers = {
@@ -6340,23 +6336,23 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     };
     let threatImpact = threatModifiers[threatLevel] || 0;
     impression += threatImpact;
-    console.log(`Threat level '${threatLevel}' applied (${threatImpact}), new impression: ${impression}`);
+    // console.log(`Threat level '${threatLevel}' applied (${threatImpact}), new impression: ${impression}`);
 
     const totalFleetSize = enemyFleets.air + enemyFleets.land + enemyFleets.sea;
     let fleetPenalty = Math.floor(totalFleetSize / 20);
     impression -= fleetPenalty;
-    console.log(`Total fleet size: ${totalFleetSize}, fleet penalty: ${fleetPenalty}, new impression: ${impression}`);
+    // console.log(`Total fleet size: ${totalFleetSize}, fleet penalty: ${fleetPenalty}, new impression: ${impression}`);
 
     if (population < 5000000) {
         impression += 5;
-        console.log(`Small population detected, new impression: ${impression}`);
+        // console.log(`Small population detected, new impression: ${impression}`);
     } else if (population > 50000000) {
         impression -= 5;
-        console.log(`Large population detected, new impression: ${impression}`);
+        // console.log(`Large population detected, new impression: ${impression}`);
     }
 
     impression = Math.max(0, Math.min(80, impression));
-    console.log(`Final impression (clamped to 0-80 range): ${impression}`);
+    // console.log(`Final impression (clamped to 0-80 range): ${impression}`);
 
     setDiplomacyPossible(impression >= 10);
     return impression;
@@ -6562,9 +6558,6 @@ async function chatAndExchangePleasantries(starData) {
 async function tryToImproveImpression() {
     let currentImpression = getStarSystemDataObject('stars', ['destinationStar', 'currentImpression']);
     let patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
-    
-    console.log('startingPatience:', patience);
-
     patience -= 2;
 
     setStarSystemDataObject(patience, 'stars', ['destinationStar', 'patience']);
@@ -6576,7 +6569,7 @@ async function tryToImproveImpression() {
 
     if (harmonyOutcome < 0.50 && patience >= 0) {
         currentImpression = Math.floor(Math.random() * (100 - 85 + 1)) + 85;
-        latestDifference = currentImpression - getStarSystemDataObject('destinationStar', 'currentImpression');
+        latestDifference = currentImpression - getStarSystemDataObject('stars', ['destinationStar', 'currentImpression']);
         outcome = 'Receptive';
     } else if (harmonyOutcome < 0.75 || patience < 0) {
         currentImpression -= 10;
@@ -6584,11 +6577,10 @@ async function tryToImproveImpression() {
         outcome = 'Rebuff';
     } else {
         currentImpression = 0;
-        latestDifference = -getStarSystemDataObject('destinationStar', 'currentImpression');
+        latestDifference = -getStarSystemDataObject('stars', ['destinationStar', 'currentImpression']);
         setStarSystemDataObject('Belligerent', 'stars', ['destinationStar', 'attitude']);
         outcome = 'Belligerent';
     }
-    console.log(outcome);
 
     setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
     setStarSystemDataObject(latestDifference, 'stars', ['destinationStar', 'latestDifferenceInImpression']);

@@ -144,7 +144,6 @@ import {
     getBatteryLevel,
     toggleAllPower,
     boostAntimatterRate,
-    resetRocketForRefuelling,
     discoverAsteroid,
     buildSpaceMiningBuilding,
     extendStarDataRange,
