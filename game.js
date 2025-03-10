@@ -226,7 +226,8 @@ import {
     getStats,
     updateTabHotkeys,
     showEnterWarModeModal,
-    setWarUI
+    setWarUI,
+    drawFleets
 } from "./ui.js";
 
 import { 
@@ -3291,6 +3292,17 @@ function coloniseChecks() {
         document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
         if (!getStellarScannerBuilt() || getWarMode()) {
             colonisePrepareWarUI('noScanner');
+        }
+
+        if (getWarMode()) {
+            const starData = getStarSystemDataObject('stars', ['destinationStar']);
+            const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
+            const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
+            const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
+            const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
+            const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
+            const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
+            drawFleets('battleCanvas', enemyFleets, playerFleets, false);
         }
     }
 }

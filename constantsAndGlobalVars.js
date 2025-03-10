@@ -106,6 +106,11 @@ let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
 let runNumber = 1;
 
+let battleUnits = { 
+    player: [], 
+    enemy: [] 
+};
+
 let miningObject = {
     rocket1: null,
     rocket2: null,
@@ -625,6 +630,7 @@ export function captureGameStatusForSaving(type) {
     gameState.asteroidsMinedThisRun = asteroidsMinedThisRun;
     gameState.runStartTimeStamp = runStartTimeStamp;
     gameState.gameStartTimeStamp = gameStartTimeStamp;
+    gameState.battleUnits = battleUnits;
 
     // Flags
     gameState.flags = {
@@ -770,6 +776,7 @@ export function restoreGameStatus(gameState, type) {
             asteroidsMinedThisRun = gameState.asteroidsMinedThisRun ?? 0;
             runStartTimeStamp = gameState.runStartTimeStamp ?? null;
             gameStartTimeStamp = gameState.gameStartTimeStamp ?? null;
+            battleUnits = gameState.battleUnits ?? { player: [], enemy: [] };
 
 
             // Flags
@@ -2388,6 +2395,14 @@ export function setFleetChangedSinceLastDiplomacy(value) {
 
 export function getFleetChangedSinceLastDiplomacy() {
     return fleetChangedSinceLastDiplomacy;
+}
+
+export function setBattleUnits(newUnits) {
+    battleUnits = newUnits;
+}
+
+export function getBattleUnits() {
+    return battleUnits;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

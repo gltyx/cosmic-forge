@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setBattleUnits,
+    getBattleUnits,
     setDiplomacyPossible,
     setAlreadySeenNewsTickerArray,
     getAlreadySeenNewsTickerArray,
@@ -97,6 +99,7 @@ import {
     setCurrentStarObject,
     getCurrentStarObject,
     setWarMode,
+    getWarMode,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1427,17 +1430,22 @@ export function showEnterWarModeModal(reason) {
 }
 
 export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HERE
-
+    const starData = getStarSystemDataObject('stars', ['destinationStar']);
     if(setWarState) {
         setDiplomacyPossible(false);
         setWarMode(true);
     }
 
+    const optionContentElement = document.getElementById(`optionContentTab5`);
     const diplomacyImpressionBar = document.getElementById('diplomacyImpressionBar');
     const diplomacyOptionsRow = document.getElementById('diplomacyOptionsRow');
     const receptionStatusRowDescription = document.getElementById('receptionStatusRowDescription');
 
-    receptionStatusRowDescription.innerHTML = "";
+    if (!getWarMode()) {
+        receptionStatusRowDescription.innerHTML = "";
+    }
+
+    createBattleCanvas(optionContentElement, starData);
 
     if (diplomacyOptionsRow) {
         diplomacyOptionsRow.classList.add('invisible');
@@ -3807,6 +3815,205 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     horizontalBar.style.width = `${percentageBarFill}px`;
     barText.textContent = `Impression: ${value}%`;
 }
+
+//-------------------------------------------------------------------------------------------------
+//--------------BATTLECANVAS-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+
+    function getRandomInRange(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        
+        const canvasWidth = canvas.offsetWidth;
+        const canvasHeight = canvas.offsetHeight;
+        
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+    
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+        const themeElement = document.querySelector('[data-theme]');
+        const unitColorPlayer = getComputedStyle(themeElement).getPropertyValue('--ready-text').trim();
+        const unitColorEnemy = getComputedStyle(themeElement).getPropertyValue('--disabled-text').trim();
+        
+        let idCounter = 0;
+    
+        if (!createNew) {
+            const battleUnits = getBattleUnits();
+            battleUnits.player.forEach(battleUnit => {
+                ctx.fillStyle = unitColorPlayer;
+                switch (battleUnit.id.split('_')[1]) {
+                    case 'air':
+                        ctx.beginPath();
+                        ctx.moveTo(battleUnit.x, battleUnit.y - battleUnit.size);
+                        ctx.lineTo(battleUnit.x - battleUnit.size, battleUnit.y + battleUnit.size);
+                        ctx.lineTo(battleUnit.x + battleUnit.size, battleUnit.y + battleUnit.size);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+                    case 'land':
+                        ctx.fillRect(battleUnit.x - battleUnit.size, battleUnit.y - battleUnit.size / 2, battleUnit.size * 2, battleUnit.size);
+                        break;
+                    case 'sea':
+                        ctx.beginPath();
+                        ctx.arc(battleUnit.x, battleUnit.y, battleUnit.size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                }
+            });
+    
+            battleUnits.enemy.forEach(battleUnit => {
+                ctx.fillStyle = unitColorEnemy;
+                switch (battleUnit.id.split('_')[1]) {
+                    case 'air':
+                        ctx.beginPath();
+                        ctx.moveTo(battleUnit.x, battleUnit.y - battleUnit.size);
+                        ctx.lineTo(battleUnit.x - battleUnit.size, battleUnit.y + battleUnit.size);
+                        ctx.lineTo(battleUnit.x + battleUnit.size, battleUnit.y + battleUnit.size);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+                    case 'land':
+                        ctx.fillRect(battleUnit.x - battleUnit.size, battleUnit.y - battleUnit.size / 2, battleUnit.size * 2, battleUnit.size);
+                        break;
+                    case 'sea':
+                        ctx.beginPath();
+                        ctx.arc(battleUnit.x, battleUnit.y, battleUnit.size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                }
+            });
+            //console.log(getBattleUnits());
+            return;
+        }
+    
+        let newUnits = { player: [], enemy: [] };
+    
+        for (let i = 0; i < enemyFleets.length; i++) {
+            const unitType = i + 1;
+            const fleetCount = enemyFleets[i];
+            
+            for (let j = 0; j < fleetCount; j++) {
+                const x = getRandomInRange(0, canvasWidth);
+                const y = getRandomInRange(0, canvasHeight);
+                const size = 8;
+                const unitId = `${idCounter}_air`;
+                const unit = { id: unitId, x, y, size, health: 100, owner: 'enemy' };
+                newUnits.enemy.push(unit);
+                idCounter++;
+    
+                ctx.fillStyle = unitColorEnemy;
+                
+                switch (unitType) {
+                    case 1:
+                        ctx.beginPath();
+                        ctx.moveTo(x, y - size);
+                        ctx.lineTo(x - size, y + size);
+                        ctx.lineTo(x + size, y + size);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+                    case 2:
+                        ctx.fillRect(x - size, y - size / 2, size * 2, size);
+                        break;
+                    case 3:
+                        ctx.beginPath();
+                        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                }
+            }
+        }
+    
+        for (let i = 0; i < playerFleets.length; i++) {
+            const fleetCount = playerFleets[i];
+            let unitType = i + 1;
+            
+            for (let j = 0; j < fleetCount; j++) {
+                const x = getRandomInRange(0, canvasWidth);
+                const y = getRandomInRange(0, canvasHeight);
+                const size = unitType === 1 ? 8 : (unitType === 2 ? 8 : 8);
+                let unitId = '';
+                
+                if (unitType === 1) {
+                    unitId = `${idCounter}_air_scout`;
+                    if (i === 1) size = 12;
+                } else if (unitType === 2) {
+                    unitId = `${idCounter}_land_landStalker`;
+                } else if (unitType === 3) {
+                    unitId = `${idCounter}_sea_navalStrafer`;
+                }
+    
+                const unit = { id: unitId, x, y, size, health: 100, owner: 'player' };
+                newUnits.player.push(unit);
+                idCounter++;
+    
+                ctx.fillStyle = unitColorPlayer;
+    
+                switch (unitType) {
+                    case 1:
+                        ctx.beginPath();
+                        ctx.moveTo(x, y - size);
+                        ctx.lineTo(x - size, y + size);
+                        ctx.lineTo(x + size, y + size);
+                        ctx.closePath();
+                        ctx.fill();
+                        break;
+                    case 2:
+                        ctx.fillRect(x - size, y - size / 2, size * 2, size);
+                        break;
+                    case 3:
+                        ctx.beginPath();
+                        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
+                        ctx.fill();
+                        break;
+                }
+            }
+        }
+    
+        setBattleUnits(newUnits);
+    }
+    
+    
+    export function createBattleCanvas(optionContentElement, starData) {
+        const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
+        const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
+        const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
+        const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
+        const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
+        const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
+
+        if (!document.getElementById('battleCanvas')) {
+            const battleContainer = document.createElement('div');
+            battleContainer.classList.add('battle-container');
+            
+            const canvas = document.createElement('canvas');
+            canvas.id = 'battleCanvas';
+            
+            battleContainer.appendChild(canvas);
+            
+            optionContentElement.prepend(battleContainer);
+
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            
+            if (getBattleUnits()) {
+                const battleUnits = getBattleUnits();
+                
+                if (battleUnits.player.length === 0 && battleUnits.enemy.length === 0) {
+                    drawFleets('battleCanvas', enemyFleets, playerFleets, true);
+                } else {
+                    drawFleets('battleCanvas', enemyFleets, playerFleets, false);
+                }
+            }
+        }
+    }
+    
+    
 
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------

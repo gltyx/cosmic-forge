@@ -1965,3 +1965,15 @@ canvas {
     font-weight: bold;
 }
 
+.battle-container {
+    width: 95%;
+    height: 600px;
+    background-color: var(--container-bg-color);
+    border: 2px solid var(--text-color);
+    border-radius: 10px;
+    position: relative;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+
