@@ -1342,7 +1342,7 @@ export function showEnterWarModeModal(reason) {
         let finalDifference = 0;
         let percentageChange = 0;
 
-        if (reason === 'patience' || reason === 'receptive' || reason === 'reserved' || reason === 'neutral') {
+        if (reason === 'patience' || reason === 'receptive' || reason === 'reserved' || reason === 'neutral' || reason === 'rebuff') {
             if (reason === 'patience') {
                 finalDifference = starData.currentImpression - starData.initialImpression; 
                 adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference);
@@ -1388,6 +1388,7 @@ export function showEnterWarModeModal(reason) {
                     content = enterwarModeModalNoBackOutText + "<br><span class='red-disabled-text'>Attacking Blind!</span>";
                     break;
                 case "laugh":
+                case "rebuff":
                     content = enterWarModeModalLaughAtProspect + "<br><span class='red-disabled-text'>Enemy Impression of you -10%</span>";
                     break;
                 case "laughWar":
@@ -1411,7 +1412,7 @@ export function showEnterWarModeModal(reason) {
         overlay.style.display = 'flex';
 
         enterWarModeConfirmButton.onclick = function () {
-            if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive') {
+            if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive' && reason !== 'rebuff') {
                 setWarUI(true);
             }
 

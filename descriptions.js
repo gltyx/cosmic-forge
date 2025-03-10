@@ -47,7 +47,7 @@ export function initialiseDescriptions() {
     enterWarModeSurrenderText = `The enemy has surrendered!<br><br>They recognize your superior strength and have chosen to yield without a fight.<br>You now have full control over the System, and no battle is necessary.`;  
     enterWarModeNotVassalizedText = `Despite your attempts to vassalize and your good relation,<br>they just prefer being independent, so violence will be the only way to conquer the System!`;
     enterWarModeScaredText = `The enemy is terrified of your power!<br><br>Diplomacy is closed but their fleet strength is halved due to deserters!`;
-    enterWarModeModalLaughAtProspect = `The enemy laughs at the prospect of your attempts to bully them!<br>Their impression of you has fallen!`;
+    enterWarModeModalLaughAtProspect = `The enemy laughs at the prospect of your attempts to manipulate them!<br>Their impression of you has fallen!`;
     enterWarModeModalLaughAndEnterWar = `The enemy laughs at the prospect of your attempts to bully them!<br>They are now going to punish you!<br>War!`;
     enterWarModeModalImproveToReceptive = `The pitter patter was successful, the enemy is now receptive towards you<br>and their impression improved!`;
     enterWarModeModalNeutral = `After chatting the enemy remains neutral towards you.`;

@@ -6559,8 +6559,52 @@ async function chatAndExchangePleasantries(starData) {
 }
 
 
-function tryToImproveImpression(starData) {
-    // Implement harmony diplomacy logic here
+async function tryToImproveImpression() {
+    let currentImpression = getStarSystemDataObject('stars', ['destinationStar', 'currentImpression']);
+    let patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
+    
+    console.log('startingPatience:', patience);
+
+    patience -= 2;
+
+    setStarSystemDataObject(patience, 'stars', ['destinationStar', 'patience']);
+
+    const harmonyOutcome = Math.random();
+    let outcome = '';
+
+    let latestDifference = 0;
+
+    if (harmonyOutcome < 0.50 && patience >= 0) {
+        currentImpression = Math.floor(Math.random() * (100 - 85 + 1)) + 85;
+        latestDifference = currentImpression - getStarSystemDataObject('destinationStar', 'currentImpression');
+        outcome = 'Receptive';
+    } else if (harmonyOutcome < 0.75 || patience < 0) {
+        currentImpression -= 10;
+        latestDifference = -10;
+        outcome = 'Rebuff';
+    } else {
+        currentImpression = 0;
+        latestDifference = -getStarSystemDataObject('destinationStar', 'currentImpression');
+        setStarSystemDataObject('Belligerent', 'stars', ['destinationStar', 'attitude']);
+        outcome = 'Belligerent';
+    }
+    console.log(outcome);
+
+    setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+    setStarSystemDataObject(latestDifference, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+    setStarSystemDataObject(Math.floor(patience), 'stars', ['destinationStar', 'patience']);
+
+    const optionContentElement = document.getElementById(`optionContentTab5`);
+    optionContentElement.innerHTML = '';
+    drawTab5Content('Colonise', optionContentElement, false, true);
+
+    if (outcome === 'Receptive') {
+        await colonisePrepareWarUI('receptive');
+    } else if (outcome === 'Belligerent') {
+        colonisePrepareWarUI('insulted');
+    } else {
+        await colonisePrepareWarUI('rebuff');
+    }
 }
 
 function tryToVassalizeEnemy() {
@@ -6579,8 +6623,6 @@ function tryToVassalizeEnemy() {
         colonisePrepareWarUI('notVassalized');
     }
 }
-
-
 
 export function addToResourceAllTimeStat(amountToAdd, item) {
     if (item !== 'solar') {
