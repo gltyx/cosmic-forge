@@ -1001,7 +1001,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         receptionStatusRow: {
-            content1: "You can communicate with civilized species, unless they are Scared or Belligerent.",
+            content1: "You can communicate with civilized species, unless they are Belligerent towards you.",
             content2: "",
             updateAt: ""
         },

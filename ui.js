@@ -1426,7 +1426,7 @@ export function showEnterWarModeModal(reason) {
     });
 }
 
-export function setWarUI(setWarState) {
+export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HERE
 
     if(setWarState) {
         setDiplomacyPossible(false);
@@ -1435,8 +1435,9 @@ export function setWarUI(setWarState) {
 
     const diplomacyImpressionBar = document.getElementById('diplomacyImpressionBar');
     const diplomacyOptionsRow = document.getElementById('diplomacyOptionsRow');
-    const receptionStatusRow = document.getElementById('receptionStatusRow');
-    const intelligenceRow = document.getElementById('intelligenceRow');
+    const receptionStatusRowDescription = document.getElementById('receptionStatusRowDescription');
+
+    receptionStatusRowDescription.innerHTML = "";
 
     if (diplomacyOptionsRow) {
         diplomacyOptionsRow.classList.add('invisible');
@@ -1445,14 +1446,6 @@ export function setWarUI(setWarState) {
     if (diplomacyImpressionBar) {
         diplomacyImpressionBar.classList.add('invisible');
     }
-
-    // if (receptionStatusRow) {
-    //     receptionStatusRow.classList.add('invisible');
-    // }
-
-    // if (intelligenceRow) {
-    //     intelligenceRow.classList.add('invisible');
-    // }
 }
 
 function adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference) {
