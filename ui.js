@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
+    getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
     setBattleUnits,
     getBattleUnits,
     setDiplomacyPossible,
@@ -3824,13 +3826,17 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     
+    function getRandomInBounds(min, max, size) {
+        return Math.floor(Math.random() * (max - min - size * 2)) + min + size;
+    }
+    
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
-        
+    
         const canvasWidth = canvas.offsetWidth;
         const canvasHeight = canvas.offsetHeight;
-        
+    
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
     
@@ -3839,145 +3845,169 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const themeElement = document.querySelector('[data-theme]');
         const unitColorPlayer = getComputedStyle(themeElement).getPropertyValue('--ready-text').trim();
         const unitColorEnemy = getComputedStyle(themeElement).getPropertyValue('--disabled-text').trim();
-        
+    
         let idCounter = 0;
+        const battleUnits = getBattleUnits();
+    
+        const getUnitSize = (unitType) => {
+            if (unitType === 'air_marauder') return 8;
+            return unitType.includes('air') ? 4 : (unitType.includes('land') ? 6 : 8);
+        };
     
         if (!createNew) {
-            const battleUnits = getBattleUnits();
-            battleUnits.player.forEach(battleUnit => {
-                ctx.fillStyle = unitColorPlayer;
-                switch (battleUnit.id.split('_')[1]) {
-                    case 'air':
-                        ctx.beginPath();
-                        ctx.moveTo(battleUnit.x, battleUnit.y - battleUnit.size);
-                        ctx.lineTo(battleUnit.x - battleUnit.size, battleUnit.y + battleUnit.size);
-                        ctx.lineTo(battleUnit.x + battleUnit.size, battleUnit.y + battleUnit.size);
-                        ctx.closePath();
-                        ctx.fill();
-                        break;
-                    case 'land':
-                        ctx.fillRect(battleUnit.x - battleUnit.size, battleUnit.y - battleUnit.size / 2, battleUnit.size * 2, battleUnit.size);
-                        break;
-                    case 'sea':
-                        ctx.beginPath();
-                        ctx.arc(battleUnit.x, battleUnit.y, battleUnit.size / 2, 0, Math.PI * 2);
-                        ctx.fill();
-                        break;
+            const hasBeenRedrawn = getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer();
+    
+            if (!hasBeenRedrawn) {
+                let currentUnitCounts = { air_scout: 0, air_marauder: 0, land_landStalker: 0, sea_navalStrafer: 0 };
+    
+                battleUnits.player.forEach(unit => {
+                    currentUnitCounts[unit.id.split('_')[1]]++;
+                });
+    
+                for (let i = 0; i < playerFleets.length; i++) {
+                    const unitType = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'][i];
+                    const neededUnits = playerFleets[i] - currentUnitCounts[unitType];
+    
+                    if (neededUnits > 0) {
+                        for (let j = 0; j < neededUnits; j++) {
+                            battleUnits.player.push(createUnit(unitType, 'player', canvasWidth, canvasHeight, idCounter));
+                            idCounter++;
+                        }
+                    }
                 }
+    
+                setBattleUnits(battleUnits);
+                setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
+            }
+    
+            battleUnits.player.forEach(unit => {
+                ctx.fillStyle = unitColorPlayer;
+                drawUnit(ctx, unit);
             });
     
-            battleUnits.enemy.forEach(battleUnit => {
+            battleUnits.enemy.forEach(unit => {
                 ctx.fillStyle = unitColorEnemy;
-                switch (battleUnit.id.split('_')[1]) {
-                    case 'air':
-                        ctx.beginPath();
-                        ctx.moveTo(battleUnit.x, battleUnit.y - battleUnit.size);
-                        ctx.lineTo(battleUnit.x - battleUnit.size, battleUnit.y + battleUnit.size);
-                        ctx.lineTo(battleUnit.x + battleUnit.size, battleUnit.y + battleUnit.size);
-                        ctx.closePath();
-                        ctx.fill();
-                        break;
-                    case 'land':
-                        ctx.fillRect(battleUnit.x - battleUnit.size, battleUnit.y - battleUnit.size / 2, battleUnit.size * 2, battleUnit.size);
-                        break;
-                    case 'sea':
-                        ctx.beginPath();
-                        ctx.arc(battleUnit.x, battleUnit.y, battleUnit.size / 2, 0, Math.PI * 2);
-                        ctx.fill();
-                        break;
-                }
+                drawUnit(ctx, unit);
             });
-            //console.log(getBattleUnits());
+    
             return;
         }
     
         let newUnits = { player: [], enemy: [] };
     
-        for (let i = 0; i < enemyFleets.length; i++) {
-            const unitType = i + 1;
-            const fleetCount = enemyFleets[i];
-            
-            for (let j = 0; j < fleetCount; j++) {
-                const x = getRandomInRange(0, canvasWidth);
-                const y = getRandomInRange(0, canvasHeight);
-                const size = 8;
-                const unitId = `${idCounter}_air`;
-                const unit = { id: unitId, x, y, size, health: 100, owner: 'enemy' };
-                newUnits.enemy.push(unit);
-                idCounter++;
+        const fleetTypes = {
+            enemy: ['air', 'land', 'sea'],
+            player: ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer']
+        };
     
-                ctx.fillStyle = unitColorEnemy;
-                
-                switch (unitType) {
-                    case 1:
-                        ctx.beginPath();
-                        ctx.moveTo(x, y - size);
-                        ctx.lineTo(x - size, y + size);
-                        ctx.lineTo(x + size, y + size);
-                        ctx.closePath();
-                        ctx.fill();
-                        break;
-                    case 2:
-                        ctx.fillRect(x - size, y - size / 2, size * 2, size);
-                        break;
-                    case 3:
-                        ctx.beginPath();
-                        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-                        ctx.fill();
-                        break;
+        const generateFleetUnits = (fleets, owner) => {
+            fleets.forEach((fleetCount, i) => {
+                const unitType = fleetTypes[owner][i];
+                for (let j = 0; j < fleetCount; j++) {
+                    newUnits[owner].push(createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter));
+                    idCounter++;
                 }
-            }
-        }
+            });
+        };
     
-        for (let i = 0; i < playerFleets.length; i++) {
-            const fleetCount = playerFleets[i];
-            let unitType = i + 1;
-            
-            for (let j = 0; j < fleetCount; j++) {
-                const x = getRandomInRange(0, canvasWidth);
-                const y = getRandomInRange(0, canvasHeight);
-                const size = unitType === 1 ? 8 : (unitType === 2 ? 8 : 8);
-                let unitId = '';
-                
-                if (unitType === 1) {
-                    unitId = `${idCounter}_air_scout`;
-                    if (i === 1) size = 12;
-                } else if (unitType === 2) {
-                    unitId = `${idCounter}_land_landStalker`;
-                } else if (unitType === 3) {
-                    unitId = `${idCounter}_sea_navalStrafer`;
-                }
-    
-                const unit = { id: unitId, x, y, size, health: 100, owner: 'player' };
-                newUnits.player.push(unit);
-                idCounter++;
-    
-                ctx.fillStyle = unitColorPlayer;
-    
-                switch (unitType) {
-                    case 1:
-                        ctx.beginPath();
-                        ctx.moveTo(x, y - size);
-                        ctx.lineTo(x - size, y + size);
-                        ctx.lineTo(x + size, y + size);
-                        ctx.closePath();
-                        ctx.fill();
-                        break;
-                    case 2:
-                        ctx.fillRect(x - size, y - size / 2, size * 2, size);
-                        break;
-                    case 3:
-                        ctx.beginPath();
-                        ctx.arc(x, y, size / 2, 0, Math.PI * 2);
-                        ctx.fill();
-                        break;
-                }
-            }
-        }
+        generateFleetUnits(enemyFleets, 'enemy');
+        generateFleetUnits(playerFleets, 'player');
     
         setBattleUnits(newUnits);
-    }
+        setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
+
+        function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter) {
+            const size = getUnitSize(unitType);
+            const { x, y } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
+            return { id: `${idCounter}_${unitType}`, x, y, size, health: 100, owner };
+        }
+
+        function getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size) {
+            console.log("Arguments:", {
+                unitType: unitType,
+                owner: owner,
+                canvasWidth: canvasWidth,
+                canvasHeight: canvasHeight,
+                size: size
+            });
+        
+            const padding = 4;
+            const boundingBox = size + padding * 2;
+            const doubleSpacing = boundingBox * 2;
+        
+            let isPlayer = owner === 'player';
+            let typeOrder = ['air', 'land', 'sea'];
+            let typeKey = unitType.includes('_') ? unitType.split('_')[0] : unitType;
+        
+            if (!getUnitPosition.columns) {
+                getUnitPosition.columns = { player: {}, enemy: {} };
+                getUnitPosition.columnCounts = { player: {}, enemy: {} };
+        
+                let playerX = boundingBox;
+                let enemyX = canvasWidth - boundingBox;
+        
+                typeOrder.forEach(type => {
+                    getUnitPosition.columns.player[type] = { x: playerX, y: boundingBox };
+                    getUnitPosition.columns.enemy[type] = { x: enemyX, y: boundingBox };
+                    getUnitPosition.columnCounts.player[type] = 0;
+                    getUnitPosition.columnCounts.enemy[type] = 0;
+        
+                    playerX += doubleSpacing;
+                    enemyX -= doubleSpacing;
+                });
+            }
+        
+            let position = getUnitPosition.columns[owner][typeKey];
+        
+            if (position.y + boundingBox > canvasHeight) {
+                position.y = boundingBox;
+                position.x += isPlayer ? doubleSpacing : -doubleSpacing;
+                getUnitPosition.columnCounts[owner][typeKey]++;
+            }
+        
+            let newPosition = { x: position.x, y: position.y };
+            position.y += boundingBox;
+        
+            let currentTypeIndex = typeOrder.indexOf(typeKey);
+            if (currentTypeIndex < typeOrder.length - 1) {
+                let nextType = typeOrder[currentTypeIndex + 1];
+        
+                let totalColumnsUsed = getUnitPosition.columnCounts[owner][typeKey];
+                let newX = getUnitPosition.columns[owner][typeKey].x + (isPlayer ? doubleSpacing : -doubleSpacing);
+        
+                getUnitPosition.columns[owner][nextType].x = newX;
+            }
+        
+            return newPosition;
+        }
+        
+                                     
+    }       
     
+    function drawUnit(ctx, unit) {
+        switch (unit.id.split('_')[1]) {
+            case 'air':
+            case 'air_scout':
+            case 'air_marauder':
+                ctx.beginPath();
+                ctx.moveTo(unit.x, unit.y - unit.size);
+                ctx.lineTo(unit.x - unit.size, unit.y + unit.size);
+                ctx.lineTo(unit.x + unit.size, unit.y + unit.size);
+                ctx.closePath();
+                ctx.fill();
+                break;
+            case 'land':
+            case 'land_landStalker':
+                ctx.fillRect(unit.x - unit.size, unit.y - unit.size / 2, unit.size * 2, unit.size);
+                break;
+            case 'sea':
+            case 'sea_navalStrafer':
+                ctx.beginPath();
+                ctx.arc(unit.x, unit.y, unit.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+                break;
+        }
+    }  
     
     export function createBattleCanvas(optionContentElement, starData) {
         const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);

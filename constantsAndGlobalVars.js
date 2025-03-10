@@ -280,6 +280,7 @@ let destinationStarScanned = false;
 let diplomacyPossible = true;
 let warMode = false;
 let fleetChangedSinceLastDiplomacy = false;
+let redrawnSinceLastFleetUpdateByPlayer = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -2403,6 +2404,14 @@ export function setBattleUnits(newUnits) {
 
 export function getBattleUnits() {
     return battleUnits;
+}
+
+export function getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer() {
+    return redrawnSinceLastFleetUpdateByPlayer ?? false;
+}
+
+export function setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(value) {
+    redrawnSinceLastFleetUpdateByPlayer = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
