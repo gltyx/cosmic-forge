@@ -6012,6 +6012,7 @@ export function generateDestinationStarData() {
     const attitude = calculateAttitude(initialImpression, civilizationLevel);
     const currentImpression = initialImpression;
     const triedToBully = false;
+    const patience = Math.floor(Math.random() * (5 - 2 + 1)) + 2;
 
     const updatedData = {
         ...existingData,
@@ -6027,7 +6028,8 @@ export function generateDestinationStarData() {
         initialImpression,
         currentImpression,
         attitude,
-        triedToBully
+        triedToBully,
+        patience
     };
 
     setStarSystemDataObject(updatedData, 'stars', ['destinationStar']);
@@ -6489,6 +6491,7 @@ function chatAndExchangePleasentries(starData) {
     let currentImpression = starData.currentImpression;
     let attitude = starData.attitude;
     const triedToBully = starData.triedToBully;
+    const patience = starData.patience;
 
     let outcome = attitude;
 
@@ -6515,6 +6518,8 @@ function chatAndExchangePleasentries(starData) {
 
     setStarSystemDataObject(outcome, 'stars', ['destinationStar', 'attitude']);
 
+    const patienceModifier = -1;
+
     if (outcome === "Receptive") {
         currentImpression = Math.floor(Math.random() * (100 - 65 + 1)) + 65;
         colonisePrepareWarUI('receptive');
@@ -6531,6 +6536,7 @@ function chatAndExchangePleasentries(starData) {
     }
 
     setStarSystemDataObject(currentImpression, 'stars', ['destinationStar', 'currentImpression']);
+    setStarSystemDataObject(Math.floor(patience + patienceModifier), 'stars', ['destinationStar', 'patience']);
 
     const optionContentElement = document.getElementById(`optionContentTab5`);
     optionContentElement.innerHTML = '';
