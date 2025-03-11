@@ -45,6 +45,9 @@ export const STAR_FIELD_SEED = 80;
 export const NUMBER_OF_STARS = 100;
 export const STELLAR_SCANNER_RANGE = 0.75;
 export const OFFLINE_GAINS_RATE = 0.334;
+export const ENEMY_FLEET_SPEED_AIR = 5;
+export const ENEMY_FLEET_SPEED_LAND = 2;
+export const ENEMY_FLEET_SPEED_SEA = 1;
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -281,6 +284,7 @@ let diplomacyPossible = true;
 let warMode = false;
 let fleetChangedSinceLastDiplomacy = false;
 let redrawnSinceLastFleetUpdateByPlayer = false;
+let battleOngoing = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -2398,8 +2402,12 @@ export function getFleetChangedSinceLastDiplomacy() {
     return fleetChangedSinceLastDiplomacy;
 }
 
-export function setBattleUnits(newUnits) {
-    battleUnits = newUnits;
+export function setBattleUnits(key, value) {
+    battleUnits[key] = value;
+}
+
+export function replaceBattleUnits(value) {
+    battleUnits = value;
 }
 
 export function getBattleUnits() {
@@ -2412,6 +2420,18 @@ export function getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer() {
 
 export function setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(value) {
     redrawnSinceLastFleetUpdateByPlayer = value;
+}
+
+export function getBattleOngoing() {
+    return battleOngoing ?? false;
+}
+
+export function setBattleOngoing(value) {
+    battleOngoing = value;
+}
+
+export function getEnemyFleetSpeeds() {
+    return [ENEMY_FLEET_SPEED_AIR, ENEMY_FLEET_SPEED_LAND, ENEMY_FLEET_SPEED_SEA];
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

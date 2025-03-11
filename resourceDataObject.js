@@ -687,7 +687,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'air',
                 bonusRemovedBy: 'Aerialians',
                 defenseStrength: 2,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 5
             },
             fleetMarauder: {
                 maxCanBuild: 100000,
@@ -702,7 +703,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'air',
                 bonusRemovedBy: 'Aerialians',
                 defenseStrength: 3,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 4
             },
             fleetLandStalker: {
                 maxCanBuild: 100000,
@@ -717,7 +719,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'land',
                 bonusRemovedBy: 'Terrans',
                 defenseStrength: 0,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 2
             },
             fleetNavalStrafer: {
                 maxCanBuild: 100000,
@@ -732,7 +735,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'sea',
                 bonusRemovedBy: 'Aquatic',
                 defenseStrength: 0,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 1
             }
         }
     },

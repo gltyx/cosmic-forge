@@ -1,5 +1,9 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    replaceBattleUnits,
+    getEnemyFleetSpeeds,
+    getBattleOngoing,
+    setBattleOngoing,
     setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
     getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
     setBattleUnits,
@@ -3822,14 +3826,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 //--------------BATTLECANVAS-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 
-    function getRandomInRange(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    
-    function getRandomInBounds(min, max, size) {
-        return Math.floor(Math.random() * (max - min - size * 2)) + min + size;
-    }
-    
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
@@ -3876,7 +3872,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                     }
                 }
     
-                setBattleUnits(battleUnits);
+                replaceBattleUnits(battleUnits);
                 setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
             }
     
@@ -3893,6 +3889,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             return;
         }
     
+        setBattleOngoing(true);
         let newUnits = { player: [], enemy: [] };
     
         const fleetTypes = {
@@ -3903,8 +3900,18 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const generateFleetUnits = (fleets, owner) => {
             fleets.forEach((fleetCount, i) => {
                 const unitType = fleetTypes[owner][i];
+                let speed;
+                if (owner === 'player') {
+                    const resourceFleetName = "fleet" + capitaliseString(unitType.split("_").slice(1).join("_"));
+                    speed = getResourceDataObject('space', ['upgrades', resourceFleetName, 'speed']);
+                } else if (owner === 'enemy') {
+                    const [airSpeed, landSpeed, seaSpeed] = getEnemyFleetSpeeds();
+                    const speedMap = { air: airSpeed, land: landSpeed, sea: seaSpeed };
+                    speed = speedMap[unitType] || 0;
+                }
+                
                 for (let j = 0; j < fleetCount; j++) {
-                    newUnits[owner].push(createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter));
+                    newUnits[owner].push(createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter, speed));
                     idCounter++;
                 }
             });
@@ -3913,77 +3920,79 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         generateFleetUnits(enemyFleets, 'enemy');
         generateFleetUnits(playerFleets, 'player');
     
-        setBattleUnits(newUnits);
+        replaceBattleUnits(newUnits);
         setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
 
-        function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter) {
+        function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter, speed) {
             const size = getUnitSize(unitType);
-            const { x, y } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
-            return { id: `${idCounter}_${unitType}`, x, y, size, health: 100, owner };
+            const { x, y, width, height } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
+            
+            return { 
+                id: `${idCounter}_${unitType}`, 
+                x, 
+                y, 
+                width, 
+                height,  // Include width and height in the unit object
+                size, 
+                health: 100, 
+                owner, 
+                speed: speed 
+            };
         }
-
+    
         function getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size) {
-            console.log("Arguments:", {
-                unitType: unitType,
-                owner: owner,
-                canvasWidth: canvasWidth,
-                canvasHeight: canvasHeight,
-                size: size
-            });
-        
             const padding = 4;
             const boundingBox = size + padding * 2;
             const doubleSpacing = boundingBox * 1.5;
-        
+    
             let isPlayer = owner === 'player';
-        
-            // Define type order separately for player and enemy
+    
             const playerTypeOrder = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'];
             const enemyTypeOrder = ['air', 'land', 'sea'];
-        
-            // Choose correct type order based on owner
+    
             let typeOrder = isPlayer ? playerTypeOrder : enemyTypeOrder;
-        
-            let typeKey = unitType; // Keep full type name for players
-        
+    
+            let typeKey = unitType;
+    
             if (!getUnitPosition.columns) {
                 getUnitPosition.columns = { player: {}, enemy: {} };
                 getUnitPosition.columnCounts = { player: {}, enemy: {} };
-        
+    
                 let playerX = boundingBox;
                 let enemyX = canvasWidth - boundingBox;
-        
-                // Initialize player and enemy columns separately
+    
                 playerTypeOrder.forEach(type => {
                     getUnitPosition.columns.player[type] = { x: playerX, y: boundingBox };
                     getUnitPosition.columnCounts.player[type] = 0;
                     playerX += doubleSpacing;
                 });
-        
+    
                 enemyTypeOrder.forEach(type => {
                     getUnitPosition.columns.enemy[type] = { x: enemyX, y: boundingBox };
                     getUnitPosition.columnCounts.enemy[type] = 0;
                     enemyX -= doubleSpacing;
                 });
             }
-        
+    
             let position = getUnitPosition.columns[owner][typeKey];
-        
+    
             if (position.y + boundingBox > canvasHeight) {
                 position.y = boundingBox;
                 position.x += isPlayer ? doubleSpacing : -doubleSpacing;
                 getUnitPosition.columnCounts[owner][typeKey]++;
             }
-        
+    
             let newPosition = { x: position.x, y: position.y };
             position.y += boundingBox;
-        
-            return newPosition;
-        }
-        
-        
-        
-                                     
+    
+            if (owner === 'player') {
+                newPosition.x -= 150;
+            } else if (owner === 'enemy') {
+                newPosition.x += 150;
+            }
+    
+            return { ...newPosition, width: size, height: size };  // Return width and height with position
+        }                          
     }       
     
     function drawUnit(ctx, unit) {
@@ -4044,6 +4053,101 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             }
         }
     }
+
+    export function moveTest(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const battleUnits = getBattleUnits();
+        
+        if (!battleUnits) return;
+        
+        ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    
+        const allUnitsOnScreen = battleUnits.player.concat(battleUnits.enemy).every(unit => unit.x >= 5 && unit.y >= 0 && unit.x <= (canvas.offsetWidth - 5) && unit.y <= canvas.offsetHeight);
+    
+        battleUnits.player.forEach(unit => {
+            if (!unit.hasBeenOnCanvas && unit.x > 3 && unit.y >= 0) {
+                unit.hasBeenOnCanvas = true;
+            }
+    
+            if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
+                unit.x += 1;
+            } else if (unit.hasBeenOnCanvas){
+                if (unit.x <= 0 || unit.x >= canvas.offsetWidth || unit.y <= 0 || unit.y >= canvas.offsetHeight) {
+                    unit.speed = -unit.speed || -1;
+                }
+    
+                if (unit.hasBeenOnCanvas) {
+                    // Determine which edge the unit has touched
+                    if (unit.x <= 0) {
+                        unit.touchedEdge = "left";
+                    } else if (unit.x >= canvas.offsetWidth) {
+                        unit.touchedEdge = "right";
+                    } else if (unit.y <= 0) {
+                        unit.touchedEdge = "top";
+                    } else if (unit.y >= canvas.offsetHeight) {
+                        unit.touchedEdge = "bottom";
+                    }
+                }
+    
+                unit.x += unit.speed || 1;
+            } else {
+                console.log('unit drawn out of bounds of ever being on canvas:', unit);
+            }
+            setBattleUnits('player', battleUnits.player);
+        });
+    
+        battleUnits.enemy.forEach(unit => {
+            if (!unit.hasBeenOnCanvas && unit.x + unit.width < (canvas.offsetWidth + 1) && unit.y >= 0) {
+                unit.hasBeenOnCanvas = true;
+            }
+    
+            if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
+                unit.x -= 1;
+            } else if (unit.hasBeenOnCanvas) {
+                if (unit.x <= 0 || unit.x >= canvas.offsetWidth || unit.y <= 0 || unit.y >= canvas.offsetHeight) {
+                    unit.speed = -unit.speed || -1;
+                }
+    
+                if (unit.hasBeenOnCanvas) {
+                    if (unit.x <= 0) {
+                        unit.touchedEdge = "left";
+                    } else if (unit.x >= canvas.offsetWidth) {
+                        unit.touchedEdge = "right";
+                    } else if (unit.y <= 0) {
+                        unit.touchedEdge = "top";
+                    } else if (unit.y >= canvas.offsetHeight) {
+                        unit.touchedEdge = "bottom";
+                    }
+                }
+    
+                unit.x -= unit.speed || 1;
+            } else {
+                console.log('unit drawn out of bounds of ever being on canvas:', unit);
+             }
+            setBattleUnits('enemy', battleUnits.enemy);
+        });
+    
+        battleUnits.player.forEach(unit => {
+            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim();
+            drawUnit(ctx, unit);
+        });
+    
+        battleUnits.enemy.forEach(unit => {
+            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim();
+            drawUnit(ctx, unit);
+        });
+    
+        console.log(getBattleUnits()); // Output the updated battle units to check the `hasBeenOnCanvas` and `touchedEdge` status
+    }
+    
+    
+    
+    
+    
+    
+      
+    
     
     
 

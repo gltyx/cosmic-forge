@@ -522,12 +522,13 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource2Price: [1000, 'silicon', 'resources'],
                         resource3Price: [300, 'titanium', 'compounds'],
                         setPrice: 'fleetScoutPrice',
-                        bonusPercentage: 20,
+                        bonusPercentage: 10,
                         baseAttackStrength: 2,
                         bonusGivenAgainstType: 'air',
                         bonusRemovedBy: 'Aerialians',
                         defenseStrength: 2,
-                        joinsAttackDefense: true
+                        joinsAttackDefense: true,
+                        speed: 5
                     },
                     fleetMarauder: {
                         maxCanBuild: 100000,
@@ -537,12 +538,13 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource2Price: [2000, 'silicon', 'resources'],
                         resource3Price: [600, 'titanium', 'compounds'],
                         setPrice: 'fleetMarauderPrice',
-                        bonusPercentage: 20,
+                        bonusPercentage: 15,
                         baseAttackStrength: 4,
                         bonusGivenAgainstType: 'air',
                         bonusRemovedBy: 'Aerialians',
                         defenseStrength: 3,
-                        joinsAttackDefense: true
+                        joinsAttackDefense: true,
+                        speed: 4
                     },
                     fleetLandStalker: {
                         maxCanBuild: 100000,
@@ -557,7 +559,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         bonusGivenAgainstType: 'land',
                         bonusRemovedBy: 'Terrans',
                         defenseStrength: 0,
-                        joinsAttackDefense: true
+                        joinsAttackDefense: true,
+                        speed: 2
                     },
                     fleetNavalStrafer: {
                         maxCanBuild: 100000,
@@ -567,12 +570,13 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         resource2Price: [4000, 'silicon', 'resources'],
                         resource3Price: [1200, 'titanium', 'compounds'],
                         setPrice: 'fleetNavalStraferPrice',
-                        bonusPercentage: 20,
+                        bonusPercentage: 15,
                         baseAttackStrength: 6,
                         bonusGivenAgainstType: 'sea',
                         bonusRemovedBy: 'Aquatic',
                         defenseStrength: 0,
-                        joinsAttackDefense: true
+                        joinsAttackDefense: true,
+                        speed: 1
                     }
                 });
 

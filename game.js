@@ -1,4 +1,6 @@
 import {
+    getBattleOngoing,
+    setBattleOngoing,
     getFleetChangedSinceLastDiplomacy,
     setFleetChangedSinceLastDiplomacy,
     setDiplomacyPossible,
@@ -227,7 +229,8 @@ import {
     updateTabHotkeys,
     showEnterWarModeModal,
     setWarUI,
-    drawFleets
+    drawFleets,
+    moveTest
 } from "./ui.js";
 
 import { 
@@ -3303,6 +3306,9 @@ function coloniseChecks() {
             const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
             const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
             drawFleets('battleCanvas', enemyFleets, playerFleets, false);
+            if (getBattleOngoing()) {
+                moveTest('battleCanvas');
+            }
         }
     }
 }
