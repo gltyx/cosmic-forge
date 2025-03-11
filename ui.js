@@ -3932,11 +3932,14 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 x, 
                 y, 
                 width, 
-                height,  // Include width and height in the unit object
+                height,
                 size, 
                 health: 100, 
                 owner, 
-                speed: speed 
+                speed: speed,
+                verticalSpeed: 0,
+                horizontalSpeed: 0,
+                movementVector: owner === 'player' ? [70, 30] : [-70, 30]
             };
         }
     
@@ -3949,8 +3952,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
             const playerTypeOrder = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'];
             const enemyTypeOrder = ['air', 'land', 'sea'];
-    
-            let typeOrder = isPlayer ? playerTypeOrder : enemyTypeOrder;
     
             let typeKey = unitType;
     
@@ -4058,12 +4059,14 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
         const battleUnits = getBattleUnits();
-        
+    
         if (!battleUnits) return;
-        
+    
         ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     
-        const allUnitsOnScreen = battleUnits.player.concat(battleUnits.enemy).every(unit => unit.x >= 5 && unit.y >= 0 && unit.x <= (canvas.offsetWidth - 5) && unit.y <= canvas.offsetHeight);
+        const allUnitsOnScreen = battleUnits.player.concat(battleUnits.enemy).every(unit =>
+            unit.x >= 5 && unit.y >= 0 && unit.x <= (canvas.offsetWidth - 5) && unit.y <= canvas.offsetHeight
+        );
     
         battleUnits.player.forEach(unit => {
             if (!unit.hasBeenOnCanvas && unit.x > 3 && unit.y >= 0) {
@@ -4072,28 +4075,11 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
             if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
                 unit.x += 1;
-            } else if (unit.hasBeenOnCanvas){
-                if (unit.x <= 0 || unit.x >= canvas.offsetWidth || unit.y <= 0 || unit.y >= canvas.offsetHeight) {
-                    unit.speed = -unit.speed || -1;
-                }
-    
-                if (unit.hasBeenOnCanvas) {
-                    if (unit.x <= 0) {
-                        unit.touchedEdge = "left";
-                    } else if (unit.x >= canvas.offsetWidth) {
-                        unit.touchedEdge = "right";
-                    } else if (unit.y <= 0) {
-                        unit.touchedEdge = "top";
-                    } else if (unit.y >= canvas.offsetHeight) {
-                        unit.touchedEdge = "bottom";
-                    }
-                }
-    
-                unit.x += unit.speed || 1;
+            } else if (unit.hasBeenOnCanvas) {
+                calculateMovement(unit, canvas, 'player');
             } else {
                 console.log('unit drawn out of bounds of ever being on canvas:', unit);
             }
-            setBattleUnits('player', battleUnits.player);
         });
     
         battleUnits.enemy.forEach(unit => {
@@ -4104,27 +4090,10 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
                 unit.x -= 1;
             } else if (unit.hasBeenOnCanvas) {
-                if (unit.x <= 0 || unit.x >= canvas.offsetWidth || unit.y <= 0 || unit.y >= canvas.offsetHeight) {
-                    unit.speed = -unit.speed || -1;
-                }
-    
-                if (unit.hasBeenOnCanvas) {
-                    if (unit.x <= 0) {
-                        unit.touchedEdge = "left";
-                    } else if (unit.x >= canvas.offsetWidth) {
-                        unit.touchedEdge = "right";
-                    } else if (unit.y <= 0) {
-                        unit.touchedEdge = "top";
-                    } else if (unit.y >= canvas.offsetHeight) {
-                        unit.touchedEdge = "bottom";
-                    }
-                }
-    
-                unit.x -= unit.speed || 1;
+                calculateMovement(unit, canvas, 'enemy');
             } else {
                 console.log('unit drawn out of bounds of ever being on canvas:', unit);
-             }
-            setBattleUnits('enemy', battleUnits.enemy);
+            }
         });
     
         battleUnits.player.forEach(unit => {
@@ -4136,8 +4105,86 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim();
             drawUnit(ctx, unit);
         });
+    }
     
-        // console.log(getBattleUnits())
+    function calculateMovement(unit, canvas, key) {
+        const units = getBattleUnits()[key];
+        const movementVector = unit.movementVector;
+    
+        const baseSpeed = Math.abs(unit.speed);
+        const xFactor = movementVector[0] / 100;
+        const yFactor = movementVector[1] / 100;
+    
+        unit.horizontalSpeed = baseSpeed * Math.abs(xFactor);
+        unit.verticalSpeed = baseSpeed * Math.abs(yFactor);
+    
+        unit.horizontalSpeed *= movementVector[0] < 0 ? -1 : 1;
+        unit.verticalSpeed *= movementVector[1] < 0 ? -1 : 1;
+    
+        const randomSpeedAdjustment = () => Math.random() * 4 - 2;
+    
+        if (unit.x <= 0) {
+            unit.touchedEdge = "left";
+            unit.horizontalSpeed = Math.abs(unit.horizontalSpeed);
+            unit.movementVector[0] = Math.abs(movementVector[0]);
+            
+            unit.movementVector[0] += randomSpeedAdjustment();
+    
+            if (unit.id.includes('marauder')) {
+                unit.x = unit.width;
+            }
+        } else if (unit.x >= canvas.offsetWidth) {
+            unit.touchedEdge = "right";
+            unit.horizontalSpeed = -Math.abs(unit.horizontalSpeed);
+            unit.movementVector[0] = -Math.abs(movementVector[0]);
+    
+            unit.movementVector[0] += randomSpeedAdjustment();
+    
+            if (unit.id.includes('marauder')) {
+                unit.x = canvas.offsetWidth - unit.width;
+            }
+        }
+    
+        if (unit.y <= 0) {
+            unit.touchedEdge = "top";
+            unit.verticalSpeed = Math.abs(unit.verticalSpeed);
+            unit.movementVector[1] = Math.abs(movementVector[1]);
+            
+            unit.movementVector[1] += randomSpeedAdjustment();
+    
+            if (unit.id.includes('marauder')) {
+                unit.y = unit.height;
+            }
+        } else if (unit.y >= canvas.offsetHeight) {
+            unit.touchedEdge = "bottom";
+            unit.verticalSpeed = -Math.abs(unit.verticalSpeed);
+            unit.movementVector[1] = -Math.abs(movementVector[1]);
+            
+            unit.movementVector[1] += randomSpeedAdjustment();
+    
+            if (unit.id.includes('marauder')) {
+                unit.y = canvas.offsetHeight - unit.height;
+            }
+        }
+    
+        unit.x += unit.horizontalSpeed;
+        unit.y += unit.verticalSpeed;
+    
+        const updatedUnits = units.map(u => {
+            if (u.id === unit.id) {
+                return { 
+                    ...u, 
+                    x: unit.x, 
+                    y: unit.y, 
+                    horizontalSpeed: unit.horizontalSpeed, 
+                    verticalSpeed: unit.verticalSpeed, 
+                    movementVector: unit.movementVector 
+                };
+            }
+            return u;
+        });
+    
+        setBattleUnits(key, updatedUnits);
     }
     
     
