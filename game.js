@@ -230,7 +230,7 @@ import {
     showEnterWarModeModal,
     setWarUI,
     drawFleets,
-    moveTest
+    moveBattleUnits
 } from "./ui.js";
 
 import { 
@@ -3307,7 +3307,7 @@ function coloniseChecks() {
             const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
             drawFleets('battleCanvas', enemyFleets, playerFleets, false);
             if (getBattleOngoing()) {
-                moveTest('battleCanvas');
+                moveBattleUnits('battleCanvas');
             }
         }
     }

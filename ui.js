@@ -4054,7 +4054,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         }
     }
 
-    export function moveTest(canvasId) {
+    export function moveBattleUnits(canvasId) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext('2d');
         const battleUnits = getBattleUnits();
@@ -4078,7 +4078,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 }
     
                 if (unit.hasBeenOnCanvas) {
-                    // Determine which edge the unit has touched
                     if (unit.x <= 0) {
                         unit.touchedEdge = "left";
                     } else if (unit.x >= canvas.offsetWidth) {
@@ -4138,7 +4137,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             drawUnit(ctx, unit);
         });
     
-        console.log(getBattleUnits()); // Output the updated battle units to check the `hasBeenOnCanvas` and `touchedEdge` status
+        // console.log(getBattleUnits())
     }
     
     
