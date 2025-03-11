@@ -3933,11 +3933,18 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         
             const padding = 4;
             const boundingBox = size + padding * 2;
-            const doubleSpacing = boundingBox * 2;
+            const doubleSpacing = boundingBox * 1.5;
         
             let isPlayer = owner === 'player';
-            let typeOrder = ['air', 'land', 'sea'];
-            let typeKey = unitType.includes('_') ? unitType.split('_')[0] : unitType;
+        
+            // Define type order separately for player and enemy
+            const playerTypeOrder = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'];
+            const enemyTypeOrder = ['air', 'land', 'sea'];
+        
+            // Choose correct type order based on owner
+            let typeOrder = isPlayer ? playerTypeOrder : enemyTypeOrder;
+        
+            let typeKey = unitType; // Keep full type name for players
         
             if (!getUnitPosition.columns) {
                 getUnitPosition.columns = { player: {}, enemy: {} };
@@ -3946,13 +3953,16 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 let playerX = boundingBox;
                 let enemyX = canvasWidth - boundingBox;
         
-                typeOrder.forEach(type => {
+                // Initialize player and enemy columns separately
+                playerTypeOrder.forEach(type => {
                     getUnitPosition.columns.player[type] = { x: playerX, y: boundingBox };
-                    getUnitPosition.columns.enemy[type] = { x: enemyX, y: boundingBox };
                     getUnitPosition.columnCounts.player[type] = 0;
-                    getUnitPosition.columnCounts.enemy[type] = 0;
-        
                     playerX += doubleSpacing;
+                });
+        
+                enemyTypeOrder.forEach(type => {
+                    getUnitPosition.columns.enemy[type] = { x: enemyX, y: boundingBox };
+                    getUnitPosition.columnCounts.enemy[type] = 0;
                     enemyX -= doubleSpacing;
                 });
             }
@@ -3968,18 +3978,10 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             let newPosition = { x: position.x, y: position.y };
             position.y += boundingBox;
         
-            let currentTypeIndex = typeOrder.indexOf(typeKey);
-            if (currentTypeIndex < typeOrder.length - 1) {
-                let nextType = typeOrder[currentTypeIndex + 1];
-        
-                let totalColumnsUsed = getUnitPosition.columnCounts[owner][typeKey];
-                let newX = getUnitPosition.columns[owner][typeKey].x + (isPlayer ? doubleSpacing : -doubleSpacing);
-        
-                getUnitPosition.columns[owner][nextType].x = newX;
-            }
-        
             return newPosition;
         }
+        
+        
         
                                      
     }       
