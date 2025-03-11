@@ -419,8 +419,15 @@ button {
     color: var(--stats-all-time-text);
 }
 
+.battleBgImage {
+    background-image: var(--battleBgImg);
+    background-size: cover;
+    background-position: center;
+}
+
 /* Dark Theme Variables */
 :root {
+    --battleBgImg: url('./resources/images/battleImage1_terminal.png');
     --twinkle-scale: 1.2;
     --disabled-text: red;
     --ready-text: lime;
@@ -451,6 +458,7 @@ button {
 
 /* Light Theme Variables */
 [data-theme="light"] {
+    --battleBgImg: url('./resources/images/battleImage1_light.png');
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
@@ -479,6 +487,7 @@ button {
 
 /* Frosty Theme Variables */
 [data-theme="frosty"] {
+    --battleBgImg: url('./resources/images/battleImage1_frosty.png');
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
@@ -507,6 +516,7 @@ button {
 
 /* Summer Theme Variables */
 [data-theme="summer"] {
+    --battleBgImg: url('./resources/images/battleImage1_summer.png');
     --disabled-text: red;
     --ready-text: rgb(0, 187, 0);
     --warning-text: orange;
@@ -535,6 +545,7 @@ button {
 
 /* Forest Theme Variables */
 [data-theme="forest"] {
+    --battleBgImg: url('./resources/images/battleImage1_forest.png');
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
@@ -563,6 +574,7 @@ button {
 
 /* Terminal Theme Variables */
 [data-theme="terminal"] {
+    --battleBgImg: url('./resources/images/battleImage1_terminal.png');
     --disabled-text: red;
     --ready-text: #fff;
     --warning-text: orange;
@@ -591,6 +603,7 @@ button {
 
 /* Dark Theme Variables */
 [data-theme="dark"] {
+    --battleBgImg: url('./resources/images/battleImage1_dark.png');
     --disabled-text: #ff0000;
     --ready-text: #00ff00;
     --warning-text: orange;
