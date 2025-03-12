@@ -3859,8 +3859,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const battleUnits = getBattleUnits();
     
         const getUnitSize = (unitType) => {
-            if (unitType === 'air_marauder') return 8;
-            return unitType.includes('air') ? 4 : (unitType.includes('land') ? 6 : 8);
+            if (unitType === 'air_marauder') return 6;
+            return unitType.includes('air') ? 4 : (unitType.includes('land') ? 8 : 12);
         };
     
         if (!createNew) {
@@ -4172,65 +4172,52 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         
         let newPositions = [];
     
-        totalColumnsPlayer.forEach(column => {
-            const columnNumber = column.columnNumber;
-            const unitCount = column.unitCount;
-            
-            const unitSpacing = columnHeight / (unitCount + 1);
+        function calculatePositions(units, totalColumns) {
+            totalColumns.forEach(column => {
+                const columnKey = `${column.columnNumber}-${column.columnNumberWithinType}`;
+                const unitCount = column.unitCount;
+                const unitSpacing = columnHeight / (unitCount + 1);
     
-            battleUnits.player.forEach(unit => {
-                if (unit.columnNumber === columnNumber) {
-                    const index = battleUnits.player.filter(u => u.columnNumber === columnNumber).indexOf(unit);
+                const columnUnits = units.filter(unit => 
+                    `${unit.columnNumber}-${unit.columnNumberWithinType}` === columnKey
+                );
+    
+                columnUnits.forEach((unit, index) => {
                     const yPosition = unitSpacing * (index + 1);
-    
                     newPositions.push({ id: unit.id, y: yPosition });
-                }
+                });
             });
-        });
+        }
     
-        totalColumnsEnemy.forEach(column => {
-            const columnNumber = column.columnNumber;
-            const unitCount = column.unitCount;
-            
-            const unitSpacing = columnHeight / (unitCount + 1);
-    
-            battleUnits.enemy.forEach(unit => {
-                if (unit.columnNumber === columnNumber) {
-                    const index = battleUnits.enemy.filter(u => u.columnNumber === columnNumber).indexOf(unit);
-                    const yPosition = unitSpacing * (index + 1);
-    
-                    newPositions.push({ id: unit.id, y: yPosition });
-                }
-            });
-        });
+        calculatePositions(battleUnits.player, totalColumnsPlayer);
+        calculatePositions(battleUnits.enemy, totalColumnsEnemy);
     
         return newPositions;
-    }
+    }    
     
     function getTotalColumnsData(units) {
         const columnMap = new Map();
         
         units.forEach(unit => {
-            if (!columnMap.has(unit.columnNumber)) {
-                columnMap.set(unit.columnNumber, {
+            const key = `${unit.columnNumber}-${unit.columnNumberWithinType}`;
+            
+            if (!columnMap.has(key)) {
+                columnMap.set(key, {
+                    columnNumber: unit.columnNumber,
+                    columnNumberWithinType: unit.columnNumberWithinType,
                     unitCount: 0,
                     unitHeights: []
                 });
             }
     
-            const columnData = columnMap.get(unit.columnNumber);
+            const columnData = columnMap.get(key);
             columnData.unitCount += 1;
             columnData.unitHeights.push(unit.height);
         });
-
-        const columnDetails = Array.from(columnMap.entries()).map(([columnNumber, data]) => ({
-            columnNumber,
-            unitCount: data.unitCount,
-            unitHeights: data.unitHeights
-        }));
     
-        return columnDetails;
+        return Array.from(columnMap.values());
     }
+    
 
     function calculateMovementVector(unit, type) {
         let movementVector = [0, 0];
@@ -4267,7 +4254,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         } else {
             baseSpeed = Math.abs(unit.speed);
         }
-        
+
         const xFactor = movementVector[0] / 100;
         const yFactor = movementVector[1] / 100;
     

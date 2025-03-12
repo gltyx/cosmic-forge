@@ -1218,7 +1218,8 @@ cursor: pointer;
 [class*="-launch-button"],
 [class*="-destination-star-element"],
 .diplomacy-button,
-.intelligence-element
+.intelligence-element,
+.battle-button
 {
     margin-left: 30px;
 }

@@ -3307,8 +3307,9 @@ function coloniseChecks() {
         if (getRedrawBattleDescription()) { //set this true when fleet power changes during battle
             descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
             const button = document.createElement('button');
-            button.id = 'enemyFleetButton';
-            button.innerHTML = 'Engage Enemy';
+            button.id = 'battleButton';
+            button.classList.add('option-button', 'red-disabled-text', 'battle-button');
+            button.innerHTML = 'Attack!';
             button.onclick = function() {
                 console.log('button clicked');
             };
