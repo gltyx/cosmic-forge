@@ -8,8 +8,6 @@ import {
     getEnemyFleetSpeeds,
     getBattleOngoing,
     setBattleOngoing,
-    setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
-    getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer,
     setBattleUnits,
     getBattleUnits,
     setDiplomacyPossible,
@@ -110,6 +108,8 @@ import {
     getCurrentStarObject,
     setWarMode,
     getWarMode,
+    getNeedNewBattleCanvas,
+    setNeedNewBattleCanvas,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -3832,6 +3832,15 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         const canvas = document.getElementById(canvasId);
+
+        const optionContentElement = document.getElementById(`optionContentTab5`);
+        const starData = getStarSystemDataObject('stars', ['destinationStar']);
+        if (!canvas)  {
+            setNeedNewBattleCanvas(true);
+            createBattleCanvas(optionContentElement, starData);
+            return;
+        }
+
         const ctx = canvas.getContext('2d');
     
         const canvasWidth = canvas.offsetWidth;
@@ -3855,30 +3864,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         };
     
         if (!createNew) {
-            const hasBeenRedrawn = getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer();
-    
-            if (!hasBeenRedrawn) {
-                let currentUnitCounts = { air_scout: 0, air_marauder: 0, land_landStalker: 0, sea_navalStrafer: 0 };
-    
-                battleUnits.player.forEach(unit => {
-                    currentUnitCounts[unit.id.split('_')[1]]++;
-                });
-    
-                for (let i = 0; i < playerFleets.length; i++) {
-                    const unitType = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'][i];
-                    const neededUnits = playerFleets[i] - currentUnitCounts[unitType];
-    
-                    if (neededUnits > 0) {
-                        for (let j = 0; j < neededUnits; j++) {
-                            battleUnits.player.push(createUnit(unitType, 'player', canvasWidth, canvasHeight, idCounter));
-                            idCounter++;
-                        }
-                    }
-                }
-    
-                replaceBattleUnits(battleUnits);
-                setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
-            }
     
             battleUnits.player.forEach(unit => {
                 ctx.fillStyle = unitColorPlayer;
@@ -3925,7 +3910,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         generateFleetUnits(playerFleets, 'player');
     
         replaceBattleUnits(newUnits);
-        setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(true);
 
         function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter, speed) {
             const size = getUnitSize(unitType);
@@ -4051,7 +4035,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
         const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
 
-        if (!document.getElementById('battleCanvas')) {
+        if (!document.getElementById('battleCanvas') && getNeedNewBattleCanvas()) {
             const battleContainer = document.createElement('div');
             battleContainer.classList.add('battle-container');
             
@@ -4074,11 +4058,21 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                     drawFleets('battleCanvas', enemyFleets, playerFleets, false);
                 }
             }
+            setNeedNewBattleCanvas(false);
         }
     }
 
     export function moveBattleUnits(canvasId) {
         const canvas = document.getElementById(canvasId);
+
+        const optionContentElement = document.getElementById(`optionContentTab5`);
+        const starData = getStarSystemDataObject('stars', ['destinationStar']);
+        if (!canvas)  {
+            setNeedNewBattleCanvas(true);
+            createBattleCanvas(optionContentElement, starData);
+            return;
+        }
+
         const ctx = canvas.getContext('2d');
         const battleUnits = getBattleUnits();
     
@@ -4212,7 +4206,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
         return newPositions;
     }
-     
     
     function getTotalColumnsData(units) {
         const columnMap = new Map();
@@ -4238,13 +4231,43 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
         return columnDetails;
     }
+
+    function calculateMovementVector(unit, type) {
+        let movementVector = [0, 0];
     
+        switch (type) {
+            case 'formation':
+                const formationGoals = getFormationGoal();
+                const goal = formationGoals.find(goal => goal.id === unit.id);
+    
+                if (goal) {
+                    const goalY = goal.y;
+                    
+                    if (unit.y < goalY) {
+                        movementVector = [0, 100];
+                    }
+                }
+                break;
+            
+            case 'fight':
+                break;
+        }
+    
+        return movementVector;
+    }   
 
     function calculateMovement(unit, canvas, key, type) { //each unit now needs to check formation goal and set its movement vector toward that goal, and if it is trype formation to start with we just set the movement vector as [0,100] and [0,0] once the y value matches and when it matched we set inFormation = true to that unit
         const units = getBattleUnits()[key];
-        const movementVector = unit.movementVector;
+        const movementVector = calculateMovementVector(unit, type);
+
+        let baseSpeed;
     
-        const baseSpeed = Math.abs(unit.speed);
+        if (type === 'formation') {
+            baseSpeed = 3 + (Math.random() * 3 - 1);
+        } else {
+            baseSpeed = Math.abs(unit.speed);
+        }
+        
         const xFactor = movementVector[0] / 100;
         const yFactor = movementVector[1] / 100;
     

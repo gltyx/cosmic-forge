@@ -1,4 +1,8 @@
 import {
+    getRedrawBattleDescription,
+    setRedrawBattleDescription,
+    getNeedNewBattleCanvas,
+    setNeedNewBattleCanvas,
     getBattleOngoing,
     setBattleOngoing,
     getFleetChangedSinceLastDiplomacy,
@@ -184,7 +188,9 @@ import {
     getStarShipArrowPosition,
     getCurrentStarObject,
     getOfflineGainsRate,
-    getWarMode
+    getWarMode,
+    getBattleUnits,
+    setFormationGoal
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -230,7 +236,8 @@ import {
     showEnterWarModeModal,
     setWarUI,
     drawFleets,
-    moveBattleUnits
+    moveBattleUnits,
+    createBattleCanvas
 } from "./ui.js";
 
 import { 
@@ -3292,7 +3299,24 @@ function fleetHangarChecks() {
 
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise') {
-        document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+        if (!getWarMode()) {
+            document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+        } else {
+            const descriptionTab = document.getElementById('descriptionContentTab5');
+
+        if (getRedrawBattleDescription()) { //set this true when fleet power changes during battle
+            descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
+            const button = document.createElement('button');
+            button.id = 'enemyFleetButton';
+            button.innerHTML = 'Engage Enemy';
+            button.onclick = function() {
+                console.log('button clicked');
+            };
+            descriptionTab.appendChild(button);
+            setRedrawBattleDescription(false);
+        }
+
+        }
         if (!getStellarScannerBuilt() || getWarMode()) {
             colonisePrepareWarUI('noScanner');
         }
@@ -3305,8 +3329,15 @@ function coloniseChecks() {
             const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
             const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
             const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
-            drawFleets('battleCanvas', enemyFleets, playerFleets, false);
-            if (getBattleOngoing()) {
+            if (getBattleUnits()) {
+                drawFleets('battleCanvas', enemyFleets, playerFleets, false);
+            } else {
+                if (getNeedNewBattleCanvas()) {
+                    colonisePrepareWarUI('chooseWar');
+                }
+            }
+
+            if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
                 moveBattleUnits('battleCanvas');
             }
         }
@@ -6441,9 +6472,22 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             tryToVassalizeEnemy(starData);
             break;
         case 'conquest':
+            setEnemyFleetPower();
+            setFormationGoal(null);
+            setNeedNewBattleCanvas(true);
             colonisePrepareWarUI('chooseWar');
             break;
     }
+}
+
+function setEnemyFleetPower() { //TODO
+    let enemyFleetPowerAir = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'air'])  * 2;
+    let enemyFleetPowerLand = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'land']) * 4;
+    let enemyFleetPowerSea = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'sea']) * 6;
+    //add modifiers here to enemy strength like defense or anomalaies TODO
+
+    const totalEnemyFleetPower = Math.floor(enemyFleetPowerAir + enemyFleetPowerLand + enemyFleetPowerSea);
+    setStarSystemDataObject(totalEnemyFleetPower, 'stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
 }
 
 function bullyEnemy(starData) {

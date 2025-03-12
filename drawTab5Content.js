@@ -1,5 +1,5 @@
 import { createBattleCanvas, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
-import { setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer, getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode } from './constantsAndGlobalVars.js';
+import { setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
@@ -601,7 +601,9 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                     gain(1, `${fleetShip.id}BuiltQuantity`, fleetShip.id, false, null, 'space', 'space');
                     increaseAttackAndDefensePower(fleetShip.id);
                     setFleetChangedSinceLastDiplomacy(true);
-                    setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(false);
+                    replaceBattleUnits({ player: [], enemy: [] });
+                    setNeedNewBattleCanvas(true);
+                    setFormationGoal(null);
                 }, 'upgradeCheck', '', 'spaceUpgrade', fleetShip.id, 'cash', true, null, 'fleetPurchase'),
                 createTextElement(
                     fleetShip.id === 'fleetEnvoy' 
@@ -633,11 +635,14 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
     }
 
     if (heading === 'Colonise') {
+        if (getWarMode()) {
+            setRedrawBattleDescription(true);
+        }
+
         const starData = getStarSystemDataObject('stars', ['destinationStar']);
 
         if (getWarMode()) {
             setWarUI(true);
-            createBattleCanvas(optionContentElement, starData);
         }
 
         if (!diplomacyRedraw) {

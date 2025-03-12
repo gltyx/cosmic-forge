@@ -284,9 +284,10 @@ let destinationStarScanned = false;
 let diplomacyPossible = true;
 let warMode = false;
 let fleetChangedSinceLastDiplomacy = false;
-let redrawnSinceLastFleetUpdateByPlayer = false;
 let battleOngoing = false;
 let battleTriggeredByPlayer = false;
+let needNewBattleCanvas = false;
+let redrawBattleDescription = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -2412,16 +2413,16 @@ export function replaceBattleUnits(value) {
     battleUnits = value;
 }
 
+export function getNeedNewBattleCanvas() {
+    return needNewBattleCanvas;
+}
+
+export function setNeedNewBattleCanvas(value) {
+    needNewBattleCanvas = value;
+}
+
 export function getBattleUnits() {
     return battleUnits;
-}
-
-export function getRedrawnBattleCanvasSinceLastFleetUpdateByPlayer() {
-    return redrawnSinceLastFleetUpdateByPlayer ?? false;
-}
-
-export function setRedrawnBattleCanvasSinceLastFleetUpdateByPlayer(value) {
-    redrawnSinceLastFleetUpdateByPlayer = value;
 }
 
 export function getBattleOngoing() {
@@ -2450,6 +2451,14 @@ export function setFormationGoal(value) {
 
 export function getEnemyFleetSpeeds() {
     return [ENEMY_FLEET_SPEED_AIR, ENEMY_FLEET_SPEED_LAND, ENEMY_FLEET_SPEED_SEA];
+}
+
+export function getRedrawBattleDescription() {
+    return redrawBattleDescription;
+}
+
+export function setRedrawBattleDescription(value) {
+    redrawBattleDescription = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
