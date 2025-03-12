@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setInFormation,
+    getInFormation,
     getFormationGoal,
     setFormationGoal,
     getBattleTriggeredByPlayer,
@@ -3930,7 +3932,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 movementVector: owner === 'player' ? [70, 30] : [-70, 30],
                 columnNumber,
                 columnNumberWithinType,
-                rotation: owner === 'player' ? Math.PI / 2 : -Math.PI / 2
+                rotation: owner === 'player' ? Math.PI / 2 : -Math.PI / 2,
+                inFormation: false
             };
         }
     
@@ -4228,6 +4231,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return Array.from(columnMap.values());
     }
     
+    let formationCounter = 0;
 
     function calculateMovementVector(unit, type) {
         let movementVector = [0, 0];
@@ -4239,11 +4243,28 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
                 if (goal) {
                     const goalY = goal.y;
-                    
+                
                     if (unit.y < goalY) {
                         movementVector = [0, 100];
+                    } else {
+                        const battleUnits = getBattleUnits();
+                        const owner = unit.owner;
+                        const unitIndex = battleUnits[owner].findIndex(u => u.id === unit.id);
+                        
+                        if (unitIndex !== -1) {
+                            battleUnits[owner][unitIndex].inFormation = true;
+                            setBattleUnits(owner, battleUnits[owner]);
+                        }
                     }
                 }
+                
+                if (
+                    getBattleUnits().player.every(unit => unit.inFormation) &&
+                    getBattleUnits().enemy.every(unit => unit.inFormation)
+                ) {
+                    setInFormation(true);
+                }                                                                         
+
                 break;
             
             case 'fight':

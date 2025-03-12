@@ -288,6 +288,7 @@ let battleOngoing = false;
 let battleTriggeredByPlayer = false;
 let needNewBattleCanvas = false;
 let redrawBattleDescription = true;
+let inFormation = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -2459,6 +2460,14 @@ export function getRedrawBattleDescription() {
 
 export function setRedrawBattleDescription(value) {
     redrawBattleDescription = value;
+}
+
+export function getInFormation() {
+    return inFormation;
+}
+
+export function setInFormation(value) {
+    inFormation = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

@@ -1,4 +1,6 @@
 import {
+    getInFormation,
+    setInFormation,
     getRedrawBattleDescription,
     setRedrawBattleDescription,
     getNeedNewBattleCanvas,
@@ -3303,45 +3305,52 @@ function coloniseChecks() {
             document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
         } else {
             const descriptionTab = document.getElementById('descriptionContentTab5');
+            let button = document.getElementById('battleButton');
 
-        if (getRedrawBattleDescription()) { //set this true when fleet power changes during battle
-            descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
-            const button = document.createElement('button');
-            button.id = 'battleButton';
-            button.classList.add('option-button', 'red-disabled-text', 'battle-button');
-            button.innerHTML = 'Attack!';
-            button.onclick = function() {
-                console.log('button clicked');
-            };
-            descriptionTab.appendChild(button);
-            setRedrawBattleDescription(false);
-        }
+            if (getRedrawBattleDescription()) { //set this true when fleet power changes during battle
+                descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
+                button = document.createElement('button');
+                button.id = 'battleButton';
+                button.classList.add('option-button', 'red-disabled-text', 'battle-button');
+                button.innerHTML = 'Attack!';
+                button.onclick = function() {
+                    console.log('button clicked');
+                };
+                descriptionTab.appendChild(button);
+                setRedrawBattleDescription(false);
+            }
 
-        }
-        if (!getStellarScannerBuilt() || getWarMode()) {
-            colonisePrepareWarUI('noScanner');
-        }
+            if (button) {
+                getInFormation() 
+                ? (button.classList.remove('red-disabled-text'), button.classList.add('green-ready-text')) 
+                : (button.classList.add('red-disabled-text'), button.classList.remove('green-ready-text'));        
+            }
 
-        if (getWarMode()) {
-            const starData = getStarSystemDataObject('stars', ['destinationStar']);
-            const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
-            const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
-            const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
-            const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
-            const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
-            const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
-            if (getBattleUnits()) {
-                drawFleets('battleCanvas', enemyFleets, playerFleets, false);
-            } else {
-                if (getNeedNewBattleCanvas()) {
-                    colonisePrepareWarUI('chooseWar');
+            }
+            if (!getStellarScannerBuilt() || getWarMode()) {
+                colonisePrepareWarUI('noScanner');
+            }
+
+            if (getWarMode()) {
+                const starData = getStarSystemDataObject('stars', ['destinationStar']);
+                const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
+                const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
+                const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
+                const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
+                const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
+                const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
+                if (getBattleUnits()) {
+                    drawFleets('battleCanvas', enemyFleets, playerFleets, false);
+                } else {
+                    if (getNeedNewBattleCanvas()) {
+                        colonisePrepareWarUI('chooseWar');
+                    }
+                }
+
+                if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
+                    moveBattleUnits('battleCanvas');
                 }
             }
-
-            if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
-                moveBattleUnits('battleCanvas');
-            }
-        }
     }
 }
 
