@@ -225,6 +225,7 @@ let allTimeSodiumIonBatteriesBuilt = 0;
 let allTimeBattery2Built = 0;
 let allTimeBattery3Built = 0;
 let asteroidsMinedThisRun = 0;
+let formationGoal = null;
 
 //FLAGS
 // let languageChangedFlag;
@@ -285,6 +286,7 @@ let warMode = false;
 let fleetChangedSinceLastDiplomacy = false;
 let redrawnSinceLastFleetUpdateByPlayer = false;
 let battleOngoing = false;
+let battleTriggeredByPlayer = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -2428,6 +2430,22 @@ export function getBattleOngoing() {
 
 export function setBattleOngoing(value) {
     battleOngoing = value;
+}
+
+export function getBattleTriggeredByPlayer() {
+    return battleTriggeredByPlayer ?? false;
+}
+
+export function setBattleTriggeredByPlayer(value) {
+    battleTriggeredByPlayer = value;
+}
+
+export function getFormationGoal() {
+    return formationGoal;
+}
+
+export function setFormationGoal(value) {
+    formationGoal = value;
 }
 
 export function getEnemyFleetSpeeds() {

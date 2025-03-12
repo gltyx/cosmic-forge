@@ -1,5 +1,9 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getFormationGoal,
+    setFormationGoal,
+    getBattleTriggeredByPlayer,
+    setBattleTriggeredByPlayer,
     replaceBattleUnits,
     getEnemyFleetSpeeds,
     getBattleOngoing,
@@ -3925,7 +3929,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
         function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter, speed) {
             const size = getUnitSize(unitType);
-            const { x, y, width, height } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
+            const { x, y, width, height, columnNumber, columnNumberWithinType } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
             
             return { 
                 id: `${idCounter}_${unitType}`, 
@@ -3939,7 +3943,9 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 speed: speed,
                 verticalSpeed: 0,
                 horizontalSpeed: 0,
-                movementVector: owner === 'player' ? [70, 30] : [-70, 30]
+                movementVector: owner === 'player' ? [70, 30] : [-70, 30],
+                columnNumber,
+                columnNumberWithinType
             };
         }
     
@@ -3947,54 +3953,70 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             const padding = 4;
             const boundingBox = size + padding * 2;
             const doubleSpacing = boundingBox * 1.5;
-    
+        
             let isPlayer = owner === 'player';
-    
+        
             const playerTypeOrder = ['air_scout', 'air_marauder', 'land_landStalker', 'sea_navalStrafer'];
             const enemyTypeOrder = ['air', 'land', 'sea'];
-    
+        
             let typeKey = unitType;
-    
+        
             if (!getUnitPosition.columns) {
                 getUnitPosition.columns = { player: {}, enemy: {} };
                 getUnitPosition.columnCounts = { player: {}, enemy: {} };
-    
+        
                 let playerX = boundingBox;
                 let enemyX = canvasWidth - boundingBox;
-    
+        
                 playerTypeOrder.forEach(type => {
                     getUnitPosition.columns.player[type] = { x: playerX, y: boundingBox };
                     getUnitPosition.columnCounts.player[type] = 0;
                     playerX += doubleSpacing;
                 });
-    
+        
                 enemyTypeOrder.forEach(type => {
                     getUnitPosition.columns.enemy[type] = { x: enemyX, y: boundingBox };
                     getUnitPosition.columnCounts.enemy[type] = 0;
                     enemyX -= doubleSpacing;
                 });
             }
-    
+        
             let position = getUnitPosition.columns[owner][typeKey];
-    
+        
             if (position.y + boundingBox > canvasHeight) {
                 position.y = boundingBox;
                 position.x += isPlayer ? doubleSpacing : -doubleSpacing;
                 getUnitPosition.columnCounts[owner][typeKey]++;
             }
-    
+        
+            let columnNumber;
+
+            if (isPlayer) {
+                columnNumber = playerTypeOrder.indexOf(typeKey) + 1;
+            } else {
+                columnNumber = enemyTypeOrder.indexOf(typeKey) + 1;
+            }
+            
+            const columnNumberWithinType = getUnitPosition.columnCounts[owner][typeKey] + 1;
+        
             let newPosition = { x: position.x, y: position.y };
             position.y += boundingBox;
-    
+        
             if (owner === 'player') {
                 newPosition.x -= 150;
             } else if (owner === 'enemy') {
                 newPosition.x += 150;
             }
-    
-            return { ...newPosition, width: size, height: size };  // Return width and height with position
-        }                          
-    }       
+        
+            return { 
+                ...newPosition, 
+                width: size, 
+                height: size, 
+                columnNumber,
+                columnNumberWithinType
+            };
+        } 
+    }           
     
     function drawUnit(ctx, unit) {
         switch (unit.id.split('_')[1]) {
@@ -4063,20 +4085,51 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         if (!battleUnits) return;
     
         ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-    
-        const allUnitsOnScreen = battleUnits.player.concat(battleUnits.enemy).every(unit =>
-            unit.x >= 5 && unit.y >= 0 && unit.x <= (canvas.offsetWidth - 5) && unit.y <= canvas.offsetHeight
+
+        const highestColumnEnemy = battleUnits.enemy.reduce((max, unit) =>
+            Math.max(max, unit.columnNumber || 0), 0);
+        
+        const highestColumnNumberWithinHighestColumnEnemy = battleUnits.enemy
+            .filter(unit => unit.columnNumber === highestColumnEnemy)
+            .reduce((max, unit) => Math.max(max, unit.columnNumberWithinType || 0), 0);
+        
+        const lowestColumnPlayer = battleUnits.player.reduce((min, unit) =>
+            Math.min(min, unit.columnNumber || Infinity), Infinity);
+        
+        const lowestColumnNumberWithinLowestColumnPlayer = battleUnits.player
+            .filter(unit => unit.columnNumber === lowestColumnPlayer)
+            .reduce((min, unit) => Math.min(min, unit.columnNumberWithinType || Infinity), Infinity);
+        
+        const lastPlayerUnits = battleUnits.player.filter(unit => 
+            unit.columnNumber === lowestColumnPlayer && unit.columnNumberWithinType === lowestColumnNumberWithinLowestColumnPlayer
         );
+
+        const lastEnemyUnits = battleUnits.enemy.filter(unit => 
+            unit.columnNumber === highestColumnEnemy && unit.columnNumberWithinType === highestColumnNumberWithinHighestColumnEnemy
+        );
+
+        const lastPlayerOnScreen = lastPlayerUnits.some(unit => unit.x >= 10);
+        const lastEnemyOnScreen = lastEnemyUnits.some(unit => unit.x <= (canvas.offsetWidth - 10));
+
+        const allUnitsOnScreen = lastPlayerOnScreen && lastEnemyOnScreen;
     
         battleUnits.player.forEach(unit => {
             if (!unit.hasBeenOnCanvas && unit.x > 3 && unit.y >= 0) {
                 unit.hasBeenOnCanvas = true;
             }
     
-            if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
+            if (!allUnitsOnScreen) {
                 unit.x += 1;
             } else if (unit.hasBeenOnCanvas) {
-                calculateMovement(unit, canvas, 'player');
+                if (getBattleTriggeredByPlayer()) {
+                    calculateMovement(unit, canvas, 'player', 'fight');
+                } else {
+                    if (!getFormationGoal()) {
+                        setFormationGoal(moveIntoFormation(canvas));
+                    } else {
+                        calculateMovement(unit, canvas, 'player', 'formation')
+                    }
+                }
             } else {
                 console.log('unit drawn out of bounds of ever being on canvas:', unit);
             }
@@ -4087,10 +4140,18 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 unit.hasBeenOnCanvas = true;
             }
     
-            if (!allUnitsOnScreen && !unit.hasBeenOnCanvas) {
+            if (!allUnitsOnScreen) {
                 unit.x -= 1;
             } else if (unit.hasBeenOnCanvas) {
-                calculateMovement(unit, canvas, 'enemy');
+                if (getBattleTriggeredByPlayer()) {
+                    calculateMovement(unit, canvas, 'enemy', 'fight');
+                } else {
+                    if (!getFormationGoal()) {
+                        setFormationGoal(moveIntoFormation(canvas));
+                    } else {
+                        calculateMovement(unit, canvas, 'enemy', 'formation')
+                    }
+                }
             } else {
                 console.log('unit drawn out of bounds of ever being on canvas:', unit);
             }
@@ -4106,8 +4167,80 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             drawUnit(ctx, unit);
         });
     }
+
+    function moveIntoFormation(canvas) {
+        const battleUnits = getBattleUnits();
+        
+        const totalColumnsPlayer = getTotalColumnsData(battleUnits.player);
+        const totalColumnsEnemy = getTotalColumnsData(battleUnits.enemy);
     
-    function calculateMovement(unit, canvas, key) {
+        const columnHeight = canvas.offsetHeight - 4;
+        
+        let newPositions = [];
+    
+        totalColumnsPlayer.forEach(column => {
+            const columnNumber = column.columnNumber;
+            const unitCount = column.unitCount;
+            
+            const unitSpacing = columnHeight / (unitCount + 1);
+    
+            battleUnits.player.forEach(unit => {
+                if (unit.columnNumber === columnNumber) {
+                    const index = battleUnits.player.filter(u => u.columnNumber === columnNumber).indexOf(unit);
+                    const yPosition = unitSpacing * (index + 1);
+    
+                    newPositions.push({ id: unit.id, y: yPosition });
+                }
+            });
+        });
+    
+        totalColumnsEnemy.forEach(column => {
+            const columnNumber = column.columnNumber;
+            const unitCount = column.unitCount;
+            
+            const unitSpacing = columnHeight / (unitCount + 1);
+    
+            battleUnits.enemy.forEach(unit => {
+                if (unit.columnNumber === columnNumber) {
+                    const index = battleUnits.enemy.filter(u => u.columnNumber === columnNumber).indexOf(unit);
+                    const yPosition = unitSpacing * (index + 1);
+    
+                    newPositions.push({ id: unit.id, y: yPosition });
+                }
+            });
+        });
+    
+        return newPositions;
+    }
+     
+    
+    function getTotalColumnsData(units) {
+        const columnMap = new Map();
+        
+        units.forEach(unit => {
+            if (!columnMap.has(unit.columnNumber)) {
+                columnMap.set(unit.columnNumber, {
+                    unitCount: 0,
+                    unitHeights: []
+                });
+            }
+    
+            const columnData = columnMap.get(unit.columnNumber);
+            columnData.unitCount += 1;
+            columnData.unitHeights.push(unit.height);
+        });
+
+        const columnDetails = Array.from(columnMap.entries()).map(([columnNumber, data]) => ({
+            columnNumber,
+            unitCount: data.unitCount,
+            unitHeights: data.unitHeights
+        }));
+    
+        return columnDetails;
+    }
+    
+
+    function calculateMovement(unit, canvas, key, type) { //each unit now needs to check formation goal and set its movement vector toward that goal, and if it is trype formation to start with we just set the movement vector as [0,100] and [0,0] once the y value matches and when it matched we set inFormation = true to that unit
         const units = getBattleUnits()[key];
         const movementVector = unit.movementVector;
     
