@@ -4266,6 +4266,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 break;
             
             case 'fight':
+                
                 break;
         }
     
