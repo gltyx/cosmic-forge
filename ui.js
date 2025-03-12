@@ -3878,7 +3878,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             return;
         }
     
-        setBattleOngoing(true);
+        setBattleOngoing(true); //USE THIS TO BLOCK SAVING IN FUTURE LIKE SET TO FALSE NOT IN COLONISE SCREEN AND STORE BATTLEUNITS WHEN LEAVING THE SCREEN TO RELOAD LATER
         let newUnits = { player: [], enemy: [] };
     
         const fleetTypes = {
@@ -3929,7 +3929,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 horizontalSpeed: 0,
                 movementVector: owner === 'player' ? [70, 30] : [-70, 30],
                 columnNumber,
-                columnNumberWithinType
+                columnNumberWithinType,
+                rotation: owner === 'player' ? Math.PI / 2 : -Math.PI / 2
             };
         }
     
@@ -4003,29 +4004,38 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     }           
     
     function drawUnit(ctx, unit) {
+        ctx.save();
+        ctx.translate(unit.x, unit.y);
+
+        if (unit.id.includes('air')) {
+            ctx.rotate(unit.rotation);
+        }
+    
         switch (unit.id.split('_')[1]) {
             case 'air':
             case 'air_scout':
             case 'air_marauder':
                 ctx.beginPath();
-                ctx.moveTo(unit.x, unit.y - unit.size);
-                ctx.lineTo(unit.x - unit.size, unit.y + unit.size);
-                ctx.lineTo(unit.x + unit.size, unit.y + unit.size);
+                ctx.moveTo(0, -unit.size);
+                ctx.lineTo(-unit.size, unit.size);
+                ctx.lineTo(unit.size, unit.size);
                 ctx.closePath();
                 ctx.fill();
                 break;
             case 'land':
             case 'land_landStalker':
-                ctx.fillRect(unit.x - unit.size, unit.y - unit.size / 2, unit.size * 2, unit.size);
+                ctx.fillRect(-unit.size, -unit.size / 2, unit.size * 2, unit.size);
                 break;
             case 'sea':
             case 'sea_navalStrafer':
                 ctx.beginPath();
-                ctx.arc(unit.x, unit.y, unit.size / 2, 0, Math.PI * 2);
+                ctx.arc(0, 0, unit.size / 2, 0, Math.PI * 2);
                 ctx.fill();
                 break;
         }
-    }  
+    
+        ctx.restore();
+    }    
     
     export function createBattleCanvas(optionContentElement, starData) {
         const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
