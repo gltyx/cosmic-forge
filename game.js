@@ -1,4 +1,5 @@
 import {
+    getBattleTriggeredByPlayer,
     getInFormation,
     setInFormation,
     getRedrawBattleDescription,
@@ -192,7 +193,8 @@ import {
     getOfflineGainsRate,
     getWarMode,
     getBattleUnits,
-    setFormationGoal
+    setFormationGoal,
+    setBattleTriggeredByPlayer
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3314,16 +3316,21 @@ function coloniseChecks() {
                 button.classList.add('option-button', 'red-disabled-text', 'battle-button');
                 button.innerHTML = 'Attack!';
                 button.onclick = function() {
-                    console.log('button clicked');
+                    setBattleTriggeredByPlayer(true);
                 };
                 descriptionTab.appendChild(button);
                 setRedrawBattleDescription(false);
             }
 
             if (button) {
-                getInFormation() 
-                ? (button.classList.remove('red-disabled-text'), button.classList.add('green-ready-text')) 
-                : (button.classList.add('red-disabled-text'), button.classList.remove('green-ready-text'));        
+                if (getBattleTriggeredByPlayer()) {
+                    button.classList.add('red-disabled-text');
+                    button.classList.remove('green-ready-text');
+                } else {
+                    getInFormation() 
+                        ? (button.classList.remove('red-disabled-text'), button.classList.add('green-ready-text')) 
+                        : (button.classList.add('red-disabled-text'), button.classList.remove('green-ready-text'));
+                }
             }
 
             }

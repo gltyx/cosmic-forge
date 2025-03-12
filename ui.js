@@ -4230,8 +4230,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
         return Array.from(columnMap.values());
     }
-    
-    let formationCounter = 0;
 
     function calculateMovementVector(unit, type) {
         let movementVector = [0, 0];
