@@ -6729,7 +6729,7 @@ export function assignGoalToUnits() {
     
     ['player', 'enemy'].forEach(owner => {
         battleUnits[owner].forEach(unit => {
-            if (!unit.currentGoal || unit.currentGoal === 'hunt' || unit.currentGoal === 'stop') {
+            if (!unit.currentGoal || unit.currentGoal === 'hunt') {
                 unit.currentGoal = getNewGoalForUnit(unit);
             } else {
                 if (getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
@@ -6832,14 +6832,6 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
 
         if (unit.x + unit.currentSpeed <= 0 || unit.x + unit.currentSpeed >= canvas.offsetWidth || 
             unit.y + unit.currentSpeed <= 0 || unit.y + unit.currentSpeed >= canvas.offsetHeight) {
-                
-            if (unit.rotation + Math.PI > 2 * Math.PI) {
-                unit.rotation -= Math.PI;
-            } else if (unit.rotation - Math.PI < 0) {
-                unit.rotation += Math.PI;
-            } else {
-                unit.rotation += Math.PI;
-            }
             
             movementVector[0] = -movementVector[0];
             movementVector[1] = -movementVector[1];
@@ -6855,20 +6847,13 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
 
         return movementVector;
     } 
-    else if (objective === 'stop') {
-        if (unit.currentSpeed < 0) {
-            return unit.movementVector;
-        } else {
-            unit.currentGoal = 'hunt';
-        }
-    }
 
     const dx = objective.x - unit.x;
     const dy = objective.y - unit.y; 
 
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < 1) {
+    if (distance < 8) { //when unit reaches target
         if (unit.currentSpeed > 0) {
             if (unit.rotation + Math.PI <= 2 * Math.PI) {
                 unit.rotation += Math.PI;
@@ -6876,7 +6861,6 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
                 unit.rotation -= Math.PI;
             }
             unit.currentSpeed = -unit.currentSpeed;
-            unit.currentGoal = 'stop';
         }
 
 

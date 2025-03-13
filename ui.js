@@ -4342,9 +4342,20 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         unit.x += unit.horizontalSpeed;
         unit.y += unit.verticalSpeed;
         unit.movementVector = newMovementVector;
+        if (type === 'fight') {
+            updateUnitRotation(newMovementVector, unit);  
+        }
 
         const updatedUnits = units.map(u => (u.id === unit.id ? unit : u));
         setBattleUnits(key, updatedUnits);
+    }
+
+    function updateUnitRotation(movementVector, unit) {
+        const x = movementVector[0];
+        const y = movementVector[1];
+        const desiredAngle = Math.atan2(y, x) + Math.PI / 2;
+        unit.rotation = desiredAngle;
+        return unit;
     }
     
     
