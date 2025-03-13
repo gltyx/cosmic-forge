@@ -3923,6 +3923,9 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             const visionDistanceAir = getFleetConstantData('air').visionDistance;
             const visionDistanceLand = getFleetConstantData('land').visionDistance;
             const visionDistanceSea = getFleetConstantData('sea').visionDistance;
+            const accelerationAir = getFleetConstantData('air').acceleration;
+            const accelerationLand = getFleetConstantData('land').acceleration;
+            const accelerationSea = getFleetConstantData('sea').acceleration;
 
             return { 
                 id: `${idCounter}_${unitType}`, 
@@ -3942,7 +3945,9 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 rotation: owner === 'player' ? Math.PI / 2 : -Math.PI / 2,
                 inFormation: false,
                 currentGoal: null,
-                visionDistance: unitType.includes('air') ? visionDistanceAir : unitType.includes('land') ? visionDistanceLand : visionDistanceSea
+                visionDistance: unitType.includes('air') ? visionDistanceAir : unitType.includes('land') ? visionDistanceLand : visionDistanceSea,
+                acceleration: unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea,
+                currentSpeed: 0
             };
         }
     
@@ -4282,92 +4287,68 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return movementVector;
     }   
 
-    function calculateMovement(unit, canvas, key, type) { //each unit now needs to check formation goal and set its movement vector toward that goal, and if it is trype formation to start with we just set the movement vector as [0,100] and [0,0] once the y value matches and when it matched we set inFormation = true to that unit
+    function calculateMovement(unit, canvas, key, type) {
         const units = getBattleUnits()[key];
-        const movementVector = calculateMovementVector(unit, type, canvas);
-
+        const newMovementVector = calculateMovementVector(unit, type, canvas);
+    
         let baseSpeed;
     
-        if (type === 'formation') {
+        if (type === "formation") {
             baseSpeed = 3 + (Math.random() * 3 - 1);
         } else {
-            baseSpeed = Math.abs(unit.speed);
+            let acceleration = unit.acceleration / 3; // /3 is DEBUG
+            unit.currentSpeed = Math.min(unit.speed, unit.currentSpeed + acceleration);
+            
+            baseSpeed = unit.currentSpeed;
+        }
+    
+        const xFactor = newMovementVector[0] / 100;
+        const yFactor = newMovementVector[1] / 100;
+            
+        unit.horizontalSpeed = baseSpeed * xFactor;
+        unit.verticalSpeed = baseSpeed * yFactor;
+
+        if (type !== 'formation') {
+            if (newMovementVector[0] < 0) {
+                unit.horizontalSpeed = -Math.abs(unit.horizontalSpeed);
+            } else {
+                unit.horizontalSpeed = Math.abs(unit.horizontalSpeed);
+            }
+            
+            unit.horizontalSpeed = Math.max(-unit.speed, Math.min(unit.horizontalSpeed, unit.speed));
+            
+            if (newMovementVector[1] < 0) {
+                unit.verticalSpeed = -Math.abs(unit.verticalSpeed);
+            } else {
+                unit.verticalSpeed = Math.abs(unit.verticalSpeed);
+            }
+            
+            unit.verticalSpeed = Math.max(-unit.speed, Math.min(unit.verticalSpeed, unit.speed));
         }
 
-        const xFactor = movementVector[0] / 100;
-        const yFactor = movementVector[1] / 100;
-    
-        unit.horizontalSpeed = baseSpeed * Math.abs(xFactor);
-        unit.verticalSpeed = baseSpeed * Math.abs(yFactor);
-    
-        unit.horizontalSpeed *= movementVector[0] < 0 ? -1 : 1;
-        unit.verticalSpeed *= movementVector[1] < 0 ? -1 : 1;
-    
-        const randomSpeedAdjustment = () => Math.random() * 4 - 2;
-    
-        if (unit.x <= 0) {
-            unit.touchedEdge = "left";
-            unit.horizontalSpeed = Math.abs(unit.horizontalSpeed);
-            unit.movementVector[0] = Math.abs(movementVector[0]);
-            
-            unit.movementVector[0] += randomSpeedAdjustment();
-    
-            if (unit.id.includes('marauder')) {
-                unit.x = unit.width;
-            }
-        } else if (unit.x >= canvas.offsetWidth) {
-            unit.touchedEdge = "right";
-            unit.horizontalSpeed = -Math.abs(unit.horizontalSpeed);
-            unit.movementVector[0] = -Math.abs(movementVector[0]);
-    
-            unit.movementVector[0] += randomSpeedAdjustment();
-    
-            if (unit.id.includes('marauder')) {
-                unit.x = canvas.offsetWidth - unit.width;
-            }
+        if (unit.x <= 0 || unit.x >= canvas.offsetWidth) {
+            unit.horizontalSpeed *= -1;
+            unit.rotation += Math.PI;
+            if (unit.rotation > Math.PI * 2) unit.rotation -= Math.PI * 2;
+            else if (unit.rotation < 0) unit.rotation += Math.PI * 2;
         }
-    
-        if (unit.y <= 0) {
-            unit.touchedEdge = "top";
-            unit.verticalSpeed = Math.abs(unit.verticalSpeed);
-            unit.movementVector[1] = Math.abs(movementVector[1]);
-            
-            unit.movementVector[1] += randomSpeedAdjustment();
-    
-            if (unit.id.includes('marauder')) {
-                unit.y = unit.height;
-            }
-        } else if (unit.y >= canvas.offsetHeight) {
-            unit.touchedEdge = "bottom";
-            unit.verticalSpeed = -Math.abs(unit.verticalSpeed);
-            unit.movementVector[1] = -Math.abs(movementVector[1]);
-            
-            unit.movementVector[1] += randomSpeedAdjustment();
-    
-            if (unit.id.includes('marauder')) {
-                unit.y = canvas.offsetHeight - unit.height;
-            }
+        if (unit.y <= 0 || unit.y >= canvas.offsetHeight) {
+            unit.verticalSpeed *= -1;
+            unit.rotation += Math.PI;
+            if (unit.rotation > Math.PI * 2) unit.rotation -= Math.PI * 2;
+            else if (unit.rotation < 0) unit.rotation += Math.PI * 2;
         }
     
         unit.x += unit.horizontalSpeed;
         unit.y += unit.verticalSpeed;
-    
-        const updatedUnits = units.map(u => {
-            if (u.id === unit.id) {
-                return { 
-                    ...u, 
-                    x: unit.x, 
-                    y: unit.y, 
-                    horizontalSpeed: unit.horizontalSpeed, 
-                    verticalSpeed: unit.verticalSpeed, 
-                    movementVector: unit.movementVector 
-                };
-            }
-            return u;
-        });
-    
+        unit.movementVector = newMovementVector;
+
+        const updatedUnits = units.map(u => (u.id === unit.id ? unit : u));
         setBattleUnits(key, updatedUnits);
-    }  
+    }
+    
+    
+    
     
 
 //-------------------------------------------------------------------------------------------------

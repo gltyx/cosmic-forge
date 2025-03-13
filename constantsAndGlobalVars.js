@@ -52,15 +52,18 @@ export const ENEMY_FLEET_SPEED_SEA = 1;
 export const enemyFleetData = {
     air: {
         speed: ENEMY_FLEET_SPEED_AIR,
-        visionDistance: 700 //300
+        visionDistance: 700, //300
+        acceleration: 0.020
     },
     land: {
         speed: ENEMY_FLEET_SPEED_LAND,
-        visionDistance: 150 //150
+        visionDistance: 150, //150
+        acceleration: 0.012
     },
     sea: {
         speed: ENEMY_FLEET_SPEED_SEA,
-        visionDistance: 200 //200
+        visionDistance: 200, //200
+        acceleration: 0.006
     }
 }
 

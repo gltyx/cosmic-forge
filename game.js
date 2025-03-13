@@ -6729,10 +6729,15 @@ export function assignGoalToUnits() {
     
     ['player', 'enemy'].forEach(owner => {
         battleUnits[owner].forEach(unit => {
-            if (!unit.currentGoal || unit.currentGoal === 'hunt') {
+            if (!unit.currentGoal || unit.currentGoal === 'hunt' || unit.currentGoal === 'stop') {
                 unit.currentGoal = getNewGoalForUnit(unit);
             } else {
-                updateGoalCoords(unit, unit.currentGoal);
+                if (getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
+                    updateGoalCoords(unit, unit.currentGoal);
+                } else {
+                    unit.currentGoal = 'hunt';
+                }
+                
             }
         });
         setBattleUnits(owner, battleUnits[owner]);
@@ -6825,8 +6830,8 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
             Math.cos(unitRotation) * 100
         ];
 
-        if (unit.x + movementVector[0] <= 0 || unit.x + movementVector[0] >= canvas.offsetWidth || 
-            unit.y + movementVector[1] <= 0 || unit.y + movementVector[1] >= canvas.offsetHeight) {
+        if (unit.x + unit.currentSpeed <= 0 || unit.x + unit.currentSpeed >= canvas.offsetWidth || 
+            unit.y + unit.currentSpeed <= 0 || unit.y + unit.currentSpeed >= canvas.offsetHeight) {
                 
             if (unit.rotation + Math.PI > 2 * Math.PI) {
                 unit.rotation -= Math.PI;
@@ -6849,6 +6854,13 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
         setBattleUnits(owner, updatedUnits);
 
         return movementVector;
+    } 
+    else if (objective === 'stop') {
+        if (unit.currentSpeed < 0) {
+            return unit.movementVector;
+        } else {
+            unit.currentGoal = 'hunt';
+        }
     }
 
     const dx = objective.x - unit.x;
@@ -6856,12 +6868,27 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
 
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance === 0) {
-        return [0, 0];
+    if (distance < 1) {
+        if (unit.currentSpeed > 0) {
+            if (unit.rotation + Math.PI <= 2 * Math.PI) {
+                unit.rotation += Math.PI;
+            } else {
+                unit.rotation -= Math.PI;
+            }
+            unit.currentSpeed = -unit.currentSpeed;
+            unit.currentGoal = 'stop';
+        }
+
+
+        const battleUnits = getBattleUnits();
+
+        const updatedUnits = battleUnits[unit.owner].map(u => u.id === unit.id ? { ...u, currentSpeed: unit.currentSpeed } : u);
+        setBattleUnits(unit.owner, updatedUnits);
+        return unit.movementVector;
     }
 
-    const speed = unit.speed;
-    const movementFactor = Math.min(distance / speed, 1);
+    const currentSpeed = unit.currentSpeed;
+    const movementFactor = Math.min(distance / currentSpeed, 1);
 
     const movementVector = [
         (dx / distance) * movementFactor * 100,
@@ -6870,6 +6897,7 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
 
     return movementVector;
 }
+
 
 //===============================================================================================================
 
