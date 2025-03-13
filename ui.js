@@ -167,6 +167,7 @@ import {
     startTravelToDestinationStarTimer,
     addToResourceAllTimeStat,
     calculateMovementVectorToTarget,
+    turnAround
 
 } from './game.js';
 
@@ -3835,6 +3836,10 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 //-------------------------------------------------------------------------------------------------
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
+        //DEBUG
+        enemyFleets = [1,0,0]; //DEBUG
+        playerFleets = [2,0,0,0]; //DEBUG
+        //
         const canvas = document.getElementById(canvasId);
 
         const optionContentElement = document.getElementById(`optionContentTab5`);
@@ -3854,13 +3859,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         canvas.height = canvasHeight;
     
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-    
-        const themeElement = document.querySelector('[data-theme]');
-        const unitColorPlayer = getComputedStyle(themeElement).getPropertyValue('--ready-text').trim();
-        const unitColorEnemy = getComputedStyle(themeElement).getPropertyValue('--disabled-text').trim();
-    
+
         let idCounter = 0;
-        const battleUnits = getBattleUnits();
     
         const getUnitSize = (unitType) => {
             if (unitType === 'air_marauder') return 6;
@@ -3868,17 +3868,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         };
     
         if (!createNew) {
-    
-            battleUnits.player.forEach(unit => {
-                ctx.fillStyle = unitColorPlayer;
-                drawUnit(ctx, unit);
-            });
-    
-            battleUnits.enemy.forEach(unit => {
-                ctx.fillStyle = unitColorEnemy;
-                drawUnit(ctx, unit);
-            });
-    
             return;
         }
     
@@ -4179,14 +4168,23 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         });
     
         battleUnits.player.forEach(unit => {
-            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim();
+            ctx.fillStyle = 
+                unit.currentGoal === 'hunt' ? 'magenta' : 
+                (unit.currentGoal !== null && unit.currentGoal !== 'hunt' ? 'blue' : 
+                getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim());
+        
             drawUnit(ctx, unit);
         });
-    
+        
         battleUnits.enemy.forEach(unit => {
-            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim();
+            ctx.fillStyle = 
+                unit.currentGoal === 'hunt' ? 'magenta' : 
+                (unit.currentGoal !== null && unit.currentGoal !== 'hunt' ? 'blue' : 
+                getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim());
+        
             drawUnit(ctx, unit);
         });
+        
     }
 
     function moveIntoFormation(canvas) {
@@ -4325,19 +4323,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             
             unit.verticalSpeed = Math.max(-unit.speed, Math.min(unit.verticalSpeed, unit.speed));
         }
-
-        if (unit.x <= 0 || unit.x >= canvas.offsetWidth) {
-            unit.horizontalSpeed *= -1;
-            unit.rotation += Math.PI;
-            if (unit.rotation > Math.PI * 2) unit.rotation -= Math.PI * 2;
-            else if (unit.rotation < 0) unit.rotation += Math.PI * 2;
-        }
-        if (unit.y <= 0 || unit.y >= canvas.offsetHeight) {
-            unit.verticalSpeed *= -1;
-            unit.rotation += Math.PI;
-            if (unit.rotation > Math.PI * 2) unit.rotation -= Math.PI * 2;
-            else if (unit.rotation < 0) unit.rotation += Math.PI * 2;
-        }
     
         unit.x += unit.horizontalSpeed;
         unit.y += unit.verticalSpeed;
@@ -4358,10 +4343,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return unit;
     }
     
-    
-    
-    
-
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------

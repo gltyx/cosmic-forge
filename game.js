@@ -6725,17 +6725,36 @@ function updateGoalCoords(unit) {
 
 
 export function assignGoalToUnits() {
+    const canvas = document.getElementById('battleCanvas');
     const battleUnits = getBattleUnits();
     
     ['player', 'enemy'].forEach(owner => {
         battleUnits[owner].forEach(unit => {
-            if (!unit.currentGoal || unit.currentGoal === 'hunt') {
+            if (unit.currentGoal === 'hunt') {
+                if (
+                    (unit.movementVector[0] < 0 && unit.x - unit.visionDistance <= 0) ||
+                    (unit.movementVector[0] > 0 && unit.x + unit.visionDistance >= canvas.offsetWidth) ||
+                    (unit.movementVector[1] < 0 && unit.y - unit.visionDistance <= 0) ||
+                    (unit.movementVector[1] > 0 && unit.y + unit.visionDistance >= canvas.offsetHeight)
+                ) {
+                    if (getVisibleEnemies(unit).length === 0) {
+                        turnAround(unit);
+                    } else {
+                        unit.currentGoal = getNewGoalForUnit(unit);
+                    }
+                } else {
+                    unit.currentGoal = getNewGoalForUnit(unit);
+                }
+            } else if (!unit.currentGoal ) {
                 unit.currentGoal = getNewGoalForUnit(unit);
             } else {
-                if (getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
+                if (unit.currentGoal !== 'hunt' && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
                     updateGoalCoords(unit, unit.currentGoal);
                 } else {
-                    unit.currentGoal = 'hunt';
+                    if (unit.type === 'fight') {
+                        turnAround(unit);
+                        unit.currentGoal = 'hunt';
+                    }
                 }
                 
             }
@@ -6746,15 +6765,23 @@ export function assignGoalToUnits() {
 
 function getNewGoalForUnit(unit) {
     const visibleEnemies = getVisibleEnemies(unit);
-    const preferredTarget = getPreferredTarget(unit, visibleEnemies);
+    
+    if (visibleEnemies.length === 0) {
+        return 'hunt';
+    }
 
+    const preferredTarget = getPreferredTarget(unit, visibleEnemies);
     return preferredTarget;
 }
 
-function getVisibleEnemies(unit) {
+function getVisibleEnemies(unit) { 
+    const canvas = document.getElementById('battleCanvas');
     const battleUnits = getBattleUnits();
     const enemyUnits = unit.owner === 'player' ? battleUnits.enemy : battleUnits.player;
     const visibleEnemies = [];
+    
+    const ctx = canvas.getContext("2d"); // DEBUG
+    ctx.lineWidth = 2; // DEBUG
 
     enemyUnits.forEach(enemy => {
         const dx = enemy.x - unit.x;
@@ -6769,6 +6796,13 @@ function getVisibleEnemies(unit) {
 
             if (angleToEnemy >= minAngle && angleToEnemy <= maxAngle) {
                 visibleEnemies.push(enemy);
+
+                ctx.strokeStyle = (unit.currentGoal && unit.currentGoal.id === enemy.id) ? "green" : "black"; // DEBUG
+                
+                ctx.beginPath();
+                ctx.moveTo(unit.x, unit.y);
+                ctx.lineTo(enemy.x, enemy.y);
+                ctx.stroke();
             }
         }
     });
@@ -6777,8 +6811,6 @@ function getVisibleEnemies(unit) {
 }
 
 function getPreferredTarget(unit, visibleEnemies) {
-
-    let preferredTarget = null;
     
     const potentialTargets = visibleEnemies.filter(enemy => {
         if (unit.owner === 'player') {
@@ -6807,18 +6839,6 @@ function getPreferredTarget(unit, visibleEnemies) {
     if (potentialTargets.length === 0) {
         return 'hunt';
     }
-
-    const stealthyTargets = potentialTargets.filter(target => {
-        return !getVisibleEnemies(target).includes(unit);
-    });
-
-    if (stealthyTargets.length > 0) {
-        preferredTarget = stealthyTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
-    } else {
-        preferredTarget = potentialTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
-    }
-
-    return preferredTarget ? preferredTarget : 'hunt';
 }
 
 export function calculateMovementVectorToTarget(unit, objective, canvas) {
@@ -6854,20 +6874,7 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < 8) { //when unit reaches target
-        if (unit.currentSpeed > 0) {
-            if (unit.rotation + Math.PI <= 2 * Math.PI) {
-                unit.rotation += Math.PI;
-            } else {
-                unit.rotation -= Math.PI;
-            }
-            unit.currentSpeed = -unit.currentSpeed;
-        }
-
-
-        const battleUnits = getBattleUnits();
-
-        const updatedUnits = battleUnits[unit.owner].map(u => u.id === unit.id ? { ...u, currentSpeed: unit.currentSpeed } : u);
-        setBattleUnits(unit.owner, updatedUnits);
+        turnAround(unit);
         return unit.movementVector;
     }
 
@@ -6880,6 +6887,20 @@ export function calculateMovementVectorToTarget(unit, objective, canvas) {
     ];
 
     return movementVector;
+}
+
+export function turnAround(unit) {
+    const battleUnits = getBattleUnits();
+
+    if (unit.rotation + Math.PI <= 2 * Math.PI) {
+        unit.rotation += Math.PI;
+    } else {
+        unit.rotation -= Math.PI;
+    }
+    unit.currentSpeed = -unit.currentSpeed;
+
+    const updatedUnits = battleUnits[unit.owner].map(u => u.id === unit.id ? { ...u, currentSpeed: unit.currentSpeed } : u);
+    setBattleUnits(unit.owner, updatedUnits);
 }
 
 

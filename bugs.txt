@@ -5,3 +5,7 @@ stats bugs in general
 
 undefined enemy units in battle screen if changed in passive for example in diplomacy
 army skips to middle if change tab
+
+battle
+- if in hunt mode moving away we need to implement something to turn them around if they touch the edge or if they can see the edge AND no targets and can be turned to any radian randomy between rotation - 2.7 or rotation + 2.7
+- double check the goal cannot change if it is an enemy as long as the enemy can be seen, and if it does change it changes to hunt
