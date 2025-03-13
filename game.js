@@ -6730,33 +6730,26 @@ export function assignGoalToUnits() {
     
     ['player', 'enemy'].forEach(owner => {
         battleUnits[owner].forEach(unit => {
-            if (unit.currentGoal === 'hunt') {
-                if (
-                    (unit.movementVector[0] < 0 && unit.x - unit.visionDistance <= 0) ||
-                    (unit.movementVector[0] > 0 && unit.x + unit.visionDistance >= canvas.offsetWidth) ||
-                    (unit.movementVector[1] < 0 && unit.y - unit.visionDistance <= 0) ||
-                    (unit.movementVector[1] > 0 && unit.y + unit.visionDistance >= canvas.offsetHeight)
-                ) {
-                    if (getVisibleEnemies(unit).length === 0) {
-                        turnAround(unit);
-                    } else {
-                        unit.currentGoal = getNewGoalForUnit(unit);
-                    }
-                } else {
-                    unit.currentGoal = getNewGoalForUnit(unit);
-                }
-            } else if (!unit.currentGoal ) {
+            if (unit.currentGoal?.id === 'hunt') {
+                unit.huntX = unit.currentGoal.x;
+                unit.huntY = unit.currentGoal.y;
+                unit.currentGoal = getNewGoalForUnit(unit);
+            } else if (!unit.currentGoal && getBattleTriggeredByPlayer()) {
                 unit.currentGoal = getNewGoalForUnit(unit);
             } else {
-                if (unit.currentGoal !== 'hunt' && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
+                if (unit.currentGoal && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
                     updateGoalCoords(unit, unit.currentGoal);
+                    unit.huntX = null;
+                    unit.huntY = null;
                 } else {
-                    if (unit.type === 'fight') {
-                        turnAround(unit);
-                        unit.currentGoal = 'hunt';
+                    if (getBattleTriggeredByPlayer()) {
+                        unit.currentGoal = {
+                            x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
+                            y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
+                            id: 'hunt'
+                        };
                     }
                 }
-                
             }
         });
         setBattleUnits(owner, battleUnits[owner]);
@@ -6765,10 +6758,6 @@ export function assignGoalToUnits() {
 
 function getNewGoalForUnit(unit) {
     const visibleEnemies = getVisibleEnemies(unit);
-    
-    if (visibleEnemies.length === 0) {
-        return 'hunt';
-    }
 
     const preferredTarget = getPreferredTarget(unit, visibleEnemies);
     return preferredTarget;
@@ -6797,7 +6786,7 @@ function getVisibleEnemies(unit) {
             if (angleToEnemy >= minAngle && angleToEnemy <= maxAngle) {
                 visibleEnemies.push(enemy);
 
-                ctx.strokeStyle = (unit.currentGoal && unit.currentGoal.id === enemy.id) ? "green" : "black"; // DEBUG
+                ctx.strokeStyle = (unit.currentGoal && unit.currentGoal.id === enemy.id) ? "green" : "transparent";// DEBUG
                 
                 ctx.beginPath();
                 ctx.moveTo(unit.x, unit.y);
@@ -6811,6 +6800,8 @@ function getVisibleEnemies(unit) {
 }
 
 function getPreferredTarget(unit, visibleEnemies) {
+    const canvas = document.getElementById('battleCanvas');
+    let preferredTarget = null;
     
     const potentialTargets = visibleEnemies.filter(enemy => {
         if (unit.owner === 'player') {
@@ -6837,36 +6828,66 @@ function getPreferredTarget(unit, visibleEnemies) {
     });
 
     if (potentialTargets.length === 0) {
-        return 'hunt';
+        return {
+            x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
+            y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
+            id: 'hunt'
+        };
     }
+
+    const stealthyTargets = potentialTargets.filter(target => {
+        return !getVisibleEnemies(target).includes(unit);
+    });
+
+    if (stealthyTargets.length > 0) {
+        preferredTarget = stealthyTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
+    } else {
+        preferredTarget = potentialTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
+    }
+
+    return preferredTarget ? preferredTarget : 'hunt';
 }
 
-export function calculateMovementVectorToTarget(unit, objective, canvas) {
-    if (objective === 'hunt') {
-        const unitRotation = unit.rotation;
+export function calculateMovementVectorToTarget(unit, objective) {
+    const battleUnits = getBattleUnits();
+    const owner = unit.owner;
 
-        const movementVector = [
-            Math.sin(unitRotation) * 100,
-            Math.cos(unitRotation) * 100
-        ];
-
-        if (unit.x + unit.currentSpeed <= 0 || unit.x + unit.currentSpeed >= canvas.offsetWidth || 
-            unit.y + unit.currentSpeed <= 0 || unit.y + unit.currentSpeed >= canvas.offsetHeight) {
-            
-            movementVector[0] = -movementVector[0];
-            movementVector[1] = -movementVector[1];
+    if (objective.id === 'hunt') {
+        const dx = unit.huntX - unit.x;
+        const dy = unit.huntY - unit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+    
+        if (distance > 10) {
+            const scale = 100 / distance;
+            const movementVector = [dx * scale, dy * scale];
+    
+            unit.movementVector = movementVector;
+            unit.rotation = Math.atan2(dy, dx);
+    
+            const updatedUnits = battleUnits[owner].map(u => 
+                u.id === unit.id ? { ...u, movementVector, rotation: unit.rotation } : u
+            );
+    
+            setBattleUnits(owner, updatedUnits);
+    
+            return movementVector;
+        } else {
+            const updatedUnits = battleUnits[owner].map(u => 
+                u.id === unit.id 
+                    ? { ...u, huntX: null, huntY: null, currentGoal: null } 
+                    : u
+            );
+    
+            setBattleUnits(owner, updatedUnits);
+            return unit.movementVector;
         }
-
-        const battleUnits = getBattleUnits();
-        const owner = unit.owner;
-        const updatedUnits = battleUnits[owner].map(u => 
-            u.id === unit.id ? { ...u, movementVector, rotation: unit.rotation } : u
-        );
-        
-        setBattleUnits(owner, updatedUnits);
-
-        return movementVector;
-    } 
+    } else if (objective === null) {
+        if (unit.owner === 'player') {
+            return [100,0];
+        } else {
+            return [-100,0];        
+        }
+    }
 
     const dx = objective.x - unit.x;
     const dy = objective.y - unit.y; 

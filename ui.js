@@ -3837,8 +3837,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         //DEBUG
-        enemyFleets = [1,0,0]; //DEBUG
-        playerFleets = [2,0,0,0]; //DEBUG
+        // enemyFleets = [1,0,0]; //DEBUG
+        // playerFleets = [2,0,0,0]; //DEBUG
         //
         const canvas = document.getElementById(canvasId);
 
@@ -3890,6 +3890,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                     const airSpeed = getFleetConstantData("air").speed;
                     const landSpeed = getFleetConstantData("land").speed;
                     const seaSpeed = getFleetConstantData("sea").speed;
+
                     const speedMap = { air: airSpeed, land: landSpeed, sea: seaSpeed };
                     speed = speedMap[unitType] || 0;
                 }
@@ -3936,7 +3937,9 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 currentGoal: null,
                 visionDistance: unitType.includes('air') ? visionDistanceAir : unitType.includes('land') ? visionDistanceLand : visionDistanceSea,
                 acceleration: unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea,
-                currentSpeed: 0
+                currentSpeed: 0,
+                huntX: null,
+                huntY: null
             };
         }
     
@@ -4168,24 +4171,25 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         });
     
         battleUnits.player.forEach(unit => {
-            ctx.fillStyle = 
-                unit.currentGoal === 'hunt' ? 'magenta' : 
-                (unit.currentGoal !== null && unit.currentGoal !== 'hunt' ? 'blue' : 
-                getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim());
-        
+            // ctx.fillStyle = 
+            //     unit.currentGoal?.id === 'hunt' ? 'magenta' : 
+            //     (unit.currentGoal?.id ? 'blue' : 
+            //     getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim());
+            
+            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim();  
             drawUnit(ctx, unit);
         });
         
         battleUnits.enemy.forEach(unit => {
-            ctx.fillStyle = 
-                unit.currentGoal === 'hunt' ? 'magenta' : 
-                (unit.currentGoal !== null && unit.currentGoal !== 'hunt' ? 'blue' : 
-                getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim());
-        
+            // ctx.fillStyle = 
+            //     unit.currentGoal?.id === 'hunt' ? 'magenta' : 
+            //     (unit.currentGoal?.id ? 'blue' : 
+            //     getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim());
+            
+            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim();  
             drawUnit(ctx, unit);
         });
-        
-    }
+    }        
 
     function moveIntoFormation(canvas) {
         const battleUnits = getBattleUnits();
@@ -4285,8 +4289,23 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return movementVector;
     }   
 
+    function checkCanvasBounds(unit, canvas) {
+        if (unit.x < 0) {
+            unit.x = 10;
+        } else if (unit.x > canvas.offsetWidth) {
+            unit.x = canvas.offsetWidth - 10;
+        }
+        
+        if (unit.y < 0) {
+            unit.y = 10;
+        } else if (unit.y > canvas.offsetHeight) {
+            unit.y = canvas.offsetHeight - 10;
+        }
+    }
+
     function calculateMovement(unit, canvas, key, type) {
         const units = getBattleUnits()[key];
+        checkCanvasBounds(unit, canvas);
         const newMovementVector = calculateMovementVector(unit, type, canvas);
     
         let baseSpeed;
