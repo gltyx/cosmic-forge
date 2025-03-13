@@ -49,6 +49,21 @@ export const ENEMY_FLEET_SPEED_AIR = 5;
 export const ENEMY_FLEET_SPEED_LAND = 2;
 export const ENEMY_FLEET_SPEED_SEA = 1;
 
+export const enemyFleetData = {
+    air: {
+        speed: ENEMY_FLEET_SPEED_AIR,
+        visionDistance: 700 //300
+    },
+    land: {
+        speed: ENEMY_FLEET_SPEED_LAND,
+        visionDistance: 150 //150
+    },
+    sea: {
+        speed: ENEMY_FLEET_SPEED_SEA,
+        visionDistance: 200 //200
+    }
+}
+
 //GLOBAL VARIABLES
 export let gameState;
 
@@ -2450,8 +2465,14 @@ export function setFormationGoal(value) {
     formationGoal = value;
 }
 
-export function getEnemyFleetSpeeds() {
-    return [ENEMY_FLEET_SPEED_AIR, ENEMY_FLEET_SPEED_LAND, ENEMY_FLEET_SPEED_SEA];
+export function getFleetConstantData(key) {
+    return enemyFleetData[key] ? enemyFleetData[key] : null;
+}
+
+export function setFleetConstantData(key, value) {
+    if (enemyFleetData[key]) {
+        enemyFleetData[key] = value;
+    }
 }
 
 export function getRedrawBattleDescription() {

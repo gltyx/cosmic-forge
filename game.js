@@ -1,4 +1,7 @@
 import {
+    setBattleUnits,
+    getFleetConstantData,
+    setFleetConstantData,
     getBattleTriggeredByPlayer,
     getInFormation,
     setInFormation,
@@ -3317,6 +3320,7 @@ function coloniseChecks() {
                 button.innerHTML = 'Attack!';
                 button.onclick = function() {
                     setBattleTriggeredByPlayer(true);
+                    assignGoalToUnits();
                 };
                 descriptionTab.appendChild(button);
                 setRedrawBattleDescription(false);
@@ -3356,6 +3360,7 @@ function coloniseChecks() {
 
                 if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
                     moveBattleUnits('battleCanvas');
+                    assignGoalToUnits();
                 }
             }
     }
@@ -6700,6 +6705,170 @@ export function addToResourceAllTimeStat(amountToAdd, item) {
         const setFunction = statFunctionsSets[`set_${item}`];
         setFunction(amountToAdd);
     }
+}
+
+function updateGoalCoords(unit) {
+    const battleUnits = getBattleUnits();
+    const ownerUnits = battleUnits[unit.currentGoal.owner];
+
+    const goalUnit = ownerUnits.find(u => u.id === unit.currentGoal.id);
+
+    if (goalUnit) {
+        if (goalUnit.x !== unit.currentGoal.x || goalUnit.y !== unit.currentGoal.y) {
+            unit.currentGoal.x = goalUnit.x;
+            unit.currentGoal.y = goalUnit.y;
+        }
+    }
+
+    setBattleUnits(unit.owner, battleUnits[unit.owner]);
+}
+
+
+export function assignGoalToUnits() {
+    const battleUnits = getBattleUnits();
+    
+    ['player', 'enemy'].forEach(owner => {
+        battleUnits[owner].forEach(unit => {
+            if (!unit.currentGoal || unit.currentGoal === 'hunt') {
+                unit.currentGoal = getNewGoalForUnit(unit);
+            } else {
+                updateGoalCoords(unit, unit.currentGoal);
+            }
+        });
+        setBattleUnits(owner, battleUnits[owner]);
+    });
+}
+
+function getNewGoalForUnit(unit) {
+    const visibleEnemies = getVisibleEnemies(unit);
+    const preferredTarget = getPreferredTarget(unit, visibleEnemies);
+
+    return preferredTarget;
+}
+
+function getVisibleEnemies(unit) {
+    const battleUnits = getBattleUnits();
+    const enemyUnits = unit.owner === 'player' ? battleUnits.enemy : battleUnits.player;
+    const visibleEnemies = [];
+
+    enemyUnits.forEach(enemy => {
+        const dx = enemy.x - unit.x;
+        const dy = enemy.y - unit.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance <= unit.visionDistance) {
+            const angleToEnemy = Math.atan2(dy, dx);
+            const unitRotation = unit.rotation;
+            const minAngle = unitRotation - Math.PI / 2;
+            const maxAngle = unitRotation + Math.PI / 2;
+
+            if (angleToEnemy >= minAngle && angleToEnemy <= maxAngle) {
+                visibleEnemies.push(enemy);
+            }
+        }
+    });
+
+    return visibleEnemies;
+}
+
+function getPreferredTarget(unit, visibleEnemies) {
+
+    let preferredTarget = null;
+    
+    const potentialTargets = visibleEnemies.filter(enemy => {
+        if (unit.owner === 'player') {
+            if (unit.id.includes("air_scout") && (enemy.id.includes("air") || enemy.id.includes("sea"))) {
+                return true;
+            } else if (unit.id.includes("air_marauder") && (enemy.id.includes("land") || enemy.id.includes("sea"))) {
+                return true;
+            } else if (unit.id.includes("land_landStalker") && (enemy.id.includes("air") || enemy.id.includes("land"))) {
+                return true;
+            } else if (unit.id.includes("sea_navalStrafer") && (enemy.id.includes("sea") || enemy.id.includes("land"))) {
+                return true;
+            }
+        } else if (unit.owner === 'enemy') {
+            if (unit.id.includes("sea") && (enemy.id.includes("sea") || enemy.id.includes("land"))) {
+                return true;
+            } else if (unit.id.includes("air") && (enemy.id.includes("air") || enemy.id.includes("land"))) {
+                return true;
+            } else if (unit.id.includes("land") && (enemy.id.includes("air") || enemy.id.includes("sea"))) {
+                return true;
+            }
+        }
+        
+        return false;
+    });
+
+    if (potentialTargets.length === 0) {
+        return 'hunt';
+    }
+
+    const stealthyTargets = potentialTargets.filter(target => {
+        return !getVisibleEnemies(target).includes(unit);
+    });
+
+    if (stealthyTargets.length > 0) {
+        preferredTarget = stealthyTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
+    } else {
+        preferredTarget = potentialTargets.reduce((prev, curr) => (prev.health < curr.health ? prev : curr));
+    }
+
+    return preferredTarget ? preferredTarget : 'hunt';
+}
+
+export function calculateMovementVectorToTarget(unit, objective, canvas) {
+    if (objective === 'hunt') {
+        const unitRotation = unit.rotation;
+
+        const movementVector = [
+            Math.sin(unitRotation) * 100,
+            Math.cos(unitRotation) * 100
+        ];
+
+        if (unit.x + movementVector[0] <= 0 || unit.x + movementVector[0] >= canvas.offsetWidth || 
+            unit.y + movementVector[1] <= 0 || unit.y + movementVector[1] >= canvas.offsetHeight) {
+                
+            if (unit.rotation + Math.PI > 2 * Math.PI) {
+                unit.rotation -= Math.PI;
+            } else if (unit.rotation - Math.PI < 0) {
+                unit.rotation += Math.PI;
+            } else {
+                unit.rotation += Math.PI;
+            }
+            
+            movementVector[0] = -movementVector[0];
+            movementVector[1] = -movementVector[1];
+        }
+
+        const battleUnits = getBattleUnits();
+        const owner = unit.owner;
+        const updatedUnits = battleUnits[owner].map(u => 
+            u.id === unit.id ? { ...u, movementVector, rotation: unit.rotation } : u
+        );
+        
+        setBattleUnits(owner, updatedUnits);
+
+        return movementVector;
+    }
+
+    const dx = objective.x - unit.x;
+    const dy = objective.y - unit.y; 
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance === 0) {
+        return [0, 0];
+    }
+
+    const speed = unit.speed;
+    const movementFactor = Math.min(distance / speed, 1);
+
+    const movementVector = [
+        (dx / distance) * movementFactor * 100,
+        (dy / distance) * movementFactor * 100
+    ];
+
+    return movementVector;
 }
 
 //===============================================================================================================

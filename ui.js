@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    getFleetConstantData,
+    setFleetConstantData,
     setInFormation,
     getInFormation,
     getFormationGoal,
@@ -7,7 +9,6 @@ import {
     getBattleTriggeredByPlayer,
     setBattleTriggeredByPlayer,
     replaceBattleUnits,
-    getEnemyFleetSpeeds,
     getBattleOngoing,
     setBattleOngoing,
     setBattleUnits,
@@ -165,6 +166,7 @@ import {
     generateStarDataAndAddToDataObject,
     startTravelToDestinationStarTimer,
     addToResourceAllTimeStat,
+    calculateMovementVectorToTarget,
 
 } from './game.js';
 
@@ -3896,7 +3898,9 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                     const resourceFleetName = "fleet" + capitaliseString(unitType.split("_").slice(1).join("_"));
                     speed = getResourceDataObject('space', ['upgrades', resourceFleetName, 'speed']);
                 } else if (owner === 'enemy') {
-                    const [airSpeed, landSpeed, seaSpeed] = getEnemyFleetSpeeds();
+                    const airSpeed = getFleetConstantData("air").speed;
+                    const landSpeed = getFleetConstantData("land").speed;
+                    const seaSpeed = getFleetConstantData("sea").speed;
                     const speedMap = { air: airSpeed, land: landSpeed, sea: seaSpeed };
                     speed = speedMap[unitType] || 0;
                 }
@@ -3916,7 +3920,10 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         function createUnit(unitType, owner, canvasWidth, canvasHeight, idCounter, speed) {
             const size = getUnitSize(unitType);
             const { x, y, width, height, columnNumber, columnNumberWithinType } = getUnitPosition(unitType, owner, canvasWidth, canvasHeight, size);
-            
+            const visionDistanceAir = getFleetConstantData('air').visionDistance;
+            const visionDistanceLand = getFleetConstantData('land').visionDistance;
+            const visionDistanceSea = getFleetConstantData('sea').visionDistance;
+
             return { 
                 id: `${idCounter}_${unitType}`, 
                 x, 
@@ -3929,11 +3936,13 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 speed: speed,
                 verticalSpeed: 0,
                 horizontalSpeed: 0,
-                movementVector: owner === 'player' ? [70, 30] : [-70, 30],
+                movementVector: [0, 0],
                 columnNumber,
                 columnNumberWithinType,
                 rotation: owner === 'player' ? Math.PI / 2 : -Math.PI / 2,
-                inFormation: false
+                inFormation: false,
+                currentGoal: null,
+                visionDistance: unitType.includes('air') ? visionDistanceAir : unitType.includes('land') ? visionDistanceLand : visionDistanceSea
             };
         }
     
@@ -4231,7 +4240,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         return Array.from(columnMap.values());
     }
 
-    function calculateMovementVector(unit, type) {
+    function calculateMovementVector(unit, type, canvas) {
         let movementVector = [0, 0];
     
         switch (type) {
@@ -4266,7 +4275,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 break;
             
             case 'fight':
-                
+                movementVector = calculateMovementVectorToTarget(unit, unit.currentGoal, canvas);
                 break;
         }
     
@@ -4275,7 +4284,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     function calculateMovement(unit, canvas, key, type) { //each unit now needs to check formation goal and set its movement vector toward that goal, and if it is trype formation to start with we just set the movement vector as [0,100] and [0,0] once the y value matches and when it matched we set inFormation = true to that unit
         const units = getBattleUnits()[key];
-        const movementVector = calculateMovementVector(unit, type);
+        const movementVector = calculateMovementVector(unit, type, canvas);
 
         let baseSpeed;
     
@@ -4358,16 +4367,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         });
     
         setBattleUnits(key, updatedUnits);
-    }
-    
-    
-    
-    
-    
-    
-      
-    
-    
+    }  
     
 
 //-------------------------------------------------------------------------------------------------
