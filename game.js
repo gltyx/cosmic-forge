@@ -6800,15 +6800,46 @@ function getNewGoalForUnit(unit) {
     return preferredTarget;
 }
 
+function shootLaser(unit, enemy) {
+    const canvas = document.getElementById('battleCanvas');
+    const ctx = canvas.getContext("2d");
+
+    ctx.lineWidth = 2;
+    let strokeColor = "transparent";
+
+    if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
+        if (unit.owner === "player") {
+            if (unit.id.includes('air')) {
+                strokeColor = "magenta";
+            } else if (unit.id.includes('sea')) {
+                strokeColor = "turquoise";
+            } else if (unit.id.includes('land')) {
+                strokeColor = "yellow";
+            }
+        } else if (unit.owner === "enemy") {
+            if (unit.id.includes('air')) {
+                strokeColor = "rgb(255, 0, 255)";
+            } else if (unit.id.includes('sea')) {
+                strokeColor = "rgb(64, 224, 208)";
+            } else if (unit.id.includes('land')) {
+                strokeColor = "rgb(255, 255, 0)";
+            }
+        }
+    }
+
+    ctx.strokeStyle = strokeColor;
+    ctx.beginPath();
+    ctx.moveTo(unit.x, unit.y);
+    ctx.lineTo(enemy.x, enemy.y);
+    ctx.stroke();
+}
+
 function getVisibleEnemies(unit) {
     const canvas = document.getElementById('battleCanvas');
     const battleUnits = getBattleUnits();
     const enemyUnits = (unit.owner === 'player' ? battleUnits.enemy : battleUnits.player).filter(enemy => enemy.disabled !== true);
 
     const visibleEnemies = [];
-
-    const ctx = canvas.getContext("2d");
-    ctx.lineWidth = 2;
 
     const unitRotation = unit.rotation;
 
@@ -6831,34 +6862,9 @@ function getVisibleEnemies(unit) {
                     visibleEnemies.push(enemy);
 
                     if (Math.random() <= 0.2) {
-                        let strokeColor = "transparent";
-
-                        // Check if the current goal id matches the enemy's id
                         if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
-                            // Apply color logic based on unit type and owner
-                            if (unit.owner === "player") {
-                                if (unit.id.includes('air')) {
-                                    strokeColor = "magenta";
-                                } else if (unit.id.includes('sea')) {
-                                    strokeColor = "turquoise";
-                                } else if (unit.id.includes('land')) {
-                                    strokeColor = "yellow";
-                                }
-                            } else if (unit.owner === "enemy") {
-                                if (unit.id.includes('air')) {
-                                    strokeColor = "rgb(255, 0, 255)"; // Magenta with red +128
-                                } else if (unit.id.includes('sea')) {
-                                    strokeColor = "rgb(64, 224, 208)"; // Turquoise with red +128
-                                } else if (unit.id.includes('land')) {
-                                    strokeColor = "rgb(255, 255, 0)"; // Yellow with red +128
-                                }
-                            }
-
-                            ctx.strokeStyle = strokeColor; // Set the stroke color
-                            ctx.beginPath();
-                            ctx.moveTo(unit.x, unit.y);
-                            ctx.lineTo(enemy.x, enemy.y);
-                            ctx.stroke();
+                            // Call shootLaser to draw the line
+                            shootLaser(unit, enemy);
                         }
                     }
                 }
@@ -6868,34 +6874,9 @@ function getVisibleEnemies(unit) {
                     visibleEnemies.push(enemy);
 
                     if (Math.random() <= 0.2) {
-                        let strokeColor = "transparent";
-
-                        // Check if the current goal id matches the enemy's id
                         if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
-                            // Apply color logic based on unit type and owner
-                            if (unit.owner === "player") {
-                                if (unit.id.includes('air')) {
-                                    strokeColor = "magenta";
-                                } else if (unit.id.includes('sea')) {
-                                    strokeColor = "turquoise";
-                                } else if (unit.id.includes('land')) {
-                                    strokeColor = "yellow";
-                                }
-                            } else if (unit.owner === "enemy") {
-                                if (unit.id.includes('air')) {
-                                    strokeColor = "rgb(255, 0, 255)"; // Magenta with red +128
-                                } else if (unit.id.includes('sea')) {
-                                    strokeColor = "rgb(64, 224, 208)"; // Turquoise with red +128
-                                } else if (unit.id.includes('land')) {
-                                    strokeColor = "rgb(255, 255, 0)"; // Yellow with red +128
-                                }
-                            }
-
-                            ctx.strokeStyle = strokeColor; // Set the stroke color
-                            ctx.beginPath();
-                            ctx.moveTo(unit.x, unit.y);
-                            ctx.lineTo(enemy.x, enemy.y);
-                            ctx.stroke();
+                            // Call shootLaser to draw the line
+                            shootLaser(unit, enemy);
                         }
                     }
                 }
@@ -6905,6 +6886,7 @@ function getVisibleEnemies(unit) {
 
     return visibleEnemies;
 }
+
 
 
 function getPreferredTarget(unit, visibleEnemies) {
