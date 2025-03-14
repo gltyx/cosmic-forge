@@ -245,7 +245,8 @@ import {
     drawFleets,
     moveBattleUnits,
     createBattleCanvas,
-    explosionAnimation
+    explosionAnimation,
+    shootLaser
 } from "./ui.js";
 
 import { 
@@ -6800,42 +6801,7 @@ function getNewGoalForUnit(unit) {
     return preferredTarget;
 }
 
-function shootLaser(unit, enemy) {
-    const canvas = document.getElementById('battleCanvas');
-    const ctx = canvas.getContext("2d");
-
-    ctx.lineWidth = 2;
-    let strokeColor = "transparent";
-
-    if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
-        if (unit.owner === "player") {
-            if (unit.id.includes('air')) {
-                strokeColor = "magenta";
-            } else if (unit.id.includes('sea')) {
-                strokeColor = "turquoise";
-            } else if (unit.id.includes('land')) {
-                strokeColor = "yellow";
-            }
-        } else if (unit.owner === "enemy") {
-            if (unit.id.includes('air')) {
-                strokeColor = "rgb(255, 0, 255)";
-            } else if (unit.id.includes('sea')) {
-                strokeColor = "rgb(64, 224, 208)";
-            } else if (unit.id.includes('land')) {
-                strokeColor = "rgb(255, 255, 0)";
-            }
-        }
-    }
-
-    ctx.strokeStyle = strokeColor;
-    ctx.beginPath();
-    ctx.moveTo(unit.x, unit.y);
-    ctx.lineTo(enemy.x, enemy.y);
-    ctx.stroke();
-}
-
 function getVisibleEnemies(unit) {
-    const canvas = document.getElementById('battleCanvas');
     const battleUnits = getBattleUnits();
     const enemyUnits = (unit.owner === 'player' ? battleUnits.enemy : battleUnits.player).filter(enemy => enemy.disabled !== true);
 

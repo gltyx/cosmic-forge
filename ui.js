@@ -3837,7 +3837,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         //DEBUG
-         enemyFleets = [10,8,6]; //DEBUG
+         enemyFleets = [10,18,26]; //DEBUG
         // playerFleets = [1,0,0,0]; //DEBUG
         //
         const canvas = document.getElementById(canvasId);
@@ -4060,6 +4060,41 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             animationContainer.classList.add('invisible');
         }, 1000);
     }
+
+    export function shootLaser(unit, enemy) {
+        const canvas = document.getElementById('battleCanvas');
+        const ctx = canvas.getContext("2d");
+    
+        ctx.lineWidth = 2;
+        let strokeColor = "transparent";
+    
+        if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
+            if (unit.owner === "player") {
+                if (unit.id.includes('air')) {
+                    strokeColor = "magenta";
+                } else if (unit.id.includes('sea')) {
+                    strokeColor = "turquoise";
+                } else if (unit.id.includes('land')) {
+                    strokeColor = "yellow";
+                }
+            } else if (unit.owner === "enemy") {
+                if (unit.id.includes('air')) {
+                    strokeColor = "rgb(255, 0, 255)";
+                } else if (unit.id.includes('sea')) {
+                    strokeColor = "rgb(64, 224, 208)";
+                } else if (unit.id.includes('land')) {
+                    strokeColor = "rgb(255, 255, 0)";
+                }
+            }
+        }
+    
+        ctx.strokeStyle = strokeColor;
+        ctx.beginPath();
+        ctx.moveTo(unit.x, unit.y);
+        ctx.lineTo(enemy.x, enemy.y);
+        ctx.stroke();
+    }
+
     
     export function createBattleCanvas(optionContentElement, starData) {
         const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
