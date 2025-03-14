@@ -244,7 +244,8 @@ import {
     setWarUI,
     drawFleets,
     moveBattleUnits,
-    createBattleCanvas
+    createBattleCanvas,
+    explosionAnimation
 } from "./ui.js";
 
 import { 
@@ -6707,7 +6708,7 @@ export function addToResourceAllTimeStat(amountToAdd, item) {
     }
 }
 
-function updateGoalCoords(unit) {
+function updateGoalCoordsAndEnemyOfUnitsHealth(unit) {
     const battleUnits = getBattleUnits();
     const ownerUnits = battleUnits[unit.currentGoal.owner];
 
@@ -6717,6 +6718,17 @@ function updateGoalCoords(unit) {
         if (goalUnit.x !== unit.currentGoal.x || goalUnit.y !== unit.currentGoal.y) {
             unit.currentGoal.x = goalUnit.x;
             unit.currentGoal.y = goalUnit.y;
+        }
+
+        if (goalUnit.health > 0) {
+            goalUnit.health -= 0.1;
+        }
+    
+        if (goalUnit.health <= 0 && !goalUnit.disabled) {
+            unit.currentGoal = null;
+            goalUnit.disabled = true;
+            explosionAnimation(goalUnit.x, goalUnit.y);
+            console.log('unit killed: ' + goalUnit.id + ' (' + goalUnit.owner + ')');
         }
     }
 
@@ -6730,26 +6742,40 @@ export function assignGoalToUnits() {
     
     ['player', 'enemy'].forEach(owner => {
         battleUnits[owner].forEach(unit => {
-            if (unit.currentGoal?.id === 'hunt') {
-                unit.huntX = unit.currentGoal.x;
-                unit.huntY = unit.currentGoal.y;
-                unit.currentGoal = getNewGoalForUnit(unit);
-            } else if (!unit.currentGoal && getBattleTriggeredByPlayer()) {
-                unit.currentGoal = getNewGoalForUnit(unit);
-            } else {
-                if (unit.currentGoal && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
-                    updateGoalCoords(unit, unit.currentGoal);
-                    unit.huntX = null;
-                    unit.huntY = null;
+            if (!unit.disabled) {
+                if (unit.currentGoal?.id === 'hunt') {
+                    if (unit.huntX === null && unit.huntY === null) {
+                        unit.huntX = unit.currentGoal.x;
+                        unit.huntY = unit.currentGoal.y;
+                    }
+                    unit.currentGoal = getNewGoalForUnit(unit);
+                } else if (!unit.currentGoal && getBattleTriggeredByPlayer()) {
+                    unit.currentGoal = getNewGoalForUnit(unit);
                 } else {
-                    if (getBattleTriggeredByPlayer()) {
-                        unit.currentGoal = {
-                            x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
-                            y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
-                            id: 'hunt'
-                        };
+                    if (unit.currentGoal && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
+                        
+                        updateGoalCoordsAndEnemyOfUnitsHealth(unit, unit.currentGoal);
+                        unit.huntX = null;
+                        unit.huntY = null;
+                    } else if (getBattleTriggeredByPlayer() ) {
+                        if (unit.currentGoal !== 'dead') {
+                            unit.currentGoal = {
+                                x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
+                                y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
+                                id: 'hunt'
+                            };
+                        }
                     }
                 }
+            } else {
+                if (unit.currentGoal !== 'dead') {
+                    unit.currentGoal = 'dead';
+                    //remove from battleUnits
+                    //remove from fleet or enemy fleet numbers
+                    //update description  
+                } else {
+                    return;
+                } 
             }
         });
         setBattleUnits(owner, battleUnits[owner]);
@@ -6759,18 +6785,37 @@ export function assignGoalToUnits() {
 function getNewGoalForUnit(unit) {
     const visibleEnemies = getVisibleEnemies(unit);
 
+    if (unit.currentGoal && unit.currentGoal.id === 'hunt' && visibleEnemies.length === 0) {
+        const battleUnits = getBattleUnits();
+        const battleUnit = battleUnits[unit.owner]?.find(u => u.id === unit.id);
+    
+        if (battleUnit && (battleUnit.huntX !== unit.huntX || battleUnit.huntY !== unit.huntY)) {
+            return battleUnit.currentGoal;
+        }
+        
+        return unit.currentGoal;
+    }    
+
     const preferredTarget = getPreferredTarget(unit, visibleEnemies);
     return preferredTarget;
 }
 
-function getVisibleEnemies(unit) { 
+function getVisibleEnemies(unit) {
     const canvas = document.getElementById('battleCanvas');
     const battleUnits = getBattleUnits();
-    const enemyUnits = unit.owner === 'player' ? battleUnits.enemy : battleUnits.player;
+    const enemyUnits = (unit.owner === 'player' ? battleUnits.enemy : battleUnits.player).filter(enemy => enemy.disabled !== true);
+
     const visibleEnemies = [];
-    
-    const ctx = canvas.getContext("2d"); // DEBUG
-    ctx.lineWidth = 2; // DEBUG
+
+    const ctx = canvas.getContext("2d");
+    ctx.lineWidth = 2;
+
+    const unitRotation = unit.rotation;
+
+    let minAngle = unitRotation - Math.PI / 2 - Math.PI / 2;
+    let maxAngle = unitRotation + Math.PI / 2 - Math.PI / 2;
+    minAngle = ((minAngle % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
+    maxAngle = ((maxAngle % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
 
     enemyUnits.forEach(enemy => {
         const dx = enemy.x - unit.x;
@@ -6778,26 +6823,89 @@ function getVisibleEnemies(unit) {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= unit.visionDistance) {
-            const angleToEnemy = Math.atan2(dy, dx);
-            const unitRotation = unit.rotation;
-            const minAngle = unitRotation - Math.PI / 2;
-            const maxAngle = unitRotation + Math.PI / 2;
+            let angleToEnemy = Math.atan2(dy, dx);
+            angleToEnemy = ((angleToEnemy % (2 * Math.PI)) + (2 * Math.PI)) % (2 * Math.PI);
 
-            if (angleToEnemy >= minAngle && angleToEnemy <= maxAngle) {
-                visibleEnemies.push(enemy);
+            if (minAngle < maxAngle) {
+                if (angleToEnemy >= minAngle && angleToEnemy <= maxAngle) {
+                    visibleEnemies.push(enemy);
 
-                ctx.strokeStyle = (unit.currentGoal && unit.currentGoal.id === enemy.id) ? "green" : "transparent";// DEBUG
-                
-                ctx.beginPath();
-                ctx.moveTo(unit.x, unit.y);
-                ctx.lineTo(enemy.x, enemy.y);
-                ctx.stroke();
+                    if (Math.random() <= 0.2) {
+                        let strokeColor = "transparent";
+
+                        // Check if the current goal id matches the enemy's id
+                        if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
+                            // Apply color logic based on unit type and owner
+                            if (unit.owner === "player") {
+                                if (unit.id.includes('air')) {
+                                    strokeColor = "magenta";
+                                } else if (unit.id.includes('sea')) {
+                                    strokeColor = "turquoise";
+                                } else if (unit.id.includes('land')) {
+                                    strokeColor = "yellow";
+                                }
+                            } else if (unit.owner === "enemy") {
+                                if (unit.id.includes('air')) {
+                                    strokeColor = "rgb(255, 0, 255)"; // Magenta with red +128
+                                } else if (unit.id.includes('sea')) {
+                                    strokeColor = "rgb(64, 224, 208)"; // Turquoise with red +128
+                                } else if (unit.id.includes('land')) {
+                                    strokeColor = "rgb(255, 255, 0)"; // Yellow with red +128
+                                }
+                            }
+
+                            ctx.strokeStyle = strokeColor; // Set the stroke color
+                            ctx.beginPath();
+                            ctx.moveTo(unit.x, unit.y);
+                            ctx.lineTo(enemy.x, enemy.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            } 
+            else {
+                if (angleToEnemy >= minAngle || angleToEnemy <= maxAngle) {
+                    visibleEnemies.push(enemy);
+
+                    if (Math.random() <= 0.2) {
+                        let strokeColor = "transparent";
+
+                        // Check if the current goal id matches the enemy's id
+                        if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
+                            // Apply color logic based on unit type and owner
+                            if (unit.owner === "player") {
+                                if (unit.id.includes('air')) {
+                                    strokeColor = "magenta";
+                                } else if (unit.id.includes('sea')) {
+                                    strokeColor = "turquoise";
+                                } else if (unit.id.includes('land')) {
+                                    strokeColor = "yellow";
+                                }
+                            } else if (unit.owner === "enemy") {
+                                if (unit.id.includes('air')) {
+                                    strokeColor = "rgb(255, 0, 255)"; // Magenta with red +128
+                                } else if (unit.id.includes('sea')) {
+                                    strokeColor = "rgb(64, 224, 208)"; // Turquoise with red +128
+                                } else if (unit.id.includes('land')) {
+                                    strokeColor = "rgb(255, 255, 0)"; // Yellow with red +128
+                                }
+                            }
+
+                            ctx.strokeStyle = strokeColor; // Set the stroke color
+                            ctx.beginPath();
+                            ctx.moveTo(unit.x, unit.y);
+                            ctx.lineTo(enemy.x, enemy.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
             }
         }
     });
 
     return visibleEnemies;
 }
+
 
 function getPreferredTarget(unit, visibleEnemies) {
     const canvas = document.getElementById('battleCanvas');
@@ -6849,15 +6957,16 @@ function getPreferredTarget(unit, visibleEnemies) {
 }
 
 export function calculateMovementVectorToTarget(unit, objective) {
+    if (!objective) return [0, 0];
     const battleUnits = getBattleUnits();
     const owner = unit.owner;
 
-    if (objective.id === 'hunt') {
+    if (objective && objective.id === 'hunt') {     
         const dx = unit.huntX - unit.x;
         const dy = unit.huntY - unit.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
     
-        if (distance > 10) {
+        if (distance > 20) {
             const scale = 100 / distance;
             const movementVector = [dx * scale, dy * scale];
     
@@ -6866,22 +6975,25 @@ export function calculateMovementVectorToTarget(unit, objective) {
     
             const updatedUnits = battleUnits[owner].map(u => 
                 u.id === unit.id ? { ...u, movementVector, rotation: unit.rotation } : u
-            );
+            ); 
     
             setBattleUnits(owner, updatedUnits);
     
             return movementVector;
         } else {
-            const updatedUnits = battleUnits[owner].map(u => 
-                u.id === unit.id 
-                    ? { ...u, huntX: null, huntY: null, currentGoal: null } 
-                    : u
-            );
-    
+            const updatedUnits = battleUnits[owner].map(u => {
+                if (u.id === unit.id) {
+                    const updatedUnit = { ...u, huntX: null, huntY: null, currentGoal: null };
+                    return updatedUnit;
+                }
+                return u;
+            });
+            
             setBattleUnits(owner, updatedUnits);
+
             return unit.movementVector;
         }
-    } else if (objective === null) {
+    } else if (objective === null && !getInFormation()) {
         if (unit.owner === 'player') {
             return [100,0];
         } else {

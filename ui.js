@@ -3837,8 +3837,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         //DEBUG
-        // enemyFleets = [1,0,0]; //DEBUG
-        // playerFleets = [2,0,0,0]; //DEBUG
+         enemyFleets = [10,8,6]; //DEBUG
+        // playerFleets = [1,0,0,0]; //DEBUG
         //
         const canvas = document.getElementById(canvasId);
 
@@ -3939,7 +3939,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 acceleration: unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea,
                 currentSpeed: 0,
                 huntX: null,
-                huntY: null
+                huntY: null,
+                disabled: false
             };
         }
     
@@ -4044,7 +4045,21 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         }
     
         ctx.restore();
-    }    
+    }  
+
+    export function explosionAnimation(x, y) {
+        const animationContainer = document.getElementById('explosionAnimation');
+        animationContainer.classList.remove('invisible');
+        animationContainer.classList.add('animate-explosion');
+        
+        animationContainer.style.left = `${x}px`;
+        animationContainer.style.top = `${y}px`;
+        
+        setTimeout(() => {
+            animationContainer.classList.remove('animate-explosion');
+            animationContainer.classList.add('invisible');
+        }, 1000);
+    }
     
     export function createBattleCanvas(optionContentElement, starData) {
         const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
@@ -4057,11 +4072,17 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         if (!document.getElementById('battleCanvas') && getNeedNewBattleCanvas()) {
             const battleContainer = document.createElement('div');
             battleContainer.classList.add('battle-container');
-            
+            battleContainer.id = 'battleCanvasContainer';
+
             const canvas = document.createElement('canvas');
             canvas.id = 'battleCanvas';
             
             battleContainer.appendChild(canvas);
+
+            const explosion = document.createElement('div');
+            explosion.id = 'explosionAnimation';
+            explosion.classList.add('invisible', 'explosion');
+            battleContainer.appendChild(explosion);
             
             optionContentElement.prepend(battleContainer);
 
@@ -4134,6 +4155,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             if (!allUnitsOnScreen) {
                 unit.x += 1;
             } else if (unit.hasBeenOnCanvas) {
+
                 if (getBattleTriggeredByPlayer()) {
                     calculateMovement(unit, canvas, 'player', 'fight');
                 } else {
@@ -4171,23 +4193,28 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         });
     
         battleUnits.player.forEach(unit => {
-            // ctx.fillStyle = 
-            //     unit.currentGoal?.id === 'hunt' ? 'magenta' : 
-            //     (unit.currentGoal?.id ? 'blue' : 
-            //     getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim());
-            
-            ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim();  
-            drawUnit(ctx, unit);
+            if (!unit.disabled) {
+                // ctx.fillStyle = 
+                //     unit.currentGoal?.id === 'hunt' ? 'magenta' : 
+                //     (unit.currentGoal?.id ? 'blue' : 
+                //     getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim());
+                
+                ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--ready-text').trim();  
+                drawUnit(ctx, unit);
+            }
+
         });
         
         battleUnits.enemy.forEach(unit => {
-            // ctx.fillStyle = 
+            if (!unit.disabled) {
+                            // ctx.fillStyle = 
             //     unit.currentGoal?.id === 'hunt' ? 'magenta' : 
             //     (unit.currentGoal?.id ? 'blue' : 
             //     getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim());
             
             ctx.fillStyle = getComputedStyle(document.querySelector('[data-theme]')).getPropertyValue('--disabled-text').trim();  
             drawUnit(ctx, unit);
+            }
         });
     }        
 
@@ -4304,16 +4331,15 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     }
 
     function calculateMovement(unit, canvas, key, type) {
-        const units = getBattleUnits()[key];
         checkCanvasBounds(unit, canvas);
         const newMovementVector = calculateMovementVector(unit, type, canvas);
-    
+
         let baseSpeed;
     
         if (type === "formation") {
             baseSpeed = 3 + (Math.random() * 3 - 1);
         } else {
-            let acceleration = unit.acceleration / 3; // /3 is DEBUG
+            let acceleration = unit.acceleration; // /3 is DEBUG
             unit.currentSpeed = Math.min(unit.speed, unit.currentSpeed + acceleration);
             
             baseSpeed = unit.currentSpeed;
@@ -4322,8 +4348,8 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const xFactor = newMovementVector[0] / 100;
         const yFactor = newMovementVector[1] / 100;
             
-        unit.horizontalSpeed = baseSpeed * xFactor;
-        unit.verticalSpeed = baseSpeed * yFactor;
+        unit.horizontalSpeed = Math.max(-unit.speed, Math.min(unit.speed, baseSpeed * xFactor));
+        unit.verticalSpeed = Math.max(-unit.speed, Math.min(unit.speed, baseSpeed * yFactor));        
 
         if (type !== 'formation') {
             if (newMovementVector[0] < 0) {
@@ -4346,11 +4372,22 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         unit.x += unit.horizontalSpeed;
         unit.y += unit.verticalSpeed;
         unit.movementVector = newMovementVector;
+        
         if (type === 'fight') {
             updateUnitRotation(newMovementVector, unit);  
         }
 
-        const updatedUnits = units.map(u => (u.id === unit.id ? unit : u));
+        const latestUnits = getBattleUnits()[key];
+        const latestUnit = latestUnits.find(u => u.id === unit.id);
+
+        const mergedUnit = {
+            ...unit,
+            currentGoal: latestUnit.currentGoal !== unit.currentGoal ? latestUnit.currentGoal : unit.currentGoal,
+            huntX: latestUnit.huntX !== unit.huntX ? latestUnit.huntX : unit.huntX,
+            huntY: latestUnit.huntY !== unit.huntY ? latestUnit.huntY : unit.huntY
+        };
+
+        const updatedUnits = latestUnits.map(u => (u.id === unit.id ? mergedUnit : u));
         setBattleUnits(key, updatedUnits);
     }
 
