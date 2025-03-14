@@ -1,11 +1,19 @@
 resource calculations are not right when burning fuel in a power station, start with carbon, pretty deep bug
-
 tech tree not updating when research points grow to reveal more
 stats bugs in general
 
-undefined enemy units in battle screen if changed in passive for example in diplomacy
-army skips to middle if change tab
+TODO
 
-battle
-- if in hunt mode moving away we need to implement something to turn them around if they touch the edge or if they can see the edge AND no targets and can be turned to any radian randomy between rotation - 2.7 or rotation + 2.7
-- double check the goal cannot change if it is an enemy as long as the enemy can be seen, and if it does change it changes to hunt
+during battle:
+block switching tabs or screens after clicking Attack button  until battle resolved
+block autosave after clicking Attack button until battle resolved
+involve defense for enemy - have a damage mechanic depending what type of unit is attacking what type of unit with defense bonus
+think about changing heat and cold resistant to somethng meaningful where you can amplify effect of defense against certain unit combinations or something like that
+when units die, update the numbers on the top description and down below in the row showing enemy fleets
+check for bug - undefined enemy units in battle screen if changed in passive for example in diplomacy
+
+after battle:
+make battle end when all units on one side are disabled = true and gracefully fade out units from canvas
+reset flags regarding battle and set a battleWon flag to true or false
+show a popup explaining to the user the result - if lost then reset state, make units prices again like they were when you had none, and replenish enemy ones but only like a quarter but no diplomacy - if won then progress on to some kind of victory dance before thinking about rebirthing
+

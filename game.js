@@ -3307,7 +3307,7 @@ function fleetHangarChecks() {
 }
 
 function coloniseChecks() {
-    if (getCurrentOptionPane() === 'colonise') {
+    if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
         if (!getWarMode()) {
             document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
         } else {
@@ -6709,7 +6709,7 @@ export function addToResourceAllTimeStat(amountToAdd, item) {
     }
 }
 
-function updateGoalCoordsAndEnemyOfUnitsHealth(unit) {
+function trackEnemyAndAdjustHealth(unit) {
     const battleUnits = getBattleUnits();
     const ownerUnits = battleUnits[unit.currentGoal.owner];
 
@@ -6755,7 +6755,7 @@ export function assignGoalToUnits() {
                 } else {
                     if (unit.currentGoal && getVisibleEnemies(unit).some(enemy => enemy.id === unit.currentGoal.id)) {
                         
-                        updateGoalCoordsAndEnemyOfUnitsHealth(unit, unit.currentGoal);
+                        trackEnemyAndAdjustHealth(unit, unit.currentGoal);
                         unit.huntX = null;
                         unit.huntY = null;
                     } else if (getBattleTriggeredByPlayer() ) {
@@ -6829,7 +6829,6 @@ function getVisibleEnemies(unit) {
 
                     if (Math.random() <= 0.2) {
                         if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
-                            // Call shootLaser to draw the line
                             shootLaser(unit, enemy);
                         }
                     }
@@ -6841,7 +6840,6 @@ function getVisibleEnemies(unit) {
 
                     if (Math.random() <= 0.2) {
                         if (unit.currentGoal && unit.currentGoal.id === enemy.id) {
-                            // Call shootLaser to draw the line
                             shootLaser(unit, enemy);
                         }
                     }

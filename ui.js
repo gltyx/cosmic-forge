@@ -4187,7 +4187,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 unit.hasBeenOnCanvas = true;
             }
     
-            if (!allUnitsOnScreen) {
+            if (!allUnitsOnScreen && !getBattleTriggeredByPlayer()) {
                 unit.x += 1;
             } else if (unit.hasBeenOnCanvas) {
 
@@ -4210,7 +4210,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 unit.hasBeenOnCanvas = true;
             }
     
-            if (!allUnitsOnScreen) {
+            if (!allUnitsOnScreen && !getBattleTriggeredByPlayer()) {
                 unit.x -= 1;
             } else if (unit.hasBeenOnCanvas) {
                 if (getBattleTriggeredByPlayer()) {
