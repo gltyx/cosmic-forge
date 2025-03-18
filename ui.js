@@ -2509,7 +2509,9 @@ export function showTabsUponUnlock() {
         const tabName = tab.getAttribute('data-name');
 
         if (unlockedTechs.includes(tabTech)) {
-            tab.classList.remove('tab-not-yet');
+            if (!getBattleTriggeredByPlayer()) {
+                tab.classList.remove('tab-not-yet');
+            }
             tab.textContent = tabName;
         }
     });

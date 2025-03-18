@@ -692,6 +692,7 @@ body {
 
 .tab-not-yet {
     pointer-events: none;
+    opacity: 0.5;
 }
 
 .option-button:hover,

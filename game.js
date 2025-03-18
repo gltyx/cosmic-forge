@@ -1,4 +1,6 @@
 import {
+    getAutoSaveToggle,
+    setAutoSaveToggle,
     setBattleUnits,
     getFleetConstantData,
     setFleetConstantData,
@@ -197,7 +199,8 @@ import {
     getWarMode,
     getBattleUnits,
     setFormationGoal,
-    setBattleTriggeredByPlayer
+    setBattleTriggeredByPlayer,
+    getWasAutoSaveToggled
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3306,6 +3309,28 @@ function fleetHangarChecks() {
     }
 }
 
+function disableTabsLinksAndAutoSaveDuringBattle(battleStart) {
+    for (let i = 1; i <= 8; i++) {
+        let tab = document.getElementById(`tab${i}`);
+        if (tab) {
+            tab.classList.toggle("tab-not-yet", battleStart);
+        }
+    }
+
+    document.querySelectorAll("[id*='Option'], #starMap").forEach(element => {
+        element.classList.toggle("tab-not-yet", battleStart);
+    });    
+
+    if (battleStart) {
+        setAutoSaveToggle(false);
+    } else {
+        if (getWasAutoSaveToggled() && !getAutoSaveToggle()) {
+            setAutoSaveToggle(true);
+        }
+    }
+}
+
+
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
         if (!getWarMode()) {
@@ -3321,6 +3346,7 @@ function coloniseChecks() {
                 button.classList.add('option-button', 'red-disabled-text', 'battle-button');
                 button.innerHTML = 'Attack!';
                 button.onclick = function() {
+                    disableTabsLinksAndAutoSaveDuringBattle(true);
                     setBattleTriggeredByPlayer(true);
                     assignGoalToUnits();
                 };

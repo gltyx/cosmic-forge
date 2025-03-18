@@ -307,6 +307,7 @@ let battleTriggeredByPlayer = false;
 let needNewBattleCanvas = false;
 let redrawBattleDescription = true;
 let inFormation = false;
+let wasAutoSaveToggled = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -989,6 +990,15 @@ export function getAutoSaveToggle() {
 export function setAutoSaveToggle(value) {
     autoSaveToggle = value;
 }
+
+export function getWasAutoSaveToggled() {
+    return wasAutoSaveToggled;
+}
+
+export function setWasAutoSaveToggled(value) {
+    wasAutoSaveToggled = value;
+}
+
 
 export function getNotationType() {
     return notationType;
