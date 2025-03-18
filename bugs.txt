@@ -7,7 +7,6 @@ TODO
 during battle:
 involve defense for enemy - have a damage mechanic depending what type of unit is attacking what type of unit with defense bonus
 think about changing heat and cold resistant to somethng meaningful where you can amplify effect of defense against certain unit combinations or something like that
-when units die, update the numbers on the top description and down below in the row showing enemy fleets
 check for bug - undefined enemy units in battle screen if changed in passive for example in diplomacy
 
 after battle:
