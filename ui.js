@@ -3839,7 +3839,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
 
     export function drawFleets(canvasId, enemyFleets = [], playerFleets = [], createNew = true) {
         //DEBUG
-         enemyFleets = [10,18,26]; //DEBUG
+         //enemyFleets = [10,18,26]; //DEBUG
         // playerFleets = [1,0,0,0]; //DEBUG
         //
         const canvas = document.getElementById(canvasId);

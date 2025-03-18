@@ -3330,8 +3330,59 @@ function disableTabsLinksAndAutoSaveDuringBattle(battleStart) {
     }
 }
 
+export function updateFleetsAfterDestroyingAUnit(unit) {
+    const fleetNamePlayer = 'fleet' + capitaliseString(unit.id.split('_').pop());
+    const fleetNameEnemy = unit.id.split('_').pop();
+    
+    let powerEnemy = 0;
+
+    if (unit.owner === 'enemy') {
+        if (fleetNameEnemy.includes('air')) {
+            powerEnemy = 2;
+        } else if (fleetNameEnemy.includes('land')) {
+            powerEnemy = 4;
+        } else {
+            powerEnemy = 6;
+        }
+    }
+    
+    const unitBaseStrength = unit.owner === 'player' ? getResourceDataObject('space', ['upgrades', fleetNamePlayer, 'baseAttackStrength']) : powerEnemy;
+
+    if (unit.owner === 'player') {
+        const newQuantity = Math.max(0, Math.floor(getResourceDataObject('space', ['upgrades', fleetNamePlayer, 'quantity']) - 1));
+        setResourceDataObject(newQuantity, 'space', ['upgrades', fleetNamePlayer, 'quantity']);
+        
+        const currentAttackPower = getResourceDataObject('fleets', ['attackPower']);
+        const currentDefensePower = getResourceDataObject('fleets', ['defensePower']);
+        setResourceDataObject(Math.max(0, Math.floor(currentAttackPower - unitBaseStrength)), 'fleets', ['attackPower']);
+        setResourceDataObject(Math.max(0, Math.floor(currentDefensePower - unitBaseStrength)), 'fleets', ['defensePower']);
+    } else {
+        const newEnemyFleetsCount = Math.max(0, Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]) - 1));
+        setStarSystemDataObject(newEnemyFleetsCount, 'stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]);
+        
+        const currentAttackPowerEnemy = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
+        setStarSystemDataObject(Math.max(0, currentAttackPowerEnemy - powerEnemy), 'stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
+        
+        writeEnemyFleetStats(fleetNameEnemy);
+    }
+    writeBattleTopDescriptionUpdate();
+}
+
+
 export function writeBattleTopDescriptionUpdate() {
     document.getElementById('descriptionContentTab5').innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
+}
+
+export function writeEnemyFleetStats(type) {
+    const elementId = `fleet${capitaliseString(type)}Text`;
+    const element = document.getElementById(elementId);
+    
+    if (element) {
+        const span = element.querySelector('span');
+        if (span) {
+            span.innerHTML = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', type]);
+        }
+    }
 }
 
 
@@ -6802,40 +6853,7 @@ export function assignGoalToUnits() {
             } else {
                 if (unit.currentGoal !== 'dead') {
                     unit.currentGoal = 'dead';
-                    const fleetNamePlayer = 'fleet' + capitaliseString(unit.id.split('_').pop());
-                    const fleetNameEnemy = unit.id.split('_').pop();
-                    
-                    let powerEnemy = 0;
-
-                    if (unit.owner === 'enemy') {
-                        if (fleetNameEnemy.includes('air')) {
-                            powerEnemy = 2;
-                        } else if (fleetNameEnemy.includes('land')) {
-                            powerEnemy = 4;
-                        } else {
-                            powerEnemy = 6;
-                        }
-                    }
-                    
-                    const unitBaseStrength = unit.owner === 'player' ? getResourceDataObject('space', ['upgrades', fleetNamePlayer, 'baseAttackStrength']) : powerEnemy;
-
-                    if (unit.owner === 'player') {
-                        setResourceDataObject(Math.floor(getResourceDataObject('space', ['upgrades', fleetNamePlayer, 'quantity']) - 1), 'space', ['upgrades', fleetNamePlayer, 'quantity']);
-                        const currentAttackPower = getResourceDataObject('fleets', ['attackPower']);
-                        const currentDefensePower = getResourceDataObject('fleets', ['defensePower']);
-                        setResourceDataObject(Math.floor(currentAttackPower - unitBaseStrength), 'fleets', ['attackPower']);
-                        setResourceDataObject(Math.floor(currentDefensePower - unitBaseStrength), 'fleets', ['defensePower']);
-                    } else {
-                        setStarSystemDataObject(Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]) - 1), 'stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]);
-                        const currentAttackPowerEnemy = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
-                        setStarSystemDataObject(currentAttackPowerEnemy - powerEnemy, 'stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
-                        writeEnemyFleetStats(fleetNameEnemy);
-                    }
-
-                    writeBattleTopDescriptionUpdate();
-                    //remove from battleUnits
-                    //remove from fleet or enemy fleet numbers
-                    //update description  
+                    updateFleetsAfterDestroyingAUnit(unit);
                 } else {
                     return;
                 } 
@@ -6844,19 +6862,6 @@ export function assignGoalToUnits() {
         setBattleUnits(owner, battleUnits[owner]);
     });
 }
-
-function writeEnemyFleetStats(type) {
-    const elementId = `fleet${capitaliseString(type)}Text`;
-    const element = document.getElementById(elementId);
-    
-    if (element) {
-        const span = element.querySelector('span');
-        if (span) {
-            span.innerHTML = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', type]);
-        }
-    }
-}
-
 
 function getNewGoalForUnit(unit) {
     const visibleEnemies = getVisibleEnemies(unit);
