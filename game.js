@@ -6311,7 +6311,7 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
         totalFleets = Math.floor(totalFleets * 0.5);
     }    
 
-    if (totalFleets === 0) return { land: 0, air: 0, sea: 0 };
+    if (totalFleets === 0) return { land: 0, air: 0, sea: 0, fleetPower: 0 };
 
     let primaryType;
     if (lifeformTraits.some(trait => trait[0] === "Terrans")) primaryType = "land";
@@ -6332,7 +6332,8 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     fleetDistribution[otherTypes[0]] = secondaryFleets;
     fleetDistribution[otherTypes[1]] = tertiaryFleets;
 
-    return fleetDistribution;
+    const fleetPower = fleetDistribution.air * 2 + fleetDistribution.land * 4 + fleetDistribution.sea * 6;
+    return { ...fleetDistribution, fleetPower };
 }
 
 function generateAnomalies(defenseRating, enemyFleets) {
@@ -6629,7 +6630,7 @@ function bullyEnemy(starData) {
             setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'air']);
             setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'land']);
             setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
-            setStarSystemDataObject(0, 'stars', ['destinationStar', 'defenseRating']);
+            setEnemyFleetPower();
             colonisePrepareWarUI('surrender');
             break;
         case "scared":
@@ -6637,6 +6638,7 @@ function bullyEnemy(starData) {
             setStarSystemDataObject(Math.floor((starData.enemyFleets.air || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'air']);
             setStarSystemDataObject(Math.floor((starData.enemyFleets.land || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'land']);
             setStarSystemDataObject(Math.floor((starData.enemyFleets.sea || 0) / 2), 'stars', ['destinationStar', 'enemyFleets', 'sea']);
+            setEnemyFleetPower();
             colonisePrepareWarUI('scared');
             break;
         case "attack":
@@ -6777,7 +6779,7 @@ function tryToVassalizeEnemy() {
         setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'air']);
         setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'land']);
         setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
-        setStarSystemDataObject(0, 'stars', ['destinationStar', 'defenseRating']);
+        setEnemyFleetPower();
         colonisePrepareWarUI('surrender');
     } else {
         colonisePrepareWarUI('notVassalized');
