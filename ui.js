@@ -1483,22 +1483,7 @@ export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HE
 
     if (diplomacyImpressionBar) {
         diplomacyImpressionBar.classList.add('invisible');
-    }
-
-    removeDuplicateIds('diplomacyOptionsRow');
-    removeDuplicateIds('diplomacyImpressionBar');
-    removeDuplicateIds('receptionStatusRow');
-    removeDuplicateIds('intelligenceRow');
-    removeDuplicateIds('enemyFleetsRow');   
-}
-
-function removeDuplicateIds(id) {
-    const elements = document.querySelectorAll(`#${id}`);
-    if (elements.length > 1) {
-        elements.forEach((el, index) => {
-            if (index > 0) el.remove();
-        });
-    }
+    } 
 }
 
 function adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference) {

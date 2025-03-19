@@ -3385,9 +3385,23 @@ export function writeEnemyFleetStats(type) {
     }
 }
 
+function removeDuplicateIds(id) {
+    const elements = document.querySelectorAll(`#${id}`);
+    if (elements.length > 1) {
+        elements.forEach((el, index) => {
+            if (index > 0) el.remove();
+        });
+    }
+}
 
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
+        removeDuplicateIds('diplomacyOptionsRow');
+        removeDuplicateIds('diplomacyImpressionBar');
+        removeDuplicateIds('receptionStatusRow');
+        removeDuplicateIds('intelligenceRow');
+        removeDuplicateIds('enemyFleetsRow');  
+
         const fleetPowerPlayer = getResourceDataObject('fleets', ['attackPower']);
         if (!getWarMode()) {
             const patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
