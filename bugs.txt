@@ -10,7 +10,6 @@ think about changing heat and cold resistant to somethng meaningful where you ca
 check for bug - undefined enemy units in battle screen if changed in passive for example in diplomacy
 
 after battle:
-make battle end when all units on one side are disabled = true and gracefully fade out units from canvas
 reset flags regarding battle and set a battleWon flag to true or false
 show a popup explaining to the user the result - if lost then reset state, make units prices again like they were when you had none, and replenish enemy ones but only like a quarter but no diplomacy - if won then progress on to some kind of victory dance before thinking about rebirthing
-
+after popup if won select another screen called rebirth screen and hide colonise - if lost then reset everything and ensure we cannot see diplomacy
