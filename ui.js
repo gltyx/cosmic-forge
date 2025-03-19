@@ -1,5 +1,7 @@
 import { ProxyServer } from './saveLoadGame.js';
 import {
+    setEnemyFleetsAdjustedForDiplomacy,
+    getEnemyFleetsAdjustedForDiplomacy,
     getFleetConstantData,
     setFleetConstantData,
     setInFormation,
@@ -167,7 +169,8 @@ import {
     startTravelToDestinationStarTimer,
     addToResourceAllTimeStat,
     calculateMovementVectorToTarget,
-    turnAround
+    turnAround,
+    setEnemyFleetPower
 
 } from './game.js';
 
@@ -1337,6 +1340,10 @@ function showLaunchWarningModal(show) {
 }
 
 export function showEnterWarModeModal(reason) {
+    if (getEnemyFleetsAdjustedForDiplomacy() && getResourceDataObject('fleets', ['attackPower']) === 0) {
+        return;
+    }
+
     return new Promise((resolve) => {
         const canBackout = reason === "chooseWar";
 
@@ -1360,9 +1367,11 @@ export function showEnterWarModeModal(reason) {
         let percentageChange = 0;
 
         if (reason === 'patience' || reason === 'receptive' || reason === 'reserved' || reason === 'neutral' || reason === 'rebuff') {
-            if (reason === 'patience') {
+            if (reason === 'patience' && !getEnemyFleetsAdjustedForDiplomacy()) {
                 finalDifference = starData.currentImpression - starData.initialImpression; 
                 adjustEnemyFleetBasedOnDiplomacy(starData, finalDifference);
+                setEnemyFleetPower();
+                setEnemyFleetsAdjustedForDiplomacy(true);
             }
 
             if (latestDifferenceInImpression !== 0) {
@@ -1446,6 +1455,12 @@ export function showEnterWarModeModal(reason) {
 
 export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HERE
     const starData = getStarSystemDataObject('stars', ['destinationStar']);
+    const playerFleetPower = getResourceDataObject('fleets', ['attackPower']);
+
+    if (playerFleetPower === 0) {
+        return;
+    }
+
     if(setWarState) {
         setDiplomacyPossible(false);
         setWarMode(true);
@@ -1468,6 +1483,21 @@ export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HE
 
     if (diplomacyImpressionBar) {
         diplomacyImpressionBar.classList.add('invisible');
+    }
+
+    removeDuplicateIds('diplomacyOptionsRow');
+    removeDuplicateIds('diplomacyImpressionBar');
+    removeDuplicateIds('receptionStatusRow');
+    removeDuplicateIds('intelligenceRow');
+    removeDuplicateIds('enemyFleetsRow');   
+}
+
+function removeDuplicateIds(id) {
+    const elements = document.querySelectorAll(`#${id}`);
+    if (elements.length > 1) {
+        elements.forEach((el, index) => {
+            if (index > 0) el.remove();
+        });
     }
 }
 

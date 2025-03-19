@@ -3388,8 +3388,23 @@ export function writeEnemyFleetStats(type) {
 
 function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
+        const fleetPowerPlayer = getResourceDataObject('fleets', ['attackPower']);
         if (!getWarMode()) {
-            document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+            const patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
+            
+            if (fleetPowerPlayer === 0) {
+                if (document.querySelector('button.conquest')) {
+                    document.querySelector('button.conquest').classList.add('red-disabled-text');
+                }
+            }
+
+            if (patience <= 0 && fleetPowerPlayer === 0) {
+                document.querySelectorAll("button.bully, button.passive, button.harmony, button.conquest, button.vassalize")
+                .forEach(button => button.classList.add("red-disabled-text"));
+                document.getElementById('descriptionContentTab5').innerHTML = `<span class="green-ready-text">Build Your Fleets to Engage the Enemy! - Fleet Power: </span><span class="red-disabled-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+            } else {
+                document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+            }
         } else {
             const descriptionTab = document.getElementById('descriptionContentTab5');
             let button = document.getElementById('battleButton');
@@ -3420,33 +3435,33 @@ function coloniseChecks() {
                         : (button.classList.add('red-disabled-text'), button.classList.remove('green-ready-text'));
                 }
             }
+        }
 
-            }
-            if (!getStellarScannerBuilt() || getWarMode()) {
-                colonisePrepareWarUI('noScanner');
-            }
+        if (!getStellarScannerBuilt() || getWarMode()) {
+            colonisePrepareWarUI('noScanner');
+        }
 
-            if (getWarMode()) {
-                const starData = getStarSystemDataObject('stars', ['destinationStar']);
-                const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
-                const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
-                const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
-                const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
-                const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
-                const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
-                if (getBattleUnits()) {
-                    drawFleets('battleCanvas', enemyFleets, playerFleets, false);
-                } else {
-                    if (getNeedNewBattleCanvas()) {
-                        colonisePrepareWarUI('chooseWar');
-                    }
-                }
-
-                if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
-                    moveBattleUnits('battleCanvas');
-                    assignGoalToUnits();
+        if (getWarMode()) {
+            const starData = getStarSystemDataObject('stars', ['destinationStar']);
+            const playerFleetScout = getResourceDataObject('space', ['upgrades', 'fleetScout', 'quantity']);
+            const playerFleetMarauder = getResourceDataObject('space', ['upgrades', 'fleetMarauder', 'quantity']);
+            const playerFleetLandStalker = getResourceDataObject('space', ['upgrades', 'fleetLandStalker', 'quantity']);
+            const playerFleetNavalStrafer = getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'quantity']);
+            const enemyFleets = [starData.enemyFleets.air, starData.enemyFleets.land, starData.enemyFleets.sea];
+            const playerFleets = [playerFleetScout, playerFleetMarauder, playerFleetLandStalker, playerFleetNavalStrafer];
+            if (getBattleUnits()) {
+                drawFleets('battleCanvas', enemyFleets, playerFleets, false);
+            } else {
+                if (getNeedNewBattleCanvas()) {
+                    colonisePrepareWarUI('chooseWar');
                 }
             }
+
+            if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
+                moveBattleUnits('battleCanvas');
+                assignGoalToUnits();
+            }
+        }
     }
 }
 
@@ -6587,7 +6602,7 @@ export function updateDiplomacySituation(buttonPressed, starData) {
     }
 }
 
-function setEnemyFleetPower() { //TODO
+export function setEnemyFleetPower() { //TODO
     let enemyFleetPowerAir = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'air'])  * 2;
     let enemyFleetPowerLand = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'land']) * 4;
     let enemyFleetPowerSea = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'sea']) * 6;
@@ -6643,6 +6658,7 @@ function bullyEnemy(starData) {
             break;
         case "attack":
             setStarSystemDataObject(Math.ceil(starData.defenseRating * 1.1), 'stars', ['destinationStar', 'defenseRating']);
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'patience']);
             colonisePrepareWarUI('insulted');
             break;
         case "laugh":
@@ -6713,6 +6729,7 @@ async function chatAndExchangePleasantries(starData) {
         currentImpression = 0;
         setStarSystemDataObject(Math.ceil(starData.defenseRating * 1.1), 'stars', ['destinationStar', 'defenseRating']);
         setStarSystemDataObject(-starData.currentImpression, 'stars', ['destinationStar', 'latestDifferenceInImpression']);
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'patience']);
         colonisePrepareWarUI('insulted');
     }
 
@@ -6763,6 +6780,7 @@ async function tryToImproveImpression() {
     if (outcome === 'Receptive') {
         await colonisePrepareWarUI('receptive');
     } else if (outcome === 'Belligerent') {
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'patience']);
         colonisePrepareWarUI('insulted');
     } else {
         await colonisePrepareWarUI('rebuff');

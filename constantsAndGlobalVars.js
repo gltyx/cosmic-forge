@@ -308,6 +308,7 @@ let needNewBattleCanvas = false;
 let redrawBattleDescription = true;
 let inFormation = false;
 let wasAutoSaveToggled = false;
+let enemyFleetAdjustedForDiplomacy = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -686,6 +687,7 @@ export function captureGameStatusForSaving(type) {
         destinationStarScanned: destinationStarScanned,
         diplomacyPossible: diplomacyPossible,
         warMode: warMode,
+        enemyFleetAdjustedForDiplomacy: enemyFleetAdjustedForDiplomacy,
     }
 
     return gameState;
@@ -832,6 +834,7 @@ export function restoreGameStatus(gameState, type) {
             destinationStarScanned = gameState.flags.destinationStarScanned ?? false;
             diplomacyPossible = gameState.flags.diplomacyPossible ?? true;
             warMode = gameState.flags.warMode ?? false;
+            enemyFleetAdjustedForDiplomacy = gameState.flags.enemyFleetAdjustedForDiplomacy ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2502,6 +2505,14 @@ export function getInFormation() {
 
 export function setInFormation(value) {
     inFormation = value;
+}
+
+export function getEnemyFleetsAdjustedForDiplomacy() {
+    return enemyFleetAdjustedForDiplomacy;
+}
+
+export function setEnemyFleetsAdjustedForDiplomacy(value) {
+    enemyFleetAdjustedForDiplomacy = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
