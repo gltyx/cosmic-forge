@@ -845,6 +845,10 @@ export function restoreGameStatus(gameState, type) {
             setLastSavedTimeStamp(gameState.timeStamp);
             offlineGains(false);
 
+            if (warMode && getBattleResolved()[0] === false) {
+                battleUnits = { player: [], enemy: [] };
+            }
+
             //replaceRocketNames(gameState.rocketNames);
             fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray);
             
