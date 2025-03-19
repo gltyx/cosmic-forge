@@ -636,7 +636,7 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
     }
 
     if (heading === 'Colonise') {
-        setBattleResolved([false, null]);
+        setBattleResolved(false, null);
         
         if (getWarMode()) {
             setRedrawBattleDescription(true);

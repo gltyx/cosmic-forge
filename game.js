@@ -3536,6 +3536,7 @@ async function coloniseChecks() {
 
 function drawBattleResultText(canvasId, result) {
     const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -6918,7 +6919,7 @@ function trackEnemyAndAdjustHealth(unit) {
             unit.currentGoal = null;
             goalUnit.disabled = true;
             explosionAnimation(goalUnit.x, goalUnit.y);
-            console.log('unit killed: ' + goalUnit.id + ' (' + goalUnit.owner + ')');
+            // console.log('unit killed: ' + goalUnit.id + ' (' + goalUnit.owner + ')');
         }
     }
 
