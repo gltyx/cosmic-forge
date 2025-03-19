@@ -1,5 +1,5 @@
 import { createBattleCanvas, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
-import { setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal } from './constantsAndGlobalVars.js';
+import { setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
@@ -636,6 +636,8 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
     }
 
     if (heading === 'Colonise') {
+        setBattleResolved([false, null]);
+        
         if (getWarMode()) {
             setRedrawBattleDescription(true);
         }
