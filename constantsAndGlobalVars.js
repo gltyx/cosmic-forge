@@ -198,6 +198,8 @@ let ranOutOfFuelWhenOn = {
     powerPlant3: false,
 }
 
+let battleResolved = [false, null];
+
 let currentTab = [1, 'Resources'];
 let currentOptionPane = null;
 let notationType = 'normalCondensed';
@@ -660,6 +662,7 @@ export function captureGameStatusForSaving(type) {
     gameState.runStartTimeStamp = runStartTimeStamp;
     gameState.gameStartTimeStamp = gameStartTimeStamp;
     gameState.battleUnits = battleUnits;
+    gameState.battleResolved = battleResolved;
 
     // Flags
     gameState.flags = {
@@ -807,6 +810,7 @@ export function restoreGameStatus(gameState, type) {
             runStartTimeStamp = gameState.runStartTimeStamp ?? null;
             gameStartTimeStamp = gameState.gameStartTimeStamp ?? null;
             battleUnits = gameState.battleUnits ?? { player: [], enemy: [] };
+            battleResolved = gameState.battleResolved ?? [false, null];
 
 
             // Flags
@@ -2513,6 +2517,14 @@ export function getEnemyFleetsAdjustedForDiplomacy() {
 
 export function setEnemyFleetsAdjustedForDiplomacy(value) {
     enemyFleetAdjustedForDiplomacy = value;
+}
+
+export function getBattleResolved() {
+    return battleResolved;
+}
+
+export function setBattleResolved(status, winner) {
+    battleResolved = [status, winner];
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

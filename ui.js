@@ -115,6 +115,7 @@ import {
     getWarMode,
     getNeedNewBattleCanvas,
     setNeedNewBattleCanvas,
+    getBattleResolved,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -170,7 +171,8 @@ import {
     addToResourceAllTimeStat,
     calculateMovementVectorToTarget,
     turnAround,
-    setEnemyFleetPower
+    setEnemyFleetPower,
+    checkBattleOutcome
 
 } from './game.js';
 

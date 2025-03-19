@@ -200,7 +200,9 @@ import {
     getBattleUnits,
     setFormationGoal,
     setBattleTriggeredByPlayer,
-    getWasAutoSaveToggled
+    getWasAutoSaveToggled,
+    getBattleResolved,
+    setBattleResolved
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3394,8 +3396,61 @@ function removeDuplicateIds(id) {
     }
 }
 
-function coloniseChecks() {
+export function checkBattleOutcome() {
+    const battleUnits = getBattleUnits();
+    
+    function allDisabled(units) {
+        return units.every(unit => unit.disabled === true);
+    }
+
+    const playerDefeated = allDisabled(battleUnits.player);
+    const enemyDefeated = allDisabled(battleUnits.enemy);
+
+    if (playerDefeated) {
+        return [true, 'enemy'];
+    } else if (enemyDefeated) {
+        return [true, 'player'];
+    }
+
+    return [false, null];
+}
+
+function waitForAnimationEnd(element, animationClass) {
+    return new Promise((resolve) => {
+        element.classList.add(animationClass);
+        element.addEventListener('animationend', function onAnimationEnd() {
+            element.removeEventListener('animationend', onAnimationEnd);
+            resolve();
+        });
+    });
+}
+
+async function initiateBattleFadeOut(battleResolved) {
+    const battleCanvas = document.getElementById('battleCanvas');
+    if (battleCanvas) {
+        await waitForAnimationEnd(battleCanvas, 'fade-in-stretch');
+        setBattleResolved(true, battleResolved[1]);
+    }
+}
+
+async function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
+        const battleCanvasContainer = document.getElementById('battleCanvasContainer');
+
+        if (getBattleTriggeredByPlayer() && !getBattleResolved()[0]) {
+            const battleResolved = checkBattleOutcome();
+            if (battleResolved[0]) {
+                drawBattleResultText('battleCanvas', battleResolved[1]);
+                await initiateBattleFadeOut(battleResolved);
+                disableTabsLinksAndAutoSaveDuringBattle(false);
+            }
+        }
+
+        if (getBattleResolved()[0] && battleCanvasContainer) {
+            battleCanvasContainer.classList.add('invisible');
+            return;
+        }
+
         removeDuplicateIds('diplomacyOptionsRow');
         removeDuplicateIds('diplomacyImpressionBar');
         removeDuplicateIds('receptionStatusRow');
@@ -3471,11 +3526,29 @@ function coloniseChecks() {
                 }
             }
 
-            if (getBattleOngoing() && !getNeedNewBattleCanvas()) {
+            if (getBattleOngoing() && !getNeedNewBattleCanvas()) {                
                 moveBattleUnits('battleCanvas');
                 assignGoalToUnits();
             }
         }
+    }
+}
+
+function drawBattleResultText(canvasId, result) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    
+    if (result === 'player') {
+        ctx.fillText("Battle Won!", canvasWidth / 2, canvasHeight / 2);
+    } else if (result === 'enemy') {
+        ctx.fillText("Battle Lost!", canvasWidth / 2, canvasHeight / 2);
     }
 }
 
@@ -6851,7 +6924,6 @@ function trackEnemyAndAdjustHealth(unit) {
 
     setBattleUnits(unit.owner, battleUnits[unit.owner]);
 }
-
 
 export function assignGoalToUnits() {
     const canvas = document.getElementById('battleCanvas');

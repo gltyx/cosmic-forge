@@ -2021,5 +2021,20 @@ canvas {
       opacity: 0;
     }
   }
+
+.fade-in-stretch {
+    animation: fadeInStretch 3s forwards;
+}
+
+@keyframes fadeInStretch {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(1.8);
+    }
+}
   
 
