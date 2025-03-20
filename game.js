@@ -6990,6 +6990,9 @@ function trackEnemyAndAdjustHealth(unit) {
     const battleUnits = getBattleUnits();
     const ownerUnits = battleUnits[unit.currentGoal.owner];
 
+    const enemyDefenseRating = getStarSystemDataObject('stars', ['destinationStar', 'defenseRating']);
+    const baseHealthReduction = 0.2;
+
     const goalUnit = ownerUnits.find(u => u.id === unit.currentGoal.id);
 
     if (goalUnit) {
@@ -6999,19 +7002,28 @@ function trackEnemyAndAdjustHealth(unit) {
         }
 
         if (goalUnit.health > 0) {
-            goalUnit.health -= 0.1;
+            let healthReduction = baseHealthReduction;
+
+            if (goalUnit.owner === 'enemy') {
+                const defenseMultiplier = enemyDefenseRating / 100;
+                healthReduction = baseHealthReduction * defenseMultiplier;
+            } else if (goalUnit.owner === 'player') {
+                healthReduction = 0.1;
+            }
+
+            goalUnit.health -= healthReduction;
         }
-    
+
         if (goalUnit.health <= 0 && !goalUnit.disabled) {
             unit.currentGoal = null;
             goalUnit.disabled = true;
             explosionAnimation(goalUnit.x, goalUnit.y);
-            // console.log('unit killed: ' + goalUnit.id + ' (' + goalUnit.owner + ')');
         }
     }
 
     setBattleUnits(unit.owner, battleUnits[unit.owner]);
 }
+
 
 export function assignGoalToUnits() {
     const canvas = document.getElementById('battleCanvas');

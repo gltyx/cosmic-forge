@@ -3977,7 +3977,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 width, 
                 height,
                 size, 
-                health: 100, 
+                health: (owner === 'enemy' && starData.lifeformTraits[2][0] === 'Hive Mind') ? 50 : 100, 
                 owner, 
                 speed: speed,
                 verticalSpeed: 0,
