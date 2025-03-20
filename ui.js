@@ -145,6 +145,11 @@ import {
     enterWarModeModalNeutral,
     enterWarModeModalReserved,
     enterWarModeModalPatience,
+    modalBattleHeaderText,
+    modalBattleWonText,
+    modalBattleLostText,
+    modalBattleNoSentientLifeHeader,
+    modalBattleNoSentientLifeText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1453,6 +1458,34 @@ export function showEnterWarModeModal(reason) {
             resolve();
         };
     });
+}
+
+export function showBattlePopup(won) {
+    const modalContainer = getElements().modalContainer;
+    const overlay = getElements().overlay;
+    const battleOutcomeConfirmButton = document.getElementById('battleOutcomeConfirmButton');
+    
+    let headerText = modalBattleHeaderText;
+    let content = won ? modalBattleWonText : modalBattleLostText;
+    
+    if (won === 'noSentientLife') {
+        headerText = modalBattleNoSentientLifeHeader;
+        content = modalBattleNoSentientLifeText;
+    }
+
+    document.getElementById('enterWarModeConfirmButton').classList.add('invisible');
+    document.getElementById('enterWarModeCancelButton').classList.add('invisible');
+
+    document.getElementById('battleOutcomeConfirmButton').classList.remove('invisible');
+
+    populateModal(headerText, content);
+
+    modalContainer.style.display = 'flex';
+    overlay.style.display = 'flex';
+
+    battleOutcomeConfirmButton.onclick = function () {
+        showHideModal();
+    };
 }
 
 export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HERE

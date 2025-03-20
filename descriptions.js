@@ -28,6 +28,11 @@ export let enterWarModeModalImproveToReceptive;
 export let enterWarModeModalNeutral;
 export let enterWarModeModalReserved;
 export let enterWarModeModalPatience;
+export let modalBattleHeaderText;
+export let modalBattleWonText;
+export let modalBattleLostText;
+export let modalBattleNoSentientLifeHeader;
+export let modalBattleNoSentientLifeText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -53,6 +58,11 @@ export function initialiseDescriptions() {
     enterWarModeModalNeutral = `After chatting the enemy remains neutral towards you.`;
     enterWarModeModalReserved = `The enemy still has a low impression of you and are reserved in their attitude.`;
     enterWarModeModalPatience = `The enemy negotiator is tired of chatter and has retired to consider their position.`;
+    modalBattleHeaderText = `OUTCOME OF CONQUEST:`;
+    modalBattleWonText = `You have won the battle!<br><br>With the enemy fleet destroyed, you have conquered the System!`;
+    modalBattleLostText = `You have lost the battle!<br><br>Your fleet has been destroyed, and must be rebuilt to try again to conquer the System!`;
+    modalBattleNoSentientLifeHeader = `SETTLE NEW SYSTEM!`;
+    modalBattleNoSentientLifeText = `There is no sentient life in this System, so you can settle right away!`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

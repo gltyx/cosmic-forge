@@ -253,7 +253,8 @@ import {
     moveBattleUnits,
     createBattleCanvas,
     explosionAnimation,
-    shootLaser
+    shootLaser,
+    showBattlePopup
 } from "./ui.js";
 
 import { 
@@ -3490,8 +3491,9 @@ async function coloniseChecks() {
                     setEnemyFleetsAdjustedForDiplomacy(false);
                     resetFleetPrices();
                     autoSelectOption('fleetHangarOption');
+                    showBattlePopup(false);
                 } else {
-                    //setup after won battle
+                    showBattlePopup(true);
                     resetFleetsToZero('enemy');
                 }
             }
@@ -3511,6 +3513,7 @@ async function coloniseChecks() {
         const fleetPowerPlayer = getResourceDataObject('fleets', ['attackPower']);
         if (!getWarMode()) {
             const patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
+            const civilizationLevel = getStarSystemDataObject('stars', ['destinationStar', 'civilizationLevel']);
             
             if (fleetPowerPlayer === 0) {
                 if (document.querySelector('button.conquest')) {
@@ -3525,6 +3528,16 @@ async function coloniseChecks() {
             } else {
                 document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
             }
+
+            if (civilizationLevel === 'None' || civilizationLevel === 'Unsentient') {
+                if (document.querySelector('button.conquest')) {
+                    document.querySelector('button.conquest').innerHTML = 'Settle';
+                    document.querySelector('button.conquest').classList.remove('red-disabled-text');
+                    document.querySelector('button.conquest').classList.add('green-ready-text');
+                }
+                document.getElementById('descriptionContentTab5').innerHTML = `Simply Settle at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> with no resistance!`;
+            }
+
         } else {
             const descriptionTab = document.getElementById('descriptionContentTab5');
             let button = document.getElementById('battleButton');
@@ -6738,6 +6751,10 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             tryToVassalizeEnemy(starData);
             break;
         case 'conquest':
+            if (starData.civilizationLevel === 'None' || starData.civilizationLevel === 'Unsentient') {
+                initialiseSettleProcessAfterBattle('noSentientLife');
+                break;
+            }
             setEnemyFleetPower();
             setFormationGoal(null);
             setNeedNewBattleCanvas(true);
@@ -7221,6 +7238,20 @@ export function turnAround(unit) {
 
     const updatedUnits = battleUnits[unit.owner].map(u => u.id === unit.id ? { ...u, currentSpeed: unit.currentSpeed } : u);
     setBattleUnits(unit.owner, updatedUnits);
+}
+
+export function initialiseSettleProcessAfterBattle(accessPoint) {
+    //hide colonise screen for rest of run and select fleet hangar
+    //enable galactic tab if not enabled
+    //award AP
+    switch(accessPoint) {
+        case 'noSentientLife':
+            showBattlePopup('noSentientLife');
+            break;
+        case 'battle':
+            showBattlePopup(true);
+            break;
+    }
 }
 
 

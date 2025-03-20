@@ -306,7 +306,8 @@ button {
 #modalButton,
 #modalSaveButton,
 #launchConfirmButton,
-#enterWarModeConfirmButton
+#enterWarModeConfirmButton,
+#battleOutcomeConfirmButton
 {
     position: fixed;
     bottom: 12%;
