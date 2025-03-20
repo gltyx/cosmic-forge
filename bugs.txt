@@ -4,7 +4,6 @@ stats bugs in general
 
 TODO
 
-if only air and sea of opposing sides, battle cant resolve
 if going in for second or subsequent battles and clilck colonise with fleet strength of 0 need to hide the battle canvas and disable conquest button
 
 during battle:

@@ -3514,7 +3514,9 @@ async function coloniseChecks() {
             }
         }
 
-        if (getBattleResolved()[0] && battleCanvasContainer) {
+        const fleetPowerPlayer = getResourceDataObject('fleets', ['attackPower']);
+
+        if (battleCanvasContainer && (getBattleResolved()[0] || fleetPowerPlayer === 0)) {
             battleCanvasContainer.classList.add('invisible');
             return;
         }
@@ -3525,16 +3527,9 @@ async function coloniseChecks() {
         removeDuplicateIds('intelligenceRow');
         removeDuplicateIds('enemyFleetsRow');  
 
-        const fleetPowerPlayer = getResourceDataObject('fleets', ['attackPower']);
         if (!getWarMode()) {
             const patience = getStarSystemDataObject('stars', ['destinationStar', 'patience']);
             const civilizationLevel = getStarSystemDataObject('stars', ['destinationStar', 'civilizationLevel']);
-            
-            if (fleetPowerPlayer === 0) {
-                if (document.querySelector('button.conquest')) {
-                    document.querySelector('button.conquest').classList.add('red-disabled-text');
-                }
-            }
 
             if (patience <= 0 && fleetPowerPlayer === 0) {
                 document.querySelectorAll("button.bully, button.passive, button.harmony, button.conquest, button.vassalize")
@@ -3657,7 +3652,9 @@ function checkDiplomacyButtons(element) {
     let active = false;
 
     if (element.classList.contains('conquest')) {
-        active = true;
+        if (playerAttackPower > 0 || element.innerHTML === 'Settle') {
+            active = true;
+        }
     }
 
     if (getDiplomacyPossible() && civilizationLevel !== 'None' && civilizationLevel !== 'Unsentient') { 
@@ -7157,11 +7154,15 @@ function getPreferredTarget(unit, visibleEnemies) {
     });
 
     if (potentialTargets.length === 0) {
-        return {
-            x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
-            y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
-            id: 'hunt'
-        };
+        if (visibleEnemies.length > 0) {
+            return visibleEnemies[Math.floor(Math.random() * visibleEnemies.length)];
+        } else {
+            return {
+                x: Math.floor(Math.random() * (canvas.offsetWidth - 20)) + 10,
+                y: Math.floor(Math.random() * (canvas.offsetHeight - 20)) + 10,
+                id: 'hunt'
+            };
+        }
     }
 
     const stealthyTargets = potentialTargets.filter(target => {
