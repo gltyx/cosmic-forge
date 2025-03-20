@@ -100,7 +100,7 @@ let createCompoundPreviews = {};
 let constituentPartsObject = {};
 let itemsToDeduct = {};
 let itemsToIncreasePrice = {};
-let techUnlockedArray = [];
+let techUnlockedArray = ['apAwardedThisRun'];
 let revealedTechArray = [];
 let upcomingTechArray = [];
 let unlockedResourcesArray = ['hydrogen'];
@@ -311,6 +311,7 @@ let redrawBattleDescription = true;
 let inFormation = false;
 let wasAutoSaveToggled = false;
 let enemyFleetAdjustedForDiplomacy = false;
+let apAwardedThisRun = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -488,7 +489,6 @@ export const statFunctionsGets = {
     "stat_enemyTotalDefenceOvercome": getStatEnemyTotalDefenceOvercome,
     "stat_enemyTotalDefenceRemaining": getStatEnemyTotalDefenceRemaining,
     "stat_apFromStarVoyage": getStatApFromStarVoyage,
-    "stat_apFromConquest": getStatApFromConquest,
 };
 
 export const statFunctionsSets = {
@@ -691,6 +691,7 @@ export function captureGameStatusForSaving(type) {
         diplomacyPossible: diplomacyPossible,
         warMode: warMode,
         enemyFleetAdjustedForDiplomacy: enemyFleetAdjustedForDiplomacy,
+        apAwardedThisRun: apAwardedThisRun,
     }
 
     return gameState;
@@ -839,6 +840,7 @@ export function restoreGameStatus(gameState, type) {
             diplomacyPossible = gameState.flags.diplomacyPossible ?? true;
             warMode = gameState.flags.warMode ?? false;
             enemyFleetAdjustedForDiplomacy = gameState.flags.enemyFleetAdjustedForDiplomacy ?? false;
+            apAwardedThisRun = gameState.flags.apAwardedThisRun ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -1540,8 +1542,14 @@ export function getTechUnlockedArray() {
 }
 
 export function setTechUnlockedArray(value) {
+    if (value === 'run1' && techUnlockedArray.length === 1 && techUnlockedArray[0] === 'apAwardedThisRun') {
+        techUnlockedArray = [];
+        return;
+    }
+
     techUnlockedArray.unshift(value);
 }
+
 
 export function getRevealedTechArray() {
     return revealedTechArray;
@@ -2531,6 +2539,14 @@ export function setBattleResolved(status, winner) {
     battleResolved = [status, winner];
 }
 
+export function getApAwardedThisRun() {
+    return apAwardedThisRun;
+}
+
+export function setApAwardedThisRun(value) {
+    apAwardedThisRun = value;
+}
+
 //stat retrievers-------------------------------------------------------------------------------------------------------
 
 function getStatPioneer() {//
@@ -2545,7 +2561,7 @@ function getStatTotalApGain() {//
     return allTimeTotalApGain;
 }
 
-function getStatRun() {//
+export function getStatRun() {//
     return runNumber; //TODO add setter when rebirth implemented
 }
 
@@ -2829,10 +2845,6 @@ function getStatEnemyTotalDefenceRemaining() {
 }
 
 function getStatApFromStarVoyage() {
-    return 1;
-}
-
-function getStatApFromConquest() {
     return 1;
 }
 

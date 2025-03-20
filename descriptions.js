@@ -59,10 +59,10 @@ export function initialiseDescriptions() {
     enterWarModeModalReserved = `The enemy still has a low impression of you and are reserved in their attitude.`;
     enterWarModeModalPatience = `The enemy negotiator is tired of chatter and has retired to consider their position.`;
     modalBattleHeaderText = `OUTCOME OF CONQUEST:`;
-    modalBattleWonText = `You have won the battle!<br><br>With the enemy fleet destroyed, you have conquered the System!`;
+    modalBattleWonText = `You have won the battle!<br><br><span class="green-ready-text">Gained X AP!</span>`;
     modalBattleLostText = `You have lost the battle!<br><br>Your fleet has been destroyed, and must be rebuilt to try again to conquer the System!`;
     modalBattleNoSentientLifeHeader = `SETTLE NEW SYSTEM!`;
-    modalBattleNoSentientLifeText = `There is no sentient life in this System, so you can settle right away!`;
+    modalBattleNoSentientLifeText = `There is no sentient life in this System, so you can settle right away!<br><br><span class="green-ready-text">Gained X AP!</span>`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
@@ -1658,9 +1658,6 @@ statisticsContent = {
 
         subHeading14: "AP From Star Voyage",
         subBody14: "1",
-
-        subHeading15: "AP From Conquest",
-        subBody15: "3",
     }
 }
 

@@ -1,4 +1,6 @@
 import {
+    setApAwardedThisRun,
+    getApAwardedThisRun,
     getAutoSaveToggle,
     setAutoSaveToggle,
     setBattleUnits,
@@ -204,7 +206,9 @@ import {
     getBattleResolved,
     setBattleResolved,
     setWarMode,
-    setEnemyFleetsAdjustedForDiplomacy
+    setEnemyFleetsAdjustedForDiplomacy,
+    setTechUnlockedArray,
+    getStatRun
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -284,6 +288,9 @@ export function startGame() {
     startInitialTimers();
     //startSpaceRelatedTimers();
     startNewsTickerTimer();
+    if (getStatRun() === 1) {
+        setTechUnlockedArray('run1');
+    }
     gameLoop();
 }
 
@@ -593,7 +600,7 @@ function checkAndRevealNewBuildings(type) {
                         .map(key => data[key].quantity);
                 })();
             
-                if (getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+                if (!getApAwardedThisRun() && getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
                     element.parentElement.parentElement.classList.remove('invisible');
                 } else {
                     element.parentElement.parentElement.classList.add('invisible');
@@ -3433,6 +3440,10 @@ async function initiateBattleFadeOut(battleResolved) {
     if (battleCanvas) {
         await waitForAnimationEnd(battleCanvas, 'fade-in-stretch');
         setBattleResolved(true, battleResolved[1]);
+
+        if (battleResolved[1] !== 'enemy') {
+            settleSystemAfterBattle('battle'); 
+        }
     }
 }
 
@@ -3493,8 +3504,12 @@ async function coloniseChecks() {
                     autoSelectOption('fleetHangarOption');
                     showBattlePopup(false);
                 } else {
-                    showBattlePopup(true);
+                    setBattleOngoing(false);
+                    setBattleTriggeredByPlayer(false);
                     resetFleetsToZero('enemy');
+                    setInFormation(false);
+                    setEnemyFleetsAdjustedForDiplomacy(false);
+                    setFleetChangedSinceLastDiplomacy(false);
                 }
             }
         }
@@ -6313,7 +6328,7 @@ export function generateDestinationStarData() {
 
     const lifeDetected = generateLifeDetection();
     //const lifeDetected = false; 
-    const civilizationLevel = lifeDetected ? generateCivilizationLevel() : 'None';
+    const civilizationLevel = lifeDetected ? generateCivilizationLevel(existingData || 0) : 'None';
     //const civilizationLevel = 'Unsentient';
     const lifeformTraits = lifeDetected ? generateLifeformTraits(civilizationLevel) : [];
     const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : 0;
@@ -6384,14 +6399,16 @@ function generateLifeformTraits(civilizationLevel) {
     return [primaryTrait, habitatTrait, extraTrait];
 }
 
-function generateCivilizationLevel() {
+function generateCivilizationLevel(starData) {
     const randomValue = Math.random();
 
     if (randomValue < 0.1) {
         return "Unsentient";
     } else if (randomValue < 0.55) {
+        addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated'); //double anticipated if a civilization is there
         return "Industrial";
     } else {
+        addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated'); //double anticipated if a civilization is there
         return "Spacefaring";
     }
 }
@@ -6752,7 +6769,7 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             break;
         case 'conquest':
             if (starData.civilizationLevel === 'None' || starData.civilizationLevel === 'Unsentient') {
-                initialiseSettleProcessAfterBattle('noSentientLife');
+                settleSystemAfterBattle('noSentientLife');
                 break;
             }
             setEnemyFleetPower();
@@ -7240,18 +7257,28 @@ export function turnAround(unit) {
     setBattleUnits(unit.owner, updatedUnits);
 }
 
-export function initialiseSettleProcessAfterBattle(accessPoint) {
-    //hide colonise screen for rest of run and select fleet hangar
+export function settleSystemAfterBattle(accessPoint) {
+    const apModifier = accessPoint === 'battle' ? 2 : 1;
+    const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
+    
+    if (!getApAwardedThisRun()) {
+        setTechUnlockedArray('apAwardedThisRun');
+        setResourceDataObject(Math.floor(apGain + getResourceDataObject('ascendencyPoints', ['quantity'])), 'ascendencyPoints', ['quantity']);
+        setApAwardedThisRun(true);
+        showNotification('Galactic Tab Unlocked!', 'warning');
+    }
+
     //enable galactic tab if not enabled
-    //award AP
     switch(accessPoint) {
         case 'noSentientLife':
-            showBattlePopup('noSentientLife');
+            showBattlePopup('noSentientLife', apGain);
             break;
         case 'battle':
-            showBattlePopup(true);
+            showBattlePopup(true, apGain);
             break;
     }
+
+    autoSelectOption('fleetHangarOption', apGain);
 }
 
 

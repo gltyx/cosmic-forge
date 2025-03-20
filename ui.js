@@ -1460,17 +1460,17 @@ export function showEnterWarModeModal(reason) {
     });
 }
 
-export function showBattlePopup(won) {
+export function showBattlePopup(won, apGain = 0) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
     const battleOutcomeConfirmButton = document.getElementById('battleOutcomeConfirmButton');
     
     let headerText = modalBattleHeaderText;
-    let content = won ? modalBattleWonText : modalBattleLostText;
+    let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
     
     if (won === 'noSentientLife') {
         headerText = modalBattleNoSentientLifeHeader;
-        content = modalBattleNoSentientLifeText;
+        content = modalBattleNoSentientLifeText.replace(' X ', ` ${apGain} `);
     }
 
     document.getElementById('enterWarModeConfirmButton').classList.add('invisible');
@@ -2587,6 +2587,7 @@ export function checkOrderOfTabs() {
     if (techArray.includes('basicPowerGeneration')) unlockedTabs.push(2);
     if (techArray.includes('compounds')) unlockedTabs.push(4);
     if (techArray.includes('atmosphericTelescopes')) unlockedTabs.push(6);
+    if (techArray.includes('apAwardedThisRun')) unlockedTabs.push(7);
 
     unlockedTabs = unlockedTabs.sort((a, b) => tabPriorities[a] - tabPriorities[b]);
 
