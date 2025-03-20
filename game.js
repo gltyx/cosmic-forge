@@ -202,7 +202,9 @@ import {
     setBattleTriggeredByPlayer,
     getWasAutoSaveToggled,
     getBattleResolved,
-    setBattleResolved
+    setBattleResolved,
+    setWarMode,
+    setEnemyFleetsAdjustedForDiplomacy
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3433,6 +3435,41 @@ async function initiateBattleFadeOut(battleResolved) {
     }
 }
 
+function resetFleetsToZero(owner) {
+    if (owner === 'player') {
+        const fleetNames = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
+        fleetNames.forEach(fleet => {
+            setResourceDataObject(0, 'space', ['upgrades', fleet, 'quantity']);
+        });
+        setResourceDataObject(0, 'fleets', ['attackPower']);
+        setResourceDataObject(0, 'fleets', ['defensePower']);
+    } else if (owner === 'enemy') {
+        const fleetNames = ['air', 'land', 'sea'];
+        fleetNames.forEach(fleet => {
+            setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', fleet]);
+        });
+        setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
+    }
+}
+
+function autoSelectOption(option) {
+    const optionElement = document.getElementById(option);
+    if (optionElement) {
+        optionElement.click();
+    }
+}
+
+function resetFleetPrices() {
+    const fleetTypes = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
+
+    fleetTypes.forEach(fleetType => {
+        setResourceDataObject(2000, 'space', ['upgrades', fleetType, 'price']);
+        setResourceDataObject([8000, 'hydrogen', 'resources'], 'space', ['upgrades', fleetType, 'resource1Price']);
+        setResourceDataObject([300, 'silicon', 'resources'], 'space', ['upgrades', fleetType, 'resource2Price']);
+        setResourceDataObject([120, 'titanium', 'compounds'], 'space', ['upgrades', fleetType, 'resource3Price']);
+    });
+}
+
 async function coloniseChecks() {
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
         const battleCanvasContainer = document.getElementById('battleCanvasContainer');
@@ -3443,6 +3480,20 @@ async function coloniseChecks() {
                 drawBattleResultText('battleCanvas', battleResolved[1]);
                 await initiateBattleFadeOut(battleResolved);
                 disableTabsLinksAndAutoSaveDuringBattle(false);
+
+                if (battleResolved[1] === 'enemy') {
+                    resetFleetsToZero('player');
+                    setFleetChangedSinceLastDiplomacy(false);
+                    setBattleOngoing(false);
+                    setBattleTriggeredByPlayer(false);
+                    setInFormation(false);
+                    setEnemyFleetsAdjustedForDiplomacy(false);
+                    resetFleetPrices();
+                    autoSelectOption('fleetHangarOption');
+                } else {
+                    //setup after won battle
+                    resetFleetsToZero('enemy');
+                }
             }
         }
 
@@ -3488,6 +3539,11 @@ async function coloniseChecks() {
                 button.onclick = function() {
                     disableTabsLinksAndAutoSaveDuringBattle(true);
                     setBattleTriggeredByPlayer(true);
+                    setDiplomacyPossible(false);
+                    setStarSystemDataObject(0, 'stars', ['destinationStar', 'initialImpression']);
+                    setStarSystemDataObject(0, 'stars', ['destinationStar', 'currentImpression']);
+                    setStarSystemDataObject('Belligerent', 'stars', ['destinationStar', 'attitude']);
+                    calculateAttitude();
                     assignGoalToUnits();
                 };
                 descriptionTab.appendChild(button);
