@@ -6458,11 +6458,11 @@ function generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) {
 function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     const threatFleetMultipliers = {
         "None": 0,
-        "Low": 0.00000002,      
-        "Moderate": 0.00000005,
-        "High": 0.0000001,
-        "Extreme": 0.0000002
-    };
+        "Low": 0.00000001,
+        "Moderate": 0.000000013,
+        "High": 0.0000000169,
+        "Extreme": 0.00000002197
+    };    
 
     let totalFleets = Math.floor(population * threatFleetMultipliers[threatLevel] * 100);
 

@@ -4,11 +4,14 @@ stats bugs in general
 
 TODO
 
+diplomacy - enable conquest button if unsentient and bypass battle
+
 during battle:
 involve defense for enemy - have a damage mechanic depending what type of unit is attacking what type of unit with defense bonus
 think about changing heat and cold resistant to somethng meaningful where you can amplify effect of defense against certain unit combinations or something like that
+involve all traits and factors in to the strength of enemies and player.  use health reduction of other side to imitate attack power bonuses
+hive mind start with half health per unit
 
 after battle:
-reset flags regarding battle and set a battleWon flag to true or false
 show a popup explaining to the user the result - if lost then reset state, make units prices again like they were when you had none, and replenish enemy ones but only like a quarter but no diplomacy - if won then progress on to some kind of victory dance before thinking about rebirthing
 after popup if won select another screen called rebirth screen and hide colonise - if lost then reset everything and ensure we cannot see diplomacy
