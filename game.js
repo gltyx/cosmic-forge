@@ -6997,7 +6997,6 @@ function trackEnemyAndAdjustHealth(unit) {
     const goalUnit = ownerUnits.find(u => u.id === unit.currentGoal.id);
 
     if (goalUnit) {
-        // Update goal coordinates if needed
         if (goalUnit.x !== unit.currentGoal.x || goalUnit.y !== unit.currentGoal.y) {
             unit.currentGoal.x = goalUnit.x;
             unit.currentGoal.y = goalUnit.y;
@@ -7007,14 +7006,9 @@ function trackEnemyAndAdjustHealth(unit) {
             let healthReduction;
             
             if (goalUnit.owner === 'enemy') {
-                // Apply correct formula: healthReduction = 0.2 - (0.001 * enemyDefenseRating)
                 healthReduction = Math.max(0, baseHealthReduction - (0.001 * enemyDefenseRating));
             } else if (goalUnit.owner === 'player') {
-                // Player units always take 0.1 damage
                 healthReduction = 0.1;
-            } else {
-                // Default case (if needed)
-                healthReduction = baseHealthReduction;
             }
 
             goalUnit.health -= healthReduction;
