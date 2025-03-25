@@ -6383,7 +6383,7 @@ function generateLifeDetection() {
 function generateLifeformTraits(civilizationLevel) {
     const primaryTraits = [["Aggressive", "red-disabled-text"], ["Diplomatic", "green-ready-text"]];
     const habitatTraits = [["Terrans", ""], ["Aquatic", ""], ["Aerialians", ""]];
-    const extraTraits = [["Armored", "red-disabled-text"], ["Hive Mind", "red-disabled-text"], ["Heat Resistant", "warning-orange-text"], ["Cold Resistant", "warning-orange-text"]];
+    const extraTraits = [["Armored", "red-disabled-text"], ["Hive Mind", "red-disabled-text"], ["Power Siphon", "warning-orange-text"], ["Hypercharge", "warning-orange-text"]];
 
     if (civilizationLevel === 'Unsentient') {
         return [['N/A', ''], ['N/A', ''], ['N/A', '']];
@@ -6473,7 +6473,7 @@ function generateDefenseRating(civilizationLevel, threatLevel, lifeformTraits) {
     defenseRating = Math.round(maxDefense * threatMultipliers[threatLevel] * civilizationBonus);
 
     if (lifeformTraits.some(trait => trait[0] === "Armored")) {
-        defenseRating = Math.min(maxDefense, defenseRating + 10);
+        defenseRating = Math.min(maxDefense, defenseRating + 25);
     }    
 
     const minDefense = Math.max(1, defenseRating - 10);
@@ -6652,13 +6652,13 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
         impression -= 10;
         // console.log(`Hive Mind trait detected, new impression: ${impression}`);
     }
-    if (lifeformTraits.some(trait => trait[0] === "Heat Resistant")) {
+    if (lifeformTraits.some(trait => trait[0] === "Power Siphon")) {
         impression += 3;
-        // console.log(`Heat Resistant trait detected, new impression: ${impression}`);
+        // console.log(`Power Siphon trait detected, new impression: ${impression}`);
     }
-    if (lifeformTraits.some(trait => trait[0] === "Cold Resistant")) {
+    if (lifeformTraits.some(trait => trait[0] === "Hypercharge")) {
         impression += 3;
-        // console.log(`Cold Resistant trait detected, new impression: ${impression}`);
+        // console.log(`Hypercharge trait detected, new impression: ${impression}`);
     }
 
     if (civilizationLevel === "Industrial") {
@@ -6991,9 +6991,16 @@ function trackEnemyAndAdjustHealth(unit) {
     const ownerUnits = battleUnits[unit.currentGoal.owner];
 
     const enemyDefenseRating = getStarSystemDataObject('stars', ['destinationStar', 'defenseRating']);
+    const anomalies = getStarSystemDataObject('stars', ['destinationStar', 'anomalies']);
+    const enemyTraits = getStarSystemDataObject('stars', ['destinationStar', 'lifeformTraits']);
+
+    const playerAttackBuff = anomalies.find(anomaly => anomaly.type === "player-attack-buff");
+    const playerAttackDebuff = anomalies.find(anomaly => anomaly.type === "player-attack-debuff");
     
+    const playerBuffTotal = (playerAttackBuff?.value ?? 0) + (playerAttackDebuff?.value ?? 0);
+
     const baseHealthReduction = 0.2;
-    
+
     const goalUnit = ownerUnits.find(u => u.id === unit.currentGoal.id);
 
     if (goalUnit) {
@@ -7003,15 +7010,22 @@ function trackEnemyAndAdjustHealth(unit) {
         }
 
         if (goalUnit.health > 0) {
-            let healthReduction;
-            
+            let healthReduction = 0;
+
             if (goalUnit.owner === 'enemy') {
                 healthReduction = Math.max(0, baseHealthReduction - (0.001 * enemyDefenseRating));
             } else if (goalUnit.owner === 'player') {
-                healthReduction = 0.1;
+                healthReduction = 0.1 * (1 + playerBuffTotal / 100);
             }
 
             goalUnit.health -= healthReduction;
+
+            if (unit.owner === 'enemy') {
+                if (enemyTraits[2][0] === "Power Siphon") {
+                    const siphonAmount = healthReduction * 0.25;
+                    unit.health = Math.min(100, unit.health + siphonAmount);
+                }
+            }
         }
 
         if (goalUnit.health <= 0 && !goalUnit.disabled) {
@@ -7023,7 +7037,6 @@ function trackEnemyAndAdjustHealth(unit) {
 
     setBattleUnits(unit.owner, battleUnits[unit.owner]);
 }
-
 
 export function assignGoalToUnits() {
     const canvas = document.getElementById('battleCanvas');

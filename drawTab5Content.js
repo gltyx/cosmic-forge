@@ -470,21 +470,6 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                 null,
                 'Enemy Fleets:',
                 createTextElement(
-                    `Land: <span class="${starData.civilizationLevel === 'None' 
-                        ? 'green-ready-text' 
-                        : (getStellarScannerBuilt() 
-                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
-                            : 'red-disabled-text')}">
-                        ${starData.civilizationLevel === 'None' 
-                            ? 'None' 
-                            : (getStellarScannerBuilt() 
-                                ? starData.enemyFleets.land 
-                                : '???')}
-                    </span>`,
-                    'fleetLandText',
-                    ['value-text', 'ap-destination-star-element']
-                ),
-                createTextElement(
                     `Air: <span class="${starData.civilizationLevel === 'None' 
                         ? 'green-ready-text' 
                         : (getStellarScannerBuilt() 
@@ -497,6 +482,21 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                                 : '???')}
                     </span>`,
                     'fleetAirText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Land: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.land 
+                                : '???')}
+                    </span>`,
+                    'fleetLandText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(
@@ -800,21 +800,6 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                 null,
                 'Enemy Fleets:',
                 createTextElement(
-                    `Land: <span class="${starData.civilizationLevel === 'None' 
-                        ? 'green-ready-text' 
-                        : (getStellarScannerBuilt() 
-                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
-                            : 'red-disabled-text')}">
-                        ${starData.civilizationLevel === 'None' 
-                            ? 'None' 
-                            : (getStellarScannerBuilt() 
-                                ? starData.enemyFleets.land 
-                                : '???')}
-                    </span>`,
-                    'fleetLandText',
-                    ['value-text', 'ap-destination-star-element']
-                ),
-                createTextElement(
                     `Air: <span class="${starData.civilizationLevel === 'None' 
                         ? 'green-ready-text' 
                         : (getStellarScannerBuilt() 
@@ -827,6 +812,21 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                                 : '???')}
                     </span>`,
                     'fleetAirText',
+                    ['value-text', 'ap-destination-star-element']
+                ),
+                createTextElement(
+                    `Land: <span class="${starData.civilizationLevel === 'None' 
+                        ? 'green-ready-text' 
+                        : (getStellarScannerBuilt() 
+                            ? (starData.enemyFleets.fleetChanges.land.class || '') 
+                            : 'red-disabled-text')}">
+                        ${starData.civilizationLevel === 'None' 
+                            ? 'None' 
+                            : (getStellarScannerBuilt() 
+                                ? starData.enemyFleets.land 
+                                : '???')}
+                    </span>`,
+                    'fleetLandText',
                     ['value-text', 'ap-destination-star-element']
                 ),
                 createTextElement(

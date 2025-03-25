@@ -3940,9 +3940,15 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                     const resourceFleetName = "fleet" + capitaliseString(unitType.split("_").slice(1).join("_"));
                     speed = getResourceDataObject('space', ['upgrades', resourceFleetName, 'speed']);
                 } else if (owner === 'enemy') {
-                    const airSpeed = getFleetConstantData("air").speed;
-                    const landSpeed = getFleetConstantData("land").speed;
-                    const seaSpeed = getFleetConstantData("sea").speed;
+                    let airSpeed = getFleetConstantData("air").speed;
+                    let landSpeed = getFleetConstantData("land").speed;
+                    let seaSpeed = getFleetConstantData("sea").speed;
+
+                    if (starData.lifeformTraits[2][0] === 'Hypercharge') {
+                        airSpeed *= 2;
+                        landSpeed *= 2;
+                        seaSpeed *= 2;
+                    }
 
                     const speedMap = { air: airSpeed, land: landSpeed, sea: seaSpeed };
                     speed = speedMap[unitType] || 0;
@@ -3989,7 +3995,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 inFormation: false,
                 currentGoal: null,
                 visionDistance: unitType.includes('air') ? visionDistanceAir : unitType.includes('land') ? visionDistanceLand : visionDistanceSea,
-                acceleration: unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea,
+                acceleration: (owner === 'enemy' && starData.lifeformTraits[2][0] === 'Hypercharge') ? (unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea) * 2 : (unitType.includes('air') ? accelerationAir : unitType.includes('land') ? accelerationLand : accelerationSea),
                 currentSpeed: 0,
                 huntX: null,
                 huntY: null,
