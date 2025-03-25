@@ -7013,9 +7013,9 @@ function trackEnemyAndAdjustHealth(unit) {
             let healthReduction = 0;
 
             if (goalUnit.owner === 'enemy') {
-                healthReduction = Math.max(0, baseHealthReduction - (0.001 * enemyDefenseRating));
+                healthReduction = Math.max(0, baseHealthReduction - (0.001 * enemyDefenseRating)) * (1 + playerBuffTotal / 100);
             } else if (goalUnit.owner === 'player') {
-                healthReduction = 0.1 * (1 + playerBuffTotal / 100);
+                healthReduction = 0.1;
             }
 
             goalUnit.health -= healthReduction;
