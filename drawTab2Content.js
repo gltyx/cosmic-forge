@@ -99,6 +99,7 @@ export function drawTab2Content(heading, optionContentElement) {
         );
         optionContentElement.appendChild(battery3Row);
     }
+    
     if (heading === 'Power Plant') {
         const activeStatus = getBuildingTypeOnOff('powerPlant1');
         if (activeStatus) {

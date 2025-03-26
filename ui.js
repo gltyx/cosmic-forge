@@ -150,6 +150,8 @@ import {
     modalBattleLostText,
     modalBattleNoSentientLifeHeader,
     modalBattleNoSentientLifeText,
+    modalRebirthHeader,
+    modalRebirthText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -177,7 +179,8 @@ import {
     calculateMovementVectorToTarget,
     turnAround,
     setEnemyFleetPower,
-    checkBattleOutcome
+    checkBattleOutcome,
+    rebirth
 
 } from './game.js';
 
@@ -2938,6 +2941,22 @@ function initializeTabEventListeners() {
             updateContent('Mining', 'tab6', 'content');
         });
     });
+
+    document.querySelectorAll('[class*="tab7"][class*="option1"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab7', 'rebirth');
+            setCurrentOptionPane('rebirth');
+            updateContent('Rebirth', 'tab7', 'content');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab7"][class*="option2"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab7', 'galactic market');
+            setCurrentOptionPane('galactic market');
+            updateContent('Galactic Market', 'tab7', 'content');
+        });
+    });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
@@ -4491,6 +4510,45 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const desiredAngle = Math.atan2(y, x) + Math.PI / 2;
         unit.rotation = desiredAngle;
         return unit;
+    }
+
+    export function showRebirthPopup() {
+        const modalContainer = getElements().modalContainer;
+        const overlay = getElements().overlay;
+        const rebirthConfirmButton = document.getElementById('rebirthConfirmButton');
+        const rebirthCancelButton = document.getElementById('rebirthCancelButton');
+        
+        let headerText = modalRebirthHeader;
+        let content = modalRebirthText;
+
+        const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+        const spanClass = currentAp === 0 ? "red-disabled-text" : "green-ready-text";
+        
+        content = content.replace(
+            /<span class="green-ready-text">.*?<\/span>/, 
+            `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
+        );
+    
+        document.getElementById('battleOutcomeConfirmButton').classList.add('invisible');
+    
+        rebirthConfirmButton.classList.remove('invisible');
+        rebirthCancelButton.classList.remove('invisible');
+    
+        populateModal(headerText, content);
+    
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+    
+        rebirthConfirmButton.onclick = function () {
+            rebirth();
+            showHideModal();
+            rebirthConfirmButton.classList.add('invisible');
+            rebirthCancelButton.classList.add('invisible');
+        };
+    
+        rebirthCancelButton.onclick = function () {
+            showHideModal();
+        };
     }
     
 //-------------------------------------------------------------------------------------------------

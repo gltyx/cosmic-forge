@@ -307,7 +307,8 @@ button {
 #modalSaveButton,
 #launchConfirmButton,
 #enterWarModeConfirmButton,
-#battleOutcomeConfirmButton
+#battleOutcomeConfirmButton,
+#rebirthConfirmButton
 {
     position: fixed;
     bottom: 12%;
@@ -317,7 +318,8 @@ button {
 }
 
 #launchCancelButton,
-#enterWarModeCancelButton
+#enterWarModeCancelButton,
+#rebirthCancelButton
 {
     position: fixed;
     bottom: 5%;

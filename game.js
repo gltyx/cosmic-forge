@@ -1,4 +1,6 @@
 import {
+    getRebirthPossible,
+    setRebirthPossible,
     setApAwardedThisRun,
     getApAwardedThisRun,
     getAutoSaveToggle,
@@ -258,7 +260,8 @@ import {
     createBattleCanvas,
     explosionAnimation,
     shootLaser,
-    showBattlePopup
+    showBattlePopup,
+    showRebirthPopup,
 } from "./ui.js";
 
 import { 
@@ -368,6 +371,7 @@ export async function gameLoop() {
         starShipUiChecks();
         fleetHangarChecks();
         coloniseChecks();
+        rebirthChecks();
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
@@ -3480,6 +3484,18 @@ function resetFleetPrices() {
         setResourceDataObject([300, 'silicon', 'resources'], 'space', ['upgrades', fleetType, 'resource2Price']);
         setResourceDataObject([120, 'titanium', 'compounds'], 'space', ['upgrades', fleetType, 'resource3Price']);
     });
+}
+
+function rebirthChecks() {
+    if (getCurrentOptionPane() === 'rebirth') {
+        if (getRebirthPossible()) {
+            document.querySelector('.rebirth-check').classList.remove('red-disabled-text');
+            document.querySelector('.rebirth-check').classList.add('green-ready-text');
+        } else {
+            document.querySelector('.rebirth-check').classList.add('red-disabled-text');
+            document.querySelector('.rebirth-check').classList.remove('green-ready-text');
+        }
+    }
 }
 
 async function coloniseChecks() {
@@ -7284,6 +7300,7 @@ export function turnAround(unit) {
 }
 
 export function settleSystemAfterBattle(accessPoint) {
+    setRebirthPossible(true);
     const apModifier = accessPoint === 'battle' ? 2 : 1;
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
     
@@ -7294,7 +7311,6 @@ export function settleSystemAfterBattle(accessPoint) {
         showNotification('Galactic Tab Unlocked!', 'warning');
     }
 
-    //enable galactic tab if not enabled
     switch(accessPoint) {
         case 'noSentientLife':
             showBattlePopup('noSentientLife', apGain);
@@ -7305,6 +7321,13 @@ export function settleSystemAfterBattle(accessPoint) {
     }
 
     autoSelectOption('fleetHangarOption', apGain);
+}
+
+export function rebirth() {
+    setRebirthPossible(false);
+    //show warning modal for reset run
+    //reset all game data except AP!
+    console.log('Rebirthed');
 }
 
 

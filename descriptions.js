@@ -33,6 +33,8 @@ export let modalBattleWonText;
 export let modalBattleLostText;
 export let modalBattleNoSentientLifeHeader;
 export let modalBattleNoSentientLifeText;
+export let modalRebirthHeader;
+export let modalRebirthText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -63,6 +65,8 @@ export function initialiseDescriptions() {
     modalBattleLostText = `You have lost the battle!<br><br>Your fleet has been destroyed, and must be rebuilt to try again to conquer the System!`;
     modalBattleNoSentientLifeHeader = `SETTLE NEW SYSTEM!`;
     modalBattleNoSentientLifeText = `There is no sentient life in this System, so you can settle right away!<br><br><span class="green-ready-text">Gained X AP!</span>`;
+    modalRebirthHeader = `WARNING: REBIRTH!`;
+    modalRebirthText = `You are about to reset your progress and start again at the new System.<br><br>Are you sure you want to do this?<br><br><span class="green-ready-text">You will carry over X AP!</span>`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
@@ -71,7 +75,7 @@ export function initialiseDescriptions() {
         'Research': 'In the Research section, you can unlock new technologies to progress through the game, and also get upgrades to farm research points.',
         'Energy': 'Here you can buy upgrades for generating power which is needed for more advanced buildings.',
         'Space Mining': 'Here you can build vessels to mine asteroids for valuable Antimatter, enabling you to visit locations in the Star Map, and really start to conquer the galaxy!',
-        'tab7intro': '',
+        'Galactic': 'Here you can exchange your AP for permanent buffs, and reset runs.',
         'Settings': 'Change the game settings to your liking.',
         
         'hydrogen': 'The most basic element known to man, very cheap to produce and has a pretty low value, but anything can be created from it.',
@@ -108,6 +112,9 @@ export function initialiseDescriptions() {
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
+
+        'rebirth': "Here you can reset the run at your new system, once settled!",
+        'galactic market': "Here you can make a one off sale per run of all resources for extra AP, and you can spend AP for permanent buffs!",
 
         'get started': "Learn how to get started in Cosmic Forge.",
         'concepts - early': "Early game concepts.",
@@ -986,6 +993,11 @@ export function initialiseDescriptions() {
         spaceFleetNavalStraferBuildRow: {
             content1: `Naval fleets can be devastated in a heartbeat!`,
             // content1: `Naval fleets can be devastated in a heartbeat! Gains a <span class="green-ready-text">&nbsp;${getResourceDataObject('space', ['upgrades', 'fleetScout', 'bonusPercentage'])}%&nbsp;</span> bonus against <span class="green-ready-text">&nbsp;${capitaliseString(getResourceDataObject('space', ['upgrades', 'fleetNavalStrafer', 'bonusGivenAgainstType']))}&nbsp;</span> fleets.`,
+            content2: "",
+            updateAt: ""
+        },
+        rebirthRow: {
+            content1: "Rebirth to start over at the new System.  This will reset all progress, but you will keep AP and any permanent buffs purchased in the Galactic Market",
             content2: "",
             updateAt: ""
         },

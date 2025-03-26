@@ -271,6 +271,7 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let rebirthPossible = false;
 let sfx = false;
 let backgroundAudio = false;
 let saveExportCloudFlag = false;
@@ -692,6 +693,7 @@ export function captureGameStatusForSaving(type) {
         warMode: warMode,
         enemyFleetAdjustedForDiplomacy: enemyFleetAdjustedForDiplomacy,
         apAwardedThisRun: apAwardedThisRun,
+        rebirthPossible: rebirthPossible,
     }
 
     return gameState;
@@ -841,6 +843,7 @@ export function restoreGameStatus(gameState, type) {
             warMode = gameState.flags.warMode ?? false;
             enemyFleetAdjustedForDiplomacy = gameState.flags.enemyFleetAdjustedForDiplomacy ?? false;
             apAwardedThisRun = gameState.flags.apAwardedThisRun ?? false;
+            rebirthPossible = gameState.flags.rebirthPossible ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2545,6 +2548,14 @@ export function getApAwardedThisRun() {
 
 export function setApAwardedThisRun(value) {
     apAwardedThisRun = value;
+}
+
+export function getRebirthPossible() {
+    return rebirthPossible;
+}
+
+export function setRebirthPossible(value) {
+    rebirthPossible = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
