@@ -2,8 +2,8 @@ import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystems
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
-import { getBatteryLevel, offlineGains, startNewsTickerTimer } from './game.js';
-import { replaceRocketNames, rocketNames } from './descriptions.js';
+import { offlineGains, startNewsTickerTimer } from './game.js';
+import { rocketNames } from './descriptions.js';
 import { boostSoundManager } from './audioManager.js';
 
 //DEBUG
@@ -27,6 +27,7 @@ export const GAME_VERSION_FOR_SAVES = 0.40;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
+export const INCREASE_STORAGE_FACTOR = 2;
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
@@ -75,7 +76,6 @@ let runStartTimeStamp = null;
 let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
 let alreadySeenNewsTickerArray = [];
-let prize = [];
 let rocketsBuilt = [];
 let starShipModulesBuilt = [];
 let rocketsFuellerStartedArray = [];
@@ -93,7 +93,6 @@ let tempRowValue = null;
 let currencySymbol = '$';
 let sortAsteroidMethod = 'rarity';
 let sortStarMethod = 'distance';
-let increaseStorageFactor = 2;
 let saleResourcePreviews = {};
 let saleCompoundPreviews = {};
 let createCompoundPreviews = {};
@@ -552,10 +551,187 @@ export function getElements() {
 //     languageChangedFlag = value;
 // }
 
-export function resetAllVariables() {
-    // GLOBAL VARIABLES
+export function resetAllVariablesOnRebirth() {
 
-    // FLAGS
+    runStartTimeStamp = null;
+    rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
+    asteroidArray = [];
+    rocketsBuilt = [];
+    starShipModulesBuilt = [];
+    rocketsFuellerStartedArray = [];
+    launchedRockets = [];
+    cachedRenderedTechTree = null;
+    currentStarSystemWeatherEfficiency = [];
+    currentPrecipitationRate = 0;
+    techRenderCounter = 0;
+    tempRowValue = null;
+    sortAsteroidMethod = 'rarity';
+    sortStarMethod = 'distance';
+    saleResourcePreviews = {};
+    saleCompoundPreviews = {};
+    createCompoundPreviews = {};
+    constituentPartsObject = {};
+    itemsToDeduct = {};
+    itemsToIncreasePrice = {};
+    techUnlockedArray = [];
+    revealedTechArray = [];
+    upcomingTechArray = [];
+    unlockedResourcesArray = ['hydrogen'];
+    unlockedCompoundsArray = [];
+    temporaryRowsRepo = null;
+    canAffordDeferred = null;
+    originalFrameNumbers = {};
+    baseSearchAsteroidTimerDuration = 120000;
+    baseInvestigateStarTimerDuration = 800000;
+    currentAsteroidSearchTimerDurationTotal = 0;
+    currentInvestigateStarTimerDurationTotal = 0;
+    timeLeftUntilAsteroidScannerTimerFinishes = 0;
+    timeLeftUntilTravelToDestinationStarTimerFinishes = 0;
+    timeLeftUntilStarInvestigationTimerFinishes = 0;
+    oldAntimatterRightBoxSvgData = null;
+    currentDestinationDropdownText = 'Select an option';
+    starVisionDistance = 0; //0
+    starMapMode = 'normal';
+    starVisionIncrement = 1;
+    destinationStar = null;
+    fromStarObject = null;
+    toStarObject = null;
+    currentStarObject = null;
+    starShipStatus = ['preconstruction', null];
+
+    runNumber++;
+    
+    battleUnits = { 
+        player: [], 
+        enemy: [] 
+    };
+    
+    miningObject = {
+        rocket1: null,
+        rocket2: null,
+        rocket3: null,
+        rocket4: null  
+    }
+    
+    timeLeftUntilRocketTravelToAsteroidTimerFinishes = {
+        rocket1: 0,
+        rocket2: 0,
+        rocket3: 0,
+        rocket4: 0  
+    }
+    
+    rocketTravelDuration = {
+        rocket1: 0,
+        rocket2: 0,
+        rocket3: 0,
+        rocket4: 0
+    }
+    
+    starTravelDuration = 0;
+    
+    destinationAsteroid = {
+        rocket1: null,
+        rocket2: null,
+        rocket3: null,
+        rocket4: null 
+    };
+    
+    rocketDirection = {
+        rocket1: false,
+        rocket2: false,
+        rocket3: false,
+        rocket4: false 
+    }
+    
+    oneOffPrizesAlreadyClaimedArray = []; //reset this on rebirth as can claim once per run
+    
+    activatedFuelBurnObject = {
+        carbon: false,
+    };
+    
+    buildingTypeOnOff = {
+        powerPlant1: false,
+        powerPlant2: false,
+        powerPlant3: false,
+    }
+    
+    ranOutOfFuelWhenOn = {
+        powerPlant1: false,
+        powerPlant2: false,
+        powerPlant3: false,
+    }
+    
+    battleResolved = [false, null];
+    
+    //STATS PAGE LOGGERS
+    starStudyRange = 0;
+    antimatterMinedThisRun = 0;
+    currentRunNumber = runNumber;
+    currentRunTimer = 0;
+    apAnticipatedThisRun = 0;
+    starShipTravelDistance = 0;
+    asteroidsMinedThisRun = 0;
+    
+    formationGoal = null;
+
+    //FLAGS    
+    checkRocketFuellingStatus = {
+        rocket1: false,
+        rocket2: false,
+        rocket3: false,
+        rocket4: false
+    };
+    
+    currentlyTravellingToAsteroid = {
+        rocket1: false,
+        rocket2: false,
+        rocket3: false,
+        rocket4: false
+    };
+    
+    rocketReadyToTravel = {
+        rocket1: true,
+        rocket2: true,
+        rocket3: true,
+        rocket4: true
+    }
+    
+    techRenderChange = false;
+    losingEnergy = false;
+    powerOnOff = false;
+    trippedStatus = false;
+    techTreeDrawnYet = false;
+    weatherEffectOn = false;
+    weatherEfficiencyApplied = false;
+    currentlySearchingAsteroid = false;
+    currentlyInvestigatingStar = false;
+    telescopeReadyToSearch = true;
+    asteroidTimerCanContinue = false;
+    starInvestigationTimerCanContinue = false;
+    antimatterUnlocked = false;
+    isAntimatterBoostActive = false;
+    antimatterSvgEventListeners = false;
+    canTravelToAsteroids = false;
+    canFuelRockets = false;
+    starShipBuilt = false;
+    starShipTravelling = false;
+    starShipArrowPosition = 0;
+    stellarScannerBuilt = false;
+    destinationStarScanned = false;
+    diplomacyPossible = true;
+    warMode = false;
+    fleetChangedSinceLastDiplomacy = false;
+    battleOngoing = false;
+    battleTriggeredByPlayer = false;
+    needNewBattleCanvas = false;
+    redrawBattleDescription = true;
+    inFormation = false;
+    enemyFleetAdjustedForDiplomacy = false;
+    apAwardedThisRun = false;
+
+    setCurrentPrecipitationRate(0);
+    stopWeatherEffect();
+    setWeatherEffectOn(false);
 }
 
 export function captureGameStatusForSaving(type) {
@@ -698,6 +874,7 @@ export function captureGameStatusForSaving(type) {
 
     return gameState;
 }
+
 export function restoreGameStatus(gameState, type) {
     return new Promise((resolve, reject) => {
         try {
@@ -1025,11 +1202,7 @@ export function setNotationType(value) {
 }
 
 export function getIncreaseStorageFactor() {
-    return increaseStorageFactor;
-}
-
-export function setIncreaseStorageFactor(value) {
-    increaseStorageFactor = value;
+    return INCREASE_STORAGE_FACTOR;
 }
 
 export function getCurrentOptionPane() {
@@ -1886,14 +2059,6 @@ export async function getTechTreeData(renew) {
     );
 
     await drawTechTree(techData, '#techTreeSvg', renew);
-}
-
-export function getPrize() {
-    return prize;
-}
-
-export function setPrize(value) {
-    prize = value;
 }
 
 export function getOneOffPrizesAlreadyClaimedArray() {

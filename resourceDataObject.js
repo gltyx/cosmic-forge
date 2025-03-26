@@ -929,6 +929,16 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 }
 
+export let resourceDataRebirthCopy = structuredClone(resourceData);
+
+export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
+    const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+    //const galacticBuffsList = 
+    Object.assign(resourceData, resourceDataRebirthCopy);
+    //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
+    setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
 export function getStarSystemDataObject(key, subKeys) {
     let current = starSystems[key];
 

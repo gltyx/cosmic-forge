@@ -54,8 +54,6 @@ import {
     oneOffPrizesAlreadyClaimedArray,
     getOneOffPrizesAlreadyClaimedArray,
     setOneOffPrizesAlreadyClaimedArray,
-    getPrize,
-    setPrize,
     deferredActions,
     setRenderedTechTree,
     getRenderedTechTree,

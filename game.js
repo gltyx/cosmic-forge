@@ -1,4 +1,5 @@
 import {
+    resetAllVariablesOnRebirth,
     getRebirthPossible,
     setRebirthPossible,
     setApAwardedThisRun,
@@ -224,7 +225,8 @@ import {
     getRocketPartsNeededInTotalPerRocket,
     getRocketParts,
     getStarShipPartsNeededInTotalPerModule,
-    getMaxFleetShip
+    getMaxFleetShip,
+    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack
 } from "./resourceDataObject.js";
 
 import { 
@@ -7325,11 +7327,13 @@ export function settleSystemAfterBattle(accessPoint) {
 
 export function rebirth() {
     setRebirthPossible(false);
-    //show warning modal for reset run
-    //reset all game data except AP!
+    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
+    //resetAllVariablesOnRebirth(); //reset all flags and variables for the new run
+    //reset all run specific statistics
+    //reset starDataObject and currentStar to new system hint let currentStarSystem = getStartingStarSystem();
+    //increment run number
     console.log('Rebirthed');
 }
-
 
 //===============================================================================================================
 
