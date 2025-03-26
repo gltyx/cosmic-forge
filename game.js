@@ -7328,10 +7328,9 @@ export function settleSystemAfterBattle(accessPoint) {
 export function rebirth() {
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
-    //resetAllVariablesOnRebirth(); //reset all flags and variables for the new run
-    //reset all run specific statistics
+    resetAllVariablesOnRebirth(); //reset all flags and variables for the new run
+    //reset tab visibilities and order
     //reset starDataObject and currentStar to new system hint let currentStarSystem = getStartingStarSystem();
-    //increment run number
     console.log('Rebirthed');
 }
 

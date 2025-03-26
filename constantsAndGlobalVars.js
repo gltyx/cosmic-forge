@@ -543,14 +543,6 @@ export function getElements() {
     return elements;
 }
 
-// export function getLanguageChangedFlag() {
-//     return languageChangedFlag;
-// }
-
-// export function setLanguageChangedFlag(value) {
-//     languageChangedFlag = value;
-// }
-
 export function resetAllVariablesOnRebirth() {
 
     runStartTimeStamp = null;
