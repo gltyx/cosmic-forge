@@ -270,6 +270,11 @@ import {
     showRebirthPopup,
     resetTabsOnRebirth,
     resetTab1ClassesRebirth,
+    resetTab2ClassesRebirth,
+    resetTab3ClassesRebirth,
+    resetTab4ClassesRebirth,
+    resetTab5ClassesRebirth,
+    resetTab6ClassesRebirth
 } from "./ui.js";
 
 import { 
@@ -7362,6 +7367,11 @@ export function rebirth() {
     resetAllVariablesOnRebirth();
     resetTabsOnRebirth();
     resetTab1ClassesRebirth();
+    resetTab2ClassesRebirth();
+    //resetTab3ClassesRebirth();
+    resetTab4ClassesRebirth();
+    resetTab5ClassesRebirth();
+    resetTab6ClassesRebirth();
     setRunStartTime();
     //reset tab visibilities and order
     console.log('Rebirthed');

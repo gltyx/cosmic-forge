@@ -1015,7 +1015,7 @@ let isNotificationActive = false;
 export function showWeatherNotification(type) {
     const precipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
     if (type === 'rain') {
-        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) {
+        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) { //can change this to not be compoiunds but revealedByTech resource for the precipitation type in the star system TODO
             showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning');
         } else if (getTechUnlockedArray().includes('rocketComposites')) {
             showNotification('Heavy Rain! No launches until it clears.', 'warning');
@@ -2673,7 +2673,6 @@ export function updateTabHotkeys() {
 
 function reorderTabs(newOrder) {
     const tabsContainer = document.getElementById('tabsContainer');
-    const tabs = Array.from(tabsContainer.children);
 
     newOrder.forEach(tabId => {
         const tab = document.getElementById(`tab${tabId}`);
@@ -4669,7 +4668,177 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const ironRow = document.getElementById('ironOption').closest('.row-side-menu');
         ironRow.classList.add('invisible');
     }
+
+    export function resetTab2ClassesRebirth() {
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(collapsible => {
+            if (collapsible.id === "energyBuildings") {
+                collapsible.classList.add('open');
+            } else {
+                collapsible.classList.remove('open');
+            }
+        });
     
+        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
+        rowSideMenuItems.forEach(row => {
+            if (row.classList.contains('invisible')) {
+                row.classList.add('invisible');
+            } else {
+                row.classList.remove('invisible');
+            }
+        });
+    
+        const energyStats = document.getElementById('energyConsumptionStats');
+        energyStats?.classList.add('invisible');
+    
+        const energyRow = document.getElementById('energyOption').closest('.row-side-menu');
+        energyRow.classList.remove('invisible');
+    
+        const powerPlant1Row = document.getElementById('powerPlant1Option').closest('.row-side-menu');
+        powerPlant1Row.classList.add('invisible');
+    
+        const powerPlant2Row = document.getElementById('powerPlant2Option').closest('.row-side-menu');
+        powerPlant2Row.classList.add('invisible');
+    
+        const powerPlant3Row = document.getElementById('powerPlant3Option').closest('.row-side-menu');
+        powerPlant3Row.classList.add('invisible');
+    }   
+    
+    export function resetTab3ClassesRebirth() {
+        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
+        rowSideMenuItems.forEach(row => {
+            if (row.classList.contains('invisible')) {
+                row.classList.add('invisible');
+            } else {
+                row.classList.remove('invisible');
+            }
+        });
+    
+        const researchRow = document.getElementById('researchOption').closest('.row-side-menu');
+        researchRow.classList.remove('invisible');
+    } 
+    
+    export function resetTab4ClassesRebirth() {
+        const collapsibles = document.querySelectorAll('.tab-4 .collapsible');
+        collapsibles.forEach(collapsible => {
+            if (collapsible.id === "liquidCompounds" || collapsible.id === "solidCompounds" ||
+                collapsible.id === "hydroCarbons" || collapsible.id === "silicates" || collapsible.id === "metalAlloys") {
+                collapsible.classList.add('open', 'invisible');
+            } else {
+                collapsible.classList.remove('open', 'invisible');
+            }
+        });
+    
+        const collapsibleHeaders = document.querySelectorAll('.tab-4 .collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.tab-4 .collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const rowSideMenuItems = document.querySelectorAll('.tab-4 .row-side-menu');
+        rowSideMenuItems.forEach(row => {
+            if (row.classList.contains('invisible')) {
+                row.classList.add('invisible');
+            } else {
+                row.classList.remove('invisible');
+            }
+        });
+    
+        const specificInvisibleRows = [
+            'dieselOption', 'waterOption', 'glassOption', 'concreteOption', 'steelOption', 'titaniumOption'
+        ];
+        
+        specificInvisibleRows.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const row = element.closest('.row-side-menu');
+                row.classList.add('invisible');
+            }
+        });
+    }
+
+    export function resetTab5ClassesRebirth() {
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(collapsible => {
+            if (collapsible.id === "starMap" || collapsible.id === "starShipOption") {
+                collapsible.classList.add('open');
+            } else {
+                collapsible.classList.remove('open');
+            }
+        });
+
+        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const starDataRow = document.getElementById('starDataOption').closest('.row-side-menu');
+        starDataRow.classList.add('invisible');
+    
+        const starShipRow = document.getElementById('starShipOption').closest('.row-side-menu');
+        starShipRow.classList.remove('invisible');
+    
+        const fleetHangarRow = document.getElementById('fleetHangarOption').closest('.row-side-menu');
+        fleetHangarRow.classList.add('invisible');
+    
+        const coloniseRow = document.getElementById('coloniseOption').closest('.row-side-menu');
+        coloniseRow.classList.add('invisible');
+    }
+
+    export function resetTab6ClassesRebirth() {
+        const collapsibleHeaders = document.querySelectorAll('.tab-6 .collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.tab-6 .collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const rowSideMenuItems = document.querySelectorAll('.tab-6 .row-side-menu');
+        rowSideMenuItems.forEach(row => {
+            row.classList.add('invisible');
+        });
+    
+        const visibleRows = ['spaceTelescope'];
+        visibleRows.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const row = element.closest('.row-side-menu');
+                row.classList.remove('invisible');
+            }
+        });
+    }    
     
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
@@ -4880,6 +5049,38 @@ gain10000AntimatterButton.addEventListener('click', () => {
     setAntimatterUnlocked(true);
     setResourceDataObject(getResourceDataObject('antimatter', ['quantity']) + 10000, 'antimatter', ['quantity']);
     showNotification('CHEAT! 10000 Antimatter added!', 'info');
+});
+
+const unlockAllTabsButton = document.getElementById('unlockAllTabsButton');
+unlockAllTabsButton.addEventListener('click', () => {
+    const allTabs = document.querySelectorAll('.tab');
+
+    allTabs.forEach(tab => {
+        if (tab.classList.contains('tab-not-yet')) {
+            tab.classList.remove('tab-not-yet');
+            tab.textContent = tab.getAttribute('data-name');
+        }
+    });
+
+    const techsToUnlock = [
+        'stellarCartography',
+        'basicPowerGeneration',
+        'compounds',
+        'atmosphericTelescopes',
+        'apAwardedThisRun'
+    ];
+    
+    const unlockedTechs = getTechUnlockedArray();
+    
+    techsToUnlock.forEach(tech => {
+        if (!unlockedTechs.includes(tech)) {
+            setTechUnlockedArray(tech);
+        }
+    });
+
+    reorderTabs([1, 4, 3, 2, 6, 5, 7, 8]);
+
+    showNotification('CHEAT! All tabs unlocked!', 'info');
 });
 
 function toggleVariableDebuggerWindow() {
