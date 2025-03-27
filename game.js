@@ -525,7 +525,11 @@ function addPrecipitationResource() {
     if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && precipitationTypeRevealedYet && precipitationStorageAvailable) {
         setResourceDataObject(currentStarSystemPrecipitationTypeQuantity + getCurrentPrecipitationRate(), currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
         addToResourceAllTimeStat(getCurrentPrecipitationRate(), currentStarSystemPrecipitationType);
-        getElements().waterQuantity.textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']); //THIS IS A BUG FIX TO FIXED AFTER REBIRTH NEED TO USE WHICHEVER PRECIPITATION TYPE
+        const precipitationId = currentStarSystemPrecipitationType + 'Quantity';
+        
+        if (document.getElementById(precipitationId)) {
+            document.getElementById(precipitationId).textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
+        }
     }
 }
 

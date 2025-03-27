@@ -1013,13 +1013,14 @@ let notificationQueue = [];
 let isNotificationActive = false;
 
 export function showWeatherNotification(type) {
+    const precipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
     if (type === 'rain') {
         if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) {
-            showNotification('Heavy Rain! No launches until it clears, but water stores benefit!', 'warning');
+            showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning');
         } else if (getTechUnlockedArray().includes('rocketComposites')) {
             showNotification('Heavy Rain! No launches until it clears.', 'warning');
         } else if (getTechUnlockedArray().includes('compounds')) {
-            showNotification('Heavy Rain! Water stores benefit!', 'warning');
+            showNotification(`Heavy Rain! ${capitaliseString(precipitationType)} stores benefit!`, 'warning');
         } else {
             showNotification('Heavy Rain!', 'warning');
         }
