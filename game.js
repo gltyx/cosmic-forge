@@ -526,7 +526,7 @@ function addPrecipitationResource() {
         setResourceDataObject(currentStarSystemPrecipitationTypeQuantity + getCurrentPrecipitationRate(), currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
         addToResourceAllTimeStat(getCurrentPrecipitationRate(), currentStarSystemPrecipitationType);
         const precipitationId = currentStarSystemPrecipitationType + 'Quantity';
-        
+
         if (document.getElementById(precipitationId)) {
             document.getElementById(precipitationId).textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
         }
@@ -2821,6 +2821,14 @@ function setPriceForAllPurchases(element, type, resource, scienceUpgradeType, bu
 function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
     const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
         
+    if (prerequisiteArray.includes('FTLravelTheory')) { // patch for FTLravelArray pre version 0.4
+        const index = prerequisiteArray.indexOf('FTLravelTheory');
+        if (index !== -1) {
+            prerequisiteArray[index] = 'FTLTravelTheory';
+        }
+    }
+    
+
     if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
         element.classList.remove('red-disabled-text');
     } else if (element) {

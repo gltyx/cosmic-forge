@@ -1605,8 +1605,14 @@ export function removeStarConnectionTooltip() {
 }
 
 export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
-    if (getSettledStars().includes(toStar.name.toLowerCase())) {
-        return;
+    if (toStar.name) {
+        if (getSettledStars().includes(toStar.name.toLowerCase())) {
+            return;
+        }
+    } else {
+        if (getSettledStars().includes(toStar.toLowerCase())) {
+            return;
+        }
     }
 
     removeStarConnectionTooltip();

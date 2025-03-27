@@ -23,7 +23,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.40;
+export const GAME_VERSION_FOR_SAVES = 0.50;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
