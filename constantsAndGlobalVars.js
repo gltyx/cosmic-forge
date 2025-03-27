@@ -3592,7 +3592,6 @@ export function populateVariableDebugger() {
 
     variables.forEach((variable) => {
         const div = document.createElement("div");
-    
         const label = document.createElement("span");
 
         if (variable.value === "" && variable.label !== "") {
@@ -3609,7 +3608,7 @@ export function populateVariableDebugger() {
             const valueDiv = document.createElement("span");
             const className = variable.value === null ? "red-disabled-text" : "green-ready-text";
             valueDiv.classList.add(className);
-            valueDiv.textContent = formatValue(variable.value);
+            valueDiv.textContent = formatVariableDebuggerValue(variable.value);
     
             div.appendChild(label);
             div.appendChild(valueDiv);
@@ -3617,10 +3616,9 @@ export function populateVariableDebugger() {
             debugTextAreaContainer.appendChild(div);
         }
     });
-    
 }
 
-function formatValue(value) {
+function formatVariableDebuggerValue(value) {
     if (Array.isArray(value) || typeof value === 'object') {
         const stringifiedValue = JSON.stringify(value);
         return stringifiedValue.length > 2000 ? `${stringifiedValue.slice(0, 2000)}...` : stringifiedValue;

@@ -312,7 +312,9 @@ export function startGame() {
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
-        populateVariableDebugger();
+        if (document.getElementById('variableDebuggerWindow').style.display === 'block') {
+            populateVariableDebugger();
+        }
 
         backgroundAudio.update();
         weatherAmbienceManager.update();
