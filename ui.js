@@ -2955,6 +2955,14 @@ function initializeTabEventListeners() {
             updateContent('Galactic Market', 'tab7', 'content');
         });
     });
+
+    document.querySelectorAll('[class*="tab7"][class*="option3"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            setLastScreenOpenRegister('tab7', 'ascendency');
+            setCurrentOptionPane('ascendency');
+            updateContent('Ascendency', 'tab7', 'content');
+        });
+    });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {

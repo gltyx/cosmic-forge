@@ -109,12 +109,13 @@ export function initialiseDescriptions() {
         'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
-        'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter",
+        'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter.",
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
 
         'rebirth': "Here you can reset the run at your new system, once settled!",
-        'galactic market': "Here you can make a one off sale per run of all resources for extra AP, and you can spend AP for permanent buffs!",
+        'galactic market': "Here you can make various trades in the Galactic Market.",
+        'ascendency': "Here you can spend AP for permanent buffs to speed up your runs!",
 
         'get started': "Learn how to get started in Cosmic Forge.",
         'concepts - early': "Early game concepts.",
@@ -997,7 +998,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         rebirthRow: {
-            content1: "Rebirth to start over at the new System.  This will reset all progress, but you will keep AP and any permanent buffs purchased in the Galactic Market",
+            content1: "Rebirth to start over at the new System.  This will reset all progress, but you will keep unspent AP and any permanent buffs purchased with it",
             content2: "",
             updateAt: ""
         },
