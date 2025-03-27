@@ -1,4 +1,6 @@
 import {
+    setSettledStars,
+    getSettledStars,
     resetAllVariablesOnRebirth,
     getRebirthPossible,
     setRebirthPossible,
@@ -266,6 +268,7 @@ import {
     shootLaser,
     showBattlePopup,
     showRebirthPopup,
+    resetTabsOnRebirth,
 } from "./ui.js";
 
 import { 
@@ -7337,10 +7340,12 @@ export function settleSystemAfterBattle(accessPoint) {
 
 export function rebirth() {
     setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
+    setSettledStars(getCurrentStarSystem());
     setupNewRunStarSystem();
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth();
+    resetTabsOnRebirth();
     setRunStartTime();
     //reset tab visibilities and order
     console.log('Rebirthed');
