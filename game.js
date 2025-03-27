@@ -266,6 +266,7 @@ import {
     shootLaser,
     showBattlePopup,
     showRebirthPopup,
+    resetTab1ClassesRebirth,
 } from "./ui.js";
 
 import { 
@@ -7341,6 +7342,7 @@ export function rebirth() {
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth();
+    resetTab1ClassesRebirth();
     setRunStartTime();
     //reset tab visibilities and order
     console.log('Rebirthed');

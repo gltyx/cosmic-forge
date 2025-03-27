@@ -4550,6 +4550,71 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             showHideModal();
         };
     }
+
+    //reset classes on rebirth
+    export function resetTab1ClassesRebirth() {
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(collapsible => {
+            if (collapsible.id === "gas" || collapsible.id === "solids") {
+                collapsible.classList.add('open');
+            } else {
+                collapsible.classList.remove('open');
+            }
+        });
+    
+        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {
+            header.classList.add('active');
+        });
+    
+        const collapsibleContents = document.querySelectorAll('.collapsible-content');
+        collapsibleContents.forEach(content => {
+            content.classList.add('open');
+        });
+    
+        const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
+        rowSideMenuItems.forEach(row => {
+            if (row.classList.contains('invisible')) {
+                row.classList.add('invisible');
+            } else {
+                row.classList.remove('invisible');
+            }
+        });
+    
+        const invisibleElements = document.querySelectorAll('.row-side-menu');
+        invisibleElements.forEach(element => {
+            if (element.querySelector('.invisible')) {
+                element.classList.add('invisible');
+            } else {
+                element.classList.remove('invisible');
+            }
+        });
+    
+        const hydrogenRow = document.getElementById('hydrogenOption').closest('.row-side-menu');
+        hydrogenRow.classList.remove('invisible');
+    
+        const heliumRow = document.getElementById('heliumOption').closest('.row-side-menu');
+        heliumRow.classList.add('invisible');
+    
+        const neonRow = document.getElementById('neonOption').closest('.row-side-menu');
+        neonRow.classList.add('invisible');
+    
+        const oxygenRow = document.getElementById('oxygenOption').closest('.row-side-menu');
+        oxygenRow.classList.add('invisible');
+    
+        const carbonRow = document.getElementById('carbonOption').closest('.row-side-menu');
+        carbonRow.classList.add('invisible');
+    
+        const siliconRow = document.getElementById('siliconOption').closest('.row-side-menu');
+        siliconRow.classList.add('invisible');
+    
+        const sodiumRow = document.getElementById('sodiumOption').closest('.row-side-menu');
+        sodiumRow.classList.add('invisible');
+    
+        const ironRow = document.getElementById('ironOption').closest('.row-side-menu');
+        ironRow.classList.add('invisible');
+    }
+    
     
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------
