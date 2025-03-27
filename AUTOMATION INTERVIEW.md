@@ -1,6 +1,8 @@
-AUTOMATION INTERVIEW
+"AUTOMATION INTERVIEW"
 
-"What factors do you consider when deciding whether to automate a test case? Provide an example of a good candidate for automation and one that should remain manual."
+"What factors do you consider when deciding whether to automate a test case? Provide an example of a 
+good candidate for automation and one that should remain manual."
+
 Repetition & Frequency – Automate tests that run frequently.
 Stability of Functionality – Automate tests for features that don’t change often.
 Data-Driven Scenarios – Good for automation when the same test needs to run with multiple inputs.
@@ -48,7 +50,8 @@ A LoginPage class might contain locators for username, password, and login butto
 Bonus points if they mention:
 Using POM with frameworks like Selenium, Cypress, or Playwright.
 
-"What strategies would you use to make element selectors more stable in an automation framework, especially when the UI layout changes frequently? What attributes would you prioritize when selecting locators?"
+"What strategies would you use to make element selectors more stable in an automation framework, 
+especially when the UI layout changes frequently? What attributes would you prioritize when selecting locators?"
 
 Strategies for stable selectors:
 Use unique IDs whenever possible.
@@ -63,7 +66,8 @@ Data-test attributes ([data-test="username-input"]) – Added specifically for a
 CSS selectors (button[type='submit']) – Faster than XPath.
 Relative XPath (//button[contains(text(), 'Login')]) – Only if no better option exists.
 
-"How would you use MITMProxy or Charles Proxy to test a mobile or web application? Can you provide a real-world scenario where these tools would be useful?"
+"How would you use MITMProxy or Charles Proxy to test a mobile or web application? 
+Can you provide a real-world scenario where these tools would be useful?"
 
 How MITMProxy/Charles Proxy Helps in Testing:
 Intercept & Inspect API Calls – Capture network requests & responses for debugging.
@@ -75,7 +79,9 @@ Mock Backend Responses – Simulate API responses without depending on a live ba
 Real-World Use Case:
 I used Charles Proxy while testing a mobile app that fetches user profiles from an API. I intercepted the request, modified the response to inject invalid data, and tested how the app handled it. This helped uncover a bug where the app crashed when receiving unexpected fields.
 
-"Here’s a screenshot of the login page for the application. What test cases would you run manually to validate that this page is working correctly? Please consider functional, usability, security, and other relevant factors."
+"Here’s a screenshot of the login page for the application. 
+What test cases would you run manually to validate that this page is working correctly? Please consider functional, 
+usability, etc."
 
 Valid Login: Test that a valid username and password combination successfully logs the user in and redirects them to the correct page.
 Invalid Login (Incorrect Credentials): Test that an invalid username or password shows the correct error message, such as Invalid username or password.
