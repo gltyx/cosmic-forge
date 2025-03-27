@@ -838,7 +838,7 @@ export let starSystems = {
     version: 0.40,
     stars: {
         spica: {
-            mapSize: 5.504440179536064, //only important for starting star
+            mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
             startingStar: true,
             starCode: 'SPC',
             precipitationResourceCategory: 'compounds',
@@ -861,7 +861,6 @@ export function copyStarDataToDestinationStarField(starName) {
 
     stars.destinationStar = JSON.parse(JSON.stringify(stars[starName]));
 }
-
 
 export function restoreResourceDataObject(value) {
     value = migrateResourceData(value, 'resourceData');
@@ -979,6 +978,26 @@ export function setStarSystemDataObject(value, key, subKeys = []) {
         }
     }
 }
+
+export function setupNewRunStarSystem() {
+    const destinationStar = getStarSystemDataObject('stars', ['destinationStar']);
+    const starObject = {
+        mapSize: destinationStar.mapSize || 5.504440179536064, // TODO
+        startingStar: destinationStar.startingStar || true,
+        starCode: destinationStar.starCode,
+        precipitationResourceCategory: destinationStar.precipitationResourceCategory,
+        precipitationType: destinationStar.precipitationType,
+        weather: destinationStar.weather
+    };
+
+    setRebirthStarSystemToStarSystemDataObject(starObject);
+}
+
+export function setRebirthStarSystemToStarSystemDataObject(newObject) {
+    starSystems.stars = {};
+    starSystems.stars[newObject.starCode.toLowerCase()] = newObject;
+}
+
 
 export function setAutoBuyerTierLevel(key, value, override = false, type) {
     if (resourceData[type][key].upgrades.autoBuyer.normalProgression === true || override) {

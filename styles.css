@@ -1935,7 +1935,32 @@ canvas {
     z-index: 100000000000000000000000000;
 }
 
-.debug-header {
+.debug-variables-window {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 90vw;
+    max-height: 80vh;  /* Limits the height to 80% of the viewport height */
+    overflow-y: auto;  /* Enables vertical scrolling */
+    border: 2px solid var(--text-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 100000000000000000000000000;
+}
+
+.debug-content {
+    padding: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    overflow-y: auto;
+    max-height: calc(80vh - 50px);
+}
+
+.debug-header,
+.debug-variables-header {
     padding: 10px;
     height: 30px;
     cursor: move;
@@ -1948,11 +1973,13 @@ canvas {
     align-items: center;
 }
 
-.debug-header span {
+.debug-header span,
+.debug-variables-header span {
     font-weight: bold;
 }
 
-.debug-header .close-btn {
+.debug-header .close-btn,
+.debug-variables-header .close-btn {
     background: none;
     border: none;
     color: var(--bg-color);
@@ -1961,12 +1988,9 @@ canvas {
     outline: none;
 }
 
-.debug-header .close-btn:hover {
+.debug-header .close-btn:hover,
+.debug-variables-header .close-btn:hover {
     color: red;
-}
-
-.debug-content {
-    padding: 10px;
 }
 
 .debug-row {
@@ -1981,6 +2005,21 @@ canvas {
 .debug-label {
     font-size: 16px;
     font-weight: bold;
+}
+
+.debug-textarea {
+    width: 100%;
+    height: 200px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 10px;
+    resize: none;
+    font-family: monospace;
+}
+
+body.debug-window-open {
+    overflow: hidden;
 }
 
 .battle-container {

@@ -114,6 +114,7 @@ import {
     getNeedNewBattleCanvas,
     setNeedNewBattleCanvas,
     getBattleResolved,
+    populateVariableDebugger,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -205,6 +206,7 @@ import { drawTab7Content } from './drawTab7Content.js';
 import { drawTab8Content } from './drawTab8Content.js';
 
 let notificationContainer;
+const variableDebuggerWindow = document.getElementById('variableDebuggerWindow');
 const debugWindow = document.getElementById('debugWindow');
 const closeButton = document.querySelector('.close-btn');
 
@@ -4568,28 +4570,33 @@ function showDebugWindow() {
 let isDragging = false;
 let offsetX = 0;
 let offsetY = 0;
+let currentWindow = null;
 
-const header = document.querySelector('.debug-header');
-header.addEventListener('mousedown', (e) => {
+function onMouseDown(e, windowElement) {
     isDragging = true;
-    offsetX = e.clientX - debugWindow.offsetLeft;
-    offsetY = e.clientY - debugWindow.offsetTop;
+    currentWindow = windowElement;
+    offsetX = e.clientX - windowElement.offsetLeft;
+    offsetY = e.clientY - windowElement.offsetTop;
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
-});
+}
 
 function onMouseMove(e) {
-    if (isDragging) {
-        debugWindow.style.left = `${e.clientX - offsetX}px`;
-        debugWindow.style.top = `${e.clientY - offsetY}px`;
+    if (isDragging && currentWindow) {
+        currentWindow.style.left = `${e.clientX - offsetX}px`;
+        currentWindow.style.top = `${e.clientY - offsetY}px`;
     }
 }
 
 function onMouseUp() {
     isDragging = false;
+    currentWindow = null;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
 }
+
+document.querySelector('.debug-header').addEventListener('mousedown', (e) => onMouseDown(e, document.getElementById('debugWindow')));
+document.querySelector('.debug-variables-header').addEventListener('mousedown', (e) => onMouseDown(e, document.getElementById('variableDebuggerWindow')));
 
 closeButton.addEventListener('click', () => {
     debugWindow.style.display = 'none';
@@ -4755,3 +4762,23 @@ gain10000AntimatterButton.addEventListener('click', () => {
     showNotification('CHEAT! 10000 Antimatter added!', 'info');
 });
 
+function toggleVariableDebuggerWindow() {
+    if (variableDebuggerWindow.style.display === 'none' || !variableDebuggerWindow.style.display) {
+        variableDebuggerWindow.style.display = 'block';
+        document.body.classList.add('debug-window-open');
+    } else {
+        variableDebuggerWindow.style.display = 'none';
+        document.body.classList.remove('debug-window-open');
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.code === 'NumpadMultiply') {
+        toggleVariableDebuggerWindow();
+    }
+});
+
+const variableDebuggerCloseButton = document.querySelector('.variable-debugger-close-btn');
+variableDebuggerCloseButton.addEventListener('click', () => {
+    toggleVariableDebuggerWindow();
+});

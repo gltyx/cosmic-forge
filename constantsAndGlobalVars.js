@@ -3373,4 +3373,258 @@ const IMAGE_URLS = {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠒⠂⠤⠤⠄⣀⢀⣠⣀⣀⣀⣀⣀⣀⣀⣀⣈⣠⣤⣴⣂⣰⡮⠦⠔⠓⠈⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`
 }
 
+export function populateVariableDebugger() {
+    const debugTextAreaContainer = document.getElementById('debugTextAreaContainer');
+    
+    const variables = [
+        { label: "", value: "" },
+        { label: "Game Settings:", value: "" },
+        { label: "", value: "" },
 
+        { label: "gamestate", value: getGameStateVariable() },
+        { label: "gameStartTimeStamp", value: gameStartTimeStamp },
+        { label: "runStartTimeStamp", value: runStartTimeStamp },        
+        { label: "alreadySeenNewsTickerArray", value: alreadySeenNewsTickerArray },
+        { label: "currencySymbol", value: currencySymbol },
+        { label: "currentTheme", value: currentTheme },
+        { label: "sfx", value: sfx },
+        { label: "backgroundAudio", value: backgroundAudio },
+        { label: "saveExportCloudFlag", value: saveExportCloudFlag },
+        { label: "autoSaveToggle", value: autoSaveToggle },
+        { label: "newsTickerSetting", value: newsTickerSetting },
+        { label: "weatherEffectSettingToggle", value: weatherEffectSettingToggle },
+        { label: "notificationsToggle", value: notificationsToggle },
+        { label: "saveName", value: saveName },
+        { label: "lastSavedTimeStamp", value: lastSavedTimeStamp },
+        { label: "autoSaveFrequency", value: autoSaveFrequency },
+        { label: "savedYetSinceOpeningSaveDialogue", value: savedYetSinceOpeningSaveDialogue },
+
+        { label: "", value: "" },
+        { label: "Run:", value: "" },
+        { label: "", value: "" },
+
+        { label: "rebirthPossible", value: rebirthPossible },
+        { label: "runNumber", value: runNumber },
+        { label: "apAwardedThisRun", value: apAwardedThisRun },
+        { label: "currentStarSystem", value: currentStarSystem },
+
+        { label: "", value: "" },
+        { label: "Resources / Compounds / AutoBuyers:", value: "" },
+        { label: "", value: "" },
+
+        { label: "saleResourcePreviews", value: saleResourcePreviews },
+        { label: "saleCompoundPreviews", value: saleCompoundPreviews },
+        { label: "createCompoundPreviews", value: createCompoundPreviews },
+        { label: "constituentPartsObject", value: constituentPartsObject },
+        { label: "itemsToDeduct", value: itemsToDeduct },
+        { label: "itemsToIncreasePrice", value: itemsToIncreasePrice },
+        { label: "unlockedResourcesArray", value: unlockedResourcesArray },
+        { label: "unlockedCompoundsArray", value: unlockedCompoundsArray },
+        { label: "temporaryRowsRepo", value: temporaryRowsRepo },
+        { label: "canAffordDeferred", value: canAffordDeferred },
+        { label: "originalFrameNumbers", value: originalFrameNumbers },
+
+        { label: "", value: "" },
+        { label: "Tech:", value: "" },
+        { label: "", value: "" },
+
+        { label: "techRenderCounter", value: techRenderCounter },
+        { label: "techUnlockedArray", value: techUnlockedArray },
+        { label: "revealedTechArray", value: revealedTechArray },
+        { label: "upcomingTechArray", value: upcomingTechArray },
+        { label: "tempRowValue", value: tempRowValue },
+        { label: "cachedRenderedTechTree", value: cachedRenderedTechTree },
+        { label: "techRenderChange", value: techRenderChange },
+        { label: "techTreeDrawnYet", value: techTreeDrawnYet },
+
+        { label: "", value: "" },
+        { label: "Energy:", value: "" },
+        { label: "", value: "" },
+
+        { label: "losingEnergy", value: losingEnergy },
+        { label: "powerOnOff", value: powerOnOff },
+        { label: "trippedStatus", value: trippedStatus },
+
+        { label: "", value: "" },
+        { label: "Statistics:", value: "" },
+        { label: "", value: "" },
+
+        { label: "allTimeTotalHydrogen", value: allTimeTotalHydrogen },
+        { label: "allTimeTotalHelium", value: allTimeTotalHelium },
+        { label: "allTimeTotalCarbon", value: allTimeTotalCarbon },
+        { label: "allTimeTotalNeon", value: allTimeTotalNeon },
+        { label: "allTimeTotalOxygen", value: allTimeTotalOxygen },
+        { label: "allTimeTotalSodium", value: allTimeTotalSodium },
+        { label: "allTimeTotalSilicon", value: allTimeTotalSilicon },
+        { label: "allTimeTotalIron", value: allTimeTotalIron },
+        { label: "allTimeTotalDiesel", value: allTimeTotalDiesel },
+        { label: "allTimeTotalGlass", value: allTimeTotalGlass },
+        { label: "allTimeTotalSteel", value: allTimeTotalSteel },
+        { label: "allTimeTotalConcrete", value: allTimeTotalConcrete },
+        { label: "allTimeTotalWater", value: allTimeTotalWater },
+        { label: "allTimeTotalTitanium", value: allTimeTotalTitanium },
+        { label: "allTimeTotalResearchPoints", value: allTimeTotalResearchPoints },
+        { label: "allTimeTotalScienceKits", value: allTimeTotalScienceKits },
+        { label: "allTimeTotalScienceClubs", value: allTimeTotalScienceClubs },
+        { label: "allTimeTotalScienceLabs", value: allTimeTotalScienceLabs },
+        { label: "allTimeTotalRocketsLaunched", value: allTimeTotalRocketsLaunched },
+        { label: "allTimeTotalStarShipsLaunched", value: allTimeTotalStarShipsLaunched },
+        { label: "allTimeTotalAsteroidsDiscovered", value: allTimeTotalAsteroidsDiscovered },
+        { label: "allTimeTotalLegendaryAsteroidsDiscovered", value: allTimeTotalLegendaryAsteroidsDiscovered },
+        { label: "starStudyRange", value: starStudyRange },
+        { label: "allTimeTotalAntimatterMined", value: allTimeTotalAntimatterMined },
+        { label: "antimatterMinedThisRun", value: antimatterMinedThisRun },
+        { label: "allTimeTotalApGain", value: allTimeTotalApGain },
+        { label: "currentRunNumber", value: currentRunNumber },
+        { label: "currentRunTimer", value: currentRunTimer },
+        { label: "totalNewsTickerPrizesCollected", value: totalNewsTickerPrizesCollected },
+        { label: "apAnticipatedThisRun", value: apAnticipatedThisRun },
+        { label: "allTimeStarShipsBuilt", value: allTimeStarShipsBuilt },
+        { label: "starShipTravelDistance", value: starShipTravelDistance },
+        { label: "allTimesTripped", value: allTimesTripped },
+        { label: "allTimeBasicPowerPlantsBuilt", value: allTimeBasicPowerPlantsBuilt },
+        { label: "allTimeAdvancedPowerPlantsBuilt", value: allTimeAdvancedPowerPlantsBuilt },
+        { label: "allTimeSolarPowerPlantsBuilt", value: allTimeSolarPowerPlantsBuilt },
+        { label: "allTimeSodiumIonBatteriesBuilt", value: allTimeSodiumIonBatteriesBuilt },
+        { label: "allTimeBattery2Built", value: allTimeBattery2Built },
+        { label: "allTimeBattery3Built", value: allTimeBattery3Built },
+        { label: "asteroidsMinedThisRun", value: asteroidsMinedThisRun },
+
+        { label: "", value: "" },
+        { label: "Weather:", value: "" },
+        { label: "", value: "" },
+
+        { label: "weatherEffectOn", value: weatherEffectOn },
+        { label: "weatherEfficiencyApplied", value: weatherEfficiencyApplied },
+        { label: "currentStarSystemWeatherEfficiency", value: currentStarSystemWeatherEfficiency },
+        { label: "currentPrecipitationRate", value: currentPrecipitationRate },
+
+        { label: "", value: "" },
+        { label: "Space Telescope:", value: "" },
+        { label: "", value: "" },
+
+        { label: "currentlySearchingAsteroid", value: currentlySearchingAsteroid },
+        { label: "currentlyInvestigatingStar", value: currentlyInvestigatingStar },
+        { label: "telescopeReadyToSearch", value: telescopeReadyToSearch },
+        { label: "asteroidTimerCanContinue", value: asteroidTimerCanContinue },
+        { label: "starInvestigationTimerCanContinue", value: starInvestigationTimerCanContinue },
+        { label: "sortAsteroidMethod", value: sortAsteroidMethod },
+        { label: "sortStarMethod", value: sortStarMethod },
+        { label: "baseSearchAsteroidTimerDuration", value: baseSearchAsteroidTimerDuration },
+        { label: "baseInvestigateStarTimerDuration", value: baseInvestigateStarTimerDuration },
+        { label: "currentAsteroidSearchTimerDurationTotal", value: currentAsteroidSearchTimerDurationTotal },
+        { label: "currentInvestigateStarTimerDurationTotal", value: currentInvestigateStarTimerDurationTotal },
+        { label: "timeLeftUntilAsteroidScannerTimerFinishes", value: timeLeftUntilAsteroidScannerTimerFinishes },
+        { label: "timeLeftUntilTravelToDestinationStarTimerFinishes", value: timeLeftUntilTravelToDestinationStarTimerFinishes },
+        { label: "timeLeftUntilStarInvestigationTimerFinishes", value: timeLeftUntilStarInvestigationTimerFinishes },
+        { label: "oldAntimatterRightBoxSvgData", value: oldAntimatterRightBoxSvgData },
+
+        { label: "", value: "" },
+        { label: "Rockets And Asteroid Mining:", value: "" },
+        { label: "", value: "" },
+
+        { label: "antimatterUnlocked", value: antimatterUnlocked },
+        { label: "isAntimatterBoostActive", value: isAntimatterBoostActive },
+        { label: "antimatterSvgEventListeners", value: antimatterSvgEventListeners },
+        { label: "canTravelToAsteroids", value: canTravelToAsteroids },
+        { label: "canFuelRockets", value: canFuelRockets },
+        { label: "checkRocketFuellingStatus - rocket1", value: checkRocketFuellingStatus.rocket1 },
+        { label: "checkRocketFuellingStatus - rocket2", value: checkRocketFuellingStatus.rocket2 },
+        { label: "checkRocketFuellingStatus - rocket3", value: checkRocketFuellingStatus.rocket3 },
+        { label: "checkRocketFuellingStatus - rocket4", value: checkRocketFuellingStatus.rocket4 },
+        { label: "currentlyTravellingToAsteroid - rocket1", value: currentlyTravellingToAsteroid.rocket1 },
+        { label: "currentlyTravellingToAsteroid - rocket2", value: currentlyTravellingToAsteroid.rocket2 },
+        { label: "currentlyTravellingToAsteroid - rocket3", value: currentlyTravellingToAsteroid.rocket3 },
+        { label: "currentlyTravellingToAsteroid - rocket4", value: currentlyTravellingToAsteroid.rocket4 },
+        { label: "rocketReadyToTravel - rocket1", value: rocketReadyToTravel.rocket1 },
+        { label: "rocketReadyToTravel - rocket2", value: rocketReadyToTravel.rocket2 },
+        { label: "rocketReadyToTravel - rocket3", value: rocketReadyToTravel.rocket3 },
+        { label: "rocketReadyToTravel - rocket4", value: rocketReadyToTravel.rocket4 },
+        { label: "rocketUserName", value: rocketUserName },
+        { label: "rocketsBuilt", value: rocketsBuilt },
+        { label: "asteroidArray", value: asteroidArray },
+        { label: "rocketsFuellerStartedArray", value: rocketsFuellerStartedArray },
+        { label: "launchedRockets", value: launchedRockets },
+
+        { label: "", value: "" },
+        { label: "Star Ship:", value: "" },
+        { label: "", value: "" },
+
+        { label: "starShipBuilt", value: starShipBuilt },
+        { label: "starShipTravelling", value: starShipTravelling },
+        { label: "starShipArrowPosition", value: starShipArrowPosition },
+        { label: "stellarScannerBuilt", value: stellarScannerBuilt },
+        { label: "destinationStarScanned", value: destinationStarScanned },
+        { label: "currentDestinationDropdownText", value: currentDestinationDropdownText },
+        { label: "starVisionDistance", value: starVisionDistance },
+        { label: "starMapMode", value: starMapMode },
+        { label: "starVisionIncrement", value: starVisionIncrement },
+        { label: "destinationStar", value: destinationStar },
+        { label: "fromStarObject", value: fromStarObject },
+        { label: "toStarObject", value: toStarObject },
+        { label: "currentStarObject", value: currentStarObject },
+        { label: "starShipStatus", value: starShipStatus },
+        { label: "starShipModulesBuilt", value: starShipModulesBuilt },
+
+        { label: "", value: "" },
+        { label: "Diplomacy:", value: "" },
+        { label: "", value: "" },
+
+        { label: "diplomacyPossible", value: diplomacyPossible },
+
+        { label: "", value: "" },
+        { label: "Battle:", value: "" },
+        { label: "", value: "" },
+
+        { label: "needNewBattleCanvas", value: needNewBattleCanvas },
+        { label: "redrawBattleDescription", value: redrawBattleDescription },
+        { label: "warMode", value: warMode },
+        { label: "fleetChangedSinceLastDiplomacy", value: fleetChangedSinceLastDiplomacy },
+        { label: "battleOngoing", value: battleOngoing },
+        { label: "formationGoal", value: formationGoal },
+        { label: "battleTriggeredByPlayer", value: battleTriggeredByPlayer },
+        { label: "inFormation", value: inFormation },
+        { label: "wasAutoSaveToggled", value: wasAutoSaveToggled },
+        { label: "enemyFleetAdjustedForDiplomacy", value: enemyFleetAdjustedForDiplomacy },
+    ];    
+
+    debugTextAreaContainer.innerHTML = "";
+
+    variables.forEach((variable) => {
+        const div = document.createElement("div");
+    
+        const label = document.createElement("span");
+
+        if (variable.value === "" && variable.label !== "") {
+            label.style.fontSize = "2rem";
+        }
+
+        if (variable.label === "") {
+            const blankLineDiv = document.createElement("div");
+            blankLineDiv.style.height = "10px";
+            debugTextAreaContainer.appendChild(blankLineDiv);
+        } else {
+            label.innerHTML = variable.value === "" ? `${variable.label}` : `${variable.label}:&nbsp;&nbsp;`;
+    
+            const valueDiv = document.createElement("span");
+            const className = variable.value === null ? "red-disabled-text" : "green-ready-text";
+            valueDiv.classList.add(className);
+            valueDiv.textContent = formatValue(variable.value);
+    
+            div.appendChild(label);
+            div.appendChild(valueDiv);
+    
+            debugTextAreaContainer.appendChild(div);
+        }
+    });
+    
+}
+
+function formatValue(value) {
+    if (Array.isArray(value) || typeof value === 'object') {
+        const stringifiedValue = JSON.stringify(value);
+        return stringifiedValue.length > 2000 ? `${stringifiedValue.slice(0, 2000)}...` : stringifiedValue;
+    } else {
+        return value;
+    }
+}

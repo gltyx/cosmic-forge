@@ -211,7 +211,8 @@ import {
     setWarMode,
     setEnemyFleetsAdjustedForDiplomacy,
     setTechUnlockedArray,
-    getStatRun
+    getStatRun,
+    populateVariableDebugger,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -226,7 +227,8 @@ import {
     getRocketParts,
     getStarShipPartsNeededInTotalPerModule,
     getMaxFleetShip,
-    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack
+    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack,
+    setupNewRunStarSystem
 } from "./resourceDataObject.js";
 
 import { 
@@ -299,17 +301,19 @@ export function startGame() {
     gameLoop();
 }
 
-export function startSpaceRelatedTimers(value) { //not active
-    startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), value]);
-    startInvestigateStarTimer([getTimeLeftUntilStarInvestigationTimerFinishes(), value]);
-    for (let i = 1; i <= 4; i++) {
-        startTravelToAndFromAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), value], 'rocket' + i, getRocketDirection('rocket' + i));
-    }
-    startTravelToDestinationStarTimer([getTimeLeftUntilTravelToDestinationStarTimerFinishes(), value]);
-}
+// export function startSpaceRelatedTimers(value) { //not active
+//     startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), value]);
+//     startInvestigateStarTimer([getTimeLeftUntilStarInvestigationTimerFinishes(), value]);
+//     for (let i = 1; i <= 4; i++) {
+//         startTravelToAndFromAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), value], 'rocket' + i, getRocketDirection('rocket' + i));
+//     }
+//     startTravelToDestinationStarTimer([getTimeLeftUntilTravelToDestinationStarTimerFinishes(), value]);
+// }
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
+        populateVariableDebugger();
+
         backgroundAudio.update();
         weatherAmbienceManager.update();
         const elements = document.querySelectorAll('.notation');
@@ -643,7 +647,11 @@ function updateStats() {
 
     //stat6
     updateAP();
-    
+
+    //stat7
+    let statLabelElement = document.getElementById('stat7').previousElementSibling;
+    statLabelElement.innerHTML = `${capitaliseWordsWithRomanNumerals(getCurrentStarSystem())}:`;
+
     //stat8
     getTimeInStatCell();
 
@@ -7326,9 +7334,12 @@ export function settleSystemAfterBattle(accessPoint) {
 }
 
 export function rebirth() {
+    setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
+    setupNewRunStarSystem();
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth(); //reset all flags and variables for the new run
+    setRunStartTime();
     //reset tab visibilities and order
     //reset starDataObject and currentStar to new system hint let currentStarSystem = getStartingStarSystem();
     console.log('Rebirthed');
