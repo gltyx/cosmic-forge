@@ -1,6 +1,5 @@
 import {
     setSettledStars,
-    getSettledStars,
     resetAllVariablesOnRebirth,
     getRebirthPossible,
     setRebirthPossible,
@@ -9,8 +8,6 @@ import {
     getAutoSaveToggle,
     setAutoSaveToggle,
     setBattleUnits,
-    getFleetConstantData,
-    setFleetConstantData,
     getBattleTriggeredByPlayer,
     getInFormation,
     setInFormation,
@@ -32,7 +29,6 @@ import {
     statFunctionsSets,
     getStellarScannerRange,
     getDestinationStarScanned,
-    setDestinationStarScanned,
     setStellarScannerBuilt,
     getStellarScannerBuilt,
     setStarShipStatus,
@@ -44,11 +40,8 @@ import {
     setStarShipTravelling,
     setStarShipBuilt,
     getAscendencyPoints,
-    setAscendencyPoints,
     getRocketUserName,
-    setRocketUserName,
     getCanFuelRockets,
-    setCanFuelRockets,
     setRocketDirection,
     getRocketDirection,
     getBoostRate,
@@ -105,7 +98,6 @@ import {
     getRocketsFuellerStartedArray,
     setRocketsFuellerStartedArray,
     setStarShipModulesBuilt,
-    getStarShipModulesBuilt,
     setRocketsBuilt,
     getRocketsBuilt,
     getWeatherEffectOn,
@@ -116,12 +108,10 @@ import {
     getNewsTickerSetting,
     getWeatherEffectSetting,
     setTechTreeDrawnYet,
-    getTechTreeDrawnYet,
     setUpcomingTechArray,
     getUpcomingTechArray,
     getSavedYetSinceOpeningSaveDialogue,
     setSavedYetSinceOpeningSaveDialogue,
-    setLastSavedTimeStamp,
     getLastSavedTimeStamp,
     setCurrentPrecipitationRate,
     getCurrentPrecipitationRate,
@@ -130,7 +120,6 @@ import {
     getCurrentStarSystem,
     setCurrentStarSystem,
     getTrippedStatus,
-    setTrippedStatus,
     setRanOutOfFuelWhenOn,
     getRanOutOfFuelWhenOn,
     setBuildingTypeOnOff,
@@ -186,20 +175,15 @@ import {
     getTechTreeData,
     getSaveName,
     setHasAntimatterSvgRightBoxDataChanged,
-    setAntimatterSvgEventListeners,
     getCanTravelToAsteroids,
     getCurrentDestinationDropdownText,
     getBaseInvestigateStarTimerDuration,
     getStarVisionIncrement,
     getStarVisionDistance,
     setStarVisionDistance,
-    getBackgroundAudio,
     getStarShipBuilt,
     getDestinationStar,
     setStarShipArrowPosition,
-    NUMBER_OF_STARS,
-    STAR_FIELD_SEED,
-    getStarMapMode,
     getStarShipArrowPosition,
     getCurrentStarObject,
     getOfflineGainsRate,
@@ -210,11 +194,12 @@ import {
     getWasAutoSaveToggled,
     getBattleResolved,
     setBattleResolved,
-    setWarMode,
     setEnemyFleetsAdjustedForDiplomacy,
     setTechUnlockedArray,
     getStatRun,
     populateVariableDebugger,
+    setLastScreenOpenRegister,
+    getLastScreenOpenRegister,
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -224,9 +209,7 @@ import {
     getResourceDataObject,
     setResourceDataObject,
     getStarSystemWeather,
-    setStarSystemWeather,
     getRocketPartsNeededInTotalPerRocket,
-    getRocketParts,
     getStarShipPartsNeededInTotalPerModule,
     getMaxFleetShip,
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack,
@@ -249,9 +232,7 @@ import {
     drawAntimatterFlowDiagram,
     switchFuelGaugeWhenFuellerBought,
     showWeatherNotification,
-    generateStarfield,
     drawStarConnectionDrawings,
-    createStarDestinationRow,
     spaceTravelButtonHideAndShowDescription,
     removeStarConnectionTooltip,
     removeOrbitCircle,
@@ -263,15 +244,12 @@ import {
     setWarUI,
     drawFleets,
     moveBattleUnits,
-    createBattleCanvas,
     explosionAnimation,
     shootLaser,
     showBattlePopup,
-    showRebirthPopup,
     resetTabsOnRebirth,
     resetTab1ClassesRebirth,
     resetTab2ClassesRebirth,
-    resetTab3ClassesRebirth,
     resetTab4ClassesRebirth,
     resetTab5ClassesRebirth,
     resetTab6ClassesRebirth
@@ -302,22 +280,12 @@ export function startGame() {
     updateTabHotkeys();
     initializeAutoSave();
     startInitialTimers();
-    //startSpaceRelatedTimers();
     startNewsTickerTimer();
     if (getStatRun() === 1) {
         setTechUnlockedArray('run1');
     }
     gameLoop();
 }
-
-// export function startSpaceRelatedTimers(value) { //not active
-//     startSearchAsteroidTimer([getTimeLeftUntilAsteroidScannerTimerFinishes(), value]);
-//     startInvestigateStarTimer([getTimeLeftUntilStarInvestigationTimerFinishes(), value]);
-//     for (let i = 1; i <= 4; i++) {
-//         startTravelToAndFromAsteroidTimer([getTimeLeftUntilRocketTravelToAsteroidTimerFinishes('rocket' + i), value], 'rocket' + i, getRocketDirection('rocket' + i));
-//     }
-//     startTravelToDestinationStarTimer([getTimeLeftUntilTravelToDestinationStarTimerFinishes(), value]);
-// }
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
@@ -3520,6 +3488,14 @@ function resetFleetPrices() {
 }
 
 function rebirthChecks() {
+    if (getCurrentTab()[1] === 'Galactic') {
+        if (getDestinationStarScanned()) {
+            document.getElementById('rebirthOption').parentElement.parentElement.classList.remove('invisible');
+        } else {
+            document.getElementById('rebirthOption').parentElement.parentElement.classList.add('invisible');
+        }
+    }
+
     if (getCurrentOptionPane() === 'rebirth') {
         if (getRebirthPossible()) {
             document.querySelector('.rebirth-check').classList.remove('red-disabled-text');
@@ -6830,14 +6806,13 @@ export function setEnemyFleetPower() { //TODO
     let enemyFleetPowerAir = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'air'])  * 2;
     let enemyFleetPowerLand = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'land']) * 4;
     let enemyFleetPowerSea = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'sea']) * 6;
-    //add modifiers here to enemy strength like defense or anomalaies TODO
 
     const totalEnemyFleetPower = Math.floor(enemyFleetPowerAir + enemyFleetPowerLand + enemyFleetPowerSea);
     setStarSystemDataObject(totalEnemyFleetPower, 'stars', ['destinationStar', 'enemyFleets', 'fleetPower']);
 }
 
 function bullyEnemy(starData) {
-    const enemyTraitMain = starData.lifeformTraits[0][0]; // Diplomatic or Aggressive
+    const enemyTraitMain = starData.lifeformTraits[0][0];
     const playerAttackPower = getResourceDataObject('fleets', ['attackPower']);
     const enemyPower = Math.floor(starData.enemyFleets.air + starData.enemyFleets.land + starData.enemyFleets.sea);
     const enemyDefense = starData.defenseRating;
@@ -7338,7 +7313,9 @@ export function settleSystemAfterBattle(accessPoint) {
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
     
     if (!getApAwardedThisRun()) {
-        setTechUnlockedArray('apAwardedThisRun');
+        if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
+            setTechUnlockedArray('apAwardedThisRun');
+        }        
         setResourceDataObject(Math.floor(apGain + getResourceDataObject('ascendencyPoints', ['quantity'])), 'ascendencyPoints', ['quantity']);
         setApAwardedThisRun(true);
         showNotification('Galactic Tab Unlocked!', 'warning');
@@ -7357,6 +7334,7 @@ export function settleSystemAfterBattle(accessPoint) {
 }
 
 export function rebirth() {
+    autoSelectOption('galacticMarketOption');
     document.getElementById('tabsContainer').children[0]?.click();
     autoSelectOption('hydrogenOption');
     setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
@@ -7368,13 +7346,10 @@ export function rebirth() {
     resetTabsOnRebirth();
     resetTab1ClassesRebirth();
     resetTab2ClassesRebirth();
-    //resetTab3ClassesRebirth();
     resetTab4ClassesRebirth();
     resetTab5ClassesRebirth();
     resetTab6ClassesRebirth();
     setRunStartTime();
-    //reset tab visibilities and order
-    console.log('Rebirthed');
 }
 
 //===============================================================================================================

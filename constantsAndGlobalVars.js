@@ -566,7 +566,7 @@ export function resetAllVariablesOnRebirth() {
     constituentPartsObject = {};
     itemsToDeduct = {};
     itemsToIncreasePrice = {};
-    techUnlockedArray = [];
+    techUnlockedArray = ['apAwardedThisRun'];
     revealedTechArray = [];
     upcomingTechArray = [];
     unlockedResourcesArray = ['hydrogen'];
@@ -2732,7 +2732,7 @@ function getStatTotalApGain() {//
 }
 
 export function getStatRun() {//
-    return runNumber; //TODO add setter when rebirth implemented
+    return runNumber;
 }
 
 function getStatTotalTimePlayed() {

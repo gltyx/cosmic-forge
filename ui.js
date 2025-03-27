@@ -3,15 +3,11 @@ import {
     setEnemyFleetsAdjustedForDiplomacy,
     getEnemyFleetsAdjustedForDiplomacy,
     getFleetConstantData,
-    setFleetConstantData,
     setInFormation,
-    getInFormation,
     getFormationGoal,
     setFormationGoal,
     getBattleTriggeredByPlayer,
-    setBattleTriggeredByPlayer,
     replaceBattleUnits,
-    getBattleOngoing,
     setBattleOngoing,
     setBattleUnits,
     getBattleUnits,
@@ -20,27 +16,19 @@ import {
     getAlreadySeenNewsTickerArray,
     getStarShipStatus,
     getStarShipArrowPosition,
-    setStarShipArrowPosition,
     getFromStarObject,
     setFromStarObject,
     getToStarObject,
     setToStarObject,
-    setStarShipTravelling,
     getStarShipTravelling,
     setDestinationStar,
     getDestinationStar,
     getStarShipBuilt,
-    setStarShipBuilt,
     setSortStarMethod,
-    getSortStarMethod,
     getStarVisionDistance,
-    setStarVisionDistance,
     STAR_SEED,
-    getStartingStarSystem,
     setRocketUserName,
     setCurrentDestinationDropdownText,
-    getCurrentDestinationDropdownText,
-    getCurrencySymbol,
     getBoostRate,
     setHasAntimatterSvgRightBoxDataChanged,
     getHasAntimatterSvgRightBoxDataChanged,
@@ -51,17 +39,14 @@ import {
     setUnlockedResourcesArray,
     setTechUnlockedArray,
     getNewsTickerScrollDuration,
-    oneOffPrizesAlreadyClaimedArray,
     getOneOffPrizesAlreadyClaimedArray,
     setOneOffPrizesAlreadyClaimedArray,
     deferredActions,
     setRenderedTechTree,
     getRenderedTechTree,
     setTechTreeDrawnYet,
-    getTechTreeDrawnYet,
     getUpcomingTechArray,
     setLastSavedTimeStamp,
-    getCurrentTheme,
     setCurrentTheme,
     READY_TO_SORT,
     NOW,
@@ -77,13 +62,9 @@ import {
     getNotificationsToggle,
     setCurrentTab,
     getCurrentTab,
-    // getLanguage,
     setElements,
     getElements,
     getGameVisibleActive,
-    // getLanguageSelected,
-    // setLanguageSelected,
-    // setLanguage,
     getCurrentOptionPane,
     setSaveName,
     getSaveName,
@@ -98,23 +79,16 @@ import {
     setSortAsteroidMethod,
     getAsteroidArray,
     getIsAntimatterBoostActive,
-    setStarShipModulesBuilt,
-    getStarShipModulesBuilt,
     setRocketsBuilt,
-    setAntimatterSvgEventListeners,
     setAntimatterUnlocked,
     setCanFuelRockets,
     setCanTravelToAsteroids,
     getRocketUserName,
-    setDestinationAsteroid,
     setCurrentStarObject,
-    getCurrentStarObject,
     setWarMode,
     getWarMode,
     getNeedNewBattleCanvas,
     setNeedNewBattleCanvas,
-    getBattleResolved,
-    populateVariableDebugger,
     getSettledStars,
 } from './constantsAndGlobalVars.js';
 import {
@@ -177,17 +151,10 @@ import {
     startTravelToDestinationStarTimer,
     addToResourceAllTimeStat,
     calculateMovementVectorToTarget,
-    turnAround,
     setEnemyFleetPower,
-    checkBattleOutcome,
     rebirth
 
 } from './game.js';
-
-// import {
-//     initLocalization,
-//     localize
-// } from './localization.js';
 
 import { 
     capitaliseString, 
@@ -1015,7 +982,7 @@ let isNotificationActive = false;
 export function showWeatherNotification(type) {
     const precipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
     if (type === 'rain') {
-        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) { //can change this to not be compoiunds but revealedByTech resource for the precipitation type in the star system TODO
+        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds') && getTechUnlockedArray().includes(getResourceDataObject('compounds', [precipitationType, 'revealedBy']))) {
             showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning');
         } else if (getTechUnlockedArray().includes('rocketComposites')) {
             showNotification('Heavy Rain! No launches until it clears.', 'warning');
@@ -1513,7 +1480,7 @@ export function showBattlePopup(won, apGain = 0) {
     };
 }
 
-export function setWarUI(setWarState) { //TODO REMOVE INVISIBLITY OF WAR ROWS HERE
+export function setWarUI(setWarState) {
     const starData = getStarSystemDataObject('stars', ['destinationStar']);
     const playerFleetPower = getResourceDataObject('fleets', ['attackPower']);
 
@@ -4713,30 +4680,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const powerPlant3Row = document.getElementById('powerPlant3Option').closest('.row-side-menu');
         powerPlant3Row.classList.add('invisible');
     }   
-    
-    export function resetTab3ClassesRebirth() {
-        const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
-        collapsibleHeaders.forEach(header => {
-            header.classList.add('active');
-        });
-    
-        const collapsibleContents = document.querySelectorAll('.collapsible-content');
-        collapsibleContents.forEach(content => {
-            content.classList.add('open');
-        });
-    
-        const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
-        rowSideMenuItems.forEach(row => {
-            if (row.classList.contains('invisible')) {
-                row.classList.add('invisible');
-            } else {
-                row.classList.remove('invisible');
-            }
-        });
-    
-        const researchRow = document.getElementById('researchOption').closest('.row-side-menu');
-        researchRow.classList.remove('invisible');
-    } 
     
     export function resetTab4ClassesRebirth() {
         const collapsibles = document.querySelectorAll('.tab-4 .collapsible');
