@@ -454,6 +454,7 @@ button {
     --button-bg-color: #444;
     --button-bg-active: #666;
     --star-color-prominent: #9da340;
+    --star-color-settled: #8fc5ff;
     --current-star-border: #ff4500;
     --generation-colors: #4CAF50, #8BC34A, #CDDC39;
     --consumption-colors: #F44336, #E91E63, #9C27B0;
@@ -483,6 +484,7 @@ button {
     --button-bg-color: #e5e5e5;
     --button-bg-active: #bfbfbf;
     --star-color-prominent: #cac71d;
+    --star-color-settled: #005fa3;
     --current-star-border: #ff4500;
     --generation-colors: #66bb6a, #a5d6a7, #dcedc8;
     --consumption-colors: #ef5350, #f48fb1, #f8bbd0;
@@ -512,6 +514,7 @@ button {
     --button-bg-color: #d8eff6;
     --button-bg-active: #c0e2eb;
     --star-color-prominent: #cac71d;
+    --star-color-settled: #b48bff;
     --current-star-border: #ff4500;
     --generation-colors: #81d4fa, #4fc3f7, #29b6f6;
     --consumption-colors: #e57373, #ef9a9a, #ffcdd2;
@@ -541,6 +544,7 @@ button {
     --button-bg-color: #e4c066;
     --button-bg-active: #ffdab0;
     --star-color-prominent: #471414;
+    --star-color-settled: #2a5faa;
     --current-star-border: #ff4500;
     --generation-colors: #ffcc80, #ffb74d, #ffa726;
     --consumption-colors: #ff8a65, #ff7043, #d84315;
@@ -570,6 +574,7 @@ button {
     --button-bg-color: #87ca87;
     --button-bg-active: #c6f9c6;
     --star-color-prominent: #bdbf32;
+    --star-color-settled: #7fc8ff;
     --current-star-border: #ff4500;
     --generation-colors: #66bb6a, #4caf50, #388e3c;
     --consumption-colors: #d32f2f, #c62828, #b71c1c;
@@ -599,6 +604,7 @@ button {
     --button-bg-color: #212121;
     --button-bg-active: #333;
     --star-color-prominent: #ffffff;
+    --star-color-settled: #00aaff;
     --current-star-border: #ff4500;
     --generation-colors: lime, #00b200, #005400;
     --consumption-colors: red, #f00, #800;
@@ -628,6 +634,7 @@ button {
     --button-bg-color: #333;
     --button-bg-active: #555;
     --star-color-prominent: #ffffff;
+    --star-color-settled: #8fc5ff;
     --current-star-border: #ff4500;
     --generation-colors: #2e7d32, #43a047, #66bb6a;
     --consumption-colors: #c62828, #e53935, #ef5350;
@@ -1545,7 +1552,6 @@ button.red-disabled-text {
         opacity: 0.8;
     }
 }
-
 .star {
     position: absolute;
     background-color: var(--star-color-prominent);
@@ -1559,6 +1565,10 @@ button.red-disabled-text {
     opacity: 0.6;
     --twinkle-scale: 1.2;
     animation: twinkle infinite ease-in-out;
+}
+
+.settled-star {
+    background-color: var(--star-color-settled);
 }
 
 @keyframes twinkle {

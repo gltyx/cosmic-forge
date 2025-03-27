@@ -2,7 +2,7 @@ import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
 export let resourceData = {
-    version: 0.40, //update this whenever changes are made to the structure
+    version: 0.50, //update this whenever changes are made to the structure
     resources: {
         solar: {
             nameResource: 'Solar',
@@ -687,7 +687,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'air',
                 bonusRemovedBy: 'Aerialians',
                 defenseStrength: 2,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 5
             },
             fleetMarauder: {
                 maxCanBuild: 100000,
@@ -702,7 +703,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'air',
                 bonusRemovedBy: 'Aerialians',
                 defenseStrength: 3,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 4
             },
             fleetLandStalker: {
                 maxCanBuild: 100000,
@@ -717,7 +719,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'land',
                 bonusRemovedBy: 'Terrans',
                 defenseStrength: 0,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 2
             },
             fleetNavalStrafer: {
                 maxCanBuild: 100000,
@@ -732,7 +735,8 @@ export let resourceData = {
                 bonusGivenAgainstType: 'sea',
                 bonusRemovedBy: 'Aquatic',
                 defenseStrength: 0,
-                joinsAttackDefense: true
+                joinsAttackDefense: true,
+                speed: 1
             }
         }
     },
@@ -831,10 +835,10 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.40,
+    version: 0.50,
     stars: {
         spica: {
-            mapSize: 5.504440179536064, //only important for starting star
+            mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
             startingStar: true,
             starCode: 'SPC',
             precipitationResourceCategory: 'compounds',
@@ -857,7 +861,6 @@ export function copyStarDataToDestinationStarField(starName) {
 
     stars.destinationStar = JSON.parse(JSON.stringify(stars[starName]));
 }
-
 
 export function restoreResourceDataObject(value) {
     value = migrateResourceData(value, 'resourceData');
@@ -925,6 +928,16 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 }
 
+export let resourceDataRebirthCopy = structuredClone(resourceData);
+
+export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
+    const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+    //const galacticBuffsList = 
+    Object.assign(resourceData, resourceDataRebirthCopy);
+    //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
+    setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
 export function getStarSystemDataObject(key, subKeys) {
     let current = starSystems[key];
 
@@ -965,6 +978,26 @@ export function setStarSystemDataObject(value, key, subKeys = []) {
         }
     }
 }
+
+export function setupNewRunStarSystem() {
+    const destinationStar = getStarSystemDataObject('stars', ['destinationStar']);
+    const starObject = {
+        mapSize: destinationStar.mapSize || 5.504440179536064, // TODO
+        startingStar: destinationStar.startingStar || true,
+        starCode: destinationStar.starCode,
+        precipitationResourceCategory: destinationStar.precipitationResourceCategory,
+        precipitationType: destinationStar.precipitationType,
+        weather: destinationStar.weather
+    };
+
+    setRebirthStarSystemToStarSystemDataObject(starObject);
+}
+
+export function setRebirthStarSystemToStarSystemDataObject(newObject) {
+    starSystems.stars = {};
+    starSystems.stars[newObject.starCode.toLowerCase()] = newObject;
+}
+
 
 export function setAutoBuyerTierLevel(key, value, override = false, type) {
     if (resourceData[type][key].upgrades.autoBuyer.normalProgression === true || override) {

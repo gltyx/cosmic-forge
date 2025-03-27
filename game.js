@@ -1,4 +1,6 @@
 import {
+    setSettledStars,
+    getSettledStars,
     resetAllVariablesOnRebirth,
     getRebirthPossible,
     setRebirthPossible,
@@ -266,6 +268,7 @@ import {
     shootLaser,
     showBattlePopup,
     showRebirthPopup,
+    resetTabsOnRebirth,
     resetTab1ClassesRebirth,
 } from "./ui.js";
 
@@ -523,7 +526,11 @@ function addPrecipitationResource() {
     if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && precipitationTypeRevealedYet && precipitationStorageAvailable) {
         setResourceDataObject(currentStarSystemPrecipitationTypeQuantity + getCurrentPrecipitationRate(), currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
         addToResourceAllTimeStat(getCurrentPrecipitationRate(), currentStarSystemPrecipitationType);
-        getElements().waterQuantity.textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']); //THIS IS A BUG FIX TO FIXED AFTER REBIRTH NEED TO USE WHICHEVER PRECIPITATION TYPE
+        const precipitationId = currentStarSystemPrecipitationType + 'Quantity';
+
+        if (document.getElementById(precipitationId)) {
+            document.getElementById(precipitationId).textContent = getResourceDataObject(currentStarSystemPrecipitationCategory, [currentStarSystemPrecipitationType, 'quantity']);
+        }
     }
 }
 
@@ -2815,6 +2822,14 @@ function setPriceForAllPurchases(element, type, resource, scienceUpgradeType, bu
 function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
     const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
         
+    if (prerequisiteArray.includes('FTLravelTheory')) { // patch for FTLravelArray pre version 0.4
+        const index = prerequisiteArray.indexOf('FTLravelTheory');
+        if (index !== -1) {
+            prerequisiteArray[index] = 'FTLTravelTheory';
+        }
+    }
+    
+
     if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
         element.classList.remove('red-disabled-text');
     } else if (element) {
@@ -7337,11 +7352,15 @@ export function settleSystemAfterBattle(accessPoint) {
 }
 
 export function rebirth() {
+    document.getElementById('tabsContainer').children[0]?.click();
+    autoSelectOption('hydrogenOption');
     setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
+    setSettledStars(getCurrentStarSystem());
     setupNewRunStarSystem();
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth();
+    resetTabsOnRebirth();
     resetTab1ClassesRebirth();
     setRunStartTime();
     //reset tab visibilities and order

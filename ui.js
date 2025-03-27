@@ -115,6 +115,7 @@ import {
     setNeedNewBattleCanvas,
     getBattleResolved,
     populateVariableDebugger,
+    getSettledStars,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1012,13 +1013,14 @@ let notificationQueue = [];
 let isNotificationActive = false;
 
 export function showWeatherNotification(type) {
+    const precipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
     if (type === 'rain') {
         if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds')) {
-            showNotification('Heavy Rain! No launches until it clears, but water stores benefit!', 'warning');
+            showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning');
         } else if (getTechUnlockedArray().includes('rocketComposites')) {
             showNotification('Heavy Rain! No launches until it clears.', 'warning');
         } else if (getTechUnlockedArray().includes('compounds')) {
-            showNotification('Heavy Rain! Water stores benefit!', 'warning');
+            showNotification(`Heavy Rain! ${capitaliseString(precipitationType)} stores benefit!`, 'warning');
         } else {
             showNotification('Heavy Rain!', 'warning');
         }
@@ -1215,21 +1217,33 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
 
     stars.forEach(star => {
         const distance = starDistanceData[star.name];
-        const isInteresting = distance <= getStarVisionDistance() || star.name === currentStar.name;
+        const isInteresting = distance <= getStarVisionDistance() || star.name === currentStar.name || getSettledStars().includes(star.name.toLowerCase());
         const starElement = document.createElement('div');
         starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
+        starElement.id = isInteresting && getCurrentStarSystem() !== starElement.id.toLowerCase() && getSettledStars().includes(star.name.toLowerCase()) ? `settledStar${star.name}` : starElement.id;        
         starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
-        if (starElement.classList.contains('star-uninteresting') || starElement.id === capitaliseString(getCurrentStarSystem())) {
-            starElement.setAttribute('titler', `${star.name}`);
+
+        if (starElement.id.includes("settledStar")) {
+            starElement.classList.add("settled-star");
+        }
+
+        if (starElement.id.includes("settledStar")) {
+            starElement.setAttribute("titler", `${star.name} (SETTLED)`);
+        } else if (starElement.classList.contains("star-uninteresting") || starElement.id === capitaliseString(getCurrentStarSystem())) {
+            starElement.setAttribute("titler", `${star.name}`);
         } else {
-            starElement.setAttribute('titler', `${star.name} (${distance}ly)`);
-        }  
+            starElement.setAttribute("titler", `${star.name} (${distance}ly)`);
+        }        
         
-        if (star.name === currentStar.name) {
-            starElement.classList.add('current-star');
-            starElement.style.width = `${star.width * 4}px`;
-            starElement.style.height = `${star.height * 4}px`;
-            setCurrentStarObject(currentStar);
+        if (star.name === currentStar.name || getSettledStars().includes(star.name.toLowerCase())) {
+            starElement.style.width = `${star.width * 1.5}px`;
+            starElement.style.height = `${star.height * 1.5}px`;
+            if (star.name === currentStar.name) {
+                starElement.classList.add('current-star');
+                starElement.style.width = `${star.width * 4}px`;
+                starElement.style.height = `${star.height * 4}px`;
+                setCurrentStarObject(currentStar);
+            }
         } else if (isInteresting) {
             starElement.style.width = `${star.width * 2}px`;
             starElement.style.height = `${star.height * 2}px`;
@@ -1266,8 +1280,10 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                     setFromStarObject(currentStar);
                     setToStarObject(star);
                     drawStarConnectionDrawings(currentStar, star, true);
-                    createStarDestinationRow(starData[star.name.toLowerCase()], true);
-                    setDestinationStar(starData[star.name.toLowerCase()].name);
+                    createStarDestinationRow(starData[star.name.toLowerCase()] || star.name, true);
+                    if (starData[star.name.toLowerCase()]) {
+                        setDestinationStar(starData[star.name.toLowerCase()].name);
+                    }
                 } else {
                     drawStarConnectionDrawings(currentStar, star, false);
                     createStarDestinationRow(star.name, false);
@@ -1280,6 +1296,12 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
 }
 
 export function createStarDestinationRow(starData, isInteresting) {
+    const starName = typeof starData === "object" ? starData.name.toLowerCase() : starData.toLowerCase();
+
+    if (getSettledStars().includes(starName)) {
+        return;
+    }
+
     const elementRow = document.getElementById('descriptionContentTab5');
     if (!elementRow) return;
     const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
@@ -1583,6 +1605,16 @@ export function removeStarConnectionTooltip() {
 }
 
 export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
+    if (toStar.name) {
+        if (getSettledStars().includes(toStar.name.toLowerCase())) {
+            return;
+        }
+    } else {
+        if (getSettledStars().includes(toStar.toLowerCase())) {
+            return;
+        }
+    }
+
     removeStarConnectionTooltip();
 
     let lineElement = null;
@@ -4549,6 +4581,29 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         rebirthCancelButton.onclick = function () {
             showHideModal();
         };
+    }
+
+    export function resetTabsOnRebirth() {
+        const tabData = [
+            { id: "tab1", classes: ["tab", "selected"], dataTab: "", dataName: "Resources", text: "Resources" },
+            { id: "tab2", classes: ["tab", "tab-not-yet"], dataTab: "basicPowerGeneration", dataName: "Energy", text: "???" },
+            { id: "tab3", classes: ["tab"], dataTab: "", dataName: "Research", text: "Research" },
+            { id: "tab4", classes: ["tab", "tab-not-yet"], dataTab: "compounds", dataName: "Compounds", text: "???" },
+            { id: "tab5", classes: ["tab", "tab-not-yet"], dataTab: "stellarCartography", dataName: "Interstellar", text: "???" },
+            { id: "tab6", classes: ["tab", "tab-not-yet"], dataTab: "atmosphericTelescopes", dataName: "Space Mining", text: "???" },
+            { id: "tab7", classes: ["tab", "tab-not-yet"], dataTab: "apAwardedThisRun", dataName: "Galactic", text: "???" },
+            { id: "tab8", classes: ["tab"], dataTab: "", dataName: "☰", text: "☰" }
+        ];
+        
+        tabData.forEach(tab => {
+            const element = document.getElementById(tab.id);
+            if (element) {
+                element.className = tab.classes.join(" ");
+                element.setAttribute("data-tab", tab.dataTab);
+                element.setAttribute("data-name", tab.dataName);
+                element.textContent = tab.text;
+            }
+        });
     }
 
     //reset classes on rebirth

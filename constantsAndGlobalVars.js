@@ -23,7 +23,7 @@ let saveData = null;
 //CONSTANTS
 //ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.40;
+export const GAME_VERSION_FOR_SAVES = 0.50;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -125,6 +125,7 @@ let toStarObject = null;
 let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
 let runNumber = 1;
+let settledStars = [STARTING_STAR_SYSTEM];
 
 let battleUnits = { 
     player: [], 
@@ -832,6 +833,7 @@ export function captureGameStatusForSaving(type) {
     gameState.gameStartTimeStamp = gameStartTimeStamp;
     gameState.battleUnits = battleUnits;
     gameState.battleResolved = battleResolved;
+    gameState.settledStars = settledStars;
 
     // Flags
     gameState.flags = {
@@ -983,7 +985,7 @@ export function restoreGameStatus(gameState, type) {
             gameStartTimeStamp = gameState.gameStartTimeStamp ?? null;
             battleUnits = gameState.battleUnits ?? { player: [], enemy: [] };
             battleResolved = gameState.battleResolved ?? [false, null];
-
+            settledStars = gameState.settledStars ?? [STARTING_STAR_SYSTEM];
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -3185,6 +3187,14 @@ export function getGameStartTime() {
 
 export function getRunStartTime() {
     return runStartTimeStamp;
+}
+
+export function getSettledStars() {
+    return settledStars;
+}
+
+export function setSettledStars(value) {
+    settledStars.push(value);
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------
