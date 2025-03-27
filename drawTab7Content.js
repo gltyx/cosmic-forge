@@ -1,6 +1,4 @@
-import { getImageUrls } from './constantsAndGlobalVars.js';
 import { createOptionRow, createButton, showRebirthPopup } from './ui.js';
-import { rebirth } from './game.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {

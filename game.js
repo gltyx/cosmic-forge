@@ -7340,10 +7340,9 @@ export function rebirth() {
     setupNewRunStarSystem();
     setRebirthPossible(false);
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
-    resetAllVariablesOnRebirth(); //reset all flags and variables for the new run
+    resetAllVariablesOnRebirth();
     setRunStartTime();
     //reset tab visibilities and order
-    //reset starDataObject and currentStar to new system hint let currentStarSystem = getStartingStarSystem();
     console.log('Rebirthed');
 }
 
