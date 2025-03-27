@@ -7351,6 +7351,8 @@ export function settleSystemAfterBattle(accessPoint) {
 }
 
 export function rebirth() {
+    document.getElementById('tabsContainer').children[0]?.click();
+    autoSelectOption('hydrogenOption');
     setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
     setSettledStars(getCurrentStarSystem());
     setupNewRunStarSystem();
