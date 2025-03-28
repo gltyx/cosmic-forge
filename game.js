@@ -6081,10 +6081,10 @@ function generateAsteroidData(name) {
 
     const rarityRoll = Math.floor(Math.random() * 101);
     let rarity, rarityClass;
-    if (rarityRoll <= 70) { //70
+    if (rarityRoll <= 50) { //50
         rarity = "Common";
         rarityClass = 'red-disabled-text';
-    } else if (rarityRoll <= 90) { //90
+    } else if (rarityRoll <= 70) { //70
         rarity = "Uncommon";
         rarityClass = 'warning-orange-text';
     } else if (rarityRoll <= 98) { //98
