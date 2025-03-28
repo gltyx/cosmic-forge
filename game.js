@@ -3504,6 +3504,8 @@ function resetFleetPrices() {
     });
 }
 
+let hasClickedOutgoingOption = false; //change to setter and set to false when option selected in outgoing dropdown
+
 function galacticMarketChecks() {
     if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
         let redrawGalacticMarket = false;
@@ -3529,6 +3531,7 @@ function galacticMarketChecks() {
         const galacticMarketOutgoingStockTypeSelectedValue = galacticMarketOutgoingStockTypeDropDown.querySelector('.dropdown-text').textContent;
         if (!galacticMarketOutgoingStockTypeSelectedValue.includes('Select')) {
             removeAndReplaceOutgoingOptionFromIncomingDropDown(galacticMarketOutgoingStockTypeDropDown, galacticMarketIncomingStockTypeDropDown);
+            hasClickedOutgoingOption = true;
         }
 
         if (redrawGalacticMarket) {
@@ -3538,42 +3541,65 @@ function galacticMarketChecks() {
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
-//     const selectedOutgoingValue = outgoingDropdown.querySelector('.dropdown-text').textContent;
+    const selectedOutgoingValue = outgoingDropdown.querySelector('.dropdown-text').textContent;
 
-//     const staticValues = [
-//         'hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 
-//         'sodium', 'silicon', 'iron', 'diesel', 'glass', 
-//         'steel', 'concrete', 'water', 'titanium'
-//     ];
+    const staticValues = [
+        'hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 
+        'sodium', 'silicon', 'iron', 'diesel', 'glass', 
+        'steel', 'concrete', 'water', 'titanium'
+    ];
 
-//     for (let i = 0; i < incomingDropdown.querySelectorAll('.dropdown-option').length; i++) {
-//         const option = incomingDropdown.querySelectorAll('.dropdown-option')[i];
-//         if (capitaliseString(option.getAttribute('data-value')) === selectedOutgoingValue && selectedOutgoingValue !== 'Select Resource / Compound') {
-//             option.remove();
-//             break;
-//         }
-//     }
+    const optionsContainer = incomingDropdown.querySelector('.dropdown-options');
 
-//     const optionsContainer = incomingDropdown.querySelector('.dropdown-options');
+    // Step 1: Remove the selected outgoing value from the incoming dropdown
+    const outgoingOption = Array.from(optionsContainer.querySelectorAll('.dropdown-option')).find(option => {
+        return capitaliseString(option.getAttribute('data-value')) === selectedOutgoingValue && selectedOutgoingValue !== 'Select Resource / Compound';
+    });
 
-//     const currentValues = Array.from(incomingDropdown.querySelectorAll('.dropdown-option')).map(option => option.getAttribute('data-value'));
+    if (outgoingOption) {
+        console.log(`Removed outgoing option: ${outgoingOption.innerHTML}`);
+        outgoingOption.remove();
+    }
 
-//     staticValues.forEach(staticValue => {
-//         if (!currentValues.includes(staticValue) && staticValue !== selectedOutgoingValue) {
-//             const newOption = document.createElement('div');
-//             newOption.classList.add('dropdown-option');
-//             newOption.setAttribute('data-value', staticValue);
-//             newOption.innerHTML = capitaliseString(staticValue);
+    // Step 2: Get the current values in the incoming dropdown
+    const currentValues = Array.from(optionsContainer.querySelectorAll('.dropdown-option')).map(option => option.getAttribute('data-value'));
 
-//             const referenceOption = incomingDropdown.querySelector('.dropdown-option[data-value="' + staticValue + '"]');
-//             if (referenceOption) {
-//                 optionsContainer.insertBefore(newOption, referenceOption);
-//             } else {
-//                 optionsContainer.appendChild(newOption);
-//             }
-//         }
-//     });
+    // Step 3: Add any missing options, except the selected outgoing value, to the incoming dropdown
+    staticValues.forEach(staticValue => {
+        // We only add the option if it is missing and is not the one being removed
+        if (!currentValues.includes(staticValue) && staticValue !== selectedOutgoingValue) {
+            const newOption = document.createElement('div');
+            newOption.classList.add('dropdown-option');
+            newOption.setAttribute('data-value', staticValue);
+            newOption.innerHTML = capitaliseString(staticValue);
+
+            console.log(`Added missing option: ${newOption.innerHTML}`);
+
+            // Insert the new option in the correct position based on static order
+            const referenceOption = optionsContainer.querySelector('.dropdown-option[data-value="' + staticValue + '"]');
+            if (referenceOption) {
+                optionsContainer.insertBefore(newOption, referenceOption);
+            } else {
+                optionsContainer.appendChild(newOption);
+            }
+        }
+    });
+
+    // Step 4: Reorder the options to match the static order
+    const allOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option'));
+    const sortedOptions = staticValues.map(staticValue => {
+        return allOptions.find(option => option.getAttribute('data-value') === staticValue);
+    });
+
+    // Step 5: Append the sorted options in the correct order
+    sortedOptions.forEach(option => {
+        optionsContainer.appendChild(option);
+    });
+
+    console.log('Reordered dropdown options to match static order.');
 }
+
+
 
 function rebirthChecks() {
     if (getCurrentTab()[1] === 'Galactic') {
