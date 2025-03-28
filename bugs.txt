@@ -5,10 +5,9 @@ stats bugs in general
 galactic market:
 
 resource trader section:
-- can trade any resource for any other for comission cost in that resource
-
+- can trade any resource for any other for commission cost in that resource
 compound trader section:
-- can trade any compound for any other for comission cost in that compound
+- can trade any compound for any other for commission cost in that compound
 
 sell AP for cash option:
 - can sell AP for a high amount of cash each

@@ -15,13 +15,8 @@ export const debugVisibilityArray = ['settingsNotificationTestRow'];
 //ELEMENTS
 let elements;
 let saveData = null;
-// let localization = {};
-// let language = 'en';
-// let languageSelected = 'en';
-// let oldLanguage = 'en';
 
 //CONSTANTS
-//ALWAYS UPDATE THIS WHEN PUSHING A BUILD FOR PUBLIC
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
 export const GAME_VERSION_FOR_SAVES = 0.50;
 export const deferredActions = [];
@@ -116,7 +111,7 @@ let timeLeftUntilTravelToDestinationStarTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
-let starVisionDistance = 0; //0
+let starVisionDistance = 0;
 let starMapMode = 'normal';
 let starVisionIncrement = 1;
 let destinationStar = null;
@@ -162,7 +157,7 @@ let destinationAsteroid = {
     rocket4: null 
 };
 
-let rocketDirection = { //false outgoing true returning
+let rocketDirection = {
     rocket1: false,
     rocket2: false,
     rocket3: false,
@@ -248,8 +243,6 @@ let asteroidsMinedThisRun = 0;
 let formationGoal = null;
 
 //FLAGS
-// let languageChangedFlag;
-
 let checkRocketFuellingStatus = {
     rocket1: false,
     rocket2: false,
@@ -512,12 +505,12 @@ export const statFunctionsSets = {
     "set_scienceClubs": setStatScienceClubs,
     "set_scienceLabs": setStatScienceLabs,
     "set_antimatter": setStatAntimatter,
-    "set_antimatterThisRun": setStatAntimatterThisRun, //resetRun
-    "set_apAnticipated": setStatApAnticipated, //resetRun
+    "set_antimatterThisRun": setStatAntimatterThisRun,
+    "set_apAnticipated": setStatApAnticipated,
     "set_newsTickerPrizesCollected": setStatNewsTickerPrizesCollected,
     "set_totalApGain": setStatTotalApGain,
-    "set_starStudyRange": setStatStarStudyRange,  //resetRun
-    "set_starShipTravelDistance": setStatStarShipTravelDistance,  //resetRun
+    "set_starStudyRange": setStatStarStudyRange,
+    "set_starShipTravelDistance": setStatStarShipTravelDistance,
     "set_totalLegendaryAsteroidsDiscovered": setStatTotalLegendaryAsteroidsDiscovered,
     "set_totalAsteroidsDiscovered": setStatTotalAsteroidsDiscovered,
     "set_totalRocketsLaunched": setStatTotalRocketsLaunched,
@@ -529,7 +522,7 @@ export const statFunctionsSets = {
     "set_allTimeSodiumIonBatteriesBuilt": setStatSodiumIonBatteries,
     "set_allTimeBattery2Built": setStatBattery2,
     "set_allTimeBattery3Built": setStatBattery3,
-    "set_asteroidsMined": setStatAsteroidsMined, //resetRun
+    "set_asteroidsMined": setStatAsteroidsMined,
 };
 
 export function setGameStateVariable(value) {

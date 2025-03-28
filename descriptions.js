@@ -1002,6 +1002,21 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
+        galacticMarketItemSelectRow: {
+            content1: "Trade resources and compounds.  There is a commission to pay!",
+            content2: "",
+            updateAt: ""
+        },
+        galacticMarketSellApForCashRow: {
+            content1: "Sell AP for Cash!  Be careful as AP are not easy to come by!",
+            content2: "",
+            updateAt: ""
+        },
+        galacticMarketLiquidateForAPRow: {
+            content1: "Liquidate ALL Cash, Resources and Compounds, to AP.  You can only do this once per run so choose your moment wisely!",
+            content2: "",
+            updateAt: ""
+        },
         settingsCurrencySymbolRow: {
             content1: "Change the currency symbol displayed in the game.",
             content2: "",

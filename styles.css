@@ -47,6 +47,27 @@
     width: 10vw;
 }
 
+.galactic-market-textarea {
+    border: 2px solid;
+    border-radius: 10px;
+    height: 5vh;
+    width: 8vw;
+}
+
+.galactic-market-summary-text {
+    margin-left: 10px;
+}
+
+.galactic-market-summary-text-wide {
+    margin-left: 50px;
+}
+
+.galactic-market-confirm-trade-button,
+.galactic-market-confirm-sell-ap-button,
+.galactic-market-confirm-liquidate-button {
+    margin-left: 50px;
+}
+
 .save-name-modal-width {
     padding-top: 3px;
     padding-left: 10px !important;
@@ -1230,7 +1251,10 @@ cursor: pointer;
 [class*="-destination-star-element"],
 .diplomacy-button,
 .intelligence-element,
-.battle-button
+.battle-button,
+#galacticMarketForText,
+#galacticMarketIncomingStockTypeDropDown,
+.galactic-market-trade-button
 {
     margin-left: 30px;
 }
@@ -1279,6 +1303,11 @@ cursor: pointer;
 .star-option-button
 {
     margin-left: 50px;
+}
+
+.galactic-market-textarea
+{
+    margin-left: 95px;
 }
 
 .destination-text {
