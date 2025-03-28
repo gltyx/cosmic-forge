@@ -1003,7 +1003,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         galacticMarketItemSelectRow: {
-            content1: "Trade resources and compounds.  There is a commission to pay!",
+            content1: "Trade Resources and Compounds.  There is a commission to pay!",
             content2: "",
             updateAt: ""
         },
@@ -1014,7 +1014,7 @@ export function initialiseDescriptions() {
         },
         galacticMarketLiquidateForAPRow: {
             content1: "Liquidate ALL Cash, Resources and Compounds, to AP.  You can only do this once per run so choose your moment wisely!",
-            content2: "",
+            content2: `Liquidate ALL Cash, Resources and Compounds, to AP. <span class="red-disabled-text">Already done this run!</span>`,
             updateAt: ""
         },
         settingsCurrencySymbolRow: {

@@ -194,7 +194,7 @@ export function drawTab7Content(heading, optionContentElement) {
             null,
             null,
             null,
-            `AP GAIN: <span id ="galacticMarketCashGainQuantity" class="green-ready-text invisible">0</span>`,
+            `AP GAIN: <span id ="galacticMarketCashGainQuantity" class="green-ready-text invisible">0</span>`, //updateDescriptionRow('galacticMarketLiquidateForAPRow', 'content2'); when user has used this up
             '',
             null,
             null,
