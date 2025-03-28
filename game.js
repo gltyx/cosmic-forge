@@ -3542,8 +3542,10 @@ function galacticMarketChecks() {
         galacticMarketQuantityTextArea.classList[galacticMarketQuantityTextAreaIsDisabled ? 'add' : 'remove']('invisible');        
 
         if (!galacticMarketQuantityTextAreaIsDisabled) {
-            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = document.getElementById('galacticMarketQuantityTextArea').value;
+            const quantityValue = document.getElementById('galacticMarketQuantityTextArea').value;
+            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = quantityValue === '' ? '0' : quantityValue;
         }
+        
 
         if (galacticMarketQuantityTextAreaIsDisabled && getGalacticMarketOutgoingQuantitySelectionType() === 'all') {
             const dataType = document.querySelector(`.dropdown-option[data-value="${document.querySelector('.dropdown-text').innerHTML.toLowerCase()}"]`)?.getAttribute('data-type') || null;
@@ -3554,11 +3556,27 @@ function galacticMarketChecks() {
             populateSummaryStockType();
             galacticMarketQuantityToTradeDropDown.classList.remove('dropdown-disabled');
             if (document.getElementById('galacticMarketOutgoingQuantityText').innerHTML === 'N/A') {
-                document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = '0';
+                document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = 0;
             }
             if (document.getElementById('galacticMarketIncomingQuantityText').innerHTML === 'N/A') {
-                document.getElementById('galacticMarketIncomingQuantityText').innerHTML = '0';
+                document.getElementById('galacticMarketIncomingQuantityText').innerHTML = 0;
             }
+            if (document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML === 'N/A') {
+                document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML = 0;
+            }
+
+            if (getGalacticMarketOutgoingQuantitySelectionType() === 'select') {
+                document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = 'N/A';
+                document.getElementById('galacticMarketIncomingQuantityText').innerHTML = 'N/A';
+                document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML = 'N/A';
+            }
+            
+            document.getElementById('galacticMarketComissionQuantityStockTypeText').innerHTML = capitaliseString(getGalacticMarketOutgoingStockType());
+
+            if (document.getElementById('galacticMarketOutgoingQuantityText').innerHTML !== 'N/A' && parseNumber(document.getElementById('galacticMarketOutgoingQuantityText').innerHTML) > 0) {
+                console.log('calculating commission and trade incoming quantity...');
+            }
+
         } else {
             galacticMarketQuantityToTradeDropDown.classList.add('dropdown-disabled');
             galacticMarketQuantityToTradeDropDown.querySelector('.dropdown-text').textContent = 'Select Quantity';
@@ -3568,6 +3586,8 @@ function galacticMarketChecks() {
             document.getElementById('galacticMarketIncomingStockTypeText').innerHTML = 'N/A';
             document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = 'N/A';
             document.getElementById('galacticMarketIncomingQuantityText').innerHTML = 'N/A';
+            document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML = 'N/A';
+            document.getElementById('galacticMarketComissionQuantityStockTypeText').innerHTML = 'N/A';
         }
     }
 }
