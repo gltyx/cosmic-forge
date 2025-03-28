@@ -200,6 +200,7 @@ import {
     populateVariableDebugger,
     setLastScreenOpenRegister,
     getLastScreenOpenRegister,
+    setLastSavedTimeStamp
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -275,6 +276,7 @@ export function startGame() {
     if (!getRunStartTime()) {
         setRunStartTime();
     }
+    setLastSavedTimeStamp(getGameStartTime());
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     updateTabHotkeys();
@@ -5591,11 +5593,13 @@ export function offlineGains(switchedFocus) {
             compounds: calculateOfflineGains(combinedValues.rate.compounds, getTimerRateRatio()),
             energy: combinedValues.rate.energy * getTimerRateRatio() * timeDifferenceInSeconds,
             research: combinedValues.rate.research * getTimerRateRatio() * timeDifferenceInSeconds,
+            rocket1: 0,
+            rocket2: 0,
+            rocket3: 0,
+            rocket4: 0,
         };
 
-        Object.keys(offlineGains).forEach(key => { //this plus antimatter at bottom nerfs the offline gains rate
-            offlineGains[key] = Math.floor(offlineGains[key] * getOfflineGainsRate());
-        });
+        nerfOfflineGains(offlineGains);
     
         Object.entries(offlineGains.resources).forEach(([resource, gain]) => {
             const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
@@ -5711,6 +5715,16 @@ export function offlineGains(switchedFocus) {
     }
     // startSearchAsteroidTimer([10000, 'offlineGains']); //DEBUG
     // startTravelToAndFromAsteroidTimer([10000, 'offlineGains'], 'rocket1', getRocketDirection('rocket1')); //DEBUG
+}
+
+function nerfOfflineGains(obj) {
+    Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+            nerfOfflineGains(obj[key]);
+        } else {
+            obj[key] = Math.floor(obj[key] * getOfflineGainsRate());
+        }
+    });
 }
 
 export function setAllCompoundsToZeroQuantity() {
@@ -6659,39 +6673,30 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     }
 
     let impression = 35;
-    // console.log(`Starting impression: ${impression}`);
 
     if (lifeformTraits.some(trait => trait[0] === "Diplomatic")) {
         impression = 50;
-        // console.log(`Diplomatic trait detected, setting impression to ${impression}`);
     } else if (lifeformTraits.some(trait => trait[0] === "Aggressive")) {
         impression = 20;
-        // console.log(`Aggressive trait detected, setting impression to ${impression}`);
     }
 
     if (lifeformTraits.some(trait => trait[0] === "Armored")) {
         impression -= 5;
-        // console.log(`Armored trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Hive Mind")) {
         impression -= 10;
-        // console.log(`Hive Mind trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Power Siphon")) {
         impression += 3;
-        // console.log(`Power Siphon trait detected, new impression: ${impression}`);
     }
     if (lifeformTraits.some(trait => trait[0] === "Hypercharge")) {
         impression += 3;
-        // console.log(`Hypercharge trait detected, new impression: ${impression}`);
     }
 
     if (civilizationLevel === "Industrial") {
         impression += 5;
-        // console.log(`Industrial civilization detected, new impression: ${impression}`);
     } else if (civilizationLevel === "Spacefaring") {
         impression -= 5;
-        // console.log(`Spacefaring civilization detected, new impression: ${impression}`);
     }
 
     const threatModifiers = {
@@ -7344,12 +7349,20 @@ export function rebirth() {
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth();
     resetTabsOnRebirth();
+    resetUIElementsOnRebirth();
+    setRunStartTime();
+}
+
+function resetUIElementsOnRebirth() {
+    if (document.getElementById('indicatorSymbol')) {
+        document.getElementById('indicatorSymbol').remove();
+    }
+
     resetTab1ClassesRebirth();
     resetTab2ClassesRebirth();
     resetTab4ClassesRebirth();
     resetTab5ClassesRebirth();
     resetTab6ClassesRebirth();
-    setRunStartTime();
 }
 
 //===============================================================================================================
