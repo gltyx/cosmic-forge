@@ -5528,19 +5528,19 @@ export function offlineGains(switchedFocus) {
     
         resources.forEach(resource => {
             resourceValues[resource] = {
-                rate: getResourceDataObject('resources', [resource, 'rate']),
+                rate: Math.max(0, getResourceDataObject('resources', [resource, 'rate']) - getResourceDataObject('resources', [resource, 'usedForFuelPerSec'])),
                 quantity: getResourceDataObject('resources', [resource, 'quantity']),
                 storageCapacity: getResourceDataObject('resources', [resource, 'storageCapacity']),
             };
         });
-    
+        
         compounds.forEach(compound => {
             compoundValues[compound] = {
-                rate: getResourceDataObject('compounds', [compound, 'rate']),
+                rate: Math.max(0, getResourceDataObject('compounds', [compound, 'rate']) - getResourceDataObject('compounds', [compound, 'usedForFuelPerSec'])),
                 quantity: getResourceDataObject('compounds', [compound, 'quantity']),
                 storageCapacity: getResourceDataObject('compounds', [compound, 'storageCapacity']),
             };
-        });
+        });        
     
         const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
         energyValues.energy = {
