@@ -1,4 +1,5 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
+import { setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -51,7 +52,7 @@ export function drawTab7Content(heading, optionContentElement) {
                 { value: 'water', text: 'Water' },
                 { value: 'titanium', text: 'Titanium' }
             ], 'select', (value) => {
-                //setGalacticMarketOutgoingStockType(value);
+                setGalacticMarketOutgoingStockType(value);
             }),
             createTextElement(`For:`, 'galacticMarketForText', '', null),
             createDropdown('galacticMarketIncomingStockTypeDropDown', [
@@ -71,7 +72,7 @@ export function drawTab7Content(heading, optionContentElement) {
                 { value: 'water', text: 'Water' },
                 { value: 'titanium', text: 'Titanium' }
             ], 'select', (value) => {
-                //setGalacticMarketIncomingStockType(value);
+                setGalacticMarketIncomingStockType(value);
             }),
             null,
             null,
@@ -99,8 +100,8 @@ export function drawTab7Content(heading, optionContentElement) {
                 { value: 'all', text: 'All Stock' },
                 { value: 'enter', text: 'Enter Quantity' },
             ], 'select', (value) => {
-                //setGalacticMarketOutgoingQuantitySelectionType(value);
-                //setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus(value);
+                setGalacticMarketOutgoingQuantitySelectionType(value);
+                setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus(value);
             }),
             createTextFieldArea('galacticMarketQuantityTextArea', ['galactic-market-textarea', 'invisible'], 'Quantity...', null),
             null,
@@ -157,7 +158,7 @@ export function drawTab7Content(heading, optionContentElement) {
                 { value: '5', text: 'Sell 5 AP' },
                 { value: '10', text: 'Sell 10 AP' },
             ], 'select', (value) => {
-                //setGalacticMarketSellApForCashQuantity(value);
+                setGalacticMarketSellApForCashQuantity(value);
             }),
             createButton(`SELL`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-sell-ap-button'], () => {
                 //galacticMarketSellApForCash();
@@ -182,11 +183,11 @@ export function drawTab7Content(heading, optionContentElement) {
             'galacticMarketLiquidateForAPRow',
             null,
             'Liquidate:',
-            createDropdown('galacticMarketSellApForCashDropDown', [
+            createDropdown('galacticMarketLiquidateDropDown', [
                 { value: 'no', text: 'I DO NOT WANT TO LIQUIDATE' },
                 { value: 'yes', text: 'I WANT TO LIQUIDATE' },
             ], 'no', (value) => {
-                //setGalacticMarketLiquidationAuthorization(value);
+                setGalacticMarketLiquidationAuthorization(value);
             }),
             createButton(`LIQUIDATE`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-liquidate-button'], () => {
                 //galacticMarketLiquidateForAp();

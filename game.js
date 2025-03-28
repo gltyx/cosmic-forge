@@ -200,7 +200,19 @@ import {
     populateVariableDebugger,
     setLastScreenOpenRegister,
     getLastScreenOpenRegister,
-    setLastSavedTimeStamp
+    setLastSavedTimeStamp,
+    setGalacticMarketOutgoingStockType, 
+    getGalacticMarketOutgoingStockType, 
+    setGalacticMarketIncomingStockType, 
+    getGalacticMarketIncomingStockType, 
+    setGalacticMarketOutgoingQuantitySelectionType, 
+    getGalacticMarketOutgoingQuantitySelectionType, 
+    setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, 
+    getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, 
+    setGalacticMarketSellApForCashQuantity, 
+    getGalacticMarketSellApForCashQuantity, 
+    setGalacticMarketLiquidationAuthorization, 
+    getGalacticMarketLiquidationAuthorization
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -264,9 +276,11 @@ import {
  import { newsTickerContent } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
- import { drawTab5Content } from './drawTab5Content.js';
  import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
  import { timerManager } from './timerManager.js';
+
+ import { drawTab5Content } from './drawTab5Content.js';
+ import { drawTab7Content } from './drawTab7Content.js';
 
 //--------------------------------------------------------------------------------------------------------
 export function startGame() {
@@ -358,6 +372,7 @@ export async function gameLoop() {
         starShipUiChecks();
         fleetHangarChecks();
         coloniseChecks();
+        galacticMarketChecks();
         rebirthChecks();
 
         handlePowerAllButtonState();
@@ -3487,6 +3502,77 @@ function resetFleetPrices() {
         setResourceDataObject([300, 'silicon', 'resources'], 'space', ['upgrades', fleetType, 'resource2Price']);
         setResourceDataObject([120, 'titanium', 'compounds'], 'space', ['upgrades', fleetType, 'resource3Price']);
     });
+}
+
+function galacticMarketChecks() {
+    if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
+        let redrawGalacticMarket = false;
+
+        const galacticMarketOutgoingStockTypeDropDown = document.getElementById('galacticMarketOutgoingStockTypeDropDown');
+        const galacticMarketIncomingStockTypeDropDown = document.getElementById('galacticMarketIncomingStockTypeDropDown');
+
+        const galacticMarketQuantityToTradeDropDown = document.getElementById('galacticMarketQuantityToTradeDropDown');
+        const galacticMarketQuantityTextArea = document.getElementById('galacticMarketQuantityTextArea');
+
+        const galacticMarketSummaryOutgoing = document.getElementById('galacticMarketSummaryOutgoing');
+        const galacticMarketSummaryIncoming = document.getElementById('galacticMarketSummaryIncoming');
+        const galacticMarketSummaryCommission = document.getElementById('galacticMarketSummaryCommission');
+        const galacticMarketTradeConfirm = document.getElementById('galacticMarketTradeConfirm');
+
+        const galacticMarketSellApForCashDropDown = document.getElementById('galacticMarketSellApForCashDropDown');
+        const galacticMarketConfirmSellApButton = document.getElementById('galacticMarketSellApForCashConfirm');
+        const galacticMarketCashGainQuantity = document.getElementById('galacticMarketCashGainQuantity');
+
+        const galacticMarketLiquidateDropDown = document.getElementById('galacticMarketLiquidateDropDown');
+        const galacticMarketLiquidateForApConfirm = document.getElementById('galacticMarketLiquidateForApConfirm');
+
+        const galacticMarketOutgoingStockTypeSelectedValue = galacticMarketOutgoingStockTypeDropDown.querySelector('.dropdown-text').textContent;
+        if (!galacticMarketOutgoingStockTypeSelectedValue.includes('Select')) {
+            removeAndReplaceOutgoingOptionFromIncomingDropDown(galacticMarketOutgoingStockTypeDropDown, galacticMarketIncomingStockTypeDropDown);
+        }
+
+        if (redrawGalacticMarket) {
+            drawTab7Content('Galactic Market', document.getElementById('optionContentTab7'));
+        }
+    }
+}
+
+function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
+//     const selectedOutgoingValue = outgoingDropdown.querySelector('.dropdown-text').textContent;
+
+//     const staticValues = [
+//         'hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 
+//         'sodium', 'silicon', 'iron', 'diesel', 'glass', 
+//         'steel', 'concrete', 'water', 'titanium'
+//     ];
+
+//     for (let i = 0; i < incomingDropdown.querySelectorAll('.dropdown-option').length; i++) {
+//         const option = incomingDropdown.querySelectorAll('.dropdown-option')[i];
+//         if (capitaliseString(option.getAttribute('data-value')) === selectedOutgoingValue && selectedOutgoingValue !== 'Select Resource / Compound') {
+//             option.remove();
+//             break;
+//         }
+//     }
+
+//     const optionsContainer = incomingDropdown.querySelector('.dropdown-options');
+
+//     const currentValues = Array.from(incomingDropdown.querySelectorAll('.dropdown-option')).map(option => option.getAttribute('data-value'));
+
+//     staticValues.forEach(staticValue => {
+//         if (!currentValues.includes(staticValue) && staticValue !== selectedOutgoingValue) {
+//             const newOption = document.createElement('div');
+//             newOption.classList.add('dropdown-option');
+//             newOption.setAttribute('data-value', staticValue);
+//             newOption.innerHTML = capitaliseString(staticValue);
+
+//             const referenceOption = incomingDropdown.querySelector('.dropdown-option[data-value="' + staticValue + '"]');
+//             if (referenceOption) {
+//                 optionsContainer.insertBefore(newOption, referenceOption);
+//             } else {
+//                 optionsContainer.appendChild(newOption);
+//             }
+//         }
+//     });
 }
 
 function rebirthChecks() {

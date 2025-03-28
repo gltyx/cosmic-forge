@@ -195,6 +195,11 @@ let ranOutOfFuelWhenOn = {
 
 let battleResolved = [false, null];
 
+let galacticMarketOutgoingStockType = 'select';
+let galacticMarketIncomingStockType = 'select';
+let galacticMarketOutgoingQuantitySelectionType = 'select';
+let galacticMarketSellApForCashQuantity = 'select';
+
 let currentTab = [1, 'Resources'];
 let currentOptionPane = null;
 let notationType = 'normalCondensed';
@@ -306,6 +311,8 @@ let inFormation = false;
 let wasAutoSaveToggled = false;
 let enemyFleetAdjustedForDiplomacy = false;
 let apAwardedThisRun = false;
+let galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
+let galacticMarketLiquidationAuthorization = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -648,6 +655,11 @@ export function resetAllVariablesOnRebirth() {
     }
     
     battleResolved = [false, null];
+
+    galacticMarketOutgoingStockType = 'select';
+    galacticMarketIncomingStockType = 'select';
+    galacticMarketOutgoingQuantitySelectionType = 'select';
+    galacticMarketSellApForCashQuantity = 'select';
     
     //STATS PAGE LOGGERS
     starStudyRange = 0;
@@ -714,6 +726,8 @@ export function resetAllVariablesOnRebirth() {
     inFormation = false;
     enemyFleetAdjustedForDiplomacy = false;
     apAwardedThisRun = false;
+    galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
+    galacticMarketLiquidationAuthorization = false;
 
     setCurrentPrecipitationRate(0);
     stopWeatherEffect();
@@ -2708,6 +2722,54 @@ export function getRebirthPossible() {
 
 export function setRebirthPossible(value) {
     rebirthPossible = value;
+}
+
+export function setGalacticMarketOutgoingStockType(value) {
+    galacticMarketOutgoingStockType = value;
+}
+
+export function getGalacticMarketOutgoingStockType() {
+    return galacticMarketOutgoingStockType;
+}
+
+export function setGalacticMarketIncomingStockType(value) {
+    galacticMarketIncomingStockType = value;
+}
+
+export function getGalacticMarketIncomingStockType() {
+    return galacticMarketIncomingStockType;
+}
+
+export function setGalacticMarketOutgoingQuantitySelectionType(value) {
+    galacticMarketOutgoingQuantitySelectionType = value;
+}
+
+export function getGalacticMarketOutgoingQuantitySelectionType() {
+    return galacticMarketOutgoingQuantitySelectionType;
+}
+
+export function setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus(value) {
+    galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = value;
+}
+
+export function getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus() {
+    return galacticMarketOutgoingQuantitySelectionTypeDisabledStatus;
+}
+
+export function setGalacticMarketSellApForCashQuantity(value) {
+    galacticMarketSellApForCashQuantity = value;
+}
+
+export function getGalacticMarketSellApForCashQuantity() {
+    return galacticMarketSellApForCashQuantity;
+}
+
+export function setGalacticMarketLiquidationAuthorization(value) {
+    galacticMarketLiquidationAuthorization = value;
+}
+
+export function getGalacticMarketLiquidationAuthorization() {
+    return galacticMarketLiquidationAuthorization;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
