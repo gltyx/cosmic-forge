@@ -276,7 +276,7 @@ export function startGame() {
     if (!getRunStartTime()) {
         setRunStartTime();
     }
-    setLastSavedTimeStamp(getGameStartTime());
+    setLastSavedTimeStamp(getGameStartTime().toISOString);
     setGameState(getGameVisibleActive());
     updateContent('Resources', `tab1`, 'intro');
     updateTabHotkeys();
