@@ -1,4 +1,6 @@
 import {
+    setHasClickedOutgoingOptionGalacticMarket,
+    getHasClickedOutgoingOptionGalacticMarket,
     setSettledStars,
     resetAllVariablesOnRebirth,
     getRebirthPossible,
@@ -267,6 +269,8 @@ import {
     resetTab5ClassesRebirth,
     resetTab6ClassesRebirth
 } from "./ui.js";
+
+import { playClickSfx } from "./audioManager.js";
 
 import { 
     capitaliseString,
@@ -3529,19 +3533,20 @@ function galacticMarketChecks() {
         const galacticMarketLiquidateForApConfirm = document.getElementById('galacticMarketLiquidateForApConfirm');
 
         const galacticMarketOutgoingStockTypeSelectedValue = galacticMarketOutgoingStockTypeDropDown.querySelector('.dropdown-text').textContent;
-        if (!galacticMarketOutgoingStockTypeSelectedValue.includes('Select')) {
+        if (getGalacticMarketOutgoingStockType() !== 'select' && getHasClickedOutgoingOptionGalacticMarket()) {
             removeAndReplaceOutgoingOptionFromIncomingDropDown(galacticMarketOutgoingStockTypeDropDown, galacticMarketIncomingStockTypeDropDown);
-            hasClickedOutgoingOption = true;
+            setHasClickedOutgoingOptionGalacticMarket(false);
         }
 
-        if (redrawGalacticMarket) {
-            drawTab7Content('Galactic Market', document.getElementById('optionContentTab7'));
+        if (getGalacticMarketOutgoingStockType() !== 'select' && getGalacticMarketOutgoingStockType() === getGalacticMarketIncomingStockType()) {
+            document.getElementById('galacticMarketIncomingStockTypeDropDown').querySelector('.dropdown-text').textContent = 'Select Resource / Compound';
+            setGalacticMarketIncomingStockType('select');
         }
     }
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
-    const selectedOutgoingValue = outgoingDropdown.querySelector('.dropdown-text').textContent;
+    const selectedOutgoingValue = getGalacticMarketOutgoingStockType();
 
     const staticValues = [
         'hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 
@@ -3550,10 +3555,8 @@ function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, in
     ];
 
     const optionsContainer = incomingDropdown.querySelector('.dropdown-options');
-
-    // Step 1: Remove the selected outgoing value from the incoming dropdown
     const outgoingOption = Array.from(optionsContainer.querySelectorAll('.dropdown-option')).find(option => {
-        return capitaliseString(option.getAttribute('data-value')) === selectedOutgoingValue && selectedOutgoingValue !== 'Select Resource / Compound';
+        return option.getAttribute('data-value') === selectedOutgoingValue && selectedOutgoingValue !== 'select';
     });
 
     if (outgoingOption) {
@@ -3561,21 +3564,28 @@ function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, in
         outgoingOption.remove();
     }
 
-    // Step 2: Get the current values in the incoming dropdown
     const currentValues = Array.from(optionsContainer.querySelectorAll('.dropdown-option')).map(option => option.getAttribute('data-value'));
+    const allOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option'));
 
-    // Step 3: Add any missing options, except the selected outgoing value, to the incoming dropdown
     staticValues.forEach(staticValue => {
-        // We only add the option if it is missing and is not the one being removed
         if (!currentValues.includes(staticValue) && staticValue !== selectedOutgoingValue) {
             const newOption = document.createElement('div');
             newOption.classList.add('dropdown-option');
             newOption.setAttribute('data-value', staticValue);
             newOption.innerHTML = capitaliseString(staticValue);
 
-            console.log(`Added missing option: ${newOption.innerHTML}`);
+            newOption.addEventListener('click', (event) => {
+                playClickSfx();
+                const value = event.target.getAttribute('data-value');
+                const selectedOption = allOptions.find(option => option.value === value);
+                incomingDropdown.querySelector('.dropdown-text').innerHTML = selectedOption ? selectedOption.text : 'Select an option';
 
-            // Insert the new option in the correct position based on static order
+                optionsContainer.classList.remove('show');
+                incomingDropdown.style.borderRadius = '10px 10px 10px 10px';
+                incomingDropdown.querySelector('.dropdown-text').textContent = capitaliseString(value);
+                setGalacticMarketIncomingStockType(value);
+            });
+
             const referenceOption = optionsContainer.querySelector('.dropdown-option[data-value="' + staticValue + '"]');
             if (referenceOption) {
                 optionsContainer.insertBefore(newOption, referenceOption);
@@ -3585,18 +3595,13 @@ function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, in
         }
     });
 
-    // Step 4: Reorder the options to match the static order
-    const allOptions = Array.from(optionsContainer.querySelectorAll('.dropdown-option'));
-    const sortedOptions = staticValues.map(staticValue => {
-        return allOptions.find(option => option.getAttribute('data-value') === staticValue);
-    });
+const sortedOptions = staticValues
+    .map(staticValue => allOptions.find(option => option.getAttribute('data-value') === staticValue))
+    .filter(option => option !== undefined);
 
-    // Step 5: Append the sorted options in the correct order
     sortedOptions.forEach(option => {
         optionsContainer.appendChild(option);
     });
-
-    console.log('Reordered dropdown options to match static order.');
 }
 
 

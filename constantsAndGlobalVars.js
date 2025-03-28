@@ -313,6 +313,7 @@ let enemyFleetAdjustedForDiplomacy = false;
 let apAwardedThisRun = false;
 let galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
 let galacticMarketLiquidationAuthorization = false;
+let hasClickedOutgoingOptionGalacticMarket = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -728,6 +729,7 @@ export function resetAllVariablesOnRebirth() {
     apAwardedThisRun = false;
     galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
     galacticMarketLiquidationAuthorization = false;
+    hasClickedOutgoingOptionGalacticMarket = false;
 
     setCurrentPrecipitationRate(0);
     stopWeatherEffect();
@@ -2770,6 +2772,14 @@ export function setGalacticMarketLiquidationAuthorization(value) {
 
 export function getGalacticMarketLiquidationAuthorization() {
     return galacticMarketLiquidationAuthorization;
+}
+
+export function setHasClickedOutgoingOptionGalacticMarket(value) {
+    hasClickedOutgoingOptionGalacticMarket = value;
+}
+
+export function getHasClickedOutgoingOptionGalacticMarket(value) {
+    return hasClickedOutgoingOptionGalacticMarket;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
-import { setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
+import { setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -53,6 +53,7 @@ export function drawTab7Content(heading, optionContentElement) {
                 { value: 'titanium', text: 'Titanium' }
             ], 'select', (value) => {
                 setGalacticMarketOutgoingStockType(value);
+                setHasClickedOutgoingOptionGalacticMarket(true);
             }),
             createTextElement(`For:`, 'galacticMarketForText', '', null),
             createDropdown('galacticMarketIncomingStockTypeDropDown', [
