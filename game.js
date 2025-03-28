@@ -6039,7 +6039,8 @@ export function discoverAsteroid(debug) {
 
     addToResourceAllTimeStat(1, 'totalAsteroidsDiscovered');
 
-    const starCode = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'starCode']);
+    const rawStarCode = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'starCode']);
+    const starCode = rawStarCode.length === 3 ? rawStarCode.toUpperCase() : getStarCode(rawStarCode);
     const randomNumber = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
     const asteroidName = `${starCode}-${randomNumber}${randomLetter}`;
@@ -6057,6 +6058,37 @@ export function discoverAsteroid(debug) {
             showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
         }
     }
+}
+
+function getStarCode(name) {
+    const words = name.toUpperCase().split(/\s+/);
+
+    if (name.length <= 3) {
+        return name;
+    }
+
+    let code = '';
+
+    if (words.length > 1) {
+        words.forEach(word => {
+            if (code.length < 3) {
+                code += word[0];
+            }
+        });
+    }
+
+    if (code.length < 3) {
+        const firstWord = words[0].replace(/[AEIOU]/g, '');
+        for (let i = 0; i < firstWord.length && code.length < 3; i++) {
+            code += firstWord[i];
+        }
+    }
+
+    if (code.length < 3) {
+        code = name.substring(0, 3);
+    }
+
+    return code.padEnd(3, 'X');
 }
 
 function generateAsteroidData(name) {
