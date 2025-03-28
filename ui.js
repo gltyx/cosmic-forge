@@ -653,6 +653,7 @@ export function createDropdown(id, options, selectedValue, onChange, classes = [
         const optionDiv = document.createElement('div');
         optionDiv.classList.add('dropdown-option');
         optionDiv.setAttribute('data-value', option.value);
+        optionDiv.setAttribute('data-type', option.type);
         optionDiv.innerHTML = option.text;
 
         optionDiv.addEventListener('click', (event) => {

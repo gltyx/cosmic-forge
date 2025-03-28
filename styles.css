@@ -921,6 +921,11 @@ body {
     cursor: pointer;
 }
 
+.dropdown-disabled {
+    pointer-events: none;
+    opacity: 0.3;
+}
+
 .travel-to {
     max-width: unset;
 }

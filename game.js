@@ -3508,12 +3508,8 @@ function resetFleetPrices() {
     });
 }
 
-let hasClickedOutgoingOption = false; //change to setter and set to false when option selected in outgoing dropdown
-
 function galacticMarketChecks() {
     if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
-        let redrawGalacticMarket = false;
-
         const galacticMarketOutgoingStockTypeDropDown = document.getElementById('galacticMarketOutgoingStockTypeDropDown');
         const galacticMarketIncomingStockTypeDropDown = document.getElementById('galacticMarketIncomingStockTypeDropDown');
 
@@ -3532,7 +3528,6 @@ function galacticMarketChecks() {
         const galacticMarketLiquidateDropDown = document.getElementById('galacticMarketLiquidateDropDown');
         const galacticMarketLiquidateForApConfirm = document.getElementById('galacticMarketLiquidateForApConfirm');
 
-        const galacticMarketOutgoingStockTypeSelectedValue = galacticMarketOutgoingStockTypeDropDown.querySelector('.dropdown-text').textContent;
         if (getGalacticMarketOutgoingStockType() !== 'select' && getHasClickedOutgoingOptionGalacticMarket()) {
             removeAndReplaceOutgoingOptionFromIncomingDropDown(galacticMarketOutgoingStockTypeDropDown, galacticMarketIncomingStockTypeDropDown);
             setHasClickedOutgoingOptionGalacticMarket(false);
@@ -3542,7 +3537,44 @@ function galacticMarketChecks() {
             document.getElementById('galacticMarketIncomingStockTypeDropDown').querySelector('.dropdown-text').textContent = 'Select Resource / Compound';
             setGalacticMarketIncomingStockType('select');
         }
+
+        const galacticMarketQuantityTextAreaIsDisabled = getGalacticMarketOutgoingQuantitySelectionType() !== 'enter';
+        galacticMarketQuantityTextArea.classList[galacticMarketQuantityTextAreaIsDisabled ? 'add' : 'remove']('invisible');        
+
+        if (!galacticMarketQuantityTextAreaIsDisabled) {
+            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = document.getElementById('galacticMarketQuantityTextArea').value;
+        }
+
+        if (galacticMarketQuantityTextAreaIsDisabled && getGalacticMarketOutgoingQuantitySelectionType() === 'all') {
+            const dataType = document.querySelector(`.dropdown-option[data-value="${document.querySelector('.dropdown-text').innerHTML.toLowerCase()}"]`)?.getAttribute('data-type') || null;
+            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = getResourceDataObject(dataType, [getGalacticMarketOutgoingStockType(), 'quantity']);
+        }
+
+        if (getGalacticMarketOutgoingStockType() !== 'select' && getGalacticMarketIncomingStockType() !== 'select') {
+            populateSummaryStockType();
+            galacticMarketQuantityToTradeDropDown.classList.remove('dropdown-disabled');
+            if (document.getElementById('galacticMarketOutgoingQuantityText').innerHTML === 'N/A') {
+                document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = '0';
+            }
+            if (document.getElementById('galacticMarketIncomingQuantityText').innerHTML === 'N/A') {
+                document.getElementById('galacticMarketIncomingQuantityText').innerHTML = '0';
+            }
+        } else {
+            galacticMarketQuantityToTradeDropDown.classList.add('dropdown-disabled');
+            galacticMarketQuantityToTradeDropDown.querySelector('.dropdown-text').textContent = 'Select Quantity';
+            setGalacticMarketOutgoingQuantitySelectionType('select');
+            galacticMarketQuantityTextArea.classList.add('invisible');
+            document.getElementById('galacticMarketOutgoingStockTypeText').innerHTML = 'N/A';
+            document.getElementById('galacticMarketIncomingStockTypeText').innerHTML = 'N/A';
+            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = 'N/A';
+            document.getElementById('galacticMarketIncomingQuantityText').innerHTML = 'N/A';
+        }
     }
+}
+
+function populateSummaryStockType() {
+    document.getElementById('galacticMarketOutgoingStockTypeText').innerHTML = capitaliseString(getGalacticMarketOutgoingStockType());
+    document.getElementById('galacticMarketIncomingStockTypeText').innerHTML = capitaliseString(getGalacticMarketIncomingStockType());
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {

@@ -36,42 +36,42 @@ export function drawTab7Content(heading, optionContentElement) {
             null,
             'Trade:',
             createDropdown('galacticMarketOutgoingStockTypeDropDown', [
-                { value: 'select', text: 'Select Resource / Compound' },
-                { value: 'hydrogen', text: 'Hydrogen' },
-                { value: 'helium', text: 'Helium' },
-                { value: 'carbon', text: 'Carbon' },
-                { value: 'neon', text: 'Neon' },
-                { value: 'oxygen', text: 'Oxygen' },
-                { value: 'sodium', text: 'Sodium' },
-                { value: 'silicon', text: 'Silicon' },
-                { value: 'iron', text: 'Iron' },
-                { value: 'diesel', text: 'Diesel' },
-                { value: 'glass', text: 'Glass' },
-                { value: 'steel', text: 'Steel' },
-                { value: 'concrete', text: 'Concrete' },
-                { value: 'water', text: 'Water' },
-                { value: 'titanium', text: 'Titanium' }
+                { value: 'select', text: 'Select Resource / Compound', type: 'select' },
+                { value: 'hydrogen', text: 'Hydrogen', type: 'resources' },
+                { value: 'helium', text: 'Helium', type: 'resources' },
+                { value: 'carbon', text: 'Carbon', type: 'resources' },
+                { value: 'neon', text: 'Neon', type: 'resources' },
+                { value: 'oxygen', text: 'Oxygen', type: 'resources' },
+                { value: 'sodium', text: 'Sodium', type: 'resources' },
+                { value: 'silicon', text: 'Silicon', type: 'resources' },
+                { value: 'iron', text: 'Iron', type: 'resources' },
+                { value: 'diesel', text: 'Diesel', type: 'compounds' },
+                { value: 'glass', text: 'Glass', type: 'compounds' },
+                { value: 'steel', text: 'Steel', type: 'compounds' },
+                { value: 'concrete', text: 'Concrete', type: 'compounds' },
+                { value: 'water', text: 'Water', type: 'compounds' },
+                { value: 'titanium', text: 'Titanium', type: 'compounds' }
             ], 'select', (value) => {
                 setGalacticMarketOutgoingStockType(value);
                 setHasClickedOutgoingOptionGalacticMarket(true);
             }),
             createTextElement(`For:`, 'galacticMarketForText', '', null),
             createDropdown('galacticMarketIncomingStockTypeDropDown', [
-                { value: 'select', text: 'Select Resource / Compound' },
-                { value: 'hydrogen', text: 'Hydrogen' },
-                { value: 'helium', text: 'Helium' },
-                { value: 'carbon', text: 'Carbon' },
-                { value: 'neon', text: 'Neon' },
-                { value: 'oxygen', text: 'Oxygen' },
-                { value: 'sodium', text: 'Sodium' },
-                { value: 'silicon', text: 'Silicon' },
-                { value: 'iron', text: 'Iron' },
-                { value: 'diesel', text: 'Diesel' },
-                { value: 'glass', text: 'Glass' },
-                { value: 'steel', text: 'Steel' },
-                { value: 'concrete', text: 'Concrete' },
-                { value: 'water', text: 'Water' },
-                { value: 'titanium', text: 'Titanium' }
+                { value: 'select', text: 'Select Resource / Compound', type: 'select'},
+                { value: 'hydrogen', text: 'Hydrogen', type: 'resources' },
+                { value: 'helium', text: 'Helium', type: 'resources' },
+                { value: 'carbon', text: 'Carbon', type: 'resources' },
+                { value: 'neon', text: 'Neon', type: 'resources' },
+                { value: 'oxygen', text: 'Oxygen', type: 'resources' },
+                { value: 'sodium', text: 'Sodium', type: 'resources' },
+                { value: 'silicon', text: 'Silicon', type: 'resources' },
+                { value: 'iron', text: 'Iron', type: 'resources' },
+                { value: 'diesel', text: 'Diesel', type: 'compounds' },
+                { value: 'glass', text: 'Glass', type: 'compounds' },
+                { value: 'steel', text: 'Steel', type: 'compounds' },
+                { value: 'concrete', text: 'Concrete', type: 'compounds' },
+                { value: 'water', text: 'Water', type: 'compounds' },
+                { value: 'titanium', text: 'Titanium', type: 'compounds' }
             ], 'select', (value) => {
                 setGalacticMarketIncomingStockType(value);
             }),
@@ -103,8 +103,8 @@ export function drawTab7Content(heading, optionContentElement) {
             ], 'select', (value) => {
                 setGalacticMarketOutgoingQuantitySelectionType(value);
                 setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus(value);
-            }),
-            createTextFieldArea('galacticMarketQuantityTextArea', ['galactic-market-textarea', 'invisible'], 'Quantity...', null),
+            }, ['dropdown-disabled']),
+            createTextFieldArea('galacticMarketQuantityTextArea', ['galactic-market-textarea', 'invisible'], '', '0'),
             null,
             null,
             null,
@@ -121,14 +121,22 @@ export function drawTab7Content(heading, optionContentElement) {
             'galacticMarketResourceTradeQuantity',
             [true, '20%', '80%']
         );
+
         optionContentElement.appendChild(galacticMarketQuantitySelectorRow);
+        document.getElementById('galacticMarketQuantityTextArea').addEventListener('input', (event) => {
+            if (event.target.value.startsWith('0') && event.target.value.length > 1) {
+                event.target.value = event.target.value.replace(/^0+/, '');
+            }
+            
+            document.getElementById('galacticMarketQuantityTextArea').value = event.target.value;
+        });
 
         const galacticMarketTradeSummaryAndConfirmRow = createOptionRow(
             'galacticMarketTradeSummaryAndConfirmRow',
             null,
             'Confirm:',
-            createTextElement(`Trade <span id="galacticMarketIncomingQuantityText" class="green-ready-text">999</span> <span id="galacticMarketIncomingQuantityText" class="green-ready-text">Hydrogen</span>`, 'galacticMarketSummaryOutgoing', ['galactic-market-summary-text'], null),            
-            createTextElement(`for <span id="galacticMarketOutgoingQuantityText" class="green-ready-text">12</span> <span id="galacticMarketOutgoingQuantityText" class="green-ready-text">Diesel</span>`, 'galacticMarketSummaryIncoming', ['galactic-market-summary-text'], null),            
+            createTextElement(`Trade <span id="galacticMarketOutgoingQuantityText" class="green-ready-text notation">999</span> <span id="galacticMarketOutgoingStockTypeText" class="green-ready-text">Hydrogen</span>`, 'galacticMarketSummaryOutgoing', ['galactic-market-summary-text'], null),            
+            createTextElement(`for <span id="galacticMarketIncomingQuantityText" class="green-ready-text notation">12</span> <span id="galacticMarketIncomingStockTypeText" class="green-ready-text">Diesel</span>`, 'galacticMarketSummaryIncoming', ['galactic-market-summary-text'], null),            
             createTextElement(`Commission: <span id="galacticMarketComissionQuantitySummaryText" class="warning-orange-text">49</span> <span id="galacticMarketComissionQuantitySummaryText" class="warning-orange-text">Hydrogen</span>`, 'galacticMarketSummaryCommission', ['galactic-market-summary-text-wide'], null),
             createButton(`CONFIRM`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-trade-button'], () => {
                 //galacticMarketTrade();
