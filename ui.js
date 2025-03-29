@@ -90,6 +90,10 @@ import {
     getNeedNewBattleCanvas,
     setNeedNewBattleCanvas,
     getSettledStars,
+    setGalacticMarketOutgoingStockType,
+    setGalacticMarketIncomingStockType,
+    setGalacticMarketOutgoingQuantitySelectionType,
+    setGalacticMarketIncomingQuantity,
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -3083,6 +3087,10 @@ function initializeTabEventListeners() {
                         const optionContentElement = document.getElementById(`optionContentTab6`);
                         optionContentElement.innerHTML = '';
                         drawTab6Content('Space Telescope', optionContentElement);
+                    } else if (lastOpenOptionPane === 'galactic market') {
+                        const optionContentElement = document.getElementById(`optionContentTab7`);
+                        optionContentElement.innerHTML = '';
+                        drawTab7Content('Galactic Market', optionContentElement);
                     }
 
                     setCurrentOptionPane(lastOpenOptionPane);

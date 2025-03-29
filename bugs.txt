@@ -2,10 +2,6 @@ resource calculations are not right when burning fuel in a power station, start 
 tech tree not updating when research points grow to reveal more
 stats bugs in general
 
-galactic market bugs
-- quantity can change in the game but this breaks the summary display in the galactic market
-- 
-
 ascendency (permanent buffs):
 ideas:
 - 

@@ -200,6 +200,7 @@ let galacticMarketIncomingStockType = 'select';
 let galacticMarketOutgoingQuantitySelectionType = 'select';
 let galacticMarketSellApForCashQuantity = 'select';
 let galacticMarketIncomingQuantity = 0;
+let currentGalacticMarketCommission = 10;
 
 let currentTab = [1, 'Resources'];
 let currentOptionPane = null;
@@ -2787,8 +2788,16 @@ export function setGalacticMarketIncomingQuantity(value) {
     galacticMarketIncomingQuantity = value;
 }
 
-export function getGalacticMarketIncomingQuantity(value) {
+export function getGalacticMarketIncomingQuantity() {
     return galacticMarketIncomingQuantity;
+}
+
+export function setCurrentGalacticMarketCommission(value) {
+    currentGalacticMarketCommission = value;
+}
+
+export function getCurrentGalacticMarketCommission() {
+    return currentGalacticMarketCommission;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
