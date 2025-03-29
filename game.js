@@ -3548,7 +3548,6 @@ function galacticMarketChecks() {
 
         if (!galacticMarketQuantityTextAreaIsDisabled) {
             const quantityValue = document.getElementById('galacticMarketQuantityTextArea').value;
-            
             const dataType = document.querySelector(`.dropdown-option[data-value="${document.querySelector('.dropdown-text').innerHTML.toLowerCase()}"]`)?.getAttribute('data-type') || null;
             
             if (dataType) {
@@ -3636,7 +3635,7 @@ export function galacticMarketTrade() {
     const commissionQuantity = parseNumber(document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML);
     const playerOutgoingQuantity = getResourceDataObject(outgoingType, [outgoingItem, 'quantity']);
     const playerIncomingQuantity = getResourceDataObject(incomingType, [incomingItem, 'quantity']);
-    const commissionAdjustedIncomingQuantity = Math.floor(incomingQuantity - (commissionQuantity * (incomingQuantity / outgoingQuantity)));
+    const commissionAdjustedIncomingQuantity = Math.max(0, Math.floor(incomingQuantity - (commissionQuantity * (incomingQuantity / outgoingQuantity))));
     
     const updatedOutgoingQuantity = Math.floor(playerOutgoingQuantity - outgoingQuantity);
     setResourceDataObject(updatedOutgoingQuantity, outgoingType, [outgoingItem, 'quantity']);
@@ -3673,6 +3672,12 @@ export function galacticMarketTrade() {
 
     setGalacticMarketDataObject(outgoingCurrentBias, outgoingType, [outgoingItem, 'marketBias']);
     setGalacticMarketDataObject(incomingCurrentBias, incomingType, [incomingItem, 'marketBias']);
+
+    const galacticMarketQuantityToTradeDropDown = document.getElementById('galacticMarketQuantityToTradeDropDown');
+    galacticMarketQuantityToTradeDropDown.classList.add('dropdown-disabled');
+    galacticMarketQuantityToTradeDropDown.querySelector('.dropdown-text').textContent = 'Select Quantity';
+    setGalacticMarketOutgoingQuantitySelectionType('select');
+    galacticMarketQuantityTextArea.classList.add('invisible');
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
@@ -4803,8 +4808,6 @@ function startInitialTimers() {
         marketCycleCountDownToChangeInterval = setInterval(() => {
             if (timeLeft > 0) {
                 console.log(`Time left in cycle: ${timeLeft} seconds`);
-                applyRandomMarketChanges();
-                
                 timeLeft -= 1;
             } else {
                 applyMarketChanges();
@@ -4812,11 +4815,6 @@ function startInitialTimers() {
             }
         }, 1000);
     }
-}
-
-function applyRandomMarketChanges() {
-    console.log("Applying random market changes...");
-    // Add logic for applying random market changes (prices, demand, etc.)
 }
 
 function applyMarketChanges() {
@@ -4834,21 +4832,20 @@ function applyMarketChanges() {
 
                 const currentBias = getGalacticMarketDataObject('resources', [resource, 'marketBias']);
                 if (currentBias !== undefined) {
-                    const tradeVolumeChangePercentage = ((((newTradeVolume - currentTradeVolume) / currentTradeVolume) * 100) / 10);
+                    const tradeVolumeChangePercentage = ((((newTradeVolume - currentTradeVolume) / currentTradeVolume) * 100) / 100);
                     if (tradeVolumeChangePercentage === Infinity) {
                         return;
                     }
 
                     let newBias = currentBias;
-                    if (tradeVolumeChangePercentage > 0) {
+                    if (tradeVolumeChangePercentage > 0 && newBias !== 0) {
                         newBias -= (Math.abs(tradeVolumeChangePercentage) / 100) * Math.abs(currentBias);
                     }
-                    else if (tradeVolumeChangePercentage < 0) {
+                    else if (tradeVolumeChangePercentage < 0 && newBias !== 0) {
                         newBias += (Math.abs(tradeVolumeChangePercentage) / 100) * Math.abs(currentBias);
                     }
 
                     setGalacticMarketDataObject(newBias, 'resources', [resource, 'marketBias']);
-                    console.log(`${resource} new bias after CYCLE END: ${newBias}`);
                 }
             }
         }
@@ -4926,8 +4923,8 @@ export function calculateIncomingQuantity() {
     const outgoingMarketBias = getGalacticMarketDataObject(outgoingType, [outgoingItem, 'marketBias']);
     const incomingMarketBias = getGalacticMarketDataObject(incomingType, [incomingItem, 'marketBias']);
 
-    const adjustedOutgoingPrice = outgoingItemBasePrice * (1 + (outgoingMarketBias / 100));
-    const adjustedIncomingPrice = incomingItemBasePrice * (1 + (incomingMarketBias / 100));
+    const adjustedOutgoingPrice = Math.max(0, outgoingItemBasePrice * (1 + (outgoingMarketBias / 100)));
+    const adjustedIncomingPrice = Math.max(0, incomingItemBasePrice * (1 + (incomingMarketBias / 100)));    
     const priceRatio = adjustedOutgoingPrice / adjustedIncomingPrice;
 
     const incomingQuantity = outgoingQuantity > 0 ? Math.floor(outgoingQuantity * priceRatio) : 0;
