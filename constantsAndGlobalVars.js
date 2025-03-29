@@ -1,4 +1,4 @@
-import { restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject } from "./resourceDataObject.js";
+import { restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.50;
+export const GAME_VERSION_FOR_SAVES = 0.52;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -663,6 +663,7 @@ export function resetAllVariablesOnRebirth() {
     galacticMarketIncomingStockType = 'select';
     galacticMarketOutgoingQuantitySelectionType = 'select';
     galacticMarketSellApForCashQuantity = 'select';
+    currentGalacticMarketCommission = 10;
     
     //STATS PAGE LOGGERS
     starStudyRange = 0;
@@ -753,6 +754,7 @@ export function captureGameStatusForSaving(type) {
     // Large objects directly
     gameState.resourceData = JSON.parse(JSON.stringify(resourceData));
     gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
+    gameState.galacticMarket = JSON.parse(JSON.stringify(galacticMarket));
 
     // Global variables
     gameState.saveName = getSaveName();
@@ -845,6 +847,7 @@ export function captureGameStatusForSaving(type) {
     gameState.battleUnits = battleUnits;
     gameState.battleResolved = battleResolved;
     gameState.settledStars = settledStars;
+    gameState.currentGalacticMarketCommission = currentGalacticMarketCommission;
 
     // Flags
     gameState.flags = {
@@ -900,7 +903,13 @@ export function restoreGameStatus(gameState, type) {
                 restoreRocketNamesObject(JSON.parse(JSON.stringify(gameState.rocketNames)));
             } else {
                 gameState.rocketNames = rocketNames;
-            }            
+            }      
+            
+            if (gameState.galacticMarket) {
+                restoreGalacticMarketDataObject(JSON.parse(JSON.stringify(gameState.galacticMarket)));
+            } else {
+                gameState.galacticMarket = galacticMarket;
+            }
 
             // Global variables
             if (type === 'cloud') {
@@ -997,6 +1006,7 @@ export function restoreGameStatus(gameState, type) {
             battleUnits = gameState.battleUnits ?? { player: [], enemy: [] };
             battleResolved = gameState.battleResolved ?? [false, null];
             settledStars = gameState.settledStars ?? [STARTING_STAR_SYSTEM];
+            currentGalacticMarketCommission = gameState.currentGalacticMarketCommission ?? 10;
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;

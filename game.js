@@ -3620,9 +3620,13 @@ function galacticMarketChecks() {
             document.getElementById('galacticMarketComissionQuantityStockTypeText').innerHTML = 'N/A';
         }
 
-        //add condition when we have the function to calculate incoming quantity
-        galacticMarketTradeConfirmButton.classList.add('green-ready-text');
-        galacticMarketTradeConfirmButton.classList.remove('red-disabled-text');
+        if (getGalacticMarketIncomingQuantity() !== null && getGalacticMarketIncomingQuantity() > 0) {
+            galacticMarketTradeConfirmButton.classList.add('green-ready-text');
+            galacticMarketTradeConfirmButton.classList.remove('red-disabled-text');
+        } else {
+            galacticMarketTradeConfirmButton.classList.remove('green-ready-text');
+            galacticMarketTradeConfirmButton.classList.add('red-disabled-text');
+        }
     }
 }
 
@@ -3691,6 +3695,7 @@ export function galacticMarketTrade() {
     setGalacticMarketOutgoingQuantitySelectionType('select');
     document.getElementById('galacticMarketQuantityTextArea').value = 0;
     document.getElementById('galacticMarketQuantityTextArea').classList.add('invisible');
+    setGalacticMarketIncomingQuantity(0);
 
 
 }
