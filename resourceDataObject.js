@@ -115,7 +115,7 @@ export let resourceData = {
         neon: {
             nameResource: 'Neon',
             screenName: 'neon',
-            saleValue: 0.02,
+            saleValue: 0.06,
             salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
@@ -142,7 +142,7 @@ export let resourceData = {
         oxygen: {
             nameResource: 'Oxygen',
             screenName: 'oxygen',
-            saleValue: 0.02,
+            saleValue: 0.05,
             salePreviewElement: 'sellOxygenDescription',
             quantity: 0,
             rate: 0,
@@ -169,7 +169,7 @@ export let resourceData = {
         silicon: {
             nameResource: 'Silicon',
             screenName: 'silicon',
-            saleValue: 0.02,
+            saleValue: 0.08,
             salePreviewElement: 'sellSiliconDescription',
             quantity: 0,
             rate: 0,
@@ -196,7 +196,7 @@ export let resourceData = {
         iron: {
             nameResource: 'Iron',
             screenName: 'iron',
-            saleValue: 0.02,
+            saleValue: 0.12,
             salePreviewElement: 'sellIronDescription',
             quantity: 0,
             rate: 0,
@@ -223,7 +223,7 @@ export let resourceData = {
         sodium: {
             nameResource: 'Sodium',
             screenName: 'sodium',
-            saleValue: 0.02,
+            saleValue: 0.1,
             salePreviewElement: 'sellSodiumDescription',
             quantity: 0,
             rate: 0,
@@ -348,7 +348,7 @@ export let resourceData = {
         concrete: {
             nameResource: 'Concrete',
             screenName: 'concrete',
-            saleValue: 2.5,
+            saleValue: 0.8,
             salePreviewElement: 'sellConcreteDescription',
             createPreviewElement: 'createConcreteDescription',
             quantity: 0,
@@ -380,7 +380,7 @@ export let resourceData = {
         water: {
             nameResource: 'Water',
             screenName: 'water',
-            saleValue: 2.5,
+            saleValue: 1.6,
             salePreviewElement: 'sellWaterDescription',
             createPreviewElement: 'createWaterDescription',
             quantity: 0,
@@ -412,7 +412,7 @@ export let resourceData = {
         titanium: {
             nameResource: 'Titanium',
             screenName: 'titanium',
-            saleValue: 12,
+            saleValue: 6,
             salePreviewElement: 'sellTitaniumDescription',
             createPreviewElement: 'createTitaniumDescription',
             quantity: 0,
@@ -853,6 +853,112 @@ export let starSystems = {
     }
 };
 
+export let galacticMarket = {
+    version: 0.50,
+    resources: {
+        hydrogen: { 
+            name: "Hydrogen", 
+            baseValue: 0.02, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        helium: { 
+            name: "Helium", 
+            baseValue: 0.01, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        carbon: { 
+            name: "Carbon", 
+            baseValue: 0.1, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        neon: { 
+            name: "Neon", 
+            baseValue: 0.06, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        oxygen: { 
+            name: "Oxygen", 
+            baseValue: 0.05, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        silicon: { 
+            name: "Silicon", 
+            baseValue: 0.08, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        iron: { 
+            name: "Iron", 
+            baseValue: 0.12, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        sodium: { 
+            name: "Sodium", 
+            baseValue: 0.10, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        }
+    },
+    compounds: {
+        water: { 
+            name: "Water", 
+            baseValue: 0.08, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        diesel: { 
+            name: "Diesel", 
+            baseValue: 0.2, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        glass: { 
+            name: "Glass", 
+            baseValue: 0.8, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        steel: { 
+            name: "Steel", 
+            baseValue: 1.2, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        concrete: { 
+            name: "Concrete", 
+            baseValue: 0.8, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        },
+        titanium: { 
+            name: "Titanium", 
+            baseValue: 6, 
+            marketBias: 0, 
+            tradeVolume: 0, 
+            eventModifier: 0 
+        }
+    }
+};
+
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
 
@@ -915,6 +1021,47 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 
     let current = resourceData;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
+    }
+}
+
+export function getGalacticMarketDataObject(key, subKeys) {
+    let current = galacticMarket[key];
+
+    if (!current) {
+        console.warn(`Galactic market data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined) {
+                console.warn(`Missing subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+export function setGalacticMarketDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
+
+    let current = galacticMarket;
     current = current[key] || (current[key] = {});
 
     for (let i = 0; i < subKeys.length; i++) {

@@ -218,6 +218,8 @@ import {
 } from './constantsAndGlobalVars.js';
 
 import {
+    setGalacticMarketDataObject,
+    getGalacticMarketDataObject,
     getStarSystemDataObject,
     setStarSystemDataObject,
     getAutoBuyerTierLevel,
@@ -3520,6 +3522,7 @@ function galacticMarketChecks() {
         const galacticMarketSummaryIncoming = document.getElementById('galacticMarketSummaryIncoming');
         const galacticMarketSummaryCommission = document.getElementById('galacticMarketSummaryCommission');
         const galacticMarketTradeConfirm = document.getElementById('galacticMarketTradeConfirm');
+        const galacticMarketTradeConfirmButton = document.querySelector('.galactic-market-confirm-trade-button');
 
         const galacticMarketSellApForCashDropDown = document.getElementById('galacticMarketSellApForCashDropDown');
         const galacticMarketConfirmSellApButton = document.getElementById('galacticMarketSellApForCashConfirm');
@@ -3543,14 +3546,31 @@ function galacticMarketChecks() {
 
         if (!galacticMarketQuantityTextAreaIsDisabled) {
             const quantityValue = document.getElementById('galacticMarketQuantityTextArea').value;
-            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = quantityValue === '' ? '0' : quantityValue;
-        }
-        
-
-        if (galacticMarketQuantityTextAreaIsDisabled && getGalacticMarketOutgoingQuantitySelectionType() === 'all') {
+            
             const dataType = document.querySelector(`.dropdown-option[data-value="${document.querySelector('.dropdown-text').innerHTML.toLowerCase()}"]`)?.getAttribute('data-type') || null;
-            document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = getResourceDataObject(dataType, [getGalacticMarketOutgoingStockType(), 'quantity']);
-        }
+            
+            if (dataType) {
+                const playerQuantity = getResourceDataObject(dataType, [getGalacticMarketOutgoingStockType(), 'quantity']);
+                
+                if (parseInt(quantityValue) > playerQuantity) {
+                    document.getElementById('galacticMarketQuantityTextArea').value = playerQuantity;
+                    document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = playerQuantity;
+                } else {
+                    document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = quantityValue === '' ? '0' : quantityValue;
+                }
+            }
+        } else {
+            if (getGalacticMarketOutgoingQuantitySelectionType() === 'all') {
+                const dataType = document.querySelector(`.dropdown-option[data-value="${document.querySelector('.dropdown-text').innerHTML.toLowerCase()}"]`)?.getAttribute('data-type') || null;
+        
+                if (dataType) {
+                    const playerQuantity = getResourceDataObject(dataType, [getGalacticMarketOutgoingStockType(), 'quantity']);
+                    
+                    document.getElementById('galacticMarketQuantityTextArea').value = playerQuantity;
+                    document.getElementById('galacticMarketOutgoingQuantityText').innerHTML = playerQuantity;
+                }
+            }
+        }          
 
         if (getGalacticMarketOutgoingStockType() !== 'select' && getGalacticMarketIncomingStockType() !== 'select') {
             populateSummaryStockType();
@@ -3589,12 +3609,76 @@ function galacticMarketChecks() {
             document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML = 'N/A';
             document.getElementById('galacticMarketComissionQuantityStockTypeText').innerHTML = 'N/A';
         }
+
+        //add condition when we have the function to calculate incoming quantity
+        galacticMarketTradeConfirmButton.classList.add('green-ready-text');
+        galacticMarketTradeConfirmButton.classList.remove('red-disabled-text');
     }
 }
 
 function populateSummaryStockType() {
     document.getElementById('galacticMarketOutgoingStockTypeText').innerHTML = capitaliseString(getGalacticMarketOutgoingStockType());
     document.getElementById('galacticMarketIncomingStockTypeText').innerHTML = capitaliseString(getGalacticMarketIncomingStockType());
+}
+
+export function galacticMarketTrade() {
+    const typesResources = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const typesCompounds = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
+    const outgoingItem = getGalacticMarketOutgoingStockType();
+    const incomingItem = getGalacticMarketIncomingStockType();
+    const outgoingType = typesResources.includes(outgoingItem) ? 'resources' : (typesCompounds.includes(outgoingItem) ? 'compounds' : null);
+    const incomingType = typesResources.includes(incomingItem) ? 'resources' : (typesCompounds.includes(incomingItem) ? 'compounds' : null);
+    const outgoingQuantity = parseNumber(document.getElementById('galacticMarketOutgoingQuantityText').innerHTML);
+    const incomingQuantity = 100; //DEBUG
+    //const incomingQuantity = parseNumber(document.getElementById('galacticMarketIncomingQuantityText').innerHTML());
+    const commissionQuantity = parseNumber(document.getElementById('galacticMarketComissionQuantitySummaryText').innerHTML);
+    const playerOutgoingQuantity = getResourceDataObject(outgoingType, [outgoingItem, 'quantity']);
+    const playerIncomingQuantity = getResourceDataObject(incomingType, [incomingItem, 'quantity']);
+    const commissionAdjustedIncomingQuantity = Math.floor(incomingQuantity - (commissionQuantity * (incomingQuantity / outgoingQuantity)));
+    
+    const updatedOutgoingQuantity = Math.floor(playerOutgoingQuantity - outgoingQuantity);
+    setResourceDataObject(updatedOutgoingQuantity, outgoingType, [outgoingItem, 'quantity']);
+    
+    const updatedIncomingQuantity = Math.floor(playerIncomingQuantity + commissionAdjustedIncomingQuantity);
+    setResourceDataObject(updatedIncomingQuantity, incomingType, [incomingItem, 'quantity']);
+    
+    const outgoingTradeVolume = getGalacticMarketDataObject(outgoingType, [outgoingItem, 'tradeVolume']);
+    const incomingTradeVolume = getGalacticMarketDataObject(incomingType, [incomingItem, 'tradeVolume']);
+
+    let outgoingMarketBiasChange = 0;
+    let incomingMarketBiasChange = 0;
+
+    if (outgoingTradeVolume && outgoingQuantity) {
+        outgoingMarketBiasChange = (outgoingQuantity / outgoingTradeVolume) * 100;
+    }
+
+    if (incomingTradeVolume && incomingQuantity) {
+        incomingMarketBiasChange = (incomingQuantity / incomingTradeVolume) * 100;
+    }
+
+    let outgoingCurrentBias = getGalacticMarketDataObject(outgoingType, [outgoingItem, 'marketBias']);
+    if (outgoingCurrentBias === undefined) {
+        outgoingCurrentBias = 0;
+    }
+
+    let incomingCurrentBias = getGalacticMarketDataObject(incomingType, [incomingItem, 'marketBias']);
+    if (incomingCurrentBias === undefined) {
+        incomingCurrentBias = 0;
+    }
+
+    outgoingCurrentBias -= outgoingMarketBiasChange;
+    incomingCurrentBias += incomingMarketBiasChange;
+
+    setGalacticMarketDataObject(outgoingCurrentBias, outgoingType, [outgoingItem, 'marketBias']);
+    setGalacticMarketDataObject(incomingCurrentBias, incomingType, [incomingItem, 'marketBias']);
+
+    console.log(`Market trade complete:`);
+    console.log(`Outgoing Type: ${outgoingItem}, Incoming Type: ${incomingItem}`);
+    console.log(`Outgoing Quantity: ${outgoingQuantity}, Incoming Quantity: ${incomingQuantity}`);
+    console.log(`Commission Quantity: ${commissionQuantity}`);
+    console.log(`Commission Adjusted Incoming Quantity: ${commissionAdjustedIncomingQuantity}`);
+    console.log(`Updated Bias for ${outgoingItem}: ${outgoingCurrentBias}`);
+    console.log(`Updated Bias for ${incomingItem}: ${incomingCurrentBias}`);
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
@@ -4693,6 +4777,104 @@ function startInitialTimers() {
             }
         }, 1000);
     }
+
+    let marketBiasAdjustmentInterval;
+    startMarketBiasAdjustment();
+
+    function startMarketBiasAdjustment() {
+        if (marketBiasAdjustmentInterval) {
+            clearInterval(marketBiasAdjustmentInterval);
+        }
+
+        marketBiasAdjustmentInterval = setInterval(() => {
+            console.log("Checking biases...");
+            adjustMarketBiases();
+        }, 1000);
+    }
+
+    let marketCycleCountDownToChangeInterval;
+    startMarketCycle();
+    
+    function startMarketCycle() {
+        const randomDurationInMinutes = Math.floor(Math.random() * 5) + 8;
+        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+        //const durationInSeconds = randomDurationInMs / 1000;
+        const durationInSeconds = 10;
+
+        console.log(`Cycle length = ${randomDurationInMinutes} minutes`);
+    
+        let timeLeft = durationInSeconds;
+
+        if (marketCycleCountDownToChangeInterval) {
+            clearInterval(marketCycleCountDownToChangeInterval);
+        }
+    
+        marketCycleCountDownToChangeInterval = setInterval(() => {
+            if (timeLeft > 0) {
+                console.log(`Time left in cycle: ${timeLeft} seconds`);
+                applyRandomMarketChanges();
+                
+                timeLeft -= 1;
+            } else {
+                applyMarketChanges();
+                startMarketCycle();
+            }
+        }, 1000);
+    }
+}
+
+function applyRandomMarketChanges() {
+    console.log("Applying random market changes...");
+    // Add logic for applying random market changes (prices, demand, etc.)
+}
+
+function applyMarketChanges() { //adjust stock volumes,..
+    const galacticMarketResources = getGalacticMarketDataObject('resources');
+    for (const resource in galacticMarketResources) {
+        if (galacticMarketResources.hasOwnProperty(resource)) {
+            const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+            if (currentQuantity !== undefined) {
+                const randomChange = getRandomQuantityChange(currentQuantity);
+                const currentTradeVolume = getGalacticMarketDataObject('resources', [resource, 'tradeVolume']);
+                setGalacticMarketDataObject(currentTradeVolume + randomChange, 'resources', [resource, 'tradeVolume']);
+                console.log(`${resource} market change: ${randomChange}, new trade volume: ${currentTradeVolume + randomChange}`);
+            }
+        }
+    }
+
+    const galacticMarketCompounds = getGalacticMarketDataObject('compounds');
+    for (const compound in galacticMarketCompounds) {
+        if (galacticMarketCompounds.hasOwnProperty(compound)) {
+            const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+            if (currentQuantity !== undefined) {
+                const randomChange = getRandomQuantityChange(currentQuantity);
+                const currentTradeVolume = getGalacticMarketDataObject('compounds', [compound, 'tradeVolume']);
+                setGalacticMarketDataObject(currentTradeVolume + randomChange, 'compounds', [compound, 'tradeVolume']);
+                console.log(`${compound} market change: ${randomChange}, new trade volume: ${currentTradeVolume + randomChange}`);
+            }
+        }
+    }
+}
+
+function getRandomQuantityChange(playerQuantity) {
+    let lowerBound, upperBound;
+
+    if (playerQuantity === 0) {
+        lowerBound = -3;
+        upperBound = 100;
+    } else {
+        lowerBound = Math.floor(playerQuantity / -3);
+        upperBound = Math.floor(playerQuantity * 10);
+    }
+
+    const randomChange = Math.floor(Math.random() * (upperBound - lowerBound + 1)) + lowerBound;
+    return randomChange;
+}
+
+// Function to adjust market biases (placeholders for the actual logic)
+function adjustMarketBiases() {
+    console.log("Adjusting market biases...");
+    // Add logic for adjusting market biases (e.g., towards zero)
 }
 
 function calculateStarTravelDuration(destination) {

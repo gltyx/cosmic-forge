@@ -1,5 +1,6 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
 import { setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
+import { galacticMarketTrade } from './game.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -139,7 +140,7 @@ export function drawTab7Content(heading, optionContentElement) {
             createTextElement(`for <span id="galacticMarketIncomingQuantityText" class="green-ready-text notation">12</span> <span id="galacticMarketIncomingStockTypeText" class="green-ready-text">Diesel</span>`, 'galacticMarketSummaryIncoming', ['galactic-market-summary-text'], null),            
             createTextElement(`Commission: <span id="galacticMarketComissionQuantitySummaryText" class="warning-orange-text">49</span> <span id="galacticMarketComissionQuantityStockTypeText" class="warning-orange-text">Hydrogen</span>`, 'galacticMarketSummaryCommission', ['galactic-market-summary-text-wide'], null),
             createButton(`CONFIRM`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-trade-button'], () => {
-                //galacticMarketTrade();
+                galacticMarketTrade();
             }, null, null, null, null, null, true, null, 'galacticMarketTradeConfirm'),
             null,
             null,
