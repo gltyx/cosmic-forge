@@ -156,7 +156,8 @@ import {
     addToResourceAllTimeStat,
     calculateMovementVectorToTarget,
     setEnemyFleetPower,
-    rebirth
+    rebirth,
+    settleSystemAfterBattle
 
 } from './game.js';
 
@@ -1442,6 +1443,13 @@ export function showEnterWarModeModal(reason) {
         overlay.style.display = 'flex';
 
         enterWarModeConfirmButton.onclick = function () {
+            if (reason === 'surrender') {
+                settleSystemAfterBattle('surrender');
+                showHideModal();
+                resolve();
+                return;
+            }
+            
             if (reason !== 'laugh' && reason !== 'reserved' && reason !== 'neutral' && reason !== 'receptive' && reason !== 'rebuff') {
                 setWarUI(true);
             }
@@ -1493,7 +1501,7 @@ export function setWarUI(setWarState) {
         return;
     }
 
-    if(setWarState) {
+    if (setWarState) {
         setDiplomacyPossible(false);
         setWarMode(true);
     }

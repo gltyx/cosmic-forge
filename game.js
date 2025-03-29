@@ -7837,7 +7837,7 @@ export function turnAround(unit) {
 
 export function settleSystemAfterBattle(accessPoint) {
     setRebirthPossible(true);
-    const apModifier = accessPoint === 'battle' ? 2 : 1;
+    const apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
     
     if (!getApAwardedThisRun()) {   

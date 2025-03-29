@@ -6,7 +6,5 @@ ascendency (permanent buffs):
 ideas:
 - 
 
-
-- bully surrender without fight triggers battle and shouldnt
 - ADD MODAL FOR GALACTIC MARKET UNLOCK AND HIDE ASCENDENCY UNTIL AP AWARDED
 
