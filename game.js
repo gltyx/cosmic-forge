@@ -3697,7 +3697,12 @@ export function galacticMarketTrade() {
     document.getElementById('galacticMarketQuantityTextArea').classList.add('invisible');
     setGalacticMarketIncomingQuantity(0);
 
+    const outgoingMessage = `${Math.floor(outgoingQuantity - commissionQuantity)} ${capitaliseString(outgoingItem)}`;
+    const incomingMessage = `${commissionAdjustedIncomingQuantity} ${capitaliseString(incomingItem)}`;
+    const commissionMessage = `${commissionQuantity} ${capitaliseString(outgoingItem)}`;
+    const notificationMessage = `You have traded ${outgoingMessage} for ${incomingMessage} and paid ${commissionMessage} commission!`;
 
+    showNotification(notificationMessage, 'info', 5000);
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
@@ -3715,7 +3720,6 @@ function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, in
     });
 
     if (outgoingOption) {
-        console.log(`Removed outgoing option: ${outgoingOption.innerHTML}`);
         outgoingOption.remove();
     }
 
@@ -4812,12 +4816,10 @@ function startInitialTimers() {
     startMarketCycle();
     
     function startMarketCycle() {
-        const randomDurationInMinutes = Math.floor(Math.random() * 5) + 8;
+        const randomDurationInMinutes = Math.floor(Math.random() * 3) + 2;
         const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-        //const durationInSeconds = randomDurationInMs / 1000;
-        const durationInSeconds = 30; //DEBUG
-
-        console.log(`Cycle length = ${randomDurationInMinutes} minutes`);
+        const durationInSeconds = randomDurationInMs / 1000;
+        //const durationInSeconds = 30; //DEBUG
     
         let timeLeft = durationInSeconds;
 
@@ -4827,7 +4829,6 @@ function startInitialTimers() {
     
         marketCycleCountDownToChangeInterval = setInterval(() => {
             if (timeLeft > 0) {
-                console.log(`Time left in cycle: ${timeLeft} seconds`);
                 timeLeft -= 1;
             } else {
                 resetCommission();
@@ -4973,8 +4974,6 @@ function adjustMarketBiases() {
     const typesResources = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
     const typesCompounds = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
 
-    let biasesLog = [];
-
     [...typesResources, ...typesCompounds].forEach(itemType => {
         let currentBias;
 
@@ -5006,11 +5005,8 @@ function adjustMarketBiases() {
             }
 
             setGalacticMarketDataObject(newBias, (typesResources.includes(itemType) ? 'resources' : 'compounds'), [itemType, 'marketBias']);
-            biasesLog.push(`${itemType}: ${newBias.toFixed(2)}`);
         }
     });
-
-    console.log(`Market Biases: ${biasesLog.join(' | ')}`);
 }
 
 
