@@ -5159,6 +5159,13 @@ export function startTravelToDestinationStarTimer(adjustment) {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(0);
                 setStarShipStatus(['orbiting', destination]);
                 distanceTravelled = distance;
+                if (getStatRun() === 1) {
+                    if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
+                        setTechUnlockedArray('apAwardedThisRun');
+                    }   
+                    //ADD MODAL HERE FOR GALACTIC MARKET UNLOCK AND HIDE ASCENDENCY UNTIL AP AWARDED
+                    showNotification('Galactic Tab Unlocked!', 'warning');  
+                }
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);
                 const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
@@ -7833,13 +7840,9 @@ export function settleSystemAfterBattle(accessPoint) {
     const apModifier = accessPoint === 'battle' ? 2 : 1;
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
     
-    if (!getApAwardedThisRun()) {
-        if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
-            setTechUnlockedArray('apAwardedThisRun');
-        }        
+    if (!getApAwardedThisRun()) {   
         setResourceDataObject(Math.floor(apGain + getResourceDataObject('ascendencyPoints', ['quantity'])), 'ascendencyPoints', ['quantity']);
         setApAwardedThisRun(true);
-        showNotification('Galactic Tab Unlocked!', 'warning');
     }
 
     switch(accessPoint) {
