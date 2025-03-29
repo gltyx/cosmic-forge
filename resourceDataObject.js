@@ -859,7 +859,7 @@ export let galacticMarket = {
         hydrogen: { 
             name: "Hydrogen", 
             baseValue: 0.02, 
-            marketBias: 0, 
+            marketBias: 0,
             tradeVolume: 0, 
             eventModifier: 0 
         },
@@ -873,7 +873,7 @@ export let galacticMarket = {
         carbon: { 
             name: "Carbon", 
             baseValue: 0.1, 
-            marketBias: 0, 
+            marketBias: 0,
             tradeVolume: 0, 
             eventModifier: 0 
         },
