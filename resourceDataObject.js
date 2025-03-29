@@ -860,56 +860,56 @@ export let galacticMarket = {
             name: "Hydrogen", 
             baseValue: 0.02, 
             marketBias: 0,
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         helium: { 
             name: "Helium", 
             baseValue: 0.01, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         carbon: { 
             name: "Carbon", 
             baseValue: 0.1, 
             marketBias: 0,
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         neon: { 
             name: "Neon", 
             baseValue: 0.06, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         oxygen: { 
             name: "Oxygen", 
             baseValue: 0.05, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         silicon: { 
             name: "Silicon", 
             baseValue: 0.08, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         iron: { 
             name: "Iron", 
             baseValue: 0.12, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         sodium: { 
             name: "Sodium", 
             baseValue: 0.10, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         }
     },
@@ -918,42 +918,42 @@ export let galacticMarket = {
             name: "Water", 
             baseValue: 0.08, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         diesel: { 
             name: "Diesel", 
             baseValue: 0.2, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         glass: { 
             name: "Glass", 
             baseValue: 0.8, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         steel: { 
             name: "Steel", 
             baseValue: 1.2, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         concrete: { 
             name: "Concrete", 
             baseValue: 0.8, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         },
         titanium: { 
             name: "Titanium", 
             baseValue: 6, 
             marketBias: 0, 
-            tradeVolume: 0, 
+            tradeVolume: 100000,
             eventModifier: 0 
         }
     }

@@ -3596,8 +3596,7 @@ function galacticMarketChecks() {
             document.getElementById('galacticMarketComissionQuantityStockTypeText').innerHTML = capitaliseString(getGalacticMarketOutgoingStockType());
 
             if (document.getElementById('galacticMarketOutgoingQuantityText').innerHTML !== 'N/A' && parseNumber(document.getElementById('galacticMarketOutgoingQuantityText').innerHTML) > 0) {
-                //console.log('calculating commission and trade incoming quantity...');
-                setGalacticMarketIncomingQuantity(100); //DEBUG
+                calculateIncomingQuantity();
                 document.getElementById('galacticMarketIncomingQuantityText').innerHTML = getGalacticMarketIncomingQuantity();
             }
 
@@ -4790,8 +4789,8 @@ function startInitialTimers() {
     function startMarketCycle() {
         const randomDurationInMinutes = Math.floor(Math.random() * 5) + 8;
         const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-        //const durationInSeconds = randomDurationInMs / 1000;
-        const durationInSeconds = 10; //DEBUG
+        const durationInSeconds = randomDurationInMs / 1000;
+        //const durationInSeconds = 10; //DEBUG
 
         console.log(`Cycle length = ${randomDurationInMinutes} minutes`);
     
@@ -4905,6 +4904,37 @@ function getRandomQuantityChange(playerQuantity) {
     return randomChange;
 }
 
+export function calculateIncomingQuantity() {
+    const typesResources = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const typesCompounds = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
+
+    const outgoingItem = getGalacticMarketOutgoingStockType();
+    const incomingItem = getGalacticMarketIncomingStockType();
+
+    let outgoingQuantity = parseNumber(document.getElementById('galacticMarketOutgoingQuantityText').innerHTML);
+
+    if (!outgoingQuantity || outgoingQuantity <= 0) {
+        outgoingQuantity = 0;
+    }
+
+    let outgoingType = typesResources.includes(outgoingItem) ? 'resources' : (typesCompounds.includes(outgoingItem) ? 'compounds' : null);
+    let incomingType = typesResources.includes(incomingItem) ? 'resources' : (typesCompounds.includes(incomingItem) ? 'compounds' : null);
+
+    const outgoingItemBasePrice = getGalacticMarketDataObject(outgoingType, [outgoingItem, 'baseValue']);
+    const incomingItemBasePrice = getGalacticMarketDataObject(incomingType, [incomingItem, 'baseValue']);
+
+    const outgoingMarketBias = getGalacticMarketDataObject(outgoingType, [outgoingItem, 'marketBias']);
+    const incomingMarketBias = getGalacticMarketDataObject(incomingType, [incomingItem, 'marketBias']);
+
+    const adjustedOutgoingPrice = outgoingItemBasePrice * (1 + (outgoingMarketBias / 100));
+    const adjustedIncomingPrice = incomingItemBasePrice * (1 + (incomingMarketBias / 100));
+    const priceRatio = adjustedOutgoingPrice / adjustedIncomingPrice;
+
+    const incomingQuantity = outgoingQuantity > 0 ? Math.floor(outgoingQuantity * priceRatio) : 0;
+
+    setGalacticMarketIncomingQuantity(incomingQuantity);
+}
+
 function adjustMarketBiases() {
     const typesResources = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
     const typesCompounds = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
@@ -4933,8 +4963,6 @@ function adjustMarketBiases() {
         }
     });
 }
-
-
 
 function calculateStarTravelDuration(destination) {
     const starData = getStarSystemDataObject('stars', [destination]);
