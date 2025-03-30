@@ -1051,7 +1051,7 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffEfficientStorageExpansionRow: {
+        buffEfficientStorageRow: {
             content1: "Improves storage expansion efficiency, doubling its effect.",
             content2: "",
             updateAt: ""
@@ -1061,7 +1061,7 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffAdvancedMarketConnectionsRow: {
+        buffAdvancedMarketRow: {
             content1: "Reduces the cost of all market purchases by 10%.",
             content2: "",
             updateAt: ""
@@ -1096,7 +1096,7 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffAsteroidDetectionEnhancementRow: {
+        buffScannerEnhancementRow: {
             content1: "Doubles the effectiveness of asteroid detection, increasing resource discovery rates.",
             content2: "",
             updateAt: ""
@@ -1106,12 +1106,12 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffEnhancedMiningModulesRow: {
+        buffEnhancedMiningRow: {
             content1: "Improves mining efficiency, increasing resource collection rates by 25%.",
             content2: "",
             updateAt: ""
         },
-        buffQuantumStarshipEnginesRow: {
+        buffQuantumEnginesRow: {
             content1: "Upgrades starship engines, improving all travel-related efficiencies by 50%.",
             content2: "",
             updateAt: ""

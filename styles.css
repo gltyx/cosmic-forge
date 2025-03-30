@@ -1307,10 +1307,15 @@ cursor: pointer;
 #starDestinationDescription,
 .save-name-margin,
 .save-load-button,
-.star-option-button,
-.ascendency-buff-button
+.star-option-button
 {
     margin-left: 50px;
+}
+
+.ascendency-buff-button
+{
+    margin-left: 30px;
+    margin-right: 50px
 }
 
 .galactic-market-textarea

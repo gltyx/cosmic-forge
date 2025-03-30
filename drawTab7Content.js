@@ -272,7 +272,7 @@ export function drawTab7Content(heading, optionContentElement) {
                 null,
                 null,
                 'ascendency',
-                [true, '35%', '65%']
+                [true, '30%', '70%']
             );
     
             optionContentElement.appendChild(buffRow);

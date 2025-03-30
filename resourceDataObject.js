@@ -960,9 +960,9 @@ export let galacticMarket = {
 };
 
 export const ascendencyBuffs = {
-    "efficientStorageExpansion": {
-        name: "Efficient Storage Expansion",
-        description: "buffEfficientStorageExpansionRow",
+    "efficientStorage": {
+        name: "Efficient Storage",
+        description: "buffEfficientStorageRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 10,
@@ -982,9 +982,9 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "advancedMarketConnections": {
-        name: "Advanced Market Connections",
-        description: "buffAdvancedMarketConnectionsRow",
+    "advancedMarket": {
+        name: "Advanced Market",
+        description: "buffAdvancedMarketRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 20,
@@ -1059,9 +1059,9 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "asteroidDetectionEnhancement": {
-        name: "Asteroid Detection Enhancement",
-        description: "buffAsteroidDetectionEnhancementRow",
+    "scannerEnhancement": {
+        name: "Scanner Enhancement",
+        description: "buffScannerEnhancementRow",
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 80,
@@ -1081,9 +1081,9 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "enhancedMiningModules": {
-        name: "Enhanced Mining Modules",
-        description: "buffEnhancedMiningModulesRow",
+    "enhancedMining": {
+        name: "Enhanced Mining",
+        description: "buffEnhancedMiningRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 100,
@@ -1092,9 +1092,9 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "quantumStarshipEngines": {
-        name: "Quantum Starship Engines",
-        description: "buffQuantumStarshipEnginesRow",
+    "quantumEngines": {
+        name: "Quantum Engines",
+        description: "buffQuantumEnginesRow",
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 120,
