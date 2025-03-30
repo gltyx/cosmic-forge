@@ -1,6 +1,7 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
 import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
 import { galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
+import { setAscendencyBuffDataObject, getAscendencyBuffDataObject } from './resourceDataObject.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -227,6 +228,54 @@ export function drawTab7Content(heading, optionContentElement) {
     }
 
     if (heading === 'Ascendency') {
-        
-    }
+        const ascendencyBuffsArray = getAscendencyBuffDataObject();
+    
+        if (Object.keys(ascendencyBuffsArray).length === 0) {
+            return;
+        }
+    
+        Object.keys(ascendencyBuffsArray).forEach(buffKey => {
+            const buff = ascendencyBuffsArray[buffKey];
+    
+            const buffRowDescription = `${buff.description}`;
+            const cost = buff.rebuyable ? buff.baseCostAp * Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet) : buff.baseCostAp;
+            const effectText = `${buff.effectCategory}: ${buff.effectCategoryMagnitude}`;
+            const buyStatus = buff.boughtYet > 0 ? (buff.rebuyable ? `Bought ${buff.boughtYet} times` : "Purchased") : "Not Bought";
+    
+            const buffRow = createOptionRow(
+                buffRowDescription,
+                null,
+                `${buff.name}:`,
+                createTextElement(
+                    `Rebuyable: <span class="green-ready-text">${buff.rebuyable ? "Yes" : "No"}</span>`,
+                    'buffEffect',
+                    ['buff-value']
+                ),                
+                createTextElement(buyStatus, 'buffStatus', ['buff-value']),
+                createButton(`BUY`, ['option-button', 'red-disabled-text', 'ascendency-buff-button', `buff-class-${buff.name.replace(/\s+/g, '-').toLowerCase()}`], () => {
+                    //purchaseBuff(buffKey);
+                }, null, null, null, null, null, true, null, 'ascendency'),
+                createTextElement(
+                    `<span id="${buff.name.replace(/\s+/g, '').replace(/^./, str => str.toLowerCase())}CostText" class="green-ready-text">${cost} AP</span>`,
+                    'buffCost',
+                    ['buff-value']
+                ),
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                'ascendency',
+                [true, '35%', '65%']
+            );
+    
+            optionContentElement.appendChild(buffRow);
+        });
+    }    
 }

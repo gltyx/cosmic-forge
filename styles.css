@@ -1260,7 +1260,8 @@ cursor: pointer;
 .battle-button,
 #galacticMarketForText,
 #galacticMarketIncomingStockTypeDropDown,
-.galactic-market-trade-button
+.galactic-market-trade-button,
+.buff-value
 {
     margin-left: 30px;
 }
@@ -1306,7 +1307,8 @@ cursor: pointer;
 #starDestinationDescription,
 .save-name-margin,
 .save-load-button,
-.star-option-button
+.star-option-button,
+.ascendency-buff-button
 {
     margin-left: 50px;
 }

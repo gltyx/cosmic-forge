@@ -959,6 +959,186 @@ export let galacticMarket = {
     }
 };
 
+export const ascendencyBuffs = {
+    "efficientStorageExpansion": {
+        name: "Efficient Storage Expansion",
+        description: "buffEfficientStorageExpansionRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 10,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 3
+    },
+    "smartAutoBuyers": {
+        name: "Smart Auto Buyers",
+        description: "buffSmartAutoBuyersRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 15,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.25,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "advancedMarketConnections": {
+        name: "Advanced Market Connections",
+        description: "buffAdvancedMarketConnectionsRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 20,
+        effectCategory: "priceReducer",
+        effectCategoryMagnitude: 0.9,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "jumpstartResearch": {
+        name: "Jumpstart Research",
+        description: "buffJumpstartResearchRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 25,
+        effectCategory: "resourceBooster",
+        effectCategoryMagnitude: 100,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "optimizedPowerGrids": {
+        name: "Optimized Power Grids",
+        description: "buffOptimizedPowerGridsRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 35,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.2,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "bulkSellBonus": {
+        name: "Bulk Sell Bonus",
+        description: "buffBulkSellBonusRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 40,
+        effectCategory: "priceReducer",
+        effectCategoryMagnitude: 0.85,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "fusionEfficiency": {
+        name: "Fusion Efficiency",
+        description: "buffFusionEfficiencyRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 50,
+        effectCategory: "priceReducer",
+        effectCategoryMagnitude: 0.8,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "techSynergy": {
+        name: "Tech Synergy",
+        description: "buffTechSynergyRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 60,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.25,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "hyperBatteries": {
+        name: "Hyper Batteries",
+        description: "buffHyperBatteriesRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 75,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.5,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "asteroidDetectionEnhancement": {
+        name: "Asteroid Detection Enhancement",
+        description: "buffAsteroidDetectionEnhancementRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 80,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "rocketFuelOptimization": {
+        name: "Rocket Fuel Optimization",
+        description: "buffRocketFuelOptimizationRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 90,
+        effectCategory: "priceReducer",
+        effectCategoryMagnitude: 0.7,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "enhancedMiningModules": {
+        name: "Enhanced Mining Modules",
+        description: "buffEnhancedMiningModulesRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 100,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.25,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "quantumStarshipEngines": {
+        name: "Quantum Starship Engines",
+        description: "buffQuantumStarshipEnginesRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 120,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.5,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "apYieldMultiplier": {
+        name: "AP Yield Multiplier",
+        description: "buffApYieldMultiplierRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 150,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 1.1,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "parallelUniverseInsight": {
+        name: "Parallel Universe Insight",
+        description: "buffParallelUniverseInsightRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 250,
+        effectCategory: "specialUnlock",
+        effectCategoryMagnitude: "newPrestigeLayer",
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "galacticInfluence": {
+        name: "Galactic Influence",
+        description: "buffGalacticInfluenceRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 300,
+        effectCategory: "resourceBooster",
+        effectCategoryMagnitude: 1,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    }
+};
+
+
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
 
@@ -995,6 +1175,30 @@ export function getStarSystemWeather(starSystem) {
 export function setStarSystemWeather(starSystem, weatherData) {
     if (starSystems.stars[starSystem]) {
         starSystems.stars[starSystem].weather = weatherData;
+    }
+}
+
+export function getAscendencyBuffDataObject() {
+    return ascendencyBuffs;
+}
+
+export function setAscendencyBuffDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
+
+    let current = ascendencyBuffs;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
     }
 }
 

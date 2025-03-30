@@ -1051,6 +1051,86 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
+        buffEfficientStorageExpansionRow: {
+            content1: "Improves storage expansion efficiency, doubling its effect.",
+            content2: "",
+            updateAt: ""
+        },
+        buffSmartAutoBuyersRow: {
+            content1: "Enhances auto buyers, increasing their efficiency by 25%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffAdvancedMarketConnectionsRow: {
+            content1: "Reduces the cost of all market purchases by 10%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffJumpstartResearchRow: {
+            content1: "Provides an instant research boost at the start of a run.",
+            content2: "",
+            updateAt: ""
+        },
+        buffOptimizedPowerGridsRow: {
+            content1: "Increases the effectiveness of power grid upgrades by 20%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffBulkSellBonusRow: {
+            content1: "Grants a 15% discount on bulk sales, improving profits.",
+            content2: "",
+            updateAt: ""
+        },
+        buffFusionEfficiencyRow: {
+            content1: "Optimizes fusion technology, reducing costs by 20%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffTechSynergyRow: {
+            content1: "Boosts upgrade effectiveness across all technology by 25%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffHyperBatteriesRow: {
+            content1: "Enhances energy storage, improving all power-related upgrades by 50%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffAsteroidDetectionEnhancementRow: {
+            content1: "Doubles the effectiveness of asteroid detection, increasing resource discovery rates.",
+            content2: "",
+            updateAt: ""
+        },
+        buffRocketFuelOptimizationRow: {
+            content1: "Reduces fuel costs for space travel by 30%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffEnhancedMiningModulesRow: {
+            content1: "Improves mining efficiency, increasing resource collection rates by 25%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffQuantumStarshipEnginesRow: {
+            content1: "Upgrades starship engines, improving all travel-related efficiencies by 50%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffApYieldMultiplierRow: {
+            content1: "Increases Ascension Point yield by 10%, making future ascensions more rewarding.",
+            content2: "",
+            updateAt: ""
+        },
+        buffParallelUniverseInsightRow: {
+            content1: "Unlocks a new prestige layer, opening up fresh mechanics and challenges.",
+            content2: "",
+            updateAt: ""
+        },
+        buffGalacticInfluenceRow: {
+            content1: "Expands your influence across the galaxy, providing unique bonuses based on galactic standing.",
+            content2: "",
+            updateAt: ""
+        }
     };
 
     newsTickerContent = {

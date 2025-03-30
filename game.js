@@ -248,7 +248,9 @@ import {
     getStarShipPartsNeededInTotalPerModule,
     getMaxFleetShip,
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack,
-    setupNewRunStarSystem
+    setupNewRunStarSystem,
+    getAscendencyBuffDataObject,
+    setAscendencyBuffDataObject
 } from "./resourceDataObject.js";
 
 import { 
@@ -398,6 +400,7 @@ export async function gameLoop() {
         fleetHangarChecks();
         coloniseChecks();
         galacticMarketChecks();
+        ascendencyBuffChecks();
         rebirthChecks();
 
         handlePowerAllButtonState();
@@ -3528,6 +3531,43 @@ function resetFleetPrices() {
         setResourceDataObject([120, 'titanium', 'compounds'], 'space', ['upgrades', fleetType, 'resource3Price']);
     });
 }
+
+function ascendencyBuffChecks() {
+    if (getCurrentOptionPane() === 'ascendency') {
+        const buttons = document.querySelectorAll('.ascendency-buff-button');
+        buttons.forEach(button => {
+            const buffClass = Array.from(button.classList).find(cls => cls.startsWith('buff-class-'));
+    
+            const buffName = buffClass ? buffClass.replace('buff-class-', '').split('-')
+              .map((word, index) => index === 0 
+                ? word.toLowerCase()
+                : word.charAt(0).toUpperCase() + word.slice(1)
+              )
+              .join('')
+              : '';
+            
+            const buff = getAscendencyBuffDataObject()[buffName];
+    
+            if (!buff) return;
+    
+            const baseCost = buff.baseCostAp;
+            let calculatedCost = baseCost;
+    
+            if (buff.rebuyable && buff.boughtYet > 0) {
+                calculatedCost *= Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet);
+            }
+    
+            if (getAscendencyPoints() >= calculatedCost) {
+                button.classList.add('green-ready-text');
+                button.classList.remove('red-disabled-text');
+            } else {
+                button.classList.add('red-disabled-text');
+                button.classList.remove('green-ready-text');
+            }
+        });
+    }
+}
+
 
 function galacticMarketChecks() {
     if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
