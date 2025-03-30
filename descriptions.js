@@ -1116,7 +1116,7 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffApYieldMultiplierRow: {
+        buffAPYieldMultiplierRow: {
             content1: "Increases Ascension Point yield by 10%, making future ascensions more rewarding.",
             content2: "",
             updateAt: ""

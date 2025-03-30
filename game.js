@@ -250,7 +250,7 @@ import {
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack,
     setupNewRunStarSystem,
     getAscendencyBuffDataObject,
-    setAscendencyBuffDataObject
+    setAscendencyBuffDataObject,
 } from "./resourceDataObject.js";
 
 import { 
@@ -3532,42 +3532,102 @@ function resetFleetPrices() {
     });
 }
 
-function ascendencyBuffChecks() {
-    if (getCurrentOptionPane() === 'ascendency') {
-        const buttons = document.querySelectorAll('.ascendency-buff-button');
-        buttons.forEach(button => {
-            const buffClass = Array.from(button.classList).find(cls => cls.startsWith('buff-class-'));
-    
-            const buffName = buffClass ? buffClass.replace('buff-class-', '').split('-')
-              .map((word, index) => index === 0 
-                ? word.toLowerCase()
-                : word.charAt(0).toUpperCase() + word.slice(1)
-              )
-              .join('')
-              : '';
-            
-            const buff = getAscendencyBuffDataObject()[buffName];
-    
-            if (!buff) return;
-    
-            const baseCost = buff.baseCostAp;
-            let calculatedCost = baseCost;
-    
-            if (buff.rebuyable && buff.boughtYet > 0) {
-                calculatedCost *= Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet);
-            }
-    
-            if (getAscendencyPoints() >= calculatedCost) {
-                button.classList.add('green-ready-text');
-                button.classList.remove('red-disabled-text');
-            } else {
-                button.classList.add('red-disabled-text');
-                button.classList.remove('green-ready-text');
-            }
-        });
-    }
+function checkAscendencyButtons() {
+    const buttons = document.querySelectorAll('.ascendency-buff-button');
+    buttons.forEach(button => {
+        const buffClass = Array.from(button.classList).find(cls => cls.startsWith('buff-class-'));
+
+        const buffName = buffClass ? buffClass.replace('buff-class-', '').split('-')
+            .map((word, index) => index === 0 
+            ? word.toLowerCase()
+            : word.charAt(0).toUpperCase() + word.slice(1)
+            )
+            .join('')
+            : '';
+        
+        const buff = getAscendencyBuffDataObject()[buffName];
+
+        if (!buff) return;
+
+        const baseCost = buff.baseCostAp;
+        let calculatedCost = baseCost;
+
+        if (buff.rebuyable && buff.boughtYet > 0) {
+            calculatedCost *= Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet);
+        }
+
+        if (getAscendencyPoints() >= calculatedCost && ((buff.rebuyable && buff.timesRebuyable >= buff.boughtYet) || (!buff.rebuyable && buff.boughtYet === 0))) {
+            button.classList.add('green-ready-text');
+            button.classList.remove('red-disabled-text');
+        } else {
+            button.classList.add('red-disabled-text');
+            button.classList.remove('green-ready-text');
+        }
+    });
 }
 
+function updateAscendencyRowTextFields() {
+    const ascendencyBuffs = getAscendencyBuffDataObject();
+
+    Object.keys(ascendencyBuffs).forEach(buffKey => {
+        const capitalizedBuffKey = capitaliseString(buffKey);
+        const statusElementId = `buff${capitalizedBuffKey}BuyStatusText`;
+        const costTextId = `${buffKey}CostText`;
+
+        const buff = ascendencyBuffs[buffKey];
+        const rebuyable = buff.rebuyable;
+        let statusText = "";
+
+        if (buff.boughtYet === 0) {
+            statusText = "Not Bought";
+        } else if (!rebuyable) {
+            statusText = `<span class="green-ready-text">Bought</span>`;
+        } else {
+            statusText = `<span class="green-ready-text">Bought * ${buff.boughtYet}</span>`;
+        }
+
+        const statusElement = document.getElementById(statusElementId);
+
+        if (statusElement) {
+            statusElement.innerHTML = statusText;
+        }
+
+        const cost = rebuyable
+            ? buff.baseCostAp * Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet)
+            : buff.baseCostAp;
+
+        const costTextElement = document.getElementById(costTextId);
+
+        if (costTextElement) {
+            if (buff.rebuyable && buff.timesRebuyable === buff.boughtYet) {
+                costTextElement.innerHTML = 'Bought Max';
+                costTextElement.classList.add("green-ready-text");
+                costTextElement.classList.remove("red-disabled-text");
+            } else if (!buff.rebuyable && buff.boughtYet > 0) {
+                costTextElement.innerHTML = 'Bought';
+                costTextElement.classList.add("green-ready-text");
+                costTextElement.classList.remove("red-disabled-text");
+            } else {
+                costTextElement.innerHTML = `${cost} AP`;
+
+                if (getAscendencyPoints() >= cost) {
+                    costTextElement.classList.add("green-ready-text");
+                    costTextElement.classList.remove("red-disabled-text");
+                } else {
+                    costTextElement.classList.add("red-disabled-text");
+                    costTextElement.classList.remove("green-ready-text");
+                }
+            }
+        }
+    });
+}
+
+function ascendencyBuffChecks() {
+    if (getCurrentOptionPane() === 'ascendency') {
+        checkAscendencyButtons();
+        updateAscendencyRowTextFields();
+    }
+}
 
 function galacticMarketChecks() {
     if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
@@ -5188,6 +5248,20 @@ function adjustMarketBiases() {
     });
 }
 
+export function purchaseBuff(buff) {
+    const ascendencyBuffDataObject = getAscendencyBuffDataObject();
+    const currentAscendencyPoints = getResourceDataObject('ascendencyPoints', ['quantity']);
+
+    const buffData = ascendencyBuffDataObject[buff];
+    const cost = buffData.rebuyable
+        ? buffData.baseCostAp * Math.pow(buffData.rebuyableIncreaseMultiple, buffData.boughtYet)
+        : buffData.baseCostAp;
+
+    if (currentAscendencyPoints >= cost) {
+        setResourceDataObject(currentAscendencyPoints - cost, 'ascendencyPoints', ['quantity']);
+        setAscendencyBuffDataObject(buffData.boughtYet + 1, buff, ['boughtYet']);
+    }
+}
 
 function calculateStarTravelDuration(destination) {
     const starData = getStarSystemDataObject('stars', [destination]);

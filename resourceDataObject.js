@@ -1103,9 +1103,9 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "apYieldMultiplier": {
+    "aPYieldMultiplier": {
         name: "AP Yield Multiplier",
-        description: "buffApYieldMultiplierRow",
+        description: "buffAPYieldMultiplierRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 150,

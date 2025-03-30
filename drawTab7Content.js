@@ -1,7 +1,8 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
 import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
-import { galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
+import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
 import { setAscendencyBuffDataObject, getAscendencyBuffDataObject } from './resourceDataObject.js';
+import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -248,12 +249,12 @@ export function drawTab7Content(heading, optionContentElement) {
                 `${buff.name}:`,
                 createTextElement(
                     `Rebuyable: <span class="green-ready-text">${buff.rebuyable ? "Yes" : "No"}</span>`,
-                    'buffEffect',
+                    `buff${capitaliseString(buffKey)}RebuyableText`,
                     ['buff-value']
                 ),                
-                createTextElement(buyStatus, 'buffStatus', ['buff-value']),
+                createTextElement(buyStatus, `buff${capitaliseString(buffKey)}BuyStatusText`, ['buff-value']),
                 createButton(`BUY`, ['option-button', 'red-disabled-text', 'ascendency-buff-button', `buff-class-${buff.name.replace(/\s+/g, '-').toLowerCase()}`], () => {
-                    //purchaseBuff(buffKey);
+                    purchaseBuff(buffKey, cost);
                 }, null, null, null, null, null, true, null, 'ascendency'),
                 createTextElement(
                     `<span id="${buff.name.replace(/\s+/g, '').replace(/^./, str => str.toLowerCase())}CostText" class="green-ready-text">${cost} AP</span>`,
