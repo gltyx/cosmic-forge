@@ -4,7 +4,3 @@ stats bugs in general
 
 ascendency (permanent buffs):
 ideas:
-- 
-
-- ADD MODAL FOR GALACTIC MARKET UNLOCK AND HIDE ASCENDENCY UNTIL AP AWARDED
-

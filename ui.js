@@ -130,6 +130,8 @@ import {
     modalBattleNoSentientLifeText,
     modalRebirthHeader,
     modalRebirthText,
+    modalGalacticTabUnlockHeader,
+    modalGalacticTabUnlockText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -4533,6 +4535,31 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         const desiredAngle = Math.atan2(y, x) + Math.PI / 2;
         unit.rotation = desiredAngle;
         return unit;
+    }
+
+    export function showGalacticTabPopup() {
+        const modalContainer = getElements().modalContainer;
+        const overlay = getElements().overlay;
+        const galacticTabUnlockConfirmButton = document.getElementById('galacticTabUnlockConfirmButton');
+        
+        let headerText = modalGalacticTabUnlockHeader;
+        let content = modalGalacticTabUnlockText;
+    
+        document.getElementById('launchCancelButton').classList.add('invisible');
+        document.getElementById('launchConfirmButton').classList.add('invisible');
+
+        galacticTabUnlockConfirmButton.classList.remove('invisible');
+    
+        populateModal(headerText, content);
+    
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+    
+        galacticTabUnlockConfirmButton.onclick = function () {
+            showHideModal();
+            showNotification('Galactic Tab Unlocked!', 'warning');
+            galacticTabUnlockConfirmButton.classList.add('invisible');
+        };
     }
 
     export function showRebirthPopup() {

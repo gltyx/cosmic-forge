@@ -329,7 +329,8 @@ button {
 #launchConfirmButton,
 #enterWarModeConfirmButton,
 #battleOutcomeConfirmButton,
-#rebirthConfirmButton
+#rebirthConfirmButton,
+#galacticTabUnlockConfirmButton
 {
     position: fixed;
     bottom: 12%;

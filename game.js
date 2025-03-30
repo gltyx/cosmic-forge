@@ -273,7 +273,8 @@ import {
     resetTab2ClassesRebirth,
     resetTab4ClassesRebirth,
     resetTab5ClassesRebirth,
-    resetTab6ClassesRebirth
+    resetTab6ClassesRebirth,
+    showGalacticTabPopup
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -3784,6 +3785,10 @@ function rebirthChecks() {
 }
 
 async function coloniseChecks() {
+    if (getStatRun() > 1 || getApAwardedThisRun()) {
+        document.getElementById('ascendencyOption').parentElement.parentElement.classList.remove('invisible');
+    }
+    
     if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
         const battleCanvasContainer = document.getElementById('battleCanvasContainer');
 
@@ -5163,8 +5168,7 @@ export function startTravelToDestinationStarTimer(adjustment) {
                     if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
                         setTechUnlockedArray('apAwardedThisRun');
                     }   
-                    //ADD MODAL HERE FOR GALACTIC MARKET UNLOCK AND HIDE ASCENDENCY UNTIL AP AWARDED
-                    showNotification('Galactic Tab Unlocked!', 'warning');  
+                    showGalacticTabPopup();
                 }
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);

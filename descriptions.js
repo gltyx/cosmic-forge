@@ -35,6 +35,8 @@ export let modalBattleNoSentientLifeHeader;
 export let modalBattleNoSentientLifeText;
 export let modalRebirthHeader;
 export let modalRebirthText;
+export let modalGalacticTabUnlockHeader;
+export let modalGalacticTabUnlockText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -67,6 +69,8 @@ export function initialiseDescriptions() {
     modalBattleNoSentientLifeText = `There is no sentient life in this System, so you can settle right away!<br><br><span class="green-ready-text">Gained X AP!</span>`;
     modalRebirthHeader = `WARNING: REBIRTH!`;
     modalRebirthText = `You are about to reset your progress and start again at the new System.<br><br>Are you sure you want to do this?<br><br><span class="green-ready-text">You will carry over X AP!</span>`;
+    modalGalacticTabUnlockHeader = `Star System reached!`;
+    modalGalacticTabUnlockText = `As you approach the new System, your scanners detect a faint communication signal...<br><br>"You have shown great innovation, you may now access our Galactic Trading Platform"<br><br><span class="green-ready-text">Galactic Tab Unlocked!</span>`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
