@@ -44,7 +44,9 @@ export const OFFLINE_GAINS_RATE = 0.334;
 export const ENEMY_FLEET_SPEED_AIR = 5;
 export const ENEMY_FLEET_SPEED_LAND = 2;
 export const ENEMY_FLEET_SPEED_SEA = 1;
-export const AP_BASE_PRICE = 100000;
+export const AP_BASE_SELL_PRICE = 1000000;
+export const AP_BASE_BUY_PRICE = 4000000;
+export const CASH_LIQUIDATION_MODIFIER = 10;
 
 export const enemyFleetData = {
     air: {
@@ -122,7 +124,9 @@ let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
 let runNumber = 1;
 let settledStars = [STARTING_STAR_SYSTEM];
-let apCashPrice = AP_BASE_PRICE;
+let apSellForCashPrice = AP_BASE_SELL_PRICE;
+let apBuyForCashPrice = AP_BASE_BUY_PRICE;
+let apLiquidationQuantity = 0;
 
 let battleUnits = { 
     player: [], 
@@ -250,6 +254,7 @@ let allTimeBattery2Built = 0;
 let allTimeBattery3Built = 0;
 let asteroidsMinedThisRun = 0;
 let formationGoal = null;
+let liquidationValue = 0;
 
 //FLAGS
 let checkRocketFuellingStatus = {
@@ -316,8 +321,9 @@ let wasAutoSaveToggled = false;
 let enemyFleetAdjustedForDiplomacy = false;
 let apAwardedThisRun = false;
 let galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
-let galacticMarketLiquidationAuthorization = false;
+let galacticMarketLiquidationAuthorization = 'no';
 let hasClickedOutgoingOptionGalacticMarket = false;
+let liquidatedThisRun = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -666,7 +672,10 @@ export function resetAllVariablesOnRebirth() {
     galacticMarketOutgoingQuantitySelectionType = 'select';
     galacticMarketSellApForCashQuantity = 'select';
     currentGalacticMarketCommission = 10;
-    apCashPrice = AP_BASE_PRICE;
+    apSellForCashPrice = AP_BASE_SELL_PRICE;
+    apBuyForCashPrice = AP_BASE_BUY_PRICE;
+    liquidationValue = 0;
+    apLiquidationQuantity = 0;
     
     //STATS PAGE LOGGERS
     starStudyRange = 0;
@@ -734,8 +743,9 @@ export function resetAllVariablesOnRebirth() {
     enemyFleetAdjustedForDiplomacy = false;
     apAwardedThisRun = false;
     galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
-    galacticMarketLiquidationAuthorization = false;
+    galacticMarketLiquidationAuthorization = 'no';
     hasClickedOutgoingOptionGalacticMarket = false;
+    liquidatedThisRun = false;
 
     setCurrentPrecipitationRate(0);
     stopWeatherEffect();
@@ -881,6 +891,7 @@ export function captureGameStatusForSaving(type) {
         enemyFleetAdjustedForDiplomacy: enemyFleetAdjustedForDiplomacy,
         apAwardedThisRun: apAwardedThisRun,
         rebirthPossible: rebirthPossible,
+        liquidatedThisRun: liquidatedThisRun
     }
 
     return gameState;
@@ -1039,6 +1050,7 @@ export function restoreGameStatus(gameState, type) {
             enemyFleetAdjustedForDiplomacy = gameState.flags.enemyFleetAdjustedForDiplomacy ?? false;
             apAwardedThisRun = gameState.flags.apAwardedThisRun ?? false;
             rebirthPossible = gameState.flags.rebirthPossible ?? false;
+            liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
 
             initializeAutoSave();
             selectTheme(getCurrentTheme());
@@ -2813,16 +2825,56 @@ export function getCurrentGalacticMarketCommission() {
     return currentGalacticMarketCommission;
 }
 
-export function setApCashPrice(value) {
-    apCashPrice = value;
+export function setApSellForCashPrice(value) {
+    apSellForCashPrice = value;
 }
 
-export function getApCashPrice() {
-    return apCashPrice;
+export function getApSellForCashPrice() {
+    return apSellForCashPrice;
 }
 
-export function getApBasePrice() {
-    return AP_BASE_PRICE;
+export function getApBaseSellPrice() {
+    return AP_BASE_SELL_PRICE;
+}
+
+export function setApBuyPrice(value) {
+    apBuyForCashPrice = value;
+}
+
+export function getApBuyPrice() {
+    return apBuyForCashPrice;
+}
+
+export function getApBaseBuyPrice() {
+    return AP_BASE_BUY_PRICE;
+}
+
+export function setLiquidationValue(value) {
+    liquidationValue = value;
+}
+
+export function getLiquidationValue() {
+    return liquidationValue;
+}
+
+export function setApLiquidationQuantity(value) {
+    apLiquidationQuantity = value;
+}
+
+export function getApLiquidationQuantity() {
+    return apLiquidationQuantity;
+}
+
+export function getCashLiquidationModifier() {
+    return CASH_LIQUIDATION_MODIFIER;
+}
+
+export function getLiquidatedThisRun() {
+    return liquidatedThisRun;
+}
+
+export function setLiquidatedThisRun(value) {
+    liquidatedThisRun = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

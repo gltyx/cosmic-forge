@@ -1,7 +1,17 @@
 import {
-    getApBasePrice,
-    getApCashPrice,
-    setApCashPrice,
+    getLiquidatedThisRun,
+    setLiquidatedThisRun,
+    getCashLiquidationModifier,
+    getApLiquidationQuantity,
+    setApLiquidationQuantity,
+    setLiquidationValue,
+    getLiquidationValue,
+    getApBaseBuyPrice,
+    getApBuyPrice,
+    setApBuyPrice,
+    getApBaseSellPrice,
+    getApSellForCashPrice,
+    setApSellForCashPrice,
     setHasClickedOutgoingOptionGalacticMarket,
     getHasClickedOutgoingOptionGalacticMarket,
     setSettledStars,
@@ -45,6 +55,7 @@ import {
     setStarShipTravelling,
     setStarShipBuilt,
     getAscendencyPoints,
+    setAscendencyPoints,
     getRocketUserName,
     getCanFuelRockets,
     setRocketDirection,
@@ -3528,9 +3539,7 @@ function galacticMarketChecks() {
         const galacticMarketTradeConfirmButton = document.querySelector('.galactic-market-confirm-trade-button');
 
         const galacticMarketConfirmSellApButton = document.querySelector('.galactic-market-confirm-sell-ap-button');
-
-        const galacticMarketLiquidateDropDown = document.getElementById('galacticMarketLiquidateDropDown');
-        const galacticMarketLiquidateForApConfirm = document.getElementById('galacticMarketLiquidateForApConfirm');
+        const galacticMarketLiquidateForApConfirmButton = document.querySelector('.galactic-market-confirm-liquidate-button');
 
         if (getGalacticMarketOutgoingStockType() !== 'select' && getHasClickedOutgoingOptionGalacticMarket()) {
             removeAndReplaceOutgoingOptionFromIncomingDropDown(galacticMarketOutgoingStockTypeDropDown, galacticMarketIncomingStockTypeDropDown);
@@ -3645,18 +3654,89 @@ function galacticMarketChecks() {
             galacticMarketConfirmSellApButton.classList.remove('green-ready-text');
             galacticMarketConfirmSellApButton.classList.add('red-disabled-text');
         }
+        //-------------------
+        if (getGalacticMarketLiquidationAuthorization() === 'yes') {
+            calculateLiquidationValue();
+        } else {
+            document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = 0;
+        }
+        
+        if (!getLiquidatedThisRun() && getApLiquidationQuantity() > 0) {
+            galacticMarketLiquidateForApConfirmButton.classList.add('green-ready-text');
+            galacticMarketLiquidateForApConfirmButton.classList.remove('red-disabled-text');
+        } else {
+            galacticMarketLiquidateForApConfirmButton.classList.remove('green-ready-text');
+            galacticMarketLiquidateForApConfirmButton.classList.add('red-disabled-text');
+        }
     }
 }
 
+export function calculateLiquidationValue() {
+    const resourcesToInclude = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const compoundsToInclude = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
+
+    let totalLiquidationValue = 0;
+
+    resourcesToInclude.forEach(resource => {
+        const saleValue = getResourceDataObject('resources', [`${resource}`, 'saleValue']);
+        const quantity = getResourceDataObject('resources', [`${resource}`, 'quantity']);
+        
+        if (saleValue !== null && quantity !== null) {
+            totalLiquidationValue += saleValue * quantity;
+        }
+    });
+
+    compoundsToInclude.forEach(compound => {
+        const saleValue = getResourceDataObject('compounds', [`${compound}`, 'saleValue']);
+        const quantity = getResourceDataObject('compounds', [`${compound}`, 'quantity']);
+        
+        if (saleValue !== null && quantity !== null) {
+            totalLiquidationValue += saleValue * quantity;
+        }
+    });
+
+    const cash = getResourceDataObject('currency', ['cash']) / getCashLiquidationModifier();
+    if (cash !== null) {
+        totalLiquidationValue += cash;
+    }
+
+    setLiquidationValue(totalLiquidationValue);
+    const apCost = getApBuyPrice();
+    const apAmount = Math.floor(totalLiquidationValue / apCost);
+
+    setApLiquidationQuantity(apAmount);
+    document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = getApLiquidationQuantity();
+}
+
+export function galacticMarketLiquidateForAp(quantityOfAp) {
+    const resourcesToInclude = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const compoundsToInclude = ['diesel', 'glass', 'steel', 'concrete', 'water', 'titanium'];
+
+    resourcesToInclude.forEach(resource => {
+        setResourceDataObject(0, 'resources', [`${resource}`, 'quantity']);
+    });
+
+    compoundsToInclude.forEach(compound => {
+        setResourceDataObject(0, 'compounds', [`${compound}`, 'quantity']);
+    });
+
+    setResourceDataObject(0, 'currency', ['cash']);
+
+    const newAscendencyPoints = Math.floor(getAscendencyPoints() + quantityOfAp);
+    setAscendencyPoints(newAscendencyPoints);
+    setLiquidatedThisRun(true);
+}
+
+
 export function galacticMarketSellApForCash(quantityOfAp) {
-    const currentApPrice = getApCashPrice();
+    const currentApPrice = getApSellForCashPrice();
     const amountToCredit = quantityOfAp * currentApPrice;
     setResourceDataObject(getAscendencyPoints() - quantityOfAp, 'ascendencyPoints', ['quantity']);
     setResourceDataObject(getResourceDataObject('currency', ['cash']) + amountToCredit, 'currency', ['cash']);
 }
 
 function calculateAndDisplayCashGainForAp(quantityToSell) {
-    const apCashPrice = getApCashPrice();    
+    const apCashPrice = getApSellForCashPrice();    
     const totalApIncomeValue = quantityToSell * apCashPrice;
     
     document.getElementById('galacticMarketCashGainQuantity').innerHTML = 
@@ -4855,8 +4935,8 @@ function startInitialTimers() {
     function startMarketCycle() {
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 2;
         const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-        const durationInSeconds = randomDurationInMs / 1000;
-        //const durationInSeconds = 30; //DEBUG
+        //const durationInSeconds = randomDurationInMs / 1000;
+        const durationInSeconds = 30; //DEBUG
     
         let timeLeft = durationInSeconds;
 
@@ -4869,6 +4949,7 @@ function startInitialTimers() {
                 timeLeft -= 1;
             } else {
                 calculateNewApForCashPrice();
+                calculateNewLiquidationPricePerApGained();
                 resetCommission();
                 applyMarketChanges();
                 startMarketCycle();
@@ -4877,14 +4958,24 @@ function startInitialTimers() {
     }
 }
 
+function calculateNewLiquidationPricePerApGained() {
+    const basePrice = getApBaseBuyPrice();
+    const minPrice = basePrice * 1;
+    const maxPrice = basePrice * 1.6;
+    
+    const newPrice = Math.floor(Math.random() * (maxPrice - minPrice + 1) + minPrice);
+    
+    setApBuyPrice(newPrice);
+}
+
 function calculateNewApForCashPrice() {
-    const basePrice = getApBasePrice();
+    const basePrice = getApBaseSellPrice();
     const minPrice = basePrice * 0.6;
     const maxPrice = basePrice * 1.4;
     
     const newPrice = Math.floor(Math.random() * (maxPrice - minPrice + 1) + minPrice);
     
-    setApCashPrice(newPrice);
+    setApSellForCashPrice(newPrice);
 }
 
 function resetCommission() {

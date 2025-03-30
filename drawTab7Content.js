@@ -1,6 +1,6 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
-import { setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
-import { galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
+import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
+import { galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -36,6 +36,9 @@ export function drawTab7Content(heading, optionContentElement) {
         setGalacticMarketIncomingStockType('select');
         setGalacticMarketOutgoingQuantitySelectionType('select');
         setGalacticMarketIncomingQuantity(0);
+        setGalacticMarketLiquidationAuthorization('no');
+        setGalacticMarketSellApForCashQuantity('select');
+        setApLiquidationQuantity(0);
         const galacticMarketItemSelectRow = createOptionRow(
             'galacticMarketItemSelectRow',
             null,
@@ -204,12 +207,12 @@ export function drawTab7Content(heading, optionContentElement) {
                 setGalacticMarketLiquidationAuthorization(value);
             }),
             createButton(`LIQUIDATE`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-liquidate-button'], () => {
-                //galacticMarketLiquidateForAp();
+                galacticMarketLiquidateForAp(getApLiquidationQuantity());
             }, null, null, null, null, null, true, null, 'galacticMarketLiquidateForApConfirm'),
             null,
             null,
             null,
-            `AP GAIN: <span id ="galacticMarketCashGainQuantity" class="green-ready-text invisible">0</span>`, //updateDescriptionRow('galacticMarketLiquidateForAPRow', 'content2'); when user has used this up
+            `AP GAIN: <span id ="galacticMarketApLiquidationQuantity" class="green-ready-text">0</span>`, //updateDescriptionRow('galacticMarketLiquidateForAPRow', 'content2'); when user has used this up
             '',
             null,
             null,
