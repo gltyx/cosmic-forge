@@ -117,7 +117,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogenAutoBuyer1Row',
             getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Hydrogen Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB1Quantity', 'autoBuyer', true, 'tier1', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'hydrogenAB1Quantity', ['autoBuyer-building-quantity']),
@@ -142,7 +142,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogenAutoBuyer2Row',
             getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Hydrogen Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB2Quantity', 'autoBuyer', true, 'tier2', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'hydrogenAB2Quantity', ['autoBuyer-building-quantity']),
@@ -167,7 +167,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogenAutoBuyer3Row',
             getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Hydrogen Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB3Quantity', 'autoBuyer', true, 'tier3', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'hydrogenAB3Quantity', ['autoBuyer-building-quantity']),
@@ -192,7 +192,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'hydrogenAutoBuyer4Row',
             getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Hydrogen Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Hydrogen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'hydrogenAB4Quantity', 'autoBuyer', true, 'tier4', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'hydrogenAB4Quantity', ['autoBuyer-building-quantity']),
@@ -326,7 +326,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'heliumAutoBuyer1Row',
             getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Helium Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB1Quantity', 'autoBuyer', true, 'tier1', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'heliumAB1Quantity', ['autoBuyer-building-quantity']),
@@ -351,7 +351,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'heliumAutoBuyer2Row',
             getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Helium Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB2Quantity', 'autoBuyer', true, 'tier2', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'heliumAB2Quantity', ['autoBuyer-building-quantity']),
@@ -376,7 +376,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'heliumAutoBuyer3Row',
             getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Helium Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB3Quantity', 'autoBuyer', true, 'tier3', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'heliumAB3Quantity', ['autoBuyer-building-quantity']),
@@ -401,7 +401,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'heliumAutoBuyer4Row',
             getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Helium Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Helium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'heliumAB4Quantity', 'autoBuyer', true, 'tier4', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'heliumAB4Quantity', ['autoBuyer-building-quantity']),
@@ -543,9 +543,9 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbonAutoBuyer1Row',
             getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Carbon Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB1Quantity', 'autoBuyer', true, 'tier1', 'carbon', 'resources')
-            }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier1', 'resource'),
+            }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier1', 'resource'),            
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'carbonAB1Quantity', ['autoBuyer-building-quantity']),
             null,
             null,
@@ -568,7 +568,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbonAutoBuyer2Row',
             getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Carbon Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB2Quantity', 'autoBuyer', true, 'tier2', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'carbonAB2Quantity', ['autoBuyer-building-quantity']),
@@ -593,7 +593,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbonAutoBuyer3Row',
             getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Carbon Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB3Quantity', 'autoBuyer', true, 'tier3', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'carbonAB3Quantity', ['autoBuyer-building-quantity']),
@@ -618,7 +618,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'carbonAutoBuyer4Row',
             getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Carbon Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Carbon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'carbonAB4Quantity', 'autoBuyer', true, 'tier4', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'carbonAB4Quantity', ['autoBuyer-building-quantity']),
@@ -753,7 +753,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neonAutoBuyer1Row',
             getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Neon Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'neonAB1Quantity', 'autoBuyer', true, 'tier1', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier0', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'neonAB1Quantity', ['autoBuyer-building-quantity']),
@@ -778,7 +778,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neonAutoBuyer2Row',
             getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Neon Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'neonAB2Quantity', 'autoBuyer', true, 'tier2', 'neon', 'resource')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'neonAB2Quantity', ['autoBuyer-building-quantity']),
@@ -803,7 +803,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neonAutoBuyer3Row',
             getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Neon Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'neonAB3Quantity', 'autoBuyer', true, 'tier3', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'neonAB3Quantity', ['autoBuyer-building-quantity']),
@@ -828,7 +828,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'neonAutoBuyer4Row',
             getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Neon Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'neonAB4Quantity', 'autoBuyer', true, 'tier4', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'neonAB4Quantity', ['autoBuyer-building-quantity']),
@@ -963,7 +963,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygenAutoBuyer1Row',
             getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Oxygen Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'oxygenAB1Quantity', 'autoBuyer', true, 'tier1', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'oxygenAB1Quantity', ['autoBuyer-building-quantity']),
@@ -988,7 +988,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygenAutoBuyer2Row',
             getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Oxygen Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'oxygenAB2Quantity', 'autoBuyer', true, 'tier2', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'oxygenAB2Quantity', ['autoBuyer-building-quantity']),
@@ -1013,7 +1013,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygenAutoBuyer3Row',
             getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Oxygen Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'oxygenAB3Quantity', 'autoBuyer', true, 'tier3', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'oxygenAB3Quantity', ['autoBuyer-building-quantity']),
@@ -1038,7 +1038,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'oxygenAutoBuyer4Row',
             getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Oxygen Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Oxygen /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'oxygenAB4Quantity', 'autoBuyer', true, 'tier4', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'oxygenAB4Quantity', ['autoBuyer-building-quantity']),
@@ -1161,7 +1161,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodiumAutoBuyer1Row',
             getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Sodium Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'sodiumAB1Quantity', 'autoBuyer', true, 'tier1', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'sodiumAB1Quantity', ['autoBuyer-building-quantity']),
@@ -1186,7 +1186,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodiumAutoBuyer2Row',
             getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Sodium Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'sodiumAB2Quantity', 'autoBuyer', true, 'tier2', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'sodiumAB2Quantity', ['autoBuyer-building-quantity']),
@@ -1211,7 +1211,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodiumAutoBuyer3Row',
             getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Sodium Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'sodiumAB3Quantity', 'autoBuyer', true, 'tier3', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'sodiumAB3Quantity', ['autoBuyer-building-quantity']),
@@ -1236,7 +1236,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'sodiumAutoBuyer4Row',
             getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Sodium Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Sodium /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'sodiumAB4Quantity', 'autoBuyer', true, 'tier4', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'sodiumAB4Quantity', ['autoBuyer-building-quantity']),
@@ -1371,7 +1371,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'siliconAutoBuyer1Row',
             getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Silicon Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'siliconAB1Quantity', 'autoBuyer', true, 'tier1', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'siliconAB1Quantity', ['autoBuyer-building-quantity']),
@@ -1396,7 +1396,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'siliconAutoBuyer2Row',
             getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Silicon Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'siliconAB2Quantity', 'autoBuyer', true, 'tier2', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'siliconAB2Quantity', ['autoBuyer-building-quantity']),
@@ -1421,7 +1421,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'siliconAutoBuyer3Row',
             getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Silicon Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'siliconAB3Quantity', 'autoBuyer', true, 'tier3', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'siliconAB3Quantity', ['autoBuyer-building-quantity']),
@@ -1446,7 +1446,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'siliconAutoBuyer4Row',
             getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Silicon Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Silicon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'siliconAB4Quantity', 'autoBuyer', true, 'tier4', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'siliconAB4Quantity', ['autoBuyer-building-quantity']),
@@ -1569,7 +1569,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'ironAutoBuyer1Row',
             getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'nameUpgrade']),
             'Iron Auto Buyer Tier 1:',
-            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'rate']) * getTimerRateRatio())} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'ironAB1Quantity', 'autoBuyer', true, 'tier1', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'ironAB1Quantity', ['autoBuyer-building-quantity']),
@@ -1594,7 +1594,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'ironAutoBuyer2Row',
             getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Iron Auto Buyer Tier 2:',
-            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'ironAB2Quantity', 'autoBuyer', true, 'tier2', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'ironAB2Quantity', ['autoBuyer-building-quantity']),
@@ -1619,7 +1619,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'ironAutoBuyer3Row',
             getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'nameUpgrade']),
             'Iron Auto Buyer Tier 3:',
-            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'rate']) * getTimerRateRatio())} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'ironAB3Quantity', 'autoBuyer', true, 'tier3', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'ironAB3Quantity', ['autoBuyer-building-quantity']),
@@ -1644,7 +1644,7 @@ export function drawTab1Content(heading, optionContentElement) {
             'ironAutoBuyer4Row',
             getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'nameUpgrade']),
             'Iron Auto Buyer Tier 4:',
-            createButton(`Add ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio()} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
+            createButton(`Add ${Math.floor(getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'rate']) * getTimerRateRatio())} Iron /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'ironAB4Quantity', 'autoBuyer', true, 'tier4', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'ironAB4Quantity', ['autoBuyer-building-quantity']),

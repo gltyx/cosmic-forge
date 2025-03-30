@@ -251,6 +251,22 @@ import {
     setupNewRunStarSystem,
     getAscendencyBuffDataObject,
     setAscendencyBuffDataObject,
+    getBuffEfficientStorageData,
+    getBuffSmartAutoBuyersData,
+    getBuffAdvancedMarketData,
+    getBuffJumpstartResearchData,
+    getBuffOptimizedPowerGridsData,
+    getBuffBulkSellBonusData,
+    getBuffFusionEfficiencyData,
+    getBuffTechSynergyData,
+    getBuffHyperBatteriesData,
+    getBuffScannerEnhancementData,
+    getBuffRocketFuelOptimizationData,
+    getBuffEnhancedMiningData,
+    getBuffQuantumEnginesData,
+    getBuffAPYieldMultiplierData,
+    getBuffParallelUniverseInsightData,
+    getBuffGalacticInfluenceData
 } from "./resourceDataObject.js";
 
 import { 
@@ -4562,7 +4578,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
 export function increaseResourceStorage(elementIds, resource, itemTypeArray) {
     let amountToDeductArray = [];
     let resourceToDeductNamesArray;
-    const increaseFactor = getIncreaseStorageFactor();
+    const increaseFactor = getIncreaseStorageFactor() * (getBuffEfficientStorageData()['boughtYet'] + 1);
 
     if (resource[0] === 'water') {
         resourceToDeductNamesArray = resource;
@@ -5260,6 +5276,10 @@ export function purchaseBuff(buff) {
     if (currentAscendencyPoints >= cost) {
         setResourceDataObject(currentAscendencyPoints - cost, 'ascendencyPoints', ['quantity']);
         setAscendencyBuffDataObject(buffData.boughtYet + 1, buff, ['boughtYet']);
+    }
+
+    if (buff === 'smartAutoBuyers') {
+        buffSmartAutoBuyersRateMultiplier();
     }
 }
 
@@ -8135,6 +8155,36 @@ function resetUIElementsOnRebirth() {
     resetTab5ClassesRebirth();
     resetTab6ClassesRebirth();
 }
+
+export function buffSmartAutoBuyersRateMultiplier() {
+    const multiplier = getAscendencyBuffDataObject()['smartAutoBuyers'].effectCategoryMagnitude;
+
+    const resources = getResourceDataObject('resources');
+    const compounds = getResourceDataObject('compounds');
+
+    function processRates(data, key) {
+        Object.keys(data).forEach(itemKey => {
+            const item = data[itemKey];
+
+            if (item.upgrades && item.upgrades.autoBuyer) {
+                const tiers = item.upgrades.autoBuyer;
+
+                Object.keys(tiers).forEach(tierKey => {
+                    if (tierKey.startsWith('tier')) {
+                        const oldRate = tiers[tierKey].rate;
+                        const newRate = oldRate * multiplier;
+
+                        setResourceDataObject(newRate, key, [itemKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                    }
+                });
+            }
+        });
+    }
+
+    processRates(resources, 'resources');
+    processRates(compounds, 'compounds');
+}
+
 
 //===============================================================================================================
 

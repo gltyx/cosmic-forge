@@ -1052,12 +1052,12 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         buffEfficientStorageRow: {
-            content1: "Improves storage expansion efficiency, doubling its effect.",
+            content1: "When you upgrade storage capacity of a Resource or Compound, it is doubled an extra time per purchase up to three times!",
             content2: "",
             updateAt: ""
         },
         buffSmartAutoBuyersRow: {
-            content1: "Enhances auto buyers, increasing their efficiency by 25%.",
+            content1: "Enhances auto buyers, increasing their efficiency by 50% per purchase.",
             content2: "",
             updateAt: ""
         },

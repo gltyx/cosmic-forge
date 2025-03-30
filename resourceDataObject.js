@@ -1,3 +1,4 @@
+import { getAscendencyPoints } from "./constantsAndGlobalVars.js";
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 
@@ -978,7 +979,7 @@ export const ascendencyBuffs = {
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 15,
         effectCategory: "upgradeEffectMultiplier",
-        effectCategoryMagnitude: 1.25,
+        effectCategoryMagnitude: 1.5,
         boughtYet: 0,
         timesRebuyable: 100000
     },
@@ -1141,6 +1142,70 @@ export const ascendencyBuffs = {
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function getBuffEfficientStorageData() {
+    return ascendencyBuffs["efficientStorage"];
+}
+
+export function getBuffSmartAutoBuyersData() {
+    return ascendencyBuffs["smartAutoBuyers"];
+}
+
+export function getBuffAdvancedMarketData() {
+    return ascendencyBuffs["advancedMarket"];
+}
+
+export function getBuffJumpstartResearchData() {
+    return ascendencyBuffs["jumpstartResearch"];
+}
+
+export function getBuffOptimizedPowerGridsData() {
+    return ascendencyBuffs["optimizedPowerGrids"];
+}
+
+export function getBuffBulkSellBonusData() {
+    return ascendencyBuffs["bulkSellBonus"];
+}
+
+export function getBuffFusionEfficiencyData() {
+    return ascendencyBuffs["fusionEfficiency"];
+}
+
+export function getBuffTechSynergyData() {
+    return ascendencyBuffs["techSynergy"];
+}
+
+export function getBuffHyperBatteriesData() {
+    return ascendencyBuffs["hyperBatteries"];
+}
+
+export function getBuffScannerEnhancementData() {
+    return ascendencyBuffs["scannerEnhancement"];
+}
+
+export function getBuffRocketFuelOptimizationData() {
+    return ascendencyBuffs["rocketFuelOptimization"];
+}
+
+export function getBuffEnhancedMiningData() {
+    return ascendencyBuffs["enhancedMining"];
+}
+
+export function getBuffQuantumEnginesData() {
+    return ascendencyBuffs["quantumEngines"];
+}
+
+export function getBuffAPYieldMultiplierData() {
+    return ascendencyBuffs["aPYieldMultiplier"];
+}
+
+export function getBuffParallelUniverseInsightData() {
+    return ascendencyBuffs["parallelUniverseInsight"];
+}
+
+export function getBuffGalacticInfluenceData() {
+    return ascendencyBuffs["galacticInfluence"];
+}
 
 export function copyStarDataToDestinationStarField(starName) {
     const stars = getStarSystemDataObject('stars');
