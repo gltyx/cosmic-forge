@@ -1,6 +1,6 @@
 import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
 import { setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization } from './constantsAndGlobalVars.js';
-import { galacticMarketTrade } from './game.js';
+import { galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     if (heading === 'Rebirth') {
@@ -175,12 +175,12 @@ export function drawTab7Content(heading, optionContentElement) {
                 setGalacticMarketSellApForCashQuantity(value);
             }),
             createButton(`SELL`, ['option-button', 'red-disabled-text', 'galactic-market-confirm-sell-ap-button'], () => {
-                //galacticMarketSellApForCash();
+                galacticMarketSellApForCash(getGalacticMarketSellApForCashQuantity());
             }, null, null, null, null, null, true, null, 'galacticMarketSellApForCashConfirm'),
             null,
             null,
             null,
-            `CASH GAIN: <span id ="galacticMarketCashGainQuantity" class="green-ready-text invisible notation">0</span>`,
+            `Cash Gain: <span id ="galacticMarketCashGainQuantity" class="green-ready-text notation">0</span>`,
             '',
             null,
             null,

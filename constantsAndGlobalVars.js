@@ -44,6 +44,7 @@ export const OFFLINE_GAINS_RATE = 0.334;
 export const ENEMY_FLEET_SPEED_AIR = 5;
 export const ENEMY_FLEET_SPEED_LAND = 2;
 export const ENEMY_FLEET_SPEED_SEA = 1;
+export const AP_BASE_PRICE = 100000;
 
 export const enemyFleetData = {
     air: {
@@ -121,6 +122,7 @@ let currentStarObject = null;
 let starShipStatus = ['preconstruction', null];
 let runNumber = 1;
 let settledStars = [STARTING_STAR_SYSTEM];
+let apCashPrice = AP_BASE_PRICE;
 
 let battleUnits = { 
     player: [], 
@@ -664,6 +666,7 @@ export function resetAllVariablesOnRebirth() {
     galacticMarketOutgoingQuantitySelectionType = 'select';
     galacticMarketSellApForCashQuantity = 'select';
     currentGalacticMarketCommission = 10;
+    apCashPrice = AP_BASE_PRICE;
     
     //STATS PAGE LOGGERS
     starStudyRange = 0;
@@ -2808,6 +2811,18 @@ export function setCurrentGalacticMarketCommission(value) {
 
 export function getCurrentGalacticMarketCommission() {
     return currentGalacticMarketCommission;
+}
+
+export function setApCashPrice(value) {
+    apCashPrice = value;
+}
+
+export function getApCashPrice() {
+    return apCashPrice;
+}
+
+export function getApBasePrice() {
+    return AP_BASE_PRICE;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

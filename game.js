@@ -1,4 +1,7 @@
 import {
+    getApBasePrice,
+    getApCashPrice,
+    setApCashPrice,
     setHasClickedOutgoingOptionGalacticMarket,
     getHasClickedOutgoingOptionGalacticMarket,
     setSettledStars,
@@ -3524,9 +3527,7 @@ function galacticMarketChecks() {
         const galacticMarketQuantityTextArea = document.getElementById('galacticMarketQuantityTextArea');
         const galacticMarketTradeConfirmButton = document.querySelector('.galactic-market-confirm-trade-button');
 
-        const galacticMarketSellApForCashDropDown = document.getElementById('galacticMarketSellApForCashDropDown');
-        const galacticMarketConfirmSellApButton = document.getElementById('galacticMarketSellApForCashConfirm');
-        const galacticMarketCashGainQuantity = document.getElementById('galacticMarketCashGainQuantity');
+        const galacticMarketConfirmSellApButton = document.querySelector('.galactic-market-confirm-sell-ap-button');
 
         const galacticMarketLiquidateDropDown = document.getElementById('galacticMarketLiquidateDropDown');
         const galacticMarketLiquidateForApConfirm = document.getElementById('galacticMarketLiquidateForApConfirm');
@@ -3628,7 +3629,38 @@ function galacticMarketChecks() {
             galacticMarketTradeConfirmButton.classList.remove('green-ready-text');
             galacticMarketTradeConfirmButton.classList.add('red-disabled-text');
         }
+
+        //-------------------
+        if (getGalacticMarketSellApForCashQuantity() !== 'select') {
+            calculateAndDisplayCashGainForAp(getGalacticMarketSellApForCashQuantity());
+        } else {
+            document.getElementById('galacticMarketCashGainQuantity').innerHTML = 
+            getCurrencySymbol() === '€' ? 0 + getCurrencySymbol() : getCurrencySymbol() + 0;
+        }
+
+        if (getGalacticMarketSellApForCashQuantity() !== 'select' && getAscendencyPoints() >= parseNumber(getGalacticMarketSellApForCashQuantity())) {
+            galacticMarketConfirmSellApButton.classList.add('green-ready-text');
+            galacticMarketConfirmSellApButton.classList.remove('red-disabled-text');
+        } else {
+            galacticMarketConfirmSellApButton.classList.remove('green-ready-text');
+            galacticMarketConfirmSellApButton.classList.add('red-disabled-text');
+        }
     }
+}
+
+export function galacticMarketSellApForCash(quantityOfAp) {
+    const currentApPrice = getApCashPrice();
+    const amountToCredit = quantityOfAp * currentApPrice;
+    setResourceDataObject(getAscendencyPoints() - quantityOfAp, 'ascendencyPoints', ['quantity']);
+    setResourceDataObject(getResourceDataObject('currency', ['cash']) + amountToCredit, 'currency', ['cash']);
+}
+
+function calculateAndDisplayCashGainForAp(quantityToSell) {
+    const apCashPrice = getApCashPrice();    
+    const totalApIncomeValue = quantityToSell * apCashPrice;
+    
+    document.getElementById('galacticMarketCashGainQuantity').innerHTML = 
+    getCurrencySymbol() === '€' ? totalApIncomeValue + getCurrencySymbol() : getCurrencySymbol() + totalApIncomeValue;
 }
 
 function populateSummaryStockType() {
@@ -4836,12 +4868,23 @@ function startInitialTimers() {
             if (timeLeft > 0) {
                 timeLeft -= 1;
             } else {
+                calculateNewApForCashPrice();
                 resetCommission();
                 applyMarketChanges();
                 startMarketCycle();
             }
         }, 1000);
     }
+}
+
+function calculateNewApForCashPrice() {
+    const basePrice = getApBasePrice();
+    const minPrice = basePrice * 0.6;
+    const maxPrice = basePrice * 1.4;
+    
+    const newPrice = Math.floor(Math.random() * (maxPrice - minPrice + 1) + minPrice);
+    
+    setApCashPrice(newPrice);
 }
 
 function resetCommission() {
