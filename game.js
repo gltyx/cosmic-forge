@@ -260,7 +260,7 @@ import {
     getBuffFusionEfficiencyData,
     getBuffTechSynergyData,
     getBuffHyperBatteriesData,
-    getBuffScannerEnhancementData,
+    getBuffAsteroidScannerBoostData,
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
     getBuffQuantumEnginesData,
@@ -3572,7 +3572,7 @@ function checkAscendencyButtons() {
             calculatedCost *= Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet);
         }
 
-        if (getAscendencyPoints() >= calculatedCost && ((buff.rebuyable && buff.timesRebuyable >= buff.boughtYet) || (!buff.rebuyable && buff.boughtYet === 0))) {
+        if (getAscendencyPoints() >= calculatedCost && ((buff.rebuyable && buff.timesRebuyable > buff.boughtYet) || (!buff.rebuyable && buff.boughtYet === 0))) {
             button.classList.add('green-ready-text');
             button.classList.remove('red-disabled-text');
         } else {
@@ -6573,7 +6573,7 @@ export function fuelRockets() {
 
     rocketsToFuel.forEach((rocket, index) => {
         const rocketLaunchButton = document.querySelector('button.rocket-fuelled-check');
-        const fuelRate = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', 'tier1', 'rate']);
+        const fuelRate = getResourceDataObject('space', ['upgrades', rocket, 'autoBuyer', 'tier1', 'rate']) * (getBuffRocketFuelOptimizationData()['boughtYet'] + 1);
         const fuelQuantity = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantity']);
         const fullLevel = getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch']);
 
@@ -6862,6 +6862,8 @@ function generateAsteroidData(name) {
 
     const distance = Math.floor(Math.random() * (maxDistance - minDistance + 1)) + minDistance;
     const distancePercentile = (distance - minDistance) / (maxDistance - minDistance);
+
+    const asteroidScannerBoostBoughtTimes = getBuffAsteroidScannerBoostData()['boughtYet'];
     
     if (distancePercentile >= 0.76) {
         distanceClass = 'red-disabled-text';
@@ -6875,22 +6877,43 @@ function generateAsteroidData(name) {
 
     const rarityRoll = Math.floor(Math.random() * 101);
     let rarity, rarityClass;
-    if (rarityRoll <= 50) { //50
-        rarity = "Common";
-        rarityClass = 'red-disabled-text';
-    } else if (rarityRoll <= 70) { //70
-        rarity = "Uncommon";
-        rarityClass = 'warning-orange-text';
-    } else if (rarityRoll <= 98) { //98
-        rarity = "Rare";
-        rarityClass = 'none';
+
+    if (asteroidScannerBoostBoughtTimes === 1) {
+        if (rarityRoll <= 50) {
+            rarity = "Uncommon";
+            rarityClass = 'warning-orange-text';
+        } else if (rarityRoll <= 90) {
+            rarity = "Rare";
+            rarityClass = 'none';
+        } else {
+            rarity = "Legendary";
+            rarityClass = 'green-ready-text';
+        }
+    } else if (asteroidScannerBoostBoughtTimes === 2) {
+        if (rarityRoll <= 85) {
+            rarity = "Rare";
+            rarityClass = 'none';
+        } else {
+            rarity = "Legendary";
+            rarityClass = 'green-ready-text';
+        }
     } else {
-        rarity = "Legendary";
-        rarityClass = 'green-ready-text';
+        if (rarityRoll <= 50) {
+            rarity = "Common";
+            rarityClass = 'red-disabled-text';
+        } else if (rarityRoll <= 70) {
+            rarity = "Uncommon";
+            rarityClass = 'warning-orange-text';
+        } else if (rarityRoll <= 98) {
+            rarity = "Rare";
+            rarityClass = 'none';
+        } else {
+            rarity = "Legendary";
+            rarityClass = 'green-ready-text';
+        }
     }
 
-    // Simplified ease of extraction logic
-    const easeOfExtraction = Math.floor(Math.random() * 10) + 1;  // Random number between 1 and 10
+    const easeOfExtraction = Math.floor(Math.random() * 10) + 1;
     let easeClass;
     if (easeOfExtraction <= 2) {
         easeClass = 'green-ready-text';
@@ -6912,10 +6935,6 @@ function generateAsteroidData(name) {
     } else {
         quantity = Math.floor(Math.random() * (10000 - 5000 + 1)) + 5000;
     }
-
-    //DEBUG
-    //quantity = 10;
-    //
 
     let quantityClass;
     const minQuantity = rarity === "Common" ? 300 : (rarity === "Uncommon" ? 700 : (rarity === "Rare" ? 1100 : 5000));

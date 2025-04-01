@@ -1096,13 +1096,13 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffScannerEnhancementRow: {
-            content1: "Doubles the effectiveness of asteroid detection, increasing resource discovery rates.",
+        buffAsteroidScannerBoostRow: {
+            content1: "Minimum rarity of asteroids upgraded by 1 - Buy once, minimum Asteroid rarity is Uncommon etc.",
             content2: "",
             updateAt: ""
         },
         buffRocketFuelOptimizationRow: {
-            content1: "Reduces fuel costs for space travel by 30%.",
+            content1: "Reduces fuelling time for rockets by 50%",
             content2: "",
             updateAt: ""
         },

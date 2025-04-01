@@ -961,7 +961,7 @@ export let galacticMarket = {
 };
 
 export const ascendencyBuffs = {
-    "efficientStorage": {
+    "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",
         rebuyable: true,
@@ -972,7 +972,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 3
     },
-    "smartAutoBuyers": {
+    "smartAutoBuyers": {  //done
         name: "Smart Auto Buyers",
         description: "buffSmartAutoBuyersRow",
         rebuyable: true,
@@ -983,7 +983,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "advancedMarket": {
+    "advancedMarket": {/////////////////////
         name: "Advanced Market",
         description: "buffAdvancedMarketRow",
         rebuyable: true,
@@ -994,29 +994,29 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "jumpstartResearch": {
+    "jumpstartResearch": {  //done
         name: "Jumpstart Research",
         description: "buffJumpstartResearchRow",
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
-        baseCostAp: 25,
+        baseCostAp: 30,
         effectCategory: "resourceBooster",
         effectCategoryMagnitude: 100,
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "optimizedPowerGrids": {
+    "optimizedPowerGrids": {  //done
         name: "Optimized Power Grids",
         description: "buffOptimizedPowerGridsRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
-        baseCostAp: 35,
+        baseCostAp: 25,
         effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.2,
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "bulkSellBonus": {
+    "bulkSellBonus": {/////////////////////////
         name: "Bulk Sell Bonus",
         description: "buffBulkSellBonusRow",
         rebuyable: true,
@@ -1027,7 +1027,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "fusionEfficiency": {
+    "fusionEfficiency": {/////////////////////////
         name: "Fusion Efficiency",
         description: "buffFusionEfficiencyRow",
         rebuyable: false,
@@ -1038,7 +1038,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "techSynergy": {
+    "techSynergy": {////////////////////////
         name: "Tech Synergy",
         description: "buffTechSynergyRow",
         rebuyable: true,
@@ -1049,7 +1049,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "hyperBatteries": {
+    "hyperBatteries": {///////////////////////////
         name: "Hyper Batteries",
         description: "buffHyperBatteriesRow",
         rebuyable: false,
@@ -1060,25 +1060,25 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "scannerEnhancement": {
-        name: "Scanner Enhancement",
-        description: "buffScannerEnhancementRow",
-        rebuyable: false,
+    "asteroidScannerBoost": {  //done
+        name: "Asteroid Scanner Boost",
+        description: "buffAsteroidScannerBoostRow",
+        rebuyable: true,
         rebuyableIncreaseMultiple: 1,
-        baseCostAp: 80,
+        baseCostAp: 20,
         effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 2,
         boughtYet: 0,
-        timesRebuyable: 100000
+        timesRebuyable: 2
     },
-    "rocketFuelOptimization": {
+    "rocketFuelOptimization": {  //done
         name: "Rocket Fuel Optimization",
         description: "buffRocketFuelOptimizationRow",
-        rebuyable: true,
-        rebuyableIncreaseMultiple: 2,
-        baseCostAp: 90,
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 40,
         effectCategory: "priceReducer",
-        effectCategoryMagnitude: 0.7,
+        effectCategoryMagnitude: 0.5,
         boughtYet: 0,
         timesRebuyable: 100000
     },
@@ -1179,8 +1179,8 @@ export function getBuffHyperBatteriesData() {
     return ascendencyBuffs["hyperBatteries"];
 }
 
-export function getBuffScannerEnhancementData() {
-    return ascendencyBuffs["scannerEnhancement"];
+export function getBuffAsteroidScannerBoostData() {
+    return ascendencyBuffs["asteroidScannerBoost"];
 }
 
 export function getBuffRocketFuelOptimizationData() {
