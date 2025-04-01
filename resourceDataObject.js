@@ -1093,7 +1093,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 4
     },
-    "quantumEngines": {
+    "quantumEngines": { //done
         name: "Quantum Engines",
         description: "buffQuantumEnginesRow",
         rebuyable: true,
@@ -1104,7 +1104,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 10
     },
-    "aPYieldMultiplier": {
+    "aPYieldMultiplier": { //////////////////////
         name: "AP Yield Multiplier",
         description: "buffAPYieldMultiplierRow",
         rebuyable: true,
@@ -1115,7 +1115,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "parallelUniverseInsight": {
+    "parallelUniverseInsight": {//////////////////////////
         name: "Parallel Universe Insight",
         description: "buffParallelUniverseInsightRow",
         rebuyable: false,
@@ -1126,7 +1126,7 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "galacticInfluence": {
+    "galacticInfluence": { ///////////////////////////
         name: "Galactic Influence",
         description: "buffGalacticInfluenceRow",
         rebuyable: false,
