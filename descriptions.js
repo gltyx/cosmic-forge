@@ -1107,12 +1107,12 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         buffEnhancedMiningRow: {
-            content1: "Improves mining efficiency, increasing resource collection rates by 25%.",
+            content1: "Improves antimatter extraction efficiency, by 25% per purchase.",
             content2: "",
             updateAt: ""
         },
         buffQuantumEnginesRow: {
-            content1: "Upgrades starship engines, improving all travel-related efficiencies by 50%.",
+            content1: "Upgrades starship engines, halving travel time per purchase.",
             content2: "",
             updateAt: ""
         },

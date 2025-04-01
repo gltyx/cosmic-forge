@@ -248,7 +248,9 @@ export function drawTab7Content(heading, optionContentElement) {
                 null,
                 `${buff.name}:`,
                 createTextElement(
-                    `Rebuyable: <span class="green-ready-text">${buff.rebuyable ? "Yes" : "No"}</span>`,
+                    `Rebuyable: <span class="green-ready-text">
+                    ${buff.rebuyable ? (buff.timesRebuyable === 100000 ? "Yes" : buff.timesRebuyable) : "No"}
+                  </span>`,                  
                     `buff${capitaliseString(buffKey)}RebuyableText`,
                     ['buff-value']
                 ),                
@@ -257,7 +259,7 @@ export function drawTab7Content(heading, optionContentElement) {
                     purchaseBuff(buffKey, cost);
                 }, null, null, null, null, null, true, null, 'ascendency'),
                 createTextElement(
-                    `<span id="${buff.name.replace(/\s+/g, '').replace(/^./, str => str.toLowerCase())}CostText" class="green-ready-text">${cost} AP</span>`,
+                    `<span id="${buff.name.replace(/\s+/g, '').replace(/^./, str => str.toLowerCase())}CostText" class="green-ready-text">${Math.floor(cost)} AP</span>`,
                     'buffCost',
                     ['buff-value']
                 ),

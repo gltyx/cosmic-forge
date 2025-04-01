@@ -1082,27 +1082,27 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "enhancedMining": {
+    "enhancedMining": { //done
         name: "Enhanced Mining",
         description: "buffEnhancedMiningRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
-        baseCostAp: 100,
+        baseCostAp: 15,
         effectCategory: "upgradeEffectMultiplier",
-        effectCategoryMagnitude: 1.25,
+        effectCategoryMagnitude: 0.25,
         boughtYet: 0,
-        timesRebuyable: 100000
+        timesRebuyable: 4
     },
     "quantumEngines": {
         name: "Quantum Engines",
         description: "buffQuantumEnginesRow",
-        rebuyable: false,
-        rebuyableIncreaseMultiple: 1,
-        baseCostAp: 120,
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 1.2,
+        baseCostAp: 15,
         effectCategory: "upgradeEffectMultiplier",
-        effectCategoryMagnitude: 1.5,
+        effectCategoryMagnitude: 2,
         boughtYet: 0,
-        timesRebuyable: 100000
+        timesRebuyable: 10
     },
     "aPYieldMultiplier": {
         name: "AP Yield Multiplier",

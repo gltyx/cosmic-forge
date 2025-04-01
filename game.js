@@ -2127,9 +2127,12 @@ function updateAntimatterAndDiagram() {
         if (asteroid && asteroid.beingMined) {
             let quantityAntimatterClass = 'none';
             let extractionRate = rocketData[`rocket${i}`][3];
+            extractionRate *= (1 + (getBuffEnhancedMiningData()['boughtYet'] * getBuffEnhancedMiningData()['effectCategoryMagnitude']));
+            
             if (getIsAntimatterBoostActive()) {
                 extractionRate *= getBoostRate();
             }
+
             totalAntimatterExtractionRate += extractionRate;
             
             let newQuantityAntimatterAsteroid = asteroid.quantity[0] - extractionRate;
@@ -3624,7 +3627,7 @@ function updateAscendencyRowTextFields() {
                 costTextElement.classList.add("green-ready-text");
                 costTextElement.classList.remove("red-disabled-text");
             } else {
-                costTextElement.innerHTML = `${cost} AP`;
+                costTextElement.innerHTML = `${Math.floor(cost)} AP`;
 
                 if (getAscendencyPoints() >= cost) {
                     costTextElement.classList.add("green-ready-text");
@@ -5390,6 +5393,8 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
 }
 
 export function startTravelToDestinationStarTimer(adjustment) {
+    const quantumEngineBuffAdjustment = getBuffQuantumEnginesData()['boughtYet'] + 1;
+
     if (adjustment[1] === 'offlineGains' && !getStarShipTravelling()) {
         return;
     }
@@ -5404,6 +5409,14 @@ export function startTravelToDestinationStarTimer(adjustment) {
         let counter = 0;
         const travelInterval = getTimerUpdateInterval();
         let travelDuration = adjustment[0] === 0 ? calculateStarTravelDuration(destination) : adjustment[0];
+
+        for (let i = 1; i < quantumEngineBuffAdjustment; i++) {
+            travelDuration /= 2;
+        }
+
+        if (quantumEngineBuffAdjustment) {
+            travelDuration /= 2;
+        }
 
         if (adjustment[0] === 0) {
             setStarTravelDuration(travelDuration);
