@@ -4928,109 +4928,7 @@ function startInitialTimers() {
 
     let weatherCountDownToChangeInterval;
 
-    changeWeather();
-
-    function changeWeather() {
-        function selectNewWeather() {
-            setResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']) * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']), 'buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
-            setWeatherEfficiencyApplied(false);
-            const weatherCurrentStarSystemObject = getStarSystemWeather(getCurrentStarSystem());
-    
-            const weatherTypes = Object.keys(weatherCurrentStarSystemObject);
-            const weatherProbabilities = weatherTypes.map(weatherType => weatherCurrentStarSystemObject[weatherType][0]);
-            const totalProbability = weatherProbabilities.reduce((acc, val) => acc + val, 0);
-            const randomSelection = Math.random() * totalProbability;
-    
-            let cumulativeProbability = 0;
-            let selectedWeatherType = '';
-    
-            for (let i = 0; i < weatherTypes.length; i++) {
-                cumulativeProbability += weatherProbabilities[i];
-                if (randomSelection <= cumulativeProbability) {
-                    selectedWeatherType = weatherTypes[i];
-                    break;
-                }
-            }
-    
-            const [probability, symbolWeather, efficiencyWeather] = weatherCurrentStarSystemObject[selectedWeatherType];
-    
-            const statValueSpan = document.getElementById('stat7');
-            const statTitleSpan = statValueSpan.previousElementSibling;
-    
-            switch (selectedWeatherType) {
-                case 'sunny':
-                    statValueSpan.classList.add('green-ready-text');
-                    statValueSpan.classList.remove('warning-orange-text');
-                    statValueSpan.classList.remove('red-disabled-text');
-                    break;
-                case 'cloudy':
-                case 'rain':
-                    statValueSpan.classList.remove('green-ready-text');
-                    statValueSpan.classList.add('warning-orange-text');
-                    statValueSpan.classList.remove('red-disabled-text');
-                    if (selectedWeatherType === 'rain') {
-                        showWeatherNotification('rain');
-                    }
-                    break;
-                case 'volcano':
-                    statValueSpan.classList.remove('green-ready-text');
-                    statValueSpan.classList.remove('warning-orange-text');
-                    statValueSpan.classList.add('red-disabled-text');
-                    showWeatherNotification('volcano');
-                    break;  
-            }
-    
-            statTitleSpan.textContent = `${capitaliseString(getCurrentStarSystem())}:`;
-            statValueSpan.textContent = `${Math.floor(efficiencyWeather * 100)}% ${symbolWeather}`;
-            setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
-        }
-    
-        selectNewWeather();
-    
-        const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
-        const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-
-        //const randomDurationInMs = 10000; //DEBUG For Testing Weather
-
-        const durationInSeconds = randomDurationInMs / 1000;
-
-        if (weatherCountDownToChangeInterval) {
-            clearInterval(weatherCountDownToChangeInterval);
-        }
-    
-        let timeLeft = durationInSeconds;
-
-        let precipitationRate = 0;
-        let precipitationRateSet = false;
-        setCurrentPrecipitationRate(0);
-        
-        weatherCountDownToChangeInterval = setInterval(() => {
-            if (timeLeft > 0) {
-                if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && !precipitationRateSet) {
-                    precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
-                    setCurrentPrecipitationRate(precipitationRate);
-                    precipitationRateSet = true;
-                } else if (!precipitationRateSet) {
-                    setCurrentPrecipitationRate(0);
-                    precipitationRateSet = true;
-                }
-
-                if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
-                    if (getWeatherEffectSetting() && !getWeatherEffectOn()) {
-                        startWeatherEffect(getCurrentStarSystemWeatherEfficiency()[2]);
-                        setWeatherEffectOn(true);
-                    }
-                }
-
-                timeLeft -= 1;
-            } else {
-                stopWeatherEffect();
-                setWeatherEffectOn(false);
-                clearInterval(weatherCountDownToChangeInterval);
-                changeWeather();
-            }
-        }, 1000);
-    }
+    changeWeather(weatherCountDownToChangeInterval);
 
     let marketBiasAdjustmentInterval;
     startMarketBiasAdjustment();
@@ -5074,6 +4972,108 @@ function startInitialTimers() {
     }
 }
 
+function changeWeather(weatherCountDownToChangeInterval) {
+    function selectNewWeather() {
+        setResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'quantity']) * getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']), 'buildings', ['energy', 'upgrades', 'powerPlant2', 'purchasedRate']);
+        setWeatherEfficiencyApplied(false);
+        const weatherCurrentStarSystemObject = getStarSystemWeather(getCurrentStarSystem());
+
+        const weatherTypes = Object.keys(weatherCurrentStarSystemObject);
+        const weatherProbabilities = weatherTypes.map(weatherType => weatherCurrentStarSystemObject[weatherType][0]);
+        const totalProbability = weatherProbabilities.reduce((acc, val) => acc + val, 0);
+        const randomSelection = Math.random() * totalProbability;
+
+        let cumulativeProbability = 0;
+        let selectedWeatherType = '';
+
+        for (let i = 0; i < weatherTypes.length; i++) {
+            cumulativeProbability += weatherProbabilities[i];
+            if (randomSelection <= cumulativeProbability) {
+                selectedWeatherType = weatherTypes[i];
+                break;
+            }
+        }
+
+        const [probability, symbolWeather, efficiencyWeather] = weatherCurrentStarSystemObject[selectedWeatherType];
+
+        const statValueSpan = document.getElementById('stat7');
+        const statTitleSpan = statValueSpan.previousElementSibling;
+
+        switch (selectedWeatherType) {
+            case 'sunny':
+                statValueSpan.classList.add('green-ready-text');
+                statValueSpan.classList.remove('warning-orange-text');
+                statValueSpan.classList.remove('red-disabled-text');
+                break;
+            case 'cloudy':
+            case 'rain':
+                statValueSpan.classList.remove('green-ready-text');
+                statValueSpan.classList.add('warning-orange-text');
+                statValueSpan.classList.remove('red-disabled-text');
+                if (selectedWeatherType === 'rain') {
+                    showWeatherNotification('rain');
+                }
+                break;
+            case 'volcano':
+                statValueSpan.classList.remove('green-ready-text');
+                statValueSpan.classList.remove('warning-orange-text');
+                statValueSpan.classList.add('red-disabled-text');
+                showWeatherNotification('volcano');
+                break;  
+        }
+
+        statTitleSpan.textContent = `${capitaliseString(getCurrentStarSystem())}:`;
+        statValueSpan.textContent = `${Math.floor(efficiencyWeather * 100)}% ${symbolWeather}`;
+        setCurrentStarSystemWeatherEfficiency([getCurrentStarSystem(), efficiencyWeather, selectedWeatherType]);
+    }
+
+    selectNewWeather();
+
+    const randomDurationInMinutes = Math.floor(Math.random() * 3) + 1;
+    const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
+
+    //const randomDurationInMs = 10000; //DEBUG For Testing Weather
+
+    const durationInSeconds = randomDurationInMs / 1000;
+
+    if (weatherCountDownToChangeInterval) {
+        clearInterval(weatherCountDownToChangeInterval);
+    }
+
+    let timeLeft = durationInSeconds;
+
+    let precipitationRate = 0;
+    let precipitationRateSet = false;
+    setCurrentPrecipitationRate(0);
+    
+    weatherCountDownToChangeInterval = setInterval(() => {
+        if (timeLeft > 0) {
+            if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && !precipitationRateSet) {
+                precipitationRate = (Math.floor(Math.random() * 4) + 1) / getTimerRateRatio();
+                setCurrentPrecipitationRate(precipitationRate);
+                precipitationRateSet = true;
+            } else if (!precipitationRateSet) {
+                setCurrentPrecipitationRate(0);
+                precipitationRateSet = true;
+            }
+
+            if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' || getCurrentStarSystemWeatherEfficiency()[2] === 'volcano') {
+                if (getWeatherEffectSetting() && !getWeatherEffectOn()) {
+                    startWeatherEffect(getCurrentStarSystemWeatherEfficiency()[2]);
+                    setWeatherEffectOn(true);
+                }
+            }
+
+            timeLeft -= 1;
+        } else {
+            stopWeatherEffect();
+            setWeatherEffectOn(false);
+            clearInterval(weatherCountDownToChangeInterval);
+            changeWeather(weatherCountDownToChangeInterval);
+        }
+    }, 1000);
+}
+
 function calculateNewLiquidationPricePerApGained() {
     const basePrice = getApBaseBuyPrice();
     const minPrice = basePrice * 1;
@@ -5111,7 +5111,6 @@ function applyMarketChanges() {
                 const newTradeVolume = currentTradeVolume + randomChange;
 
                 setGalacticMarketDataObject(newTradeVolume, 'resources', [resource, 'tradeVolume']);
-                console.log(`${resource} market change: ${randomChange}, new trade volume: ${newTradeVolume}`);
 
                 const currentBias = getGalacticMarketDataObject('resources', [resource, 'marketBias']);
                 if (currentBias !== undefined) {
@@ -5129,7 +5128,6 @@ function applyMarketChanges() {
                     }
 
                     setGalacticMarketDataObject(newBias, 'resources', [resource, 'marketBias']);
-                    console.log(`${resource} new bias after CYCLE END: ${newBias}`);
                 }
             }
         }
@@ -5145,7 +5143,6 @@ function applyMarketChanges() {
                 const newTradeVolume = currentTradeVolume + randomChange;
 
                 setGalacticMarketDataObject(newTradeVolume, 'compounds', [compound, 'tradeVolume']);
-                console.log(`${compound} market change: ${randomChange}, new trade volume: ${newTradeVolume}`);
 
                 const currentBias = getGalacticMarketDataObject('compounds', [compound, 'marketBias']);
                 if (currentBias !== undefined) {
@@ -5163,7 +5160,6 @@ function applyMarketChanges() {
                     }
 
                     setGalacticMarketDataObject(newBias, 'compounds', [compound, 'marketBias']);
-                    console.log(`${compound} new bias after CYCLE END: ${newBias}`);
                 }
             }
         }
@@ -5280,7 +5276,10 @@ export function purchaseBuff(buff) {
 
     if (buff === 'smartAutoBuyers') {
         buffSmartAutoBuyersRateMultiplier();
+    } else if (buff === 'optimizedPowerGrids') {
+        buffOptimizedPowerGridsMultiplier();
     }
+
 }
 
 function calculateStarTravelDuration(destination) {
@@ -8129,6 +8128,30 @@ export function settleSystemAfterBattle(accessPoint) {
     autoSelectOption('fleetHangarOption', apGain);
 }
 
+export function addPermanentBuffsBackInAfterRebirth() {
+    if (getBuffSmartAutoBuyersData()['boughtYet'] > 0) {
+        for (let i = 0; i < getBuffSmartAutoBuyersData()['boughtYet']; i++) {
+            buffSmartAutoBuyersRateMultiplier();
+        }
+    }
+
+    if (getBuffOptimizedPowerGridsData()['boughtYet'] > 0) {
+        for (let i = 0; i < getBuffOptimizedPowerGridsData()['boughtYet']; i++) {
+            buffOptimizedPowerGridsMultiplier();
+        }
+    }
+
+    if (getBuffJumpstartResearchData()['boughtYet'] > 0) {
+        const resourceData = getResourceDataObject('techs');
+
+        for (const itemKey in resourceData) {
+            if (resourceData[itemKey].price <= 4200) {
+                setTechUnlockedArray(itemKey);
+            }
+        }
+    }
+}
+
 export function rebirth() {
     autoSelectOption('galacticMarketOption');
     document.getElementById('tabsContainer').children[0]?.click();
@@ -8137,10 +8160,11 @@ export function rebirth() {
     setSettledStars(getCurrentStarSystem());
     setupNewRunStarSystem();
     setRebirthPossible(false);
-    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetAllVariablesOnRebirth();
+    resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetTabsOnRebirth();
     resetUIElementsOnRebirth();
+    changeWeather(1000);
     setRunStartTime();
 }
 
@@ -8155,6 +8179,47 @@ function resetUIElementsOnRebirth() {
     resetTab5ClassesRebirth();
     resetTab6ClassesRebirth();
 }
+
+export function buffOptimizedPowerGridsMultiplier() {
+    const multiplier = getAscendencyBuffDataObject()['optimizedPowerGrids'].effectCategoryMagnitude;
+
+    const buildings = Object.fromEntries(
+        Object.entries(getResourceDataObject('buildings', ['energy', 'upgrades']))
+            .filter(([key]) => !key.includes('battery'))
+    );
+
+    Object.keys(buildings).forEach(buildingKey => {
+        const building = buildings[buildingKey];
+
+        if (building.maxPurchasedRate) {
+            setResourceDataObject(building.maxPurchasedRate * multiplier, 'buildings', ['energy', 'upgrades', buildingKey, 'maxPurchasedRate']);
+        }
+
+        if (building.purchasedRate) {
+            setResourceDataObject(building.purchasedRate * multiplier, 'buildings', ['energy', 'upgrades', buildingKey, 'purchasedRate']);
+        }
+
+        if (building.rate) {
+            const newRateOfBuilding = building.rate * multiplier;
+            setResourceDataObject(newRateOfBuilding, 'buildings', ['energy', 'upgrades', buildingKey, 'rate']);
+
+            const buyBuildingButtonElement = document.querySelector(
+                `#${buildingKey}${capitaliseString(buildingKey)}Row .option-row-main .input-container .building-purchase-button`
+            );
+            const rateElement = document.getElementById(`${buildingKey}Rate`);
+
+            if (buyBuildingButtonElement) {
+                buyBuildingButtonElement.innerHTML = `Add ${Math.floor(newRateOfBuilding * getTimerRateRatio())} KW /s`;
+            }
+
+            if (rateElement) {
+                const quantityOfBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', buildingKey, 'quantity']) || 0;
+                rateElement.innerHTML = `${Math.floor((newRateOfBuilding * getTimerRateRatio()) * quantityOfBuilding)} KW / s`;
+            }
+        }
+    });
+}
+
 
 export function buffSmartAutoBuyersRateMultiplier() {
     const multiplier = getAscendencyBuffDataObject()['smartAutoBuyers'].effectCategoryMagnitude;

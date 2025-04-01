@@ -1067,7 +1067,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         buffJumpstartResearchRow: {
-            content1: "Provides an instant research boost at the start of a run.",
+            content1: "All Technology worth up to 4200 Research Points is given for free on Rebirth.",
             content2: "",
             updateAt: ""
         },

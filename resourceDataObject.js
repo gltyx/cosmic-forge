@@ -1,7 +1,6 @@
-import { getAscendencyPoints } from "./constantsAndGlobalVars.js";
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
-import { buffSmartAutoBuyersRateMultiplier } from './game.js';
+import { addPermanentBuffsBackInAfterRebirth } from './game.js';
 
 export let resourceData = {
     version: 0.52, //update this whenever changes are made to the structure
@@ -1357,11 +1356,7 @@ export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() 
     //const galacticBuffsList = 
     Object.assign(resourceData, resourceDataRebirthCopy);
 
-    if (getBuffSmartAutoBuyersData()['boughtYet'] > 0) {
-        for (let i = 0; i < getBuffSmartAutoBuyersData()['boughtYet']; i++) {
-            buffSmartAutoBuyersRateMultiplier();
-        }
-    }
+    addPermanentBuffsBackInAfterRebirth();
     //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
 }

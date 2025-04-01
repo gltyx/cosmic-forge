@@ -3101,8 +3101,16 @@ function initializeTabEventListeners() {
                         const optionContentElement = document.getElementById(`optionContentTab7`);
                         optionContentElement.innerHTML = '';
                         drawTab7Content('Galactic Market', optionContentElement);
+                    }else if (["power plant", "advanced power plant", "solar power plant"].includes(lastOpenOptionPane)) {
+                        const optionContentElement = document.getElementById(`optionContentTab2`);
+                        optionContentElement.innerHTML = '';
+                        const formattedPaneName = lastOpenOptionPane
+                            .split(' ')
+                            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                            .join(' ');
+                    
+                        drawTab2Content(formattedPaneName, optionContentElement);
                     }
-
                     setCurrentOptionPane(lastOpenOptionPane);
                 }
             });
