@@ -6791,7 +6791,7 @@ function handlePowerAllButtonState() {
 }
 
 export function extendStarDataRange(debug) {
-    const increment = getStarVisionIncrement() * (getBuffFasterStarStudyData()['boughtYet'] + 1);
+    const increment = getStarVisionIncrement() * Math.pow(getBuffFasterStarStudyData()['effectCategoryMagnitude'], getBuffFasterStarStudyData()['boughtYet']);
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);
