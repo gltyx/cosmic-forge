@@ -1,4 +1,4 @@
-import { restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket } from "./resourceDataObject.js";
+import { restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs } from "./resourceDataObject.js";
 import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.52;
+export const GAME_VERSION_FOR_SAVES = 0.54;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -768,6 +768,7 @@ export function captureGameStatusForSaving(type) {
     gameState.resourceData = JSON.parse(JSON.stringify(resourceData));
     gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
     gameState.galacticMarket = JSON.parse(JSON.stringify(galacticMarket));
+    gameState.ascendencyBuffs = JSON.parse(JSON.stringify(ascendencyBuffs));
 
     // Global variables
     gameState.saveName = getSaveName();
@@ -923,6 +924,12 @@ export function restoreGameStatus(gameState, type) {
                 restoreGalacticMarketDataObject(JSON.parse(JSON.stringify(gameState.galacticMarket)));
             } else {
                 gameState.galacticMarket = galacticMarket;
+            }
+
+            if (gameState.ascendencyBuffs) {
+                restoreAscendencyBuffsDataObject(JSON.parse(JSON.stringify(gameState.ascendencyBuffs)));
+            } else {
+                gameState.ascendencyBuffs = ascendencyBuffs;
             }
 
             // Global variables

@@ -101,6 +101,7 @@ import {
     setAutoBuyerTierLevel,
     setResourceDataObject,
     setStarSystemDataObject,
+    getBuffEnhancedMiningData
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -2341,9 +2342,9 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         label.setAttribute("fill", "var(--" + lineClass + ")");
         label.setAttribute("font-size", "14");
         if (rocketInfo && !getIsAntimatterBoostActive()) {
-            label.innerHTML = `${(rocketInfo[3] * getTimerRateRatio()).toFixed(2)} / s`;
+            label.innerHTML = `${(rocketInfo[3] * (1 + (getBuffEnhancedMiningData().boughtYet * getBuffEnhancedMiningData().effectCategoryMagnitude)) * getTimerRateRatio()).toFixed(2)} / s`;
         } else if (rocketInfo && getIsAntimatterBoostActive()) {
-            label.innerHTML = `${(rocketInfo[3] * getTimerRateRatio() * getBoostRate()).toFixed(2)} / s`;
+            label.innerHTML = `${(rocketInfo[3] * (1 + (getBuffEnhancedMiningData().boughtYet * getBuffEnhancedMiningData().effectCategoryMagnitude)) * getTimerRateRatio() * getBoostRate()).toFixed(2)} / s`;
         } else {
             label.innerHTML = '0 / s';
         }

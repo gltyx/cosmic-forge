@@ -229,7 +229,7 @@ export function drawTab7Content(heading, optionContentElement) {
     }
 
     if (heading === 'Ascendency') {
-        const ascendencyBuffsArray = getAscendencyBuffDataObject();
+        const ascendencyBuffsArray = Object.fromEntries(Object.entries(getAscendencyBuffDataObject()).filter(([key]) => key !== "version"));
     
         if (Object.keys(ascendencyBuffsArray).length === 0) {
             return;

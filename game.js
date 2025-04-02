@@ -3586,7 +3586,7 @@ function checkAscendencyButtons() {
 }
 
 function updateAscendencyRowTextFields() {
-    const ascendencyBuffs = getAscendencyBuffDataObject();
+    const ascendencyBuffs = Object.fromEntries(Object.entries(getAscendencyBuffDataObject()).filter(([key]) => key !== "version"));
 
     Object.keys(ascendencyBuffs).forEach(buffKey => {
         const capitalizedBuffKey = capitaliseString(buffKey);
@@ -5264,7 +5264,7 @@ function adjustMarketBiases() {
 }
 
 export function purchaseBuff(buff) {
-    const ascendencyBuffDataObject = getAscendencyBuffDataObject();
+    const ascendencyBuffDataObject = Object.fromEntries(Object.entries(getAscendencyBuffDataObject()).filter(([key]) => key !== "version"));
     const currentAscendencyPoints = getResourceDataObject('ascendencyPoints', ['quantity']);
 
     const buffData = ascendencyBuffDataObject[buff];
@@ -5303,8 +5303,8 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
-    return Math.floor(distance / speed);  
-    //return 10000; //DEBUG
+    //return Math.floor(distance / speed);  
+    return 10000; //DEBUG
 }
 
 export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction) {

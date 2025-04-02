@@ -707,7 +707,197 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                     } 
                 }
             }
+        }
 
+        if (saveData.version < 0.54) {
+            if (objectType === 'resourceData') {
+
+            } else if (objectType === 'starSystemsData') {
+
+            } else if (objectType === 'rocketNames') {
+            
+            } else if (objectType === 'galacticMarketData') {
+
+            } else if (objectType === 'ascendencyBuffsData') {
+                saveData = {
+                    "efficientStorage": {
+                        name: "Efficient Storage",
+                        description: "buffEfficientStorageRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 10,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 2,
+                        boughtYet: 0,
+                        timesRebuyable: 3
+                    },
+                    "smartAutoBuyers": {
+                        name: "Smart Auto Buyers",
+                        description: "buffSmartAutoBuyersRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 15,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 1.5,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "advancedMarket": {
+                        name: "Advanced Market",
+                        description: "buffAdvancedMarketRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 20,
+                        effectCategory: "priceReducer",
+                        effectCategoryMagnitude: 0.9,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "jumpstartResearch": {
+                        name: "Jumpstart Research",
+                        description: "buffJumpstartResearchRow",
+                        rebuyable: false,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 30,
+                        effectCategory: "resourceBooster",
+                        effectCategoryMagnitude: 100,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "optimizedPowerGrids": {
+                        name: "Optimized Power Grids",
+                        description: "buffOptimizedPowerGridsRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 25,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 1.2,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "bulkSellBonus": {
+                        name: "Bulk Sell Bonus",
+                        description: "buffBulkSellBonusRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 40,
+                        effectCategory: "priceReducer",
+                        effectCategoryMagnitude: 0.85,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "fasterStarStudy": {
+                        name: "Faster Star Study",
+                        description: "buffFasterStarStudyRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 50,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 2,
+                        boughtYet: 0,
+                        timesRebuyable: 3
+                    },
+                    "techSynergy": {
+                        name: "Tech Synergy",
+                        description: "buffTechSynergyRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 60,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 1.25,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "hyperBatteries": {
+                        name: "Hyper Batteries",
+                        description: "buffHyperBatteriesRow",
+                        rebuyable: false,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 75,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 1.5,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "asteroidScannerBoost": {
+                        name: "Asteroid Scanner Boost",
+                        description: "buffAsteroidScannerBoostRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 20,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 2,
+                        boughtYet: 0,
+                        timesRebuyable: 2
+                    },
+                    "rocketFuelOptimization": {
+                        name: "Rocket Fuel Optimization",
+                        description: "buffRocketFuelOptimizationRow",
+                        rebuyable: false,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 40,
+                        effectCategory: "priceReducer",
+                        effectCategoryMagnitude: 0.5,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "enhancedMining": {
+                        name: "Enhanced Mining",
+                        description: "buffEnhancedMiningRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 15,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 0.25,
+                        boughtYet: 0,
+                        timesRebuyable: 4
+                    },
+                    "quantumEngines": {
+                        name: "Quantum Engines",
+                        description: "buffQuantumEnginesRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 1.2,
+                        baseCostAp: 15,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 2,
+                        boughtYet: 0,
+                        timesRebuyable: 10
+                    },
+                    "aPYieldMultiplier": {
+                        name: "AP Yield Multiplier",
+                        description: "buffAPYieldMultiplierRow",
+                        rebuyable: true,
+                        rebuyableIncreaseMultiple: 2,
+                        baseCostAp: 150,
+                        effectCategory: "upgradeEffectMultiplier",
+                        effectCategoryMagnitude: 1.1,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "parallelUniverseInsight": {
+                        name: "Parallel Universe Insight",
+                        description: "buffParallelUniverseInsightRow",
+                        rebuyable: false,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 250,
+                        effectCategory: "specialUnlock",
+                        effectCategoryMagnitude: "newPrestigeLayer",
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    },
+                    "galacticInfluence": {
+                        name: "Galactic Influence",
+                        description: "buffGalacticInfluenceRow",
+                        rebuyable: false,
+                        rebuyableIncreaseMultiple: 1,
+                        baseCostAp: 300,
+                        effectCategory: "resourceBooster",
+                        effectCategoryMagnitude: 1,
+                        boughtYet: 0,
+                        timesRebuyable: 100000
+                    }
+                }
+            }
         }
     
         saveData.version += 0.01;
