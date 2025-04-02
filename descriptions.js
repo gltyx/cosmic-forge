@@ -1076,12 +1076,12 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffBulkSellBonusRow: {
-            content1: "Grants a 15% discount on bulk sales, improving profits.",
+        buffFasterAsteroidScanRow: {
+            content1: "Reduces the time taken to perform an Asteroid Search by 25% per purchase.",
             content2: "",
             updateAt: ""
         },
-        buffFasterStarStudyRow: {
+        buffDeeperStarStudyRow: {
             content1: "Double the range reveal of a star study each purchase.",
             content2: "",
             updateAt: ""

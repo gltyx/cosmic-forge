@@ -256,8 +256,8 @@ import {
     getBuffAdvancedMarketData,
     getBuffJumpstartResearchData,
     getBuffOptimizedPowerGridsData,
-    getBuffBulkSellBonusData,
-    getBuffFasterStarStudyData,
+    getBuffFasterAsteroidScanData,
+    getBuffDeeperStarStudyData,
     getBuffTechSynergyData,
     getBuffHyperBatteriesData,
     getBuffAsteroidScannerBoostData,
@@ -5414,10 +5414,6 @@ export function startTravelToDestinationStarTimer(adjustment) {
             travelDuration /= 2;
         }
 
-        if (quantumEngineBuffAdjustment) {
-            travelDuration /= 2;
-        }
-
         if (adjustment[0] === 0) {
             setStarTravelDuration(travelDuration);
         }
@@ -5545,6 +5541,9 @@ export function startInvestigateStarTimer(adjustment) {
 }
 
 export function startSearchAsteroidTimer(adjustment) {
+    const fasterAsteroidScanBuffAdjustment = getBuffFasterAsteroidScanData()['boughtYet'];
+    const fasterAsteroidsScanBuffMultiplier = getBuffFasterAsteroidScanData()['effectCategoryMagnitude'];
+
     if (getAsteroidTimerCanContinue()) {
         if (adjustment[1] === 'offlineGains' && !getCurrentlySearchingAsteroid()) {
             return;
@@ -5559,6 +5558,10 @@ export function startSearchAsteroidTimer(adjustment) {
             let searchDuration = adjustment[0] === 0 ? getAsteroidSearchDuration() : adjustment[0];
     
             //searchDuration = 12000; //DEBUG
+
+            if (fasterAsteroidScanBuffAdjustment > 0) {
+                searchDuration = searchDuration * (1 - (fasterAsteroidsScanBuffMultiplier * fasterAsteroidScanBuffAdjustment));
+            }
     
             if (adjustment[0] === 0) {
                 setCurrentAsteroidSearchTimerDurationTotal(searchDuration);
@@ -6791,7 +6794,7 @@ function handlePowerAllButtonState() {
 }
 
 export function extendStarDataRange(debug) {
-    const increment = getStarVisionIncrement() * Math.pow(getBuffFasterStarStudyData()['effectCategoryMagnitude'], getBuffFasterStarStudyData()['boughtYet']);
+    const increment = getStarVisionIncrement() * Math.pow(getBuffDeeperStarStudyData()['effectCategoryMagnitude'], getBuffDeeperStarStudyData()['boughtYet']);
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);

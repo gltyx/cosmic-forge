@@ -1012,19 +1012,19 @@ export let ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "bulkSellBonus": {/////////////////////////
-        name: "Bulk Sell Bonus",
-        description: "buffBulkSellBonusRow",
+    "fasterAsteroidScan": { //done
+        name: "Faster Asteroid Scan",
+        description: "buffFasterAsteroidScanRow",
         rebuyable: true,
-        rebuyableIncreaseMultiple: 2,
-        baseCostAp: 40,
-        effectCategoryMagnitude: 0.85,
+        rebuyableIncreaseMultiple: 1.2,
+        baseCostAp: 20,
+        effectCategoryMagnitude: 0.25,
         boughtYet: 0,
-        timesRebuyable: 100000
+        timesRebuyable: 4
     },
-    "fasterStarStudy": {
-        name: "Faster Star Study",
-        description: "buffFasterStarStudyRow",
+    "deeperStarStudy": { //done
+        name: "Deeper Star Study",
+        description: "buffDeeperStarStudyRow",
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 50,
@@ -1148,12 +1148,12 @@ export function getBuffOptimizedPowerGridsData() {
     return ascendencyBuffs["optimizedPowerGrids"];
 }
 
-export function getBuffBulkSellBonusData() {
-    return ascendencyBuffs["bulkSellBonus"];
+export function getBuffFasterAsteroidScanData() {
+    return ascendencyBuffs["fasterAsteroidScan"];
 }
 
-export function getBuffFasterStarStudyData() {
-    return ascendencyBuffs["fasterStarStudy"];
+export function getBuffDeeperStarStudyData() {
+    return ascendencyBuffs["deeperStarStudy"];
 }
 
 export function getBuffTechSynergyData() {

@@ -770,19 +770,19 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         boughtYet: 0,
                         timesRebuyable: 100000
                     },
-                    "bulkSellBonus": {
-                        name: "Bulk Sell Bonus",
-                        description: "buffBulkSellBonusRow",
+                    "fasterAsteroidScan": {
+                        name: "Faster Asteroid Scan",
+                        description: "buffFasterAsteroidScanRow",
                         rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 40,
-                        effectCategoryMagnitude: 0.85,
+                        rebuyableIncreaseMultiple: 1.2,
+                        baseCostAp: 20,
+                        effectCategoryMagnitude: 0.25,
                         boughtYet: 0,
-                        timesRebuyable: 100000
+                        timesRebuyable: 4
                     },
-                    "fasterStarStudy": {
-                        name: "Faster Star Study",
-                        description: "buffFasterStarStudyRow",
+                    "deeperStarStudy": {
+                        name: "Deeper Star Study",
+                        description: "buffDeeperStarStudyRow",
                         rebuyable: true,
                         rebuyableIncreaseMultiple: 2,
                         baseCostAp: 50,
