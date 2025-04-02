@@ -257,7 +257,7 @@ import {
     getBuffJumpstartResearchData,
     getBuffOptimizedPowerGridsData,
     getBuffBulkSellBonusData,
-    getBuffFusionEfficiencyData,
+    getBuffFasterStarStudyData,
     getBuffTechSynergyData,
     getBuffHyperBatteriesData,
     getBuffAsteroidScannerBoostData,
@@ -5531,7 +5531,7 @@ export function startInvestigateStarTimer(adjustment) {
                     setTimeLeftUntilStarInvestigationTimerFinishes(0);
                 } else {
                     setTimeLeftUntilStarInvestigationTimerFinishes(timeLeft); 
-                    if (searchTimerDescriptionElement) { 
+                    if (searchTimerDescriptionElement) {
                         searchTimerDescriptionElement.classList.add('green-ready-text');
                         searchTimerDescriptionElement.innerText = `Studying ... ${timeLeftUI}s`;
                         const elapsedTime = getCurrentInvestigateStarTimerDurationTotal() - getTimeLeftUntilStarInvestigationTimerFinishes();
@@ -6791,7 +6791,7 @@ function handlePowerAllButtonState() {
 }
 
 export function extendStarDataRange(debug) {
-    const increment = getStarVisionIncrement();
+    const increment = getStarVisionIncrement() * (getBuffFasterStarStudyData()['boughtYet'] + 1);
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);

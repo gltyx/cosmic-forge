@@ -1081,8 +1081,8 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffFusionEfficiencyRow: {
-            content1: "Optimizes fusion technology, reducing costs by 20%.",
+        buffFasterStarStudyRow: {
+            content1: "Double the range reveal of a star study each purchase.",
             content2: "",
             updateAt: ""
         },

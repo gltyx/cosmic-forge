@@ -1027,16 +1027,16 @@ export const ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "fusionEfficiency": {/////////////////////////
-        name: "Fusion Efficiency",
-        description: "buffFusionEfficiencyRow",
-        rebuyable: false,
-        rebuyableIncreaseMultiple: 1,
+    "fasterStarStudy": {
+        name: "Faster Star Study",
+        description: "buffFasterStarStudyRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
         baseCostAp: 50,
-        effectCategory: "priceReducer",
-        effectCategoryMagnitude: 0.8,
+        effectCategory: "upgradeEffectMultiplier",
+        effectCategoryMagnitude: 2,
         boughtYet: 0,
-        timesRebuyable: 100000
+        timesRebuyable: 3
     },
     "techSynergy": {////////////////////////
         name: "Tech Synergy",
@@ -1167,8 +1167,8 @@ export function getBuffBulkSellBonusData() {
     return ascendencyBuffs["bulkSellBonus"];
 }
 
-export function getBuffFusionEfficiencyData() {
-    return ascendencyBuffs["fusionEfficiency"];
+export function getBuffFasterStarStudyData() {
+    return ascendencyBuffs["fasterStarStudy"];
 }
 
 export function getBuffTechSynergyData() {
