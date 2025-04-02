@@ -982,16 +982,6 @@ export let ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 100000
     },
-    "advancedMarket": {/////////////////////
-        name: "Advanced Market",
-        description: "buffAdvancedMarketRow",
-        rebuyable: true,
-        rebuyableIncreaseMultiple: 2,
-        baseCostAp: 20,
-        effectCategoryMagnitude: 0.9,
-        boughtYet: 0,
-        timesRebuyable: 100000
-    },
     "jumpstartResearch": {  //done
         name: "Jumpstart Research",
         description: "buffJumpstartResearchRow",
@@ -1032,26 +1022,6 @@ export let ascendencyBuffs = {
         boughtYet: 0,
         timesRebuyable: 3
     },
-    "techSynergy": {////////////////////////
-        name: "Tech Synergy",
-        description: "buffTechSynergyRow",
-        rebuyable: true,
-        rebuyableIncreaseMultiple: 2,
-        baseCostAp: 60,
-        effectCategoryMagnitude: 1.25,
-        boughtYet: 0,
-        timesRebuyable: 100000
-    },
-    "hyperBatteries": {///////////////////////////
-        name: "Hyper Batteries",
-        description: "buffHyperBatteriesRow",
-        rebuyable: false,
-        rebuyableIncreaseMultiple: 1,
-        baseCostAp: 75,
-        effectCategoryMagnitude: 1.5,
-        boughtYet: 0,
-        timesRebuyable: 100000
-    },
     "asteroidScannerBoost": {  //done
         name: "Asteroid Scanner Boost",
         description: "buffAsteroidScannerBoostRow",
@@ -1091,36 +1061,6 @@ export let ascendencyBuffs = {
         effectCategoryMagnitude: 2,
         boughtYet: 0,
         timesRebuyable: 10
-    },
-    "aPYieldMultiplier": { //////////////////////
-        name: "AP Yield Multiplier",
-        description: "buffAPYieldMultiplierRow",
-        rebuyable: true,
-        rebuyableIncreaseMultiple: 2,
-        baseCostAp: 150,
-        effectCategoryMagnitude: 1.1,
-        boughtYet: 0,
-        timesRebuyable: 100000
-    },
-    "parallelUniverseInsight": {//////////////////////////
-        name: "Parallel Universe Insight",
-        description: "buffParallelUniverseInsightRow",
-        rebuyable: false,
-        rebuyableIncreaseMultiple: 1,
-        baseCostAp: 250,
-        effectCategoryMagnitude: "newPrestigeLayer",
-        boughtYet: 0,
-        timesRebuyable: 100000
-    },
-    "galacticInfluence": { ///////////////////////////
-        name: "Galactic Influence",
-        description: "buffGalacticInfluenceRow",
-        rebuyable: false,
-        rebuyableIncreaseMultiple: 1,
-        baseCostAp: 300,
-        effectCategoryMagnitude: 1,
-        boughtYet: 0,
-        timesRebuyable: 100000
     }
 };
 
@@ -1134,10 +1074,6 @@ export function getBuffEfficientStorageData() {
 
 export function getBuffSmartAutoBuyersData() {
     return ascendencyBuffs["smartAutoBuyers"];
-}
-
-export function getBuffAdvancedMarketData() {
-    return ascendencyBuffs["advancedMarket"];
 }
 
 export function getBuffJumpstartResearchData() {
@@ -1156,14 +1092,6 @@ export function getBuffDeeperStarStudyData() {
     return ascendencyBuffs["deeperStarStudy"];
 }
 
-export function getBuffTechSynergyData() {
-    return ascendencyBuffs["techSynergy"];
-}
-
-export function getBuffHyperBatteriesData() {
-    return ascendencyBuffs["hyperBatteries"];
-}
-
 export function getBuffAsteroidScannerBoostData() {
     return ascendencyBuffs["asteroidScannerBoost"];
 }
@@ -1178,18 +1106,6 @@ export function getBuffEnhancedMiningData() {
 
 export function getBuffQuantumEnginesData() {
     return ascendencyBuffs["quantumEngines"];
-}
-
-export function getBuffAPYieldMultiplierData() {
-    return ascendencyBuffs["aPYieldMultiplier"];
-}
-
-export function getBuffParallelUniverseInsightData() {
-    return ascendencyBuffs["parallelUniverseInsight"];
-}
-
-export function getBuffGalacticInfluenceData() {
-    return ascendencyBuffs["galacticInfluence"];
 }
 
 export function copyStarDataToDestinationStarField(starName) {

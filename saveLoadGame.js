@@ -740,16 +740,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         boughtYet: 0,
                         timesRebuyable: 100000
                     },
-                    "advancedMarket": {
-                        name: "Advanced Market",
-                        description: "buffAdvancedMarketRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 20,
-                        effectCategoryMagnitude: 0.9,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
                     "jumpstartResearch": {
                         name: "Jumpstart Research",
                         description: "buffJumpstartResearchRow",
@@ -790,26 +780,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         boughtYet: 0,
                         timesRebuyable: 3
                     },
-                    "techSynergy": {
-                        name: "Tech Synergy",
-                        description: "buffTechSynergyRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 60,
-                        effectCategoryMagnitude: 1.25,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "hyperBatteries": {
-                        name: "Hyper Batteries",
-                        description: "buffHyperBatteriesRow",
-                        rebuyable: false,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 75,
-                        effectCategoryMagnitude: 1.5,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
                     "asteroidScannerBoost": {
                         name: "Asteroid Scanner Boost",
                         description: "buffAsteroidScannerBoostRow",
@@ -849,36 +819,6 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         effectCategoryMagnitude: 2,
                         boughtYet: 0,
                         timesRebuyable: 10
-                    },
-                    "aPYieldMultiplier": {
-                        name: "AP Yield Multiplier",
-                        description: "buffAPYieldMultiplierRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 150,
-                        effectCategoryMagnitude: 1.1,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "parallelUniverseInsight": {
-                        name: "Parallel Universe Insight",
-                        description: "buffParallelUniverseInsightRow",
-                        rebuyable: false,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 250,
-                        effectCategoryMagnitude: "newPrestigeLayer",
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "galacticInfluence": {
-                        name: "Galactic Influence",
-                        description: "buffGalacticInfluenceRow",
-                        rebuyable: false,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 300,
-                        effectCategoryMagnitude: 1,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
                     }
                 }
             }

@@ -1061,11 +1061,6 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffAdvancedMarketRow: {
-            content1: "Reduces the cost of all market purchases by 10%.",
-            content2: "",
-            updateAt: ""
-        },
         buffJumpstartResearchRow: {
             content1: "All Technology worth up to 4200 Research Points is given for free on Rebirth.",
             content2: "",
@@ -1086,16 +1081,6 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: ""
         },
-        buffTechSynergyRow: {
-            content1: "Boosts upgrade effectiveness across all technology by 25%.",
-            content2: "",
-            updateAt: ""
-        },
-        buffHyperBatteriesRow: {
-            content1: "Enhances energy storage, improving all power-related upgrades by 50%.",
-            content2: "",
-            updateAt: ""
-        },
         buffAsteroidScannerBoostRow: {
             content1: "Minimum rarity of asteroids upgraded by 1 - Buy once, minimum Asteroid rarity is Uncommon etc.",
             content2: "",
@@ -1113,21 +1098,6 @@ export function initialiseDescriptions() {
         },
         buffQuantumEnginesRow: {
             content1: "Upgrades starship engines, halving travel time per purchase.",
-            content2: "",
-            updateAt: ""
-        },
-        buffAPYieldMultiplierRow: {
-            content1: "Increases Ascension Point yield by 10%, making future ascensions more rewarding.",
-            content2: "",
-            updateAt: ""
-        },
-        buffParallelUniverseInsightRow: {
-            content1: "Unlocks a new prestige layer, opening up fresh mechanics and challenges.",
-            content2: "",
-            updateAt: ""
-        },
-        buffGalacticInfluenceRow: {
-            content1: "Expands your influence across the galaxy, providing unique bonuses based on galactic standing.",
             content2: "",
             updateAt: ""
         }

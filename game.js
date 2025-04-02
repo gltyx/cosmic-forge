@@ -253,20 +253,14 @@ import {
     setAscendencyBuffDataObject,
     getBuffEfficientStorageData,
     getBuffSmartAutoBuyersData,
-    getBuffAdvancedMarketData,
     getBuffJumpstartResearchData,
     getBuffOptimizedPowerGridsData,
     getBuffFasterAsteroidScanData,
     getBuffDeeperStarStudyData,
-    getBuffTechSynergyData,
-    getBuffHyperBatteriesData,
     getBuffAsteroidScannerBoostData,
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
-    getBuffQuantumEnginesData,
-    getBuffAPYieldMultiplierData,
-    getBuffParallelUniverseInsightData,
-    getBuffGalacticInfluenceData
+    getBuffQuantumEnginesData
 } from "./resourceDataObject.js";
 
 import { 
