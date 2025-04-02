@@ -240,7 +240,6 @@ export function drawTab7Content(heading, optionContentElement) {
     
             const buffRowDescription = `${buff.description}`;
             const cost = buff.rebuyable ? buff.baseCostAp * Math.pow(buff.rebuyableIncreaseMultiple, buff.boughtYet) : buff.baseCostAp;
-            const effectText = `${buff.effectCategory}: ${buff.effectCategoryMagnitude}`;
             const buyStatus = buff.boughtYet > 0 ? (buff.rebuyable ? `Bought ${buff.boughtYet} times` : "Purchased") : "Not Bought";
     
             const buffRow = createOptionRow(

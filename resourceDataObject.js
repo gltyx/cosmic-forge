@@ -968,7 +968,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 10,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 2,
         boughtYet: 0,
         timesRebuyable: 3
@@ -979,7 +978,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 15,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.5,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -990,7 +988,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 20,
-        effectCategory: "priceReducer",
         effectCategoryMagnitude: 0.9,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1001,7 +998,6 @@ export let ascendencyBuffs = {
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 30,
-        effectCategory: "resourceBooster",
         effectCategoryMagnitude: 100,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1012,7 +1008,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 25,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.2,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1023,7 +1018,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 40,
-        effectCategory: "priceReducer",
         effectCategoryMagnitude: 0.85,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1034,7 +1028,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 50,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 2,
         boughtYet: 0,
         timesRebuyable: 3
@@ -1045,7 +1038,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 60,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.25,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1056,7 +1048,6 @@ export let ascendencyBuffs = {
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 75,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.5,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1067,7 +1058,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 20,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 2,
         boughtYet: 0,
         timesRebuyable: 2
@@ -1078,7 +1068,6 @@ export let ascendencyBuffs = {
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 40,
-        effectCategory: "priceReducer",
         effectCategoryMagnitude: 0.5,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1089,7 +1078,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 15,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 0.25,
         boughtYet: 0,
         timesRebuyable: 4
@@ -1100,7 +1088,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 1.2,
         baseCostAp: 15,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 2,
         boughtYet: 0,
         timesRebuyable: 10
@@ -1111,7 +1098,6 @@ export let ascendencyBuffs = {
         rebuyable: true,
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 150,
-        effectCategory: "upgradeEffectMultiplier",
         effectCategoryMagnitude: 1.1,
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1122,7 +1108,6 @@ export let ascendencyBuffs = {
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 250,
-        effectCategory: "specialUnlock",
         effectCategoryMagnitude: "newPrestigeLayer",
         boughtYet: 0,
         timesRebuyable: 100000
@@ -1133,7 +1118,6 @@ export let ascendencyBuffs = {
         rebuyable: false,
         rebuyableIncreaseMultiple: 1,
         baseCostAp: 300,
-        effectCategory: "resourceBooster",
         effectCategoryMagnitude: 1,
         boughtYet: 0,
         timesRebuyable: 100000
