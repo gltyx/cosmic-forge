@@ -2439,17 +2439,17 @@ export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
     scaleContainer.style.color = "var(--text-color)";
     scaleContainer.style.fontSize = "12px";
     
-    for (let i = 0; i <= 4; i++) {  
+    for (let i = 0; i <= 8; i++) {  
         const scaleLabel = document.createElement("div");
-        scaleLabel.innerText = `${(antimatterMaxRate * ((4 - i) / 4) * getTimerRateRatio()).toFixed(2)} / s`;
+        scaleLabel.innerText = `${(antimatterMaxRate * 2 * ((8 - i) / 8) * getTimerRateRatio()).toFixed(2)} / s`;
         scaleLabel.style.position = "absolute";
         scaleLabel.style.right = "5px";
         
-        let topOffset = (i / 4) * 100;
+        let topOffset = (i / 8) * 100;
         
         if (i === 0) {
             topOffset += 2;
-        } else if (i === 4) {
+        } else if (i === 8) {
             topOffset -= 2;
         }
     
@@ -2461,9 +2461,9 @@ export async function drawAntimatterFlowDiagram(rocketData, svgElement) {
     
     const scaleForeignObject = document.createElementNS(svgNS, "foreignObject");
     scaleForeignObject.setAttribute("x", rightOffset + (boxWidth / 2) - 20);
-    scaleForeignObject.setAttribute("y", topMostY + (rightBoxHeight / 2));
+    scaleForeignObject.setAttribute("y", topMostY);
     scaleForeignObject.setAttribute("width", 80);
-    scaleForeignObject.setAttribute("height", rightBoxHeight / 2);
+    scaleForeignObject.setAttribute("height", rightBoxHeight);
     scaleForeignObject.setAttribute("id", "svgRightScaleContainer");
     scaleForeignObject.appendChild(scaleContainer);
 
