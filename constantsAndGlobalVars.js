@@ -1059,7 +1059,7 @@ export function restoreGameStatus(gameState, type) {
             rebirthPossible = gameState.flags.rebirthPossible ?? false;
             liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
 
-            initializeAutoSave();
+            //initializeAutoSave();
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
             offlineGains(false);

@@ -38,21 +38,42 @@ let db;
 
 export function initializeAutoSave() {
     if (autoSaveTimer) {
+        console.log("Clearing existing auto-save timer.");
         clearTimeout(autoSaveTimer);
     }
 
+    const frequency = getAutoSaveFrequency();
+    console.log("Auto-save initialized with frequency:", frequency, "ms");
+
+    let timeLeft = frequency / 1000; // Convert to seconds
+
     const autoSaveHandler = () => {
+        console.log("Auto-save triggered. Saving game...");
+
         if (getAutoSaveToggle()) {
             saveGame('autoSave');
+
             if (getSaveData()) {
+                console.log("Saving to cloud...");
                 saveGameToCloud(getSaveData(), 'autosave');
             }
+
             setSaveData(null);
         }
-        autoSaveTimer = setTimeout(autoSaveHandler, getAutoSaveFrequency());
+
+        timeLeft = frequency / 1000; // Reset countdown
+        autoSaveTimer = setTimeout(autoSaveHandler, frequency);
     };
 
-    autoSaveTimer = setTimeout(autoSaveHandler, getAutoSaveFrequency());
+    // Countdown logger to track the time remaining
+    const countdownLogger = setInterval(() => {
+        if (timeLeft > 0) {
+            console.log(`Auto-save in: ${timeLeft} seconds`);
+            timeLeft--;
+        }
+    }, 1000);
+
+    autoSaveTimer = setTimeout(autoSaveHandler, frequency);
 }
 
 export async function saveGameToCloud(gameData, type) {
@@ -86,7 +107,7 @@ export function saveGame(type) {
         saveGameArea.readOnly = true;
     }
 
-    if (type === 'initialise') {
+    if (type === 'initialise' || type === 'autoSave') {
         setSaveData(compressedSaveData);
     }
 }
