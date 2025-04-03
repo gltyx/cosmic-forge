@@ -402,7 +402,7 @@ export async function gameLoop() {
         }
 
         const elementsToCheck = document.querySelectorAll(
-            '.energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
+            '#autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
         );
         elementsToCheck.forEach(checkStatusAndSetTextClasses);        
 
@@ -3305,8 +3305,24 @@ function checkStatusAndSetTextClasses(element) {
         resourceCostSellChecks(element);  
     }
 
+    if (element.id === 'autoSellToggle') {
+        return autoSellerChecks(element);
+    }
+    
     if (element.classList.contains('building-purchase')) {
         setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
+    }
+}
+
+function autoSellerChecks(element) {
+    const toggleSwitchContainer = element.parentElement
+    const textAutoContainer = toggleSwitchContainer.parentElement.querySelector('.autoBuyer-building-quantity');
+    if (getTechUnlockedArray().includes('nanoBrokers')) {
+        toggleSwitchContainer.classList.remove('invisible');
+        if (textAutoContainer) textAutoContainer.classList.remove('invisible');
+    } else {
+        toggleSwitchContainer.classList.add('invisible');
+        if (textAutoContainer) textAutoContainer.classList.add('invisible');
     }
 }
 

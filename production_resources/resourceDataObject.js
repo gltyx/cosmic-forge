@@ -1,5 +1,6 @@
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
+import { addPermanentBuffsBackInAfterRebirth } from './game.js';
 
 export let resourceData = {
     version: 0.54, //update this whenever changes are made to the structure
@@ -115,7 +116,7 @@ export let resourceData = {
         neon: {
             nameResource: 'Neon',
             screenName: 'neon',
-            saleValue: 0.02,
+            saleValue: 0.06,
             salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
@@ -142,7 +143,7 @@ export let resourceData = {
         oxygen: {
             nameResource: 'Oxygen',
             screenName: 'oxygen',
-            saleValue: 0.02,
+            saleValue: 0.05,
             salePreviewElement: 'sellOxygenDescription',
             quantity: 0,
             rate: 0,
@@ -169,7 +170,7 @@ export let resourceData = {
         silicon: {
             nameResource: 'Silicon',
             screenName: 'silicon',
-            saleValue: 0.02,
+            saleValue: 0.08,
             salePreviewElement: 'sellSiliconDescription',
             quantity: 0,
             rate: 0,
@@ -196,7 +197,7 @@ export let resourceData = {
         iron: {
             nameResource: 'Iron',
             screenName: 'iron',
-            saleValue: 0.02,
+            saleValue: 0.12,
             salePreviewElement: 'sellIronDescription',
             quantity: 0,
             rate: 0,
@@ -223,7 +224,7 @@ export let resourceData = {
         sodium: {
             nameResource: 'Sodium',
             screenName: 'sodium',
-            saleValue: 0.02,
+            saleValue: 0.1,
             salePreviewElement: 'sellSodiumDescription',
             quantity: 0,
             rate: 0,
@@ -348,7 +349,7 @@ export let resourceData = {
         concrete: {
             nameResource: 'Concrete',
             screenName: 'concrete',
-            saleValue: 2.5,
+            saleValue: 0.8,
             salePreviewElement: 'sellConcreteDescription',
             createPreviewElement: 'createConcreteDescription',
             quantity: 0,
@@ -380,7 +381,7 @@ export let resourceData = {
         water: {
             nameResource: 'Water',
             screenName: 'water',
-            saleValue: 2.5,
+            saleValue: 1.6,
             salePreviewElement: 'sellWaterDescription',
             createPreviewElement: 'createWaterDescription',
             quantity: 0,
@@ -412,7 +413,7 @@ export let resourceData = {
         titanium: {
             nameResource: 'Titanium',
             screenName: 'titanium',
-            saleValue: 12,
+            saleValue: 6,
             salePreviewElement: 'sellTitaniumDescription',
             createPreviewElement: 'createTitaniumDescription',
             quantity: 0,
@@ -799,6 +800,7 @@ export let resourceData = {
         aggregateMixing: { appearsAt: [12000, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 81 },
         steelFoundries: { appearsAt: [11500, "siliconFusion", ""], prereqs: ['Silicon Fusion'], price: 13000, idForRenderPosition: 82 },
         nanoTubeTechnology: { appearsAt: [3500, "heliumFusion", ""], prereqs: ['Helium Fusion'], price: 4000, idForRenderPosition: 499 },
+        nanoBrokers: { appearsAt: [18000, "nanoTubeTechnology", "steelFoundries", "compounds"], prereqs: ['Nano Tube Technology', 'Steel Foundries', 'Compounds'], price: 19000, idForRenderPosition: 498 },
         hydroCarbons: { appearsAt: [3200, "basicPowerGeneration", ""], prereqs: ['Basic Power Generation'], price: 3800, idForRenderPosition: 500 },
         stellarCartography: { appearsAt: [700, null], prereqs: [null], price: 800, idForRenderPosition: 510 },
         quantumComputing: { appearsAt: [3500, "nanoTubeTechnology", ""], prereqs: ['Nano Tube Technology'], price: 5750, idForRenderPosition: 520 },
@@ -853,8 +855,259 @@ export let starSystems = {
     }
 };
 
+export let galacticMarket = {
+    version: 0.54,
+    resources: {
+        hydrogen: { 
+            name: "Hydrogen", 
+            baseValue: 0.02, 
+            marketBias: 0,
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        helium: { 
+            name: "Helium", 
+            baseValue: 0.01, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        carbon: { 
+            name: "Carbon", 
+            baseValue: 0.1, 
+            marketBias: 0,
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        neon: { 
+            name: "Neon", 
+            baseValue: 0.06, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        oxygen: { 
+            name: "Oxygen", 
+            baseValue: 0.05, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        silicon: { 
+            name: "Silicon", 
+            baseValue: 0.08, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        iron: { 
+            name: "Iron", 
+            baseValue: 0.12, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        sodium: { 
+            name: "Sodium", 
+            baseValue: 0.10, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        }
+    },
+    compounds: {
+        water: { 
+            name: "Water", 
+            baseValue: 0.08, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        diesel: { 
+            name: "Diesel", 
+            baseValue: 0.2, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        glass: { 
+            name: "Glass", 
+            baseValue: 0.8, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        steel: { 
+            name: "Steel", 
+            baseValue: 1.2, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        concrete: { 
+            name: "Concrete", 
+            baseValue: 0.8, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        },
+        titanium: { 
+            name: "Titanium", 
+            baseValue: 6, 
+            marketBias: 0, 
+            tradeVolume: 100000,
+            eventModifier: 0 
+        }
+    }
+};
+
+export let ascendencyBuffs = {
+    version: 0.54,
+    "efficientStorage": {  //done
+        name: "Efficient Storage",
+        description: "buffEfficientStorageRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 10,
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 3
+    },
+    "smartAutoBuyers": {  //done
+        name: "Smart Auto Buyers",
+        description: "buffSmartAutoBuyersRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 15,
+        effectCategoryMagnitude: 1.5,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "jumpstartResearch": {  //done
+        name: "Jumpstart Research",
+        description: "buffJumpstartResearchRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 30,
+        effectCategoryMagnitude: 100,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "optimizedPowerGrids": {  //done
+        name: "Optimized Power Grids",
+        description: "buffOptimizedPowerGridsRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 25,
+        effectCategoryMagnitude: 1.2,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "fasterAsteroidScan": { //done
+        name: "Faster Asteroid Scan",
+        description: "buffFasterAsteroidScanRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 1.2,
+        baseCostAp: 20,
+        effectCategoryMagnitude: 0.25,
+        boughtYet: 0,
+        timesRebuyable: 4
+    },
+    "deeperStarStudy": { //done
+        name: "Deeper Star Study",
+        description: "buffDeeperStarStudyRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 50,
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 3
+    },
+    "asteroidScannerBoost": {  //done
+        name: "Asteroid Scanner Boost",
+        description: "buffAsteroidScannerBoostRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 20,
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 2
+    },
+    "rocketFuelOptimization": {  //done
+        name: "Rocket Fuel Optimization",
+        description: "buffRocketFuelOptimizationRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 40,
+        effectCategoryMagnitude: 0.5,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "enhancedMining": { //done
+        name: "Enhanced Mining",
+        description: "buffEnhancedMiningRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 2,
+        baseCostAp: 15,
+        effectCategoryMagnitude: 0.25,
+        boughtYet: 0,
+        timesRebuyable: 4
+    },
+    "quantumEngines": { //done
+        name: "Quantum Engines",
+        description: "buffQuantumEnginesRow",
+        rebuyable: true,
+        rebuyableIncreaseMultiple: 1.2,
+        baseCostAp: 15,
+        effectCategoryMagnitude: 2,
+        boughtYet: 0,
+        timesRebuyable: 10
+    }
+};
+
+
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function getBuffEfficientStorageData() {
+    return ascendencyBuffs["efficientStorage"];
+}
+
+export function getBuffSmartAutoBuyersData() {
+    return ascendencyBuffs["smartAutoBuyers"];
+}
+
+export function getBuffJumpstartResearchData() {
+    return ascendencyBuffs["jumpstartResearch"];
+}
+
+export function getBuffOptimizedPowerGridsData() {
+    return ascendencyBuffs["optimizedPowerGrids"];
+}
+
+export function getBuffFasterAsteroidScanData() {
+    return ascendencyBuffs["fasterAsteroidScan"];
+}
+
+export function getBuffDeeperStarStudyData() {
+    return ascendencyBuffs["deeperStarStudy"];
+}
+
+export function getBuffAsteroidScannerBoostData() {
+    return ascendencyBuffs["asteroidScannerBoost"];
+}
+
+export function getBuffRocketFuelOptimizationData() {
+    return ascendencyBuffs["rocketFuelOptimization"];
+}
+
+export function getBuffEnhancedMiningData() {
+    return ascendencyBuffs["enhancedMining"];
+}
+
+export function getBuffQuantumEnginesData() {
+    return ascendencyBuffs["quantumEngines"];
+}
 
 export function copyStarDataToDestinationStarField(starName) {
     const stars = getStarSystemDataObject('stars');
@@ -877,6 +1130,16 @@ export function restoreRocketNamesObject(value) {
     replaceRocketNames(value);
 }
 
+export function restoreGalacticMarketDataObject(value) {
+    value = migrateResourceData(value, 'galacticMarketData');
+    galacticMarket = value;
+}
+
+export function restoreAscendencyBuffsDataObject(value) {
+    value = migrateResourceData(value, 'ascendencyBuffsData')
+    ascendencyBuffs = value;
+}
+
 export function getStarSystemWeather(starSystem) {
     return starSystems.stars[starSystem]?.weather || null;
 }
@@ -884,6 +1147,30 @@ export function getStarSystemWeather(starSystem) {
 export function setStarSystemWeather(starSystem, weatherData) {
     if (starSystems.stars[starSystem]) {
         starSystems.stars[starSystem].weather = weatherData;
+    }
+}
+
+export function getAscendencyBuffDataObject() {
+    return ascendencyBuffs;
+}
+
+export function setAscendencyBuffDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
+
+    let current = ascendencyBuffs;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
     }
 }
 
@@ -928,12 +1215,55 @@ export function setResourceDataObject(value, key, subKeys = []) {
     }
 }
 
+export function getGalacticMarketDataObject(key, subKeys) {
+    let current = galacticMarket[key];
+
+    if (!current) {
+        console.warn(`Galactic market data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined) {
+                console.warn(`Missing subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+export function setGalacticMarketDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Main key is required.");
+        return;
+    }
+
+    let current = galacticMarket;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
+    }
+}
+
 export let resourceDataRebirthCopy = structuredClone(resourceData);
 
 export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
     const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
     //const galacticBuffsList = 
     Object.assign(resourceData, resourceDataRebirthCopy);
+
+    addPermanentBuffsBackInAfterRebirth();
     //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
 }

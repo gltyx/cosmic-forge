@@ -158,6 +158,7 @@ export function initialiseDescriptions() {
         scienceLaboratories: 'Science Laboratories Researched\n\nYou can now build Science Labs!',
         hydroCarbons: 'HydroCarbons Researched\n\nYou can gain access to Diesel Fuel once you have Compounds unlocked!',
         nanoTubeTechnology: 'Nano Tube Technology Researched\n\nWith this we can start to learn about how to fuse Carbon in the future!',
+        nanoBrokers: 'Nano Brokers Researched\n\nYou can toggle resources to be automatically sold for cash instead of accumulating!',
         stellarCartography: 'Stellar Cartography Researched\n\nYou unlocked Interstellar tab!',
         fusionEfficiencyI: 'Fusion Efficiency I Researched\n\n20% Boost to Fusion returns!',
         fusionEfficiencyII: 'Fusion Efficiency II Researched\n\nFurther 20% Boost to Fusion returns!',
@@ -705,6 +706,11 @@ export function initialiseDescriptions() {
         techStellarCartographyRow: {
             content1: "Unlock Stellar Cartography to map the stars.",
             content2: "Unlock Stellar Cartography to map distant stars and unlock new astronomical research capabilities.<br><br><span class='green-ready-text'>Unlock Star Map</span>",
+            updateAt: ""
+        },
+        techNanoBrokersRow: {
+            content1: "Unlock Nano Brokers to automatically sell Resources and Compounds!",
+            content2: "Unlock Nano Brokers to automatically sell Resources and Compounds!<br><br><span class='green-ready-text'>Unlock Auto Sellers on all Resources and Compounds</span>",
             updateAt: ""
         },
         techQuantumComputingRow: {

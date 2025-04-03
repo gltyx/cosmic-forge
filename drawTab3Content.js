@@ -598,6 +598,37 @@ export function drawTab3Content(heading, optionContentElement) {
                 )
             },
             {
+                techName: 'nanoBrokers',
+                row: createOptionRow(
+                    'techNanoBrokersRow',
+                    null,
+                    'Nano Brokers:',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('nanoBrokers', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('nanoBrokers');
+                        showNotification(techNotificationMessages.nanoBrokers, 'info');
+                        setRenderedTechTree(false);
+                        enableAutoSellToggles();
+                    }, 'techUnlock', '', 'nanoBrokers', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['nanoBrokers', 'price'])} Research${getResourceDataObject('techs', ['nanoBrokers', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="nanoBrokersPrereq">${getResourceDataObject('techs', ['nanoBrokers', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'nanoBrokers',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
                 techName: 'stellarCartography',
                 row: createOptionRow(
                     'techStellarCartographyRow',
