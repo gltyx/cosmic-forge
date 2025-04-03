@@ -1,7 +1,7 @@
 import { getImageUrls, setSaleResourcePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
 import { sellResource, fuseResource, gain, increaseResourceStorage } from './game.js';
-import { getResourceDataObject } from './resourceDataObject.js';
-import { createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
+import { getResourceDataObject, setResourceDataObject } from './resourceDataObject.js';
+import { createToggleSwitch, createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
 
 export function drawTab1Content(heading, optionContentElement) {
     if (heading === 'Hydrogen') {
@@ -46,8 +46,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'hydrogen', 'helium', 'hydrogen', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             `${getResourceSalePreview('hydrogen')}`,
             null,
             null,
@@ -255,8 +257,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'helium', 'carbon', 'helium', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['helium', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             `${getResourceSalePreview('helium')}`,
             null,
@@ -472,8 +476,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'carbon', 'neon', 'carbon', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['carbon', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             `${getResourceSalePreview('neon')}`,
             null,
@@ -682,8 +688,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'neon', 'oxygen', 'neon', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['neon', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             `${getResourceSalePreview('neon')}`,
             null,
@@ -892,8 +900,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'oxygen', 'silicon', 'oxygen', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['oxygen', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             `${getResourceSalePreview('oxygen')}`,
             null,
@@ -1089,8 +1099,10 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('sodium');
             }, 'sellResource', null, null, null, 'sodium', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['sodium', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${getResourceSalePreview('sodium')}`,
@@ -1300,8 +1312,10 @@ export function drawTab1Content(heading, optionContentElement) {
                 event.currentTarget.classList.remove('warning-orange-text', 'disabled-red-text');
                 event.currentTarget.parentElement.nextElementSibling.querySelector('label').classList.remove('warning-orange-text', 'disabled-red-text');
             }, 'fuseResource', null, 'silicon', 'iron', 'silicon', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['silicon', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             `${getResourceSalePreview('silicon')}`,
             null,
@@ -1497,8 +1511,10 @@ export function drawTab1Content(heading, optionContentElement) {
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('iron');
             }, 'sellResource', null, null, null, 'iron', true, null, 'resource'),
-            null,
-            null,
+            createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+            createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'autoSell']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${getResourceSalePreview('iron')}`,

@@ -45,33 +45,23 @@ export function initializeAutoSave() {
     const frequency = getAutoSaveFrequency();
     console.log("Auto-save initialized with frequency:", frequency, "ms");
 
-    let timeLeft = frequency / 1000; // Convert to seconds
+    let timeLeft = frequency / 1000;
 
     const autoSaveHandler = () => {
-        console.log("Auto-save triggered. Saving game...");
 
         if (getAutoSaveToggle()) {
             saveGame('autoSave');
 
             if (getSaveData()) {
-                console.log("Saving to cloud...");
                 saveGameToCloud(getSaveData(), 'autosave');
             }
 
             setSaveData(null);
         }
 
-        timeLeft = frequency / 1000; // Reset countdown
+        timeLeft = frequency / 1000;
         autoSaveTimer = setTimeout(autoSaveHandler, frequency);
     };
-
-    // Countdown logger to track the time remaining
-    const countdownLogger = setInterval(() => {
-        if (timeLeft > 0) {
-            console.log(`Auto-save in: ${timeLeft} seconds`);
-            timeLeft--;
-        }
-    }, 1000);
 
     autoSaveTimer = setTimeout(autoSaveHandler, frequency);
 }

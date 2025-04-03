@@ -1,7 +1,7 @@
 import { getImageUrls, getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
-import { getResourceDataObject } from './resourceDataObject.js';
-import { createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
+import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
+import { createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
 
 export function drawTab4Content(heading, optionContentElement) {
         if (heading === 'Diesel') {
@@ -72,8 +72,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('diesel');
                 }, 'sellCompound', null, null, null, 'diesel', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['diesel', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('diesel')}`,
@@ -284,8 +286,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('glass');
                 }, 'sellCompound', null, null, null, 'glass', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['glass', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('glass')}`,
@@ -496,8 +500,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('steel');
                 }, 'sellCompound', null, null, null, 'steel', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['steel', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('steel')}`,
@@ -708,8 +714,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('concrete');
                 }, 'sellCompound', null, null, null, 'concrete', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['concrete', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('concrete')}`,
@@ -922,8 +930,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('water');
                 }, 'sellCompound', null, null, null, 'water', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['water', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('water')}`,
@@ -1134,8 +1144,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('titanium');
                 }, 'sellCompound', null, null, null, 'titanium', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoSellToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['titanium', 'autoSell']);
+                }, ['toggle-switch-spacing']),
                 null,
                 null,
                 `${getCompoundSalePreview('titanium')}`,
