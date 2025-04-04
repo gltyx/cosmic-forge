@@ -1837,16 +1837,25 @@ helpContent = {
         subBody3: "Building a Starship is a major milestone. Starships can travel to distant star systems and permit Rebirthing.",
 
         subHeading4: "Starship - Travelling",
-        subBody4: "Starships can Travel To Studied Star systems, each offering unique Weather, Resources, and challenges.",
+        subBody4: "Starships can Travel To Studied Star systems, each offering unique Weather, Resources, and challenges when you rebirth on them for a new run.", 
 
-        subHeading5: "Ascendency Points (AP)",
-        subBody5: "Ascendency Points (AP) are earned by Travelling To Stars. Simply put, the further away the Star is, the more AP will be granted upon Rebirth. They can be spent in the Galactic Market.",
+        subHeading5: "Diplomacy",
+        subBody5: "Most Star Systems contain intelligent alien life. You need to perform a Stellar Scan, and build an Envoy and send it, to initiate this. The Scan gives information about the lifeform in the System, it is not mandatory, but if you don't do this, your only option will be war and without knowing the size of the enemy force!  There are several options when these encounters are made, ranging from Bullying them, to trying to Vassalize them, and if all else fails, Conquerig them!  You can improve or worsen their impression of you which can affect their fleet size.  Leaders have traits that can affect how they respond to you, or in the case of war, can buff or reduce their defense, speed, fleet size etc.",
 
-        subHeading6: "Rebirth",
-        subBody6: "Rebirth resets progress but grants Ascendency Points (AP), the first one unlocks the Galactic Market where AP can be spent.",
+        subHeading6: "Battle",
+        subBody6: "Not all systems are friendly. Sometimes the only option will be to fight it out to try to conquer it.  You must use the Fleet Hangar screen to build an attack force and initiate a battle.  If you lose, all your fleet will be destroyed but not your Star Ship.  You can rebuild, but it is an expensive process so try and win!.",
 
-        subHeading7: "Galactic Market",
-        subBody7: "The Galactic market is the last major Unlock of the game, and arrives after the first Rebirth.  In it, you can spend AP for permanent Upgrades to make subsequent runs much easier.",
+        subHeading7: "Ascendency Points (AP)",
+        subBody7: "Ascendency Points (AP) are earned by Travelling To Stars. Simply put, the further away the Star is, the more AP will be granted upon Rebirth. They can be spent in the Galactic Market.  You can also gain them by liquidating all your resources and compounds and cash once per run, and also some colonising methods can double the payout also.", 
+
+        subHeading8: "Rebirth",
+        subBody8: "Rebirth resets progress but conquers a New System.", 
+
+        subHeading9: "Galactic Market",
+        subBody9: "The Galactic market is a major unlock, and arrives after your ship arrives at the new System in the first run.  In it, you can trade Resources, Cash and AP.",
+
+        subHeading10: "Ascendency Perks",
+        subBody10: "You can spend acquired AP on permanent buffs that make future runs easier, and the game more replayable and fun!"
     }
 }
 
