@@ -90,6 +90,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(dieselSellRow);
+            const toggleSwitch = dieselSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
     
             const dieselIncreaseStorageRow = createOptionRow(
                 'dieselIncreaseStorageRow',
@@ -304,6 +308,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(glassSellRow);
+            const toggleSwitch = glassSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
     
             const glassIncreaseStorageRow = createOptionRow(
                 'glassIncreaseStorageRow',
@@ -518,6 +526,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(steelSellRow);
+            const toggleSwitch = steelSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
         
             const steelIncreaseStorageRow = createOptionRow(
                 'steelIncreaseStorageRow',
@@ -732,6 +744,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(concreteSellRow);
+            const toggleSwitch = concreteSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
         
             const concreteIncreaseStorageRow = createOptionRow(
                 'concreteIncreaseStorageRow',
@@ -948,6 +964,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(waterSellRow);
+            const toggleSwitch = waterSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
         
             const waterIncreaseStorageRow = createOptionRow(
                 'waterIncreaseStorageRow',
@@ -1162,6 +1182,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 'compound'
             );
             optionContentElement.appendChild(titaniumSellRow);
+            const toggleSwitch = titaniumSellRow.querySelector('#autoSellToggle');
+            if (toggleSwitch) {
+                toggleSwitch.setAttribute('data-type', 'compounds');
+            }
         
             const titaniumIncreaseStorageRow = createOptionRow(
                 'titaniumIncreaseStorageRow',

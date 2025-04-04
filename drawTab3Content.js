@@ -1,6 +1,6 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getImageUrls, getTechTreeData, getTechUnlockedArray, getUpcomingTechArray, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setTechRenderChange, setRenderedTechTree } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
-import { getResourceDataObject, setAutoBuyerTierLevel, getAutoBuyerTierLevel } from './resourceDataObject.js';
+import { getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
@@ -609,7 +609,6 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('nanoBrokers');
                         showNotification(techNotificationMessages.nanoBrokers, 'info');
                         setRenderedTechTree(false);
-                        enableAutoSellToggles();
                     }, 'techUnlock', '', 'nanoBrokers', null, 'research', true, null, 'tech'),
                     null,
                     null,

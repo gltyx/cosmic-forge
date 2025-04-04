@@ -160,7 +160,8 @@ import {
     calculateMovementVectorToTarget,
     setEnemyFleetPower,
     rebirth,
-    settleSystemAfterBattle
+    settleSystemAfterBattle,
+    setAutoSellToggleState
 
 } from './game.js';
 
@@ -2678,6 +2679,7 @@ function initializeTabEventListeners() {
             updateContent('Hydrogen', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('hydrogen', 'resources');
         });
     });
     
@@ -2688,6 +2690,7 @@ function initializeTabEventListeners() {
             updateContent('Helium', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('helium', 'resources');
         });
     });
 
@@ -2698,6 +2701,7 @@ function initializeTabEventListeners() {
             updateContent('Carbon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('carbon', 'resources');
         });
     });
 
@@ -2708,6 +2712,7 @@ function initializeTabEventListeners() {
             updateContent('Neon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('neon', 'resources');
         });
     });
 
@@ -2718,6 +2723,7 @@ function initializeTabEventListeners() {
             updateContent('Oxygen', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('oxygen', 'resources');
         });
     });
 
@@ -2726,6 +2732,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab1', 'sodium');
             setCurrentOptionPane('sodium');
             updateContent('Sodium', 'tab1', 'content');
+            setAutoSellToggleState('sodium', 'resources');
         });
     });
 
@@ -2736,6 +2743,7 @@ function initializeTabEventListeners() {
             updateContent('Silicon', 'tab1', 'content');
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+            setAutoSellToggleState('silicon', 'resources');
         });
     });
 
@@ -2744,6 +2752,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab1', 'iron');
             setCurrentOptionPane('iron');
             updateContent('Iron', 'tab1', 'content');
+            setAutoSellToggleState('iron', 'resources');
         });
     });
 
@@ -2808,6 +2817,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'diesel');
             setCurrentOptionPane('diesel');
             updateContent('Diesel', 'tab4', 'content');
+            setAutoSellToggleState('diesel', 'compounds');
         });
     });
 
@@ -2816,6 +2826,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'glass');
             setCurrentOptionPane('glass');
             updateContent('Glass', 'tab4', 'content');
+            setAutoSellToggleState('glass', 'compounds');
         });
     });
 
@@ -2824,6 +2835,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'steel');
             setCurrentOptionPane('steel');
             updateContent('Steel', 'tab4', 'content');
+            setAutoSellToggleState('steel', 'compounds');
         });
     });
 
@@ -2832,6 +2844,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'concrete');
             setCurrentOptionPane('concrete');
             updateContent('Concrete', 'tab4', 'content');
+            setAutoSellToggleState('concrete', 'compounds');
         });
     });
 
@@ -2840,6 +2853,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'water');
             setCurrentOptionPane('water');
             updateContent('Water', 'tab4', 'content');
+            setAutoSellToggleState('water', 'compounds');
         });
     });
 
@@ -2848,6 +2862,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab4', 'titanium');
             setCurrentOptionPane('titanium');
             updateContent('Titanium', 'tab4', 'content');
+            setAutoSellToggleState('titanium', 'compounds');
         });
     });
 
@@ -4842,7 +4857,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 row.classList.remove('invisible');
             }
         });
-    }    
+    }
     
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------

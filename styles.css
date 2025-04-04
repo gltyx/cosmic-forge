@@ -457,8 +457,8 @@ button {
     --disabled-text: red;
     --ready-text: lime;
     --warning-text: orange;
-    --stats-this-run-text: #87cefa; /* Soft blue for better contrast */
-    --stats-all-time-text: #ff80ff; /* Light magenta for contrast */
+    --stats-this-run-text: #87cefa;
+    --stats-all-time-text: #ff80ff;
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
     --text-color: white;

@@ -63,6 +63,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(hydrogenSellRow);
+        const toggleSwitch = hydrogenSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const hydrogenGainRow = createOptionRow(
             'hydrogenGainRow',
@@ -274,6 +278,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(heliumSellRow);
+        const toggleSwitch = heliumSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const heliumGainRow = createOptionRow(
             'heliumGainRow',
@@ -493,6 +501,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(carbonSellRow);
+        const toggleSwitch = carbonSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const carbonGainRow = createOptionRow(
             'carbonGainRow',
@@ -705,6 +717,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(neonSellRow);
+        const toggleSwitch = neonSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const neonGainRow = createOptionRow(
             'neonGainRow',
@@ -917,6 +933,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(oxygenSellRow);
+        const toggleSwitch = oxygenSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const oxygenGainRow = createOptionRow(
             'oxygenGainRow',
@@ -1117,6 +1137,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(sodiumSellRow);
+        const toggleSwitch = sodiumSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const sodiumGainRow = createOptionRow(
             'sodiumGainRow',
@@ -1329,6 +1353,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(siliconSellRow);
+        const toggleSwitch = siliconSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const siliconGainRow = createOptionRow(
             'siliconGainRow',
@@ -1529,6 +1557,10 @@ export function drawTab1Content(heading, optionContentElement) {
             'resource'
         );
         optionContentElement.appendChild(ironSellRow);
+        const toggleSwitch = ironSellRow.querySelector('#autoSellToggle');
+        if (toggleSwitch) {
+            toggleSwitch.setAttribute('data-type', 'resources');
+        }
 
         const ironGainRow = createOptionRow(
             'ironGainRow',

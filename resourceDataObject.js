@@ -3,9 +3,10 @@ import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
 
 export let resourceData = {
-    version: 0.54, //update this whenever changes are made to the structure
+    version: 0.56, //update this whenever changes are made to the structure
     resources: {
         solar: {
+            autoSell: false,
             nameResource: 'Solar',
             screenName: 'solar',
             saleValue: 0,
@@ -33,6 +34,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         hydrogen: {
+            autoSell: false,
             nameResource: 'Hydrogen',
             screenName: 'hydrogen',
             saleValue: 0.02,
@@ -60,6 +62,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         helium: {
+            autoSell: false,
             nameResource: 'Helium',
             screenName: 'helium',
             saleValue: 0.01,
@@ -87,6 +90,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         carbon: {
+            autoSell: false,
             nameResource: 'Carbon',
             screenName: 'carbon',
             saleValue: 0.1,
@@ -114,6 +118,7 @@ export let resourceData = {
             fuseToRatio2: 0.2
         },    
         neon: {
+            autoSell: false,
             nameResource: 'Neon',
             screenName: 'neon',
             saleValue: 0.06,
@@ -141,6 +146,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         oxygen: {
+            autoSell: false,
             nameResource: 'Oxygen',
             screenName: 'oxygen',
             saleValue: 0.05,
@@ -168,6 +174,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         silicon: {
+            autoSell: false,
             nameResource: 'Silicon',
             screenName: 'silicon',
             saleValue: 0.08,
@@ -195,6 +202,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         iron: {
+            autoSell: false,
             nameResource: 'Iron',
             screenName: 'iron',
             saleValue: 0.12,
@@ -222,6 +230,7 @@ export let resourceData = {
             fuseToRatio2: 0
         },
         sodium: {
+            autoSell: false,
             nameResource: 'Sodium',
             screenName: 'sodium',
             saleValue: 0.1,
@@ -251,6 +260,7 @@ export let resourceData = {
     },
     compounds: {
         diesel: {
+            autoSell: false,
             nameResource: 'Diesel',
             screenName: 'diesel',
             saleValue: 0.1,
@@ -283,6 +293,7 @@ export let resourceData = {
             createsFromRatio4: 0
         },
         glass: {
+            autoSell: false,
             nameResource: 'Glass',
             screenName: 'glass',
             saleValue: 0.8,
@@ -315,6 +326,7 @@ export let resourceData = {
             createsFromRatio4: 0
         },
         steel: {
+            autoSell: false,
             nameResource: 'Steel',
             screenName: 'steel',
             saleValue: 1.8,
@@ -347,6 +359,7 @@ export let resourceData = {
             createsFromRatio4: 0
         },
         concrete: {
+            autoSell: false,
             nameResource: 'Concrete',
             screenName: 'concrete',
             saleValue: 0.8,
@@ -379,6 +392,7 @@ export let resourceData = {
             createsFromRatio4: 0
         },   
         water: {
+            autoSell: false,
             nameResource: 'Water',
             screenName: 'water',
             saleValue: 1.6,
@@ -411,6 +425,7 @@ export let resourceData = {
             createsFromRatio4: 0
         },  
         titanium: {
+            autoSell: false,
             nameResource: 'Titanium',
             screenName: 'titanium',
             saleValue: 6,
@@ -837,7 +852,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.54,
+    version: 0.56,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
@@ -856,7 +871,7 @@ export let starSystems = {
 };
 
 export let galacticMarket = {
-    version: 0.54,
+    version: 0.56,
     resources: {
         hydrogen: { 
             name: "Hydrogen", 
@@ -962,7 +977,7 @@ export let galacticMarket = {
 };
 
 export let ascendencyBuffs = {
-    version: 0.54,
+    version: 0.56,
     "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",
@@ -1174,10 +1189,10 @@ export function setAscendencyBuffDataObject(value, key, subKeys = []) {
     }
 }
 
-export function getResourceDataObject(key, subKeys) {
+export function getResourceDataObject(key, subKeys, noWarning = false) {
     let current = resourceData[key];
 
-    if (!current) {
+    if (!current && !noWarning) {
         console.warn(`Resource data not found for key: ${key}`);
         return undefined;
     }
@@ -1185,7 +1200,7 @@ export function getResourceDataObject(key, subKeys) {
     if (subKeys) {
         for (const subKey of subKeys) {
             current = current?.[subKey];
-            if (current === undefined) {
+            if (current === undefined && !noWarning) {
                 console.warn(`Missing subKey: ${subKey}`);
                 return undefined;
             }

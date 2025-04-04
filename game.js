@@ -3315,14 +3315,23 @@ function checkStatusAndSetTextClasses(element) {
 }
 
 function autoSellerChecks(element) {
-    const toggleSwitchContainer = element.parentElement
+    const toggleSwitchContainer = element.parentElement;
     const textAutoContainer = toggleSwitchContainer.parentElement.querySelector('.autoBuyer-building-quantity');
+
     if (getTechUnlockedArray().includes('nanoBrokers')) {
-        toggleSwitchContainer.classList.remove('invisible');
-        if (textAutoContainer) textAutoContainer.classList.remove('invisible');
+        if (toggleSwitchContainer.classList.contains('invisible')) {
+            toggleSwitchContainer.classList.remove('invisible');
+        }
+        if (textAutoContainer && textAutoContainer.classList.contains('invisible')) {
+            textAutoContainer.classList.remove('invisible');
+        }
     } else {
-        toggleSwitchContainer.classList.add('invisible');
-        if (textAutoContainer) textAutoContainer.classList.add('invisible');
+        if (!toggleSwitchContainer.classList.contains('invisible')) {
+            toggleSwitchContainer.classList.add('invisible');
+        }
+        if (textAutoContainer && !textAutoContainer.classList.contains('invisible')) {
+            textAutoContainer.classList.add('invisible');
+        }
     }
 }
 
@@ -4413,6 +4422,29 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
             element.classList.add('green-ready-text');
         }
 
+        if (element && data2 && data1 !== data2) {
+            const baseId = element.id.replace('Quantity', '');
+        
+            const resourceAutoSell = getResourceDataObject('resources', [baseId, 'autoSell'], true);
+            const compoundAutoSell = getResourceDataObject('compounds', [baseId, 'autoSell'], true);
+
+            if (resourceAutoSell || compoundAutoSell) {  //if autosell is on
+                let storageCapacity = 0;
+                if (resourceAutoSell) {
+                    storageCapacity = getResourceDataObject('resources', [baseId, 'storageCapacity']);
+                } else if (compoundAutoSell) {
+                    storageCapacity = getResourceDataObject('compounds', [baseId, 'storageCapacity']);
+                }
+
+                if (storageCapacity > 100) {
+                    element.classList.add('stats-text');
+                    element.classList.remove('green-ready-text');
+                }
+            } else {
+                element.classList.remove('stats-text');
+            }
+        }        
+
         if (element && element.classList.contains('green-ready-text') && data1 !== data2) {
             element.classList.remove('green-ready-text');
         }
@@ -4743,6 +4775,16 @@ function startInitialTimers() {
                                 }
                             }
                         }
+
+                        if (getResourceDataObject('resources', [resource, 'autoSell'])) {
+                            const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+                        
+                            if (currentQuantity > 100) {
+                                const autoSellQuantity = currentQuantity - 100;
+                                setResourceDataObject(100, 'resources', [resource, 'quantity']);
+                                processAutoSell(resource, autoSellQuantity, 'resources');
+                            }
+                        }
                     });
                 }
             });
@@ -4818,6 +4860,16 @@ function startInitialTimers() {
                                     setResourceDataObject(getCurrentPrecipitationRate(), 'compounds', [compound, 'rate']);
                                     getElements()[`${compound}Rate`].textContent = `${(getCurrentPrecipitationRate() * getTimerRateRatio()).toFixed(1)} / s`;
                                 }
+                            }
+                        }
+
+                        if (getResourceDataObject('compounds', [compound, 'autoSell'])) {
+                            const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+                        
+                            if (currentQuantity > 100) {
+                                const autoSellQuantity = currentQuantity - 100;
+                                setResourceDataObject(100, 'compounds', [compound, 'quantity']);
+                                processAutoSell(compound, autoSellQuantity, 'compounds');
                             }
                         }
                     });
@@ -5272,6 +5324,12 @@ function adjustMarketBiases() {
             setGalacticMarketDataObject(newBias, (typesResources.includes(itemType) ? 'resources' : 'compounds'), [itemType, 'marketBias']);
         }
     });
+}
+
+function processAutoSell(item, quantityToSell, type) {
+    const price = getResourceDataObject(type, [item, 'saleValue']);
+    const cashToAdd = price * quantityToSell;
+    setResourceDataObject(getResourceDataObject('currency', ['cash']) + cashToAdd, 'currency', ['cash']);
 }
 
 export function purchaseBuff(buff) {
@@ -8296,6 +8354,18 @@ export function buffSmartAutoBuyersRateMultiplier() {
     processRates(compounds, 'compounds');
 }
 
+export function setAutoSellToggleState(item, type) {
+    if (!getTechUnlockedArray().includes('nanoBrokers')) {
+        return;
+    }
+
+    const autoSellValue = getResourceDataObject(type, [item, 'autoSell']);
+    const element = document.querySelector(`#autoSellToggle[data-type="${type}"]`);
+
+    if (element) {
+        element.checked = autoSellValue;
+    }
+}
 
 //===============================================================================================================
 

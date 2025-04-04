@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.54;
+export const GAME_VERSION_FOR_SAVES = 0.56;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';
@@ -1077,6 +1077,8 @@ export function restoreGameStatus(gameState, type) {
             const newsTickerSettingToggleElement = document.getElementById('newsTickerSettingToggle');
             const backgroundAudioToggleElement = document.getElementById('backgroundAudioToggle');
             const sfxToggleElement = document.getElementById('sfxToggle');
+
+            
 
 
             if (autoSaveFrequencyElement) {

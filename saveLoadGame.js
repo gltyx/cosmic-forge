@@ -3,32 +3,19 @@ import {
     getCurrentGameVersion,
     setSaveName,
     getSaveName,
-    setLastSavedTimeStamp,
-    getLastSavedTimeStamp,
     setSaveData, 
     captureGameStatusForSaving, 
     restoreGameStatus, 
-    getElements,
     getAutoSaveFrequency,
     getAutoSaveToggle,
     getSaveData,
-    eNCrQueen,
-    getRocketsBuilt,
-    getAsteroidArray,
-    // getLanguage, 
-    // setLanguageChangedFlag, 
-    // getLanguageChangedFlag 
+    eNCrQueen
 } from './constantsAndGlobalVars.js';
-
-//import {localize} from './localization.js';
-//import { handleLanguageChange } from './ui.js';
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
-import { rocketNames } from './descriptions.js';
-import { setResourceDataObject } from './resourceDataObject.js';
 
 let autoSaveTimer = null;
 let firebaseConfig;
@@ -720,9 +707,23 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.54) {
+        if (saveData.version < 0.56) {
             if (objectType === 'resourceData') {
-
+                saveData.resources.solar.autoSell = false;
+                saveData.resources.hydrogen.autoSell = false;
+                saveData.resources.helium.autoSell = false;
+                saveData.resources.carbon.autoSell = false;
+                saveData.resources.neon.autoSell = false;
+                saveData.resources.oxygen.autoSell = false;
+                saveData.resources.sodium.autoSell = false;
+                saveData.resources.silicon.autoSell = false;
+                saveData.resources.iron.autoSell = false;
+                saveData.compounds.diesel.autoSell = false;
+                saveData.compounds.glass.autoSell = false;
+                saveData.compounds.steel.autoSell = false;
+                saveData.compounds.concrete.autoSell = false;
+                saveData.compounds.water.autoSell = false;
+                saveData.compounds.titanium.autoSell = false;
             } else if (objectType === 'starSystemsData') {
 
             } else if (objectType === 'rocketNames') {
@@ -832,6 +833,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                         timesRebuyable: 10
                     }
                 }
+                saveData.version = 0.56;
             }
         }
     
