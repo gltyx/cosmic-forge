@@ -709,6 +709,12 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
 
         if (saveData.version < 0.56) {
             if (objectType === 'resourceData') {
+                saveData.space.upgrades.ssStructural = { finished: false, builtParts: 0, parts: 20, price: 3000, resource1Price: [4000, 'steel', 'compounds'], resource2Price: [1500, 'titanium', 'compounds'], resource3Price: [4500, 'silicon', 'resources'], setPrice: 'ssStructuralPrice' };
+                saveData.space.upgrades.ssLifeSupport = { finished: false, builtParts: 0, parts: 10, price: 7500, resource1Price: [5000, 'glass', 'compounds'], resource2Price: [20000, 'oxygen', 'resources'], resource3Price: [15000, 'water', 'compounds'], setPrice: 'ssLifeSupportPrice' };
+                saveData.space.upgrades.ssAntimatterEngine = { finished: false, builtParts: 0, parts: 16, price: 6000, resource1Price: [3500, 'steel', 'compounds'], resource2Price: [2000, 'titanium', 'compounds'], resource3Price: [10000, 'neon', 'resources'], setPrice: 'ssAntimatterEnginePrice' };
+                saveData.space.upgrades.ssFleetHangar = { finished: false, builtParts: 0, parts: 1, price: 50000, resource1Price: [40000, 'glass', 'compounds'], resource2Price: [20000, 'titanium', 'compounds'], resource3Price: [80000, 'steel', 'compounds'], setPrice: 'ssFleetHangarPrice' };
+                saveData.space.upgrades.ssStellarScanner = { finished: false, builtParts: 0, parts: 8, price: 2500, resource1Price: [1500, 'glass', 'compounds'], resource2Price: [2000, 'silicon', 'resources'], resource3Price: [3000, 'neon', 'resources'], setPrice: 'ssStellarScannerPrice' };
+
                 saveData.resources.solar.autoSell = false;
                 saveData.resources.hydrogen.autoSell = false;
                 saveData.resources.helium.autoSell = false;
@@ -724,6 +730,8 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 saveData.compounds.concrete.autoSell = false;
                 saveData.compounds.water.autoSell = false;
                 saveData.compounds.titanium.autoSell = false;
+
+                saveData.techs.nanoBrokers = { appearsAt: [18000, "nanoTubeTechnology", "steelFoundries", "compounds"], prereqs: ['Nano Tube Technology', 'Steel Foundries', 'Compounds'], price: 19000, idForRenderPosition: 498 }
             } else if (objectType === 'starSystemsData') {
 
             } else if (objectType === 'rocketNames') {
