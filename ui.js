@@ -3117,7 +3117,7 @@ function initializeTabEventListeners() {
                         const optionContentElement = document.getElementById(`optionContentTab7`);
                         optionContentElement.innerHTML = '';
                         drawTab7Content('Galactic Market', optionContentElement);
-                    }else if (["power plant", "advanced power plant", "solar power plant"].includes(lastOpenOptionPane)) {
+                    } else if (["power plant", "advanced power plant", "solar power plant"].includes(lastOpenOptionPane)) {
                         const optionContentElement = document.getElementById(`optionContentTab2`);
                         optionContentElement.innerHTML = '';
                         const formattedPaneName = lastOpenOptionPane
@@ -3126,6 +3126,20 @@ function initializeTabEventListeners() {
                             .join(' ');
                     
                         drawTab2Content(formattedPaneName, optionContentElement);
+                    } else if (["hydrogen", "helium", "carbon", "neon", "oxygen", "sodium", "silicon", "iron"].includes(lastOpenOptionPane)) {
+                        const optionContentElement = document.getElementById(`optionContentTab2`);
+                        optionContentElement.innerHTML = '';
+                        updateContent(capitaliseString(lastOpenOptionPane), 'tab1', 'content');
+                        drawTab1Content(capitaliseString(lastOpenOptionPane), optionContentElement);
+                        fuseButton = document.querySelector('button.fuse');
+                        setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
+                        setAutoSellToggleState(lastOpenOptionPane, 'resources');
+                    } else if (["diesel", "glass", "steel", "concrete", "water", "titanium"].includes(lastOpenOptionPane)) {
+                        const optionContentElement = document.getElementById(`optionContentTab2`);
+                        optionContentElement.innerHTML = '';
+                        updateContent(capitaliseString(lastOpenOptionPane), 'tab4', 'content');
+                        drawTab4Content(capitaliseString(lastOpenOptionPane), optionContentElement);
+                        setAutoSellToggleState(lastOpenOptionPane, 'compounds');
                     }
                     setCurrentOptionPane(lastOpenOptionPane);
                 }
