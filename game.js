@@ -6040,7 +6040,13 @@ function setEnergyUse() {
                 const tier = autoBuyer[tierKey];
 
                 if (tier) {
-                    const energyUse = tier.energyUse || 0;
+                    let energyUse = 0;
+                    if (tier.active) {
+                        energyUse = tier.energyUse || 0;
+                    } else {
+                        energyUse = 0;
+                    }
+
                     const quantity = tier.quantity || 0;
                     totalEnergyUseResources += energyUse * quantity;
                 }
@@ -6057,7 +6063,14 @@ function setEnergyUse() {
                 const tier = autoBuyer[tierKey];
 
                 if (tier) {
-                    const energyUse = tier.energyUse || 0;
+                    let energyUse = 0;
+                    if (tier.active) {
+                        energyUse = tier.energyUse || 0;
+                    } else {
+                        energyUse = 0;
+                    }
+                    
+                    energyUse = tier.energyUse || 0;
                     const quantity = tier.quantity || 0;
                     totalEnergyUseCompounds += energyUse * quantity;
                 }
