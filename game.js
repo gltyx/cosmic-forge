@@ -4715,7 +4715,10 @@ function startInitialTimers() {
                         if (getPowerOnOff()) {
                             const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
                             const currentTierAutoBuyerQuantity = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
-                            const calculatedResourceRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                            const activeAutoBuyer = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier${tier}`, 'active']);
+                            const calculatedResourceRate = activeAutoBuyer
+                              ? autoBuyerExtractionRate * currentTierAutoBuyerQuantity
+                              : 0;
                             const amountToAdd = Math.min(currentQuantity + calculatedResourceRate, storageCapacity);
                             setResourceDataObject(amountToAdd, 'resources', [resource, 'quantity']);
                             addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedResourceRate, resource);
@@ -4760,7 +4763,10 @@ function startInitialTimers() {
                             if (tier === 1) {
                                 const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
                                 const currentTierAutoBuyerQuantity = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'quantity']);
-                                const calculatedResourceRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                                const activeAutoBuyer = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'active']);
+                                const calculatedResourceRate = activeAutoBuyer
+                                  ? autoBuyerExtractionRate * currentTierAutoBuyerQuantity
+                                  : 0;
                                 const amountToAdd = Math.min(currentQuantity + calculatedResourceRate, storageCapacity);
                                 setResourceDataObject(amountToAdd, 'resources', [resource, 'quantity']);
                                 addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedResourceRate, resource);
@@ -4802,7 +4808,10 @@ function startInitialTimers() {
                         if (getPowerOnOff()) {
                             const autoBuyerExtractionRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'rate']);
                             const currentTierAutoBuyerQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'quantity']);
-                            const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                            const activeAutoBuyer = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier${tier}`, 'active']);
+                            const calculatedCompoundRate = activeAutoBuyer
+                              ? autoBuyerExtractionRate * currentTierAutoBuyerQuantity
+                              : 0;                            
                             const amountToAdd = Math.min(currentQuantity + calculatedCompoundRate, storageCapacity);
                             setResourceDataObject(amountToAdd, 'compounds', [compound, 'quantity']);
                             addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedCompoundRate, compound);
@@ -4840,7 +4849,10 @@ function startInitialTimers() {
                             if (tier === 1) {
                                 const autoBuyerExtractionRate = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
                                 const currentTierAutoBuyerQuantity = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier1`, 'quantity']);
-                                const calculatedCompoundRate = autoBuyerExtractionRate * currentTierAutoBuyerQuantity;
+                                const activeAutoBuyer = getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', `tier1`, 'active']);
+                                const calculatedCompoundRate = activeAutoBuyer
+                                  ? autoBuyerExtractionRate * currentTierAutoBuyerQuantity
+                                  : 0; 
                                 const amountToAdd = Math.min(currentQuantity + calculatedCompoundRate, storageCapacity);
                                 setResourceDataObject(amountToAdd, 'compounds', [compound, 'quantity']);
                                 addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedCompoundRate, compound);
@@ -4852,6 +4864,8 @@ function startInitialTimers() {
                                 if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType'])) {
                                     compoundTier1Rate += getCurrentPrecipitationRate();
                                 }
+
+                                if (!activeAutoBuyer) compoundTier1Rate = 0;
 
                                 setResourceDataObject(compoundTier1Rate, 'compounds', [compound, 'rate']);
                                 getElements()[`${compound}Rate`].textContent = `${(compoundTier1Rate * getTimerRateRatio()).toFixed(1)} / s`;
