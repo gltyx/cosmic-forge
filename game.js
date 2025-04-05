@@ -401,9 +401,14 @@ export async function gameLoop() {
             checkAndIncreasePrices();
         }
 
-        const elementsToCheck = document.querySelectorAll(
-            '#autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
-        );
+        const elementsToCheck = [
+            ...document.querySelectorAll(
+                '#autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
+            ),
+            ...Array.from(document.querySelectorAll('*')).filter(element =>
+                /^.+[1-4]Toggle$/.test(element.id)
+            )
+        ];
         elementsToCheck.forEach(checkStatusAndSetTextClasses);        
 
         starChecks();
@@ -3308,11 +3313,36 @@ function checkStatusAndSetTextClasses(element) {
     if (element.id === 'autoSellToggle') {
         return autoSellerChecks(element);
     }
-    
+
+    if (/^.+[1-4]Toggle$/.test(element.id)) {
+        return autoBuyerToggleChecks(element);
+    }
+   
     if (element.classList.contains('building-purchase')) {
         setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
     }
 }
+
+function autoBuyerToggleChecks(element) {
+    const regex = /^([a-zA-Z]+)([1-4])Toggle$/;
+    const match = element.id.match(regex);
+
+    if (match) {
+        const item = match[1];
+        const tier = parseInt(match[2], 10);
+
+        let resourcesActive = getResourceDataObject('resources', [item, 'upgrades', 'autoBuyer', `tier${tier}`, 'active'], true);
+        let active = resourcesActive !== undefined ? resourcesActive : getResourceDataObject('compounds', [item, 'upgrades', 'autoBuyer', `tier${tier}`, 'active'], true);
+        
+        if (active === undefined) {
+            return;
+        } else {
+            element.checked = active;
+        }
+        
+    }
+}
+
 
 function autoSellerChecks(element) {
     const toggleSwitchContainer = element.parentElement;
@@ -6069,7 +6099,7 @@ function setEnergyUse() {
                     } else {
                         energyUse = 0;
                     }
-                    
+
                     energyUse = tier.energyUse || 0;
                     const quantity = tier.quantity || 0;
                     totalEnergyUseCompounds += energyUse * quantity;
