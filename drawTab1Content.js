@@ -127,7 +127,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'hydrogenAB1Quantity', 'autoBuyer', true, 'tier1', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'hydrogenAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('hydrogen1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['hydrogen', 'nameResource'])}`,
@@ -152,7 +154,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'hydrogenAB2Quantity', 'autoBuyer', true, 'tier2', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'hydrogenAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('hydrogen2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['hydrogen', 'nameResource'])}`,
@@ -177,7 +181,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'hydrogenAB3Quantity', 'autoBuyer', true, 'tier3', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'hydrogenAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('hydrogen3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['hydrogen', 'nameResource'])}`,
@@ -202,7 +208,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'hydrogenAB4Quantity', 'autoBuyer', true, 'tier4', 'hydrogen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'hydrogen', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'hydrogenAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('hydrogen4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['hydrogen', 'nameResource'])}`,
@@ -342,7 +350,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'heliumAB1Quantity', 'autoBuyer', true, 'tier1', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'heliumAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('helium1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['helium', 'nameResource'])}`,
@@ -367,7 +377,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'heliumAB2Quantity', 'autoBuyer', true, 'tier2', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'heliumAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('helium2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['helium', 'nameResource'])}`,
@@ -392,7 +404,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'heliumAB3Quantity', 'autoBuyer', true, 'tier3', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'heliumAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('helium3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['helium', 'nameResource'])}`,
@@ -417,7 +431,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'heliumAB4Quantity', 'autoBuyer', true, 'tier4', 'helium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'helium', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'heliumAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('helium4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['helium', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['helium', 'nameResource'])}`,
@@ -565,7 +581,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'carbonAB1Quantity', 'autoBuyer', true, 'tier1', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier1', 'resource'),            
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'carbonAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('carbon1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['carbon', 'nameResource'])}`,
@@ -590,7 +608,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'carbonAB2Quantity', 'autoBuyer', true, 'tier2', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'carbonAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('carbon2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['carbon', 'nameResource'])}`,
@@ -615,7 +635,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'carbonAB3Quantity', 'autoBuyer', true, 'tier3', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'carbonAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('carbon3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['carbon', 'nameResource'])}`,
@@ -640,7 +662,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'carbonAB4Quantity', 'autoBuyer', true, 'tier4', 'carbon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'carbon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'carbonAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('carbon4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['carbon', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['carbon', 'nameResource'])}`,
@@ -781,7 +805,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'neonAB1Quantity', 'autoBuyer', true, 'tier1', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier0', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'neonAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('neon1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['neon', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
@@ -806,7 +832,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'neonAB2Quantity', 'autoBuyer', true, 'tier2', 'neon', 'resource')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'neonAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('neon2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
@@ -831,7 +859,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'neonAB3Quantity', 'autoBuyer', true, 'tier3', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'neonAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('neon3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['neon', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
@@ -856,7 +886,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'neonAB4Quantity', 'autoBuyer', true, 'tier4', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'neonAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('neon4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['neon', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['neon', 'nameResource'])}`,
@@ -997,7 +1029,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'oxygenAB1Quantity', 'autoBuyer', true, 'tier1', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'oxygenAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('oxygen1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
@@ -1022,7 +1056,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'oxygenAB2Quantity', 'autoBuyer', true, 'tier2', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'oxygenAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('oxygen2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
@@ -1047,7 +1083,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'oxygenAB3Quantity', 'autoBuyer', true, 'tier3', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'oxygenAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('oxygen3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
@@ -1072,7 +1110,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'oxygenAB4Quantity', 'autoBuyer', true, 'tier4', 'oxygen', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'oxygen', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'oxygenAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('oxygen4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['oxygen', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['oxygen', 'nameResource'])}`,
@@ -1201,7 +1241,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'sodiumAB1Quantity', 'autoBuyer', true, 'tier1', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'sodiumAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('sodium1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['sodium', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['sodium', 'nameResource'])}`,
@@ -1226,7 +1268,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'sodiumAB2Quantity', 'autoBuyer', true, 'tier2', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'sodiumAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('sodium2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['sodium', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['sodium', 'nameResource'])}`,
@@ -1251,7 +1295,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'sodiumAB3Quantity', 'autoBuyer', true, 'tier3', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'sodiumAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('sodium3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['sodium', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['sodium', 'nameResource'])}`,
@@ -1276,7 +1322,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'sodiumAB4Quantity', 'autoBuyer', true, 'tier4', 'sodium', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'sodium', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'sodiumAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('sodium4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['sodium', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['sodium', 'nameResource'])}`,
@@ -1417,7 +1465,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'siliconAB1Quantity', 'autoBuyer', true, 'tier1', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'siliconAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('silicon1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['silicon', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['silicon', 'nameResource'])}`,
@@ -1442,7 +1492,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'siliconAB2Quantity', 'autoBuyer', true, 'tier2', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'siliconAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('silicon2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['silicon', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['silicon', 'nameResource'])}`,
@@ -1467,7 +1519,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'siliconAB3Quantity', 'autoBuyer', true, 'tier3', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'siliconAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('silicon3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['silicon', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['silicon', 'nameResource'])}`,
@@ -1492,7 +1546,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'siliconAB4Quantity', 'autoBuyer', true, 'tier4', 'silicon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'silicon', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'siliconAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('silicon4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['silicon', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['silicon', 'nameResource'])}`,
@@ -1621,7 +1677,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'ironAB1Quantity', 'autoBuyer', true, 'tier1', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier1', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'quantity'])}`, 'ironAB1Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('iron1Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['iron', 'upgrades', 'autoBuyer', 'tier1', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer1Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
@@ -1646,7 +1704,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'ironAB2Quantity', 'autoBuyer', true, 'tier2', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'ironAB2Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('iron2Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['iron', 'upgrades', 'autoBuyer', 'tier2', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer2Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
@@ -1671,7 +1731,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'ironAB3Quantity', 'autoBuyer', true, 'tier3', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier3', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'quantity'])}`, 'ironAB3Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('iron3Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['iron', 'upgrades', 'autoBuyer', 'tier3', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer3Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,
@@ -1696,7 +1758,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 gain(1, 'ironAB4Quantity', 'autoBuyer', true, 'tier4', 'iron', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'iron', true, 'tier4', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'quantity'])}`, 'ironAB4Quantity', ['autoBuyer-building-quantity']),
-            null,
+            createToggleSwitch('iron4Toggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'resources', ['iron', 'upgrades', 'autoBuyer', 'tier4', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${autobuyer4Price + " " + getResourceDataObject('resources', ['iron', 'nameResource'])}`,

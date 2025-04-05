@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.56;
+export const GAME_VERSION_FOR_SAVES = 0.58;
 export const deferredActions = [];
 
 export const MENU_STATE = 'menuState';

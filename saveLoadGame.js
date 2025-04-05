@@ -844,6 +844,94 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
                 saveData.version = 0.56;
             }
         }
+
+        if (saveData.version < 0.58) {
+            if (objectType === 'resourceData') {
+                saveData.resources.solar.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.solar.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.solar.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.solar.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.hydrogen.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.hydrogen.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.hydrogen.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.hydrogen.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.helium.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.helium.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.helium.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.helium.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.carbon.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.carbon.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.carbon.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.carbon.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.neon.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.neon.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.neon.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.neon.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.oxygen.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.oxygen.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.oxygen.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.oxygen.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.sodium.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.sodium.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.sodium.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.sodium.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.silicon.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.silicon.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.silicon.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.silicon.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.resources.iron.upgrades.autoBuyer.tier1.active = true;
+                saveData.resources.iron.upgrades.autoBuyer.tier2.active = true;
+                saveData.resources.iron.upgrades.autoBuyer.tier3.active = true;
+                saveData.resources.iron.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.compounds.diesel.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.diesel.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.diesel.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.diesel.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.compounds.glass.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.glass.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.glass.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.glass.upgrades.autoBuyer.tier4.active = true;
+                
+                saveData.compounds.concrete.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.concrete.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.concrete.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.concrete.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.compounds.steel.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.steel.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.steel.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.steel.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.compounds.water.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.water.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.water.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.water.upgrades.autoBuyer.tier4.active = true;
+
+                saveData.compounds.titanium.upgrades.autoBuyer.tier1.active = true;
+                saveData.compounds.titanium.upgrades.autoBuyer.tier2.active = true;
+                saveData.compounds.titanium.upgrades.autoBuyer.tier3.active = true;
+                saveData.compounds.titanium.upgrades.autoBuyer.tier4.active = true;
+            } else if (objectType === 'starSystemsData') {
+
+            } else if (objectType === 'rocketNames') {
+            
+            } else if (objectType === 'galacticMarketData') {
+
+            } else if (objectType === 'ascendencyBuffsData') {
+            
+            }
+            saveData.version = 0.58;
+        }
     
         saveData.version += 0.01;
     }   

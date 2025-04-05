@@ -5,8 +5,7 @@ stats bugs in general
 ascendency (permanent buffs):
 ideas:
 
-
-
 helium fusion stays as ??? and causes tech tree not to work great
 maybe have rows of notifications ie if fuse has loads queued up still show tech to left etc
-be good to have an option to divert a resource directly to cash instead of accumulating it
+
+deactivate autobuyers
