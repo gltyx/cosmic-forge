@@ -2219,7 +2219,7 @@ function monitorTechTree() {
                     setTechTreeDrawnYet(true);
                 }
             }
-            if (getResourceDataObject('research', ['quantity']) > (techs[techKey].appearsAt[0] / 1.5) && !getUpcomingTechArray().includes(techKey)) {
+            if (getResourceDataObject('research', ['quantity']) > (techs[techKey].appearsAt[0] / 2.5) && !getUpcomingTechArray().includes(techKey)) {
                 setUpcomingTechArray(techKey);
                 if (getCurrentOptionPane() === 'tech tree') {
                     const tooltip = document.getElementById('techTreeTooltip');
