@@ -126,7 +126,7 @@ let runNumber = 1;
 let settledStars = [STARTING_STAR_SYSTEM];
 let apSellForCashPrice = AP_BASE_SELL_PRICE;
 let apBuyForCashPrice = AP_BASE_BUY_PRICE;
-let apLiquidationQuantity = 0;
+let apLiquidationQuantity = 0;  
 
 let battleUnits = { 
     player: [], 
@@ -153,6 +153,27 @@ let rocketTravelDuration = {
     rocket3: 0,
     rocket4: 0
 }
+
+let lastSellResourceCompoundDropdownOption = {
+    resources: {
+      hydrogen: 'all',
+      helium: 'all',
+      carbon: 'all',
+      neon: 'all',
+      oxygen: 'all',
+      sodium: 'all',
+      silicon: 'all',
+      iron: 'all'
+    },
+    compounds: {
+      diesel: 'all',
+      glass: 'all',
+      steel: 'all',
+      concrete: 'all',
+      water: 'all',
+      titanium: 'all'
+    }
+  };
 
 let starTravelDuration = 0;
 
@@ -2884,6 +2905,17 @@ export function getLiquidatedThisRun() {
 
 export function setLiquidatedThisRun(value) {
     liquidatedThisRun = value;
+}
+
+export function getLastSellResourceCompoundDropdownOption(type, resource) {
+    return lastSellResourceCompoundDropdownOption[type][resource];
+}
+
+export function setLastSellResourceCompoundDropdownOption(type, resource, value) {
+    if (!lastSellResourceCompoundDropdownOption[type]) {
+        lastSellResourceCompoundDropdownOption[type] = {};
+    }
+    lastSellResourceCompoundDropdownOption[type][resource] = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

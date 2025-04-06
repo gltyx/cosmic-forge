@@ -1,4 +1,4 @@
-import { getImageUrls, getTimerRateRatio, getCompoundSalePreview, setSaleCompoundPreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
+import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
@@ -66,9 +66,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('diesel', value);
-                }),
+            ], getLastSellResourceCompoundDropdownOption('compounds', 'diesel'), (value) => {
+                setLastSellResourceCompoundDropdownOption('compounds', 'diesel', value);
+            }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('diesel');
                 }, 'sellCompound', null, null, null, 'diesel', true, null, 'compound'),
@@ -292,9 +292,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('glass', value);
-                }),
+                ], getLastSellResourceCompoundDropdownOption('compounds', 'glass'), (value) => {
+                    setLastSellResourceCompoundDropdownOption('compounds', 'glass', value);
+                }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('glass');
                 }, 'sellCompound', null, null, null, 'glass', true, null, 'compound'),
@@ -518,9 +518,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('steel', value);
-                }),
+                ], getLastSellResourceCompoundDropdownOption('compounds', 'steel'), (value) => {
+                    setLastSellResourceCompoundDropdownOption('compounds', 'steel', value);
+                }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('steel');
                 }, 'sellCompound', null, null, null, 'steel', true, null, 'compound'),
@@ -744,9 +744,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('concrete', value);
-                }),
+                ], getLastSellResourceCompoundDropdownOption('compounds', 'concrete'), (value) => {
+                    setLastSellResourceCompoundDropdownOption('compounds', 'concrete', value);
+                }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('concrete');
                 }, 'sellCompound', null, null, null, 'concrete', true, null, 'compound'),
@@ -972,9 +972,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('water', value);
-                }),
+                ], getLastSellResourceCompoundDropdownOption('compounds', 'water'), (value) => {
+                    setLastSellResourceCompoundDropdownOption('compounds', 'water', value);
+                }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('water');
                 }, 'sellCompound', null, null, null, 'water', true, null, 'compound'),
@@ -1198,9 +1198,9 @@ export function drawTab4Content(heading, optionContentElement) {
                     { value: '100', text: '100' },
                     { value: '10', text: '10' },
                     { value: '1', text: '1' },
-                ], 'all', (value) => {
-                    setSaleCompoundPreview('titanium', value);
-                }),
+                ], getLastSellResourceCompoundDropdownOption('compounds', 'titanium'), (value) => {
+                    setLastSellResourceCompoundDropdownOption('compounds', 'titanium', value);
+                }),  
                 createButton('Sell', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'sell'], () => {
                     sellCompound('titanium');
                 }, 'sellCompound', null, null, null, 'titanium', true, null, 'compound'),

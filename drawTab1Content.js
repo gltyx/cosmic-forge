@@ -1,4 +1,4 @@
-import { getImageUrls, setSaleResourcePreview, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
+import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
 import { sellResource, fuseResource, gain, increaseResourceStorage } from './game.js';
 import { getResourceDataObject, setResourceDataObject } from './resourceDataObject.js';
 import { createToggleSwitch, createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
@@ -27,8 +27,8 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('hydrogen', value, 'helium');
+            ], getLastSellResourceCompoundDropdownOption('resources', 'hydrogen'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'hydrogen', value);
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('hydrogen');
@@ -250,9 +250,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('helium', value, 'carbon');
-            }),
+            ], getLastSellResourceCompoundDropdownOption('resources', 'helium'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'helium', value);
+            }),            
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('helium');
             }, 'sellResource', null, null, null, 'helium', true, null, 'resource'),
@@ -474,8 +474,8 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('carbon', value, 'nextElementsWillExpandOutHere');
+            ], getLastSellResourceCompoundDropdownOption('resources', 'carbon'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'carbon', value);
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('carbon');
@@ -705,9 +705,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('neon', value, 'nextElementsWillExpandOutHere');
-            }),
+            ], getLastSellResourceCompoundDropdownOption('resources', 'neon'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'neon', value);
+            }),            
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('neon');
             }, 'sellResource', null, null, null, 'neon', true, null, 'resource'),
@@ -929,8 +929,8 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('oxygen', value, 'silicon');
+            ], getLastSellResourceCompoundDropdownOption('resources', 'oxygen'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'oxygen', value);
             }),
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('oxygen');
@@ -1153,9 +1153,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('sodium', value, '');
-            }),
+            ], getLastSellResourceCompoundDropdownOption('resources', 'sodium'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'sodium', value);
+            }),      
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('sodium');
             }, 'sellResource', null, null, null, 'sodium', true, null, 'resource'),
@@ -1365,9 +1365,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('silicon', value, 'iron');
-            }),
+            ], getLastSellResourceCompoundDropdownOption('resources', 'silicon'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'silicon', value);
+            }),      
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('silicon');
             }, 'sellResource', null, null, null, 'silicon', true, null, 'resource'),
@@ -1589,9 +1589,9 @@ export function drawTab1Content(heading, optionContentElement) {
                 { value: '100', text: '100' },
                 { value: '10', text: '10' },
                 { value: '1', text: '1' },
-            ], 'all', (value) => {
-                setSaleResourcePreview('iron', value, 'iron');
-            }),
+            ], getLastSellResourceCompoundDropdownOption('resources', 'iron'), (value) => {
+                setLastSellResourceCompoundDropdownOption('resources', 'iron', value);
+            }),      
             createButton('Sell', ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'sell'], () => {
                 sellResource('iron');
             }, 'sellResource', null, null, null, 'iron', true, null, 'resource'),
