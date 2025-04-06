@@ -3131,7 +3131,6 @@ function initializeTabEventListeners() {
                         optionContentElement.innerHTML = '';
                         setCurrentOptionPane(lastOpenOptionPane);
                         updateContent(capitaliseString(lastOpenOptionPane), 'tab1', 'content');
-                        drawTab1Content(capitaliseString(lastOpenOptionPane), optionContentElement);
                         fuseButton = document.querySelector('button.fuse');
                         setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
                         setAutoSellToggleState(lastOpenOptionPane, 'resources');
@@ -3140,7 +3139,6 @@ function initializeTabEventListeners() {
                         optionContentElement.innerHTML = '';
                         setCurrentOptionPane(lastOpenOptionPane);
                         updateContent(capitaliseString(lastOpenOptionPane), 'tab4', 'content');
-                        drawTab4Content(capitaliseString(lastOpenOptionPane), optionContentElement);
                         setAutoSellToggleState(lastOpenOptionPane, 'compounds');
                     }
                     setCurrentOptionPane(lastOpenOptionPane);
