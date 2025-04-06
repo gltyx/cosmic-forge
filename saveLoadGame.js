@@ -102,7 +102,7 @@ export function copySaveStringToClipBoard() {
                 showNotification('Data copied to clipboard!', 'info');
             })
             .catch(err => {
-                showNotification('Error copying data!', 'error');
+                showNotification('Error copying data! If on Chrome, this could be expected.  Select and copy the text string manually!', 'error');
                 console.log('Error copying data! ' + err);
             })
             .finally(() => {
