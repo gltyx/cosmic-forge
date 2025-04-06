@@ -1,31 +1,53 @@
-//---------------------------------------------------------------------------------------------------------
 class TimerManager {
     constructor() {
         this.timers = new Map();
+        this.isRunning = false;
+        this.lastUpdate = performance.now();
+        this.update = this.update.bind(this);
     }
 
     addTimer(key, duration, onExpire) {
-        if (this.timers.has(key)) {
-            return;
-        }
+        if (this.timers.has(key)) return;
+
         const timer = new Timer(duration, onExpire);
         this.timers.set(key, timer);
-        timer.start();
+
+        if (!this.isRunning) {
+            this.isRunning = true;
+            this.lastUpdate = performance.now();
+            requestAnimationFrame(this.update);
+        }
     }
 
     removeTimer(key) {
-        if (this.timers.has(key)) {
-            this.timers.get(key).stop();
-            this.timers.delete(key);
-        }
+        this.timers.delete(key);
     }
 
     stopAllTimers() {
-        this.timers.forEach(timer => timer.stop());
+        this.timers.clear();
+        this.isRunning = false;
     }
 
     getTimer(key) {
         return this.timers.get(key);
+    }
+
+    update(currentTime) {
+        const delta = currentTime - this.lastUpdate;
+        this.lastUpdate = currentTime;
+
+        this.timers.forEach((timer, key) => {
+            timer.update(delta);
+            if (timer.finished) {
+                this.timers.delete(key);
+            }
+        });
+
+        if (this.timers.size > 0) {
+            requestAnimationFrame(this.update);
+        } else {
+            this.isRunning = false;
+        }
     }
 }
 
@@ -33,44 +55,32 @@ class Timer {
     constructor(duration, onExpire) {
         this.duration = duration;
         this.onExpire = onExpire;
-        this.timerId = null;
         this.elapsedTime = 0;
         this.isPaused = false;
+        this.finished = false;
     }
 
-    start() {
-        if (this.isPaused) {
-            this.resume();
-        } else {
-            this.timerId = setInterval(() => {
-                this.elapsedTime += this.duration;
-                this.onExpire();
-            }, this.duration);
-        }
-    }
+    update(delta) {
+        if (this.isPaused || this.finished) return;
 
-    stop() {
-        if (this.timerId) {
-            clearInterval(this.timerId);
-            this.timerId = null;
+        this.elapsedTime += delta;
+
+        if (this.elapsedTime >= this.duration) {
+            this.onExpire();
+            this.finished = true;
         }
     }
 
     pause() {
-        if (this.timerId) {
-            clearInterval(this.timerId);
-            this.isPaused = true; // Mark as paused
-        }
+        this.isPaused = true;
     }
 
     resume() {
-        if (this.isPaused) {
-            this.isPaused = false;
-            this.timerId = setInterval(() => {
-                this.elapsedTime += this.duration;
-                this.onExpire();
-            }, this.duration);
-        }
+        this.isPaused = false;
+    }
+
+    stop() {
+        this.finished = true;
     }
 }
 
