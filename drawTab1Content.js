@@ -1597,7 +1597,7 @@ export function drawTab1Content(heading, optionContentElement) {
             }, 'sellResource', null, null, null, 'iron', true, null, 'resource'),
             createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
             createToggleSwitch('autoSellToggle', false, (isEnabled) => {
-                setResourceDataObject(isEnabled, 'resources', ['hydrogen', 'autoSell']);
+                setResourceDataObject(isEnabled, 'resources', ['iron', 'autoSell']);
             }, ['toggle-switch-spacing']),
             null,
             null,

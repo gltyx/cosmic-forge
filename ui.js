@@ -3129,6 +3129,7 @@ function initializeTabEventListeners() {
                     } else if (["hydrogen", "helium", "carbon", "neon", "oxygen", "sodium", "silicon", "iron"].includes(lastOpenOptionPane)) {
                         const optionContentElement = document.getElementById(`optionContentTab1`);
                         optionContentElement.innerHTML = '';
+                        setCurrentOptionPane(lastOpenOptionPane);
                         updateContent(capitaliseString(lastOpenOptionPane), 'tab1', 'content');
                         drawTab1Content(capitaliseString(lastOpenOptionPane), optionContentElement);
                         fuseButton = document.querySelector('button.fuse');
@@ -3137,6 +3138,7 @@ function initializeTabEventListeners() {
                     } else if (["diesel", "glass", "steel", "concrete", "water", "titanium"].includes(lastOpenOptionPane)) {
                         const optionContentElement = document.getElementById(`optionContentTab4`);
                         optionContentElement.innerHTML = '';
+                        setCurrentOptionPane(lastOpenOptionPane);
                         updateContent(capitaliseString(lastOpenOptionPane), 'tab4', 'content');
                         drawTab4Content(capitaliseString(lastOpenOptionPane), optionContentElement);
                         setAutoSellToggleState(lastOpenOptionPane, 'compounds');

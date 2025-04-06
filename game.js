@@ -8416,13 +8416,22 @@ export function setAutoSellToggleState(item, type) {
         return;
     }
 
+    const sellRow = document.getElementById(`${item}SellRow`);
     const autoSellValue = getResourceDataObject(type, [item, 'autoSell']);
-    const element = document.querySelector(`#autoSellToggle[data-type="${type}"]`);
+    const targetElement = sellRow.querySelector(`#autoSellToggle[data-type="${type}"]`);
 
-    if (element) {
-        element.checked = autoSellValue;
+    if (targetElement) {
+        const allWithSameId = document.querySelectorAll('#autoSellToggle');
+        allWithSameId.forEach(el => {
+            if (el !== targetElement) {
+                el.remove();
+            }
+        });
+
+        targetElement.checked = autoSellValue;
     }
 }
+
 
 //===============================================================================================================
 
