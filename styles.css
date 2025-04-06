@@ -111,10 +111,6 @@
     text-align: center;
 }
 
-.export-save {
-    pointer-events: none;
-}
-
 .import-save {
     pointer-events: auto !important;
 }

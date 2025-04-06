@@ -3,7 +3,7 @@ import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
 
 export let resourceData = {
-    version: 0.58, //update this whenever changes are made to the structure
+    version: 0.60, //update this whenever changes are made to the structure
     resources: {
         solar: {
             autoSell: false,
@@ -852,7 +852,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.58,
+    version: 0.60,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
@@ -871,7 +871,7 @@ export let starSystems = {
 };
 
 export let galacticMarket = {
-    version: 0.58,
+    version: 0.60,
     resources: {
         hydrogen: { 
             name: "Hydrogen", 
@@ -977,7 +977,7 @@ export let galacticMarket = {
 };
 
 export let ascendencyBuffs = {
-    version: 0.58,
+    version: 0.60,
     "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",

@@ -845,7 +845,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
         }
 
-        if (saveData.version < 0.58) {
+        if (saveData.version < 0.60) {
             if (objectType === 'resourceData') {
                 saveData.resources.solar.upgrades.autoBuyer.tier1.active = true;
                 saveData.resources.solar.upgrades.autoBuyer.tier2.active = true;
@@ -930,7 +930,7 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             } else if (objectType === 'ascendencyBuffsData') {
             
             }
-            saveData.version = 0.58;
+            saveData.version = 0.60;
         }
     
         saveData.version += 0.01;
