@@ -57,8 +57,6 @@ export function initializeAutoSave() {
 export async function saveGameToCloud(gameData, type) {
     try {
         const userId = getSaveName();
-        const currentTimestamp = new Date().toISOString();
-
         const { data: existingData, error: fetchError } = await supabase
             .from('CosmicForge_saves')
             .select('*')
@@ -74,7 +72,6 @@ export async function saveGameToCloud(gameData, type) {
                 .from('CosmicForge_saves')
                 .update({ 
                     data: gameData,
-                    'created_at': currentTimestamp
                 })
                 .eq('pioneer_name', userId);
 
@@ -88,7 +85,7 @@ export async function saveGameToCloud(gameData, type) {
         } else {
             const { error: insertError } = await supabase
                 .from('CosmicForge_saves')
-                .insert([{ pioneer_name: userId, data: gameData, 'created_at': currentTimestamp }]);
+                .insert([{ pioneer_name: userId, data: gameData }]);
 
             if (insertError) {
                 throw insertError;
