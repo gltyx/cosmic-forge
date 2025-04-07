@@ -18,8 +18,6 @@ const supabaseUrl = 'https://riogcxvtomyjlzkcnujf.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpb2djeHZ0b215amx6a2NudWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMjY1NDgsImV4cCI6MjA1OTYwMjU0OH0.HH7KXPrcORvl6Wiefupl422gRYxAa_kFCRM2-puUcsQ';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-let db;
-
 document.addEventListener('DOMContentLoaded', async () => {
 
 });
@@ -90,7 +88,7 @@ export async function saveGameToCloud(gameData, type) {
         } else {
             const { error: insertError } = await supabase
                 .from('CosmicForge_saves')
-                .insert([{ pioneer_name: userId, data: gameData, created: currentTimestamp }]);
+                .insert([{ pioneer_name: userId, data: gameData, 'created_at': currentTimestamp }]);
 
             if (insertError) {
                 throw insertError;
