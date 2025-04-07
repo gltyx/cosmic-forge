@@ -2674,6 +2674,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'hydrogen');
             setCurrentOptionPane('hydrogen');
             updateContent('Hydrogen', 'tab1', 'content');
@@ -2685,6 +2686,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab1"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'helium');
             setCurrentOptionPane('helium');
             updateContent('Helium', 'tab1', 'content');
@@ -2696,6 +2698,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'carbon');
             setCurrentOptionPane('carbon');
             updateContent('Carbon', 'tab1', 'content');
@@ -2707,6 +2710,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'neon');
             setCurrentOptionPane('neon');
             updateContent('Neon', 'tab1', 'content');
@@ -2718,6 +2722,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'oxygen');
             setCurrentOptionPane('oxygen');
             updateContent('Oxygen', 'tab1', 'content');
@@ -2729,6 +2734,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'sodium');
             setCurrentOptionPane('sodium');
             updateContent('Sodium', 'tab1', 'content');
@@ -2738,6 +2744,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option7"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'silicon');
             setCurrentOptionPane('silicon');
             updateContent('Silicon', 'tab1', 'content');
@@ -2749,6 +2756,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab1"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab1', 'iron');
             setCurrentOptionPane('iron');
             updateContent('Iron', 'tab1', 'content');
@@ -2758,6 +2766,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab2"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab2', 'energy storage');
             setCurrentOptionPane('energy storage');
             updateContent('Energy Storage', 'tab2', 'content');
@@ -2766,6 +2775,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab2"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab2', 'power plant');
             setCurrentOptionPane('power plant');
             updateContent('Power Plant', 'tab2', 'content');
@@ -2774,6 +2784,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab2"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab2', 'solar power plant');
             setCurrentOptionPane('solar power plant');
             updateContent('Solar Power Plant', 'tab2', 'content');
@@ -2782,6 +2793,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab2"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab2', 'advanced power plant');
             setCurrentOptionPane('advanced power plant');
             updateContent('Advanced Power Plant', 'tab2', 'content');
@@ -2790,6 +2802,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab3"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab3', 'research');
             setCurrentOptionPane('research');
             updateContent('Research', 'tab3', 'content');
@@ -2798,6 +2811,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab3"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab3', 'technology');
             setCurrentOptionPane('technology');
             updateContent('Technology', 'tab3', 'content');
@@ -2806,6 +2820,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab3"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab3', 'tech tree');
             setCurrentOptionPane('tech tree');
             updateContent('Tech Tree', 'tab3', 'content');
@@ -2814,6 +2829,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'diesel');
             setCurrentOptionPane('diesel');
             updateContent('Diesel', 'tab4', 'content');
@@ -2823,6 +2839,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'glass');
             setCurrentOptionPane('glass');
             updateContent('Glass', 'tab4', 'content');
@@ -2832,6 +2849,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'steel');
             setCurrentOptionPane('steel');
             updateContent('Steel', 'tab4', 'content');
@@ -2841,6 +2859,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'concrete');
             setCurrentOptionPane('concrete');
             updateContent('Concrete', 'tab4', 'content');
@@ -2850,6 +2869,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'water');
             setCurrentOptionPane('water');
             updateContent('Water', 'tab4', 'content');
@@ -2859,6 +2879,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab4"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab4', 'titanium');
             setCurrentOptionPane('titanium');
             updateContent('Titanium', 'tab4', 'content');
@@ -2868,6 +2889,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab5"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab5', 'star map');
             setCurrentOptionPane('star map');
             updateContent('Star Map', 'tab5', 'content');
@@ -2876,6 +2898,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab5"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab5', 'star data');
             setCurrentOptionPane('star data');
             updateContent('Star Data', 'tab5', 'content');
@@ -2884,6 +2907,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab5"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab5', 'star ship');
             setCurrentOptionPane('star ship');
             updateContent('Star Ship', 'tab5', 'content');
@@ -2892,6 +2916,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab5"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab5', 'fleet hangar');
             setCurrentOptionPane('fleet hangar');
             updateContent('Fleet Hangar', 'tab5', 'content');
@@ -2900,6 +2925,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab5"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab5', 'colonise');
             setCurrentOptionPane('colonise');
             updateContent('Colonise', 'tab5', 'content');
@@ -2908,6 +2934,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'launch pad');
             setCurrentOptionPane('launch pad');
             updateContent('Launch Pad', 'tab6', 'content');
@@ -2916,6 +2943,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'rocket1');
             setCurrentOptionPane('rocket1');
             updateContent(`${getRocketUserName('rocket1')}`, 'tab6', 'content');
@@ -2924,6 +2952,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'rocket2');
             setCurrentOptionPane('rocket2');
             updateContent(`${getRocketUserName('rocket2')}`, 'tab6', 'content');
@@ -2932,6 +2961,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'rocket3');
             setCurrentOptionPane('rocket3');
             updateContent(`${getRocketUserName('rocket3')}`, 'tab6', 'content');
@@ -2940,6 +2970,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'rocket4');
             setCurrentOptionPane('rocket4');
             updateContent(`${getRocketUserName('rocket4')}`, 'tab6', 'content');
@@ -2948,6 +2979,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'space telescope');
             setCurrentOptionPane('space telescope');
             updateContent('Space Telescope', 'tab6', 'content');
@@ -2956,6 +2988,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option7"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'asteroids');
             setCurrentOptionPane('asteroids');
             updateContent('Asteroids', 'tab6', 'content');
@@ -2964,6 +2997,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab6"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setHasAntimatterSvgRightBoxDataChanged(null);
             setLastScreenOpenRegister('tab6', 'mining');
             setCurrentOptionPane('mining');
@@ -2973,6 +3007,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab7"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab7', 'rebirth');
             setCurrentOptionPane('rebirth');
             updateContent('Rebirth', 'tab7', 'content');
@@ -2981,6 +3016,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab7"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab7', 'galactic market');
             setCurrentOptionPane('galactic market');
             updateContent('Galactic Market', 'tab7', 'content');
@@ -2989,6 +3025,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab7"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab7', 'ascendency');
             setCurrentOptionPane('ascendency');
             updateContent('Ascendency', 'tab7', 'content');
@@ -2997,6 +3034,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'visual');
             setCurrentOptionPane('visual');
             updateContent('Visual', 'tab8', 'content');
@@ -3005,6 +3043,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option2"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'saving / loading');
             setCurrentOptionPane('saving / loading');
             updateContent('Saving / Loading', 'tab8', 'content');
@@ -3013,6 +3052,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab8"][class*="option3"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'game options');
             setCurrentOptionPane('game options');
             updateContent('Game Options', 'tab8', 'content');
@@ -3021,6 +3061,7 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab8"][class*="option4"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'get started');
             setCurrentOptionPane('get started');
             updateContent('Get Started', 'tab8', 'content');
@@ -3029,6 +3070,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option5"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'concepts - early');
             setCurrentOptionPane('concepts - early');
             updateContent('Concepts - Early', 'tab8', 'content');
@@ -3037,6 +3079,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option6"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'concepts - mid');
             setCurrentOptionPane('concepts - mid');
             updateContent('Concepts - Mid', 'tab8', 'content');
@@ -3045,6 +3088,7 @@ function initializeTabEventListeners() {
     
     document.querySelectorAll('[class*="tab8"][class*="option7"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'concepts - late');
             setCurrentOptionPane('concepts - late');
             updateContent('Concepts - Late', 'tab8', 'content');
@@ -3053,22 +3097,23 @@ function initializeTabEventListeners() {
 
     document.querySelectorAll('[class*="tab8"][class*="option8"]').forEach(function(element) {
         element.addEventListener('click', function() {
+            selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'statistics');
             setCurrentOptionPane('statistics');
             updateContent('Statistics', 'tab8', 'content');
         });    
     });
 
-    const rowSideMenuItems = document.querySelectorAll('.row-side-menu');
-    rowSideMenuItems.forEach(item => {
-        item.addEventListener('click', function() {
-            rowSideMenuItems.forEach(i => i.classList.remove('row-side-menu-selected'));
+    function selectRowCss(clickedItem) {
+        const tabClassName = Array.from(clickedItem.classList).find(cls => cls.startsWith('tab'));
+        if (!tabClassName) return;
+        const [tabClass, optionClass] = tabClassName.split('.');
+        if (!tabClass || !optionClass) return;
+        
+        document.querySelectorAll('.row-side-menu').forEach(i => i.classList.remove('row-side-menu-selected'));
+        clickedItem.parentElement?.parentElement?.classList.add('row-side-menu-selected');
+    }
 
-            this.classList.add('row-side-menu-selected');
-        });
-    });
-
-    
     const tabsContainer = document.getElementById('tabsContainer');
 
     if (tabsContainer) {
