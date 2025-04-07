@@ -5,11 +5,11 @@ import { getStatisticsContent, getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Contact') createHelpSectionRow('contactRow', ['discord-link', 'email-link']);
-    if (heading === 'Get Started') createHelpSectionRow('getStartedRow');
-    if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow');
-    if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow');
-    if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow');
-    if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow');
+    if (heading === 'Get Started') createHelpSectionRow('getStartedRow', []);
+    if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow', []);
+    if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow', []);
+    if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow', []);
+    if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow', []);
 
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
@@ -499,7 +499,7 @@ export function drawTab8Content(heading, optionContentElement) {
         
         optionContentElement.appendChild(helpRow);
     
-        if (document.getElementById('contactRowTextArea').classList.contains('discord-link')) {
+        if (document.getElementById('contactRowTextArea') && document.getElementById('contactRowTextArea').classList.contains('discord-link')) {
             const spans = helpRow.querySelectorAll('span');
             
             spans.forEach(span => {
@@ -514,7 +514,7 @@ export function drawTab8Content(heading, optionContentElement) {
             });
         }
         
-        if (document.getElementById('contactRowTextArea').classList.contains('email-link')) {
+        if (document.getElementById('contactRowTextArea') && document.getElementById('contactRowTextArea').classList.contains('email-link')) {
             const spans = helpRow.querySelectorAll('span');
             
             spans.forEach(span => {
