@@ -1099,17 +1099,10 @@ export function restoreGameStatus(gameState, type) {
             const backgroundAudioToggleElement = document.getElementById('backgroundAudioToggle');
             const sfxToggleElement = document.getElementById('sfxToggle');
 
-            
-
-
             if (autoSaveFrequencyElement) {
                 autoSaveFrequencyElement.value = getAutoSaveFrequency();
             }
             
-            if (autoSaveToggleElement) {
-                autoSaveToggleElement.checked = getAutoSaveToggle();
-            }
-
             if (autoSaveToggleElement) {
                 autoSaveToggleElement.checked = getAutoSaveToggle();
             }
