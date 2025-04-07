@@ -1004,6 +1004,40 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
             saveData.version = 0.60;
         }
+
+        if (saveData.version < 0.62) {
+            if (objectType === 'resourceData') {
+                saveData.resources.hydrogen.saleValue = 0.02;
+                saveData.resources.helium.saleValue = 0.03;
+                saveData.resources.carbon.saleValue = 0.1;
+                saveData.resources.neon.saleValue = 0.40;
+                saveData.resources.oxygen.saleValue = 0.05;
+                saveData.resources.sodium.saleValue = 0.1;
+                saveData.resources.silicon.saleValue = 0.08;
+                saveData.resources.iron.saleValue = 0.17;
+
+                saveData.compounds.diesel.saleValue = 0.3;
+                saveData.compounds.glass.saleValue = 0.8;
+                saveData.compounds.steel.saleValue = 1.8;
+                saveData.compounds.concrete.saleValue = 0.8;
+                saveData.compounds.water.saleValue = 1.6;
+                saveData.compounds.titanium.saleValue = 6;
+
+                saveData.research.upgrades.scienceKit.active = true;
+                saveData.research.upgrades.scienceClub.active = true;
+                saveData.research.upgrades.scienceLab.active = true;
+
+            } else if (objectType === 'starSystemsData') {
+
+            } else if (objectType === 'rocketNames') {
+            
+            } else if (objectType === 'galacticMarketData') {
+
+            } else if (objectType === 'ascendencyBuffsData') {
+            
+            }
+            saveData.version = 0.62;
+        }
     
         saveData.version += 0.01;
     }   

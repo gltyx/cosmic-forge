@@ -386,7 +386,6 @@ export async function gameLoop() {
         const allStorages = getAllStorages();
         const allElements = getAllElements(resourceTierPairs, compoundTierPairs);
         const allDescElements = getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs);
-        updateRates();
         updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
         
         updateStats();
@@ -406,9 +405,10 @@ export async function gameLoop() {
                 '#autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
             ),
             ...Array.from(document.querySelectorAll('*')).filter(element =>
-                /^.+[1-4]Toggle$/.test(element.id)
+                /^.+[1-4]Toggle$/.test(element.id) ||
+                ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)
             )
-        ];
+        ];        
         elementsToCheck.forEach(checkStatusAndSetTextClasses);        
 
         starChecks();
@@ -1927,17 +1927,6 @@ function getSpaceMiningResourceDescriptionElements() {
     };       
 }
 
-function updateRates() {
-    let currentActualResearchRate;
-
-    if (getPowerOnOff()) {
-        currentActualResearchRate = getResourceDataObject('research', ['rate']) * getTimerRateRatio();
-    } else {
-        currentActualResearchRate = (getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower'])) * getTimerRateRatio();
-    }
-    getElements().researchRate.textContent = Math.floor(currentActualResearchRate) + ' / s'; 
-}
-
 function updateUIQuantities(allQuantities, allStorages, allElements, allDescriptionElements) {
     for (const item in allQuantities) {
         if (allQuantities.hasOwnProperty(item)) {
@@ -3314,9 +3303,9 @@ function checkStatusAndSetTextClasses(element) {
         return autoSellerChecks(element);
     }
 
-    if (/^.+[1-4]Toggle$/.test(element.id)) {
+    if (/^.+[1-4]Toggle$/.test(element.id) || ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)) {
         return autoBuyerToggleChecks(element);
-    }
+    }    
    
     if (element.classList.contains('building-purchase')) {
         setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element);
@@ -3340,6 +3329,13 @@ function autoBuyerToggleChecks(element) {
             element.checked = active;
         }
         
+    }
+
+    const scienceToggles = ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'];
+    if (scienceToggles.includes(element.id)) {
+        const item = element.id.replace('Toggle', '');
+        const active = getResourceDataObject('research', ['upgrades', item, 'active']);
+        element.checked = active;
     }
 }
 
@@ -4924,16 +4920,31 @@ function startInitialTimers() {
 
     timerManager.addTimer('research', getTimerUpdateInterval(), () => {
         const currentResearchQuantity = getResourceDataObject('research', ['quantity']);
-        const currentResearchRate = getResourceDataObject('research', ['rate']);
-        const currentResearchRateUnpowered = getResourceDataObject('research', ['rate']) - getResourceDataObject('research', ['ratePower']);
-        if (getPowerOnOff()) {
-            setResourceDataObject(currentResearchQuantity + currentResearchRate, 'research', ['quantity']);
-            addToResourceAllTimeStat(currentResearchRate, 'researchPoints');
-        } else {
-            setResourceDataObject(currentResearchQuantity + currentResearchRateUnpowered, 'research', ['quantity']);
-            addToResourceAllTimeStat(currentResearchRateUnpowered, 'researchPoints');
-        }
-    });
+
+        let newRate = 0;  
+        let newRateUnpowered = 0;
+
+        const upgrades = getResourceDataObject('research', ['upgrades']);
+
+        Object.keys(upgrades).forEach((upgradeKey) => {
+            const buildingRate = getResourceDataObject('research', ['upgrades', upgradeKey, 'rate']) * getResourceDataObject('research', ['upgrades', upgradeKey, 'quantity']);
+
+            if (upgrades[upgradeKey].active) { //all buildings
+                newRate += buildingRate;
+            }
+
+            if (upgrades[upgradeKey].active && upgradeKey !== 'scienceLab') { //all buildings except scienceLab
+                newRateUnpowered += buildingRate;
+            }
+        });
+
+        const finalRate = getPowerOnOff() ? newRate : newRateUnpowered;
+
+        setResourceDataObject(currentResearchQuantity + finalRate, 'research', ['quantity']);
+        addToResourceAllTimeStat(finalRate, 'researchPoints');
+
+        getElements().researchRate.textContent = `${(finalRate * getTimerRateRatio()).toFixed(1)} / s`;
+    });    
     
     timerManager.addTimer('energy', getTimerUpdateInterval(), () => {
         let newEnergyRate = 0;
@@ -5059,8 +5070,8 @@ function startInitialTimers() {
     function startMarketCycle() {
         const randomDurationInMinutes = Math.floor(Math.random() * 3) + 2;
         const randomDurationInMs = randomDurationInMinutes * 60 * 1000;
-        //const durationInSeconds = randomDurationInMs / 1000;
-        const durationInSeconds = 30; //DEBUG
+        const durationInSeconds = randomDurationInMs / 1000;
+        //const durationInSeconds = 30; //DEBUG
     
         let timeLeft = durationInSeconds;
 
@@ -5753,18 +5764,17 @@ export function startNewsTickerTimer() {
 function startUpdateScienceTimers(elementName) {
     let newResearchRate;
     let newResearchRatePower = getResourceDataObject('research', ['ratePower']);
-
     const upgradeRatePerUnit = getResourceDataObject('research', ['upgrades', elementName, 'rate']);
     
     if (getResourceDataObject('research', ['upgrades', elementName, 'energyUse']) > 0) {
         newResearchRatePower = getResourceDataObject('research', ['ratePower']) + upgradeRatePerUnit;
     }
-        
+       
     newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
+    
 
     setResourceDataObject(newResearchRatePower, 'research', ['ratePower']);
     setResourceDataObject(newResearchRate, 'research', ['rate']);
-    getElements().researchRate.textContent = `${(newResearchRate * getTimerRateRatio()).toFixed(1)} / s`;
 }
 
 function startUpdateEnergyTimers(elementName, action) {
@@ -6112,7 +6122,13 @@ function setEnergyUse() {
         const researchUpgrade = researchData[researchUpgradeKey];
 
         if (researchUpgrade) {
-            const energyUse = researchUpgrade.energyUse || 0;
+            let energyUse = 0;
+            if (researchUpgrade.active) {
+                energyUse = researchUpgrade.energyUse || 0;
+            } else {
+                energyUse = 0;
+            }
+            
             const quantity = researchUpgrade.quantity || 0;
             totalEnergyUseResearch += energyUse * quantity;
         }

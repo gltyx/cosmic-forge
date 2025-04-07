@@ -1,7 +1,7 @@
 import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
-import { getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
-import { createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
+import { createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -22,7 +22,9 @@ export function drawTab3Content(heading, optionContentElement) {
                     });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceKit', 'cash', true, null, 'science'),
             createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceKit', 'quantity'])}`, 'scienceKitQuantity', ['science-building-quantity']),
-            null,
+            createToggleSwitch('scienceKitToggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'research', ['upgrades', 'scienceKit', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${getResourceDataObject('research', ['upgrades', 'scienceKit', 'price']) + ' Research'}`,
@@ -54,7 +56,9 @@ export function drawTab3Content(heading, optionContentElement) {
                 });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceClub', 'cash', true, null, 'science'),
             createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceClub', 'quantity'])}`, 'scienceClubQuantity', ['science-building-quantity']),
-            null,
+            createToggleSwitch('scienceClubToggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'research', ['upgrades', 'scienceClub', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${getResourceDataObject('research', ['upgrades', 'scienceClub', 'price']) + ' Research'}`,
@@ -86,7 +90,9 @@ export function drawTab3Content(heading, optionContentElement) {
                 });
             }, 'upgradeCheck', '', 'scienceUpgrade', 'scienceLab', 'cash', true, null, 'science'),
             createTextElement(`Quantity: ${getResourceDataObject('research', ['upgrades', 'scienceLab', 'quantity'])}`, 'scienceLabQuantity', ['science-building-quantity']),
-            null,
+            createToggleSwitch('scienceLabToggle', true, (isEnabled) => {
+                setResourceDataObject(isEnabled, 'research', ['upgrades', 'scienceLab', 'active']);
+            }, ['toggle-switch-spacing']),
             null,
             null,
             `${getResourceDataObject('research', ['upgrades', 'scienceLab', 'price']) + ' Research'}`,

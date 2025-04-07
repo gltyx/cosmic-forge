@@ -3,7 +3,7 @@ import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
 
 export let resourceData = {
-    version: 0.60, //update this whenever changes are made to the structure
+    version: 0.62, //update this whenever changes are made to the structure
     resources: {
         solar: {
             autoSell: false,
@@ -65,7 +65,7 @@ export let resourceData = {
             autoSell: false,
             nameResource: 'Helium',
             screenName: 'helium',
-            saleValue: 0.01,
+            saleValue: 0.03,
             salePreviewElement: 'sellHeliumDescription',
             quantity: 0,
             rate: 0,
@@ -121,7 +121,7 @@ export let resourceData = {
             autoSell: false,
             nameResource: 'Neon',
             screenName: 'neon',
-            saleValue: 0.06,
+            saleValue: 0.40,
             salePreviewElement: 'sellNeonDescription',
             quantity: 0,
             rate: 0,
@@ -205,7 +205,7 @@ export let resourceData = {
             autoSell: false,
             nameResource: 'Iron',
             screenName: 'iron',
-            saleValue: 0.12,
+            saleValue: 0.17,
             salePreviewElement: 'sellIronDescription',
             quantity: 0,
             rate: 0,
@@ -263,7 +263,7 @@ export let resourceData = {
             autoSell: false,
             nameResource: 'Diesel',
             screenName: 'diesel',
-            saleValue: 0.1,
+            saleValue: 0.3,
             salePreviewElement: 'sellDieselDescription',
             createPreviewElement: 'createDieselDescription',
             quantity: 0,
@@ -763,6 +763,7 @@ export let resourceData = {
         ratePower: 0,
         upgrades: {
             scienceKit: { 
+                active: true,
                 price: 5,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
@@ -773,6 +774,7 @@ export let resourceData = {
                 energyUse: 0
             },
             scienceClub: { 
+                active: true,
                 price: 200,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
@@ -783,6 +785,7 @@ export let resourceData = {
                 energyUse: 0
             },
             scienceLab: { 
+                active: true,
                 price: 1500,
                 resource1Price: [0, '', ''],
                 resource2Price: [0, '', ''],
@@ -852,7 +855,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.60,
+    version: 0.62,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
@@ -871,7 +874,7 @@ export let starSystems = {
 };
 
 export let galacticMarket = {
-    version: 0.60,
+    version: 0.62,
     resources: {
         hydrogen: { 
             name: "Hydrogen", 
@@ -977,7 +980,7 @@ export let galacticMarket = {
 };
 
 export let ascendencyBuffs = {
-    version: 0.60,
+    version: 0.62,
     "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",
