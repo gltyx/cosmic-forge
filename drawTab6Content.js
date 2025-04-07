@@ -20,7 +20,7 @@ export function drawTab6Content(heading, optionContentElement) {
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
                         document.getElementById('spaceTelescopeInvestigateStarRow').classList.remove('invisible');
                         spaceBuildTelescopeRow.classList.add('invisible');
-                        showNotification('Space Telescope Built!', 'info');
+                        showNotification('Space Telescope Built!', 'info', 3000, 'special');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'spaceTelescope', 'cash', true, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'spaceTelescopeAlreadyBoughtText', ['green-ready-text', 'invisible']),
                     null,
@@ -137,7 +137,7 @@ export function drawTab6Content(heading, optionContentElement) {
                         document.getElementById('spaceRocket3BuildRow').classList.remove('invisible');
                         document.getElementById('spaceRocket4BuildRow').classList.remove('invisible');
                         spaceBuildLaunchPadRow.classList.add('invisible');
-                        showNotification('Launch Pad Built!', 'info');
+                        showNotification('Launch Pad Built!', 'info', 3000, 'special');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'launchPad', 'cash', true, null, 'spaceMiningPurchase'),
                     createTextElement('Bought', 'launchPadAlreadyBoughtText', ['green-ready-text', 'invisible']),
                     null,

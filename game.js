@@ -523,7 +523,7 @@ function checkIfStarShipBuilt() {
     
         setStarShipBuilt(allMandatoryModulesFinished);
         if (allMandatoryModulesFinished) {
-            showNotification('Star Ship can now be launched!', 'info');
+            showNotification('Star Ship can now be launched!', 'info', 3000, 'starShip');
         }
     }
 
@@ -774,7 +774,7 @@ export function fuseResource(resource, fuseTargets) {
 
             showNotification(
                 `Discovered ${fuseToString} and made ${amountToAdd} ${fuseToString} from ${amountToDeductFromResource} ${resourceString}!`,
-                'info'
+                'info', 3000, 'fuse'
             );
             setResourceDataObject(resourceQuantity - amountToDeductFromResource, 'resources', [resource, 'quantity']);
             setResourceDataObject(fuseToQuantity + amountToAdd, 'resources', [fuseTo, 'quantity']);
@@ -803,7 +803,7 @@ export function fuseResource(resource, fuseTargets) {
                 showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Lost ${energyLossFuseToQuantity} ${fuseToString} as energy due to sub-optimal fusion efficiency, receive ${realAmountToAdd} ${fuseToString}`,
                     'info',
-                    5000
+                    3000, 'fuse'
                 );
             } else { ;
                 
@@ -811,7 +811,7 @@ export function fuseResource(resource, fuseTargets) {
                 showNotification(
                     `Should Fuse ${amountToDeductFromResource} ${resourceString} into ${Math.floor(amountToDeductFromResource * ratio)} ${fuseToString}. Max available storage is for ${availableStorageFuseTo}.  Of those, ${energyLossFuseToQuantity} lost due to sub-optimal fusion efficiency. So receive ${realAmountToAdd - lostQuantity} ${fuseToString}`,
                     'warning',
-                    5000
+                    5000, 'fuse'
                 );
             }
 
@@ -843,12 +843,12 @@ export function sellResource(resource) {
     if (getCurrencySymbol() === "€") {
         showNotification(
             `You sold ${quantityToDeduct} ${capitaliseString(resource)} for ${cashRaised}${getCurrencySymbol()}!`,
-            'info'
+            'info', 3000, 'sold'
         );
     } else {
         showNotification(
             `You sold ${quantityToDeduct} ${capitaliseString(resource)} for ${getCurrencySymbol()}${cashRaised}!`,
-            'info'
+            'info', 3000, 'sold'
         );
     }
 
@@ -913,12 +913,12 @@ export function createCompound(compound) {
     if (exceededDifference > 0) {
         showNotification(
             `You created ${compoundCreatedQuantity} ${compoundCreatedName} from ${notificationParts.join(', ')} but ${exceededDifference} ${compoundCreatedName} was wasted due to storage limit being exceeded.`,
-            'warning'
+            'warning', 3000, 'create'
         );
     } else {
         showNotification(
             `You created ${compoundCreatedQuantity} ${compoundCreatedName} from ${notificationParts.join(', ')}`,
-            'info'
+            'info', 3000, 'create'
         );
     }
 }
@@ -951,12 +951,12 @@ export function sellCompound(compound) {
     if (getCurrencySymbol() === "€") {
         showNotification(
             `You sold ${quantityToDeduct} ${capitaliseString(compound)} for ${cashRaised}${getCurrencySymbol()}!`,
-            'info'
+            'info', 3000, 'special'
         );
     } else {
         showNotification(
             `You sold ${quantityToDeduct} ${capitaliseString(compound)} for ${getCurrencySymbol()}${cashRaised}!`,
-            'info'
+            'info', 3000, 'special'
         );
     }
 }
@@ -3984,7 +3984,7 @@ export function galacticMarketTrade() {
     const commissionMessage = `${commissionQuantity} ${capitaliseString(outgoingItem)}`;
     const notificationMessage = `You have traded ${outgoingMessage} for ${incomingMessage} and paid ${commissionMessage} commission!`;
 
-    showNotification(notificationMessage, 'info', 5000);
+    showNotification(notificationMessage, 'info', 5000, 3000, 'special');
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
@@ -5460,14 +5460,14 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
                 if (direction) {
                     sfxPlayer.playAudio("rocketLand", false);
                     showNotification(`${
-                        getRocketUserName(rocket)} has returned to be refuelled!`, 'info');
+                        getRocketUserName(rocket)} has returned to be refuelled!`, 'info', 3000, 'rocket');
                     resetRocketForNextJourney(rocket);
                     timerManager.removeTimer(timerName);
 
                     setCurrentlyTravellingToAsteroid(rocket, false);
                     setTimeLeftUntilRocketTravelToAsteroidTimerFinishes(0);
                 } else {
-                    showNotification(`${getRocketUserName(rocket)} has reached ${destination} and started mining Antimatter!`, 'info');
+                    showNotification(`${getRocketUserName(rocket)} has reached ${destination} and started mining Antimatter!`, 'info', 3000, 'rocket');
                     addToResourceAllTimeStat(1, 'asteroidsMined');
                     timerManager.removeTimer(timerName);
     
@@ -5543,7 +5543,7 @@ export function startTravelToDestinationStarTimer(adjustment) {
             let distanceTravelled;    
             
             if (counter >= travelDuration) {
-                showNotification(`StarShip has reached orbit of the ${capitaliseWordsWithRomanNumerals(destination)} system!`, 'info');
+                showNotification(`StarShip has reached orbit of the ${capitaliseWordsWithRomanNumerals(destination)} system!`, 'info', 3000, 'starShip');
                 timerManager.removeTimer(timerName);
         
                 if (travelTimerDescriptionElement) {             
@@ -6611,7 +6611,7 @@ export function offlineGains(switchedFocus) {
         addToResourceAllTimeStat(Math.floor(offlineGainsAntimatter * getOfflineGainsRate()), 'antimatterThisRun');        
         
         if (!switchedFocus) {
-            showNotification('Offline Gains Added!', 'info');
+            showNotification('Offline Gains Added!', 'info', 3000, 'loadSave');
         }
     
         //console.log('Offline Gains:', offlineGains);
@@ -6727,7 +6727,7 @@ export function fuelRockets() {
         const fuelQuantityProgressBarElement = document.getElementById(rocket + 'FuellingProgressBar');
 
         if (newFuelQuantity >= fullLevel) {
-            showNotification(`${getRocketUserName(rocket)} is ready for Launch!`, 'info');
+            showNotification(`${getRocketUserName(rocket)} is ready for Launch!`, 'info', 3000, 'rocket');
             if (!getRocketsFuellerStartedArray().includes(rocket + 'FuelledUp')) {
                 setRocketsFuellerStartedArray(`${rocket}FuelledUp`, 'add');
             }
@@ -6854,7 +6854,7 @@ export function updateRocketDescription() {
 export function launchRocket(rocket) {
     setLaunchedRockets(rocket, 'add');
     document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
-    showNotification(`${getRocketUserName(rocket)} Launched!`, 'info');
+    showNotification(`${getRocketUserName(rocket)} Launched!`, 'info', 3000, 'rocket');
 }
 
 export function toggleAllPower() {
@@ -6931,13 +6931,13 @@ export function extendStarDataRange(debug) {
     }
 
     if (!debug) {
-        showNotification('Star Study Complete!</br></br>Take a look at the Star Map!', 'info');
+        showNotification('Star Study Complete!</br></br>Take a look at the Star Map!', 'info', 3000, 'special');
     }
 }
 
 export function discoverAsteroid(debug) {
     if (Math.random() < 0.07 && !debug) {
-        showNotification('Asteroid not found after search!', 'warning');
+        showNotification('Asteroid not found after search!', 'warning', 3000, 'special');
         return;
     }
 
@@ -6957,9 +6957,9 @@ export function discoverAsteroid(debug) {
     if (!debug) {
         if (asteroid[keyName].specialName) {
             addToResourceAllTimeStat(1, 'totalLegendaryAsteroidsDiscovered');
-            showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info');
+            showNotification(`Legendary Asteroid Discovered!<br><br>They named it after you!<br><br>${asteroid[keyName].name}`, 'info', 3000, 'special');
         } else {
-            showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info');
+            showNotification(`Asteroid Discovered!<br><br>${asteroidName}`, 'info', 3000, 'special');
         }
     }
 }

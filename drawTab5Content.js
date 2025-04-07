@@ -242,7 +242,7 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                     setDestinationStarScanned(true);
                     copyStarDataToDestinationStarField(destinationStar);
                     generateDestinationStarData();
-                    showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`);
+                    showNotification(`${capitaliseWordsWithRomanNumerals(destinationStar)} System Scanned!`, 'info', 3000, 'starShip');
     
                     drawTab5Content('Star Ship', optionContentElement, true, false);
                 }, '', '', '', null, '', true, null, ''),

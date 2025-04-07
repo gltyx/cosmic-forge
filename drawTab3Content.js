@@ -115,7 +115,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('knowledgeSharing', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('knowledgeSharing');
-                        showNotification(techNotificationMessages.knowledgeSharing, 'info');
+                        showNotification(techNotificationMessages.knowledgeSharing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'knowledgeSharing', null, 'research', true, null, 'tech'),
                     null,
@@ -145,7 +145,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionTheory', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionTheory');
-                        showNotification(techNotificationMessages.fusionTheory, 'info');
+                        showNotification(techNotificationMessages.fusionTheory, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionTheory', null, 'research', true, null, 'tech'),
                     null,
@@ -176,7 +176,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('hydrogenFusion');
                         updateDescriptionRow('hydrogenSellRow', 'content2');
-                        showNotification(techNotificationMessages.hydrogenFusion, 'info');
+                        showNotification(techNotificationMessages.hydrogenFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'hydrogenFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -207,7 +207,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('heliumFusion');
                         updateDescriptionRow('heliumSellRow', 'content2');
-                        showNotification(techNotificationMessages.heliumFusion, 'info');
+                        showNotification(techNotificationMessages.heliumFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'heliumFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -238,7 +238,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('carbonFusion');
                         updateDescriptionRow('carbonSellRow', 'content2');
-                        showNotification(techNotificationMessages.carbonFusion, 'info');
+                        showNotification(techNotificationMessages.carbonFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'carbonFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -269,7 +269,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neonFusion');
                         updateDescriptionRow('neonSellRow', 'content2');
-                        showNotification(techNotificationMessages.neonFusion, 'info');
+                        showNotification(techNotificationMessages.neonFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neonFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -300,7 +300,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('oxygenFusion');
                         updateDescriptionRow('oxygenSellRow', 'content2');
-                        showNotification(techNotificationMessages.oxygenFusion, 'info');
+                        showNotification(techNotificationMessages.oxygenFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'oxygenFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -331,7 +331,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('siliconFusion');
                         updateDescriptionRow('siliconSellRow', 'content2');
-                        showNotification(techNotificationMessages.siliconFusion, 'info');
+                        showNotification(techNotificationMessages.siliconFusion, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'siliconFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -361,7 +361,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('nobleGasCollection', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nobleGasCollection');
-                        showNotification(techNotificationMessages.nobleGasCollection, 'info');
+                        showNotification(techNotificationMessages.nobleGasCollection, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'nobleGasCollection', null, 'research', true, null, 'tech'),
                     null,
@@ -391,7 +391,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('glassManufacture', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('glassManufacture');
-                        showNotification(techNotificationMessages.glassManufacture, 'info');
+                        showNotification(techNotificationMessages.glassManufacture, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'glassManufacture', null, 'research', true, null, 'tech'),
                     null,
@@ -421,7 +421,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('aggregateMixing', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('aggregateMixing');
-                        showNotification(techNotificationMessages.aggregateMixing, 'info');
+                        showNotification(techNotificationMessages.aggregateMixing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'aggregateMixing', null, 'research', true, null, 'tech'),
                     null,
@@ -451,7 +451,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('neutronCapture', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neutronCapture');
-                        showNotification(techNotificationMessages.neutronCapture, 'info');
+                        showNotification(techNotificationMessages.neutronCapture, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neutronCapture', null, 'research', true, null, 'tech'),
                     null,
@@ -487,7 +487,7 @@ export function drawTab3Content(heading, optionContentElement) {
                                 setAutoBuyerTierLevel(key, 2, false, 'resources');
                             }
                         });
-                        showNotification(techNotificationMessages.quantumComputing, 'info');
+                        showNotification(techNotificationMessages.quantumComputing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', true, null, 'tech'),
                     null,
@@ -517,7 +517,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('scienceLaboratories', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('scienceLaboratories');
-                        showNotification(techNotificationMessages.scienceLaboratories, 'info');
+                        showNotification(techNotificationMessages.scienceLaboratories, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'scienceLaboratories', null, 'research', true, null, 'tech'),
                     null,
@@ -547,7 +547,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('hydroCarbons', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('hydroCarbons');
-                        showNotification(techNotificationMessages.hydroCarbons, 'info');
+                        showNotification(techNotificationMessages.hydroCarbons, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'hydroCarbons', null, 'research', true, null, 'tech'),
                     null,
@@ -577,7 +577,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('nanoTubeTechnology', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoTubeTechnology');
-                        showNotification(techNotificationMessages.nanoTubeTechnology, 'info');
+                        showNotification(techNotificationMessages.nanoTubeTechnology, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'nanoTubeTechnology', null, 'research', true, null, 'tech'),
                     null,
@@ -607,7 +607,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('nanoBrokers', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('nanoBrokers');
-                        showNotification(techNotificationMessages.nanoBrokers, 'info');
+                        showNotification(techNotificationMessages.nanoBrokers, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'nanoBrokers', null, 'research', true, null, 'tech'),
                     null,
@@ -637,7 +637,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('stellarCartography', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('stellarCartography');
-                        showNotification(techNotificationMessages.stellarCartography, 'info');
+                        showNotification(techNotificationMessages.stellarCartography, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'stellarCartography', null, 'research', true, null, 'tech'),
                     null,
@@ -667,7 +667,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('basicPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('basicPowerGeneration');
-                        showNotification(techNotificationMessages.basicPowerGeneration, 'info');
+                        showNotification(techNotificationMessages.basicPowerGeneration, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', true, null, 'tech'),
                     null,
@@ -697,7 +697,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('sodiumIonPowerStorage', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('sodiumIonPowerStorage');
-                        showNotification(techNotificationMessages.sodiumIonPowerStorage, 'info');
+                        showNotification(techNotificationMessages.sodiumIonPowerStorage, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'sodiumIonPowerStorage', null, 'research', true, null, 'tech'),
                     null,
@@ -727,7 +727,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('advancedPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('advancedPowerGeneration');
-                        showNotification(techNotificationMessages.advancedPowerGeneration, 'info');
+                        showNotification(techNotificationMessages.advancedPowerGeneration, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'advancedPowerGeneration', null, 'research', true, null, 'tech'),
                     null,
@@ -757,7 +757,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('solarPowerGeneration', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('solarPowerGeneration');
-                        showNotification(techNotificationMessages.solarPowerGeneration, 'info');
+                        showNotification(techNotificationMessages.solarPowerGeneration, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'solarPowerGeneration', null, 'research', true, null, 'tech'),
                     null,
@@ -793,7 +793,7 @@ export function drawTab3Content(heading, optionContentElement) {
                                 setAutoBuyerTierLevel(key, 4, false, 'resources');
                             }
                         });
-                        showNotification(techNotificationMessages.rocketComposites, 'info');
+                        showNotification(techNotificationMessages.rocketComposites, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         document.getElementById('launchPad').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'rocketComposites', null, 'research', true, null, 'tech'),
@@ -824,7 +824,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('advancedFuels', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('advancedFuels');
-                        showNotification(techNotificationMessages.advancedFuels, 'info');
+                        showNotification(techNotificationMessages.advancedFuels, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         setCanFuelRockets(true);
                     }, 'techUnlock', '', 'advancedFuels', null, 'research', true, null, 'tech'),
@@ -855,7 +855,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('planetaryNavigation', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('planetaryNavigation');
-                        showNotification(techNotificationMessages.planetaryNavigation, 'info');
+                        showNotification(techNotificationMessages.planetaryNavigation, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         setCanTravelToAsteroids(true);
                     }, 'techUnlock', '', 'planetaryNavigation', null, 'research', true, null, 'tech'),
@@ -886,7 +886,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('compounds', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('compounds');
-                        showNotification(techNotificationMessages.compounds, 'info');
+                        showNotification(techNotificationMessages.compounds, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         setAllCompoundsToZeroQuantity();
                     }, 'techUnlock', '', 'compounds', null, 'research', true, null, 'tech'),
@@ -917,7 +917,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('steelFoundries', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('steelFoundries');
-                        showNotification(techNotificationMessages.steelFoundries, 'info');
+                        showNotification(techNotificationMessages.steelFoundries, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'steelFoundries', null, 'research', true, null, 'tech'),
                     null,
@@ -947,7 +947,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('giganticTurbines', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('giganticTurbines');
-                        showNotification(techNotificationMessages.giganticTurbines, 'info');
+                        showNotification(techNotificationMessages.giganticTurbines, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'giganticTurbines', null, 'research', true, null, 'tech'),
                     null,
@@ -977,7 +977,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('atmosphericTelescopes', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('atmosphericTelescopes');
-                        showNotification(techNotificationMessages.atmosphericTelescopes, 'info');
+                        showNotification(techNotificationMessages.atmosphericTelescopes, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', true, null, 'tech'),
                     null,
@@ -1007,7 +1007,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyI', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyI');
-                        showNotification(techNotificationMessages.fusionEfficiencyI, 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyI, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyI', null, 'research', true, null, 'tech'),
                     null,
@@ -1037,7 +1037,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyII');
-                        showNotification(techNotificationMessages.fusionEfficiencyII, 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyII, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyII', null, 'research', true, null, 'tech'), 
                     null,
@@ -1067,7 +1067,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('fusionEfficiencyIII', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('fusionEfficiencyIII');
-                        showNotification(techNotificationMessages.fusionEfficiencyIII, 'info');
+                        showNotification(techNotificationMessages.fusionEfficiencyIII, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'fusionEfficiencyIII', null, 'research', true, null, 'tech'),
                     null,
@@ -1097,7 +1097,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('orbitalConstruction', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('orbitalConstruction');
-                        showNotification(techNotificationMessages.orbitalConstruction, 'info');
+                        showNotification(techNotificationMessages.orbitalConstruction, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         document.getElementById('starShipOption').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'orbitalConstruction', null, 'research', true, null, 'tech'),
@@ -1128,7 +1128,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('antimatterEngines', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('antimatterEngines');
-                        showNotification(techNotificationMessages.antimatterEngines, 'info');
+                        showNotification(techNotificationMessages.antimatterEngines, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'antimatterEngines', null, 'research', true, null, 'tech'),
                     null,
@@ -1158,7 +1158,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('FTLTravelTheory', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('FTLTravelTheory');
-                        showNotification(techNotificationMessages.FTLTravelTheory, 'info');
+                        showNotification(techNotificationMessages.FTLTravelTheory, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'FTLTravelTheory', null, 'research', true, null, 'tech'),
                     null,
@@ -1188,7 +1188,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('lifeSupportSystems', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('lifeSupportSystems');
-                        showNotification(techNotificationMessages.lifeSupportSystems, 'info');
+                        showNotification(techNotificationMessages.lifeSupportSystems, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'lifeSupportSystems', null, 'research', true, null, 'tech'),
                     null,
@@ -1218,7 +1218,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('starshipFleets', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('starshipFleets');
-                        showNotification(techNotificationMessages.starshipFleets, 'info');
+                        showNotification(techNotificationMessages.starshipFleets, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'starshipFleets', null, 'research', true, null, 'tech'),
                     null,
@@ -1248,7 +1248,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('stellarScanners', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('stellarScanners');
-                        showNotification(techNotificationMessages.stellarScanners, 'info');
+                        showNotification(techNotificationMessages.stellarScanners, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'stellarScanners', null, 'research', true, null, 'tech'),
                     null,

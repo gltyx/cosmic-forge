@@ -83,7 +83,7 @@ export async function saveGameToCloud(gameData, type) {
             }
 
             if (type !== 'initialise') {
-                showNotification('Game updated in the cloud!', 'info');
+                showNotification('Game updated in the cloud!', 'info', 3000, 'loadSave');
             }
         } else {
             const { error: insertError } = await supabase
@@ -95,13 +95,12 @@ export async function saveGameToCloud(gameData, type) {
             }
 
             if (type !== 'initialise') {
-                showNotification('Game saved to the cloud!', 'info');
+                showNotification('Game saved to the cloud!', 'info', 3000, 'loadSave');
             }
         }
 
     } catch (error) {
-        showNotification('Error saving game to cloud!', 'error');
-        console.error("Error saving game to cloud:", error);
+        showNotification('Error saving game to cloud!', 'error', 3000, 'loadSave');
     }
 }
 
@@ -189,10 +188,10 @@ export function copySaveStringToClipBoard() {
     try {
         navigator.clipboard.writeText(textArea.value)
             .then(() => {
-                showNotification('Data copied to clipboard!', 'info');
+                showNotification('Data copied to clipboard!', 'info', 3000, 'loadSave');
             })
             .catch(err => {
-                showNotification('Error copying data! If on Chrome, this could be expected.  Select and copy the text string manually!', 'error');
+                showNotification('Error copying data! If on Chrome, this could be expected.  Select and copy the text string manually!', 'error', 3000, 'loadSave');
                 console.log('Error copying data! ' + err);
             })
             .finally(() => {
@@ -219,15 +218,15 @@ export async function loadGameFromCloud() {
             const gameState = JSON.parse(decompressedJson);
 
             await initialiseLoadedGame(gameState, 'cloud');
-            showNotification('Game loaded successfully!', 'info');
+            showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
             return true;
         } else {
-            showNotification('No saved game data found.', 'warning');
+            showNotification('No saved game data found.', 'warning', 3000, 'loadSave');
             return false;
         }
     } catch (error) {
         console.error("Error loading game from cloud:", error);
-        showNotification('Error loading game data from the cloud.', 'error');
+        showNotification('Error loading game data from the cloud.', 'error', 3000, 'loadSave');
         return false;
     }
 }
@@ -244,7 +243,7 @@ export function loadGame() {
 
             // Validate the compressed string before processing
             if (!validateSaveString(compressed)) {
-                showNotification('Invalid game data string. Please check and try again.', 'warning');
+                showNotification('Invalid game data string. Please check and try again.', 'warning', 3000, 'loadSave');
                 return reject('Invalid game data string');
             }
 
@@ -253,18 +252,18 @@ export function loadGame() {
 
             initialiseLoadedGame(gameState, 'textImport')
                 .then(() => {
-                    showNotification('Game loaded successfully!', 'info');
+                    showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
                     resolve();
                 })
                 .catch(error => {
                     console.error('Error initializing game:', error);
-                    showNotification('Error initializing game. Please make sure the data is correct.', 'error');
+                    showNotification('Error initializing game. Please make sure the data is correct.', 'error', 3000, 'loadSave');
                     reject(error);
                 });
 
         } catch (error) {
             console.error('Error loading game:', error);
-            showNotification('Error loading game. Please make sure the string contains valid game data.', 'error');
+            showNotification('Error loading game. Please make sure the string contains valid game data.', 'error', 3000, 'loadSave');
             reject(error);
         }
     });

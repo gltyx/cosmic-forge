@@ -1,5 +1,4 @@
 import { restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs } from "./resourceDataObject.js";
-import { initializeAutoSave } from './saveLoadGame.js';
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
@@ -20,6 +19,11 @@ let saveData = null;
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
 export const GAME_VERSION_FOR_SAVES = 0.60;
 export const deferredActions = [];
+
+//NOTIFICATIONS
+export const MAX_STACKS = 4;
+export const STACK_WIDTH = 220;
+export const BASE_RIGHT = 0;        
 
 export const MENU_STATE = 'menuState';
 export const INCREASE_STORAGE_FACTOR = 2;
@@ -65,6 +69,11 @@ export const enemyFleetData = {
         acceleration: 0.006
     }
 }
+
+export let notificationQueues = {};
+export let notificationStatus = {};
+export let notificationContainers = {};
+export let classificationOrder = [];
 
 //GLOBAL VARIABLES
 export let gameState;
@@ -2897,6 +2906,38 @@ export function setLastSellResourceCompoundDropdownOption(type, resource, value)
         lastSellResourceCompoundDropdownOption[type] = {};
     }
     lastSellResourceCompoundDropdownOption[type][resource] = value;
+}
+
+export function getNotificationQueues() {
+    return notificationQueues;
+}
+
+export function setNotificationQueues(value) {
+    notificationQueues = value;
+}
+
+export function getNotificationStatus() {
+    return notificationStatus;
+}
+
+export function setNotificationStatus(value) {
+    notificationStatus = value;
+}
+
+export function getNotificationContainers() {
+    return notificationContainers;
+}
+
+export function setNotificationContainers(value) {
+    notificationContainers = value;
+}
+
+export function getClassificationOrder() {
+    return classificationOrder;
+}
+
+export function setClassificationOrder(value) {
+    classificationOrder = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

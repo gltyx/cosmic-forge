@@ -1,4 +1,12 @@
 import {
+    getNotificationQueues,
+    setNotificationQueues,
+    getNotificationStatus,
+    setNotificationStatus,
+    getNotificationContainers,
+    setNotificationContainers,
+    getClassificationOrder,
+    setClassificationOrder,
     setEnemyFleetsAdjustedForDiplomacy,
     getEnemyFleetsAdjustedForDiplomacy,
     getFleetConstantData,
@@ -89,10 +97,10 @@ import {
     getNeedNewBattleCanvas,
     setNeedNewBattleCanvas,
     getSettledStars,
-    setGalacticMarketOutgoingStockType,
-    setGalacticMarketIncomingStockType,
-    setGalacticMarketOutgoingQuantitySelectionType,
-    setGalacticMarketIncomingQuantity,
+    MAX_STACKS,
+    STACK_WIDTH,
+    BASE_RIGHT,
+
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -979,86 +987,158 @@ export function selectTheme(theme) {
     setCurrentTheme(theme);
 }
 
-let notificationQueue = [];
-let isNotificationActive = false;
-
 export function showWeatherNotification(type) {
     const precipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
+    const tech = getTechUnlockedArray();
+
     if (type === 'rain') {
-        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('compounds') && getTechUnlockedArray().includes(getResourceDataObject('compounds', [precipitationType, 'revealedBy']))) {
-            showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning');
-        } else if (getTechUnlockedArray().includes('rocketComposites')) {
+        const benefits = tech.includes('compounds') && tech.includes(getResourceDataObject('compounds', [precipitationType, 'revealedBy']));
+        const hasRockets = tech.includes('rocketComposites');
+
+        if (hasRockets && benefits) {
+            showNotification(`Heavy Rain! No launches until it clears, but ${precipitationType} stores benefit!`, 'warning', 3000, 'weather');
+        } else if (hasRockets) {
             showNotification('Heavy Rain! No launches until it clears.', 'warning');
-        } else if (getTechUnlockedArray().includes('compounds')) {
-            showNotification(`Heavy Rain! ${capitaliseString(precipitationType)} stores benefit!`, 'warning');
+        } else if (benefits) {
+            showNotification(`Heavy Rain! ${capitaliseString(precipitationType)} stores benefit!`, 'warning', 3000, 'weather');
         } else {
-            showNotification('Heavy Rain!', 'warning');
+            showNotification('Heavy Rain!', 'warning', 3000, 'weather');
         }
     } else if (type === 'volcano') {
-        if (getTechUnlockedArray().includes('rocketComposites') && getTechUnlockedArray().includes('solarPowerGeneration')) {
-            showNotification('Volcano Eruption! No launches until it clears, and solar power generation severely affected!', 'error');
-        } else if (getTechUnlockedArray().includes('rocketComposites')) {
-            showNotification('Volcano Eruption! No launches until it clears.', 'error');
-        } else if (getTechUnlockedArray().includes('solarPowerGeneration')) {
-            showNotification('Volcano Eruption! Solar power severely affected!', 'error');
+        const hasRockets = tech.includes('rocketComposites');
+        const hasSolar = tech.includes('solarPowerGeneration');
+
+        if (hasRockets && hasSolar) {
+            showNotification('Volcano Eruption! No launches until it clears, and solar power generation severely affected!', 'error', 3000, 'weather');
+        } else if (hasRockets) {
+            showNotification('Volcano Eruption! No launches until it clears.', 'error', 3000, 'weather');
+        } else if (hasSolar) {
+            showNotification('Volcano Eruption! Solar power severely affected!', 'error', 3000, 'weather');
         } else {
-            showNotification('Volcano Eruption!', 'warning');
+            showNotification('Volcano Eruption!', 'warning', 3000, 'weather');
         }
     } else {
         console.error('Unknown weather type:', type);
     }
 }
 
-export function showNotification(message, type = 'info', time = 3000) {
-    if (getNotificationsToggle()) {
-        notificationQueue.push({ message, type, time });
+export function showNotification(message, type = 'info', time = 3000, classification = 'default') {
+    if (!getNotificationsToggle()) return;
 
-        if (!isNotificationActive) {
-            processNotificationQueue();
+    const queues = getNotificationQueues();
+    const status = getNotificationStatus();
+
+    if (!queues[classification]) {
+        queues[classification] = [];
+        status[classification] = false;
+        setNotificationQueues(queues);
+        setNotificationStatus(status);
+        createNotificationContainer(classification);
+    }
+
+    queues[classification].push({ message, type, time });
+    setNotificationQueues(queues);
+
+    if (!status[classification]) {
+        processNotificationQueue(classification);
+    }
+}
+
+function createNotificationContainer(classification) {
+    const container = document.createElement('div');
+    container.className = `notification-container classification-${classification}`;
+
+    document.body.appendChild(container);
+
+    const containers = getNotificationContainers();
+    containers[classification] = container;
+    setNotificationContainers(containers);
+
+    const order = getClassificationOrder();
+    order.push(classification);
+    setClassificationOrder(order);
+
+    updateContainerPositions();
+}
+
+function updateContainerPositions() {
+    const containers = getNotificationContainers();
+    const order = getClassificationOrder();
+
+    order.slice(0, MAX_STACKS).forEach((className, index) => {
+        const container = containers[className];
+        if (container) {
+            container.style.right = `${BASE_RIGHT + index * STACK_WIDTH}px`;
         }
-    }
+    });
 }
 
-function processNotificationQueue() {
-    if (notificationQueue.length > 0) {
-        isNotificationActive = true;
+function processNotificationQueue(classification) {
+    if (!getNotificationsToggle()) return;
 
-        const { message, type, time } = notificationQueue.shift();
-        sendNotificationIfActive(message, type, time);
+    const queues = getNotificationQueues();
+    const status = getNotificationStatus();
+
+    const queue = queues[classification];
+    if (queue?.length > 0) {
+        status[classification] = true;
+        setNotificationStatus(status);
+
+        const { message, type, time } = queue.shift();
+        setNotificationQueues(queues);
+
+        sendNotification(message, type, classification, time);
     } else {
-        isNotificationActive = false;
+        status[classification] = false;
+        setNotificationStatus(status);
+
+        const containers = getNotificationContainers();
+        const container = containers[classification];
+        if (container) {
+            container.remove();
+            delete containers[classification];
+            setNotificationContainers(containers);
+        }
+
+        delete queues[classification];
+        setNotificationQueues(queues);
+
+        const order = getClassificationOrder().filter(c => c !== classification);
+        setClassificationOrder(order);
+        delete status[classification];
+        setNotificationStatus(status);
+        updateContainerPositions();
     }
 }
 
-function sendNotificationIfActive(message, type, duration) {
+function sendNotification(message, type, classification, duration) {
+    const containers = getNotificationContainers();
+    const container = containers[classification];
+    if (!container) return;
+
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
-    notification.innerHTML = message;
+    notification.innerHTML = `<div class="notification-content">${message}</div>`;
 
-    const allNotifications = document.querySelectorAll('.notification');
-    allNotifications.forEach((notification, index) => {
-        notification.style.transform = `translateY(-${(index + 1) * 110}px)`;
-    });
-
-    if (notificationContainer) {
-        notificationContainer.prepend(notification);
+    const existing = container.querySelector('.notification');
+    if (existing) {
+        existing.remove();
     }
-    
+
+    container.appendChild(notification);
+
     setTimeout(() => {
-        notification.style.opacity = '1';
-        notification.style.transform = 'translateY(0)';
-    }, 50);
+        notification.classList.add('show');
+    }, 10);
 
     setTimeout(() => {
         hideNotification(notification);
-        processNotificationQueue();
+        processNotificationQueue(classification);
     }, duration);
 }
 
 function hideNotification(notification) {
-    notification.style.opacity = '0';
-    notification.style.transform = 'translateY(100px)';
-
+    notification.classList.remove('show');
     setTimeout(() => {
         notification.remove();
     }, 500);
@@ -1077,22 +1157,6 @@ function highlightActiveTab(activeTabText) {
         }
     });
 }
-
-// async function setElementsLanguageText() {
-//     getElements().menuTitle.innerHTML = `<h2>${localize('menuTitle', getLanguage())}</h2>`;
-//     getElements().newGameMenuButton.innerHTML = `${localize('newGame', getLanguage())}`;
-// }
-
-// export async function handleLanguageChange(languageCode) {
-//     setLanguageSelected(languageCode);
-//     await setupLanguageAndLocalization();
-//     setElementsLanguageText();
-// }
-
-// async function setupLanguageAndLocalization() {
-//     setLanguage(getLanguageSelected());
-//     await initLocalization(getLanguage());
-// }
 
 export function disableActivateButton(button, action, activeClass) {
     switch (action) {
@@ -1324,7 +1388,7 @@ function showLaunchWarningModal(show) {
         launchConfirmButton.onclick = function () {
             const destinationStar = getDestinationStar();
             const starData = getStarSystemDataObject('stars', [destinationStar]);
-            showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000);
+            showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000, 'special');
             startTravelToDestinationStarTimer([0, 'buttonClick'], false);
             spendAntimatterOnFuelForStarShip(starData.fuel);
             spaceTravelButtonHideAndShowDescription();
@@ -4642,7 +4706,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     
         galacticTabUnlockConfirmButton.onclick = function () {
             showHideModal();
-            showNotification('Galactic Tab Unlocked!', 'warning');
+            showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
             galacticTabUnlockConfirmButton.classList.add('invisible');
         };
     }
@@ -4985,7 +5049,7 @@ grantAllTechsButton.addEventListener('click', () => {
 
     grantAllTechsButton.classList.add('red-disabled-text');
     setRenderedTechTree(false);
-    showNotification('CHEAT! All techs unlocked!', 'info');
+    showNotification('CHEAT! All techs unlocked!', 'info', 3000, 'debug');
 
     console.log('All techs unlocked!');
 });
@@ -4997,7 +5061,7 @@ give1BButton.addEventListener('click', () => {
 
     setResourceDataObject(newCash, 'currency', ['cash']);
     
-    showNotification('CHEAT! $1B added', 'info');
+    showNotification('CHEAT! $1B added', 'info', 3000, 'debug');
     console.log('$ 1B granted! Current cash:', newCash);
 });
 
@@ -5007,7 +5071,7 @@ give100Button.addEventListener('click', () => {
 
     setResourceDataObject(newCash, 'currency', ['cash']);
     
-    showNotification('CHEAT! $100 set', 'info');
+    showNotification('CHEAT! $100 set', 'info', 3000, 'debug');
     console.log('$100 set! Current cash:', newCash);
 });
 
@@ -5046,7 +5110,7 @@ give1MAllResourcesAndCompoundsButton.addEventListener('click', () => {
         setAutoBuyerTierLevel(compoundKey, 4, false, 'compounds');
     });
     
-    showNotification('CHEAT! 1M of every resource and compound added!', 'info');
+    showNotification('CHEAT! 1M of every resource and compound added!', 'info', 3000, 'debug');
     console.log('1M storage capacity granted to all resources and compounds!');
 });
 
@@ -5085,7 +5149,7 @@ give100AllResourcesAndCompoundsButton.addEventListener('click', () => {
         setAutoBuyerTierLevel(compoundKey, 1, false, 'compounds');
     });
     
-    showNotification('CHEAT! 100 of every resource and compound!', 'info');
+    showNotification('CHEAT! 100 of every resource and compound!', 'info', 3000, 'debug');
     console.log('100 of all resources and compounds!');
 });
 
@@ -5094,7 +5158,7 @@ add10AsteroidsButton.addEventListener('click', () => {
     for (let i = 0; i < 10; i++) {
         discoverAsteroid(true);
     }
-    showNotification('CHEAT! Discovered 10 Asteroids!', 'info');
+    showNotification('CHEAT! Discovered 10 Asteroids!', 'info', 3000, 'debug');
 });
 
 const addStarButton = document.getElementById('addStarButton');
@@ -5102,7 +5166,7 @@ addStarButton.addEventListener('click', () => {
     // for (let i = 0; i < 10; i++) {
         extendStarDataRange(true);
     // }
-    showNotification('CHEAT! Discovered Star Data!', 'info');
+    showNotification('CHEAT! Discovered Star Data!', 'info', 3000, 'debug');
 });
 
 const buildLaunchPadScannerAndAllRocketsButton = document.getElementById('buildLaunchPadScannerAndAllRocketsButton');
@@ -5121,14 +5185,14 @@ buildLaunchPadScannerAndAllRocketsButton.addEventListener('click', () => {
     setRocketsBuilt('rocket4');
 
     buildLaunchPadScannerAndAllRocketsButton.classList.add('red-disabled-text');
-    showNotification('CHEAT! Launch Pad, Space Scanner and all Rockets Built!', 'info');
+    showNotification('CHEAT! Launch Pad, Space Scanner and all Rockets Built!', 'info', 3000, 'debug');
 });
 
 const gain10000AntimatterButton = document.getElementById('gain10000AntimatterButton');
 gain10000AntimatterButton.addEventListener('click', () => {
     setAntimatterUnlocked(true);
     setResourceDataObject(getResourceDataObject('antimatter', ['quantity']) + 10000, 'antimatter', ['quantity']);
-    showNotification('CHEAT! 10000 Antimatter added!', 'info');
+    showNotification('CHEAT! 10000 Antimatter added!', 'info', 3000, 'debug');
 });
 
 const unlockAllTabsButton = document.getElementById('unlockAllTabsButton');
@@ -5160,7 +5224,7 @@ unlockAllTabsButton.addEventListener('click', () => {
 
     reorderTabs([1, 4, 3, 2, 6, 5, 7, 8]);
 
-    showNotification('CHEAT! All tabs unlocked!', 'info');
+    showNotification('CHEAT! All tabs unlocked!', 'info', 3000, 'debug');
 });
 
 function toggleVariableDebuggerWindow() {
