@@ -4,6 +4,7 @@ import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initial
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
+    if (heading === 'Contact') createHelpSectionRow('contactRow', ['discord-link', 'email-link']);
     if (heading === 'Get Started') createHelpSectionRow('getStartedRow');
     if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow');
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow');
@@ -463,14 +464,17 @@ export function drawTab8Content(heading, optionContentElement) {
         }
     }
 
-    function createHelpSectionRow(rowId) {
+    function createHelpSectionRow(rowId, classes) {
+        const defaultClasses = ['help-container', 'help-container-margin'];
+        const combinedClasses = defaultClasses.concat(classes || []);
+        
         const helpRow = createOptionRow(
             rowId,
             null,
             '',
             createHtmlTextAreaProse(
                 `${rowId}TextArea`,
-                ['help-container', 'help-container-margin'],
+                combinedClasses,
                 getHelpContent(getCurrentOptionPane(), 'subHeadings'),
                 getHelpContent(getCurrentOptionPane(), 'subBodys'),
                 ['help-sub-header-text'],
@@ -494,9 +498,40 @@ export function drawTab8Content(heading, optionContentElement) {
             [true, 'invisible', '100%'],
             ['no-left-margin']
         );
-    
+        
         optionContentElement.appendChild(helpRow);
-    }
+    
+        if (document.getElementById('contactRowTextArea').classList.contains('discord-link')) {
+            const spans = helpRow.querySelectorAll('span');
+            
+            spans.forEach(span => {
+                if (span.innerHTML.includes('discord.gg')) {
+                    span.classList.add('green-ready-text');
+                    span.style.cursor = 'pointer';
+                    span.style.pointerEvents = 'auto';
+                    span.addEventListener('click', () => {
+                        window.open(span.innerHTML, '_blank');
+                    });
+                }
+            });
+        }
+        
+        if (document.getElementById('contactRowTextArea').classList.contains('email-link')) {
+            const spans = helpRow.querySelectorAll('span');
+            
+            spans.forEach(span => {
+                if (span.innerHTML.includes('@gmail.com')) {
+                    span.classList.add('green-ready-text');
+                    span.style.cursor = 'pointer';
+                    span.style.pointerEvents = 'auto';
+                    span.addEventListener('click', () => {
+                        window.open(`mailto:${span.innerHTML}`, '_blank');
+                    });
+                }
+            });
+        }        
+    }    
+    
 
     function createStatisticsSectionRow(rowId) {
         const statisticsRow = createOptionRow(

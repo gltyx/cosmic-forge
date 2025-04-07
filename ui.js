@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await loadGameFromCloud(); 
     
                 saveGame('initialise');
-                saveGameToCloud(getSaveData(), 'initialise');
+                // saveGameToCloud(getSaveData(), 'initialise');
             } catch (error) {
                 console.error("Error during game loading:", error);
             }
@@ -3101,6 +3101,15 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'statistics');
             setCurrentOptionPane('statistics');
             updateContent('Statistics', 'tab8', 'content');
+        });    
+    });
+
+    document.querySelectorAll('[class*="tab8"][class*="option9"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab8', 'contact');
+            setCurrentOptionPane('contact');
+            updateContent('Contact', 'tab8', 'content');
         });    
     });
 
