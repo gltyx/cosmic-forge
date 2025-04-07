@@ -89,6 +89,62 @@ export function saveGame(type) {
     }
 }
 
+export function importSaveStringFileFromComputer() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.txt';
+
+    input.addEventListener('change', () => {
+        const file = input.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            const fileContents = event.target.result;
+
+            if (typeof fileContents === 'string') {
+                const textArea = document.getElementById('importSaveArea');
+                if (textArea) {
+                    textArea.value = fileContents;
+                }
+
+                try {
+                    await loadGame();
+                } catch (err) {
+                    console.error('Load failed from file import:', err);
+                }
+            }
+        };
+
+        reader.readAsText(file);
+    });
+
+    input.click();
+}
+
+export function downloadSaveStringToComputer() {
+    const saveArea = document.getElementById('exportSaveArea');
+    if (!saveArea || !saveArea.value) {
+        console.warn('No save data found to download.');
+        return;
+    }
+
+    const saveData = saveArea.value;
+    const blob = new Blob([saveData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    const now = new Date();
+    const formattedTimestamp = `${now.getFullYear()}_${String(now.getMonth() + 1).padStart(2, '0')}_${String(now.getDate()).padStart(2, '0')} : ${String(now.getHours()).padStart(2, '0')}_${String(now.getMinutes()).padStart(2, '0')}_${String(now.getSeconds()).padStart(2, '0')}`;
+    a.download = `cosmic_forge_save_${formattedTimestamp}.txt`;
+    
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
 export const ProxyServer = CryptoJS;
 
 export function copySaveStringToClipBoard() {

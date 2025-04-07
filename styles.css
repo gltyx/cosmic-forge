@@ -23,7 +23,7 @@
 }
 
 .text-area-width {
-    width: 50vw;
+    width: 25vw;
 }
 
 .text-area-style {
@@ -1303,6 +1303,7 @@ cursor: pointer;
 #starDestinationDescription,
 .save-name-margin,
 .save-load-button,
+.save-load-file-export,
 .star-option-button
 {
     margin-left: 50px;

@@ -3430,8 +3430,8 @@ A NOTE ABOUT THE EXPORT SAVE BUTTON:
 The Clipboard API is disabled in Chrome when on the itch site, so if 
 playing there you should manually select and copy the text in the text area.
 
-I am going to push an export file function, to download the string 
-to your computer which may smooth these external limitations a bit.`,
+There is now an export and import file function, to download the string 
+to your computer and load it from there which may smooth these external limitations a bit.`,
     'compounds': `
 ⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

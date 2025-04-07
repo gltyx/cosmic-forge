@@ -1,6 +1,6 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx, setWasAutoSaveToggled } from './constantsAndGlobalVars.js';
 import { createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
-import { initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
+import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
 
 export function drawTab8Content(heading, optionContentElement) {
@@ -346,7 +346,9 @@ export function drawTab8Content(heading, optionContentElement) {
             createButton(`Export`, ['option-button', 'save-load-button'], () => {
                 copySaveStringToClipBoard();
             }),
-            null,
+            createButton(`Export File`, ['option-button', 'save-load-file-export'], () => {
+                downloadSaveStringToComputer();
+            }),
             null,
             null,
             '',
@@ -359,7 +361,8 @@ export function drawTab8Content(heading, optionContentElement) {
             false,
             null,
             null,
-            null
+            null,
+            [true, '17%', '83%']
         );
         optionContentElement.appendChild(exportSaveRow);
 
@@ -371,7 +374,9 @@ export function drawTab8Content(heading, optionContentElement) {
             createButton(`Import`, ['option-button', 'save-load-button'], () => {
                 loadGame();
             }),
-            null,
+            createButton(`Import File`, ['option-button', 'save-load-file-export'], () => {
+                importSaveStringFileFromComputer();
+            }),
             null,
             null,
             '',
@@ -384,7 +389,8 @@ export function drawTab8Content(heading, optionContentElement) {
             false,
             null,
             null,
-            null
+            null,
+            [true, '17%', '83%']
         );
         optionContentElement.appendChild(importSaveRow);
 
