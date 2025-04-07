@@ -3401,11 +3401,11 @@ const IMAGE_URLS = {
 */
     'resources': `
 A NOTE ABOUT AUTOSAVE:
-The cloud is on a free plan as I dont charge for the game.
-The max database writes with Firebase is 20000 per day.
-When this quota runs out, the game will not save to the cloud until the next day.
-It is not a problem on the game end, but I recommend you to copy and paste a save string or
-export a file to save your progress as well.
+I have migrated user data to another provider for the save cloud.
+It works now, but if any save data is lost, please let me know, but it should be pretty smooth.
+This provider also has limits, so may stop working in the future, where I will have to
+look at paid options.  I would appreciate feedback.
+Contact details in the Cosmicopedia in the Settings Tab.
 
 A NOTE ABOUT THE EXPORT SAVE BUTTON:
 The Clipboard API is disabled in Chrome when on the itch site, so if 
