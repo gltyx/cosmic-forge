@@ -961,7 +961,7 @@ export function restoreGameStatus(gameState, type) {
             }
 
             setCurrentTheme(gameState.currentTheme);
-            setAutoSaveFrequency(gameState.autoSaveFrequency);
+            setAutoSaveFrequency(300000);
             setCurrentStarSystem(gameState.currentStarSystem);
             setCurrencySymbol(gameState.currencySymbol);
             setConstituentPartsObject(gameState.constituentPartsObject);
