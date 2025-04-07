@@ -307,8 +307,6 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             'Auto Save:',
             createDropdown('autoSaveFrequency', [
-                { value: 30000, text: '30 Seconds' },
-                { value: 60000, text: '60 Seconds' },
                 { value: 120000, text: '2 Minutes' },
                 { value: 180000, text: '3 Minutes' },
                 { value: 300000, text: '5 Minutes' },
