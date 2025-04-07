@@ -8,20 +8,23 @@ import {
     restoreGameStatus, 
     getAutoSaveFrequency,
     getAutoSaveToggle,
-    getSaveData,
-    eNCrQueen
+    getSaveData
 } from './constantsAndGlobalVars.js';
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
 import { showNotification } from './ui.js';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://riogcxvtomyjlzkcnujf.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpb2djeHZ0b215amx6a2NudWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMjY1NDgsImV4cCI6MjA1OTYwMjU0OH0.HH7KXPrcORvl6Wiefupl422gRYxAa_kFCRM2-puUcsQ';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+let db;
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+});
 
 let autoSaveTimer = null;
-let firebaseConfig;
-let app;
-let analytics;
-let db;
 
 export function initializeAutoSave() {
     if (autoSaveTimer) {
@@ -56,12 +59,46 @@ export function initializeAutoSave() {
 export async function saveGameToCloud(gameData, type) {
     try {
         const userId = getSaveName();
-        const saveRef = doc(db, "cosmicForgeSaves_0.20", userId);
+        const currentTimestamp = new Date().toISOString();
 
-        await setDoc(saveRef, { saveData: gameData });
+        const { data: existingData, error: fetchError } = await supabase
+            .from('CosmicForge_saves')
+            .select('*')
+            .eq('pioneer_name', userId)
+            .single();
 
-        if (type !== 'initialise') {
-            showNotification('Game saved to the cloud!', 'info');
+        if (fetchError && fetchError.code !== 'PGRST116') {
+            throw fetchError;
+        }
+
+        if (existingData) {
+            const { error: updateError } = await supabase
+                .from('CosmicForge_saves')
+                .update({ 
+                    data: gameData,
+                    'created_at': currentTimestamp
+                })
+                .eq('pioneer_name', userId);
+
+            if (updateError) {
+                throw updateError;
+            }
+
+            if (type !== 'initialise') {
+                showNotification('Game updated in the cloud!', 'info');
+            }
+        } else {
+            const { error: insertError } = await supabase
+                .from('CosmicForge_saves')
+                .insert([{ pioneer_name: userId, data: gameData, created: currentTimestamp }]);
+
+            if (insertError) {
+                throw insertError;
+            }
+
+            if (type !== 'initialise') {
+                showNotification('Game saved to the cloud!', 'info');
+            }
         }
 
     } catch (error) {
@@ -69,6 +106,7 @@ export async function saveGameToCloud(gameData, type) {
         console.error("Error saving game to cloud:", error);
     }
 }
+
 
 export function saveGame(type) {
     const gameState = captureGameStatusForSaving(type);
@@ -145,8 +183,6 @@ export function downloadSaveStringToComputer() {
     URL.revokeObjectURL(url);
 }
 
-export const ProxyServer = CryptoJS;
-
 export function copySaveStringToClipBoard() {
     const textArea = document.getElementById('exportSaveArea');
     textArea.select();
@@ -172,11 +208,14 @@ export function copySaveStringToClipBoard() {
 export async function loadGameFromCloud() {
     try {
         const userId = localStorage.getItem('saveName') || getSaveName();
-        const saveRef = doc(db, "cosmicForgeSaves_0.20", userId);
-        const docSnapshot = await getDoc(saveRef);
-
-        if (docSnapshot.exists()) {
-            const gameData = docSnapshot.data().saveData;
+        const { data, error } = await supabase
+        .from('CosmicForge_saves')
+        .select('data')
+        .eq('pioneer_name', userId)
+        .single();
+      
+      if (data) {
+        const gameData = data.data;
 
             const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
             const gameState = JSON.parse(decompressedJson);
@@ -234,21 +273,7 @@ export function loadGame() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const vcx = await eNCrQueen();
 
-    firebaseConfig = {
-        apiKey: vcx,
-        authDomain: "cosmic-forge-1981.firebaseapp.com",
-        projectId: "cosmic-forge-1981",
-        storageBucket: "cosmic-forge-1981.firebasestorage.app",
-        messagingSenderId: "155017224771",
-        appId: "1:155017224771:web:c4cb2d9f468c0571b9aaf6",
-        measurementId: "G-82DCH5GJ0P"
-    };
-    
-    app = initializeApp(firebaseConfig);
-    analytics = getAnalytics(app);
-    db = getFirestore(app);
 });
 
 function validateSaveString(compressed) {
@@ -264,12 +289,6 @@ function validateSaveString(compressed) {
 async function initialiseLoadedGame(gameState, type) {
     await restoreGameStatus(gameState, type);
 }
-
-window.proxyServerEngineDKrypt = (a1a, viv) => {
-    const AsZd = ProxyServer.AES.decrypt(a1a, viv);
-    const c3RT = AsZd.toString(ProxyServer.enc.Utf8);
-    return c3RT;
-};
 
 export function generateRandomPioneerName() {
     const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

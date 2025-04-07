@@ -1,4 +1,3 @@
-import { ProxyServer } from './saveLoadGame.js';
 import {
     setEnemyFleetsAdjustedForDiplomacy,
     getEnemyFleetsAdjustedForDiplomacy,
@@ -322,12 +321,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
     });
-
-    window.proxyServerEngineDKrypt = (a1a, viv) => {
-        const AsZd = ProxyServer.AES.decrypt(a1a, viv);
-        const c3RT = AsZd.toString(CryptoJS.enc.Utf8);
-        return c3RT;
-    };
 });
 
 export function updateContent(heading, tab, type) {
