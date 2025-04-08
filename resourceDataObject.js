@@ -2523,6 +2523,10 @@ export function achievementLaunchStarShip() {
 
 }
 
+export function achievementInitiateDiplomacyWithAlienRace() {
+    
+}
+
 export function achievementBeatEnemy(victoryType) {
 
 }
