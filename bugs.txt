@@ -1,3 +1,4 @@
 stats bugs in general
 
 look at price of neon, titanium, possible neon autobuyer possibly with AP to make titanium generation easier the following runs
+turn off autobuyers ie carbon burner not redrawing the rate/s
