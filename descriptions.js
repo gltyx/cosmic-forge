@@ -1926,15 +1926,15 @@ achievementNotifications = {
     "liquidateAllAssetsNotification": "ACHIEVEMENT:\nYou have liquidated all assets!\n\nREWARD: Pride!",
     "rebirthNotification": "ACHIEVEMENT:\nYou have rebirthed!\n\nREWARD: Permanent x1.3 all Resource Rates",
     "conquer10StarSystemsNotification": "ACHIEVEMENT:\nYou have conquered 10 star systems!\n\nREWARD: 10AP",
-    "conquer50StarSystemsNotification": "ACHIEVEMENT:\nYou have conquered 50 star systems!\n\nREWARD: 100AP", //to here
-    "seeAllNewsTickersNotification": "ACHIEVEMENT:\nYou have seen all news tickers!\n\nREWARD: 100 Cash",
-    "activateAllWackyNewsTickersNotification": "ACHIEVEMENT:\nYou have activated all wacky news tickers!\n\nREWARD: 200 Cash",
-    "collect100TitaniumAsPrecipitationNotification": "ACHIEVEMENT:\nYou have collected 100 titanium as precipitation!\n\nREWARD: 500 Cash",
-    "discoverLegendaryAsteroidNotification": "ACHIEVEMENT:\nYou have discovered a legendary asteroid!\n\nREWARD: 1000 Cash",
-    "have4RocketsMiningAntimatterNotification": "ACHIEVEMENT:\nYou have 4 rockets simultaneously mining antimatter!\n\nREWARD: 5000 Cash",
-    "studyAllStarsInOneRunNotification": "ACHIEVEMENT:\nYou have studied all stars in the star map in one run!\n\nREWARD: 1000 Cash",
-    "trade10APForCashNotification": "ACHIEVEMENT:\nYou have traded 10 AP for cash in one transaction in the Galactic Market!\n\nREWARD: 1000 Cash",
-    "have50HoursWithOnePioneerNotification": "ACHIEVEMENT:\nYou have logged 50 hours with one pioneer name!\n\nREWARD: 500 Cash"
+    "conquer50StarSystemsNotification": "ACHIEVEMENT:\nYou have conquered 50 star systems!\n\nREWARD: 100AP",
+    "seeAllNewsTickersNotification": "ACHIEVEMENT:\nYou have seen all news tickers!\n\nREWARD: Permanent x1.2 all Resource Rates",
+    "activateAllWackyNewsTickersNotification": "ACHIEVEMENT:\nYou have activated all wacky news tickers!\n\nREWARD: Permanent -20% Compound Creation Material Costs",
+    "collect100TitaniumAsPrecipitationNotification": "ACHIEVEMENT:\nYou have collected 100 titanium as precipitation!\n\nREWARD: 50AP",
+    "discoverLegendaryAsteroidNotification": "ACHIEVEMENT:\nYou have discovered a legendary asteroid!\n\nREWARD: 75000 Cash",
+    "have4RocketsMiningAntimatterNotification": "ACHIEVEMENT:\nYou have 4 rockets simultaneously mining antimatter!\n\nREWARD: 100000 Cash",
+    "studyAllStarsInOneRunNotification": "ACHIEVEMENT:\nYou have studied all stars in the star map in one run!\n\nREWARD: Pride!",
+    "trade10APForCashNotification": "ACHIEVEMENT:\nYou have traded 10 AP for cash in one transaction in the Galactic Market!\n\nREWARD: 5AP",
+    "have50HoursWithOnePioneerNotification": "ACHIEVEMENT:\nYou have logged 50 hours with one pioneer name!\n\nREWARD: 50AP"
 };
 
 export function getAchievementNotification(achievementKey) {
