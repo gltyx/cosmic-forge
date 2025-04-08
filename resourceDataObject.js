@@ -1219,7 +1219,7 @@ const achievementsData = {
     fuseElement: {
         name: "Fuse an Element",
         specialCondition: false,
-        gridRow: 3,
+        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "unlock",
@@ -1238,71 +1238,86 @@ const achievementsData = {
     gain100Cash: {
         name: "Gain 100 Cash",
         specialCondition: false,
-        gridRow: 9,
+        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "cash",
             value1: {
-                Cash: 100
+                quantity: 100
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 5
+            gives1: "saleMutiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.1
+            }
         },
         notification: "gain100CashNotification"
     },
     gain10000Cash: {
         name: "Gain 10000 Cash",
         specialCondition: false,
-        gridRow: 10,
+        gridRow: 3,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Cash: 10000
+            requirement1: "cash",
+            value1: {
+                quantity: 10000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 10
+            gives1: "saleMutiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.2
+            }
         },
         notification: "gain10000CashNotification"
     },
     gain100000Cash: {
         name: "Gain 100000 Cash",
         specialCondition: false,
-        gridRow: 11,
+        gridRow: 3,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Cash: 100000
+            requirement1: "cash",
+            value1: {
+                quantity: 100000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 15
+            gives1: "saleMutiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.3
+            }
         },
         notification: "gain100000CashNotification"
     },
     gain1000000Cash: {
         name: "Gain 1000000 Cash",
         specialCondition: false,
-        gridRow: 12,
+        gridRow: 3,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Cash: 1000000
+            requirement1: "cash",
+            value1: {
+                quantity: 1000000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 30
+            gives1: "saleMutiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.4
+            }
         },
         notification: "gain1000000CashNotification"
     },
+
+
+    //here done
     buildPowerStation: {
         name: "Build a Power Station",
         specialCondition: false,
@@ -1316,8 +1331,11 @@ const achievementsData = {
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 15
+            gives1: "saleMutiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.5
+            }
         },
         notification: "buildPowerStationNotification"
     },
