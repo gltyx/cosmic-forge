@@ -1124,7 +1124,7 @@ const achievementsData = {
         gives: {
             gives1: "cash",
             value1: {
-                quantity: 250
+                quantity: 25
             }
         },
         notification: "collect1000HydrogenNotification"
@@ -1146,7 +1146,7 @@ const achievementsData = {
         gives: {
             gives1: "cash",
             value1: {
-                quantity: 1500
+                quantity: 150
             }
         },
         notification: "collect5000CarbonNotification"
@@ -1168,7 +1168,7 @@ const achievementsData = {
         gives: {
             gives1: "cash",
             value1: {
-                quantity: 18000
+                quantity: 1800
             }
         },
         notification: "collect50000IronNotification"
@@ -1196,7 +1196,7 @@ const achievementsData = {
         name: "Research All Technologies",
         specialCondition: achievementResearchAllTechnologies,
         specialConditionArguments: false,
-        resetOnRebirth: true,
+        resetOnRebirth: false,
         gridRow: 2,
         active: false,
         requirements: {
@@ -1310,7 +1310,7 @@ const achievementsData = {
             gives1: "multiplier",
             value1: {
                 type: 'cash',
-                quantity: 1.3
+                quantity: 1.2
             }
         },
         notification: "gain100000CashNotification"
@@ -1332,7 +1332,7 @@ const achievementsData = {
             gives1: "multiplier",
             value1: {
                 type: 'cash',
-                quantity: 1.4
+                quantity: 1.5
             }
         },
         notification: "gain1000000CashNotification"
@@ -1426,7 +1426,7 @@ const achievementsData = {
         name: "Unlock Compounds",
         specialCondition: false,
         specialConditionArguments: false,
-        resetOnRebirth: false,
+        resetOnRebirth: true,
         gridRow: 2,
         active: false,
         requirements: {
@@ -1445,7 +1445,7 @@ const achievementsData = {
         name: "Create Steel",
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['steel'],
-        resetOnRebirth: false,
+        resetOnRebirth: true,
         gridRow: 1,
         active: false,
         requirements: {
@@ -1465,7 +1465,7 @@ const achievementsData = {
         name: "Create Titanium",
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['titanium'],
-        resetOnRebirth: false,
+        resetOnRebirth: true,
         gridRow: 1,
         active: false,
         requirements: {
@@ -1485,7 +1485,7 @@ const achievementsData = {
         name: "Discover an Asteroid",
         specialCondition: achievementDiscoverAsteroid,
         specialConditionArguments: false,
-        resetOnRebirth: false,
+        resetOnRebirth: true,
         gridRow: 4,
         active: false,
         requirements: {
@@ -1501,46 +1501,46 @@ const achievementsData = {
         },
         notification: "discoverAsteroidNotification"
     },
-    //to here
     launchRocket: {
         name: "Launch a Rocket",
-        specialCondition: false,
+        specialCondition: achievementLaunchRocket,
         specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 21,
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                RocketFuel: 1000,
-                Steel: 500
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 15
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
         },
         notification: "launchRocketNotification"
     },
     mineAntimatterAsteroid: {
         name: "Mine All Antimatter from an Asteroid",
         specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 22,
+        specialConditionArguments: achievementMineAntimatterAsteroid,
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Antimatter: 100
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 30
+            gives1: "antimatter",
+            value1: {
+                quantity: 150
+            }
         },
         notification: "mineAntimatterAsteroidNotification"
     },
+        //to here
     studyStar: {
         name: "Study a Star",
         specialCondition: false,
@@ -2502,5 +2502,13 @@ export function achievementCreateCompound(compound) {
 }
 
 export function achievementDiscoverAsteroid() {
+
+}
+
+export function achievementLaunchRocket() {
+
+}
+
+export function achievementMineAntimatterAsteroid() {
 
 }
