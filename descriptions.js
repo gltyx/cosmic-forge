@@ -1887,8 +1887,8 @@ starNames = [
 achievementNotifications = {
     "collect50HydrogenNotification": "ACHIEVEMENT:\nYou have collected 50 Hydrogen!",
     "collect1000HydrogenNotification": "ACHIEVEMENT:\nYou have collected 1000 Hydrogen!",
-    "collect5000AnyResourceNotification": "ACHIEVEMENT:\nYou have collected 5000 of any kind of resource!",
-    "collect50000AnyResourceNotification": "ACHIEVEMENT:\nYou have collected 50000 of any type of resource!",
+    "collect5000CarbonNotification": "ACHIEVEMENT:\nYou have collected 5000 Carbon!",
+    "collect50000IronNotification": "ACHIEVEMENT:\nYou have collected 50000 Iron!",
     "researchTechnologyNotification": "ACHIEVEMENT:\nYou have researched a new technology!",
     "researchAllTechnologiesNotification": "ACHIEVEMENT:\nYou have researched all technologies!",
     "achieve100FusionEfficiencyNotification": "ACHIEVEMENT:\nYou have achieved 100% fusion efficiency!",

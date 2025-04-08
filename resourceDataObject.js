@@ -1087,145 +1087,162 @@ export let ascendencyBuffs = {
 const achievementsData = {
     collect50Hydrogen: {
         name: "Collect 50 Hydrogen",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
-            resources: {
-                Hydrogen: 50
+            value1: {
+                type: 'hydrogen',
+                quantity: 50
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 10
+            gives1: "cash",
+            value1: {
+                quantity: 10
+            }
         },
         notification: "collect50HydrogenNotification"
     },
     collect1000Hydrogen: {
         name: "Collect 1000 Hydrogen",
-        imgSrc: "path/to/image.png",
-        gridRow: 2,
+        specialCondition: false,
+        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
-            resources: {
-                Hydrogen: 1000
+            value1: {
+                type: 'hydrogen',
+                quantity: 1000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 20
+            gives1: "cash",
+            value1: {
+                quantity: 250
+            }
         },
         notification: "collect1000HydrogenNotification"
     },
-    collect5000Resources: {
-        name: "Collect 5000 of Any Kind of Resource",
-        imgSrc: "path/to/image.png",
-        gridRow: 3,
+    collect5000Carbon: {
+        name: "Collect 5000 Carbon",
+        specialCondition: false,
+        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
-            resources: {
-                Hydrogen: 5000
+            value1: {
+                type: 'carbon',
+                quantity: 5000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 30
+            gives1: "cash",
+            value1: {
+                quantity: 1500
+            }
         },
-        notification: "collect5000ResourcesNotification"
+        notification: "collect5000CarbonNotification"
     },
-    collect50000Resources: {
-        name: "Collect 50000 of Any Type of Resource",
-        imgSrc: "path/to/image.png",
-        gridRow: 4,
+    collect50000Iron: {
+        name: "Collect 50000 Iron",
+        specialCondition: false,
+        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
-            resources: {
-                Hydrogen: 50000
+            value1: {
+                type: 'iron',
+                quantity: 50000
             }
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 40
+            gives1: "cash",
+            value1: {
+                quantity: 18000
+            }
         },
-        notification: "collect50000ResourcesNotification"
+        notification: "collect50000IronNotification"
     },
     researchTechnology: {
         name: "Research a Technology",
-        imgSrc: "path/to/image.png",
-        gridRow: 5,
+        specialCondition: false,
+        gridRow: 2,
         active: false,
         requirements: {
-            requirement1: "technologyReq",
-            technologyReq: ["Basic Fusion"]
+            requirement1: "tech",
+            value1: "knowledgeSharing"
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 10
+            gives1: "cash",
+            value1: {
+                quantity: 30
+            }
         },
         notification: "researchTechnologyNotification"
     },
     researchAllTechnologies: {
         name: "Research All Technologies",
-        imgSrc: "path/to/image.png",
-        gridRow: 6,
+        specialCondition: achievementAllTechsResearched,
+        gridRow: 2,
         active: false,
         requirements: {
-            requirement1: "technologyReq",
-            technologyReq: ["Basic Fusion", "Advanced Fusion", "Knowledge Sharing"]
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 50
+            value1: {
+                quantity: 1
+            }
         },
         notification: "researchAllTechnologiesNotification"
     },
     achieve100FusionEfficiency: {
         name: "Achieve 100% Fusion Efficiency",
-        imgSrc: "path/to/image.png",
-        gridRow: 7,
+        specialCondition: achievementAllFusionTechsResearched,
+        gridRow: 2,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                FusionCores: 100
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 20
+            gives1: "cash",
+            value1: {
+                quantity: 500
+            }
         },
         notification: "achieve100FusionEfficiencyNotification"
     },
     fuseElement: {
         name: "Fuse an Element",
-        imgSrc: "path/to/image.png",
-        gridRow: 8,
+        specialCondition: false,
+        gridRow: 3,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Hydrogen: 1000,
-                Oxygen: 500
-            }
+            requirement1: "unlock",
+            value1: "helium"
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 15
+            gives1: "cash",
+            value1: {
+                quantity: 40
+            }
         },
         notification: "fuseElementNotification"
-    },
+    },    
+
+    //done to here
     gain100Cash: {
         name: "Gain 100 Cash",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 9,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
+            requirement1: "cash",
+            value1: {
                 Cash: 100
             }
         },
@@ -1237,7 +1254,7 @@ const achievementsData = {
     },
     gain10000Cash: {
         name: "Gain 10000 Cash",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 10,
         active: false,
         requirements: {
@@ -1254,7 +1271,7 @@ const achievementsData = {
     },
     gain100000Cash: {
         name: "Gain 100000 Cash",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 11,
         active: false,
         requirements: {
@@ -1271,7 +1288,7 @@ const achievementsData = {
     },
     gain1000000Cash: {
         name: "Gain 1000000 Cash",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 12,
         active: false,
         requirements: {
@@ -1288,7 +1305,7 @@ const achievementsData = {
     },
     buildPowerStation: {
         name: "Build a Power Station",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 13,
         active: false,
         requirements: {
@@ -1306,7 +1323,7 @@ const achievementsData = {
     },
     tripThePower: {
         name: "Trip the Power",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 14,
         active: false,
         requirements: {
@@ -1323,7 +1340,7 @@ const achievementsData = {
     },
     buildSolarPowerStation: {
         name: "Build a Solar Power Station",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 15,
         active: false,
         requirements: {
@@ -1341,7 +1358,7 @@ const achievementsData = {
     },
     collect100Precipitation: {
         name: "Collect 100 Precipitation",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 16,
         active: false,
         requirements: {
@@ -1358,7 +1375,7 @@ const achievementsData = {
     },
     unlockCompounds: {
         name: "Unlock Compounds",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 17,
         active: false,
         requirements: {
@@ -1376,7 +1393,7 @@ const achievementsData = {
     },
     createSteel: {
         name: "Create Steel",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 18,
         active: false,
         requirements: {
@@ -1393,7 +1410,7 @@ const achievementsData = {
     },
     createTitanium: {
         name: "Create Titanium",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 19,
         active: false,
         requirements: {
@@ -1410,7 +1427,7 @@ const achievementsData = {
     },
     discoverAsteroid: {
         name: "Discover an Asteroid",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 20,
         active: false,
         requirements: {
@@ -1427,7 +1444,7 @@ const achievementsData = {
     },
     launchRocket: {
         name: "Launch a Rocket",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 21,
         active: false,
         requirements: {
@@ -1445,7 +1462,7 @@ const achievementsData = {
     },
     mineAntimatterAsteroid: {
         name: "Mine All Antimatter from an Asteroid",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 22,
         active: false,
         requirements: {
@@ -1462,7 +1479,7 @@ const achievementsData = {
     },
     studyStar: {
         name: "Study a Star",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 23,
         active: false,
         requirements: {
@@ -1479,7 +1496,7 @@ const achievementsData = {
     },
     studyStarMoreThan5LYAway: {
         name: "Study a Star More Than 5ly Away",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 24,
         active: false,
         requirements: {
@@ -1497,7 +1514,7 @@ const achievementsData = {
     },
     studyStarMoreThan20LYAway: {
         name: "Study a Star More Than 20ly Away",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 25,
         active: false,
         requirements: {
@@ -1515,7 +1532,7 @@ const achievementsData = {
     },
     launchStarship: {
         name: "Launch a Starship",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 26,
         active: false,
         requirements: {
@@ -1532,7 +1549,7 @@ const achievementsData = {
     },
     initiateDiplomacyWithAlienRace: {
         name: "Initiate Diplomacy with an Alien Race",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 27,
         active: false,
         requirements: {
@@ -1549,7 +1566,7 @@ const achievementsData = {
     },
     bullyEnemyIntoSubmission: {
         name: "Bully an Enemy into Submission",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 28,
         active: false,
         requirements: {
@@ -1566,7 +1583,7 @@ const achievementsData = {
     },
     vassalizeEnemy: {
         name: "Vassalize an Enemy",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 29,
         active: false,
         requirements: {
@@ -1583,7 +1600,7 @@ const achievementsData = {
     },
     conquerEnemy: {
         name: "Conquer an Enemy",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 30,
         active: false,
         requirements: {
@@ -1600,7 +1617,7 @@ const achievementsData = {
     },
     conquerHiveMindEnemy: {
         name: "Conquer a Hive Mind Enemy",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 31,
         active: false,
         requirements: {
@@ -1617,7 +1634,7 @@ const achievementsData = {
     },
     conquerBelligerentEnemy: {
         name: "Conquer a Belligerent Enemy",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 32,
         active: false,
         requirements: {
@@ -1634,7 +1651,7 @@ const achievementsData = {
     },
     conquerEnemyWithoutScanning: {
         name: "Conquer an Enemy Without Scanning the System",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 33,
         active: false,
         requirements: {
@@ -1651,7 +1668,7 @@ const achievementsData = {
     },
     settleUnoccupiedSystem: {
         name: "Settle an Unoccupied System",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 34,
         active: false,
         requirements: {
@@ -1668,7 +1685,7 @@ const achievementsData = {
     },
     discoverSystemWithNoLife: {
         name: "Discover a System with No Life",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 35,
         active: false,
         requirements: {
@@ -1685,7 +1702,7 @@ const achievementsData = {
     },
     settleSystem: {
         name: "Settle a System",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 36,
         active: false,
         requirements: {
@@ -1702,7 +1719,7 @@ const achievementsData = {
     },
     spendAP: {
         name: "Spend Ascendency Points (AP)",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 37,
         active: false,
         requirements: {
@@ -1719,7 +1736,7 @@ const achievementsData = {
     },
     performGalacticMarketTransaction: {
         name: "Perform a Galactic Market Transaction",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 38,
         active: false,
         requirements: {
@@ -1736,7 +1753,7 @@ const achievementsData = {
     },
     liquidateAllAssets: {
         name: "Liquidate All Assets",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 39,
         active: false,
         requirements: {
@@ -1753,7 +1770,7 @@ const achievementsData = {
     },
     rebirth: {
         name: "Rebirth",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 40,
         active: false,
         requirements: {
@@ -1770,7 +1787,7 @@ const achievementsData = {
     },
     conquer10StarSystems: {
         name: "Conquer 10 Star Systems",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 41,
         active: false,
         requirements: {
@@ -1787,7 +1804,7 @@ const achievementsData = {
     },
     conquer50StarSystems: {
         name: "Conquer 50 Star Systems",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 42,
         active: false,
         requirements: {
@@ -1804,7 +1821,7 @@ const achievementsData = {
     },
     seeAllNewsTickers: {
         name: "See All News Tickers",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 43,
         active: false,
         requirements: {
@@ -1821,7 +1838,7 @@ const achievementsData = {
     },
     activateAllWackyNewsTickers: {
         name: "Activate All Wacky News Tickers",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 44,
         active: false,
         requirements: {
@@ -1838,7 +1855,7 @@ const achievementsData = {
     },
     collect100TitaniumAsPrecipitation: {
         name: "Collect 100 Titanium as Precipitation",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 45,
         active: false,
         requirements: {
@@ -1855,7 +1872,7 @@ const achievementsData = {
     },
     discoverLegendaryAsteroid: {
         name: "Discover a Legendary Asteroid",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 46,
         active: false,
         requirements: {
@@ -1872,7 +1889,7 @@ const achievementsData = {
     },
     have4RocketsSimultaneouslyMiningAntimatter: {
         name: "Have 4 Rockets Simultaneously Mining Antimatter",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 47,
         active: false,
         requirements: {
@@ -1890,7 +1907,7 @@ const achievementsData = {
     },
     studyAllStarsInStarMapInOneRun: {
         name: "Study All Stars in the Star Map in One Run",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 48,
         active: false,
         requirements: {
@@ -1908,7 +1925,7 @@ const achievementsData = {
     },
     trade10APForCashInOneTransaction: {
         name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 49,
         active: false,
         requirements: {
@@ -1926,7 +1943,7 @@ const achievementsData = {
     },
     have50HoursLoggedWithOnePioneerName: {
         name: "Have 50 Hours Logged with One Pioneer Name",
-        imgSrc: "path/to/image.png",
+        specialCondition: false,
         gridRow: 50,
         active: false,
         requirements: {
@@ -1944,10 +1961,58 @@ const achievementsData = {
     }
 };
 
-
-  
-  
-  
+const achievementImageUrls = {
+    collect50Hydrogen: './images/achievements/collect50Hydrogen.png',
+    collect1000Hydrogen: './images/achievements/collect1000Hydrogen.png',
+    collect5000Carbon: './images/achievements/collect5000Carbon.png',
+    collect50000Iron: './images/achievements/collect50000Iron.png',
+    researchTechnology: './images/achievements/researchTechnology.png',
+    researchAllTechnologies: './images/achievements/researchAllTechnologies.png',
+    achieve100FusionEfficiency: './images/achievements/achieve100FusionEfficiency.png',
+    fuseElement: './images/achievements/fuseElement.png',
+    gain100Cash: './images/achievements/gain100Cash.png',
+    gain10000Cash: './images/achievements/gain10000Cash.png',
+    gain100000Cash: './images/achievements/gain100000Cash.png',
+    gain1000000Cash: './images/achievements/gain1000000Cash.png',
+    buildPowerStation: './images/achievements/buildPowerStation.png',
+    tripPower: './images/achievements/tripPower.png',
+    buildSolarPowerStation: './images/achievements/buildSolarPowerStation.png',
+    collect100Precipitation: './images/achievements/collect100Precipitation.png',
+    unlockCompounds: './images/achievements/unlockCompounds.png',
+    createSteel: './images/achievements/createSteel.png',
+    createTitanium: './images/achievements/createTitanium.png',
+    discoverAsteroid: './images/achievements/discoverAsteroid.png',
+    launchRocket: './images/achievements/launchRocket.png',
+    mineAllAntimatterAsteroid: './images/achievements/mineAllAntimatterAsteroid.png',
+    studyStar: './images/achievements/studyStar.png',
+    studyStarMoreThan5LYAway: './images/achievements/studyStarMoreThan5LYAway.png',
+    studyStarMoreThan20LYAway: './images/achievements/studyStarMoreThan20LYAway.png',
+    launchStarship: './images/achievements/launchStarship.png',
+    initiateDiplomacyWithAlienRace: './images/achievements/initiateDiplomacyWithAlienRace.png',
+    bullyEnemyIntoSubmission: './images/achievements/bullyEnemyIntoSubmission.png',
+    vassalizeEnemy: './images/achievements/vassalizeEnemy.png',
+    conquerEnemy: './images/achievements/conquerEnemy.png',
+    conquerHiveMindEnemy: './images/achievements/conquerHiveMindEnemy.png',
+    conquerBelligerentEnemy: './images/achievements/conquerBelligerentEnemy.png',
+    conquerEnemyWithoutScanning: './images/achievements/conquerEnemyWithoutScanning.png',
+    settleUnoccupiedSystem: './images/achievements/settleUnoccupiedSystem.png',
+    discoverSystemWithNoLife: './images/achievements/discoverSystemWithNoLife.png',
+    settleSystem: './images/achievements/settleSystem.png',
+    spendAP: './images/achievements/spendAP.png',
+    performGalacticMarketTransaction: './images/achievements/performGalacticMarketTransaction.png',
+    liquidateAllAssets: './images/achievements/liquidateAllAssets.png',
+    rebirth: './images/achievements/rebirth.png',
+    conquer10StarSystems: './images/achievements/conquer10StarSystems.png',
+    conquer50StarSystems: './images/achievements/conquer50StarSystems.png',
+    seeAllNewsTickers: './images/achievements/seeAllNewsTickers.png',
+    activateAllWackyNewsTickers: './images/achievements/activateAllWackyNewsTickers.png',
+    collect100TitaniumAsPrecipitation: './images/achievements/collect100TitaniumAsPrecipitation.png',
+    discoverLegendaryAsteroid: './images/achievements/discoverLegendaryAsteroid.png',
+    have4RocketsMiningAntimatter: './images/achievements/have4RocketsMiningAntimatter.png',
+    studyAllStarsInOneRun: './images/achievements/studyAllStarsInOneRun.png',
+    trade10APForCash: './images/achievements/trade10APForCash.png',
+    have50HoursWithOnePioneer: './images/achievements/have50HoursWithOnePioneer.png'
+};  
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
@@ -2030,6 +2095,15 @@ export function getStarSystemWeather(starSystem) {
 export function setStarSystemWeather(starSystem, weatherData) {
     if (starSystems.stars[starSystem]) {
         starSystems.stars[starSystem].weather = weatherData;
+    }
+}
+
+export function getAchievementImageUrl(key) {
+    if (achievementImageUrls.hasOwnProperty(key)) {
+        return achievementImageUrls[key];
+    } else {
+        console.warn('Achievement key not found:', key);
+        return null; // or a default image URL
     }
 }
 
@@ -2285,4 +2359,12 @@ export function getFleetShips(fleetShip) {
 
 export function getMaxFleetShip(fleetShip) {
     return resourceData.space.upgrades[fleetShip].maxCanBuild;
+}
+
+export function achievementAllTechsResearched() {
+
+}
+
+export function achievementAllFusionTechsResearched() {
+    
 }
