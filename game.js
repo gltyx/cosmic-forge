@@ -4748,7 +4748,6 @@ function startInitialTimers() {
                             const amountToAdd = Math.min(currentQuantity + calculatedResourceRate, storageCapacity);
                             setResourceDataObject(amountToAdd, 'resources', [resource, 'quantity']);
                             addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedResourceRate, resource);
-                            
                             const allResourceRatesAddedTogether = 
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                 getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', 'tier1', 'quantity']) +
@@ -4769,11 +4768,15 @@ function startInitialTimers() {
                                     amountToDeductForConsumption = powerPlant1Consumption;
                                     if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
                                         setCanAffordDeferred(true);
-                                        //FIX HERE
                                         deferredActions.push(() => {
                                             if (getCanAffordDeferred()) { 
-                                                setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
-                                                setResourceDataObject(Math.min(getResourceDataObject('resources', [resource, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'resources', [resource, 'quantity']);
+                                                if (allResourceRatesAddedTogether < amountToDeductForConsumption) {
+                                                    setResourceDataObject(allResourceRatesAddedTogether - amountToDeductForConsumption, 'resources', [resource, 'rate']);
+                                                } else {
+                                                    setResourceDataObject(allResourceRatesAddedTogether + amountToDeductForConsumption, 'resources', [resource, 'rate']);
+                                                }
+                                                const currentQuantity = getResourceDataObject('resources', [resource, 'quantity']);
+                                                setResourceDataObject(Math.min(currentQuantity - amountToDeductForConsumption - calculatedResourceRate, storageCapacity), 'resources', [resource, 'quantity']);
                                             }
                                             setCanAffordDeferred(null);
                                         });
@@ -4865,8 +4868,13 @@ function startInitialTimers() {
                                 if (compound === powerPlant3FuelType) {
                                     amountToDeductForConsumption = powerPlant3Consumption;
                                     if (tier === 1) { //not important which tier just has to be one of them to make it run once per loop
-                                        setResourceDataObject(allCompoundRatesAddedTogether + amountToDeductForConsumption, 'compounds', [compound, 'rate']);
-                                        setResourceDataObject(Math.min(getResourceDataObject('compounds', [compound, 'quantity']) - amountToDeductForConsumption, storageCapacity), 'compounds', [compound, 'quantity']);
+                                        if (allCompoundRatesAddedTogether < amountToDeductForConsumption) {
+                                            setResourceDataObject(allCompoundRatesAddedTogether - amountToDeductForConsumption, 'compounds', [compound, 'rate']);
+                                        } else {
+                                            setResourceDataObject(allCompoundRatesAddedTogether + amountToDeductForConsumption, 'compounds', [compound, 'rate']);
+                                        }
+                                        const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+                                        setResourceDataObject(Math.min(currentQuantity - amountToDeductForConsumption - calculatedCompoundRate, storageCapacity), 'compounds', [compound, 'quantity']);
                                     }
                                 }
                             }
