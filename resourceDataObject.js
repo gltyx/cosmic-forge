@@ -1810,121 +1810,123 @@ const achievementsData = {
         },
         notification: "settleSystemNotification"
     },
-        //to here
     spendAP: {
-        name: "Spend Ascendency Points (AP)",
-        specialCondition: false,
+        name: "Spend Ascendency Points",
+        specialCondition: achievementSpendAp,
         specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 37,
+        resetOnRebirth: true,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                ascendencyPoints: 10
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 5
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
         },
         notification: "spendAPNotification"
     },
     performGalacticMarketTransaction: {
         name: "Perform a Galactic Market Transaction",
-        specialCondition: false,
+        specialCondition: achievementPerformGalaticMarketTransaction,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 38,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                TradeGoods: 100
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 30
+            value1: {
+                quantity: 1
+            }
         },
         notification: "performGalacticMarketTransactionNotification"
     },
     liquidateAllAssets: {
         name: "Liquidate All Assets",
-        specialCondition: false,
+        specialCondition: achievementLiquidateAllAssets,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 39,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                Assets: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 50
+            value1: {
+                quantity: 0
+            }
         },
         notification: "liquidateAllAssetsNotification"
     },
     rebirth: {
         name: "Rebirth",
-        specialCondition: false,
+        specialCondition: achievementRebirth,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 40,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                RebirthToken: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 100
+            gives1: "multiplierPermanent",
+            value1: {
+                type: 'allResources',
+                quantity: 1.3
+            }
         },
         notification: "rebirthNotification"
     },
     conquer10StarSystems: {
         name: "Conquer 10 Star Systems",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementConquerStarSystems,
+        specialConditionArguments: [10],
         resetOnRebirth: false,
-        gridRow: 41,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                ConqueredSystems: 10
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 150
+            value1: {
+                quantity: 10
+            }
         },
         notification: "conquer10StarSystemsNotification"
     },
     conquer50StarSystems: {
         name: "Conquer 50 Star Systems",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementConquerStarSystems,
+        specialConditionArguments: [100],
         resetOnRebirth: false,
-        gridRow: 42,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                ConqueredSystems: 50
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 200
+            value1: {
+                quantity: 100
+            }
         },
         notification: "conquer50StarSystemsNotification"
     },
+    //to here
     seeAllNewsTickers: {
         name: "See All News Tickers",
         specialCondition: false,
@@ -2528,5 +2530,25 @@ export function achievementInitiateDiplomacyWithAlienRace() {
 }
 
 export function achievementBeatEnemy(victoryType) {
+
+}
+
+export function achievementSpendAp() {
+
+}
+
+export function achievementPerformGalaticMarketTransaction() {
+    
+}
+
+export function achievementLiquidateAllAssets() {
+
+}
+
+export function achievementRebirth() {
+
+}
+
+export function achievementConquerStarSystems(conqueredQuantity) {
 
 }
