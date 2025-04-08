@@ -1540,66 +1540,67 @@ const achievementsData = {
         },
         notification: "mineAntimatterAsteroidNotification"
     },
-        //to here
     studyStar: {
         name: "Study a Star",
-        specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 23,
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [0.5],
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                StarScanner: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 25
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.95
+            }
         },
         notification: "studyStarNotification"
     },
     studyStarMoreThan5LYAway: {
         name: "Study a Star More Than 5ly Away",
-        specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 24,
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [5],
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                StarScanner: 1,
-                Distance: 5
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 35
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.90
+            }
         },
         notification: "studyStarMoreThan5LYAwayNotification"
     },
     studyStarMoreThan20LYAway: {
         name: "Study a Star More Than 20ly Away",
-        specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 25,
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [20],
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                StarScanner: 1,
-                Distance: 20
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 50
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.85
+            }
         },
         notification: "studyStarMoreThan20LYAwayNotification"
     },
+    //to here
     launchStarship: {
         name: "Launch a Starship",
         specialCondition: false,
@@ -2510,5 +2511,9 @@ export function achievementLaunchRocket() {
 }
 
 export function achievementMineAntimatterAsteroid() {
+
+}
+
+export function achievementStudyAStar(requiredDistance) {
 
 }
