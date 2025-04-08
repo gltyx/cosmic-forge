@@ -3170,6 +3170,15 @@ function initializeTabEventListeners() {
         });    
     });
 
+    document.querySelectorAll('[class*="tab8"][class*="option10"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab8', 'achievements');
+            setCurrentOptionPane('achievements');
+            updateContent('Achievements', 'tab8', 'content');
+        });    
+    });
+
     function selectRowCss(clickedItem) {
         const tabClassName = Array.from(clickedItem.classList).find(cls => cls.startsWith('tab'));
         if (!tabClassName) return;

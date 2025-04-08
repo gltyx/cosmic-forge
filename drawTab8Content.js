@@ -9,7 +9,8 @@ export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow', []);
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow', []);
     if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow', []);
-    if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow', []);
+    if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow');
+    if (heading === 'Achievements') createAchievementsSectionRow('achievementsRow');
 
     if (heading === 'Visual') {
         const settingsCurrencySymbolRow = createOptionRow(
@@ -528,9 +529,12 @@ export function drawTab8Content(heading, optionContentElement) {
                 }
             });
         }        
-    }    
+    }   
     
+    function createAchievementsSectionRow(rowId) {
 
+    }
+    
     function createStatisticsSectionRow(rowId) {
         const statisticsRow = createOptionRow(
             rowId,

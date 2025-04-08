@@ -131,6 +131,7 @@ export function initialiseDescriptions() {
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
         'statistics': `Here you can see your progress in the game.`,
+        'achievements': `Here you can see your earned achievements, and their effects.`
 
     };
 
