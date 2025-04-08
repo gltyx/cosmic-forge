@@ -1,6 +1,3 @@
-resource calculations are not right when burning fuel in a power station, start with carbon, pretty deep bug
 stats bugs in general
 
-
-maybe have rows of notifications ie if fuse has loads queued up still show tech to left etc
-look at price of neon, titanium, possible neon autobuyer
+look at price of neon, titanium, possible neon autobuyer possibly with AP to make titanium generation easier the following runs
