@@ -1,7 +1,8 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx, setWasAutoSaveToggled } from './constantsAndGlobalVars.js';
-import { createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
+import { getAchievementPositionData } from './resourceDataObject.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Contact') createHelpSectionRow('contactRow', ['discord-link', 'email-link']);
@@ -532,8 +533,38 @@ export function drawTab8Content(heading, optionContentElement) {
     }   
     
     function createAchievementsSectionRow(rowId) {
-
-    }
+        const achievementsData = Object.values(getAchievementPositionData());
+    
+        const achievementsRow = createOptionRow(
+            rowId,
+            null,
+            '',
+            createHtmlTableAchievementsGrid(
+                `${rowId}AchievementsGrid`,
+                ['achievement-container', 'achievement-container-margin'],
+                achievementsData
+            ),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%'],
+            ['no-left-margin']
+        );
+    
+        optionContentElement.appendChild(achievementsRow);
+    }      
     
     function createStatisticsSectionRow(rowId) {
         const statisticsRow = createOptionRow(

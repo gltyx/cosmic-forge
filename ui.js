@@ -108,7 +108,8 @@ import {
     setAutoBuyerTierLevel,
     setResourceDataObject,
     setStarSystemDataObject,
-    getBuffEnhancedMiningData
+    getBuffEnhancedMiningData,
+    getAchievementPositionData
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -169,7 +170,6 @@ import {
     rebirth,
     settleSystemAfterBattle,
     setAutoSellToggleState
-
 } from './game.js';
 
 import { 
@@ -189,7 +189,6 @@ import { drawTab6Content } from './drawTab6Content.js';
 import { drawTab7Content } from './drawTab7Content.js';
 import { drawTab8Content } from './drawTab8Content.js';
 
-let notificationContainer;
 const variableDebuggerWindow = document.getElementById('variableDebuggerWindow');
 const debugWindow = document.getElementById('debugWindow');
 const closeButton = document.querySelector('.close-btn');
@@ -249,8 +248,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     startGame();
-
-    notificationContainer = getElements().notificationContainer;
 
     document.addEventListener('keydown', (event) => {
         if (event.code === 'NumpadSubtract') {
@@ -856,6 +853,36 @@ export function createHtmlTextAreaProse(id, classList = [], headerText = '', bod
     }
 
     return div;
+}
+
+export function createHtmlTableAchievementsGrid(id, classList = [], achievementsData = []) {
+    const container = document.createElement('div');
+    container.id = id;
+
+    container.classList.add(...classList);
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(10, 80px)';
+    container.style.gridTemplateRows = 'repeat(5, 80px)';
+    container.style.gap = '0px';
+    container.style.padding = '10px';
+    container.style.justifyContent = 'start';
+    container.style.alignItems = 'start';
+
+    achievementsData.forEach(achievement => {
+        const tile = document.createElement('div');
+        tile.id = achievement.id;
+        tile.classList.add('achievement-tile');
+        tile.style.gridColumnStart = achievement.gridColumn + 1;
+        tile.style.gridRowStart = achievement.gridRow + 1;
+        tile.style.width = '70px';
+        tile.style.height = '70px';
+        tile.style.border = '1px solid var(--text-color)';
+        tile.style.boxSizing = 'border-box';
+        tile.style.position = 'relative';
+        container.appendChild(tile);
+    });
+
+    return container;
 }
 
 export function createHtmlTableStatistics(id, classList = [], mainHeadings, subHeadings, subBodys, mainHeaderClasses = [], subHeaderClasses = [], subBodyClasses = []) {

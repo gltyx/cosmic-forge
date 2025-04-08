@@ -2135,8 +2135,66 @@ const achievementImageUrls = {
     have50HoursWithOnePioneer: './images/achievements/have50HoursWithOnePioneer.png'
 };  
 
+const achievementPositionDataLinker = {
+    collect50Hydrogen: { id: 'collect50Hydrogen', gridRow: 0, gridColumn: 0 },
+    collect1000Hydrogen: { id: 'collect1000Hydrogen', gridRow: 0, gridColumn: 1 },
+    collect5000Carbon: { id: 'collect5000Carbon', gridRow: 0, gridColumn: 2 },
+    collect50000Iron: { id: 'collect50000Iron', gridRow: 0, gridColumn: 3 },
+    researchTechnology: { id: 'researchTechnology', gridRow: 0, gridColumn: 4 },
+    researchAllTechnologies: { id: 'researchAllTechnologies', gridRow: 0, gridColumn: 5 },
+    achieve100FusionEfficiency: { id: 'achieve100FusionEfficiency', gridRow: 0, gridColumn: 6 },
+    fuseElement: { id: 'fuseElement', gridRow: 0, gridColumn: 7 },
+    gain100Cash: { id: 'gain100Cash', gridRow: 0, gridColumn: 8 },
+    gain10000Cash: { id: 'gain10000Cash', gridRow: 0, gridColumn: 9 },
+    gain100000Cash: { id: 'gain100000Cash', gridRow: 1, gridColumn: 0 },
+    gain1000000Cash: { id: 'gain1000000Cash', gridRow: 1, gridColumn: 1 },
+    buildPowerPlant: { id: 'buildPowerPlant', gridRow: 1, gridColumn: 2 },
+    tripPower: { id: 'tripPower', gridRow: 1, gridColumn: 3 },
+    buildSolarPowerPlant: { id: 'buildSolarPowerPlant', gridRow: 1, gridColumn: 4 },
+    collect100Precipitation: { id: 'collect100Precipitation', gridRow: 1, gridColumn: 5 },
+    unlockCompounds: { id: 'unlockCompounds', gridRow: 1, gridColumn: 6 },
+    createSteel: { id: 'createSteel', gridRow: 1, gridColumn: 7 },
+    createTitanium: { id: 'createTitanium', gridRow: 1, gridColumn: 8 },
+    discoverAsteroid: { id: 'discoverAsteroid', gridRow: 1, gridColumn: 9 },
+    launchRocket: { id: 'launchRocket', gridRow: 2, gridColumn: 0 },
+    mineAllAntimatterAsteroid: { id: 'mineAllAntimatterAsteroid', gridRow: 2, gridColumn: 1 },
+    studyStar: { id: 'studyStar', gridRow: 2, gridColumn: 2 },
+    studyStarMoreThan5LYAway: { id: 'studyStarMoreThan5LYAway', gridRow: 2, gridColumn: 3 },
+    studyStarMoreThan20LYAway: { id: 'studyStarMoreThan20LYAway', gridRow: 2, gridColumn: 4 },
+    launchStarship: { id: 'launchStarship', gridRow: 2, gridColumn: 5 },
+    initiateDiplomacyWithAlienRace: { id: 'initiateDiplomacyWithAlienRace', gridRow: 2, gridColumn: 6 },
+    bullyEnemyIntoSubmission: { id: 'bullyEnemyIntoSubmission', gridRow: 2, gridColumn: 7 },
+    vassalizeEnemy: { id: 'vassalizeEnemy', gridRow: 2, gridColumn: 8 },
+    conquerEnemy: { id: 'conquerEnemy', gridRow: 2, gridColumn: 9 },
+    conquerHiveMindEnemy: { id: 'conquerHiveMindEnemy', gridRow: 3, gridColumn: 0 },
+    conquerBelligerentEnemy: { id: 'conquerBelligerentEnemy', gridRow: 3, gridColumn: 1 },
+    conquerEnemyWithoutScanning: { id: 'conquerEnemyWithoutScanning', gridRow: 3, gridColumn: 2 },
+    settleUnoccupiedSystem: { id: 'settleUnoccupiedSystem', gridRow: 3, gridColumn: 3 },
+    discoverSystemWithNoLife: { id: 'discoverSystemWithNoLife', gridRow: 3, gridColumn: 4 },
+    settleSystem: { id: 'settleSystem', gridRow: 3, gridColumn: 5 },
+    spendAP: { id: 'spendAP', gridRow: 3, gridColumn: 6 },
+    performGalacticMarketTransaction: { id: 'performGalacticMarketTransaction', gridRow: 3, gridColumn: 7 },
+    liquidateAllAssets: { id: 'liquidateAllAssets', gridRow: 3, gridColumn: 8 },
+    rebirth: { id: 'rebirth', gridRow: 3, gridColumn: 9 },
+    conquer10StarSystems: { id: 'conquer10StarSystems', gridRow: 4, gridColumn: 0 },
+    conquer50StarSystems: { id: 'conquer50StarSystems', gridRow: 4, gridColumn: 1 },
+    seeAllNewsTickers: { id: 'seeAllNewsTickers', gridRow: 4, gridColumn: 2 },
+    activateAllWackyNewsTickers: { id: 'activateAllWackyNewsTickers', gridRow: 4, gridColumn: 3 },
+    collect100TitaniumAsPrecipitation: { id: 'collect100TitaniumAsPrecipitation', gridRow: 4, gridColumn: 4 },
+    discoverLegendaryAsteroid: { id: 'discoverLegendaryAsteroid', gridRow: 4, gridColumn: 5 },
+    have4RocketsMiningAntimatter: { id: 'have4RocketsMiningAntimatter', gridRow: 4, gridColumn: 6 },
+    studyAllStarsInOneRun: { id: 'studyAllStarsInOneRun', gridRow: 4, gridColumn: 7 },
+    trade10APForCash: { id: 'trade10APForCash', gridRow: 4, gridColumn: 8 },
+    have50HoursWithOnePioneer: { id: 'have50HoursWithOnePioneer', gridRow: 4, gridColumn: 9 }
+};
+
+
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function getAchievementPositionData() {
+    return achievementPositionDataLinker;
+}
 
 export function getBuffEfficientStorageData() {
     return ascendencyBuffs["efficientStorage"];
