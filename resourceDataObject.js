@@ -1364,7 +1364,7 @@ const achievementsData = {
         name: "Trip the Power",
         specialCondition: achievementTripThePower,
         specialConditionArguments: false,
-        resetOnRebirth: false,
+        resetOnRebirth: true,
         gridRow: 4,
         active: false,
         requirements: {
@@ -1600,140 +1600,141 @@ const achievementsData = {
         },
         notification: "studyStarMoreThan20LYAwayNotification"
     },
-    //to here
     launchStarship: {
         name: "Launch a Starship",
-        specialCondition: false,
+        specialCondition: achievementLaunchStarShip,
         specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 26,
+        resetOnRebirth: true,
+        gridRow: 4,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                StarshipParts: 100
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 40
+            gives1: "cash",
+            value1: {
+                quantity: 10000
+            }
         },
         notification: "launchStarshipNotification"
     },
     initiateDiplomacyWithAlienRace: {
         name: "Initiate Diplomacy with an Alien Race",
-        specialCondition: false,
+        specialCondition: achievementInitiateDiplomacyWithAlienRace,
         specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 27,
-        active: false,
+        resetOnRebirth: true,
+        gridRow: 5,
+        active: true,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                DiplomaticMission: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 25
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
         },
         notification: "initiateDiplomacyWithAlienRaceNotification"
     },
     bullyEnemyIntoSubmission: {
         name: "Bully an Enemy into Submission",
-        specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 28,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments:  ['bully'],
+        resetOnRebirth: true,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                MilitaryUnits: 1000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 50
+            value1: {
+                quantity: 1
+            }
         },
         notification: "bullyEnemyIntoSubmissionNotification"
     },
     vassalizeEnemy: {
         name: "Vassalize an Enemy",
-        specialCondition: false,
-        specialConditionArguments: false,
-        resetOnRebirth: false,
-        gridRow: 29,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments:  ['vassalize'],
+        resetOnRebirth: true,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                VassalizationTreaty: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 60
+            value1: {
+                quantity: 1
+            }
         },
         notification: "vassalizeEnemyNotification"
     },
     conquerEnemy: {
         name: "Conquer an Enemy",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['conquer'],
         resetOnRebirth: false,
-        gridRow: 30,
-        active: false,
+        gridRow: 5,
+        active: true,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                MilitaryUnits: 5000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 75
+            value1: {
+                quantity: 1
+            }
         },
         notification: "conquerEnemyNotification"
     },
     conquerHiveMindEnemy: {
         name: "Conquer a Hive Mind Enemy",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['hiveMind'],
         resetOnRebirth: false,
-        gridRow: 31,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                HiveMindUnits: 1000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 100
+            value1: {
+                quantity: 2
+            }
         },
         notification: "conquerHiveMindEnemyNotification"
     },
     conquerBelligerentEnemy: {
         name: "Conquer a Belligerent Enemy",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['belligerent'],
         resetOnRebirth: false,
-        gridRow: 32,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                BelligerentUnits: 2000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 80
+            value1: {
+                quantity: 3
+            }
         },
         notification: "conquerBelligerentEnemyNotification"
     },
+    //to here
     conquerEnemyWithoutScanning: {
         name: "Conquer an Enemy Without Scanning the System",
         specialCondition: false,
@@ -2515,5 +2516,13 @@ export function achievementMineAntimatterAsteroid() {
 }
 
 export function achievementStudyAStar(requiredDistance) {
+
+}
+
+export function achievementLaunchStarShip() {
+
+}
+
+export function achievementBeatEnemy(victoryType) {
 
 }
