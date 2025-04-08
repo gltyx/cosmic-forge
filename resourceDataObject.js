@@ -1,6 +1,7 @@
-import { replaceRocketNames } from "./descriptions.js";
+import { getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
+
 
 export let resourceData = {
     version: 0.62, //update this whenever changes are made to the structure
@@ -1083,6 +1084,870 @@ export let ascendencyBuffs = {
     }
 };
 
+const achievementsData = {
+    collect50Hydrogen: {
+        name: "Collect 50 Hydrogen",
+        imgSrc: "path/to/image.png",
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Hydrogen: 50
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "collect50HydrogenNotification"
+    },
+    collect1000Hydrogen: {
+        name: "Collect 1000 Hydrogen",
+        imgSrc: "path/to/image.png",
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Hydrogen: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 20
+        },
+        notification: "collect1000HydrogenNotification"
+    },
+    collect5000Resources: {
+        name: "Collect 5000 of Any Kind of Resource",
+        imgSrc: "path/to/image.png",
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Hydrogen: 5000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 30
+        },
+        notification: "collect5000ResourcesNotification"
+    },
+    collect50000Resources: {
+        name: "Collect 50000 of Any Type of Resource",
+        imgSrc: "path/to/image.png",
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Hydrogen: 50000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 40
+        },
+        notification: "collect50000ResourcesNotification"
+    },
+    researchTechnology: {
+        name: "Research a Technology",
+        imgSrc: "path/to/image.png",
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "technologyReq",
+            technologyReq: ["Basic Fusion"]
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "researchTechnologyNotification"
+    },
+    researchAllTechnologies: {
+        name: "Research All Technologies",
+        imgSrc: "path/to/image.png",
+        gridRow: 6,
+        active: false,
+        requirements: {
+            requirement1: "technologyReq",
+            technologyReq: ["Basic Fusion", "Advanced Fusion", "Knowledge Sharing"]
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 50
+        },
+        notification: "researchAllTechnologiesNotification"
+    },
+    achieve100FusionEfficiency: {
+        name: "Achieve 100% Fusion Efficiency",
+        imgSrc: "path/to/image.png",
+        gridRow: 7,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                FusionCores: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 20
+        },
+        notification: "achieve100FusionEfficiencyNotification"
+    },
+    fuseElement: {
+        name: "Fuse an Element",
+        imgSrc: "path/to/image.png",
+        gridRow: 8,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Hydrogen: 1000,
+                Oxygen: 500
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 15
+        },
+        notification: "fuseElementNotification"
+    },
+    gain100Cash: {
+        name: "Gain 100 Cash",
+        imgSrc: "path/to/image.png",
+        gridRow: 9,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Cash: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 5
+        },
+        notification: "gain100CashNotification"
+    },
+    gain10000Cash: {
+        name: "Gain 10000 Cash",
+        imgSrc: "path/to/image.png",
+        gridRow: 10,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Cash: 10000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "gain10000CashNotification"
+    },
+    gain100000Cash: {
+        name: "Gain 100000 Cash",
+        imgSrc: "path/to/image.png",
+        gridRow: 11,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Cash: 100000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 15
+        },
+        notification: "gain100000CashNotification"
+    },
+    gain1000000Cash: {
+        name: "Gain 1000000 Cash",
+        imgSrc: "path/to/image.png",
+        gridRow: 12,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Cash: 1000000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 30
+        },
+        notification: "gain1000000CashNotification"
+    },
+    buildPowerStation: {
+        name: "Build a Power Station",
+        imgSrc: "path/to/image.png",
+        gridRow: 13,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Steel: 500,
+                Titanium: 300
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 15
+        },
+        notification: "buildPowerStationNotification"
+    },
+    tripThePower: {
+        name: "Trip the Power",
+        imgSrc: "path/to/image.png",
+        gridRow: 14,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Power: 100000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 20
+        },
+        notification: "tripThePowerNotification"
+    },
+    buildSolarPowerStation: {
+        name: "Build a Solar Power Station",
+        imgSrc: "path/to/image.png",
+        gridRow: 15,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                SolarPanels: 200,
+                Steel: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "buildSolarPowerStationNotification"
+    },
+    collect100Precipitation: {
+        name: "Collect 100 Precipitation",
+        imgSrc: "path/to/image.png",
+        gridRow: 16,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Precipitation: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 5
+        },
+        notification: "collect100PrecipitationNotification"
+    },
+    unlockCompounds: {
+        name: "Unlock Compounds",
+        imgSrc: "path/to/image.png",
+        gridRow: 17,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Steel: 1000,
+                Titanium: 500
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 25
+        },
+        notification: "unlockCompoundsNotification"
+    },
+    createSteel: {
+        name: "Create Steel",
+        imgSrc: "path/to/image.png",
+        gridRow: 18,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Iron: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "createSteelNotification"
+    },
+    createTitanium: {
+        name: "Create Titanium",
+        imgSrc: "path/to/image.png",
+        gridRow: 19,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                TitaniumOre: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "createTitaniumNotification"
+    },
+    discoverAsteroid: {
+        name: "Discover an Asteroid",
+        imgSrc: "path/to/image.png",
+        gridRow: 20,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                AsteroidScanner: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 10
+        },
+        notification: "discoverAsteroidNotification"
+    },
+    launchRocket: {
+        name: "Launch a Rocket",
+        imgSrc: "path/to/image.png",
+        gridRow: 21,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                RocketFuel: 1000,
+                Steel: 500
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 15
+        },
+        notification: "launchRocketNotification"
+    },
+    mineAntimatterAsteroid: {
+        name: "Mine All Antimatter from an Asteroid",
+        imgSrc: "path/to/image.png",
+        gridRow: 22,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Antimatter: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 30
+        },
+        notification: "mineAntimatterAsteroidNotification"
+    },
+    studyStar: {
+        name: "Study a Star",
+        imgSrc: "path/to/image.png",
+        gridRow: 23,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                StarScanner: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 25
+        },
+        notification: "studyStarNotification"
+    },
+    studyStarMoreThan5LYAway: {
+        name: "Study a Star More Than 5ly Away",
+        imgSrc: "path/to/image.png",
+        gridRow: 24,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                StarScanner: 1,
+                Distance: 5
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 35
+        },
+        notification: "studyStarMoreThan5LYAwayNotification"
+    },
+    studyStarMoreThan20LYAway: {
+        name: "Study a Star More Than 20ly Away",
+        imgSrc: "path/to/image.png",
+        gridRow: 25,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                StarScanner: 1,
+                Distance: 20
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 50
+        },
+        notification: "studyStarMoreThan20LYAwayNotification"
+    },
+    launchStarship: {
+        name: "Launch a Starship",
+        imgSrc: "path/to/image.png",
+        gridRow: 26,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                StarshipParts: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 40
+        },
+        notification: "launchStarshipNotification"
+    },
+    initiateDiplomacyWithAlienRace: {
+        name: "Initiate Diplomacy with an Alien Race",
+        imgSrc: "path/to/image.png",
+        gridRow: 27,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                DiplomaticMission: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 25
+        },
+        notification: "initiateDiplomacyWithAlienRaceNotification"
+    },
+    bullyEnemyIntoSubmission: {
+        name: "Bully an Enemy into Submission",
+        imgSrc: "path/to/image.png",
+        gridRow: 28,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                MilitaryUnits: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 50
+        },
+        notification: "bullyEnemyIntoSubmissionNotification"
+    },
+    vassalizeEnemy: {
+        name: "Vassalize an Enemy",
+        imgSrc: "path/to/image.png",
+        gridRow: 29,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                VassalizationTreaty: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 60
+        },
+        notification: "vassalizeEnemyNotification"
+    },
+    conquerEnemy: {
+        name: "Conquer an Enemy",
+        imgSrc: "path/to/image.png",
+        gridRow: 30,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                MilitaryUnits: 5000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 75
+        },
+        notification: "conquerEnemyNotification"
+    },
+    conquerHiveMindEnemy: {
+        name: "Conquer a Hive Mind Enemy",
+        imgSrc: "path/to/image.png",
+        gridRow: 31,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                HiveMindUnits: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 100
+        },
+        notification: "conquerHiveMindEnemyNotification"
+    },
+    conquerBelligerentEnemy: {
+        name: "Conquer a Belligerent Enemy",
+        imgSrc: "path/to/image.png",
+        gridRow: 32,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                BelligerentUnits: 2000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 80
+        },
+        notification: "conquerBelligerentEnemyNotification"
+    },
+    conquerEnemyWithoutScanning: {
+        name: "Conquer an Enemy Without Scanning the System",
+        imgSrc: "path/to/image.png",
+        gridRow: 33,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                MilitaryUnits: 3000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 90
+        },
+        notification: "conquerEnemyWithoutScanningNotification"
+    },
+    settleUnoccupiedSystem: {
+        name: "Settle an Unoccupied System",
+        imgSrc: "path/to/image.png",
+        gridRow: 34,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                SettlementUnits: 500
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 20
+        },
+        notification: "settleUnoccupiedSystemNotification"
+    },
+    discoverSystemWithNoLife: {
+        name: "Discover a System with No Life",
+        imgSrc: "path/to/image.png",
+        gridRow: 35,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                SystemScanner: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 15
+        },
+        notification: "discoverSystemWithNoLifeNotification"
+    },
+    settleSystem: {
+        name: "Settle a System",
+        imgSrc: "path/to/image.png",
+        gridRow: 36,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                SettlementUnits: 1000
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 25
+        },
+        notification: "settleSystemNotification"
+    },
+    spendAP: {
+        name: "Spend Ascendency Points (AP)",
+        imgSrc: "path/to/image.png",
+        gridRow: 37,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                ascendencyPoints: 10
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 5
+        },
+        notification: "spendAPNotification"
+    },
+    performGalacticMarketTransaction: {
+        name: "Perform a Galactic Market Transaction",
+        imgSrc: "path/to/image.png",
+        gridRow: 38,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                TradeGoods: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 30
+        },
+        notification: "performGalacticMarketTransactionNotification"
+    },
+    liquidateAllAssets: {
+        name: "Liquidate All Assets",
+        imgSrc: "path/to/image.png",
+        gridRow: 39,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Assets: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 50
+        },
+        notification: "liquidateAllAssetsNotification"
+    },
+    rebirth: {
+        name: "Rebirth",
+        imgSrc: "path/to/image.png",
+        gridRow: 40,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                RebirthToken: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 100
+        },
+        notification: "rebirthNotification"
+    },
+    conquer10StarSystems: {
+        name: "Conquer 10 Star Systems",
+        imgSrc: "path/to/image.png",
+        gridRow: 41,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                ConqueredSystems: 10
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 150
+        },
+        notification: "conquer10StarSystemsNotification"
+    },
+    conquer50StarSystems: {
+        name: "Conquer 50 Star Systems",
+        imgSrc: "path/to/image.png",
+        gridRow: 42,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                ConqueredSystems: 50
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 200
+        },
+        notification: "conquer50StarSystemsNotification"
+    },
+    seeAllNewsTickers: {
+        name: "See All News Tickers",
+        imgSrc: "path/to/image.png",
+        gridRow: 43,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                NewsTickers: 10 // Assuming there are 10 different news tickers
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 50
+        },
+        notification: "seeAllNewsTickersNotification"
+    },
+    activateAllWackyNewsTickers: {
+        name: "Activate All Wacky News Tickers",
+        imgSrc: "path/to/image.png",
+        gridRow: 44,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                WackyNewsTickers: 10 // Assuming 10 wacky news tickers to activate
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 75
+        },
+        notification: "activateAllWackyNewsTickersNotification"
+    },
+    collect100TitaniumAsPrecipitation: {
+        name: "Collect 100 Titanium as Precipitation",
+        imgSrc: "path/to/image.png",
+        gridRow: 45,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Titanium: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 30
+        },
+        notification: "collect100TitaniumAsPrecipitationNotification"
+    },
+    discoverLegendaryAsteroid: {
+        name: "Discover a Legendary Asteroid",
+        imgSrc: "path/to/image.png",
+        gridRow: 46,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                LegendaryAsteroid: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 100
+        },
+        notification: "discoverLegendaryAsteroidNotification"
+    },
+    have4RocketsSimultaneouslyMiningAntimatter: {
+        name: "Have 4 Rockets Simultaneously Mining Antimatter",
+        imgSrc: "path/to/image.png",
+        gridRow: 47,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                Rockets: 4,
+                MiningAntimatter: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 40
+        },
+        notification: "have4RocketsSimultaneouslyMiningAntimatterNotification"
+    },
+    studyAllStarsInStarMapInOneRun: {
+        name: "Study All Stars in the Star Map in One Run",
+        imgSrc: "path/to/image.png",
+        gridRow: 48,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                StarScanner: 1,
+                StarsStudied: 100
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 150
+        },
+        notification: "studyAllStarsInStarMapInOneRunNotification"
+    },
+    trade10APForCashInOneTransaction: {
+        name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
+        imgSrc: "path/to/image.png",
+        gridRow: 49,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                ascendencyPoints: 10,
+                GalacticMarketTransaction: 1
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 60
+        },
+        notification: "trade10APForCashInOneTransactionNotification"
+    },
+    have50HoursLoggedWithOnePioneerName: {
+        name: "Have 50 Hours Logged with One Pioneer Name",
+        imgSrc: "path/to/image.png",
+        gridRow: 50,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            resources: {
+                PioneerName: 1,
+                HoursLogged: 50
+            }
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            ascendencyPoints: 100
+        },
+        notification: "have50HoursLoggedWithOnePioneerNameNotification"
+    }
+};
+
+
+  
+  
+  
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
@@ -1165,6 +2030,47 @@ export function getStarSystemWeather(starSystem) {
 export function setStarSystemWeather(starSystem, weatherData) {
     if (starSystems.stars[starSystem]) {
         starSystems.stars[starSystem].weather = weatherData;
+    }
+}
+
+export function getAchievementDataObject(key, subKeys, noWarning = false) {
+    let current = achievementsData[key];
+
+    if (!current && !noWarning) {
+        console.warn(`Achievement data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined && !noWarning) {
+                console.warn(`Missing achievement subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+export function setAchievementDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Achievement key is required.");
+        return;
+    }
+
+    let current = achievementsData;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
     }
 }
 

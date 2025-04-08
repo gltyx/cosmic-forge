@@ -13,6 +13,7 @@ export let helpContent;
 export let statisticsContent;
 export let rocketNames;
 export let starNames;
+export let achievementNotifications;
 export let launchStarShipWarningHeader;
 export let launchStarShipWarningText;
 export let enterWarModeModalHeader;
@@ -1882,6 +1883,70 @@ starNames = [
     "Biham","Zubeneschamali","Alpherg","Alcor","Polaris","Pleione","Spica","Chara","Sadachbia","Rasalgethi",
     "Barnards Star","Saiph","Hassaleh","Furud","Atik","Sadalsuud","Propus","Botein","Acamar","Anser"
 ];
+
+achievementNotifications = {
+    "collect50HydrogenNotification": "ACHIEVEMENT:\nYou have collected 50 Hydrogen!",
+    "collect1000HydrogenNotification": "ACHIEVEMENT:\nYou have collected 1000 Hydrogen!",
+    "collect5000AnyResourceNotification": "ACHIEVEMENT:\nYou have collected 5000 of any kind of resource!",
+    "collect50000AnyResourceNotification": "ACHIEVEMENT:\nYou have collected 50000 of any type of resource!",
+    "researchTechnologyNotification": "ACHIEVEMENT:\nYou have researched a new technology!",
+    "researchAllTechnologiesNotification": "ACHIEVEMENT:\nYou have researched all technologies!",
+    "achieve100FusionEfficiencyNotification": "ACHIEVEMENT:\nYou have achieved 100% fusion efficiency!",
+    "fuseElementNotification": "ACHIEVEMENT:\nYou have fused an element!",
+    "gain100CashNotification": "ACHIEVEMENT:\nYou have gained 100 cash!",
+    "gain10000CashNotification": "ACHIEVEMENT:\nYou have gained 10000 cash!",
+    "gain100000CashNotification": "ACHIEVEMENT:\nYou have gained 100000 cash!",
+    "gain1000000CashNotification": "ACHIEVEMENT:\nYou have gained 1000000 cash!",
+    "buildPowerStationNotification": "ACHIEVEMENT:\nYou have built a power station!",
+    "tripPowerNotification": "ACHIEVEMENT:\nYou have tripped the power!",
+    "buildSolarPowerStationNotification": "ACHIEVEMENT:\nYou have built a solar power station!",
+    "collect100PrecipitationNotification": "ACHIEVEMENT:\nYou have collected 100 precipitation!",
+    "unlockCompoundsNotification": "ACHIEVEMENT:\nYou have unlocked compounds!",
+    "createSteelNotification": "ACHIEVEMENT:\nYou have created steel!",
+    "createTitaniumNotification": "ACHIEVEMENT:\nYou have created titanium!",
+    "discoverAsteroidNotification": "ACHIEVEMENT:\nYou have discovered an asteroid!",
+    "launchRocketNotification": "ACHIEVEMENT:\nYou have launched a rocket!",
+    "mineAllAntimatterAsteroidNotification": "ACHIEVEMENT:\nYou have mined all antimatter from an asteroid!",
+    "studyStarNotification": "ACHIEVEMENT:\nYou have studied a star!",
+    "studyStarMoreThan5LYAwayNotification": "ACHIEVEMENT:\nYou have studied a star more than 5ly away!",
+    "studyStarMoreThan20LYAwayNotification": "ACHIEVEMENT:\nYou have studied a star more than 20ly away!",
+    "launchStarshipNotification": "ACHIEVEMENT:\nYou have launched a starship!",
+    "initiateDiplomacyWithAlienRaceNotification": "ACHIEVEMENT:\nYou have initiated diplomacy with an alien race!",
+    "bullyEnemyIntoSubmissionNotification": "ACHIEVEMENT:\nYou have bullied an enemy into submission!",
+    "vassalizeEnemyNotification": "ACHIEVEMENT:\nYou have vassalized an enemy!",
+    "conquerEnemyNotification": "ACHIEVEMENT:\nYou have conquered an enemy!",
+    "conquerHiveMindEnemyNotification": "ACHIEVEMENT:\nYou have conquered a Hive Mind enemy!",
+    "conquerBelligerentEnemyNotification": "ACHIEVEMENT:\nYou have conquered a belligerent enemy!",
+    "conquerEnemyWithoutScanningNotification": "ACHIEVEMENT:\nYou have conquered an enemy without scanning the system!",
+    "settleUnoccupiedSystemNotification": "ACHIEVEMENT:\nYou have settled an unoccupied system!",
+    "discoverSystemWithNoLifeNotification": "ACHIEVEMENT:\nYou have discovered a system with no life!",
+    "settleSystemNotification": "ACHIEVEMENT:\nYou have settled a system!",
+    "spendAPNotification": "ACHIEVEMENT:\nYou have spent Ascendency Points (AP)!",
+    "performGalacticMarketTransactionNotification": "ACHIEVEMENT:\nYou have performed a Galactic Market transaction!",
+    "liquidateAllAssetsNotification": "ACHIEVEMENT:\nYou have liquidated all assets!",
+    "rebirthNotification": "ACHIEVEMENT:\nYou have rebirthed!",
+    "conquer10StarSystemsNotification": "ACHIEVEMENT:\nYou have conquered 10 star systems!",
+    "conquer50StarSystemsNotification": "ACHIEVEMENT:\nYou have conquered 50 star systems!",
+    "seeAllNewsTickersNotification": "ACHIEVEMENT:\nYou have seen all news tickers!",
+    "activateAllWackyNewsTickersNotification": "ACHIEVEMENT:\nYou have activated all wacky news tickers!",
+    "collect100TitaniumAsPrecipitationNotification": "ACHIEVEMENT:\nYou have collected 100 titanium as precipitation!",
+    "discoverLegendaryAsteroidNotification": "ACHIEVEMENT:\nYou have discovered a legendary asteroid!",
+    "have4RocketsMiningAntimatterNotification": "ACHIEVEMENT:\nYou have 4 rockets simultaneously mining antimatter!",
+    "studyAllStarsInOneRunNotification": "ACHIEVEMENT:\nYou have studied all stars in the star map in one run!",
+    "trade10APForCashNotification": "ACHIEVEMENT:\nYou have traded 10 AP for cash in one transaction in the Galactic Market!",
+    "have50HoursWithOnePioneerNotification": "ACHIEVEMENT:\nYou have logged 50 hours with one pioneer name!"
+};
+
+export function getAchievementNotification(achievementKey) {
+    const notification = achievementNotifications[achievementKey];
+    
+    if (notification) {
+        return notification;
+    } else {
+        console.warn(`Notification not found for achievement key: ${achievementKey}`);
+        return undefined;
+    }
+}
 
 export function getOptionDescription(key1) {
     return optionDescriptions[key1];

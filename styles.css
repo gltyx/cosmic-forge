@@ -1078,6 +1078,12 @@ body {
     pointer-events: none;
 }
 
+.notification-achievement {
+    background-color: var(--tab-bg-color);
+    color: var(--stats-all-time-text);
+    border: 6px solid var(--stats-all-time-text);
+}
+
 .notification.show {
     opacity: 1;
     transform: translateY(0);
