@@ -1084,7 +1084,7 @@ export let ascendencyBuffs = {
     }
 };
 
-const achievementsData = {
+export const achievementsData = {
     collect50Hydrogen: {
         name: "Collect 50 Hydrogen",
         specialCondition: false,
@@ -1327,9 +1327,9 @@ const achievementsData = {
         },
         notification: "achieve100FusionEfficiencyNotification"
     },   
-    have50HoursLoggedWithOnePioneerName: {
+    have50HoursWithOnePioneer: {
         name: "Have 50 Hours Logged with One Pioneer Name",
-        specialCondition: achievementHave50HoursLoggedWithOnePioneerName,
+        specialCondition: achievementHave50HoursWithOnePioneer,
         specialConditionArguments: false,
         resetOnRebirth: false,
         gridRow: 2,
@@ -1344,9 +1344,9 @@ const achievementsData = {
                 quantity: 50
             }
         },
-        notification: "have50HoursLoggedWithOnePioneerNameNotification"
+        notification: "have50HoursWithOnePioneerNotification"
     },
-    buildPowerStation: {
+    buildPowerPlant: {
         name: "Build a Power Plant",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1369,7 +1369,7 @@ const achievementsData = {
         },
         notification: "buildPowerPlantNotification"
     },
-    buildSolarPowerStation: {
+    buildSolarPowerPlant: {
         name: "Build a Solar Power Plant",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1390,7 +1390,7 @@ const achievementsData = {
                 quantity: 1.2
             }
         },
-        notification: "buildSolarPowerStationNotification"
+        notification: "buildSolarPowerPlantNotification"
     },
     collect100TitaniumAsPrecipitation: {
         name: "Collect 100 Titanium as Precipitation",
@@ -1558,9 +1558,9 @@ const achievementsData = {
         },
         notification: "discoverLegendaryAsteroidNotification"
     },
-    have4RocketsSimultaneouslyMiningAntimatter: {
+    have4RocketsMiningAntimatter: {
         name: "Have 4 Rockets Simultaneously Mining Antimatter",
-        specialCondition: achievementHave4RocketsSimultaneouslyMiningAntimatter,
+        specialCondition: achievementHave4RocketsMiningAntimatter,
         specialConditionArguments: false,
         resetOnRebirth: true,
         gridRow: 4,
@@ -1575,11 +1575,11 @@ const achievementsData = {
                 quantity: 100000
             }
         },
-        notification: "have4RocketsSimultaneouslyMiningAntimatterNotification"
+        notification: "have4RocketsMiningAntimatterNotification"
     },
-    tripThePower: {
+    tripPower: {
         name: "Trip the Power",
-        specialCondition: achievementTripThePower,
+        specialCondition: achievementTripPower,
         specialConditionArguments: false,
         resetOnRebirth: true,
         gridRow: 4,
@@ -1595,7 +1595,7 @@ const achievementsData = {
                 quantity: 1.1
             }
         },
-        notification: "tripThePowerNotification"
+        notification: "tripPowerNotification"
     },
     discoverAsteroid: {
         name: "Discover an Asteroid",
@@ -1637,10 +1637,10 @@ const achievementsData = {
         },
         notification: "launchRocketNotification"
     },
-    mineAntimatterAsteroid: {
+    mineAllAntimatterAsteroid: {
         name: "Mine All Antimatter from an Asteroid",
         specialCondition: false,
-        specialConditionArguments: achievementMineAntimatterAsteroid,
+        specialConditionArguments: achievementMineAllAntimatterAsteroid,
         resetOnRebirth: true,
         gridRow: 4,
         active: false,
@@ -1654,7 +1654,7 @@ const achievementsData = {
                 quantity: 150
             }
         },
-        notification: "mineAntimatterAsteroidNotification"
+        notification: "mineAllAntimatterAsteroidNotification"
     },
     studyStar: {
         name: "Study a Star",
@@ -1754,9 +1754,9 @@ const achievementsData = {
         },
         notification: "performGalacticMarketTransactionNotification"
     },
-    trade10APForCashInOneTransaction: {
+    trade10APForCash: {
         name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
-        specialCondition: achievementTrade10APForCashInOneTransaction,
+        specialCondition: achievementTrade10APForCash,
         specialConditionArguments: false,
         resetOnRebirth: false,
         gridRow: 4,
@@ -1771,7 +1771,7 @@ const achievementsData = {
                 quantity: 5
             }
         },
-        notification: "trade10APForCashInOneTransactionNotification"
+        notification: "trade10APForCashNotification"
     },
     initiateDiplomacyWithAlienRace: {
         name: "Initiate Diplomacy with an Alien Race",
@@ -2061,9 +2061,9 @@ const achievementsData = {
         },
         notification: "conquer50StarSystemsNotification"
     },
-    studyAllStarsInStarMapInOneRun: {
+    studyAllStarsInOneRun: {
         name: "Study All Stars in the Star Map in One Run",
-        specialCondition: achievementStudyAllStarsInStarMapInOneRun,
+        specialCondition: achievementStudyAllStarsInOneRun,
         specialConditionArguments: false,
         resetOnRebirth: false,
         gridRow: 5,
@@ -2078,7 +2078,7 @@ const achievementsData = {
                 quantity: 0
             }
         },
-        notification: "studyAllStarsInStarMapInOneRunNotification"
+        notification: "studyAllStarsInOneRunNotification"
     }
 };
 
@@ -2548,7 +2548,7 @@ export function achievementAchieve100FusionEfficiency() {
     
 }
 
-export function achievementTripThePower() {
+export function achievementTripPower() {
 
 }
 
@@ -2568,7 +2568,7 @@ export function achievementLaunchRocket() {
 
 }
 
-export function achievementMineAntimatterAsteroid() {
+export function achievementMineAllAntimatterAsteroid() {
 
 }
 
@@ -2624,18 +2624,18 @@ export function achievementDiscoverLegendaryAsteroid() {
 
 }
 
-export function achievementHave4RocketsSimultaneouslyMiningAntimatter() {
+export function achievementHave4RocketsMiningAntimatter() {
 
 }
 
-export function achievementStudyAllStarsInStarMapInOneRun() {
+export function achievementStudyAllStarsInOneRun() {
 
 }
 
-export function achievementTrade10APForCashInOneTransaction() {
+export function achievementTrade10APForCash() {
 
 }
 
-export function achievementHave50HoursLoggedWithOnePioneerName() {
+export function achievementHave50HoursWithOnePioneer() {
     
 }

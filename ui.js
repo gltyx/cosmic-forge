@@ -146,6 +146,7 @@ import {
     rocketNames,
     getHeaderDescriptions,
     getStarNames,
+    getAchievementTooltipDescription
 } from "./descriptions.js";
 
 import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
@@ -853,6 +854,64 @@ export function createHtmlTextAreaProse(id, classList = [], headerText = '', bod
     }
 
     return div;
+}
+
+export function setupAchievementTooltip() {
+    const tooltip = document.createElement('div');
+    tooltip.id = 'achievement-tooltip';
+    tooltip.style.position = 'absolute';
+    tooltip.style.padding = '6px 10px';
+    tooltip.style.pointerEvents = 'none';
+    tooltip.style.background = 'rgba(0, 0, 0, 0.9)';
+    tooltip.style.color = 'var(--text-color)';
+    tooltip.style.border = '2px solid var(--text-color)';
+    tooltip.style.borderRadius = '5px';
+    tooltip.style.fontSize = '12px';
+    tooltip.style.pointerEvents = 'none';
+    tooltip.style.zIndex = '1000';
+    tooltip.style.display = 'none';
+    document.body.appendChild(tooltip);
+    document.body.appendChild(tooltip);
+
+    const containerWidth = 200;
+
+    document.addEventListener('mouseover', (e) => {
+        if (e.target.classList.contains('achievement-tile')) {
+            const tile = e.target;
+            const gridColumnStart= parseInt(window.getComputedStyle(tile).getPropertyValue('grid-column-start'), 10);
+            const tooltipContent = getAchievementTooltipDescription(tile.id);
+
+            if (tooltipContent) {
+                tooltip.innerHTML = tooltipContent;
+                tooltip.style.display = 'block';
+                if (gridColumnStart > 5) {
+                    tooltip.style.left = `${e.pageX - containerWidth + 10}px`;
+                } else {
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                }
+                tooltip.style.top = `${e.pageY + 10}px`;
+            }
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (tooltip.style.display === 'block') {
+            const tile = e.target;
+            const gridColumnStart= parseInt(window.getComputedStyle(tile).getPropertyValue('grid-column-start'), 10);
+            if (gridColumnStart > 5) {
+                tooltip.style.left = `${e.pageX - containerWidth + 10}px`;
+            } else {
+                tooltip.style.left = `${e.pageX + 10}px`;
+            }
+            tooltip.style.top = `${e.pageY + 10}px`;
+        }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+        if (e.target.classList.contains('achievement-tile')) {
+            tooltip.style.display = 'none';
+        }
+    });
 }
 
 export function createHtmlTableAchievementsGrid(id, classList = [], achievementsData = []) {
