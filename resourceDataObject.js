@@ -1643,7 +1643,7 @@ const achievementsData = {
         name: "Bully an Enemy into Submission",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['bully'],
-        resetOnRebirth: true,
+        resetOnRebirth: false,
         gridRow: 5,
         active: false,
         requirements: {
@@ -1662,7 +1662,7 @@ const achievementsData = {
         name: "Vassalize an Enemy",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['vassalize'],
-        resetOnRebirth: true,
+        resetOnRebirth: false,
         gridRow: 5,
         active: false,
         requirements: {
@@ -1734,83 +1734,83 @@ const achievementsData = {
         },
         notification: "conquerBelligerentEnemyNotification"
     },
-    //to here
     conquerEnemyWithoutScanning: {
         name: "Conquer an Enemy Without Scanning the System",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['withoutScanning'],
         resetOnRebirth: false,
-        gridRow: 33,
-        active: false,
+        gridRow: 5,
+        active: true,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                MilitaryUnits: 3000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 90
+            value1: {
+                quantity: 2
+            }
         },
         notification: "conquerEnemyWithoutScanningNotification"
     },
     settleUnoccupiedSystem: {
         name: "Settle an Unoccupied System",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['unoccupied'],
         resetOnRebirth: false,
-        gridRow: 34,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                SettlementUnits: 500
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 20
+            gives1: "cash",
+            value1: {
+                quantity: 50000
+            }
         },
         notification: "settleUnoccupiedSystemNotification"
     },
     discoverSystemWithNoLife: {
         name: "Discover a System with No Life",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['noLife'],
         resetOnRebirth: false,
-        gridRow: 35,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                SystemScanner: 1
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
-            gives1: "ascendencyPoints",
-            ascendencyPoints: 15
+            gives1: "cash",
+            value1: {
+                quantity: 75000
+            }
         },
         notification: "discoverSystemWithNoLifeNotification"
     },
     settleSystem: {
         name: "Settle a System",
-        specialCondition: false,
-        specialConditionArguments: false,
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['settleNormal'],
         resetOnRebirth: false,
-        gridRow: 36,
+        gridRow: 5,
         active: false,
         requirements: {
-            requirement1: "resources",
-            resources: {
-                SettlementUnits: 1000
-            }
+            requirement1: "special",
+            value1: ""
         },
         gives: {
             gives1: "ascendencyPoints",
-            ascendencyPoints: 25
+            value1: {
+                quantity: 1
+            }
         },
         notification: "settleSystemNotification"
     },
+        //to here
     spendAP: {
         name: "Spend Ascendency Points (AP)",
         specialCondition: false,
@@ -2524,7 +2524,7 @@ export function achievementLaunchStarShip() {
 }
 
 export function achievementInitiateDiplomacyWithAlienRace() {
-    
+
 }
 
 export function achievementBeatEnemy(victoryType) {

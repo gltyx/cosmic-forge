@@ -1916,11 +1916,11 @@ achievementNotifications = {
     "vassalizeEnemyNotification": "ACHIEVEMENT:\nYou have vassalized an enemy!\n\nREWARD: 1AP",
     "conquerEnemyNotification": "ACHIEVEMENT:\nYou have conquered an enemy!\n\nREWARD: 1AP",
     "conquerHiveMindEnemyNotification": "ACHIEVEMENT:\nYou have conquered a Hive Mind enemy!\n\nREWARD: 2AP",
-    "conquerBelligerentEnemyNotification": "ACHIEVEMENT:\nYou have conquered a Belligerent enemy!\n\nREWARD: 3AP", //to here
-    "conquerEnemyWithoutScanningNotification": "ACHIEVEMENT:\nYou have conquered an enemy without scanning the system!\n\nREWARD: 1500 Cash",
-    "settleUnoccupiedSystemNotification": "ACHIEVEMENT:\nYou have settled an unoccupied system!\n\nREWARD: 500 Cash",
-    "discoverSystemWithNoLifeNotification": "ACHIEVEMENT:\nYou have discovered a system with no life!\n\nREWARD: 200 Cash",
-    "settleSystemNotification": "ACHIEVEMENT:\nYou have settled a system!\n\nREWARD: 1000 Cash",
+    "conquerBelligerentEnemyNotification": "ACHIEVEMENT:\nYou have conquered a Belligerent enemy!\n\nREWARD: 3AP", 
+    "conquerEnemyWithoutScanningNotification": "ACHIEVEMENT:\nYou have conquered an enemy without scanning the system!\n\nREWARD: 2AP",
+    "settleUnoccupiedSystemNotification": "ACHIEVEMENT:\nYou have settled an unoccupied system!\n\nREWARD: 50000 Cash",
+    "discoverSystemWithNoLifeNotification": "ACHIEVEMENT:\nYou have discovered a system with no life!\n\nREWARD: 75000 Cash",
+    "settleSystemNotification": "ACHIEVEMENT:\nYou have settled a system!\n\nREWARD: 1AP", //to here
     "spendAPNotification": "ACHIEVEMENT:\nYou have spent Ascendency Points (AP)!\n\nREWARD: 50 Cash",
     "performGalacticMarketTransactionNotification": "ACHIEVEMENT:\nYou have performed a Galactic Market transaction!\n\nREWARD: 100 Cash",
     "liquidateAllAssetsNotification": "ACHIEVEMENT:\nYou have liquidated all assets!\n\nREWARD: 1000 Cash",
