@@ -108,8 +108,7 @@ import {
     setAutoBuyerTierLevel,
     setResourceDataObject,
     setStarSystemDataObject,
-    getBuffEnhancedMiningData,
-    getAchievementPositionData
+    getBuffEnhancedMiningData
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -146,7 +145,8 @@ import {
     rocketNames,
     getHeaderDescriptions,
     getStarNames,
-    getAchievementTooltipDescription
+    getAchievementTooltipDescription,
+    refreshAchievementTooltipDescriptions
 } from "./descriptions.js";
 
 import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
@@ -3261,6 +3261,7 @@ function initializeTabEventListeners() {
             selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'achievements');
             setCurrentOptionPane('achievements');
+            refreshAchievementTooltipDescriptions();
             updateContent('Achievements', 'tab8', 'content');
         });    
     });

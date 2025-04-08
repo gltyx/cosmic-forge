@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar } from "./constantsAndGlobalVars.js";
+import { getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol } from "./constantsAndGlobalVars.js";
 import { getAchievementDataObject, getResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals } from "./utilityFunctions.js";
 
@@ -1888,31 +1888,39 @@ starNames = [
 ];
 
 document.addEventListener('DOMContentLoaded', function () {
-    achievementTooltipDescriptions = {
+    achievementTooltipDescriptions = generateAchievementTooltipDescriptions();
+});
+
+export function refreshAchievementTooltipDescriptions() {
+    achievementTooltipDescriptions = generateAchievementTooltipDescriptions();
+}
+
+function generateAchievementTooltipDescriptions() {
+   return {
         "collect50Hydrogen": `
         <span class="green-ready-text">${getAchievementDataObject('collect50Hydrogen', ['name'])}:</span><br>
         ${getAchievementTooltipDescriptionTexts('collect50Hydrogen')}<br>
-        <span class="green-ready-text">Reward: 10 Cash</span>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}10</span>
         `,
         "collect1000Hydrogen": `
             <span class="green-ready-text">${getAchievementDataObject('collect1000Hydrogen', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('collect1000Hydrogen')}<br>
-            <span class="green-ready-text">Reward: 25 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}25</span>
         `,
         "collect5000Carbon": `
             <span class="green-ready-text">${getAchievementDataObject('collect5000Carbon', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('collect5000Carbon')}<br>
-            <span class="green-ready-text">Reward: 150 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}150</span>
         `,
         "collect50000Iron": `
             <span class="green-ready-text">${getAchievementDataObject('collect50000Iron', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('collect50000Iron')}<br>
-            <span class="green-ready-text">Reward: 1800 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}1800</span>
         `,
         "researchTechnology": `
             <span class="green-ready-text">${getAchievementDataObject('researchTechnology', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('researchTechnology')}<br>
-            <span class="green-ready-text">Reward: 30 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}30</span>
         `,
         "researchAllTechnologies": `
             <span class="green-ready-text">${getAchievementDataObject('researchAllTechnologies', ['name'])}:</span><br>
@@ -1922,12 +1930,12 @@ document.addEventListener('DOMContentLoaded', function () {
         "achieve100FusionEfficiency": `
             <span class="green-ready-text">${getAchievementDataObject('achieve100FusionEfficiency', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('achieve100FusionEfficiency')}<br>
-            <span class="green-ready-text">Reward: 500 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}500</span>
         `,
         "fuseElement": `
             <span class="green-ready-text">${getAchievementDataObject('fuseElement', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('fuseElement')}<br>
-            <span class="green-ready-text">Reward: 40 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}40</span>
         `,
         "gain100Cash": `
             <span class="green-ready-text">${getAchievementDataObject('gain100Cash', ['name'])}:</span><br>
@@ -1967,12 +1975,12 @@ document.addEventListener('DOMContentLoaded', function () {
         "collect100Precipitation": `
             <span class="green-ready-text">${getAchievementDataObject('collect100Precipitation', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('collect100Precipitation')}<br>
-            <span class="green-ready-text">Reward: 1000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}1000</span>
         `,
         "unlockCompounds": `
             <span class="green-ready-text">${getAchievementDataObject('unlockCompounds', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('unlockCompounds')}<br>
-            <span class="green-ready-text">Reward: 200 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}200</span>
         `,
         "createSteel": `
             <span class="green-ready-text">${getAchievementDataObject('createSteel', ['name'])}:</span><br>
@@ -2017,7 +2025,7 @@ document.addEventListener('DOMContentLoaded', function () {
         "launchStarship": `
             <span class="green-ready-text">${getAchievementDataObject('launchStarship', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('launchStarship')}<br>
-            <span class="green-ready-text">Reward: 10000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}10000</span>
         `,
         "initiateDiplomacyWithAlienRace": `
             <span class="green-ready-text">${getAchievementDataObject('initiateDiplomacyWithAlienRace', ['name'])}:</span><br>
@@ -2057,12 +2065,12 @@ document.addEventListener('DOMContentLoaded', function () {
         "settleUnoccupiedSystem": `
             <span class="green-ready-text">${getAchievementDataObject('settleUnoccupiedSystem', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('settleUnoccupiedSystem')}<br>
-            <span class="green-ready-text">Reward: 50000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}50000</span>
         `,
         "discoverSystemWithNoLife": `
             <span class="green-ready-text">${getAchievementDataObject('discoverSystemWithNoLife', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('discoverSystemWithNoLife')}<br>
-            <span class="green-ready-text">Reward: 75000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
         `,
         "settleSystem": `
             <span class="green-ready-text">${getAchievementDataObject('settleSystem', ['name'])}:</span><br>
@@ -2117,12 +2125,12 @@ document.addEventListener('DOMContentLoaded', function () {
         "discoverLegendaryAsteroid": `
             <span class="green-ready-text">${getAchievementDataObject('discoverLegendaryAsteroid', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('discoverLegendaryAsteroid')}<br>
-            <span class="green-ready-text">Reward: 75000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
         `,
         "have4RocketsMiningAntimatter": `
             <span class="green-ready-text">${getAchievementDataObject('have4RocketsMiningAntimatter', ['name'])}:</span><br>
             ${getAchievementTooltipDescriptionTexts('have4RocketsMiningAntimatter')}<br>
-            <span class="green-ready-text">Reward: 100000 Cash</span>
+            <span class="green-ready-text">Reward: ${getCurrencySymbol()}100000</span>
         `,
         "studyAllStarsInOneRun": `
             <span class="green-ready-text">${getAchievementDataObject('studyAllStarsInOneRun', ['name'])}:</span><br>
@@ -2140,7 +2148,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="green-ready-text">Reward: 50 AP</span>
         `
     };
-});
+}
 
 achievementTooltipDescriptionTexts = {
     "collect50Hydrogen": "Collect 50 Hydrogen to boost your resources.",
