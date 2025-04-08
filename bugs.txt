@@ -3,3 +3,4 @@ stats bugs in general
 
 
 maybe have rows of notifications ie if fuse has loads queued up still show tech to left etc
+look at price of neon, titanium, possible neon autobuyer
