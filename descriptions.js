@@ -1896,256 +1896,206 @@ export function refreshAchievementTooltipDescriptions() {
 }
 
 function generateAchievementTooltipDescriptions() {
-   return {
+    return {
         "collect50Hydrogen": `
-        <span class="green-ready-text">${getAchievementDataObject('collect50Hydrogen', ['name'])}:</span><br>
         ${getAchievementTooltipDescriptionTexts('collect50Hydrogen')}<br>
         <span class="green-ready-text">Reward: ${getCurrencySymbol()}10</span>
         `,
         "collect1000Hydrogen": `
-            <span class="green-ready-text">${getAchievementDataObject('collect1000Hydrogen', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('collect1000Hydrogen')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}25</span>
+        ${getAchievementTooltipDescriptionTexts('collect1000Hydrogen')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}25</span>
         `,
         "collect5000Carbon": `
-            <span class="green-ready-text">${getAchievementDataObject('collect5000Carbon', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('collect5000Carbon')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}150</span>
+        ${getAchievementTooltipDescriptionTexts('collect5000Carbon')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}150</span>
         `,
         "collect50000Iron": `
-            <span class="green-ready-text">${getAchievementDataObject('collect50000Iron', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('collect50000Iron')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}1800</span>
+        ${getAchievementTooltipDescriptionTexts('collect50000Iron')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}1800</span>
         `,
         "researchTechnology": `
-            <span class="green-ready-text">${getAchievementDataObject('researchTechnology', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('researchTechnology')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}30</span>
+        ${getAchievementTooltipDescriptionTexts('researchTechnology')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}30</span>
         `,
         "researchAllTechnologies": `
-            <span class="green-ready-text">${getAchievementDataObject('researchAllTechnologies', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('researchAllTechnologies')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('researchAllTechnologies')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "achieve100FusionEfficiency": `
-            <span class="green-ready-text">${getAchievementDataObject('achieve100FusionEfficiency', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('achieve100FusionEfficiency')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}500</span>
+        ${getAchievementTooltipDescriptionTexts('achieve100FusionEfficiency')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}500</span>
         `,
         "fuseElement": `
-            <span class="green-ready-text">${getAchievementDataObject('fuseElement', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('fuseElement')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}40</span>
+        ${getAchievementTooltipDescriptionTexts('fuseElement')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}40</span>
         `,
         "gain100Cash": `
-            <span class="green-ready-text">${getAchievementDataObject('gain100Cash', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('gain100Cash')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Cash Sales</span>
+        ${getAchievementTooltipDescriptionTexts('gain100Cash')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Cash Sales</span>
         `,
         "gain10000Cash": `
-            <span class="green-ready-text">${getAchievementDataObject('gain10000Cash', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('gain10000Cash')}<br>
-            <span class="green-ready-text">Reward: x1.2 all Cash Sales</span>
+        ${getAchievementTooltipDescriptionTexts('gain10000Cash')}<br>
+        <span class="green-ready-text">Reward: x1.2 all Cash Sales</span>
         `,
         "gain100000Cash": `
-            <span class="green-ready-text">${getAchievementDataObject('gain100000Cash', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('gain100000Cash')}<br>
-            <span class="green-ready-text">Reward: x1.2 all Cash Sales</span>
+        ${getAchievementTooltipDescriptionTexts('gain100000Cash')}<br>
+        <span class="green-ready-text">Reward: x1.2 all Cash Sales</span>
         `,
         "gain1000000Cash": `
-            <span class="green-ready-text">${getAchievementDataObject('gain1000000Cash', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('gain1000000Cash')}<br>
-            <span class="green-ready-text">Reward: x1.5 all Cash Sales</span>
+        ${getAchievementTooltipDescriptionTexts('gain1000000Cash')}<br>
+        <span class="green-ready-text">Reward: x1.5 all Cash Sales</span>
         `,
         "buildPowerPlant": `
-            <span class="green-ready-text">${getAchievementDataObject('buildPowerPlant', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('buildPowerPlant')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('buildPowerPlant')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
         `,
         "tripPower": `
-            <span class="green-ready-text">${getAchievementDataObject('tripPower', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('tripPower')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('tripPower')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
         `,
         "buildSolarPowerPlant": `
-            <span class="green-ready-text">${getAchievementDataObject('buildSolarPowerPlant', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('buildSolarPowerPlant')}<br>
-            <span class="green-ready-text">Reward: x1.2 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('buildSolarPowerPlant')}<br>
+        <span class="green-ready-text">Reward: x1.2 all Resource Rates</span>
         `,
         "collect100Precipitation": `
-            <span class="green-ready-text">${getAchievementDataObject('collect100Precipitation', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('collect100Precipitation')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}1000</span>
+        ${getAchievementTooltipDescriptionTexts('collect100Precipitation')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}1000</span>
         `,
         "unlockCompounds": `
-            <span class="green-ready-text">${getAchievementDataObject('unlockCompounds', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('unlockCompounds')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}200</span>
+        ${getAchievementTooltipDescriptionTexts('unlockCompounds')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}200</span>
         `,
         "createSteel": `
-            <span class="green-ready-text">${getAchievementDataObject('createSteel', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('createSteel')}<br>
-            <span class="green-ready-text">Reward: -20% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('createSteel')}<br>
+        <span class="green-ready-text">Reward: -20% Compound Creation Material Costs</span>
         `,
         "createTitanium": `
-        <span class="green-ready-text">${getAchievementDataObject('createTitanium', ['name'])}:</span><br>
         ${getAchievementTooltipDescriptionTexts('createTitanium')}<br>
         <span class="green-ready-text">Reward: -20% Compound Creation Material Costs</span>
         `,
         "discoverAsteroid": `
-            <span class="green-ready-text">${getAchievementDataObject('discoverAsteroid', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('discoverAsteroid')}<br>
-            <span class="green-ready-text">Reward: -5% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('discoverAsteroid')}<br>
+        <span class="green-ready-text">Reward: -5% Compound Creation Material Costs</span>
         `,
         "launchRocket": `
-            <span class="green-ready-text">${getAchievementDataObject('launchRocket', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('launchRocket')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('launchRocket')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
         `,
         "mineAllAntimatterAsteroid": `
-            <span class="green-ready-text">${getAchievementDataObject('mineAllAntimatterAsteroid', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('mineAllAntimatterAsteroid')}<br>
-            <span class="green-ready-text">Reward: 150 Antimatter</span>
+        ${getAchievementTooltipDescriptionTexts('mineAllAntimatterAsteroid')}<br>
+        <span class="green-ready-text">Reward: 150 Antimatter</span>
         `,
         "studyStar": `
-            <span class="green-ready-text">${getAchievementDataObject('studyStar', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('studyStar')}<br>
-            <span class="green-ready-text">Reward: -5% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('studyStar')}<br>
+        <span class="green-ready-text">Reward: -5% Compound Creation Material Costs</span>
         `,
         "studyStarMoreThan5LYAway": `
-            <span class="green-ready-text">${getAchievementDataObject('studyStarMoreThan5LYAway', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('studyStarMoreThan5LYAway')}<br>
-            <span class="green-ready-text">Reward: -10% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('studyStarMoreThan5LYAway')}<br>
+        <span class="green-ready-text">Reward: -10% Compound Creation Material Costs</span>
         `,
         "studyStarMoreThan20LYAway": `
-            <span class="green-ready-text">${getAchievementDataObject('studyStarMoreThan20LYAway', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('studyStarMoreThan20LYAway')}<br>
-            <span class="green-ready-text">Reward: -15% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('studyStarMoreThan20LYAway')}<br>
+        <span class="green-ready-text">Reward: -15% Compound Creation Material Costs</span>
         `,
         "launchStarship": `
-            <span class="green-ready-text">${getAchievementDataObject('launchStarship', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('launchStarship')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}10000</span>
+        ${getAchievementTooltipDescriptionTexts('launchStarship')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}10000</span>
         `,
         "initiateDiplomacyWithAlienRace": `
-            <span class="green-ready-text">${getAchievementDataObject('initiateDiplomacyWithAlienRace', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('initiateDiplomacyWithAlienRace')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('initiateDiplomacyWithAlienRace')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
         `,
         "bullyEnemyIntoSubmission": `
-            <span class="green-ready-text">${getAchievementDataObject('bullyEnemyIntoSubmission', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('bullyEnemyIntoSubmission')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('bullyEnemyIntoSubmission')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "vassalizeEnemy": `
-            <span class="green-ready-text">${getAchievementDataObject('vassalizeEnemy', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('vassalizeEnemy')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('vassalizeEnemy')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "conquerEnemy": `
-            <span class="green-ready-text">${getAchievementDataObject('conquerEnemy', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquerEnemy')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquerEnemy')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "conquerHiveMindEnemy": `
-            <span class="green-ready-text">${getAchievementDataObject('conquerHiveMindEnemy', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquerHiveMindEnemy')}<br>
-            <span class="green-ready-text">Reward: 2 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquerHiveMindEnemy')}<br>
+        <span class="green-ready-text">Reward: 2 AP</span>
         `,
         "conquerBelligerentEnemy": `
-            <span class="green-ready-text">${getAchievementDataObject('conquerBelligerentEnemy', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquerBelligerentEnemy')}<br>
-            <span class="green-ready-text">Reward: 3 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquerBelligerentEnemy')}<br>
+        <span class="green-ready-text">Reward: 3 AP</span>
         `,
         "conquerEnemyWithoutScanning": `
-            <span class="green-ready-text">${getAchievementDataObject('conquerEnemyWithoutScanning', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquerEnemyWithoutScanning')}<br>
-            <span class="green-ready-text">Reward: 2 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquerEnemyWithoutScanning')}<br>
+        <span class="green-ready-text">Reward: 2 AP</span>
         `,
         "settleUnoccupiedSystem": `
-            <span class="green-ready-text">${getAchievementDataObject('settleUnoccupiedSystem', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('settleUnoccupiedSystem')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}50000</span>
+        ${getAchievementTooltipDescriptionTexts('settleUnoccupiedSystem')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}50000</span>
         `,
         "discoverSystemWithNoLife": `
-            <span class="green-ready-text">${getAchievementDataObject('discoverSystemWithNoLife', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('discoverSystemWithNoLife')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
+        ${getAchievementTooltipDescriptionTexts('discoverSystemWithNoLife')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
         `,
         "settleSystem": `
-            <span class="green-ready-text">${getAchievementDataObject('settleSystem', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('settleSystem')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('settleSystem')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "spendAP": `
-            <span class="green-ready-text">${getAchievementDataObject('spendAP', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('spendAP')}<br>
-            <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('spendAP')}<br>
+        <span class="green-ready-text">Reward: x1.1 all Resource Rates</span>
         `,
         "performGalacticMarketTransaction": `
-            <span class="green-ready-text">${getAchievementDataObject('performGalacticMarketTransaction', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('performGalacticMarketTransaction')}<br>
-            <span class="green-ready-text">Reward: 1 AP</span>
+        ${getAchievementTooltipDescriptionTexts('performGalacticMarketTransaction')}<br>
+        <span class="green-ready-text">Reward: 1 AP</span>
         `,
         "liquidateAllAssets": `
-            <span class="green-ready-text">${getAchievementDataObject('liquidateAllAssets', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('liquidateAllAssets')}<br>
-            <span class="green-ready-text">Reward: Pride!</span>
+        ${getAchievementTooltipDescriptionTexts('liquidateAllAssets')}<br>
+        <span class="green-ready-text">Reward: Pride!</span>
         `,
         "rebirth": `
-            <span class="green-ready-text">${getAchievementDataObject('rebirth', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('rebirth')}<br>
-            <span class="green-ready-text">Reward: Permanent x1.3 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('rebirth')}<br>
+        <span class="green-ready-text">Reward: Permanent x1.3 all Resource Rates</span>
         `,
         "conquer10StarSystems": `
-            <span class="green-ready-text">${getAchievementDataObject('conquer10StarSystems', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquer10StarSystems')}<br>
-            <span class="green-ready-text">Reward: 10 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquer10StarSystems')}<br>
+        <span class="green-ready-text">Reward: 10 AP</span>
         `,
         "conquer50StarSystems": `
-            <span class="green-ready-text">${getAchievementDataObject('conquer50StarSystems', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('conquer50StarSystems')}<br>
-            <span class="green-ready-text">Reward: 100 AP</span>
+        ${getAchievementTooltipDescriptionTexts('conquer50StarSystems')}<br>
+        <span class="green-ready-text">Reward: 100 AP</span>
         `,
         "seeAllNewsTickers": `
-            <span class="green-ready-text">${getAchievementDataObject('seeAllNewsTickers', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('seeAllNewsTickers')}<br>
-            <span class="green-ready-text">Reward: Permanent x1.2 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('seeAllNewsTickers')}<br>
+        <span class="green-ready-text">Reward: Permanent x1.2 all Resource Rates</span>
         `,
         "activateAllWackyNewsTickers": `
-            <span class="green-ready-text">${getAchievementDataObject('activateAllWackyNewsTickers', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('activateAllWackyNewsTickers')}<br>
-            <span class="green-ready-text">Reward: Permanent -20% Compound Creation Material Costs</span>
+        ${getAchievementTooltipDescriptionTexts('activateAllWackyNewsTickers')}<br>
+        <span class="green-ready-text">Reward: Permanent -20% Compound Creation Material Costs</span>
         `,
         "collect100TitaniumAsPrecipitation": `
-            <span class="green-ready-text">${getAchievementDataObject('collect100TitaniumAsPrecipitation', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('collect100TitaniumAsPrecipitation')}<br>
-            <span class="green-ready-text">Reward: Permanent x1.3 all Resource Rates</span>
+        ${getAchievementTooltipDescriptionTexts('collect100TitaniumAsPrecipitation')}<br>
+        <span class="green-ready-text">Reward: Permanent x1.3 all Resource Rates</span>
         `,
         "discoverLegendaryAsteroid": `
-            <span class="green-ready-text">${getAchievementDataObject('discoverLegendaryAsteroid', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('discoverLegendaryAsteroid')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
+        ${getAchievementTooltipDescriptionTexts('discoverLegendaryAsteroid')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}75000</span>
         `,
         "have4RocketsMiningAntimatter": `
-            <span class="green-ready-text">${getAchievementDataObject('have4RocketsMiningAntimatter', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('have4RocketsMiningAntimatter')}<br>
-            <span class="green-ready-text">Reward: ${getCurrencySymbol()}100000</span>
+        ${getAchievementTooltipDescriptionTexts('have4RocketsMiningAntimatter')}<br>
+        <span class="green-ready-text">Reward: ${getCurrencySymbol()}100000</span>
         `,
         "studyAllStarsInOneRun": `
-            <span class="green-ready-text">${getAchievementDataObject('studyAllStarsInOneRun', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('studyAllStarsInOneRun')}<br>
-            <span class="green-ready-text">Reward: Pride!</span>
+        ${getAchievementTooltipDescriptionTexts('studyAllStarsInOneRun')}<br>
+        <span class="green-ready-text">Reward: Pride!</span>
         `,
         "trade10APForCash": `
-            <span class="green-ready-text">${getAchievementDataObject('trade10APForCash', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('trade10APForCash')}<br>
-            <span class="green-ready-text">Reward: 5 AP</span>
+        ${getAchievementTooltipDescriptionTexts('trade10APForCash')}<br>
+        <span class="green-ready-text">Reward: 5 AP</span>
         `,
         "have50HoursWithOnePioneer": `
-            <span class="green-ready-text">${getAchievementDataObject('have50HoursWithOnePioneer', ['name'])}:</span><br>
-            ${getAchievementTooltipDescriptionTexts('have50HoursWithOnePioneer')}<br>
-            <span class="green-ready-text">Reward: 50 AP</span>
+        ${getAchievementTooltipDescriptionTexts('have50HoursWithOnePioneer')}<br>
+        <span class="green-ready-text">Reward: 50 AP</span>
         `
     };
 }
