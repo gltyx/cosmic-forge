@@ -4539,6 +4539,7 @@ export function sellBuilding(quantityToSell, building) {
       ];
       
       const costMultiplier = getGameCostMultiplier();
+      const currentCash = getResourceDataObject('currency', ['cash']);
       
       for (let item of priceKeys) {
         let value = getResourceDataObject('buildings', ['energy', 'upgrades', building, item.key]);
@@ -4548,6 +4549,8 @@ export function sellBuilding(quantityToSell, building) {
           value[0] = Math.floor(value[0] / costMultiplier);
         } else {
           value = Math.floor(value / costMultiplier);
+          setResourceDataObject(Math.floor(value * 0.4) + currentCash, 'currency', ['cash']);
+          showNotification(`You sold a Power Plant!  Receive: ${getCurrencySymbol()}${Math.floor(value * 0.4)}`);
         }
       
         setResourceDataObject(value, 'buildings', ['energy', 'upgrades', building, item.key]);
