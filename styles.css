@@ -1257,7 +1257,8 @@ cursor: pointer;
     margin-left: 30px;
 }
 
-[class*="-destination-star-element-right"]
+[class*="-destination-star-element-right"],
+.sell-building-button
 {
     margin-right: 30px;
 }

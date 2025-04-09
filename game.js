@@ -390,6 +390,7 @@ export async function gameLoop() {
         
         updateStats();
         updateRocketNames();
+        updateAllPowerPlantRates();
         checkIfStarShipBuilt();
 
         if (getItemsToDeduct() && Object.keys(getItemsToDeduct()).length > 0) {
@@ -511,6 +512,22 @@ export async function gameLoop() {
         requestAnimationFrame(gameLoop);
     }
 }
+
+function updateAllPowerPlantRates() {
+    if (getCurrentTab()[1] === 'Energy') {
+        const buildings = ['powerPlant1', 'powerPlant2', 'powerPlant3'];
+  
+        buildings.forEach(building => {
+          const rateBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', building, 'rate']);
+          const newQuantityBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', building, 'quantity']); 
+      
+          const energyRateElement = getElements()[building + 'Rate'];
+          if (energyRateElement) {
+            energyRateElement.innerHTML = `${Math.floor(rateBuilding * newQuantityBuilding * getTimerRateRatio())} KW / s`;
+          }
+        });
+    }
+  }  
 
 function checkIfStarShipBuilt() {
     if (!getStarShipBuilt())  {
@@ -2724,6 +2741,20 @@ function compoundCostSellCreateChecks(element) {  //to refactor
 }
 
 function resourceCostSellChecks(element) {
+    if (element.classList.contains('sell-building-button')) {
+        const buildingType = element.dataset.resourceToFuseTo;
+        const quantityBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', buildingType, 'quantity']);
+
+        if (quantityBuilding > 0) {
+            element.classList.remove('red-disabled-text');
+            element.classList.add('green-ready-text');
+        } else {
+            element.classList.add('red-disabled-text');
+            element.classList.remove('green-ready-text');
+        }
+        return;
+    }
+    
     let resource = element.dataset.type;
     const techName = element.dataset.type;
     const type = element.dataset.type;
@@ -3081,6 +3112,7 @@ function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
     });
 
     const buyButton = element.parentElement.parentElement.querySelector('button');
+    if (buyButton.classList.contains('sell-building-button')) return; //sell button
 
     if (hasRedDisabledText) {
         buyButton.classList.add('red-disabled-text');
@@ -4487,6 +4519,39 @@ export function increaseAttackAndDefensePower(fleetShipId) {
         setResourceDataObject(Math.floor(currentAttackPower + attackPowerToAdd), 'fleets', ['attackPower']);
         setResourceDataObject(Math.floor(currentDefensePower + defensePowerToAdd), 'fleets', ['defensePower']);
     }   
+}
+
+export function sellBuilding(quantityToSell, building) {
+    const quantityBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', building, 'quantity']);
+    setResourceDataObject(Math.floor(quantityBuilding - quantityToSell), 'buildings', ['energy', 'upgrades', building, 'quantity']);
+    
+    const rateBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', building, 'rate']);
+    const newQuantityBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', building, 'quantity']); 
+
+    const energyRateElement = getElements()[building + 'Rate'];
+    energyRateElement.innerHTML = `${Math.floor(rateBuilding * newQuantityBuilding * getTimerRateRatio())} KW / s`
+
+    const priceKeys = [
+        { key: 'price', isArray: false },
+        { key: 'resource1Price', isArray: true },
+        { key: 'resource2Price', isArray: true },
+        { key: 'resource3Price', isArray: true },
+      ];
+      
+      const costMultiplier = getGameCostMultiplier();
+      
+      for (let item of priceKeys) {
+        let value = getResourceDataObject('buildings', ['energy', 'upgrades', building, item.key]);
+      
+        if (item.isArray) {
+          if (!Array.isArray(value)) value = [value];
+          value[0] = Math.floor(value[0] / costMultiplier);
+        } else {
+          value = Math.floor(value / costMultiplier);
+        }
+      
+        setResourceDataObject(value, 'buildings', ['energy', 'upgrades', building, item.key]);
+      }
 }
 
 export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB, resourceCategory, itemType) {

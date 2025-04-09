@@ -1,5 +1,5 @@
 import { getImageUrls, getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
-import { toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, addToResourceAllTimeStat } from './game.js';
+import { sellBuilding, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
@@ -112,6 +112,10 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant1Row',
             null,
             'Power Plant:',
+            createButton(`Sell 1`, ['option-button', 'red-disabled-text', 'sell-building-button', 'resource-cost-sell-check'], () => {
+                sellBuilding(1, 'powerPlant1');
+                addBuildingPotentialRate('powerPlant1');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant1', 'cash', true, null, 'building'),
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'building-purchase-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant1Quantity', 'powerPlant1', false, null, 'energy', 'resources');
                 addToResourceAllTimeStat(1, 'allTimeBasicPowerPlantsBuilt');
@@ -129,7 +133,6 @@ export function drawTab2Content(heading, optionContentElement) {
             }, 'toggle', null, null, 'powerPlant1', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0], 'quantity'])}`, 'powerPlant1FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
-            null,
             `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'price'])}`,
             '',
             'upgradeCheck',
@@ -158,6 +161,10 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant2Row',
             null,
             'Solar Power Plant:',
+            createButton(`Sell 1`, ['option-button', 'red-disabled-text', 'sell-building-button', 'resource-cost-sell-check'], () => {
+                sellBuilding(1, 'powerPlant2');
+                addBuildingPotentialRate('powerPlant2');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant2', 'cash', true, null, 'building'),
             createButton(`Add (max) ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant2Quantity', 'powerPlant2', false, null, 'energy', 'resources');
                 addToResourceAllTimeStat(1, 'allTimeSolarPowerPlantsBuilt');
@@ -175,7 +182,6 @@ export function drawTab2Content(heading, optionContentElement) {
             }, 'toggle', null, null, 'powerPlant2', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0])}:`, 'powerPlant2FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getCurrentStarSystemWeatherEfficiency()[1]}%`, 'powerPlant2FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
-            null,
             `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'price'])}`,
             '',
             'upgradeCheck',
@@ -204,6 +210,10 @@ export function drawTab2Content(heading, optionContentElement) {
             'energyPowerPlant3Row',
             null,
             'Advanced Power Plant:',
+            createButton(`Sell 1`, ['option-button', 'red-disabled-text', 'sell-building-button', 'resource-cost-sell-check'], () => {
+                sellBuilding(1, 'powerPlant3');
+                addBuildingPotentialRate('powerPlant3');
+            }, 'upgradeCheck', '', 'energy', 'powerPlant3', 'cash', true, null, 'building'),
             createButton(`Add ${getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'rate']) * getTimerRateRatio()} KW /s`, ['option-button', 'red-disabled-text', 'building-purchase-button', 'resource-cost-sell-check'], () => {
                 gain(1, 'powerPlant3Quantity', 'powerPlant3', false, null, 'energy', 'resources');
                 addToResourceAllTimeStat(1, 'allTimeAdvancedPowerPlantsBuilt');
@@ -221,7 +231,6 @@ export function drawTab2Content(heading, optionContentElement) {
             }, 'toggle', null, null, 'powerPlant3', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0])}:`, 'powerPlant3FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
             createTextElement(`${getResourceDataObject(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[2], [getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0], 'quantity'])}`, 'powerPlant3FuelQuantity', ['red-disabled-text', 'fuel-quantity', 'invisible']),
-            null,
             `${getCurrencySymbol() + getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'price'])}`,
             '',
             'upgradeCheck',
