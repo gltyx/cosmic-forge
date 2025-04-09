@@ -1,6 +1,7 @@
-import { replaceRocketNames } from "./descriptions.js";
+import { getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
+
 
 export let resourceData = {
     version: 0.62, //update this whenever changes are made to the structure
@@ -1083,9 +1084,1117 @@ export let ascendencyBuffs = {
     }
 };
 
+export const achievementsData = {
+    collect50Hydrogen: {
+        name: "Collect 50 Hydrogen",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            value1: {
+                type: 'hydrogen',
+                quantity: 50
+            }
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 10
+            }
+        },
+        notification: "collect50HydrogenNotification"
+    },
+    collect1000Hydrogen: {
+        name: "Collect 1000 Hydrogen",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            value1: {
+                type: 'hydrogen',
+                quantity: 1000
+            }
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 25
+            }
+        },
+        notification: "collect1000HydrogenNotification"
+    },
+    collect5000Carbon: {
+        name: "Collect 5000 Carbon",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            value1: {
+                type: 'carbon',
+                quantity: 5000
+            }
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 150
+            }
+        },
+        notification: "collect5000CarbonNotification"
+    },
+    collect50000Iron: {
+        name: "Collect 50000 Iron",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "resources",
+            value1: {
+                type: 'iron',
+                quantity: 50000
+            }
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 1800
+            }
+        },
+        notification: "collect50000IronNotification"
+    },
+    collect100Precipitation: {
+        name: "Collect 100 Precipitation",
+        specialCondition: achievementCollect100Precipitation,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 1000
+            }
+        },
+        notification: "collect100PrecipitationNotification"
+    },
+    fuseElement: {
+        name: "Fuse an Element",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "unlock",
+            value1: "helium"
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 40
+            }
+        },
+        notification: "fuseElementNotification"
+    }, 
+    createSteel: {
+        name: "Create Steel",
+        specialCondition: achievementCreateCompound,
+        specialConditionArguments: ['steel'],
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.8
+            }
+        },
+        notification: "createSteelNotification"
+    },
+    createTitanium: {
+        name: "Create Titanium",
+        specialCondition: achievementCreateCompound,
+        specialConditionArguments: ['titanium'],
+        resetOnRebirth: true,
+        gridRow: 1,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.8
+            }
+        },
+        notification: "createTitaniumNotification"
+    },
+    unlockCompounds: {
+        name: "Unlock Compounds",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "tech",
+            value1: "compounds"
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 200
+            }
+        },
+        notification: "unlockCompoundsNotification"
+    },
+    researchTechnology: {
+        name: "Research a Technology",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "tech",
+            value1: "knowledgeSharing"
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 30
+            }
+        },
+        notification: "researchTechnologyNotification"
+    },
+    researchAllTechnologies: {
+        name: "Research All Technologies",
+        specialCondition: achievementResearchAllTechnologies,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "researchAllTechnologiesNotification"
+    },
+    achieve100FusionEfficiency: {
+        name: "Achieve 100% Fusion Efficiency",
+        specialCondition: achievementAchieve100FusionEfficiency,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 500
+            }
+        },
+        notification: "achieve100FusionEfficiencyNotification"
+    },   
+    have50HoursWithOnePioneer: {
+        name: "Have 50 Hours Logged with One Pioneer Name",
+        specialCondition: achievementHave50HoursWithOnePioneer,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 50
+            }
+        },
+        notification: "have50HoursWithOnePioneerNotification"
+    },
+    buildPowerPlant: {
+        name: "Build a Power Plant",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "buildings",
+            value1: {
+                type: 'powerPlant1',
+                quantity: 1
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
+        },
+        notification: "buildPowerPlantNotification"
+    },
+    buildSolarPowerPlant: {
+        name: "Build a Solar Power Plant",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "buildings",
+            value1: {
+                type: 'powerPlant2',
+                quantity: 1
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.2
+            }
+        },
+        notification: "buildSolarPowerPlantNotification"
+    },
+    collect100TitaniumAsPrecipitation: {
+        name: "Collect 100 Titanium as Precipitation",
+        specialCondition: achievementCollect100TitaniumAsPrecipitation,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 2,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 50
+            }
+        },
+        notification: "collect100TitaniumAsPrecipitationNotification"
+    },
+    gain100Cash: {
+        name: "Gain 100 Cash",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "cash",
+            value1: {
+                quantity: 100
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.1
+            }
+        },
+        notification: "gain100CashNotification"
+    },
+    gain10000Cash: {
+        name: "Gain 10000 Cash",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "cash",
+            value1: {
+                quantity: 10000
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.2
+            }
+        },
+        notification: "gain10000CashNotification"
+    },
+    gain100000Cash: {
+        name: "Gain 100000 Cash",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "cash",
+            value1: {
+                quantity: 100000
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.2
+            }
+        },
+        notification: "gain100000CashNotification"
+    },
+    gain1000000Cash: {
+        name: "Gain 1000000 Cash",
+        specialCondition: false,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "cash",
+            value1: {
+                quantity: 1000000
+            }
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'cash',
+                quantity: 1.5
+            }
+        },
+        notification: "gain1000000CashNotification"
+    },
+    seeAllNewsTickers: {
+        name: "See All News Tickers",
+        specialCondition: achievementSeeAllNewsTickers,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplierPermanent",
+            value1: {
+                type: 'allResources',
+                quantity: 1.2
+            }
+        },
+        notification: "seeAllNewsTickersNotification"
+    },
+    activateAllWackyNewsTickers: {
+        name: "Activate All Wacky News Tickers",
+        specialCondition: achievementActivateAllWackyNewsTickers,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 3,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplierPermanent",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.80
+            }
+        },
+        notification: "activateAllWackyNewsTickersNotification"
+    },
+    discoverLegendaryAsteroid: {
+        name: "Discover a Legendary Asteroid",
+        specialCondition: achievementDiscoverLegendaryAsteroid,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 75000
+            }
+        },
+        notification: "discoverLegendaryAsteroidNotification"
+    },
+    have4RocketsMiningAntimatter: {
+        name: "Have 4 Rockets Simultaneously Mining Antimatter",
+        specialCondition: achievementHave4RocketsMiningAntimatter,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 100000
+            }
+        },
+        notification: "have4RocketsMiningAntimatterNotification"
+    },
+    tripPower: {
+        name: "Trip the Power",
+        specialCondition: achievementTripPower,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
+        },
+        notification: "tripPowerNotification"
+    },
+    discoverAsteroid: {
+        name: "Discover an Asteroid",
+        specialCondition: achievementDiscoverAsteroid,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.95
+            }
+        },
+        notification: "discoverAsteroidNotification"
+    },
+    launchRocket: {
+        name: "Launch a Rocket",
+        specialCondition: achievementLaunchRocket,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
+        },
+        notification: "launchRocketNotification"
+    },
+    mineAllAntimatterAsteroid: {
+        name: "Mine All Antimatter from an Asteroid",
+        specialCondition: false,
+        specialConditionArguments: achievementMineAllAntimatterAsteroid,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "antimatter",
+            value1: {
+                quantity: 150
+            }
+        },
+        notification: "mineAllAntimatterAsteroidNotification"
+    },
+    studyStar: {
+        name: "Study a Star",
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [0.5],
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.95
+            }
+        },
+        notification: "studyStarNotification"
+    },
+    studyStarMoreThan5LYAway: {
+        name: "Study a Star More Than 5ly Away",
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [5],
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.90
+            }
+        },
+        notification: "studyStarMoreThan5LYAwayNotification"
+    },
+    studyStarMoreThan20LYAway: {
+        name: "Study a Star More Than 20ly Away",
+        specialCondition: achievementStudyAStar,
+        specialConditionArguments: [20],
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'createCostCompounds',
+                quantity: 0.85
+            }
+        },
+        notification: "studyStarMoreThan20LYAwayNotification"
+    },
+    launchStarship: {
+        name: "Launch a Starship",
+        specialCondition: achievementLaunchStarShip,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 10000
+            }
+        },
+        notification: "launchStarshipNotification"
+    },
+    performGalacticMarketTransaction: {
+        name: "Perform a Galactic Market Transaction",
+        specialCondition: achievementPerformGalaticMarketTransaction,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "performGalacticMarketTransactionNotification"
+    },
+    trade10APForCash: {
+        name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
+        specialCondition: achievementTrade10APForCash,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 4,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 5
+            }
+        },
+        notification: "trade10APForCashNotification"
+    },
+    initiateDiplomacyWithAlienRace: {
+        name: "Initiate Diplomacy with an Alien Race",
+        specialCondition: achievementInitiateDiplomacyWithAlienRace,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 5,
+        active: true,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
+        },
+        notification: "initiateDiplomacyWithAlienRaceNotification"
+    },
+    bullyEnemyIntoSubmission: {
+        name: "Bully an Enemy into Submission",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments:  ['bully'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "bullyEnemyIntoSubmissionNotification"
+    },
+    vassalizeEnemy: {
+        name: "Vassalize an Enemy",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments:  ['vassalize'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "vassalizeEnemyNotification"
+    },
+    conquerEnemy: {
+        name: "Conquer an Enemy",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['conquer'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: true,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "conquerEnemyNotification"
+    },
+    conquerHiveMindEnemy: {
+        name: "Conquer a Hive Mind Enemy",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['hiveMind'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 2
+            }
+        },
+        notification: "conquerHiveMindEnemyNotification"
+    },
+    conquerBelligerentEnemy: {
+        name: "Conquer a Belligerent Enemy",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['belligerent'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 3
+            }
+        },
+        notification: "conquerBelligerentEnemyNotification"
+    },
+    conquerEnemyWithoutScanning: {
+        name: "Conquer an Enemy Without Scanning the System",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['withoutScanning'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: true,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 2
+            }
+        },
+        notification: "conquerEnemyWithoutScanningNotification"
+    },
+    settleUnoccupiedSystem: {
+        name: "Settle an Unoccupied System",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['unoccupied'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 50000
+            }
+        },
+        notification: "settleUnoccupiedSystemNotification"
+    },
+    discoverSystemWithNoLife: {
+        name: "Discover a System with No Life",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['noLife'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "cash",
+            value1: {
+                quantity: 75000
+            }
+        },
+        notification: "discoverSystemWithNoLifeNotification"
+    },
+    settleSystem: {
+        name: "Settle a System",
+        specialCondition: achievementBeatEnemy,
+        specialConditionArguments: ['settleNormal'],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 1
+            }
+        },
+        notification: "settleSystemNotification"
+    },
+    spendAP: {
+        name: "Spend Ascendency Points",
+        specialCondition: achievementSpendAp,
+        specialConditionArguments: false,
+        resetOnRebirth: true,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplier",
+            value1: {
+                type: 'allResources',
+                quantity: 1.1
+            }
+        },
+        notification: "spendAPNotification"
+    },
+    liquidateAllAssets: {
+        name: "Liquidate All Assets",
+        specialCondition: achievementLiquidateAllAssets,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 0
+            }
+        },
+        notification: "liquidateAllAssetsNotification"
+    },
+    rebirth: {
+        name: "Rebirth",
+        specialCondition: achievementRebirth,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "multiplierPermanent",
+            value1: {
+                type: 'allResources',
+                quantity: 1.3
+            }
+        },
+        notification: "rebirthNotification"
+    },
+    conquer10StarSystems: {
+        name: "Conquer 10 Star Systems",
+        specialCondition: achievementConquerStarSystems,
+        specialConditionArguments: [10],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 10
+            }
+        },
+        notification: "conquer10StarSystemsNotification"
+    },
+    conquer50StarSystems: {
+        name: "Conquer 50 Star Systems",
+        specialCondition: achievementConquerStarSystems,
+        specialConditionArguments: [100],
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 100
+            }
+        },
+        notification: "conquer50StarSystemsNotification"
+    },
+    studyAllStarsInOneRun: {
+        name: "Study All Stars in the Star Map in One Run",
+        specialCondition: achievementStudyAllStarsInOneRun,
+        specialConditionArguments: false,
+        resetOnRebirth: false,
+        gridRow: 5,
+        active: false,
+        requirements: {
+            requirement1: "special",
+            value1: ""
+        },
+        gives: {
+            gives1: "ascendencyPoints",
+            value1: {
+                quantity: 0
+            }
+        },
+        notification: "studyAllStarsInOneRunNotification"
+    }
+};
+
+const achievementImageUrls = {
+    collect50Hydrogen: './images/achievements/collect50Hydrogen.png',
+    collect1000Hydrogen: './images/achievements/collect1000Hydrogen.png',
+    collect5000Carbon: './images/achievements/collect5000Carbon.png',
+    collect50000Iron: './images/achievements/collect50000Iron.png',
+    researchTechnology: './images/achievements/researchTechnology.png',
+    researchAllTechnologies: './images/achievements/researchAllTechnologies.png',
+    achieve100FusionEfficiency: './images/achievements/achieve100FusionEfficiency.png',
+    fuseElement: './images/achievements/fuseElement.png',
+    gain100Cash: './images/achievements/gain100Cash.png',
+    gain10000Cash: './images/achievements/gain10000Cash.png',
+    gain100000Cash: './images/achievements/gain100000Cash.png',
+    gain1000000Cash: './images/achievements/gain1000000Cash.png',
+    buildPowerPlant: './images/achievements/buildPowerPlant.png',
+    tripPower: './images/achievements/tripPower.png',
+    buildSolarPowerPlant: './images/achievements/buildSolarPowerPlant.png',
+    collect100Precipitation: './images/achievements/collect100Precipitation.png',
+    unlockCompounds: './images/achievements/unlockCompounds.png',
+    createSteel: './images/achievements/createSteel.png',
+    createTitanium: './images/achievements/createTitanium.png',
+    discoverAsteroid: './images/achievements/discoverAsteroid.png',
+    launchRocket: './images/achievements/launchRocket.png',
+    mineAllAntimatterAsteroid: './images/achievements/mineAllAntimatterAsteroid.png',
+    studyStar: './images/achievements/studyStar.png',
+    studyStarMoreThan5LYAway: './images/achievements/studyStarMoreThan5LYAway.png',
+    studyStarMoreThan20LYAway: './images/achievements/studyStarMoreThan20LYAway.png',
+    launchStarship: './images/achievements/launchStarship.png',
+    initiateDiplomacyWithAlienRace: './images/achievements/initiateDiplomacyWithAlienRace.png',
+    bullyEnemyIntoSubmission: './images/achievements/bullyEnemyIntoSubmission.png',
+    vassalizeEnemy: './images/achievements/vassalizeEnemy.png',
+    conquerEnemy: './images/achievements/conquerEnemy.png',
+    conquerHiveMindEnemy: './images/achievements/conquerHiveMindEnemy.png',
+    conquerBelligerentEnemy: './images/achievements/conquerBelligerentEnemy.png',
+    conquerEnemyWithoutScanning: './images/achievements/conquerEnemyWithoutScanning.png',
+    settleUnoccupiedSystem: './images/achievements/settleUnoccupiedSystem.png',
+    discoverSystemWithNoLife: './images/achievements/discoverSystemWithNoLife.png',
+    settleSystem: './images/achievements/settleSystem.png',
+    spendAP: './images/achievements/spendAP.png',
+    performGalacticMarketTransaction: './images/achievements/performGalacticMarketTransaction.png',
+    liquidateAllAssets: './images/achievements/liquidateAllAssets.png',
+    rebirth: './images/achievements/rebirth.png',
+    conquer10StarSystems: './images/achievements/conquer10StarSystems.png',
+    conquer50StarSystems: './images/achievements/conquer50StarSystems.png',
+    seeAllNewsTickers: './images/achievements/seeAllNewsTickers.png',
+    activateAllWackyNewsTickers: './images/achievements/activateAllWackyNewsTickers.png',
+    collect100TitaniumAsPrecipitation: './images/achievements/collect100TitaniumAsPrecipitation.png',
+    discoverLegendaryAsteroid: './images/achievements/discoverLegendaryAsteroid.png',
+    have4RocketsMiningAntimatter: './images/achievements/have4RocketsMiningAntimatter.png',
+    studyAllStarsInOneRun: './images/achievements/studyAllStarsInOneRun.png',
+    trade10APForCash: './images/achievements/trade10APForCash.png',
+    have50HoursWithOnePioneer: './images/achievements/have50HoursWithOnePioneer.png'
+};  
+
+const achievementPositionDataLinker = {
+    collect50Hydrogen: { id: 'collect50Hydrogen', gridRow: 0, gridColumn: 0 },
+    collect1000Hydrogen: { id: 'collect1000Hydrogen', gridRow: 0, gridColumn: 1 },
+    collect5000Carbon: { id: 'collect5000Carbon', gridRow: 0, gridColumn: 2 },
+    collect50000Iron: { id: 'collect50000Iron', gridRow: 0, gridColumn: 3 },
+    researchTechnology: { id: 'researchTechnology', gridRow: 0, gridColumn: 4 },
+    researchAllTechnologies: { id: 'researchAllTechnologies', gridRow: 0, gridColumn: 5 },
+    achieve100FusionEfficiency: { id: 'achieve100FusionEfficiency', gridRow: 0, gridColumn: 6 },
+    fuseElement: { id: 'fuseElement', gridRow: 0, gridColumn: 7 },
+    gain100Cash: { id: 'gain100Cash', gridRow: 0, gridColumn: 8 },
+    gain10000Cash: { id: 'gain10000Cash', gridRow: 0, gridColumn: 9 },
+    gain100000Cash: { id: 'gain100000Cash', gridRow: 1, gridColumn: 0 },
+    gain1000000Cash: { id: 'gain1000000Cash', gridRow: 1, gridColumn: 1 },
+    buildPowerPlant: { id: 'buildPowerPlant', gridRow: 1, gridColumn: 2 },
+    tripPower: { id: 'tripPower', gridRow: 1, gridColumn: 3 },
+    buildSolarPowerPlant: { id: 'buildSolarPowerPlant', gridRow: 1, gridColumn: 4 },
+    collect100Precipitation: { id: 'collect100Precipitation', gridRow: 1, gridColumn: 5 },
+    unlockCompounds: { id: 'unlockCompounds', gridRow: 1, gridColumn: 6 },
+    createSteel: { id: 'createSteel', gridRow: 1, gridColumn: 7 },
+    createTitanium: { id: 'createTitanium', gridRow: 1, gridColumn: 8 },
+    discoverAsteroid: { id: 'discoverAsteroid', gridRow: 1, gridColumn: 9 },
+    launchRocket: { id: 'launchRocket', gridRow: 2, gridColumn: 0 },
+    mineAllAntimatterAsteroid: { id: 'mineAllAntimatterAsteroid', gridRow: 2, gridColumn: 1 },
+    studyStar: { id: 'studyStar', gridRow: 2, gridColumn: 2 },
+    studyStarMoreThan5LYAway: { id: 'studyStarMoreThan5LYAway', gridRow: 2, gridColumn: 3 },
+    studyStarMoreThan20LYAway: { id: 'studyStarMoreThan20LYAway', gridRow: 2, gridColumn: 4 },
+    launchStarship: { id: 'launchStarship', gridRow: 2, gridColumn: 5 },
+    initiateDiplomacyWithAlienRace: { id: 'initiateDiplomacyWithAlienRace', gridRow: 2, gridColumn: 6 },
+    bullyEnemyIntoSubmission: { id: 'bullyEnemyIntoSubmission', gridRow: 2, gridColumn: 7 },
+    vassalizeEnemy: { id: 'vassalizeEnemy', gridRow: 2, gridColumn: 8 },
+    conquerEnemy: { id: 'conquerEnemy', gridRow: 2, gridColumn: 9 },
+    conquerHiveMindEnemy: { id: 'conquerHiveMindEnemy', gridRow: 3, gridColumn: 0 },
+    conquerBelligerentEnemy: { id: 'conquerBelligerentEnemy', gridRow: 3, gridColumn: 1 },
+    conquerEnemyWithoutScanning: { id: 'conquerEnemyWithoutScanning', gridRow: 3, gridColumn: 2 },
+    settleUnoccupiedSystem: { id: 'settleUnoccupiedSystem', gridRow: 3, gridColumn: 3 },
+    discoverSystemWithNoLife: { id: 'discoverSystemWithNoLife', gridRow: 3, gridColumn: 4 },
+    settleSystem: { id: 'settleSystem', gridRow: 3, gridColumn: 5 },
+    spendAP: { id: 'spendAP', gridRow: 3, gridColumn: 6 },
+    performGalacticMarketTransaction: { id: 'performGalacticMarketTransaction', gridRow: 3, gridColumn: 7 },
+    liquidateAllAssets: { id: 'liquidateAllAssets', gridRow: 3, gridColumn: 8 },
+    rebirth: { id: 'rebirth', gridRow: 3, gridColumn: 9 },
+    conquer10StarSystems: { id: 'conquer10StarSystems', gridRow: 4, gridColumn: 0 },
+    conquer50StarSystems: { id: 'conquer50StarSystems', gridRow: 4, gridColumn: 1 },
+    seeAllNewsTickers: { id: 'seeAllNewsTickers', gridRow: 4, gridColumn: 2 },
+    activateAllWackyNewsTickers: { id: 'activateAllWackyNewsTickers', gridRow: 4, gridColumn: 3 },
+    collect100TitaniumAsPrecipitation: { id: 'collect100TitaniumAsPrecipitation', gridRow: 4, gridColumn: 4 },
+    discoverLegendaryAsteroid: { id: 'discoverLegendaryAsteroid', gridRow: 4, gridColumn: 5 },
+    have4RocketsMiningAntimatter: { id: 'have4RocketsMiningAntimatter', gridRow: 4, gridColumn: 6 },
+    studyAllStarsInOneRun: { id: 'studyAllStarsInOneRun', gridRow: 4, gridColumn: 7 },
+    trade10APForCash: { id: 'trade10APForCash', gridRow: 4, gridColumn: 8 },
+    have50HoursWithOnePioneer: { id: 'have50HoursWithOnePioneer', gridRow: 4, gridColumn: 9 }
+};
+
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
+
+export function getAchievementPositionData() {
+    return achievementPositionDataLinker;
+}
 
 export function getBuffEfficientStorageData() {
     return ascendencyBuffs["efficientStorage"];
@@ -1165,6 +2274,56 @@ export function getStarSystemWeather(starSystem) {
 export function setStarSystemWeather(starSystem, weatherData) {
     if (starSystems.stars[starSystem]) {
         starSystems.stars[starSystem].weather = weatherData;
+    }
+}
+
+export function getAchievementImageUrl(key) {
+    if (achievementImageUrls.hasOwnProperty(key)) {
+        return achievementImageUrls[key];
+    } else {
+        console.warn('Achievement key not found:', key);
+        return null; // or a default image URL
+    }
+}
+
+export function getAchievementDataObject(key, subKeys, noWarning = false) {
+    let current = achievementsData[key];
+
+    if (!current && !noWarning) {
+        console.warn(`Achievement data not found for key: ${key}`);
+        return undefined;
+    }
+
+    if (subKeys) {
+        for (const subKey of subKeys) {
+            current = current?.[subKey];
+            if (current === undefined && !noWarning) {
+                console.warn(`Missing achievement subKey: ${subKey}`);
+                return undefined;
+            }
+        }
+    }
+
+    return current;
+}
+
+export function setAchievementDataObject(value, key, subKeys = []) {
+    if (!key) {
+        console.warn("Achievement key is required.");
+        return;
+    }
+
+    let current = achievementsData;
+    current = current[key] || (current[key] = {});
+
+    for (let i = 0; i < subKeys.length; i++) {
+        const subKey = subKeys[i];
+
+        if (i === subKeys.length - 1) {
+            current[subKey] = value;
+        } else {
+            current = current[subKey] || (current[subKey] = {});
+        }
     }
 }
 
@@ -1379,4 +2538,104 @@ export function getFleetShips(fleetShip) {
 
 export function getMaxFleetShip(fleetShip) {
     return resourceData.space.upgrades[fleetShip].maxCanBuild;
+}
+
+export function achievementResearchAllTechnologies() {
+
+}
+
+export function achievementAchieve100FusionEfficiency() {
+    
+}
+
+export function achievementTripPower() {
+
+}
+
+export function achievementCollect100Precipitation() {
+
+}
+
+export function achievementCreateCompound(compound) {
+
+}
+
+export function achievementDiscoverAsteroid() {
+
+}
+
+export function achievementLaunchRocket() {
+
+}
+
+export function achievementMineAllAntimatterAsteroid() {
+
+}
+
+export function achievementStudyAStar(requiredDistance) {
+
+}
+
+export function achievementLaunchStarShip() {
+
+}
+
+export function achievementInitiateDiplomacyWithAlienRace() {
+
+}
+
+export function achievementBeatEnemy(victoryType) {
+
+}
+
+export function achievementSpendAp() {
+
+}
+
+export function achievementPerformGalaticMarketTransaction() {
+    
+}
+
+export function achievementLiquidateAllAssets() {
+
+}
+
+export function achievementRebirth() {
+
+}
+
+export function achievementConquerStarSystems(conqueredQuantity) {
+
+}
+
+export function achievementSeeAllNewsTickers() {
+
+}
+
+export function achievementActivateAllWackyNewsTickers(conqueredQuantity) {
+
+}
+
+export function achievementCollect100TitaniumAsPrecipitation() {
+
+}
+
+export function achievementDiscoverLegendaryAsteroid() {
+
+}
+
+export function achievementHave4RocketsMiningAntimatter() {
+
+}
+
+export function achievementStudyAllStarsInOneRun() {
+
+}
+
+export function achievementTrade10APForCash() {
+
+}
+
+export function achievementHave50HoursWithOnePioneer() {
+    
 }
