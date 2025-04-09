@@ -559,8 +559,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             null,
             '',
-            [true, 'invisible', '100%'],
-            ['no-left-margin']
+            [true, '0%', '100%']
         );
     
         optionContentElement.appendChild(achievementsRow);
