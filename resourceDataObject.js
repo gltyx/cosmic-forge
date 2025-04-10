@@ -1092,7 +1092,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
@@ -1114,7 +1113,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
@@ -1136,7 +1134,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
@@ -1158,7 +1155,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "resources",
@@ -1180,7 +1176,6 @@ export const achievementsData = {
         specialCondition: achievementCollect100Precipitation,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1199,7 +1194,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "unlock",
@@ -1218,7 +1212,6 @@ export const achievementsData = {
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['steel'],
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1238,7 +1231,6 @@ export const achievementsData = {
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['titanium'],
         resetOnRebirth: true,
-        gridRow: 1,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1258,7 +1250,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "tech",
@@ -1277,7 +1268,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "tech",
@@ -1296,7 +1286,6 @@ export const achievementsData = {
         specialCondition: achievementResearchAllTechnologies,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1315,7 +1304,6 @@ export const achievementsData = {
         specialCondition: achievementAchieve100FusionEfficiency,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1334,7 +1322,6 @@ export const achievementsData = {
         specialCondition: achievementHave50HoursWithOnePioneer,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1353,7 +1340,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "buildings",
@@ -1376,7 +1362,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "buildings",
@@ -1399,7 +1384,6 @@ export const achievementsData = {
         specialCondition: achievementCollect100TitaniumAsPrecipitation,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 2,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1418,7 +1402,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "cash",
@@ -1440,7 +1423,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "cash",
@@ -1462,7 +1444,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "cash",
@@ -1484,7 +1465,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "cash",
@@ -1506,7 +1486,6 @@ export const achievementsData = {
         specialCondition: achievementSeeAllNewsTickers,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1526,7 +1505,6 @@ export const achievementsData = {
         specialCondition: achievementActivateAllWackyNewsTickers,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 3,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1546,7 +1524,6 @@ export const achievementsData = {
         specialCondition: achievementDiscoverLegendaryAsteroid,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1565,7 +1542,6 @@ export const achievementsData = {
         specialCondition: achievementHave4RocketsMiningAntimatter,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1584,7 +1560,6 @@ export const achievementsData = {
         specialCondition: achievementTripPower,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1604,7 +1579,6 @@ export const achievementsData = {
         specialCondition: achievementDiscoverAsteroid,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1624,7 +1598,6 @@ export const achievementsData = {
         specialCondition: achievementLaunchRocket,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1644,7 +1617,6 @@ export const achievementsData = {
         specialCondition: false,
         specialConditionArguments: achievementMineAllAntimatterAsteroid,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1663,7 +1635,6 @@ export const achievementsData = {
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [0.5],
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1683,7 +1654,6 @@ export const achievementsData = {
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [5],
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1703,7 +1673,6 @@ export const achievementsData = {
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [20],
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1723,7 +1692,6 @@ export const achievementsData = {
         specialCondition: achievementLaunchStarShip,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1742,7 +1710,6 @@ export const achievementsData = {
         specialCondition: achievementPerformGalaticMarketTransaction,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1761,7 +1728,6 @@ export const achievementsData = {
         specialCondition: achievementTrade10APForCash,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 4,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1780,7 +1746,6 @@ export const achievementsData = {
         specialCondition: achievementInitiateDiplomacyWithAlienRace,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 5,
         active: true,
         requirements: {
             requirement1: "special",
@@ -1800,7 +1765,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['bully'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1819,7 +1783,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['vassalize'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1838,7 +1801,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['conquer'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: true,
         requirements: {
             requirement1: "special",
@@ -1857,7 +1819,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['hiveMind'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1876,7 +1837,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['belligerent'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1895,7 +1855,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['withoutScanning'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: true,
         requirements: {
             requirement1: "special",
@@ -1914,7 +1873,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['unoccupied'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1933,7 +1891,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['noLife'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1952,7 +1909,6 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['settleNormal'],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1971,7 +1927,6 @@ export const achievementsData = {
         specialCondition: achievementSpendAp,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -1991,7 +1946,6 @@ export const achievementsData = {
         specialCondition: achievementLiquidateAllAssets,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -2010,7 +1964,6 @@ export const achievementsData = {
         specialCondition: achievementRebirth,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -2030,7 +1983,6 @@ export const achievementsData = {
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [10],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -2049,7 +2001,6 @@ export const achievementsData = {
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [100],
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
@@ -2068,7 +2019,6 @@ export const achievementsData = {
         specialCondition: achievementStudyAllStarsInOneRun,
         specialConditionArguments: false,
         resetOnRebirth: false,
-        gridRow: 5,
         active: false,
         requirements: {
             requirement1: "special",
