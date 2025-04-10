@@ -11,6 +11,8 @@ import {
     getSaveData
 } from './constantsAndGlobalVars.js';
 
+import { setAchievementIconImageUrls } from './resourceDataObject.js';
+
 import { showNotification } from './ui.js';
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
@@ -218,6 +220,7 @@ export async function loadGameFromCloud() {
             const gameState = JSON.parse(decompressedJson);
 
             await initialiseLoadedGame(gameState, 'cloud');
+            setAchievementIconImageUrls();
             showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
             return true;
         } else {
@@ -252,6 +255,7 @@ export function loadGame() {
 
             initialiseLoadedGame(gameState, 'textImport')
                 .then(() => {
+                    setAchievementIconImageUrls();
                     showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
                     resolve();
                 })

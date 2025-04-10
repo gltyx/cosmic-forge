@@ -108,7 +108,8 @@ import {
     setAutoBuyerTierLevel,
     setResourceDataObject,
     setStarSystemDataObject,
-    getBuffEnhancedMiningData
+    getBuffEnhancedMiningData,
+    getAchievementImageUrl
 } from "./resourceDataObject.js";
 import {
     optionDescriptions,
@@ -938,6 +939,11 @@ export function createHtmlTableAchievementsGrid(id, classList = [], achievements
         tile.style.border = '1px solid var(--text-color)';
         tile.style.boxSizing = 'border-box';
         tile.style.position = 'relative';
+
+        tile.style.backgroundImage = `url('${getAchievementImageUrl(achievement.id)}')`;
+        tile.style.backgroundSize = 'contain';
+        tile.style.backgroundRepeat = 'no-repeat';
+        tile.style.backgroundPosition = 'center';
         container.appendChild(tile);
     });
 

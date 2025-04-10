@@ -2,7 +2,7 @@ import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveTo
 import { setupAchievementTooltip, createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
 import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
-import { getAchievementPositionData } from './resourceDataObject.js';
+import { setAchievementIconImageUrls, getAchievementPositionData } from './resourceDataObject.js';
 
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Contact') createHelpSectionRow('contactRow', ['discord-link', 'email-link']);
@@ -115,6 +115,7 @@ export function drawTab8Content(heading, optionContentElement) {
                 { value: 'forest', text: 'Forest' },
             ], document.body.getAttribute('data-theme'), (value) => {
                 selectTheme(value);
+                setAchievementIconImageUrls();
             }),
             null,
             null,

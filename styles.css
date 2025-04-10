@@ -446,7 +446,6 @@ button {
     background-position: center;
 }
 
-/* Dark Theme Variables */
 :root {
     --battleBgImg: url('./resources/images/battleImage1_terminal.png');
     --twinkle-scale: 1.2;
