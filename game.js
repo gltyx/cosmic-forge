@@ -419,6 +419,7 @@ export async function gameLoop() {
         galacticMarketChecks();
         ascendencyBuffChecks();
         rebirthChecks();
+        calculateLiquidationValue();
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
@@ -3851,14 +3852,8 @@ function galacticMarketChecks() {
             galacticMarketConfirmSellApButton.classList.remove('green-ready-text');
             galacticMarketConfirmSellApButton.classList.add('red-disabled-text');
         }
-        //-------------------
-        if (getGalacticMarketLiquidationAuthorization() === 'yes') {
-            calculateLiquidationValue();
-        } else {
-            document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = 0;
-        }
         
-        if (!getLiquidatedThisRun() && getApLiquidationQuantity() > 0) {
+        if (getGalacticMarketLiquidationAuthorization() === 'yes' && !getLiquidatedThisRun() && getApLiquidationQuantity() > 0) {
             galacticMarketLiquidateForApConfirmButton.classList.add('green-ready-text');
             galacticMarketLiquidateForApConfirmButton.classList.remove('red-disabled-text');
         } else {
@@ -3902,7 +3897,10 @@ export function calculateLiquidationValue() {
     const apAmount = Math.floor(totalLiquidationValue / apCost);
 
     setApLiquidationQuantity(apAmount);
-    document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = getApLiquidationQuantity();
+
+    if (getCurrentOptionPane() === 'galactic market') {
+        document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = getApLiquidationQuantity();
+    }
 }
 
 export function galacticMarketLiquidateForAp(quantityOfAp) {
