@@ -261,7 +261,8 @@ import {
     getBuffAsteroidScannerBoostData,
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
-    getBuffQuantumEnginesData
+    getBuffQuantumEnginesData,
+    setAchievementIconImageUrls
 } from "./resourceDataObject.js";
 
 import { 
@@ -338,6 +339,7 @@ export function startGame() {
     if (getStatRun() === 1) {
         setTechUnlockedArray('run1');
     }
+    setAchievementIconImageUrls();
     gameLoop();
 }
 
