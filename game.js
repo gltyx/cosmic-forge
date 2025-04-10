@@ -262,7 +262,8 @@ import {
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
     getBuffQuantumEnginesData,
-    setAchievementIconImageUrls
+    setAchievementIconImageUrls,
+    checkForAchievements,
 } from "./resourceDataObject.js";
 
 import { 
@@ -391,6 +392,8 @@ export async function gameLoop() {
         updateUIQuantities(allQuantities, allStorages, allElements, allDescElements);
         
         updateStats();
+        checkForAchievements();
+
         updateRocketNames();
         updateAllPowerPlantRates();
         checkIfStarShipBuilt();

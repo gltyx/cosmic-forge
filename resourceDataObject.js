@@ -1614,8 +1614,8 @@ export const achievementsData = {
     },
     mineAllAntimatterAsteroid: {
         name: "Mine All Antimatter from an Asteroid",
-        specialCondition: false,
-        specialConditionArguments: achievementMineAllAntimatterAsteroid,
+        specialCondition: achievementMineAllAntimatterAsteroid,
+        specialConditionArguments: false,
         resetOnRebirth: true,
         active: false,
         requirements: {
@@ -1746,7 +1746,7 @@ export const achievementsData = {
         specialCondition: achievementInitiateDiplomacyWithAlienRace,
         specialConditionArguments: false,
         resetOnRebirth: true,
-        active: true,
+        active: false,
         requirements: {
             requirement1: "special",
             value1: ""
@@ -1801,7 +1801,7 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['conquer'],
         resetOnRebirth: false,
-        active: true,
+        active: false,
         requirements: {
             requirement1: "special",
             value1: ""
@@ -1855,7 +1855,7 @@ export const achievementsData = {
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['withoutScanning'],
         resetOnRebirth: false,
-        active: true,
+        active: false,
         requirements: {
             requirement1: "special",
             value1: ""
@@ -2495,101 +2495,147 @@ export function getMaxFleetShip(fleetShip) {
 }
 
 export function achievementResearchAllTechnologies() {
-
+    // Function implementation here
 }
 
 export function achievementAchieve100FusionEfficiency() {
-    
+    // Function implementation here
 }
 
 export function achievementTripPower() {
-
+    // Function implementation here
 }
 
 export function achievementCollect100Precipitation() {
-
+    // Function implementation here
 }
 
 export function achievementCreateCompound(compound) {
-
+    // Function implementation here
 }
 
 export function achievementDiscoverAsteroid() {
-
+    // Function implementation here
 }
 
 export function achievementLaunchRocket() {
-
+    // Function implementation here
 }
 
 export function achievementMineAllAntimatterAsteroid() {
-
+    // Function implementation here
 }
 
 export function achievementStudyAStar(requiredDistance) {
-
+    // Function implementation here
 }
 
 export function achievementLaunchStarShip() {
-
+    // Function implementation here
 }
 
 export function achievementInitiateDiplomacyWithAlienRace() {
-
+    // Function implementation here
 }
 
 export function achievementBeatEnemy(victoryType) {
-
+    // Function implementation here
 }
 
 export function achievementSpendAp() {
-
+    // Function implementation here
 }
 
 export function achievementPerformGalaticMarketTransaction() {
-    
+    // Function implementation here
 }
 
 export function achievementLiquidateAllAssets() {
-
+    // Function implementation here
 }
 
 export function achievementRebirth() {
-
+    // Function implementation here
 }
 
 export function achievementConquerStarSystems(conqueredQuantity) {
-
+    // Function implementation here
 }
 
 export function achievementSeeAllNewsTickers() {
-
+    // Function implementation here
 }
 
 export function achievementActivateAllWackyNewsTickers(conqueredQuantity) {
-
+    // Function implementation here
 }
 
 export function achievementCollect100TitaniumAsPrecipitation() {
-
+    // Function implementation here
 }
 
 export function achievementDiscoverLegendaryAsteroid() {
-
+    // Function implementation here
 }
 
 export function achievementHave4RocketsMiningAntimatter() {
-
+    // Function implementation here
 }
 
 export function achievementStudyAllStarsInOneRun() {
-
+    // Function implementation here
 }
 
 export function achievementTrade10APForCash() {
-
+    // Function implementation here
 }
 
 export function achievementHave50HoursWithOnePioneer() {
-    
+    // Function implementation here
+}
+
+export function genericAchievementChecker(achievement) {
+    const requirementType = achievement?.requirements?.requirement1;
+    const achievementName = achievement?.name;
+
+    console.log(`Checking achievement: ${achievementName} - Requirement Type: ${requirementType}`);
+
+    switch (requirementType) {
+        case 'resources':
+            break;
+        case 'unlock':
+            break;
+        case 'tech':
+            break;
+        case 'buildings':
+            break;
+        case 'cash':
+            break;
+        case 'special':
+            return;
+    }
+}
+
+export function checkForAchievements() {
+    const inactiveAchievements = Object.keys(achievementsData).reduce((acc, key) => {
+        const achievement = getAchievementDataObject(key);
+        if (achievement && achievement.active === false) {
+            acc[key] = achievement;
+        }
+        return acc;
+    }, {});
+
+    for (const [key, achievement] of Object.entries(inactiveAchievements)) {
+        if (achievement.specialCondition !== false) {
+            const achievementFunction = achievement.specialCondition;
+
+            if (achievement.specialConditionArguments !== false) {
+                achievementFunction(...achievement.specialConditionArguments);
+            } else {
+                achievementFunction();
+            }
+        } else {
+            genericAchievementChecker(achievement);
+        }
+    }
 }
