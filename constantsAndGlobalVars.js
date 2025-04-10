@@ -48,8 +48,8 @@ export const OFFLINE_GAINS_RATE = 0.334;
 export const ENEMY_FLEET_SPEED_AIR = 5;
 export const ENEMY_FLEET_SPEED_LAND = 2;
 export const ENEMY_FLEET_SPEED_SEA = 1;
-export const AP_BASE_SELL_PRICE = 1000000;
-export const AP_BASE_BUY_PRICE = 4000000;
+export const AP_BASE_SELL_PRICE = 100000;
+export const AP_BASE_BUY_PRICE = 400000;
 export const CASH_LIQUIDATION_MODIFIER = 10;
 
 export const enemyFleetData = {
