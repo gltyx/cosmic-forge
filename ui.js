@@ -939,6 +939,7 @@ export function createHtmlTableAchievementsGrid(id, classList = [], achievements
         tile.style.border = '1px solid var(--text-color)';
         tile.style.boxSizing = 'border-box';
         tile.style.position = 'relative';
+        tile.style.opacity = 0.3;
 
         tile.style.backgroundImage = `url('${getAchievementImageUrl(achievement.id)}')`;
         tile.style.backgroundSize = 'contain';

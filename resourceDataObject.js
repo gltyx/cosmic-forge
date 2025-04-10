@@ -1,7 +1,8 @@
 import { getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getCurrentTheme } from "./constantsAndGlobalVars.js";
+import { getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme } from "./constantsAndGlobalVars.js";
+import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
 
@@ -1088,6 +1089,7 @@ export let ascendencyBuffs = {
 
 export const achievementsData = {
     collect50Hydrogen: {
+        id: "collect50Hydrogen",
         name: "Collect 50 Hydrogen",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1109,6 +1111,7 @@ export const achievementsData = {
         notification: "collect50HydrogenNotification"
     },
     collect1000Hydrogen: {
+        id: "collect1000Hydrogen",
         name: "Collect 1000 Hydrogen",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1130,6 +1133,7 @@ export const achievementsData = {
         notification: "collect1000HydrogenNotification"
     },
     collect5000Carbon: {
+        id: "collect5000Carbon",
         name: "Collect 5000 Carbon",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1151,6 +1155,7 @@ export const achievementsData = {
         notification: "collect5000CarbonNotification"
     },
     collect50000Iron: {
+        id: "collect50000Iron",
         name: "Collect 50000 Iron",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1172,6 +1177,7 @@ export const achievementsData = {
         notification: "collect50000IronNotification"
     },
     collect100Precipitation: {
+        id: "collect100Precipitation",
         name: "Collect 100 Precipitation",
         specialCondition: achievementCollect100Precipitation,
         specialConditionArguments: false,
@@ -1190,6 +1196,7 @@ export const achievementsData = {
         notification: "collect100PrecipitationNotification"
     },
     fuseElement: {
+        id: "fuseElement",
         name: "Fuse an Element",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1208,6 +1215,7 @@ export const achievementsData = {
         notification: "fuseElementNotification"
     }, 
     createSteel: {
+        id: "createSteel",
         name: "Create Steel",
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['steel'],
@@ -1227,6 +1235,7 @@ export const achievementsData = {
         notification: "createSteelNotification"
     },
     createTitanium: {
+        id: "createTitanium",
         name: "Create Titanium",
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['titanium'],
@@ -1246,6 +1255,7 @@ export const achievementsData = {
         notification: "createTitaniumNotification"
     },
     unlockCompounds: {
+        id: "unlockCompounds",
         name: "Unlock Compounds",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1264,6 +1274,7 @@ export const achievementsData = {
         notification: "unlockCompoundsNotification"
     },
     researchTechnology: {
+        id: "researchTechnology",
         name: "Research a Technology",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1282,6 +1293,7 @@ export const achievementsData = {
         notification: "researchTechnologyNotification"
     },
     researchAllTechnologies: {
+        id: "researchAllTechnologies",
         name: "Research All Technologies",
         specialCondition: achievementResearchAllTechnologies,
         specialConditionArguments: false,
@@ -1300,6 +1312,7 @@ export const achievementsData = {
         notification: "researchAllTechnologiesNotification"
     },
     achieve100FusionEfficiency: {
+        id: "achieve100FusionEfficiency",
         name: "Achieve 100% Fusion Efficiency",
         specialCondition: achievementAchieve100FusionEfficiency,
         specialConditionArguments: false,
@@ -1318,6 +1331,7 @@ export const achievementsData = {
         notification: "achieve100FusionEfficiencyNotification"
     },   
     have50HoursWithOnePioneer: {
+        id: "have50HoursWithOnePioneer",
         name: "Have 50 Hours Logged with One Pioneer Name",
         specialCondition: achievementHave50HoursWithOnePioneer,
         specialConditionArguments: false,
@@ -1336,6 +1350,7 @@ export const achievementsData = {
         notification: "have50HoursWithOnePioneerNotification"
     },
     buildPowerPlant: {
+        id: "buildPowerPlant",
         name: "Build a Power Plant",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1358,6 +1373,7 @@ export const achievementsData = {
         notification: "buildPowerPlantNotification"
     },
     buildSolarPowerPlant: {
+        id: "buildSolarPowerPlant",
         name: "Build a Solar Power Plant",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1380,6 +1396,7 @@ export const achievementsData = {
         notification: "buildSolarPowerPlantNotification"
     },
     collect100TitaniumAsPrecipitation: {
+        id: "collect100TitaniumAsPrecipitation",
         name: "Collect 100 Titanium as Precipitation",
         specialCondition: achievementCollect100TitaniumAsPrecipitation,
         specialConditionArguments: false,
@@ -1398,6 +1415,7 @@ export const achievementsData = {
         notification: "collect100TitaniumAsPrecipitationNotification"
     },
     gain100Cash: {
+        id: "gain100Cash",
         name: "Gain 100 Cash",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1419,6 +1437,7 @@ export const achievementsData = {
         notification: "gain100CashNotification"
     },
     gain10000Cash: {
+        id: "gain10000Cash",
         name: "Gain 10000 Cash",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1440,6 +1459,7 @@ export const achievementsData = {
         notification: "gain10000CashNotification"
     },
     gain100000Cash: {
+        id: "gain100000Cash",
         name: "Gain 100000 Cash",
         specialCondition: false,
         specialConditionArguments: false,
@@ -1461,7 +1481,7 @@ export const achievementsData = {
         notification: "gain100000CashNotification"
     },
     gain1000000Cash: {
-        name: "Gain 1000000 Cash",
+        id: "gain1000000Cash",
         specialCondition: false,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1482,6 +1502,7 @@ export const achievementsData = {
         notification: "gain1000000CashNotification"
     },
     seeAllNewsTickers: {
+        id: "seeAllNewsTickers",
         name: "See All News Tickers",
         specialCondition: achievementSeeAllNewsTickers,
         specialConditionArguments: false,
@@ -1501,6 +1522,7 @@ export const achievementsData = {
         notification: "seeAllNewsTickersNotification"
     },
     activateAllWackyNewsTickers: {
+        id: "activateAllWackyNewsTickers",
         name: "Activate All Wacky News Tickers",
         specialCondition: achievementActivateAllWackyNewsTickers,
         specialConditionArguments: false,
@@ -1520,6 +1542,7 @@ export const achievementsData = {
         notification: "activateAllWackyNewsTickersNotification"
     },
     discoverLegendaryAsteroid: {
+        id: "discoverLegendaryAsteroid",
         name: "Discover a Legendary Asteroid",
         specialCondition: achievementDiscoverLegendaryAsteroid,
         specialConditionArguments: false,
@@ -1538,6 +1561,7 @@ export const achievementsData = {
         notification: "discoverLegendaryAsteroidNotification"
     },
     have4RocketsMiningAntimatter: {
+        id: "have4RocketsMiningAntimatter",
         name: "Have 4 Rockets Simultaneously Mining Antimatter",
         specialCondition: achievementHave4RocketsMiningAntimatter,
         specialConditionArguments: false,
@@ -1556,6 +1580,7 @@ export const achievementsData = {
         notification: "have4RocketsMiningAntimatterNotification"
     },
     tripPower: {
+        id: "tripPower",
         name: "Trip the Power",
         specialCondition: achievementTripPower,
         specialConditionArguments: false,
@@ -1575,6 +1600,7 @@ export const achievementsData = {
         notification: "tripPowerNotification"
     },
     discoverAsteroid: {
+        id: "discoverAsteroid",
         name: "Discover an Asteroid",
         specialCondition: achievementDiscoverAsteroid,
         specialConditionArguments: false,
@@ -1594,6 +1620,7 @@ export const achievementsData = {
         notification: "discoverAsteroidNotification"
     },
     launchRocket: {
+        id: "launchRocket",
         name: "Launch a Rocket",
         specialCondition: achievementLaunchRocket,
         specialConditionArguments: false,
@@ -1613,6 +1640,7 @@ export const achievementsData = {
         notification: "launchRocketNotification"
     },
     mineAllAntimatterAsteroid: {
+        id: "mineAllAntimatterAsteroid",
         name: "Mine All Antimatter from an Asteroid",
         specialCondition: achievementMineAllAntimatterAsteroid,
         specialConditionArguments: false,
@@ -1631,6 +1659,7 @@ export const achievementsData = {
         notification: "mineAllAntimatterAsteroidNotification"
     },
     studyStar: {
+        id: "studyStar",
         name: "Study a Star",
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [0.5],
@@ -1650,6 +1679,7 @@ export const achievementsData = {
         notification: "studyStarNotification"
     },
     studyStarMoreThan5LYAway: {
+        id: "studyStarMoreThan5LYAway",
         name: "Study a Star More Than 5ly Away",
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [5],
@@ -1669,6 +1699,7 @@ export const achievementsData = {
         notification: "studyStarMoreThan5LYAwayNotification"
     },
     studyStarMoreThan20LYAway: {
+        id: "studyStarMoreThan20LYAway",
         name: "Study a Star More Than 20ly Away",
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [20],
@@ -1688,6 +1719,7 @@ export const achievementsData = {
         notification: "studyStarMoreThan20LYAwayNotification"
     },
     launchStarship: {
+        id: "launchStarship",
         name: "Launch a Starship",
         specialCondition: achievementLaunchStarShip,
         specialConditionArguments: false,
@@ -1706,6 +1738,7 @@ export const achievementsData = {
         notification: "launchStarshipNotification"
     },
     performGalacticMarketTransaction: {
+        id: "performGalacticMarketTransaction",
         name: "Perform a Galactic Market Transaction",
         specialCondition: achievementPerformGalaticMarketTransaction,
         specialConditionArguments: false,
@@ -1724,6 +1757,7 @@ export const achievementsData = {
         notification: "performGalacticMarketTransactionNotification"
     },
     trade10APForCash: {
+        id: "trade10APForCash",
         name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
         specialCondition: achievementTrade10APForCash,
         specialConditionArguments: false,
@@ -1742,6 +1776,7 @@ export const achievementsData = {
         notification: "trade10APForCashNotification"
     },
     initiateDiplomacyWithAlienRace: {
+        id: "initiateDiplomacyWithAlienRace",
         name: "Initiate Diplomacy with an Alien Race",
         specialCondition: achievementInitiateDiplomacyWithAlienRace,
         specialConditionArguments: false,
@@ -1761,6 +1796,7 @@ export const achievementsData = {
         notification: "initiateDiplomacyWithAlienRaceNotification"
     },
     bullyEnemyIntoSubmission: {
+        id: "bullyEnemyIntoSubmission",
         name: "Bully an Enemy into Submission",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['bully'],
@@ -1779,6 +1815,7 @@ export const achievementsData = {
         notification: "bullyEnemyIntoSubmissionNotification"
     },
     vassalizeEnemy: {
+        id: "vassalizeEnemy",
         name: "Vassalize an Enemy",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['vassalize'],
@@ -1797,6 +1834,7 @@ export const achievementsData = {
         notification: "vassalizeEnemyNotification"
     },
     conquerEnemy: {
+        id: "conquerEnemy",
         name: "Conquer an Enemy",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['conquer'],
@@ -1815,6 +1853,7 @@ export const achievementsData = {
         notification: "conquerEnemyNotification"
     },
     conquerHiveMindEnemy: {
+        id: "conquerHiveMindEnemy",
         name: "Conquer a Hive Mind Enemy",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['hiveMind'],
@@ -1833,6 +1872,7 @@ export const achievementsData = {
         notification: "conquerHiveMindEnemyNotification"
     },
     conquerBelligerentEnemy: {
+        id: "conquerBelligerentEnemy",
         name: "Conquer a Belligerent Enemy",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['belligerent'],
@@ -1851,6 +1891,7 @@ export const achievementsData = {
         notification: "conquerBelligerentEnemyNotification"
     },
     conquerEnemyWithoutScanning: {
+        id: "conquerEnemyWithoutScanning",
         name: "Conquer an Enemy Without Scanning the System",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['withoutScanning'],
@@ -1869,6 +1910,7 @@ export const achievementsData = {
         notification: "conquerEnemyWithoutScanningNotification"
     },
     settleUnoccupiedSystem: {
+        id: "settleUnoccupiedSystem",
         name: "Settle an Unoccupied System",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['unoccupied'],
@@ -1887,6 +1929,7 @@ export const achievementsData = {
         notification: "settleUnoccupiedSystemNotification"
     },
     discoverSystemWithNoLife: {
+        id: "discoverSystemWithNoLife",
         name: "Discover a System with No Life",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['noLife'],
@@ -1905,6 +1948,7 @@ export const achievementsData = {
         notification: "discoverSystemWithNoLifeNotification"
     },
     settleSystem: {
+        id: "settleSystem",
         name: "Settle a System",
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['settleNormal'],
@@ -1923,6 +1967,7 @@ export const achievementsData = {
         notification: "settleSystemNotification"
     },
     spendAP: {
+        id: "spendAP",
         name: "Spend Ascendency Points",
         specialCondition: achievementSpendAp,
         specialConditionArguments: false,
@@ -1942,6 +1987,7 @@ export const achievementsData = {
         notification: "spendAPNotification"
     },
     liquidateAllAssets: {
+        id: "liquidateAllAssets",
         name: "Liquidate All Assets",
         specialCondition: achievementLiquidateAllAssets,
         specialConditionArguments: false,
@@ -1960,6 +2006,7 @@ export const achievementsData = {
         notification: "liquidateAllAssetsNotification"
     },
     rebirth: {
+        id: "rebirth",
         name: "Rebirth",
         specialCondition: achievementRebirth,
         specialConditionArguments: false,
@@ -1979,6 +2026,7 @@ export const achievementsData = {
         notification: "rebirthNotification"
     },
     conquer10StarSystems: {
+        id: "conquer10StarSystems",
         name: "Conquer 10 Star Systems",
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [10],
@@ -1997,6 +2045,7 @@ export const achievementsData = {
         notification: "conquer10StarSystemsNotification"
     },
     conquer50StarSystems: {
+        id: "conquer50StarSystems",
         name: "Conquer 50 Star Systems",
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [100],
@@ -2015,6 +2064,7 @@ export const achievementsData = {
         notification: "conquer50StarSystemsNotification"
     },
     studyAllStarsInOneRun: {
+        id: "studyAllStarsInOneRun",
         name: "Study All Stars in the Star Map in One Run",
         specialCondition: achievementStudyAllStarsInOneRun,
         specialConditionArguments: false,
@@ -2236,7 +2286,7 @@ export function getAchievementImageUrl(key) {
         return achievementImageUrls[key];
     } else {
         console.warn('Achievement key not found:', key);
-        return null; // or a default image URL
+        return null;
     }
 }
 
@@ -2594,22 +2644,58 @@ export function achievementHave50HoursWithOnePioneer() {
     // Function implementation here
 }
 
+export function grantGenericAchievement(achievement) {
+    setAchievementDataObject(true, achievement.id, ['active']);
+    //showNotification(getAchievementNotification(achievement.notification), 'achievement', 4000, 'default');
+
+    addAchievementBonus(achievement);
+}
+
+export function addAchievementBonus(achievement) {
+
+}
+
 export function genericAchievementChecker(achievement) {
     const requirementType = achievement?.requirements?.requirement1;
-    const achievementName = achievement?.name;
-
-    console.log(`Checking achievement: ${achievementName} - Requirement Type: ${requirementType}`);
 
     switch (requirementType) {
         case 'resources':
+            const resourceType = achievement.requirements.value1.type;
+            const requiredQuantity = achievement?.requirements.value1.quantity;
+            const currentResourceQuantity = getResourceDataObject('resources', [resourceType, 'quantity']);
+
+            if (currentResourceQuantity >= requiredQuantity) {
+                grantGenericAchievement(achievement);
+            }
             break;
         case 'unlock':
+            const requiredUnlock = achievement.requirements.value1;
+            if (getUnlockedResourcesArray().includes(requiredUnlock)) {
+                grantGenericAchievement(achievement);
+            }
             break;
         case 'tech':
+            const requiredTech = achievement.requirements.value1;
+
+            if (getTechUnlockedArray().includes(requiredTech)) {
+                grantGenericAchievement(achievement);
+            }
             break;
         case 'buildings':
+            const buildingType = achievement.requirements.value1.type;
+            const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingType, 'quantity']);
+
+            if (buildingQuantity >= achievement.requirements.value1.quantity) {
+                grantGenericAchievement(achievement);
+            }
             break;
         case 'cash':
+            const requiredCash = achievement.requirements.value1.quantity;    
+            const currentCash = getResourceDataObject('currency', ['cash']);
+
+            if (currentCash >= requiredCash) {
+                grantGenericAchievement(achievement);
+            }
             break;
         case 'special':
             return;
