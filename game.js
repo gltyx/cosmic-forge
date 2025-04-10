@@ -2750,6 +2750,7 @@ function resourceCostSellChecks(element) {
             element.classList.remove('red-disabled-text');
             element.classList.add('green-ready-text');
         } else {
+            document.getElementById(buildingType + 'Toggle').classList.add('invisible');
             element.classList.add('red-disabled-text');
             element.classList.remove('green-ready-text');
         }
@@ -4848,12 +4849,11 @@ function startInitialTimers() {
                                         });
                                     }
                                 }
-
-                                if (resource !== 'solar') {
-                                    getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
-                                }
-
                             }
+                            if (resource !== 'solar') {
+                                getElements()[`${resource}Rate`].textContent = `${((allResourceRatesAddedTogether - amountToDeductForConsumption) * getTimerRateRatio()).toFixed(1)} / s`;
+                            }
+
                         } else { //if power off
                             if (tier === 1) {
                                 const autoBuyerExtractionRate = getResourceDataObject('resources', [resource, 'upgrades', 'autoBuyer', `tier1`, 'rate']);
