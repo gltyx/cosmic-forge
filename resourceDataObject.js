@@ -1,7 +1,7 @@
 import { refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject } from "./constantsAndGlobalVars.js";
+import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -2084,7 +2084,7 @@ export let achievementsData = {
         name: "Conquer 50 Star Systems",
         specialConditionName: 'achievementConquerStarSystems',
         specialCondition: achievementConquerStarSystems,
-        specialConditionArguments: [100],
+        specialConditionArguments: [50],
         resetOnRebirth: false,
         active: false,
         requirements: {
@@ -2635,23 +2635,48 @@ export function achievementBeatEnemy(victoryType) {
 }
 
 export function achievementSpendAp() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('spendAP');
+    if (getAchievementFlagArray().includes('spendAP')) {
+        setAchievementFlagArray('spendAP', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementPerformGalaticMarketTransaction() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('performGalacticMarketTransaction');
+    if (getAchievementFlagArray().includes('performGalacticMarketTransaction')) {
+        setAchievementFlagArray('performGalacticMarketTransaction', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementLiquidateAllAssets() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('liquidateAllAssets');
+    if (getAchievementFlagArray().includes('liquidateAllAssets')) {
+        setAchievementFlagArray('liquidateAllAssets', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementRebirth() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('rebirth');
+    if (getAchievementFlagArray().includes('rebirth')) {
+        setAchievementFlagArray('rebirth', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementConquerStarSystems(conqueredQuantity) {
-    // Function implementation here
+    if (getStatRun() - 1 >= conqueredQuantity) {
+        switch (conqueredQuantity) {
+            case 10:
+                grantAchievement('conquer10StarSystems');
+                break;
+            case 50:
+                grantAchievement('conquer50StarSystems');
+                break;
+        }
+    }
 }
 
 export function achievementSeeAllNewsTickers() {
@@ -2667,7 +2692,11 @@ export function achievementCollect100TitaniumAsPrecipitation() {
 }
 
 export function achievementDiscoverLegendaryAsteroid() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('discoverLegendaryAsteroid');
+    if (getAchievementFlagArray().includes('discoverLegendaryAsteroid')) {
+        setAchievementFlagArray('discoverLegendaryAsteroid', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementHave4RocketsMiningAntimatter() {
@@ -2699,7 +2728,7 @@ export function achievementHave50HoursWithOnePioneer() {
     const startTimeStamp = getGameStartTime();
 }
 
-export function grantAchievement(achievement) { //all achievements through here regardless of type
+export function grantAchievement(achievement) {
     setAchievementDataObject(true, achievement.id, ['active']);
     showNotification(getAchievementNotification(achievement.notification), 'achievement', 4000, 'default');
 

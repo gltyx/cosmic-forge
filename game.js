@@ -234,7 +234,8 @@ import {
     setGalacticMarketIncomingQuantity,
     getGalacticMarketIncomingQuantity,
     setCurrentGalacticMarketCommission,
-    getCurrentGalacticMarketCommission
+    getCurrentGalacticMarketCommission,
+    getAchievementFlagArray
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3926,6 +3927,7 @@ export function galacticMarketLiquidateForAp(quantityOfAp) {
     const newAscendencyPoints = Math.floor(getAscendencyPoints() + quantityOfAp);
     setAscendencyPoints(newAscendencyPoints);
     setLiquidatedThisRun(true);
+    setAchievementFlagArray('liquidateAllAssets', 'add');
 }
 
 
@@ -4021,6 +4023,7 @@ export function galacticMarketTrade() {
     const notificationMessage = `You have traded ${outgoingMessage} for ${incomingMessage} and paid ${commissionMessage} commission!`;
 
     showNotification(notificationMessage, 'info', 5000, 3000, 'special');
+    setAchievementFlagArray('performGalacticMarketTransaction', 'add');
 }
 
 function removeAndReplaceOutgoingOptionFromIncomingDropDown(outgoingDropdown, incomingDropdown) {
@@ -5471,6 +5474,7 @@ function processAutoSell(item, quantityToSell, type) {
 }
 
 export function purchaseBuff(buff) {
+    setAchievementFlagArray('spendAP', 'add');
     const ascendencyBuffDataObject = Object.fromEntries(Object.entries(getAscendencyBuffDataObject()).filter(([key]) => key !== "version"));
     const currentAscendencyPoints = getResourceDataObject('ascendencyPoints', ['quantity']);
 
@@ -7023,7 +7027,7 @@ export function extendStarDataRange(debug) {
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);
-    
+
     if (getStarVisionDistance() >= 100) {
         setAchievementFlagArray('studyAllStarsInOneRun', 'add');
     }
@@ -7157,6 +7161,10 @@ function generateAsteroidData(name) {
             rarity = "Legendary";
             rarityClass = 'green-ready-text';
         }
+    }
+
+    if (rarity === "Legendary" ) {
+        setAchievementFlagArray('discoverLegendaryAsteroid', 'add');
     }
 
     const easeOfExtraction = Math.floor(Math.random() * 10) + 1;
@@ -8418,6 +8426,7 @@ export function addPermanentBuffsBackInAfterRebirth() {
 }
 
 export function rebirth() {
+    setAchievementFlagArray('rebirth', 'add');
     autoSelectOption('galacticMarketOption');
     document.getElementById('tabsContainer').children[0]?.click();
     autoSelectOption('hydrogenOption');
