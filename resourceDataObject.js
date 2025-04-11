@@ -1,7 +1,7 @@
-import { getAchievementNotification, replaceRocketNames } from "./descriptions.js";
+import { refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme } from "./constantsAndGlobalVars.js";
+import { getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -1087,7 +1087,7 @@ export let ascendencyBuffs = {
     }
 };
 
-export const achievementsData = {
+export let achievementsData = {
     collect50Hydrogen: {
         id: "collect50Hydrogen",
         name: "Collect 50 Hydrogen",
@@ -1179,6 +1179,7 @@ export const achievementsData = {
     collect100Precipitation: {
         id: "collect100Precipitation",
         name: "Collect 100 Precipitation",
+        specialConditionName: 'achievementCollect100Precipitation',
         specialCondition: achievementCollect100Precipitation,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1217,6 +1218,7 @@ export const achievementsData = {
     createSteel: {
         id: "createSteel",
         name: "Create Steel",
+        specialConditionName: 'achievementCreateCompound',
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['steel'],
         resetOnRebirth: true,
@@ -1237,6 +1239,7 @@ export const achievementsData = {
     createTitanium: {
         id: "createTitanium",
         name: "Create Titanium",
+        specialConditionName: 'achievementCreateCompound',
         specialCondition: achievementCreateCompound,
         specialConditionArguments: ['titanium'],
         resetOnRebirth: true,
@@ -1295,6 +1298,7 @@ export const achievementsData = {
     researchAllTechnologies: {
         id: "researchAllTechnologies",
         name: "Research All Technologies",
+        specialConditionName: 'achievementResearchAllTechnologies',
         specialCondition: achievementResearchAllTechnologies,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1314,6 +1318,7 @@ export const achievementsData = {
     achieve100FusionEfficiency: {
         id: "achieve100FusionEfficiency",
         name: "Achieve 100% Fusion Efficiency",
+        specialConditionName: 'achievementAchieve100FusionEfficiency',
         specialCondition: achievementAchieve100FusionEfficiency,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1333,6 +1338,7 @@ export const achievementsData = {
     have50HoursWithOnePioneer: {
         id: "have50HoursWithOnePioneer",
         name: "Have 50 Hours Logged with One Pioneer Name",
+        specialConditionName: 'achievementHave50HoursWithOnePioneer',
         specialCondition: achievementHave50HoursWithOnePioneer,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1398,6 +1404,7 @@ export const achievementsData = {
     collect100TitaniumAsPrecipitation: {
         id: "collect100TitaniumAsPrecipitation",
         name: "Collect 100 Titanium as Precipitation",
+        specialConditionName: 'achievementCollect100TitaniumAsPrecipitation',
         specialCondition: achievementCollect100TitaniumAsPrecipitation,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1504,6 +1511,7 @@ export const achievementsData = {
     seeAllNewsTickers: {
         id: "seeAllNewsTickers",
         name: "See All News Tickers",
+        specialConditionName: 'achievementSeeAllNewsTickers',
         specialCondition: achievementSeeAllNewsTickers,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1524,6 +1532,7 @@ export const achievementsData = {
     activateAllWackyNewsTickers: {
         id: "activateAllWackyNewsTickers",
         name: "Activate All Wacky News Tickers",
+        specialConditionName: 'achievementActivateAllWackyNewsTickers',
         specialCondition: achievementActivateAllWackyNewsTickers,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1544,6 +1553,7 @@ export const achievementsData = {
     discoverLegendaryAsteroid: {
         id: "discoverLegendaryAsteroid",
         name: "Discover a Legendary Asteroid",
+        specialConditionName: 'achievementDiscoverLegendaryAsteroid',
         specialCondition: achievementDiscoverLegendaryAsteroid,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1563,6 +1573,7 @@ export const achievementsData = {
     have4RocketsMiningAntimatter: {
         id: "have4RocketsMiningAntimatter",
         name: "Have 4 Rockets Simultaneously Mining Antimatter",
+        specialConditionName: 'achievementHave4RocketsMiningAntimatter',
         specialCondition: achievementHave4RocketsMiningAntimatter,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1582,6 +1593,7 @@ export const achievementsData = {
     tripPower: {
         id: "tripPower",
         name: "Trip the Power",
+        specialConditionName: 'achievementTripPower',
         specialCondition: achievementTripPower,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1602,6 +1614,7 @@ export const achievementsData = {
     discoverAsteroid: {
         id: "discoverAsteroid",
         name: "Discover an Asteroid",
+        specialConditionName: 'achievementDiscoverAsteroid',
         specialCondition: achievementDiscoverAsteroid,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1622,6 +1635,7 @@ export const achievementsData = {
     launchRocket: {
         id: "launchRocket",
         name: "Launch a Rocket",
+        specialConditionName: 'achievementLaunchRocket',
         specialCondition: achievementLaunchRocket,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1642,6 +1656,7 @@ export const achievementsData = {
     mineAllAntimatterAsteroid: {
         id: "mineAllAntimatterAsteroid",
         name: "Mine All Antimatter from an Asteroid",
+        specialConditionName: 'achievementMineAllAntimatterAsteroid',
         specialCondition: achievementMineAllAntimatterAsteroid,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1661,6 +1676,7 @@ export const achievementsData = {
     studyStar: {
         id: "studyStar",
         name: "Study a Star",
+        specialConditionName: 'achievementStudyAStar',
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [0.5],
         resetOnRebirth: true,
@@ -1681,6 +1697,7 @@ export const achievementsData = {
     studyStarMoreThan5LYAway: {
         id: "studyStarMoreThan5LYAway",
         name: "Study a Star More Than 5ly Away",
+        specialConditionName: 'achievementStudyAStar',
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [5],
         resetOnRebirth: true,
@@ -1701,6 +1718,7 @@ export const achievementsData = {
     studyStarMoreThan20LYAway: {
         id: "studyStarMoreThan20LYAway",
         name: "Study a Star More Than 20ly Away",
+        specialConditionName: 'achievementStudyAStar',
         specialCondition: achievementStudyAStar,
         specialConditionArguments: [20],
         resetOnRebirth: true,
@@ -1721,6 +1739,7 @@ export const achievementsData = {
     launchStarship: {
         id: "launchStarship",
         name: "Launch a Starship",
+        specialConditionName: 'achievementLaunchStarShip',
         specialCondition: achievementLaunchStarShip,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1740,6 +1759,7 @@ export const achievementsData = {
     performGalacticMarketTransaction: {
         id: "performGalacticMarketTransaction",
         name: "Perform a Galactic Market Transaction",
+        specialConditionName: 'achievementPerformGalaticMarketTransaction',
         specialCondition: achievementPerformGalaticMarketTransaction,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1759,6 +1779,7 @@ export const achievementsData = {
     trade10APForCash: {
         id: "trade10APForCash",
         name: "Trade 10 AP for Cash in One Transaction in the Galactic Market",
+        specialConditionName: 'achievementTrade10APForCash',
         specialCondition: achievementTrade10APForCash,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -1778,6 +1799,7 @@ export const achievementsData = {
     initiateDiplomacyWithAlienRace: {
         id: "initiateDiplomacyWithAlienRace",
         name: "Initiate Diplomacy with an Alien Race",
+        specialConditionName: 'achievementInitiateDiplomacyWithAlienRace',
         specialCondition: achievementInitiateDiplomacyWithAlienRace,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1798,6 +1820,7 @@ export const achievementsData = {
     bullyEnemyIntoSubmission: {
         id: "bullyEnemyIntoSubmission",
         name: "Bully an Enemy into Submission",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['bully'],
         resetOnRebirth: false,
@@ -1817,6 +1840,7 @@ export const achievementsData = {
     vassalizeEnemy: {
         id: "vassalizeEnemy",
         name: "Vassalize an Enemy",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments:  ['vassalize'],
         resetOnRebirth: false,
@@ -1836,6 +1860,7 @@ export const achievementsData = {
     conquerEnemy: {
         id: "conquerEnemy",
         name: "Conquer an Enemy",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['conquer'],
         resetOnRebirth: false,
@@ -1855,6 +1880,7 @@ export const achievementsData = {
     conquerHiveMindEnemy: {
         id: "conquerHiveMindEnemy",
         name: "Conquer a Hive Mind Enemy",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['hiveMind'],
         resetOnRebirth: false,
@@ -1874,6 +1900,7 @@ export const achievementsData = {
     conquerBelligerentEnemy: {
         id: "conquerBelligerentEnemy",
         name: "Conquer a Belligerent Enemy",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['belligerent'],
         resetOnRebirth: false,
@@ -1893,6 +1920,7 @@ export const achievementsData = {
     conquerEnemyWithoutScanning: {
         id: "conquerEnemyWithoutScanning",
         name: "Conquer an Enemy Without Scanning the System",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['withoutScanning'],
         resetOnRebirth: false,
@@ -1912,6 +1940,7 @@ export const achievementsData = {
     settleUnoccupiedSystem: {
         id: "settleUnoccupiedSystem",
         name: "Settle an Unoccupied System",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['unoccupied'],
         resetOnRebirth: false,
@@ -1931,6 +1960,7 @@ export const achievementsData = {
     discoverSystemWithNoLife: {
         id: "discoverSystemWithNoLife",
         name: "Discover a System with No Life",
+        specialConditionName: 'achievementBeatEnemy',
         specialCondition: achievementBeatEnemy,
         specialConditionArguments: ['noLife'],
         resetOnRebirth: false,
@@ -1951,6 +1981,7 @@ export const achievementsData = {
         id: "settleSystem",
         name: "Settle a System",
         specialCondition: achievementBeatEnemy,
+        specialConditionName: 'achievementBeatEnemy',
         specialConditionArguments: ['settleNormal'],
         resetOnRebirth: false,
         active: false,
@@ -1969,6 +2000,7 @@ export const achievementsData = {
     spendAP: {
         id: "spendAP",
         name: "Spend Ascendency Points",
+        specialConditionName: 'achievementSpendAp',
         specialCondition: achievementSpendAp,
         specialConditionArguments: false,
         resetOnRebirth: true,
@@ -1989,6 +2021,7 @@ export const achievementsData = {
     liquidateAllAssets: {
         id: "liquidateAllAssets",
         name: "Liquidate All Assets",
+        specialConditionName: 'achievementLiquidateAllAssets',
         specialCondition: achievementLiquidateAllAssets,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -2008,6 +2041,7 @@ export const achievementsData = {
     rebirth: {
         id: "rebirth",
         name: "Rebirth",
+        specialConditionName: 'achievementRebirth',
         specialCondition: achievementRebirth,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -2028,6 +2062,7 @@ export const achievementsData = {
     conquer10StarSystems: {
         id: "conquer10StarSystems",
         name: "Conquer 10 Star Systems",
+        specialConditionName: 'achievementConquerStarSystems',
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [10],
         resetOnRebirth: false,
@@ -2047,6 +2082,7 @@ export const achievementsData = {
     conquer50StarSystems: {
         id: "conquer50StarSystems",
         name: "Conquer 50 Star Systems",
+        specialConditionName: 'achievementConquerStarSystems',
         specialCondition: achievementConquerStarSystems,
         specialConditionArguments: [100],
         resetOnRebirth: false,
@@ -2066,6 +2102,7 @@ export const achievementsData = {
     studyAllStarsInOneRun: {
         id: "studyAllStarsInOneRun",
         name: "Study All Stars in the Star Map in One Run",
+        specialConditionName: 'achievementStudyAllStarsInOneRun',
         specialCondition: achievementStudyAllStarsInOneRun,
         specialConditionArguments: false,
         resetOnRebirth: false,
@@ -2269,6 +2306,11 @@ export function restoreGalacticMarketDataObject(value) {
 export function restoreAscendencyBuffsDataObject(value) {
     value = migrateResourceData(value, 'ascendencyBuffsData')
     ascendencyBuffs = value;
+}
+
+export function restoreAchievementsDataObject(value) {
+    value = migrateResourceData(value, 'achievementsData')
+    achievementsData = value;
 }
 
 export function getStarSystemWeather(starSystem) {
@@ -2644,10 +2686,11 @@ export function achievementHave50HoursWithOnePioneer() {
     // Function implementation here
 }
 
-export function grantGenericAchievement(achievement) {
+export function grantAchievement(achievement) { //all achievements through here regardless of type
     setAchievementDataObject(true, achievement.id, ['active']);
-    //showNotification(getAchievementNotification(achievement.notification), 'achievement', 4000, 'default');
+    showNotification(getAchievementNotification(achievement.notification), 'achievement', 4000, 'default');
 
+    refreshAchievementTooltipDescriptions();
     addAchievementBonus(achievement);
 }
 
@@ -2665,20 +2708,20 @@ export function genericAchievementChecker(achievement) {
             const currentResourceQuantity = getResourceDataObject('resources', [resourceType, 'quantity']);
 
             if (currentResourceQuantity >= requiredQuantity) {
-                grantGenericAchievement(achievement);
+                grantAchievement(achievement);
             }
             break;
         case 'unlock':
             const requiredUnlock = achievement.requirements.value1;
             if (getUnlockedResourcesArray().includes(requiredUnlock)) {
-                grantGenericAchievement(achievement);
+                grantAchievement(achievement);
             }
             break;
         case 'tech':
             const requiredTech = achievement.requirements.value1;
 
             if (getTechUnlockedArray().includes(requiredTech)) {
-                grantGenericAchievement(achievement);
+                grantAchievement(achievement);
             }
             break;
         case 'buildings':
@@ -2686,7 +2729,7 @@ export function genericAchievementChecker(achievement) {
             const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingType, 'quantity']);
 
             if (buildingQuantity >= achievement.requirements.value1.quantity) {
-                grantGenericAchievement(achievement);
+                grantAchievement(achievement);
             }
             break;
         case 'cash':
@@ -2694,7 +2737,7 @@ export function genericAchievementChecker(achievement) {
             const currentCash = getResourceDataObject('currency', ['cash']);
 
             if (currentCash >= requiredCash) {
-                grantGenericAchievement(achievement);
+                grantAchievement(achievement);
             }
             break;
         case 'special':
@@ -2704,7 +2747,18 @@ export function genericAchievementChecker(achievement) {
 
 export function checkForAchievements() {
     const inactiveAchievements = Object.keys(achievementsData).reduce((acc, key) => {
+        if (key === 'version') return acc;
         const achievement = getAchievementDataObject(key);
+        
+        if (getCurrentOptionPane() === 'achievements') {
+            const achievementElement = document.getElementById(achievement.id);
+            if (achievement && achievement.active) {
+                achievementElement.style.opacity = 1;
+            } else if (achievement && !achievement.active) {
+                achievementElement.style.opacity = 0.3;
+            }
+        }
+
         if (achievement && achievement.active === false) {
             acc[key] = achievement;
         }
@@ -2725,3 +2779,31 @@ export function checkForAchievements() {
         }
     }
 }
+
+export const achievementFunctionsMap = {
+    achievementResearchAllTechnologies,
+    achievementAchieve100FusionEfficiency,
+    achievementTripPower,
+    achievementCollect100Precipitation,
+    achievementCreateCompound,
+    achievementDiscoverAsteroid,
+    achievementLaunchRocket,
+    achievementMineAllAntimatterAsteroid,
+    achievementStudyAStar,
+    achievementLaunchStarShip,
+    achievementInitiateDiplomacyWithAlienRace,
+    achievementBeatEnemy,
+    achievementSpendAp,
+    achievementPerformGalaticMarketTransaction,
+    achievementLiquidateAllAssets,
+    achievementRebirth,
+    achievementConquerStarSystems,
+    achievementSeeAllNewsTickers,
+    achievementActivateAllWackyNewsTickers,
+    achievementCollect100TitaniumAsPrecipitation,
+    achievementDiscoverLegendaryAsteroid,
+    achievementHave4RocketsMiningAntimatter,
+    achievementStudyAllStarsInOneRun,
+    achievementTrade10APForCash,
+    achievementHave50HoursWithOnePioneer
+};

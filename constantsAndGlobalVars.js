@@ -1,4 +1,4 @@
-import { restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs } from "./resourceDataObject.js";
+import { achievementFunctionsMap, restoreAchievementsDataObject, restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs, achievementsData } from "./resourceDataObject.js";
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
@@ -587,6 +587,8 @@ export function getElements() {
 
 export function resetAllVariablesOnRebirth() {
 
+    //resetAchievements() TODO
+
     runStartTimeStamp = null;
     rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
     asteroidArray = [];
@@ -677,7 +679,7 @@ export function resetAllVariablesOnRebirth() {
         rocket4: false 
     }
     
-    oneOffPrizesAlreadyClaimedArray = []; //reset this on rebirth as can claim once per run
+    oneOffPrizesAlreadyClaimedArray = [];
     
     activatedFuelBurnObject = {
         carbon: false,
@@ -799,6 +801,7 @@ export function captureGameStatusForSaving(type) {
     gameState.starSystems = JSON.parse(JSON.stringify(starSystems));
     gameState.galacticMarket = JSON.parse(JSON.stringify(galacticMarket));
     gameState.ascendencyBuffs = JSON.parse(JSON.stringify(ascendencyBuffs));
+    gameState.achievementsData = JSON.parse(JSON.stringify(achievementsData));
 
     // Global variables
     gameState.saveName = getSaveName();
@@ -962,6 +965,15 @@ export function restoreGameStatus(gameState, type) {
                 gameState.ascendencyBuffs = ascendencyBuffs;
             }
 
+            if (gameState.achievementsData) {
+                let parsed = JSON.parse(JSON.stringify(gameState.achievementsData));
+                parsed = attachAchievementFunctions(parsed);
+                restoreAchievementsDataObject(parsed);
+            } else {
+                gameState.achievementsData = achievementsData;
+            }
+            
+
             // Global variables
             if (type === 'cloud') {
                 if (gameState.saveName) {
@@ -1089,7 +1101,6 @@ export function restoreGameStatus(gameState, type) {
             rebirthPossible = gameState.flags.rebirthPossible ?? false;
             liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
 
-            //initializeAutoSave();
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
             offlineGains(false);
@@ -1143,6 +1154,21 @@ export function restoreGameStatus(gameState, type) {
     });
 }
 
+function attachAchievementFunctions(data) {
+    for (const key in data) {
+        if (key === 'version') continue;
+        const achievement = data[key];
+        if (!('specialCondition' in achievement)) {
+            const fn = achievementFunctionsMap[achievement.specialConditionName];
+            if (fn) {
+                achievement.specialCondition = fn;
+            }
+        }
+    }
+
+    return data;
+}
+
 function fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray) { //for fixing saves broken by my carelessness in migration.
     if (rocketsBuilt.length > 0) {
         setResourceDataObject(true, 'space', ['upgrades', 'launchPad', 'launchPadBoughtYet']);
@@ -1162,49 +1188,9 @@ function fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray) { //for fixi
     }
 }
 
-// export function setLocalization(value) {
-//     localization = value;
-// }
-
-// export function getLocalization() {
-//     return localization;
-// }
-
-// export function setLanguage(value) {
-//     language = value;
-// }
-
-// export function getLanguage() {
-//     return language;
-// }
-
-// export function setOldLanguage(value) {
-//     oldLanguage = value;
-// }
-
-// export function getOldLanguage() {
-//     return oldLanguage;
-// }
-
-// export function setAudioMuted(value) {
-//     audioMuted = value;
-// }
-
-// export function getAudioMuted() {
-//     return audioMuted;
-// }
-
 export function getGameVisibleActive() {
     return GAME_VISIBLE_ACTIVE;
 }
-
-// export function getLanguageSelected() {
-//     return languageSelected;
-// }
-
-// export function setLanguageSelected(value) {
-//     languageSelected = value;
-// }
 
 export function getTimerUpdateInterval() {
     return TIMER_UPDATE_INTERVAL;
