@@ -1,4 +1,5 @@
 import {
+    setAchievementFlagArray,
     getAutoSaveFrequency,
     getLiquidatedThisRun,
     setLiquidatedThisRun,
@@ -320,7 +321,6 @@ import {
  import { timerManager } from './timerManager.js';
 
  import { drawTab5Content } from './drawTab5Content.js';
- import { drawTab7Content } from './drawTab7Content.js';
 
 //--------------------------------------------------------------------------------------------------------
 export function startGame() {
@@ -3930,6 +3930,10 @@ export function galacticMarketLiquidateForAp(quantityOfAp) {
 
 
 export function galacticMarketSellApForCash(quantityOfAp) {
+    if (quantityOfAp === '10') {
+        setAchievementFlagArray('trade10APForCash', 'add');
+    }
+
     const currentApPrice = getApSellForCashPrice();
     const amountToCredit = quantityOfAp * currentApPrice;
     setResourceDataObject(getAscendencyPoints() - quantityOfAp, 'ascendencyPoints', ['quantity']);
@@ -7019,6 +7023,11 @@ export function extendStarDataRange(debug) {
     const currentRange = getStarVisionDistance();
 
     setStarVisionDistance(currentRange + increment);
+    
+    if (getStarVisionDistance() >= 100) {
+        setAchievementFlagArray('studyAllStarsInOneRun', 'add');
+    }
+
     addToResourceAllTimeStat(currentRange + increment, 'starStudyRange');
 
     if (getCurrentOptionPane() === 'star map') {

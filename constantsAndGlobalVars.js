@@ -77,6 +77,7 @@ export let classificationOrder = [];
 
 //GLOBAL VARIABLES
 export let gameState;
+let achievementFlagArray = [];
 
 let gameStartTimeStamp = null;
 let runStartTimeStamp = null;
@@ -3865,4 +3866,16 @@ function formatVariableDebuggerValue(value) {
     } else {
         return value;
     }
+}
+
+export function setAchievementFlagArray(achievementKey, action) {
+    if (action === 'add' && !achievementFlagArray.includes(achievementKey)) {
+        achievementFlagArray.push(achievementKey);
+    } else if (action === 'remove' && achievementFlagArray.includes(achievementKey)) {
+        achievementFlagArray = achievementFlagArray.filter(flag => flag !== achievementKey);
+    }
+}
+
+export function getAchievementFlagArray() {
+    return achievementFlagArray;
 }

@@ -1,7 +1,7 @@
 import { refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane } from "./constantsAndGlobalVars.js";
+import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -2671,19 +2671,32 @@ export function achievementDiscoverLegendaryAsteroid() {
 }
 
 export function achievementHave4RocketsMiningAntimatter() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('have4RocketsMiningAntimatter');
+    const miningObject = getMiningObject();
+
+    if (Object.values(miningObject).every(value => value !== null)) {
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementStudyAllStarsInOneRun() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('studyAllStarsInOneRun');
+    if (getAchievementFlagArray().includes('studyAllStarsInOneRun')) {
+        setAchievementFlagArray('studyAllStarsInOneRun', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementTrade10APForCash() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('trade10APForCash');
+    if (getAchievementFlagArray().includes('trade10APForCash')) {
+        setAchievementFlagArray('trade10APForCash', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementHave50HoursWithOnePioneer() {
-    // Function implementation here
+    const startTimeStamp = getGameStartTime();
 }
 
 export function grantAchievement(achievement) { //all achievements through here regardless of type
