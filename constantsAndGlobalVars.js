@@ -1940,12 +1940,16 @@ export function setBuildingTypeOnOff(building, value) {
     
     const totalRate = powerPlant1PurchasedRate + powerPlant2PurchasedRate + powerPlant3PurchasedRate;
 
-    if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) && getResourceDataObject('buildings', ['energy', 'consumption']) > totalRate) {
+    const batteryBought = getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']);
+    const energyConsumption = getResourceDataObject('buildings', ['energy', 'consumption']);
+    const energyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
+    
+    if (
+        (!batteryBought && energyConsumption > totalRate) ||
+        (batteryBought && energyQuantity === 0 && energyConsumption > totalRate)
+    ) {
         setTrippedStatus(true);
-    }
-
-    if (getResourceDataObject('buildings', ['energy', 'batteryBoughtYet']) && getResourceDataObject('buildings', ['energy', 'quantity']) === 0 && getResourceDataObject('buildings', ['energy', 'consumption']) > totalRate) {
-        setTrippedStatus(true);
+        setAchievementFlagArray('tripPower', 'add');
     }
 
     buildingTypeOnOff[building] = value;

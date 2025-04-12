@@ -2587,20 +2587,36 @@ export function getMaxFleetShip(fleetShip) {
 }
 
 export function achievementResearchAllTechnologies() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('researchAllTechnologies');
+    const allTechs = getResourceDataObject('techs');
+    const unlockedTechs = getTechUnlockedArray();
+    const allTechsUnlocked = Object.keys(allTechs).every(techKey => unlockedTechs.includes(techKey));
+
+    if (allTechsUnlocked) {
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementAchieve100FusionEfficiency() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('achieve100FusionEfficiency');
+    if (getTechUnlockedArray().includes('fusionEfficiencyIII')) {
+        setAchievementFlagArray('achieve100FusionEfficiency', 'remove');
+        grantAchievement(achievement);
+    }   
 }
 
 export function achievementTripPower() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('tripPower');
+    if (getAchievementFlagArray().includes('tripPower')) {
+        setAchievementFlagArray('tripPower', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementCollect100Precipitation() {
     // Function implementation here
 }
+
 
 export function achievementCreateCompound() {
     let achievement;
