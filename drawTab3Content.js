@@ -1,4 +1,4 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
@@ -276,6 +276,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('neonFusion');
                         updateDescriptionRow('neonSellRow', 'content2');
                         showNotification(techNotificationMessages.neonFusion, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('water');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neonFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -398,6 +399,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('glassManufacture');
                         showNotification(techNotificationMessages.glassManufacture, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('glass');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'glassManufacture', null, 'research', true, null, 'tech'),
                     null,
@@ -428,6 +430,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('aggregateMixing');
                         showNotification(techNotificationMessages.aggregateMixing, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('concrete');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'aggregateMixing', null, 'research', true, null, 'tech'),
                     null,
@@ -458,6 +461,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('neutronCapture');
                         showNotification(techNotificationMessages.neutronCapture, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('titanium');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neutronCapture', null, 'research', true, null, 'tech'),
                     null,
@@ -554,6 +558,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('hydroCarbons');
                         showNotification(techNotificationMessages.hydroCarbons, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('diesel');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'hydroCarbons', null, 'research', true, null, 'tech'),
                     null,
@@ -924,6 +929,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         event.currentTarget.classList.add('unlocked-tech');
                         setTechUnlockedArray('steelFoundries');
                         showNotification(techNotificationMessages.steelFoundries, 'info', 3000, 'tech');
+                        setUnlockedCompoundsArray('steel');
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'steelFoundries', null, 'research', true, null, 'tech'),
                     null,

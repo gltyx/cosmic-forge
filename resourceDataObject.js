@@ -1,7 +1,7 @@
-import { refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
+import { newsTickerContent, refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance } from "./constantsAndGlobalVars.js";
+import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -2614,7 +2614,10 @@ export function achievementTripPower() {
 }
 
 export function achievementCollect100Precipitation() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('collect100Precipitation');
+    if (getCollectedPrecipitationQuantityThisRun() >= 100) {
+        grantAchievement(achievement);
+    }
 }
 
 
@@ -2761,15 +2764,44 @@ export function achievementConquerStarSystems(conqueredQuantity) {
 }
 
 export function achievementSeeAllNewsTickers() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('seeAllNewsTickers');
+    const newsTickerObject = newsTickerContent;
+    let totalLength = 0;
+
+    for (const key in newsTickerObject) {
+        const array = newsTickerObject[key];
+        if (Array.isArray(array)) {
+            totalLength += array.length;
+        }
+    }
+
+    if (totalLength === getAlreadySeenNewsTickerArray().length) {
+        grantAchievement(achievement);
+    }
 }
 
-export function achievementActivateAllWackyNewsTickers(conqueredQuantity) {
-    // Function implementation here
+export function achievementActivateAllWackyNewsTickers() {
+    const achievement = getAchievementDataObject('activateAllWackyNewsTickers');
+    const newsTickerObject = newsTickerContent;
+    const wackyArray = newsTickerObject['wackyEffects'];
+    let totalLength = 0;
+
+    if (Array.isArray(wackyArray)) {
+        totalLength = wackyArray.length;
+    }
+
+    if (totalLength === getActivatedWackyNewsEffectsArray().length) {
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementCollect100TitaniumAsPrecipitation() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('collect100TitaniumAsPrecipitation');
+    const currentPrecipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
+
+    if (currentPrecipitationType === 'titanium' && getCollectedPrecipitationQuantityThisRun() >= 100) {
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementDiscoverLegendaryAsteroid() {
@@ -2807,6 +2839,7 @@ export function achievementTrade10APForCash() {
 
 export function achievementHave50HoursWithOnePioneer() {
     const startTimeStamp = getGameStartTime();
+    //TODO
 }
 
 export function grantAchievement(achievement) {

@@ -1,4 +1,4 @@
-import { achievementFunctionsMap, restoreAchievementsDataObject, restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs, achievementsData } from "./resourceDataObject.js";
+import { achievementFunctionsMap, restoreAchievementsDataObject, restoreAscendencyBuffsDataObject, restoreGalacticMarketDataObject, restoreRocketNamesObject, restoreResourceDataObject, restoreStarSystemsDataObject, resourceData, starSystems, getResourceDataObject, setResourceDataObject, galacticMarket, ascendencyBuffs, achievementsData, getStarSystemDataObject } from "./resourceDataObject.js";
 import { drawTechTree, selectTheme, startWeatherEffect, stopWeatherEffect } from "./ui.js";
 import { capitaliseWordsWithRomanNumerals, capitaliseString } from './utilityFunctions.js';
 import { offlineGains, startNewsTickerTimer } from './game.js';
@@ -84,6 +84,8 @@ let runStartTimeStamp = null;
 let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
 let alreadySeenNewsTickerArray = [];
+let activatedWackyNewsEffectsArray = [];
+let collectedPrecipitationQuantityThisRun = 0;
 let rocketsBuilt = [];
 let starShipModulesBuilt = [];
 let rocketsFuellerStartedArray = [];
@@ -136,7 +138,7 @@ let runNumber = 1;
 let settledStars = [STARTING_STAR_SYSTEM];
 let apSellForCashPrice = AP_BASE_SELL_PRICE;
 let apBuyForCashPrice = AP_BASE_BUY_PRICE;
-let apLiquidationQuantity = 0;  
+let apLiquidationQuantity = 0;
 
 let battleUnits = { 
     player: [], 
@@ -590,7 +592,6 @@ export function getElements() {
 export function resetAllVariablesOnRebirth() {
 
     //resetAchievements() TODO
-
     runStartTimeStamp = null;
     rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
     asteroidArray = [];
@@ -636,6 +637,7 @@ export function resetAllVariablesOnRebirth() {
     toStarObject = null;
     currentStarObject = null;
     starShipStatus = ['preconstruction', null];
+    collectedPrecipitationQuantityThisRun = 0;
 
     runNumber++;
     
@@ -817,7 +819,7 @@ export function captureGameStatusForSaving(type) {
     gameState.revealedTechArray = revealedTechArray;
     gameState.upcomingTechArray = upcomingTechArray;
     gameState.unlockedResourcesArray = unlockedResourcesArray;
-    gameState.unlockedCompoundsArray = unlockedResourcesArray;
+    gameState.unlockedCompoundsArray = unlockedCompoundsArray;
     gameState.activatedFuelBurnObject = activatedFuelBurnObject;
     gameState.buildingTypeOnOff = buildingTypeOnOff;
     gameState.ranOutOfFuelWhenOn = ranOutOfFuelWhenOn;
@@ -882,6 +884,9 @@ export function captureGameStatusForSaving(type) {
     gameState.apAnticipatedThisRun = apAnticipatedThisRun;
     gameState.allTimeStarShipsBuilt = allTimeStarShipsBuilt;
     gameState.alreadySeenNewsTickerArray = alreadySeenNewsTickerArray;
+    gameState.activatedWackyNewsEffectsArray = activatedWackyNewsEffectsArray;
+    gameState.collectedPrecipitationQuantityThisRun = collectedPrecipitationQuantityThisRun;
+
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
     gameState.allTimesTripped = allTimesTripped;
@@ -1074,6 +1079,8 @@ export function restoreGameStatus(gameState, type) {
             battleResolved = gameState.battleResolved ?? [false, null];
             settledStars = gameState.settledStars ?? [STARTING_STAR_SYSTEM];
             currentGalacticMarketCommission = gameState.currentGalacticMarketCommission ?? 10;
+            activatedWackyNewsEffectsArray = gameState.activatedWackyNewsEffectsArray ?? [];
+            collectedPrecipitationQuantityThisRun = gameState.collectedPrecipitationQuantityThisRun ?? 0;
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -1115,6 +1122,7 @@ export function restoreGameStatus(gameState, type) {
             }
 
             //replaceRocketNames(gameState.rocketNames);
+            patchAchievementsPrecipitation();
             fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray);
             
             const autoSaveToggleElement = document.getElementById('autoSaveToggle');
@@ -1172,6 +1180,27 @@ function attachAchievementFunctions(data) {
     }
 
     return data;
+}
+
+export function patchAchievementsPrecipitation() { //to add unlocked compounds to saves
+    const unlockedTechs = getTechUnlockedArray();
+    const unlockedCompounds = getUnlockedCompoundsArray();
+
+    const techToCompoundMap = {
+        hydroCarbons: 'diesel',
+        glassManufacture: 'glass',
+        aggregateMixing: 'concrete',
+        steelFoundries: 'steel',
+        neutronCapture: 'titanium',
+        neonFusion: 'water'
+    };
+
+    for (const tech in techToCompoundMap) {
+        const compound = techToCompoundMap[tech];
+        if (unlockedTechs.includes(tech) && !unlockedCompounds.includes(compound)) {
+            setUnlockedCompoundsArray(compound);
+        }
+    }
 }
 
 function fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray) { //for fixing saves broken by my carelessness in migration.
@@ -1969,10 +1998,6 @@ export function getTrippedStatus() {
 
 export function setTrippedStatus(value) {
     trippedStatus = value;
-}
-
-export function getAlreadySeenNewsTickerArray() {
-    return alreadySeenNewsTickerArray;
 }
 
 export function getCurrentStarSystem() {
@@ -3395,6 +3420,26 @@ function setStatAsteroidsMined(valueToAdd) {
     asteroidsMinedThisRun += valueToAdd;
 }
 
+export function getActivatedWackyNewsEffectsArray() {
+    return activatedWackyNewsEffectsArray;
+}
+
+export function setCollectedPrecipitationQuantityThisRun(value) {
+    collectedPrecipitationQuantityThisRun = value;
+}
+
+export function getCollectedPrecipitationQuantityThisRun() {
+    return collectedPrecipitationQuantityThisRun;
+}
+
+export function setActivatedWackyNewsEffectsArray(value) {
+    activatedWackyNewsEffectsArray.push(value);
+}
+
+export function getAlreadySeenNewsTickerArray() {
+    return alreadySeenNewsTickerArray;
+}
+
 export function setAlreadySeenNewsTickerArray(value) {
     alreadySeenNewsTickerArray.push(value);
 }
@@ -3426,23 +3471,6 @@ export function setSettledStars(value) {
 //image urls----------------------------------------------------------------------------------------------------------------------
 
 const IMAGE_URLS = {
-    /*
-    `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠋⠙⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿⠁⠀⠀⠈⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⢀⣀⣤⣤⣀⣀⡀⠀⢸⠃⠀⠀⠀⠀⠘⡇⠀⢀⣀⣀⣤⣤⣀⡀⠀⠀⠀
-⠀⠀⠀⢸⠉⠀⠀⠉⠉⠛⠻⣿⣤⣀⠀⠀⣀⣤⣿⠟⠛⠉⠉⠁⠈⠉⡇⠀⠀⠀
-⠀⠀⠀⠘⣧⡀⠀⠀⠀⠀⠀⣇⣀⣽⠿⠿⣯⣀⣸⠀⠀⠀⠀⠀⢀⣼⠃⠀⠀⠀
-⠀⠀⠀⠀⠈⠻⣦⡀⠀⣠⣴⡟⠉⠀⢀⡀⠀⠉⢻⣦⣄⠀⢀⣴⠟⠁⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢈⣿⣿⣉⠀⡇⠀⢰⣿⣿⠆⠀⢸⠀⣉⣿⣿⡁⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⢀⣴⠟⠁⠀⠙⠻⣧⣀⠀⠉⠉⠀⣀⣼⠟⠋⠀⠈⠻⣦⡀⠀⠀⠀⠀
-⠀⠀⠀⢠⡟⠁⠀⠀⠀⠀⠀⡏⠉⣻⣶⣶⣟⠉⢹⠀⠀⠀⠀⠀⠈⢻⡄⠀⠀⠀
-⠀⠀⠀⢸⣀⠀⠀⣀⣀⣤⣴⣿⠛⠉⠀⠀⠉⠛⣿⣦⣤⣀⣀⠀⠀⣀⡇⠀⠀⠀
-⠀⠀⠀⠈⠉⠛⠛⠉⠉⠁⠀⢸⡄⠀⠀⠀⠀⢠⡇⠀⠈⠉⠉⠛⠛⠉⠁⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷⡀⠀⠀⢀⣾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢷⣄⣠⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`
-*/
     'resources': `⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠋⠙⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿⠁⠀⠀⠈⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

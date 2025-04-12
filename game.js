@@ -1,4 +1,7 @@
 import {
+    getUnlockedCompoundsArray,
+    getCollectedPrecipitationQuantityThisRun,
+    setCollectedPrecipitationQuantityThisRun,
     setBelligerentEnemyFlag,
     setAchievementFlagArray,
     getAutoSaveFrequency,
@@ -4939,6 +4942,11 @@ function startInitialTimers() {
                             const amountToAdd = Math.min(currentQuantity + calculatedCompoundRate, storageCapacity);
                             setResourceDataObject(amountToAdd, 'compounds', [compound, 'quantity']);
                             addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedCompoundRate, compound);
+
+                            if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']) && getUnlockedCompoundsArray().includes(getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']))) {
+                                const amountOfPrecipitationThisTimerIteration = (currentQuantity >= storageCapacity) ? 0 : autoBuyerExtractionRate;
+                                setCollectedPrecipitationQuantityThisRun(getCollectedPrecipitationQuantityThisRun() + amountOfPrecipitationThisTimerIteration);
+                            }
                             
                             let allCompoundRatesAddedTogether = 
                                 getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
@@ -4986,6 +4994,11 @@ function startInitialTimers() {
                                 setResourceDataObject(amountToAdd, 'compounds', [compound, 'quantity']);
                                 addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedCompoundRate, compound);
                                 
+                                if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']) && getUnlockedCompoundsArray().includes(getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']))) {
+                                    const amountOfPrecipitationThisTimerIteration = (currentQuantity >= storageCapacity) ? 0 : autoBuyerExtractionRate;
+                                    setCollectedPrecipitationQuantityThisRun(getCollectedPrecipitationQuantityThisRun() + amountOfPrecipitationThisTimerIteration);
+                                }
+
                                 let compoundTier1Rate = 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'rate']) * 
                                     getResourceDataObject('compounds', [compound, 'upgrades', 'autoBuyer', 'tier1', 'quantity']);
@@ -7423,12 +7436,12 @@ export function calculateAntimatterRequired(distance) {
 
 export function calculatePrecipitationType() {
     const precipitationWeights = [
-        { type: "titanium", weight: 2 },
-        { type: "water", weight: 50 },
-        { type: "glass", weight: 17 },
-        { type: "diesel", weight: 25 },
+        { type: "titanium", weight: 4 },
+        { type: "water", weight: 40 },
+        { type: "glass", weight: 19 },
+        { type: "diesel", weight: 30 },
         { type: "concrete", weight: 0 },
-        { type: "steel", weight: 6 }
+        { type: "steel", weight: 7 }
     ];
 
     const weightedPrecipitationTypes = [];

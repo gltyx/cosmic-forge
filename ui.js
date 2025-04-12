@@ -101,7 +101,8 @@ import {
     STACK_WIDTH,
     BASE_RIGHT,
     setAchievementFlagArray,
-
+    getActivatedWackyNewsEffectsArray,
+    setActivatedWackyNewsEffectsArray
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -3821,10 +3822,13 @@ function addWackyEffectsEventListeners() {
                 break;
         }
 
+        if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
+            setActivatedWackyNewsEffectsArray(effectItem);
+        }
+
         targetElement.style.animation = newAnimation;
 
         prizeTickerSpan.style.pointerEvents = 'none';
-
     });
 }
 
@@ -5155,6 +5159,13 @@ grantAllTechsButton.addEventListener('click', () => {
     Object.keys(techArray).forEach((techKey) => {
         setTechUnlockedArray(techKey);
     });
+
+    setUnlockedCompoundsArray('diesel');
+    setUnlockedCompoundsArray('glass');
+    setUnlockedCompoundsArray('steel');
+    setUnlockedCompoundsArray('concrete');
+    setUnlockedCompoundsArray('water');
+    setUnlockedCompoundsArray('titanium');
 
     setCanFuelRockets(true);
     setCanTravelToAsteroids(true);
