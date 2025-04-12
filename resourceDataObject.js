@@ -1,7 +1,7 @@
 import { refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun } from "./constantsAndGlobalVars.js";
+import { setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -1220,7 +1220,7 @@ export let achievementsData = {
         name: "Create Steel",
         specialConditionName: 'achievementCreateCompound',
         specialCondition: achievementCreateCompound,
-        specialConditionArguments: ['steel'],
+        specialConditionArguments: false,
         resetOnRebirth: true,
         active: false,
         requirements: {
@@ -1241,7 +1241,7 @@ export let achievementsData = {
         name: "Create Titanium",
         specialConditionName: 'achievementCreateCompound',
         specialCondition: achievementCreateCompound,
-        specialConditionArguments: ['titanium'],
+        specialConditionArguments: false,
         resetOnRebirth: true,
         active: false,
         requirements: {
@@ -2602,32 +2602,79 @@ export function achievementCollect100Precipitation() {
     // Function implementation here
 }
 
-export function achievementCreateCompound(compound) {
-    // Function implementation here
+export function achievementCreateCompound() {
+    let achievement;
+    if (getAchievementFlagArray().includes('createSteel')) {
+        achievement = getAchievementDataObject('createSteel');
+        setAchievementFlagArray('createSteel', 'remove');
+        grantAchievement(achievement);
+    }
+
+    if (getAchievementFlagArray().includes('createTitanium')) {
+        achievement = getAchievementDataObject('createTitanium');
+        setAchievementFlagArray('createTitanium', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementDiscoverAsteroid() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('discoverAsteroid');
+    if (getAchievementFlagArray().includes('discoverAsteroid')) {
+        setAchievementFlagArray('discoverAsteroid', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementLaunchRocket() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('launchRocket');
+    if (getAchievementFlagArray().includes('launchRocket')) {
+        setAchievementFlagArray('launchRocket', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementMineAllAntimatterAsteroid() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('mineAllAntimatterAsteroid');
+    if (getAchievementFlagArray().includes('mineAllAntimatterAsteroid')) {
+        setAchievementFlagArray('mineAllAntimatterAsteroid', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementStudyAStar(requiredDistance) {
-    // Function implementation here
+    let achievement;
+    if (getStarVisionDistance() >= requiredDistance) {
+        switch (requiredDistance) {
+            case 0.5:
+                achievement = getAchievementDataObject('studyStar');
+                break;
+            case 5:
+                achievement = getAchievementDataObject('studyStarMoreThan5LYAway');
+                break;
+            case 20:
+                achievement = getAchievementDataObject('studyStarMoreThan20LYAway');
+                break;
+        }
+        if (achievement) {
+            grantAchievement(achievement);
+        }
+    }
 }
 
 export function achievementLaunchStarShip() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('launchStarship');
+    if (getAchievementFlagArray().includes('launchStarship')) {
+        setAchievementFlagArray('launchStarship', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementInitiateDiplomacyWithAlienRace() {
-    // Function implementation here
+    const achievement = getAchievementDataObject('initiateDiplomacyWithAlienRace');
+    if (getAchievementFlagArray().includes('initiateDiplomacyWithAlienRace')) {
+        setAchievementFlagArray('initiateDiplomacyWithAlienRace', 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementBeatEnemy(type) {

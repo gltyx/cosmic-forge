@@ -100,6 +100,7 @@ import {
     MAX_STACKS,
     STACK_WIDTH,
     BASE_RIGHT,
+    setAchievementFlagArray,
 
 } from './constantsAndGlobalVars.js';
 import {
@@ -1495,6 +1496,7 @@ function showLaunchWarningModal(show) {
             addToResourceAllTimeStat(1, 'starShipLaunched');
             addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated');
             showHideModal();
+            setAchievementFlagArray('launchStarship', 'add');
         };
 
         launchCancelButton.onclick = function () {

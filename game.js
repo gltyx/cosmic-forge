@@ -5547,6 +5547,7 @@ export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction)
     let timerName;
 
     if (direction) {
+        setAchievementFlagArray('mineAllAntimatterAsteroid', 'add');
         setMiningObject(rocket, null);
         timerName = `${rocket}TravelReturnTimer`;
         destination = getDestinationAsteroid(rocket);
@@ -6972,6 +6973,7 @@ export function updateRocketDescription() {
 }
 
 export function launchRocket(rocket) {
+    setAchievementFlagArray('launchRocket', 'add');
     setLaunchedRockets(rocket, 'add');
     document.getElementById(`space${capitaliseString(rocket)}AutoBuyerRow`).classList.add('invisible');
     showNotification(`${getRocketUserName(rocket)} Launched!`, 'info', 3000, 'rocket');
@@ -7066,6 +7068,7 @@ export function discoverAsteroid(debug) {
         return;
     }
 
+    setAchievementFlagArray('discoverAsteroid', 'add');
     addToResourceAllTimeStat(1, 'totalAsteroidsDiscovered');
 
     const rawStarCode = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'starCode']);

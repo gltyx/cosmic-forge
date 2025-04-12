@@ -1,4 +1,4 @@
-import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview } from './constantsAndGlobalVars.js';
+import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview, setAchievementFlagArray } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
@@ -484,6 +484,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('steel');
+                    setAchievementFlagArray('createSteel', 'add');
                 }, 'createCompound', null, null, null, 'steel', true, null, 'compound'),
                 null,
                 null,
@@ -1164,6 +1165,7 @@ export function drawTab4Content(heading, optionContentElement) {
                 }),
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('titanium');
+                    setAchievementFlagArray('createTitanium', 'add');
                 }, 'createCompound', null, null, null, 'titanium', true, null, 'compound'),
                 null,
                 null,
