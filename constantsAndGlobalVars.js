@@ -81,6 +81,7 @@ let achievementFlagArray = [];
 
 let gameStartTimeStamp = null;
 let runStartTimeStamp = null;
+let gameActiveCountTime = [0, 0];
 let rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
 let asteroidArray = [];
 let alreadySeenNewsTickerArray = [];
@@ -886,6 +887,7 @@ export function captureGameStatusForSaving(type) {
     gameState.alreadySeenNewsTickerArray = alreadySeenNewsTickerArray;
     gameState.activatedWackyNewsEffectsArray = activatedWackyNewsEffectsArray;
     gameState.collectedPrecipitationQuantityThisRun = collectedPrecipitationQuantityThisRun;
+    gameState.gameActiveCountTime = gameActiveCountTime;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1081,6 +1083,7 @@ export function restoreGameStatus(gameState, type) {
             currentGalacticMarketCommission = gameState.currentGalacticMarketCommission ?? 10;
             activatedWackyNewsEffectsArray = gameState.activatedWackyNewsEffectsArray ?? [];
             collectedPrecipitationQuantityThisRun = gameState.collectedPrecipitationQuantityThisRun ?? 0;
+            gameActiveCountTime = gameState.gameActiveCountTime ?? [0, 0];
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -3458,6 +3461,19 @@ export function getGameStartTime() {
 
 export function getRunStartTime() {
     return runStartTimeStamp;
+}
+
+export function setGameActiveCountTime(value, offlineValue) {
+    const current = gameActiveCountTime;
+
+    gameActiveCountTime = [
+        value !== null ? value : current[0],
+        offlineValue !== null ? offlineValue : current[1]
+    ];
+}
+
+export function getGameActiveCountTime() {
+    return gameActiveCountTime;
 }
 
 export function getSettledStars() {

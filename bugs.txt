@@ -3,13 +3,7 @@ stats bugs in general
 look at price of neon, titanium, possible neon autobuyer possibly with AP to make titanium generation easier the following runs
 turn off autobuyers ie carbon burner not redrawing the rate/s
 
-remove asteroid from travel to dropdown if one already on way there
+remove asteroid from travel to dropdown if one already on way therey
 
 achievements TODO:
-
-- write all special requirements functions
-- reset achievements on rebirth if they have resetOnRebirth: true
-    - remove reward 
-    - set active to false
-
 - write reward code

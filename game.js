@@ -1,4 +1,6 @@
 import {
+    setGameActiveCountTime,
+    getGameActiveCountTime,
     getUnlockedCompoundsArray,
     getCollectedPrecipitationQuantityThisRun,
     setCollectedPrecipitationQuantityThisRun,
@@ -271,6 +273,7 @@ import {
     getBuffQuantumEnginesData,
     setAchievementIconImageUrls,
     checkForAchievements,
+    resetAchievementsOnRebirth
 } from "./resourceDataObject.js";
 
 import { 
@@ -350,8 +353,29 @@ export function startGame() {
     gameLoop();
 }
 
+export function calculateElapsedActiveGameTime() {
+    const gameStart = getGameStartTime();
+    const totalInactiveTime = getGameActiveCountTime()[1];
+
+    if (gameStart) {
+        const now = Date.now();
+        const elapsed = now - gameStart;
+        const elapsedMinusOffline = elapsed - totalInactiveTime;
+        setGameActiveCountTime(elapsedMinusOffline, null);
+
+        const totalSeconds = Math.floor(elapsedMinusOffline / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        console.log(`Active Game Time: ${hours}h ${minutes}m ${seconds}s`);
+    }
+}
+
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
+        calculateElapsedActiveGameTime();
+
         if (document.getElementById('variableDebuggerWindow').style.display === 'block') {
             populateVariableDebugger();
         }
@@ -6612,10 +6636,15 @@ export function offlineGains(switchedFocus) {
                 antimatter: antimatterValues.antimatter.quantity
             },
         };
-    
+
         const lastSavedTimeStamp = getLastSavedTimeStamp();
+        const now = Date.now();
         const currentTimeStamp = new Date().toISOString();
-    
+
+        const lastSavedTime = new Date(lastSavedTimeStamp).getTime();
+        const diff = now - lastSavedTime;
+        setGameActiveCountTime(null, getGameActiveCountTime()[1] + diff);
+
         const timeDifferenceInSeconds = Math.floor(
             (new Date(currentTimeStamp).getTime() - new Date(lastSavedTimeStamp).getTime()) / 1000
         );
@@ -8484,6 +8513,7 @@ export function rebirth() {
     setupNewRunStarSystem();
     setRebirthPossible(false);
     resetAllVariablesOnRebirth();
+    resetAchievementsOnRebirth();
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetTabsOnRebirth();
     resetUIElementsOnRebirth();
