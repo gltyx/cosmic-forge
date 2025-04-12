@@ -1992,7 +1992,7 @@ export let achievementsData = {
         gives: {
             gives1: "ascendencyPoints",
             value1: {
-                quantity: 1
+                quantity: 0
             }
         },
         notification: "settleSystemNotification"
@@ -2630,8 +2630,26 @@ export function achievementInitiateDiplomacyWithAlienRace() {
     // Function implementation here
 }
 
-export function achievementBeatEnemy(victoryType) {
-    // Function implementation here
+export function achievementBeatEnemy(type) {
+    const typeToIdMap = {
+        bully: 'bullyEnemyIntoSubmission',
+        vassalize: 'vassalizeEnemy',
+        conquer: 'conquerEnemy',
+        hiveMind: 'conquerHiveMindEnemy',
+        belligerent: 'conquerBelligerentEnemy',
+        withoutScanning: 'conquerEnemyWithoutScanning',
+        unoccupied: 'settleUnoccupiedSystem',
+        noLife: 'discoverSystemWithNoLife',
+        settleNormal: 'settleSystem'
+    };
+
+    const achievementId = typeToIdMap[type];
+    const achievement = getAchievementDataObject(achievementId);
+
+    if (getAchievementFlagArray().includes(achievementId)) {
+        setAchievementFlagArray(achievementId, 'remove');
+        grantAchievement(achievement);
+    }
 }
 
 export function achievementSpendAp() {
@@ -2820,6 +2838,8 @@ export function checkForAchievements() {
             genericAchievementChecker(achievement);
         }
     }
+
+    setAchievementFlagArray(null, 'empty');
 }
 
 export const achievementFunctionsMap = {

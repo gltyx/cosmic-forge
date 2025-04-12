@@ -1,4 +1,5 @@
 import {
+    setBelligerentEnemyFlag,
     setAchievementFlagArray,
     getAutoSaveFrequency,
     getLiquidatedThisRun,
@@ -235,7 +236,8 @@ import {
     getGalacticMarketIncomingQuantity,
     setCurrentGalacticMarketCommission,
     getCurrentGalacticMarketCommission,
-    getAchievementFlagArray
+    getAchievementFlagArray,
+    getBelligerentEnemyFlag
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -4117,6 +4119,7 @@ async function coloniseChecks() {
             if (battleResolved[0]) {
                 drawBattleResultText('battleCanvas', battleResolved[1]);
                 await initiateBattleFadeOut(battleResolved);
+
                 disableTabsLinksAndAutoSaveDuringBattle(false);
 
                 if (battleResolved[1] === 'enemy') {
@@ -4136,6 +4139,20 @@ async function coloniseChecks() {
                     setInFormation(false);
                     setEnemyFleetsAdjustedForDiplomacy(false);
                     setFleetChangedSinceLastDiplomacy(false);
+                    setAchievementFlagArray('conquerEnemy', 'add');
+                    
+                    if (getStarSystemDataObject('stars', ['destinationStar', 'lifeformTraits'])[2][0] === 'Hive Mind') {
+                        setAchievementFlagArray('conquerHiveMindEnemy', 'add');
+                    }
+                    
+                    if (getBelligerentEnemyFlag()) {
+                        setAchievementFlagArray('conquerBelligerentEnemy', 'add');
+                        setBelligerentEnemyFlag(false);
+                    }
+
+                    if (!getStellarScannerBuilt()) {
+                        setAchievementFlagArray('conquerEnemyWithoutScanning', 'add');
+                    }
                 }
             }
         }
@@ -5514,8 +5531,8 @@ function calculateRocketTravelDuration(destinationAsteroid) {
     const distance = targetAsteroid[destinationAsteroid].distance[0];
     const speed = getRocketTravelSpeed();
 
-    //return Math.floor(distance / speed);  
-    return 10000; //DEBUG
+    return Math.floor(distance / speed);  
+    //return 10000; //DEBUG
 }
 
 export function startTravelToAndFromAsteroidTimer(adjustment, rocket, direction) {
@@ -7433,7 +7450,7 @@ export function generateDestinationStarData() {
     //const lifeDetected = false; 
     const civilizationLevel = lifeDetected ? generateCivilizationLevel(existingData || 0) : 'None';
     //const civilizationLevel = 'Unsentient';
-    const lifeformTraits = lifeDetected ? generateLifeformTraits(civilizationLevel) : [];
+    const lifeformTraits = generateLifeformTraits(civilizationLevel);
     const population = lifeDetected ? generatePopulationEstimate(lifeformTraits) : 0;
     const raceName = generateRaceName(civilizationLevel);
 
@@ -7453,12 +7470,13 @@ export function generateDestinationStarData() {
     const latestDifferenceInImpression = 0;
     let patience = Math.floor(Math.random() * (5 - 3 + 1)) + 3;
 
-    if (lifeformTraits[0][0] === "Diplomatic") {
-        patience += 1;
-    } else if (lifeformTraits[0][0] === "Aggressive") {
-        patience -= 1;
+    if (lifeformTraits[0]) {
+        if (lifeformTraits[0][0] === "Diplomatic") {
+            patience += 1;
+        } else if (lifeformTraits[0][0] === "Aggressive") {
+            patience -= 1;
+        }
     }
-    
 
     const updatedData = {
         ...existingData,
@@ -7483,7 +7501,7 @@ export function generateDestinationStarData() {
 }
 
 function generateLifeDetection() {
-    return Math.random() < 0.99;
+    return Math.random() < 0.97;
 }
 
 function generateLifeformTraits(civilizationLevel) {
@@ -7491,7 +7509,7 @@ function generateLifeformTraits(civilizationLevel) {
     const habitatTraits = [["Terrans", ""], ["Aquatic", ""], ["Aerialians", ""]];
     const extraTraits = [["Armored", "red-disabled-text"], ["Hive Mind", "red-disabled-text"], ["Power Siphon", "warning-orange-text"], ["Hypercharge", "warning-orange-text"]];
 
-    if (civilizationLevel === 'Unsentient') {
+    if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') {
         return [['N/A', ''], ['N/A', ''], ['N/A', '']];
     }
 
@@ -7791,6 +7809,11 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
     }
 
     impression = Math.max(0, Math.min(80, impression));
+    if (impression < 10) {
+        setBelligerentEnemyFlag(true);
+    } else {
+        setBelligerentEnemyFlag(false);
+    }
     // console.log(`Final impression (clamped to 0-80 range): ${impression}`);
 
     setDiplomacyPossible(impression >= 10);
@@ -7863,6 +7886,13 @@ export function updateDiplomacySituation(buttonPressed, starData) {
             break;
         case 'conquest':
             if (starData.civilizationLevel === 'None' || starData.civilizationLevel === 'Unsentient') {
+                
+                if (starData.civilizationLevel === 'None') {
+                    setAchievementFlagArray('discoverSystemWithNoLife', 'add');
+                } else if (starData.civilizationLevel === 'Unsentient') {
+                    setAchievementFlagArray('settleUnoccupiedSystem', 'add'); 
+                }
+
                 settleSystemAfterBattle('noSentientLife');
                 break;
             }
@@ -7918,6 +7948,7 @@ function bullyEnemy(starData) {
             setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
             setEnemyFleetPower();
             colonisePrepareWarUI('surrender');
+            setAchievementFlagArray('bullyEnemyIntoSubmission', 'add');
             break;
         case "scared":
             setStarSystemDataObject("Scared", 'stars', ['destinationStar', 'attitude']);
@@ -8070,6 +8101,7 @@ function tryToVassalizeEnemy() {
         setStarSystemDataObject(0, 'stars', ['destinationStar', 'enemyFleets', 'sea']);
         setEnemyFleetPower();
         colonisePrepareWarUI('surrender');
+        setAchievementFlagArray('vassalizeEnemy', 'add');
     } else {
         colonisePrepareWarUI('notVassalized');
     }
@@ -8380,6 +8412,7 @@ export function turnAround(unit) {
 }
 
 export function settleSystemAfterBattle(accessPoint) {
+    setAchievementFlagArray('settleSystem', 'add');
     setRebirthPossible(true);
     const apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);

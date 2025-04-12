@@ -355,6 +355,7 @@ let galacticMarketOutgoingQuantitySelectionTypeDisabledStatus = true;
 let galacticMarketLiquidationAuthorization = 'no';
 let hasClickedOutgoingOptionGalacticMarket = false;
 let liquidatedThisRun = false;
+let belligerentEnemyFlag = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -779,6 +780,7 @@ export function resetAllVariablesOnRebirth() {
     galacticMarketLiquidationAuthorization = 'no';
     hasClickedOutgoingOptionGalacticMarket = false;
     liquidatedThisRun = false;
+    belligerentEnemyFlag = false;
 
     setCurrentPrecipitationRate(0);
     stopWeatherEffect();
@@ -926,7 +928,8 @@ export function captureGameStatusForSaving(type) {
         enemyFleetAdjustedForDiplomacy: enemyFleetAdjustedForDiplomacy,
         apAwardedThisRun: apAwardedThisRun,
         rebirthPossible: rebirthPossible,
-        liquidatedThisRun: liquidatedThisRun
+        liquidatedThisRun: liquidatedThisRun,
+        belligerentEnemyFlag: belligerentEnemyFlag
     }
 
     return gameState;
@@ -1101,6 +1104,7 @@ export function restoreGameStatus(gameState, type) {
             apAwardedThisRun = gameState.flags.apAwardedThisRun ?? false;
             rebirthPossible = gameState.flags.rebirthPossible ?? false;
             liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
+            belligerentEnemyFlag = gameState.flags.belligerentEnemyFlag ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -2646,6 +2650,14 @@ export function setWarMode(value) {
     warMode = value;
 }
 
+export function getBelligerentEnemyFlag() {
+    return belligerentEnemyFlag;
+}
+
+export function setBelligerentEnemyFlag(value) {
+    belligerentEnemyFlag = value;
+}
+
 export function getDiplomacyPossible() {
     return diplomacyPossible;
 }
@@ -3873,6 +3885,8 @@ export function setAchievementFlagArray(achievementKey, action) {
         achievementFlagArray.push(achievementKey);
     } else if (action === 'remove' && achievementFlagArray.includes(achievementKey)) {
         achievementFlagArray = achievementFlagArray.filter(flag => flag !== achievementKey);
+    } else if (action === 'empty') {
+        achievementFlagArray = [];
     }
 }
 

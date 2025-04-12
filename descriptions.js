@@ -2249,7 +2249,7 @@ function generateAchievementTooltipDescriptions() {
         `,
         "settleSystem": `
         ${getAchievementTooltipDescriptionTexts('settleSystem')}<br>
-        <span class="green-ready-text">Reward: 1 AP</span><br>
+        <span class="green-ready-text">Reward: Pride!</span><br>
         <span class="${getAchievementDataObject('settleSystem', ['resetOnRebirth']) ? 'green-ready-text' : ''}">
             Reset on Rebirth: ${getAchievementDataObject('settleSystem', ['resetOnRebirth']) ? 'YES' : 'NO'}
         </span><br><br>
@@ -2489,7 +2489,7 @@ achievementNotifications = {
     "conquerEnemyWithoutScanningNotification": "ACHIEVEMENT:\nYou have conquered an enemy without scanning the system!\n\nREWARD: 2AP",
     "settleUnoccupiedSystemNotification": "ACHIEVEMENT:\nYou have settled an unoccupied system!\n\nREWARD: 50000 Cash",
     "discoverSystemWithNoLifeNotification": "ACHIEVEMENT:\nYou have discovered a system with no life!\n\nREWARD: 75000 Cash",
-    "settleSystemNotification": "ACHIEVEMENT:\nYou have settled a system!\n\nREWARD: 1AP",
+    "settleSystemNotification": "ACHIEVEMENT:\nYou have settled a system!\n\nREWARD: Pride!",
     "spendAPNotification": "ACHIEVEMENT:\nYou have spent Ascendency Points (AP)!\n\nREWARD: x1.1 all Resource Rates",
     "performGalacticMarketTransactionNotification": "ACHIEVEMENT:\nYou have performed a Galactic Market transaction!\n\nREWARD: 1AP",
     "liquidateAllAssetsNotification": "ACHIEVEMENT:\nYou have liquidated all assets!\n\nREWARD: Pride!",

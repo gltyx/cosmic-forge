@@ -4,7 +4,6 @@ look at price of neon, titanium, possible neon autobuyer possibly with AP to mak
 turn off autobuyers ie carbon burner not redrawing the rate/s
 
 remove asteroid from travel to dropdown if one already on way there
-add asteroid timer proper time again
 
 achievements TODO:
 
