@@ -1,4 +1,6 @@
 import {
+    getUserPlatform,
+    setUserPlatform,
     setGameActiveCountTime,
     getGameActiveCountTime,
     getUnlockedCompoundsArray,
@@ -350,6 +352,7 @@ export function startGame() {
         setTechUnlockedArray('run1');
     }
     setAchievementIconImageUrls();
+    getNavigatorLanguage();
     gameLoop();
 }
 
@@ -362,13 +365,6 @@ export function calculateElapsedActiveGameTime() {
         const elapsed = now - gameStart;
         const elapsedMinusOffline = elapsed - totalInactiveTime;
         setGameActiveCountTime(elapsedMinusOffline, null);
-
-        const totalSeconds = Math.floor(elapsedMinusOffline / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        console.log(`Active Game Time: ${hours}h ${minutes}m ${seconds}s`);
     }
 }
 
@@ -3504,6 +3500,21 @@ function fleetHangarChecks() {
         }
     }
 }
+
+export function getNavigatorLanguage() {
+    const languages = navigator.languages || [navigator.language];
+    const primaryLanguage = languages[0];
+    let region = null;
+    try {
+        const userLocale = new Intl.Locale(primaryLanguage);
+        region = userLocale.region;
+    } catch (e) {
+    }
+
+    const platform = navigator.platform;
+    setUserPlatform([primaryLanguage, region, platform]);
+}
+
 
 function disableTabsLinksAndAutoSaveDuringBattle(battleStart) {
     for (let i = 1; i <= 8; i++) {

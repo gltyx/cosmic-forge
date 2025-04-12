@@ -1,7 +1,7 @@
 import { newsTickerContent, refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem } from "./constantsAndGlobalVars.js";
+import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -2838,8 +2838,14 @@ export function achievementTrade10APForCash() {
 }
 
 export function achievementHave50HoursWithOnePioneer() {
-    const startTimeStamp = getGameStartTime();
-    //TODO
+    const elapsedTimeActive = getGameActiveCountTime()[0];
+    const achievement = getAchievementDataObject('have50HoursWithOnePioneer');
+
+    const fiftyHoursInMs = 50 * 60 * 60 * 1000;
+
+    if (elapsedTimeActive >= fiftyHoursInMs) {
+        grantAchievement(achievement);
+    }
 }
 
 export function grantAchievement(achievement) {
@@ -2965,3 +2971,11 @@ export const achievementFunctionsMap = {
     achievementTrade10APForCash,
     achievementHave50HoursWithOnePioneer
 };
+
+export function resetAchievementsOnRebirth() {
+    for (const key in achievementsData) {
+        if (achievementsData[key].resetOnRebirth) {
+            setAchievementDataObject(false, key, ['active']);
+        }
+    }
+}

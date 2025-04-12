@@ -8,13 +8,15 @@ import {
     restoreGameStatus, 
     getAutoSaveFrequency,
     getAutoSaveToggle,
-    getSaveData
+    getSaveData,
+    getUserPlatform
 } from './constantsAndGlobalVars.js';
 
 import { setAchievementIconImageUrls } from './resourceDataObject.js';
 
 import { showNotification } from './ui.js';
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+import { getNavigatorLanguage } from './game.js';
 
 const supabaseUrl = 'https://riogcxvtomyjlzkcnujf.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpb2djeHZ0b215amx6a2NudWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMjY1NDgsImV4cCI6MjA1OTYwMjU0OH0.HH7KXPrcORvl6Wiefupl422gRYxAa_kFCRM2-puUcsQ';
@@ -76,7 +78,8 @@ export async function saveGameToCloud(gameData, type) {
                 .from('CosmicForge_saves')
                 .update({ 
                     data: gameData,
-                    'created_at': currentTimestamp
+                    'created_at': currentTimestamp,
+                    'region': getUserPlatform()
                 })
                 .eq('pioneer_name', userId);
 
@@ -221,6 +224,7 @@ export async function loadGameFromCloud() {
 
             await initialiseLoadedGame(gameState, 'cloud');
             setAchievementIconImageUrls();
+            getNavigatorLanguage();
             showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
             return true;
         } else {

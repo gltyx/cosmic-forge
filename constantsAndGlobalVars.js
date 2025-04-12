@@ -140,6 +140,7 @@ let settledStars = [STARTING_STAR_SYSTEM];
 let apSellForCashPrice = AP_BASE_SELL_PRICE;
 let apBuyForCashPrice = AP_BASE_BUY_PRICE;
 let apLiquidationQuantity = 0;
+let userPlatform = [null, null, null];
 
 let battleUnits = { 
     player: [], 
@@ -888,6 +889,7 @@ export function captureGameStatusForSaving(type) {
     gameState.activatedWackyNewsEffectsArray = activatedWackyNewsEffectsArray;
     gameState.collectedPrecipitationQuantityThisRun = collectedPrecipitationQuantityThisRun;
     gameState.gameActiveCountTime = gameActiveCountTime;
+    gameState.userPlatform = userPlatform;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1084,6 +1086,7 @@ export function restoreGameStatus(gameState, type) {
             activatedWackyNewsEffectsArray = gameState.activatedWackyNewsEffectsArray ?? [];
             collectedPrecipitationQuantityThisRun = gameState.collectedPrecipitationQuantityThisRun ?? 0;
             gameActiveCountTime = gameState.gameActiveCountTime ?? [0, 0];
+            userPlatform = gameState.userPlatform ?? [null, null, null];
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -3926,6 +3929,14 @@ function formatVariableDebuggerValue(value) {
     } else {
         return value;
     }
+}
+
+export function getUserPlatform() {
+    return userPlatform;
+}
+
+export function setUserPlatform(value) {
+    userPlatform = value;
 }
 
 export function setAchievementFlagArray(achievementKey, action) {
