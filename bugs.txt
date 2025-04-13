@@ -6,4 +6,4 @@ turn off autobuyers ie carbon burner not redrawing the rate/s
 remove asteroid from travel to dropdown if one already on way therey
 
 achievements TODO:
-- write reward code
+-permanent multipliers still need doing

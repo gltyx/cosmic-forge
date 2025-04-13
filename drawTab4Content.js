@@ -1,4 +1,4 @@
-import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview, setAchievementFlagArray } from './constantsAndGlobalVars.js';
+import { getCompoundCreateDropdownRecipeText, getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview, setAchievementFlagArray } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
@@ -16,20 +16,20 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Diesel:',
                 createDropdown('dieselCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 1.3M Hyd, 600K Crb' },
-                    { value: '5000', text: '5000 - 130K Hyd, 60K Crb' },
-                    { value: '500', text: '500 - 13K Hyd, 6K Crb' },
-                    { value: '50', text: '50 - 1.3K Hyd, 600 Crb' },
-                    { value: '5', text: '5 - 130 Hyd, 60 Crb' },
-                    { value: '1', text: '1 - 26 Hyd, 12 Crb' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('diesel').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('diesel').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('diesel').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('diesel').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('diesel').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('diesel')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('diesel')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('diesel')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('diesel')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('diesel')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('diesel')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('diesel', value);
-                }),
+                }),                
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('diesel');
                 }, 'createCompound', null, null, null, 'diesel', true, null, 'compound'),
@@ -242,20 +242,20 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Glass:',
                 createDropdown('glassCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 200K Sil, 100K Oxy, 50K Sod' },
-                    { value: '5000', text: '5000 - 20K Sil, 10K Oxy, 5K Sod' },
-                    { value: '500', text: '500 - 2K Sil, 1K Oxy, 500 Sod' },
-                    { value: '50', text: '50 - 200 Sil, 100 Oxy, 50 Sod' },
-                    { value: '5', text: '5 - 20 Sil, 10 Oxy, 5 Sod' },
-                    { value: '1', text: '1 - 4 Sil, 2 Oxy, 1 Sod' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('glass').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('glass').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('glass').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('glass').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('glass').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('glass')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('glass')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('glass')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('glass')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('glass')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('glass')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('glass', value);
-                }),
+                }),                
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('glass');
                 }, 'createCompound', null, null, null, 'glass', true, null, 'compound'),
@@ -468,20 +468,20 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Steel:',
                 createDropdown('steelCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 200K Irn, 50K Crb' },
-                    { value: '5000', text: '5000 - 20K Irn, 5K Crb' },
-                    { value: '500', text: '500 - 2K Irn, 500 Crb' },
-                    { value: '50', text: '50 - 200 Irn, 50 Crb' },
-                    { value: '5', text: '5 - 20 Irn, 5 Crb' },
-                    { value: '1', text: '1 - 4 Irn, 1 Crb' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('steel').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('steel').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('steel').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('steel').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('steel').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('steel')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('steel')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('steel')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('steel')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('steel')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('steel')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('steel', value);
-                }),
+                }),                
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('steel');
                     setAchievementFlagArray('createSteel', 'add');
@@ -695,20 +695,20 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Concrete:',
                 createDropdown('concreteCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 250K Sil, 100K Sod, 150K Hyd' },
-                    { value: '5000', text: '5000 - 25K Sil, 10K Sod, 15K Hyd' },
-                    { value: '500', text: '500 - 2.5K Sil, 1K Sod, 1.5K Hyd' },
-                    { value: '50', text: '50 - 250 Sil, 100 Sod, 150 Hyd' },
-                    { value: '5', text: '5 - 25 Sil, 10 Sod, 15 Hyd' },
-                    { value: '1', text: '1 - 5 Sil, 2 Sod, 3 Hyd' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('concrete').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('concrete').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('concrete').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('concrete').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('concrete').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('concrete')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('concrete')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('concrete')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('concrete')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('concrete')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('concrete')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('concrete', value);
-                }),
+                }),                
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('concrete');
                 }, 'createCompound', null, null, null, 'concrete', true, null, 'compound'),
@@ -923,20 +923,20 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Water:',
                 createDropdown('waterCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 1M Hyd, 500K Oxy' },
-                    { value: '5000', text: '5000 - 100K Hyd, 50K Oxy' },
-                    { value: '500', text: '500 - 10K Hyd, 5K Oxy' },
-                    { value: '50', text: '50 - 1K Hyd, 500 Oxy' },
-                    { value: '5', text: '5 - 100 Hyd, 50 Oxy' },
-                    { value: '1', text: '1 - 20 Hyd, 10 Oxy' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('water').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('water').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('water').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('water').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('water').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('water')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('water')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('water')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('water')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('water')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('water')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('water', value);
-                }),
+                }),                
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('water');
                 }, 'createCompound', null, null, null, 'water', true, null, 'compound'),
@@ -1149,17 +1149,17 @@ export function drawTab4Content(heading, optionContentElement) {
                 null,
                 'Create Titanium:',
                 createDropdown('titaniumCreateSelectQuantity', [
-                    { value: 'max', text: 'Max Possible' },
-                    { value: 'threeQuarters', text: 'Up to 75%' },
-                    { value: 'twoThirds', text: 'Up to 67%' },
-                    { value: 'half', text: 'Up to 50%' },
-                    { value: 'oneThird', text: 'Up to 33%' },
-                    { value: '50000', text: '50000 - 1.1M Irn, 900K Sod, 2M Neo' },
-                    { value: '5000', text: '5000 - 110K Irn, 90K Sod, 200K Neo' },
-                    { value: '500', text: '500 - 11K Irn, 9K Sod, 20K Neo' },
-                    { value: '50', text: '50 - 1.1K Irn, 900 Sod, 2K Neo' },
-                    { value: '5', text: '5 - 110 Irn, 90 Sod, 200 Neo' },
-                    { value: '1', text: '1 - 22 Irn, 18 Sod, 40 Neo' },
+                    { value: 'max', text: getCompoundCreateDropdownRecipeText('titanium').max.text },
+                    { value: 'threeQuarters', text: getCompoundCreateDropdownRecipeText('titanium').threeQuarters.text },
+                    { value: 'twoThirds', text: getCompoundCreateDropdownRecipeText('titanium').twoThirds.text },
+                    { value: 'half', text: getCompoundCreateDropdownRecipeText('titanium').half.text },
+                    { value: 'oneThird', text: getCompoundCreateDropdownRecipeText('titanium').oneThird.text },
+                    { value: '50000', text: getCompoundCreateDropdownRecipeText('titanium')[50000].text },
+                    { value: '5000', text: getCompoundCreateDropdownRecipeText('titanium')[5000].text },
+                    { value: '500', text: getCompoundCreateDropdownRecipeText('titanium')[500].text },
+                    { value: '50', text: getCompoundCreateDropdownRecipeText('titanium')[50].text },
+                    { value: '5', text: getCompoundCreateDropdownRecipeText('titanium')[5].text },
+                    { value: '1', text: getCompoundCreateDropdownRecipeText('titanium')[1].text },
                 ], 'max', (value) => {
                     setCreateCompoundPreview('titanium', value);
                 }),

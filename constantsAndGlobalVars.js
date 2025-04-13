@@ -75,6 +75,87 @@ export let notificationStatus = {};
 export let notificationContainers = {};
 export let classificationOrder = [];
 
+let compoundCreateDropdownRecipeText = {
+    diesel: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 1.3M Hyd, 600K Crb' },
+      5000: { value: '5000', text: '5000 - 130K Hyd, 60K Crb' },
+      500: { value: '500', text: '500 - 13K Hyd, 6K Crb' },
+      50: { value: '50', text: '50 - 1.3K Hyd, 600 Crb' },
+      5: { value: '5', text: '5 - 130 Hyd, 60 Crb' },
+      1: { value: '1', text: '1 - 26 Hyd, 12 Crb' }
+    },
+    glass: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 200K Sil, 100K Oxy, 50K Sod' },
+      5000: { value: '5000', text: '5000 - 20K Sil, 10K Oxy, 5K Sod' },
+      500: { value: '500', text: '500 - 2K Sil, 1K Oxy, 500 Sod' },
+      50: { value: '50', text: '50 - 200 Sil, 100 Oxy, 50 Sod' },
+      5: { value: '5', text: '5 - 20 Sil, 10 Oxy, 5 Sod' },
+      1: { value: '1', text: '1 - 4 Sil, 2 Oxy, 1 Sod' }
+    },
+    steel: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 200K Irn, 50K Crb' },
+      5000: { value: '5000', text: '5000 - 20K Irn, 5K Crb' },
+      500: { value: '500', text: '500 - 2K Irn, 500 Crb' },
+      50: { value: '50', text: '50 - 200 Irn, 50 Crb' },
+      5: { value: '5', text: '5 - 20 Irn, 5 Crb' },
+      1: { value: '1', text: '1 - 4 Irn, 1 Crb' }
+    },
+    concrete: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 250K Sil, 100K Sod, 150K Hyd' },
+      5000: { value: '5000', text: '5000 - 25K Sil, 10K Sod, 15K Hyd' },
+      500: { value: '500', text: '500 - 2.5K Sil, 1K Sod, 1.5K Hyd' },
+      50: { value: '50', text: '50 - 250 Sil, 100 Sod, 150 Hyd' },
+      5: { value: '5', text: '5 - 25 Sil, 10 Sod, 15 Hyd' },
+      1: { value: '1', text: '1 - 5 Sil, 2 Sod, 3 Hyd' }
+    },
+    water: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 1M Hyd, 500K Oxy' },
+      5000: { value: '5000', text: '5000 - 100K Hyd, 50K Oxy' },
+      500: { value: '500', text: '500 - 10K Hyd, 5K Oxy' },
+      50: { value: '50', text: '50 - 1K Hyd, 500 Oxy' },
+      5: { value: '5', text: '5 - 100 Hyd, 50 Oxy' },
+      1: { value: '1', text: '1 - 20 Hyd, 10 Oxy' }
+    },
+    titanium: {
+      max: { value: 'max', text: 'Max Possible' },
+      threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+      twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+      half: { value: 'half', text: 'Up to 50%' },
+      oneThird: { value: 'oneThird', text: 'Up to 33%' },
+      50000: { value: '50000', text: '50000 - 1.1M Irn, 900K Sod, 2M Neo' },
+      5000: { value: '5000', text: '5000 - 110K Irn, 90K Sod, 200K Neo' },
+      500: { value: '500', text: '500 - 11K Irn, 9K Sod, 20K Neo' },
+      50: { value: '50', text: '50 - 1.1K Irn, 900 Sod, 2K Neo' },
+      5: { value: '5', text: '5 - 110 Irn, 90 Sod, 200 Neo' },
+      1: { value: '1', text: '1 - 22 Irn, 18 Sod, 40 Neo' }
+    }
+  };  
+
 //GLOBAL VARIABLES
 export let gameState;
 let achievementFlagArray = [];
@@ -702,6 +783,87 @@ export function resetAllVariablesOnRebirth() {
         powerPlant2: false,
         powerPlant3: false,
     }
+
+    compoundCreateDropdownRecipeText = {
+        diesel: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 1.3M Hyd, 600K Crb' },
+          5000: { value: '5000', text: '5000 - 130K Hyd, 60K Crb' },
+          500: { value: '500', text: '500 - 13K Hyd, 6K Crb' },
+          50: { value: '50', text: '50 - 1.3K Hyd, 600 Crb' },
+          5: { value: '5', text: '5 - 130 Hyd, 60 Crb' },
+          1: { value: '1', text: '1 - 26 Hyd, 12 Crb' }
+        },
+        glass: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 200K Sil, 100K Oxy, 50K Sod' },
+          5000: { value: '5000', text: '5000 - 20K Sil, 10K Oxy, 5K Sod' },
+          500: { value: '500', text: '500 - 2K Sil, 1K Oxy, 500 Sod' },
+          50: { value: '50', text: '50 - 200 Sil, 100 Oxy, 50 Sod' },
+          5: { value: '5', text: '5 - 20 Sil, 10 Oxy, 5 Sod' },
+          1: { value: '1', text: '1 - 4 Sil, 2 Oxy, 1 Sod' }
+        },
+        steel: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 200K Irn, 50K Crb' },
+          5000: { value: '5000', text: '5000 - 20K Irn, 5K Crb' },
+          500: { value: '500', text: '500 - 2K Irn, 500 Crb' },
+          50: { value: '50', text: '50 - 200 Irn, 50 Crb' },
+          5: { value: '5', text: '5 - 20 Irn, 5 Crb' },
+          1: { value: '1', text: '1 - 4 Irn, 1 Crb' }
+        },
+        concrete: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 250K Sil, 100K Sod, 150K Hyd' },
+          5000: { value: '5000', text: '5000 - 25K Sil, 10K Sod, 15K Hyd' },
+          500: { value: '500', text: '500 - 2.5K Sil, 1K Sod, 1.5K Hyd' },
+          50: { value: '50', text: '50 - 250 Sil, 100 Sod, 150 Hyd' },
+          5: { value: '5', text: '5 - 25 Sil, 10 Sod, 15 Hyd' },
+          1: { value: '1', text: '1 - 5 Sil, 2 Sod, 3 Hyd' }
+        },
+        water: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 1M Hyd, 500K Oxy' },
+          5000: { value: '5000', text: '5000 - 100K Hyd, 50K Oxy' },
+          500: { value: '500', text: '500 - 10K Hyd, 5K Oxy' },
+          50: { value: '50', text: '50 - 1K Hyd, 500 Oxy' },
+          5: { value: '5', text: '5 - 100 Hyd, 50 Oxy' },
+          1: { value: '1', text: '1 - 20 Hyd, 10 Oxy' }
+        },
+        titanium: {
+          max: { value: 'max', text: 'Max Possible' },
+          threeQuarters: { value: 'threeQuarters', text: 'Up to 75%' },
+          twoThirds: { value: 'twoThirds', text: 'Up to 67%' },
+          half: { value: 'half', text: 'Up to 50%' },
+          oneThird: { value: 'oneThird', text: 'Up to 33%' },
+          50000: { value: '50000', text: '50000 - 1.1M Irn, 900K Sod, 2M Neo' },
+          5000: { value: '5000', text: '5000 - 110K Irn, 90K Sod, 200K Neo' },
+          500: { value: '500', text: '500 - 11K Irn, 9K Sod, 20K Neo' },
+          50: { value: '50', text: '50 - 1.1K Irn, 900 Sod, 2K Neo' },
+          5: { value: '5', text: '5 - 110 Irn, 90 Sod, 200 Neo' },
+          1: { value: '1', text: '1 - 22 Irn, 18 Sod, 40 Neo' }
+        }
+    };
     
     battleResolved = [false, null];
 
@@ -890,6 +1052,7 @@ export function captureGameStatusForSaving(type) {
     gameState.collectedPrecipitationQuantityThisRun = collectedPrecipitationQuantityThisRun;
     gameState.gameActiveCountTime = gameActiveCountTime;
     gameState.userPlatform = userPlatform;
+    gameState.compoundCreateDropdownRecipeText = compoundCreateDropdownRecipeText;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1087,6 +1250,10 @@ export function restoreGameStatus(gameState, type) {
             collectedPrecipitationQuantityThisRun = gameState.collectedPrecipitationQuantityThisRun ?? 0;
             gameActiveCountTime = gameState.gameActiveCountTime ?? [0, 0];
             userPlatform = gameState.userPlatform ?? [null, null, null];
+            
+            if (gameState.compoundCreateDropdownRecipeText) {
+                compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
+            }
 
             // Flags
             autoSaveToggle = gameState.flags.autoSaveToggle ?? false;
@@ -3952,3 +4119,12 @@ export function setAchievementFlagArray(achievementKey, action) {
 export function getAchievementFlagArray() {
     return achievementFlagArray;
 }
+  
+export function getCompoundCreateDropdownRecipeText(compound) {
+    return compoundCreateDropdownRecipeText[compound];
+}
+
+export function setCompoundCreateDropdownRecipeText(compound, newOptions) {
+    compoundCreateDropdownRecipeText[compound] = newOptions;
+}
+  

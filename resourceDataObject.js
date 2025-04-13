@@ -1,7 +1,7 @@
 import { newsTickerContent, refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime } from "./constantsAndGlobalVars.js";
+import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -2857,7 +2857,130 @@ export function grantAchievement(achievement) {
 }
 
 export function addAchievementBonus(achievement) {
+    const category = achievement.gives.gives1;
+    const type = achievement.gives.value1?.type;
+    const quantity = achievement.gives.value1?.quantity;
 
+    switch (category) {
+        case 'ascendencyPoints':
+            const currentPoints = getResourceDataObject('ascendencyPoints', ['quantity']);
+            setResourceDataObject(Math.floor(currentPoints + quantity), 'ascendencyPoints', ['quantity']);
+            break;  
+        case 'multiplierPermanent':      
+        case 'multiplier':
+            switch (type) {
+                case 'createCostCompounds':
+                    const allCompounds = getResourceDataObject('compounds');
+                
+                    for (const compoundKey in allCompounds) {
+                        for (let i = 1; i <= 4; i++) {
+                            const ratioKey = `createsFromRatio${i}`;
+                            const currentRatio = getResourceDataObject('compounds', [compoundKey, ratioKey]);
+                
+                            if (currentRatio > 0) {
+                                const newRatio = Math.max(1, Math.floor(currentRatio * quantity));
+                                setResourceDataObject(newRatio, 'compounds', [compoundKey, ratioKey]);
+                            }
+                        }
+
+                        const originalCompoundText = getCompoundCreateDropdownRecipeText(compoundKey);
+                        const updatedCompoundText = {};
+                        
+                        for (const key of ['max', 'threeQuarters', 'twoThirds', 'half', 'oneThird']) {
+                            if (originalCompoundText[key]) {
+                                updatedCompoundText[key] = originalCompoundText[key];
+                            }
+                        }
+
+                        const resourceShortNames = {
+                            iron: 'Irn',
+                            carbon: 'Crb',
+                            sodium: 'Sod',
+                            neon: 'Neo',
+                            hydrogen: 'Hyd',
+                            oxygen: 'Oxy',
+                            silicon: 'Sil'
+                        };
+
+                        const quantitiesToUpdate = {
+                            '50000': 50000,
+                            '5000': 5000,
+                            '500': 500,
+                            '50': 50,
+                            '5': 5,
+                            '1': 1
+                        };
+
+                        const sources = [];
+                        for (let i = 1; i <= 4; i++) {
+                            const from = getResourceDataObject('compounds', [compoundKey, `createsFrom${i}`]);
+                            const ratio = getResourceDataObject('compounds', [compoundKey, `createsFromRatio${i}`]);
+                            if (from && from[0] && ratio > 0) {
+                                const shortName = resourceShortNames[from[0]];
+                                sources.push({ resource: shortName, ratio });
+                            }
+                        }
+                
+                        for (const [label, baseMultiplier] of Object.entries(quantitiesToUpdate)) {
+                            const parts = sources.map(({ resource, ratio }) => {
+                                const amount = ratio * baseMultiplier;
+                                let formatted;
+                            
+                                if (amount >= 1000000) {
+                                    formatted = `${(amount / 1000000).toFixed(amount % 1000000 === 0 ? 0 : 1)}M`;
+                                } else if (amount >= 1000) {
+                                    formatted = `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}K`;
+                                } else {
+                                    formatted = amount;
+                                }
+                            
+                                return `${formatted} ${resource}`;
+                            });                            
+                            updatedCompoundText[label] = {
+                                value: label,
+                                text: `${label} - ${parts.join(', ')}`
+                            };
+                        }
+
+                        setCompoundCreateDropdownRecipeText(compoundKey, updatedCompoundText);
+                    }
+                    break;                
+                case 'allResources':
+                    const allResources = getResourceDataObject('resources');
+                
+                    for (const resourceKey in allResources) {
+                        if (resourceKey === 'solar') continue;                   
+                        for (let i = 1; i <= 4; i++) {
+                            const tierKey = `tier${i}`;
+                            const currentRate = getResourceDataObject('resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                            setResourceDataObject(currentRate * quantity, 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                        }
+                    }
+                    break;
+                case 'cash':
+                    const resources = getResourceDataObject('resources');
+                    for (const resourceKey in resources) {
+                        const currentSaleValue = getResourceDataObject('resources', [resourceKey, 'saleValue']);
+                        setResourceDataObject(currentSaleValue * quantity, 'resources', [resourceKey, 'saleValue']);
+                    }
+                
+                    const compounds = getResourceDataObject('compounds');
+                    for (const compoundKey in compounds) {
+                        const currentSaleValue = getResourceDataObject('compounds', [compoundKey, 'saleValue']);
+                        setResourceDataObject(currentSaleValue * quantity, 'compounds', [compoundKey, 'saleValue']);
+                    }
+                    break;
+            }
+            break;
+        case 'cash':
+            const currentCash = getResourceDataObject('currency', ['cash']);
+            setResourceDataObject(Math.floor(currentCash + quantity), 'currency', ['cash']);
+            break;
+        case 'antimatter':
+            const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
+            setResourceDataObject(Math.floor(currentAntimatter + quantity), 'antimatter', ['quantity']);
+            break;
+    }
 }
 
 export function genericAchievementChecker(achievement) {
