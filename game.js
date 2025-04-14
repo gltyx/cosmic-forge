@@ -273,10 +273,9 @@ import {
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
     getBuffQuantumEnginesData,
-    setAchievementIconImageUrls,
-    checkForAchievements,
-    resetAchievementsOnRebirth
-} from "./resourceDataObject.js";
+    setAchievementIconImageUrls} from "./resourceDataObject.js";
+import { checkForAchievements } from "./achievements.js";
+import { resetAchievementsOnRebirth } from "./achievements.js";
 
 import { 
     updateContent,
