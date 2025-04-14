@@ -1,8 +1,8 @@
-import { newsTickerContent, refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
+import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime } from "./constantsAndGlobalVars.js";
-import { showNotification } from "./ui.js";
+import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, getGameStartTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
+import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsTickers, achievementBeatEnemy, achievementCollect100Precipitation, achievementCollect100TitaniumAsPrecipitation, achievementConquerStarSystems, achievementCreateCompound, achievementDiscoverAsteroid, achievementDiscoverLegendaryAsteroid, achievementHave4RocketsMiningAntimatter, achievementHave50HoursWithOnePioneer, achievementInitiateDiplomacyWithAlienRace, achievementLaunchRocket, achievementLaunchStarShip, achievementLiquidateAllAssets, achievementMineAllAntimatterAsteroid, achievementPerformGalaticMarketTransaction, achievementRebirth, achievementResearchAllTechnologies, achievementSeeAllNewsTickers, achievementSpendAp, achievementStudyAllStarsInOneRun, achievementStudyAStar, achievementTrade10APForCash, achievementTripPower } from "./achievements.js";
 
 export let achievementImageUrls;
 
@@ -1524,7 +1524,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'allResources',
-                quantity: 1.2
+                quantity: 0.2
             }
         },
         notification: "seeAllNewsTickersNotification"
@@ -2054,7 +2054,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'allResources',
-                quantity: 1.3
+                quantity: 0.3
             }
         },
         notification: "rebirthNotification"
@@ -2483,12 +2483,105 @@ export let resourceDataRebirthCopy = structuredClone(resourceData);
 
 export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
     const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
-    //const galacticBuffsList = 
     Object.assign(resourceData, resourceDataRebirthCopy);
 
     addPermanentBuffsBackInAfterRebirth();
-    //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
+    addPermanentResourcesModifiersBackIn();
+    addPermanentCompoundsModifiersBackIn();
+
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
+function addPermanentCompoundsModifiersBackIn() {
+    const permanentCompoundsModifier = getMultiplierPermanentCompounds();
+    const allCompounds = getResourceDataObject('compounds');
+                
+    for (const compoundKey in allCompounds) {
+        for (let i = 1; i <= 4; i++) {
+            const ratioKey = `createsFromRatio${i}`;
+            const currentRatio = getResourceDataObject('compounds', [compoundKey, ratioKey]);
+
+            if (currentRatio > 0) {
+                const newRatio = Math.max(1, Math.floor(currentRatio * permanentCompoundsModifier));
+                setResourceDataObject(newRatio, 'compounds', [compoundKey, ratioKey]);
+            }
+        }
+
+        const originalCompoundText = getCompoundCreateDropdownRecipeText(compoundKey);
+        const updatedCompoundText = {};
+        
+        for (const key of ['max', 'threeQuarters', 'twoThirds', 'half', 'oneThird']) {
+            if (originalCompoundText[key]) {
+                updatedCompoundText[key] = originalCompoundText[key];
+            }
+        }
+
+        const resourceShortNames = {
+            iron: 'Irn',
+            carbon: 'Crb',
+            sodium: 'Sod',
+            neon: 'Neo',
+            hydrogen: 'Hyd',
+            oxygen: 'Oxy',
+            silicon: 'Sil'
+        };
+
+        const quantitiesToUpdate = {
+            '50000': 50000,
+            '5000': 5000,
+            '500': 500,
+            '50': 50,
+            '5': 5,
+            '1': 1
+        };
+
+        const sources = [];
+        for (let i = 1; i <= 4; i++) {
+            const from = getResourceDataObject('compounds', [compoundKey, `createsFrom${i}`]);
+            const ratio = getResourceDataObject('compounds', [compoundKey, `createsFromRatio${i}`]);
+            if (from && from[0] && ratio > 0) {
+                const shortName = resourceShortNames[from[0]];
+                sources.push({ compound: shortName, ratio });
+            }
+        }
+
+        for (const [label, baseMultiplier] of Object.entries(quantitiesToUpdate)) {
+            const parts = sources.map(({ compound: compound, ratio }) => {
+                const amount = ratio * baseMultiplier;
+                let formatted;
+            
+                if (amount >= 1000000) {
+                    formatted = `${(amount / 1000000).toFixed(amount % 1000000 === 0 ? 0 : 1)}M`;
+                } else if (amount >= 1000) {
+                    formatted = `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}K`;
+                } else {
+                    formatted = amount;
+                }
+            
+                return `${formatted} ${compound}`;
+            });                            
+            updatedCompoundText[label] = {
+                value: label,
+                text: `${label} - ${parts.join(', ')}`
+            };
+        }
+
+        setCompoundCreateDropdownRecipeText(compoundKey, updatedCompoundText);
+    }
+}
+
+function addPermanentResourcesModifiersBackIn() {
+    const permanentResourcesModifier = getMultiplierPermanentResources();
+    const allResources = getResourceDataObject('resources');
+                
+    for (const resourceKey in allResources) {
+        if (resourceKey === 'solar') continue;                   
+        for (let i = 1; i <= 4; i++) {
+            const tierKey = `tier${i}`;
+            const currentRate = getResourceDataObject('resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+            setResourceDataObject(currentRate * permanentResourcesModifier, 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+        }
+    }
 }
 
 export function getStarSystemDataObject(key, subKeys) {
@@ -2584,398 +2677,4 @@ export function getFleetShips(fleetShip) {
 
 export function getMaxFleetShip(fleetShip) {
     return resourceData.space.upgrades[fleetShip].maxCanBuild;
-}
-
-export function achievementResearchAllTechnologies() {
-    const achievement = getAchievementDataObject('researchAllTechnologies');
-    const allTechs = getResourceDataObject('techs');
-    const unlockedTechs = getTechUnlockedArray();
-    const allTechsUnlocked = Object.keys(allTechs).every(techKey => unlockedTechs.includes(techKey));
-
-    if (allTechsUnlocked) {
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementAchieve100FusionEfficiency() {
-    const achievement = getAchievementDataObject('achieve100FusionEfficiency');
-    if (getTechUnlockedArray().includes('fusionEfficiencyIII')) {
-        setAchievementFlagArray('achieve100FusionEfficiency', 'remove');
-        grantAchievement(achievement);
-    }   
-}
-
-export function achievementTripPower() {
-    const achievement = getAchievementDataObject('tripPower');
-    if (getAchievementFlagArray().includes('tripPower')) {
-        setAchievementFlagArray('tripPower', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementCollect100Precipitation() {
-    const achievement = getAchievementDataObject('collect100Precipitation');
-    if (getCollectedPrecipitationQuantityThisRun() >= 100) {
-        grantAchievement(achievement);
-    }
-}
-
-
-export function achievementCreateCompound() {
-    let achievement;
-    if (getAchievementFlagArray().includes('createSteel')) {
-        achievement = getAchievementDataObject('createSteel');
-        setAchievementFlagArray('createSteel', 'remove');
-        grantAchievement(achievement);
-    }
-
-    if (getAchievementFlagArray().includes('createTitanium')) {
-        achievement = getAchievementDataObject('createTitanium');
-        setAchievementFlagArray('createTitanium', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementDiscoverAsteroid() {
-    const achievement = getAchievementDataObject('discoverAsteroid');
-    if (getAchievementFlagArray().includes('discoverAsteroid')) {
-        setAchievementFlagArray('discoverAsteroid', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementLaunchRocket() {
-    const achievement = getAchievementDataObject('launchRocket');
-    if (getAchievementFlagArray().includes('launchRocket')) {
-        setAchievementFlagArray('launchRocket', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementMineAllAntimatterAsteroid() {
-    const achievement = getAchievementDataObject('mineAllAntimatterAsteroid');
-    if (getAchievementFlagArray().includes('mineAllAntimatterAsteroid')) {
-        setAchievementFlagArray('mineAllAntimatterAsteroid', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementStudyAStar(requiredDistance) {
-    let achievement;
-    if (getStarVisionDistance() >= requiredDistance) {
-        switch (requiredDistance) {
-            case 0.5:
-                achievement = getAchievementDataObject('studyStar');
-                break;
-            case 5:
-                achievement = getAchievementDataObject('studyStarMoreThan5LYAway');
-                break;
-            case 20:
-                achievement = getAchievementDataObject('studyStarMoreThan20LYAway');
-                break;
-        }
-        if (achievement) {
-            grantAchievement(achievement);
-        }
-    }
-}
-
-export function achievementLaunchStarShip() {
-    const achievement = getAchievementDataObject('launchStarship');
-    if (getAchievementFlagArray().includes('launchStarship')) {
-        setAchievementFlagArray('launchStarship', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementInitiateDiplomacyWithAlienRace() {
-    const achievement = getAchievementDataObject('initiateDiplomacyWithAlienRace');
-    if (getAchievementFlagArray().includes('initiateDiplomacyWithAlienRace')) {
-        setAchievementFlagArray('initiateDiplomacyWithAlienRace', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementBeatEnemy(type) {
-    const typeToIdMap = {
-        bully: 'bullyEnemyIntoSubmission',
-        vassalize: 'vassalizeEnemy',
-        conquer: 'conquerEnemy',
-        hiveMind: 'conquerHiveMindEnemy',
-        belligerent: 'conquerBelligerentEnemy',
-        withoutScanning: 'conquerEnemyWithoutScanning',
-        unoccupied: 'settleUnoccupiedSystem',
-        noLife: 'discoverSystemWithNoLife',
-        settleNormal: 'settleSystem'
-    };
-
-    const achievementId = typeToIdMap[type];
-    const achievement = getAchievementDataObject(achievementId);
-
-    if (getAchievementFlagArray().includes(achievementId)) {
-        setAchievementFlagArray(achievementId, 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementSpendAp() {
-    const achievement = getAchievementDataObject('spendAP');
-    if (getAchievementFlagArray().includes('spendAP')) {
-        setAchievementFlagArray('spendAP', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementPerformGalaticMarketTransaction() {
-    const achievement = getAchievementDataObject('performGalacticMarketTransaction');
-    if (getAchievementFlagArray().includes('performGalacticMarketTransaction')) {
-        setAchievementFlagArray('performGalacticMarketTransaction', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementLiquidateAllAssets() {
-    const achievement = getAchievementDataObject('liquidateAllAssets');
-    if (getAchievementFlagArray().includes('liquidateAllAssets')) {
-        setAchievementFlagArray('liquidateAllAssets', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementRebirth() {
-    const achievement = getAchievementDataObject('rebirth');
-    if (getAchievementFlagArray().includes('rebirth')) {
-        setAchievementFlagArray('rebirth', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementConquerStarSystems(conqueredQuantity) {
-    if (getStatRun() - 1 >= conqueredQuantity) {
-        switch (conqueredQuantity) {
-            case 10:
-                grantAchievement('conquer10StarSystems');
-                break;
-            case 50:
-                grantAchievement('conquer50StarSystems');
-                break;
-        }
-    }
-}
-
-export function achievementSeeAllNewsTickers() {
-    const achievement = getAchievementDataObject('seeAllNewsTickers');
-    const newsTickerObject = newsTickerContent;
-    let totalLength = 0;
-
-    for (const key in newsTickerObject) {
-        const array = newsTickerObject[key];
-        if (Array.isArray(array)) {
-            totalLength += array.length;
-        }
-    }
-
-    if (totalLength === getAlreadySeenNewsTickerArray().length) {
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementActivateAllWackyNewsTickers() {
-    const achievement = getAchievementDataObject('activateAllWackyNewsTickers');
-    const newsTickerObject = newsTickerContent;
-    const wackyArray = newsTickerObject['wackyEffects'];
-    let totalLength = 0;
-
-    if (Array.isArray(wackyArray)) {
-        totalLength = wackyArray.length;
-    }
-
-    if (totalLength === getActivatedWackyNewsEffectsArray().length) {
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementCollect100TitaniumAsPrecipitation() {
-    const achievement = getAchievementDataObject('collect100TitaniumAsPrecipitation');
-    const currentPrecipitationType = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']);
-
-    if (currentPrecipitationType === 'titanium' && getCollectedPrecipitationQuantityThisRun() >= 100) {
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementDiscoverLegendaryAsteroid() {
-    const achievement = getAchievementDataObject('discoverLegendaryAsteroid');
-    if (getAchievementFlagArray().includes('discoverLegendaryAsteroid')) {
-        setAchievementFlagArray('discoverLegendaryAsteroid', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementHave4RocketsMiningAntimatter() {
-    const achievement = getAchievementDataObject('have4RocketsMiningAntimatter');
-    const miningObject = getMiningObject();
-
-    if (Object.values(miningObject).every(value => value !== null)) {
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementStudyAllStarsInOneRun() {
-    const achievement = getAchievementDataObject('studyAllStarsInOneRun');
-    if (getAchievementFlagArray().includes('studyAllStarsInOneRun')) {
-        setAchievementFlagArray('studyAllStarsInOneRun', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementTrade10APForCash() {
-    const achievement = getAchievementDataObject('trade10APForCash');
-    if (getAchievementFlagArray().includes('trade10APForCash')) {
-        setAchievementFlagArray('trade10APForCash', 'remove');
-        grantAchievement(achievement);
-    }
-}
-
-export function achievementHave50HoursWithOnePioneer() {
-    const elapsedTimeActive = getGameActiveCountTime()[0];
-    const achievement = getAchievementDataObject('have50HoursWithOnePioneer');
-
-    const fiftyHoursInMs = 50 * 60 * 60 * 1000;
-
-    if (elapsedTimeActive >= fiftyHoursInMs) {
-        grantAchievement(achievement);
-    }
-}
-
-export function grantAchievement(achievement) {
-    setAchievementDataObject(true, achievement.id, ['active']);
-    showNotification(getAchievementNotification(achievement.notification), 'achievement', 4000, 'default');
-
-    refreshAchievementTooltipDescriptions();
-    addAchievementBonus(achievement);
-}
-
-export function addAchievementBonus(achievement) {
-
-}
-
-export function genericAchievementChecker(achievement) {
-    const requirementType = achievement?.requirements?.requirement1;
-
-    switch (requirementType) {
-        case 'resources':
-            const resourceType = achievement.requirements.value1.type;
-            const requiredQuantity = achievement?.requirements.value1.quantity;
-            const currentResourceQuantity = getResourceDataObject('resources', [resourceType, 'quantity']);
-
-            if (currentResourceQuantity >= requiredQuantity) {
-                grantAchievement(achievement);
-            }
-            break;
-        case 'unlock':
-            const requiredUnlock = achievement.requirements.value1;
-            if (getUnlockedResourcesArray().includes(requiredUnlock)) {
-                grantAchievement(achievement);
-            }
-            break;
-        case 'tech':
-            const requiredTech = achievement.requirements.value1;
-
-            if (getTechUnlockedArray().includes(requiredTech)) {
-                grantAchievement(achievement);
-            }
-            break;
-        case 'buildings':
-            const buildingType = achievement.requirements.value1.type;
-            const buildingQuantity = getResourceDataObject('buildings', ['energy', 'upgrades', buildingType, 'quantity']);
-
-            if (buildingQuantity >= achievement.requirements.value1.quantity) {
-                grantAchievement(achievement);
-            }
-            break;
-        case 'cash':
-            const requiredCash = achievement.requirements.value1.quantity;    
-            const currentCash = getResourceDataObject('currency', ['cash']);
-
-            if (currentCash >= requiredCash) {
-                grantAchievement(achievement);
-            }
-            break;
-        case 'special':
-            return;
-    }
-}
-
-export function checkForAchievements() {
-    const inactiveAchievements = Object.keys(achievementsData).reduce((acc, key) => {
-        if (key === 'version') return acc;
-        const achievement = getAchievementDataObject(key);
-        
-        if (getCurrentOptionPane() === 'achievements') {
-            const achievementElement = document.getElementById(achievement.id);
-            if (achievement && achievement.active) {
-                achievementElement.style.opacity = 1;
-            } else if (achievement && !achievement.active) {
-                achievementElement.style.opacity = 0.3;
-            }
-        }
-
-        if (achievement && achievement.active === false) {
-            acc[key] = achievement;
-        }
-        return acc;
-    }, {});
-
-    for (const [key, achievement] of Object.entries(inactiveAchievements)) {
-        if (achievement.specialCondition !== false) {
-            const achievementFunction = achievement.specialCondition;
-
-            if (achievement.specialConditionArguments !== false) {
-                achievementFunction(...achievement.specialConditionArguments);
-            } else {
-                achievementFunction();
-            }
-        } else {
-            genericAchievementChecker(achievement);
-        }
-    }
-
-    setAchievementFlagArray(null, 'empty');
-}
-
-export const achievementFunctionsMap = {
-    achievementResearchAllTechnologies,
-    achievementAchieve100FusionEfficiency,
-    achievementTripPower,
-    achievementCollect100Precipitation,
-    achievementCreateCompound,
-    achievementDiscoverAsteroid,
-    achievementLaunchRocket,
-    achievementMineAllAntimatterAsteroid,
-    achievementStudyAStar,
-    achievementLaunchStarShip,
-    achievementInitiateDiplomacyWithAlienRace,
-    achievementBeatEnemy,
-    achievementSpendAp,
-    achievementPerformGalaticMarketTransaction,
-    achievementLiquidateAllAssets,
-    achievementRebirth,
-    achievementConquerStarSystems,
-    achievementSeeAllNewsTickers,
-    achievementActivateAllWackyNewsTickers,
-    achievementCollect100TitaniumAsPrecipitation,
-    achievementDiscoverLegendaryAsteroid,
-    achievementHave4RocketsMiningAntimatter,
-    achievementStudyAllStarsInOneRun,
-    achievementTrade10APForCash,
-    achievementHave50HoursWithOnePioneer
-};
-
-export function resetAchievementsOnRebirth() {
-    for (const key in achievementsData) {
-        if (achievementsData[key].resetOnRebirth) {
-            setAchievementDataObject(false, key, ['active']);
-        }
-    }
 }
