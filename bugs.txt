@@ -4,3 +4,18 @@ look at price of neon, titanium, possible neon autobuyer possibly with AP to mak
 turn off autobuyers ie carbon burner not redrawing the rate/s
 
 remove asteroid from travel to dropdown if one already on way there
+
+indicators
+done:
+resource unlocks
+compounds unlocks
+new tab unlocks (the normal way)
+all new content
+
+not working:
+space Mining tab
+
+need to add:
+second, third, fourth autobuyer unlocked indicators
+battery unlocked indicators
+science club and science lab unlocked indicators
