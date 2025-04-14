@@ -76,6 +76,8 @@ export let notificationStatus = {};
 export let notificationContainers = {};
 export let classificationOrder = [];
 
+export let firstAccessArray = [];
+
 let compoundCreateDropdownRecipeText = {
     diesel: {
       max: { value: 'max', text: 'Max Possible' },
@@ -1056,6 +1058,7 @@ export function captureGameStatusForSaving(type) {
     gameState.gameActiveCountTime = gameActiveCountTime;
     gameState.userPlatform = userPlatform;
     gameState.compoundCreateDropdownRecipeText = compoundCreateDropdownRecipeText;
+    gameState.firstAccessArray = firstAccessArray;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1257,6 +1260,7 @@ export function restoreGameStatus(gameState, type) {
             userPlatform = gameState.userPlatform ?? [null, null, null];
             multiplierPermanentResources = gameState.multiplierPermanentResources ?? 1;
             multiplierPermanentCompounds = gameState.multiplierPermanentCompounds ?? 1;
+            firstAccessArray = gameState.firstAccessArray ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -4149,5 +4153,15 @@ export function getMultiplierPermanentCompounds() {
 
 export function setMultiplierPermanentCompounds(value) {
     multiplierPermanentCompounds = value;
+}
+
+export function getFirstAccessArray() {
+    return firstAccessArray;
+}
+
+export function setFirstAccessArray(value) {
+    if (!firstAccessArray.includes(value)) {
+        firstAccessArray.push(value);
+    }
 }
   

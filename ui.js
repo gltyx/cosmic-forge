@@ -102,7 +102,9 @@ import {
     BASE_RIGHT,
     setAchievementFlagArray,
     getActivatedWackyNewsEffectsArray,
-    setActivatedWackyNewsEffectsArray
+    setActivatedWackyNewsEffectsArray,
+    setFirstAccessArray,
+    getFirstAccessArray
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -2853,8 +2855,34 @@ export function showTabsUponUnlock() {
                 tab.classList.remove('tab-not-yet');
             }
             tab.textContent = tabName;
+            const containerGroup = document.getElementById(`${tab.id}ContainerGroup`);
+
+            if (containerGroup) {
+                const firstAccessArray = getFirstAccessArray();            
+                const optionElements = containerGroup.querySelectorAll('[id$="Option"]');
+            
+                optionElements.forEach(el => {
+                    const grandparent = el.parentElement?.parentElement;
+                    const isVisible = !grandparent?.classList.contains('invisible');
+                    const normalizedElName = normalizeTabName(el.textContent);
+                    const isFirstAccess = !firstAccessArray.includes(normalizedElName);
+            
+                    if (isVisible && isFirstAccess) {
+                        appendAttentionIndicator(el);
+                    } else {
+                        removeAttentionIndicator(el);
+                    }
+                });
+            }                  
         }
     });
+}
+
+function normalizeTabName(tabName) {
+    return tabName
+        .replace(/\s*⚠️/, '')
+        .toLowerCase()
+        .trimEnd();
 }
 
 export function checkOrderOfTabs() {
@@ -2961,6 +2989,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('hydrogen', 'resources');
+            setFirstAccessArray('hydrogen');
         });
     });
     
@@ -2973,6 +3002,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('helium', 'resources');
+            setFirstAccessArray('helium');
         });
     });
 
@@ -2985,6 +3015,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('carbon', 'resources');
+            setFirstAccessArray('carbon');
         });
     });
 
@@ -2997,6 +3028,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('neon', 'resources');
+            setFirstAccessArray('neon');
         });
     });
 
@@ -3009,6 +3041,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('oxygen', 'resources');
+            setFirstAccessArray('oxygen');
         });
     });
 
@@ -3019,6 +3052,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('sodium');
             updateContent('Sodium', 'tab1', 'content');
             setAutoSellToggleState('sodium', 'resources');
+            setFirstAccessArray('sodium');
         });
     });
 
@@ -3031,6 +3065,7 @@ function initializeTabEventListeners() {
             fuseButton = document.querySelector('button.fuse');
             setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(fuseButton, 'fuse');
             setAutoSellToggleState('silicon', 'resources');
+            setFirstAccessArray('silicon');
         });
     });
 
@@ -3041,6 +3076,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('iron');
             updateContent('Iron', 'tab1', 'content');
             setAutoSellToggleState('iron', 'resources');
+            setFirstAccessArray('iron');
         });
     });
 
@@ -3050,6 +3086,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab2', 'energy storage');
             setCurrentOptionPane('energy storage');
             updateContent('Energy Storage', 'tab2', 'content');
+            setFirstAccessArray('energy storage');
         });
     });
 
@@ -3059,6 +3096,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab2', 'power plant');
             setCurrentOptionPane('power plant');
             updateContent('Power Plant', 'tab2', 'content');
+            setFirstAccessArray('power plant');
         });
     });
 
@@ -3068,6 +3106,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab2', 'solar power plant');
             setCurrentOptionPane('solar power plant');
             updateContent('Solar Power Plant', 'tab2', 'content');
+            setFirstAccessArray('solar power plant');
         });
     });
 
@@ -3077,6 +3116,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab2', 'advanced power plant');
             setCurrentOptionPane('advanced power plant');
             updateContent('Advanced Power Plant', 'tab2', 'content');
+            setFirstAccessArray('advanced power plant');
         });
     });
 
@@ -3086,6 +3126,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab3', 'research');
             setCurrentOptionPane('research');
             updateContent('Research', 'tab3', 'content');
+            setFirstAccessArray('research');
         });
     });
     
@@ -3095,6 +3136,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab3', 'technology');
             setCurrentOptionPane('technology');
             updateContent('Technology', 'tab3', 'content');
+            setFirstAccessArray('technology');
         });
     });
 
@@ -3104,6 +3146,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab3', 'tech tree');
             setCurrentOptionPane('tech tree');
             updateContent('Tech Tree', 'tab3', 'content');
+            setFirstAccessArray('tech tree');
         });
     });
 
@@ -3114,6 +3157,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('diesel');
             updateContent('Diesel', 'tab4', 'content');
             setAutoSellToggleState('diesel', 'compounds');
+            setFirstAccessArray('diesel');
         });
     });
 
@@ -3124,6 +3168,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('glass');
             updateContent('Glass', 'tab4', 'content');
             setAutoSellToggleState('glass', 'compounds');
+            setFirstAccessArray('glass');
         });
     });
 
@@ -3134,6 +3179,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('steel');
             updateContent('Steel', 'tab4', 'content');
             setAutoSellToggleState('steel', 'compounds');
+            setFirstAccessArray('steel');
         });
     });
 
@@ -3144,6 +3190,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('concrete');
             updateContent('Concrete', 'tab4', 'content');
             setAutoSellToggleState('concrete', 'compounds');
+            setFirstAccessArray('concrete');
         });
     });
 
@@ -3154,6 +3201,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('water');
             updateContent('Water', 'tab4', 'content');
             setAutoSellToggleState('water', 'compounds');
+            setFirstAccessArray('water');
         });
     });
 
@@ -3164,6 +3212,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('titanium');
             updateContent('Titanium', 'tab4', 'content');
             setAutoSellToggleState('titanium', 'compounds');
+            setFirstAccessArray('titanium');
         });
     });
 
@@ -3173,6 +3222,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star map');
             setCurrentOptionPane('star map');
             updateContent('Star Map', 'tab5', 'content');
+            setFirstAccessArray('star map');
         });
     });
 
@@ -3182,6 +3232,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star data');
             setCurrentOptionPane('star data');
             updateContent('Star Data', 'tab5', 'content');
+            setFirstAccessArray('star data');
         });
     });
 
@@ -3191,6 +3242,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'star ship');
             setCurrentOptionPane('star ship');
             updateContent('Star Ship', 'tab5', 'content');
+            setFirstAccessArray('star ship');
         });
     });
 
@@ -3200,6 +3252,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'fleet hangar');
             setCurrentOptionPane('fleet hangar');
             updateContent('Fleet Hangar', 'tab5', 'content');
+            setFirstAccessArray('fleet hangar');
         });
     });
 
@@ -3209,6 +3262,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab5', 'colonise');
             setCurrentOptionPane('colonise');
             updateContent('Colonise', 'tab5', 'content');
+            setFirstAccessArray('colonise');
         });
     });
 
@@ -3217,7 +3271,6 @@ function initializeTabEventListeners() {
             selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'launch pad');
             setCurrentOptionPane('launch pad');
-            updateContent('Launch Pad', 'tab6', 'content');
         });
     });
 
@@ -3227,6 +3280,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'rocket1');
             setCurrentOptionPane('rocket1');
             updateContent(`${getRocketUserName('rocket1')}`, 'tab6', 'content');
+            setFirstAccessArray('rocket1');
         });
     });
 
@@ -3236,6 +3290,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'rocket2');
             setCurrentOptionPane('rocket2');
             updateContent(`${getRocketUserName('rocket2')}`, 'tab6', 'content');
+            setFirstAccessArray('rocket2');
         });
     });
 
@@ -3245,6 +3300,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'rocket3');
             setCurrentOptionPane('rocket3');
             updateContent(`${getRocketUserName('rocket3')}`, 'tab6', 'content');
+            setFirstAccessArray('rocket3');
         });
     });
 
@@ -3254,6 +3310,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'rocket4');
             setCurrentOptionPane('rocket4');
             updateContent(`${getRocketUserName('rocket4')}`, 'tab6', 'content');
+            setFirstAccessArray('rocket4');
         });
     });
 
@@ -3263,6 +3320,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'space telescope');
             setCurrentOptionPane('space telescope');
             updateContent('Space Telescope', 'tab6', 'content');
+            setFirstAccessArray('space telescope');
         });
     });
 
@@ -3272,6 +3330,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'asteroids');
             setCurrentOptionPane('asteroids');
             updateContent('Asteroids', 'tab6', 'content');
+            setFirstAccessArray('asteroids');
         });
     });
 
@@ -3282,6 +3341,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab6', 'mining');
             setCurrentOptionPane('mining');
             updateContent('Mining', 'tab6', 'content');
+            setFirstAccessArray('mining');
         });
     });
 
@@ -3291,6 +3351,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab7', 'rebirth');
             setCurrentOptionPane('rebirth');
             updateContent('Rebirth', 'tab7', 'content');
+            setFirstAccessArray('rebirth');
         });
     });
 
@@ -3300,6 +3361,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab7', 'galactic market');
             setCurrentOptionPane('galactic market');
             updateContent('Galactic Market', 'tab7', 'content');
+            setFirstAccessArray('galactic market');
         });
     });
 
@@ -3309,6 +3371,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab7', 'ascendency');
             setCurrentOptionPane('ascendency');
             updateContent('Ascendency', 'tab7', 'content');
+            setFirstAccessArray('ascendency');
         });
     });
     
@@ -3318,6 +3381,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'visual');
             setCurrentOptionPane('visual');
             updateContent('Visual', 'tab8', 'content');
+            setFirstAccessArray('visual');
         });
     });
     
@@ -3327,6 +3391,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'saving / loading');
             setCurrentOptionPane('saving / loading');
             updateContent('Saving / Loading', 'tab8', 'content');
+            setFirstAccessArray('saving / loading');
         });
     });
 
@@ -3336,6 +3401,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'game options');
             setCurrentOptionPane('game options');
             updateContent('Game Options', 'tab8', 'content');
+            setFirstAccessArray('game options');
         });
     });
 
@@ -3345,6 +3411,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'get started');
             setCurrentOptionPane('get started');
             updateContent('Get Started', 'tab8', 'content');
+            setFirstAccessArray('get started');
         });
     });
     
@@ -3354,6 +3421,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'concepts - early');
             setCurrentOptionPane('concepts - early');
             updateContent('Concepts - Early', 'tab8', 'content');
+            setFirstAccessArray('concepts - early');
         });
     });
     
@@ -3363,6 +3431,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'concepts - mid');
             setCurrentOptionPane('concepts - mid');
             updateContent('Concepts - Mid', 'tab8', 'content');
+            setFirstAccessArray('concepts - mid');
         });
     });
     
@@ -3372,6 +3441,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'concepts - late');
             setCurrentOptionPane('concepts - late');
             updateContent('Concepts - Late', 'tab8', 'content');
+            setFirstAccessArray('concepts - late');
         });    
     });
 
@@ -3381,6 +3451,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'statistics');
             setCurrentOptionPane('statistics');
             updateContent('Statistics', 'tab8', 'content');
+            setFirstAccessArray('statistics');
         });    
     });
 
@@ -3390,6 +3461,7 @@ function initializeTabEventListeners() {
             setLastScreenOpenRegister('tab8', 'contact');
             setCurrentOptionPane('contact');
             updateContent('Contact', 'tab8', 'content');
+            setFirstAccessArray('contact');
         });    
     });
 
@@ -3400,6 +3472,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('achievements');
             refreshAchievementTooltipDescriptions();
             updateContent('Achievements', 'tab8', 'content');
+            setFirstAccessArray('achievements');
         });    
     });
 
@@ -5164,7 +5237,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     export function resetTab5ClassesRebirth() {
         const collapsibles = document.querySelectorAll('.collapsible');
         collapsibles.forEach(collapsible => {
-            if (collapsible.id === "starMap" || collapsible.id === "starShipOption") {
+            if (collapsible.id === "starMapOption" || collapsible.id === "starShipOption") {
                 collapsible.classList.add('open');
             } else {
                 collapsible.classList.remove('open');

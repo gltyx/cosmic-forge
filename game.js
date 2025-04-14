@@ -3527,7 +3527,7 @@ function disableTabsLinksAndAutoSaveDuringBattle(battleStart) {
         }
     }
 
-    document.querySelectorAll("[id*='Option'], #starMap").forEach(element => {
+    document.querySelectorAll("[id*='Option'], #starMapOption").forEach(element => {
         element.classList.toggle("tab-not-yet", battleStart);
     });    
 
