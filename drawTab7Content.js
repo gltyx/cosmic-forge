@@ -5,7 +5,7 @@ import { getAscendencyBuffDataObject } from './resourceDataObject.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab7Content(heading, optionContentElement) {
-    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
     if (optionElement) {
         const warningIcon = optionElement.querySelector('span.attention-indicator');
         if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {

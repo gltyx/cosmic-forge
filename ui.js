@@ -3271,6 +3271,8 @@ function initializeTabEventListeners() {
             selectRowCss(this);
             setLastScreenOpenRegister('tab6', 'launch pad');
             setCurrentOptionPane('launch pad');
+            updateContent('Launch Pad', 'tab6', 'content');
+            setFirstAccessArray('launch pad');
         });
     });
 
@@ -5283,7 +5285,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             row.classList.add('invisible');
         });
     
-        const visibleRows = ['spaceTelescope'];
+        const visibleRows = ['spaceTelescopeOption'];
         visibleRows.forEach(id => {
             const element = document.getElementById(id);
             if (element) {

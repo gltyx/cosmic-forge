@@ -5,7 +5,7 @@ import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement,
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
-    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
     if (optionElement) {
         const warningIcon = optionElement.querySelector('span.attention-indicator');
         if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
@@ -830,7 +830,8 @@ export function drawTab3Content(heading, optionContentElement) {
                         });
                         showNotification(techNotificationMessages.rocketComposites, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
-                        document.getElementById('launchPad').parentElement.parentElement.classList.remove('invisible');
+                        appendAttentionIndicator(document.getElementById(`launchPadOption`));  
+                        document.getElementById('launchPadOption').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'rocketComposites', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1018,6 +1019,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('atmosphericTelescopes');
                         showNotification(techNotificationMessages.atmosphericTelescopes, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        appendAttentionIndicator(document.getElementById(`spaceTelescopeOption`));  
                     }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', true, null, 'tech'),
                     null,
                     null,

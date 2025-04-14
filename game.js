@@ -244,7 +244,8 @@ import {
     setCurrentGalacticMarketCommission,
     getCurrentGalacticMarketCommission,
     getAchievementFlagArray,
-    getBelligerentEnemyFlag
+    getBelligerentEnemyFlag,
+    getFirstAccessArray
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -638,13 +639,13 @@ function checkAndRevealNewBuildings(type) {
             }
             break;
         case 'space':
-            element = document.getElementById('launchPad');
+            element = document.getElementById('launchPadOption');
             if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1] === 'Space Mining') {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
             }
-            element = document.getElementById('asteroids');
+            element = document.getElementById('asteroidsOption');
             if (getAsteroidArray().length > 0 && getCurrentTab()[1] === 'Space Mining') {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
@@ -7133,7 +7134,7 @@ export function discoverAsteroid(debug) {
     const randomLetter = String.fromCharCode(Math.floor(Math.random() * 26) + 65);
     const asteroidName = `${starCode}-${randomNumber}${randomLetter}`;
     const asteroid = generateAsteroidData(asteroidName);
-    document.getElementById('asteroids').parentElement.parentElement.classList.remove('invisible');
+    document.getElementById('asteroidsOption').parentElement.parentElement.classList.remove('invisible');
     setBaseSearchAsteroidTimerDuration(getBaseSearchAsteroidTimerDuration() * getGameCostMultiplier());
     setAsteroidArray(asteroid);
 

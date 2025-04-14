@@ -6,7 +6,7 @@ import { capitaliseString } from './utilityFunctions.js';
 import { sfxPlayer, playClickSfx } from './audioManager.js';
 
 export function drawTab2Content(heading, optionContentElement) {
-    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
     if (optionElement) {
         const warningIcon = optionElement.querySelector('span.attention-indicator');
         if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {

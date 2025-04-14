@@ -4,7 +4,7 @@ import { getResourceDataObject, setResourceDataObject } from './resourceDataObje
 import { createToggleSwitch, createTextElement, createOptionRow, createDropdown, createButton, removeTabAttentionIfNoIndicators } from './ui.js';
 
 export function drawTab1Content(heading, optionContentElement) {
-    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
     if (optionElement) {
         const warningIcon = optionElement.querySelector('span.attention-indicator');
         if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
