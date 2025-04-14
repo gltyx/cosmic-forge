@@ -838,7 +838,7 @@ export function drawTab1Content(heading, optionContentElement) {
             getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'nameUpgrade']),
             'Neon Auto Buyer Tier 2:',
             createButton(`Add ${Math.floor(getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'rate']) * getTimerRateRatio())} Neon /s`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check'], () => {
-                gain(1, 'neonAB2Quantity', 'autoBuyer', true, 'tier2', 'neon', 'resource')
+                gain(1, 'neonAB2Quantity', 'autoBuyer', true, 'tier2', 'neon', 'resources')
             }, 'upgradeCheck', '', 'autoBuyer', null, 'neon', true, 'tier2', 'resource'),
             createTextElement(`Quantity: ${getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'tier2', 'quantity'])}`, 'neonAB2Quantity', ['autoBuyer-building-quantity']),
             createToggleSwitch('neon2Toggle', true, (isEnabled) => {
