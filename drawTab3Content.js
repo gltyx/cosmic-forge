@@ -1,4 +1,4 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
@@ -132,6 +132,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('knowledgeSharing');
                         showNotification(techNotificationMessages.knowledgeSharing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        appendAttentionIndicator(document.getElementById('researchOption'));
                     }, 'techUnlock', '', 'knowledgeSharing', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -520,6 +521,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         });
                         showNotification(techNotificationMessages.quantumComputing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        indicateAllResources();
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -550,6 +552,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('scienceLaboratories');
                         showNotification(techNotificationMessages.scienceLaboratories, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        appendAttentionIndicator(document.getElementById('researchOption'));
                     }, 'techUnlock', '', 'scienceLaboratories', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -826,11 +829,14 @@ export function drawTab3Content(heading, optionContentElement) {
                         Object.keys(resourceObject).forEach(key => {
                             if (getResourceDataObject('resources', [key, 'upgrades', 'autoBuyer', 'normalProgression']) === true) {
                                 setAutoBuyerTierLevel(key, 4, false, 'resources');
+                                indicateAllResources();
                             }
                         });
                         showNotification(techNotificationMessages.rocketComposites, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
-                        appendAttentionIndicator(document.getElementById(`launchPadOption`));  
+                        if (!document.getElementById('tab6').innerHTML.includes('???')) {
+                            appendAttentionIndicator(document.getElementById(`launchPadOption`)); 
+                        }  
                         document.getElementById('launchPadOption').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'rocketComposites', null, 'research', true, null, 'tech'),
                     null,
@@ -1019,7 +1025,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('atmosphericTelescopes');
                         showNotification(techNotificationMessages.atmosphericTelescopes, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
-                        appendAttentionIndicator(document.getElementById(`spaceTelescopeOption`));  
+                        if (!document.getElementById('tab6').innerHTML.includes('???')) {
+                            appendAttentionIndicator(document.getElementById(`spaceTelescopeOption`)); 
+                        } 
                     }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1357,3 +1365,17 @@ export function drawTab3Content(heading, optionContentElement) {
 
     }    
 }
+
+function indicateAllResources() {
+    const resources = ['hydrogen', 'helium', 'carbon', 'oxygen', 'sodium', 'silicon', 'iron'];
+
+    resources.forEach(resource => {
+        if (getUnlockedResourcesArray().includes(resource)) {
+            const element = document.getElementById(`${resource}Option`);
+            if (element) {
+                appendAttentionIndicator(element);
+            }
+        }
+    });
+}
+

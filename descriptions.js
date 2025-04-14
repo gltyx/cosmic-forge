@@ -171,7 +171,7 @@ export function initialiseDescriptions() {
         atmosphericTelescopes: 'Atmospheric Telescopes Researched\n\nYou can now get data from the local stellar neighborhood!',
         giganticTurbines: 'Gigantic Turbines Researched\n\nThis opens up new research in power generation!',
         steelFoundries: 'Steel Foundries Researched\n\nYou can now create Steel compounds!',
-        rocketComposites: 'Rocket Composites Researched\n\nYou can now build Rocket Parts!',
+        rocketComposites: 'Rocket Composites Researched\n\nYou can now build Rocket Parts and Level 3 and 4 AutoBuyers!',
         advancedFuels: 'Advanced Fuels Researched\n\nYou can now fuel Rockets!',
         planetaryNavigation: 'Planetary Navigation Researched\n\nYou can now travel to Asteroids!',
         advancedPowerGeneration: 'Advanced Power Generation Researched\n\nBuild Advanced Power Plants!',
@@ -814,8 +814,8 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techRocketCompositesRow: {
-            content1: "Unlock Rocket Composites to build rocket components and unlock the Launch Pad tab.",
-            content2: "Unlock Rocket Composites to build rocket components to mine in space.<br><br><span class='green-ready-text'>Unlock Launch Pad Tab</span>",
+            content1: "Unlock Rocket Composites to build rocket components and unlock the Launch Pad tab, and level 3 and 4 AutoBuyers",
+            content2: "Unlock Rocket Composites to build rocket components to mine in space, and level 3 and 4 AutoBuyers.<br><br><span class='green-ready-text'>Unlock Launch Pad Tab</span>",
             updateAt: ""
         },
         techAdvancedFuelsRow: {

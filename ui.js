@@ -1007,7 +1007,9 @@ export function updateAttentionIndicators() {
       const element = document.querySelector(rule.selector);
   
       if (rule.condition()) {
-        appendAttentionIndicator(element);
+        if (!element.innerHTML.includes('???')) {
+            appendAttentionIndicator(element);
+        }
       } else {
         removeAttentionIndicator(element);
       }
