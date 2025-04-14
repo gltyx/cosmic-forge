@@ -1,7 +1,7 @@
 import { newsTickerContent, refreshAchievementTooltipDescriptions, getAchievementNotification, replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
+import { getMultiplierPermanentCompounds, setMultiplierPermanentCompounds, getMultiplierPermanentResources, setMultiplierPermanentResources, getCollectedPrecipitationQuantityThisRun, getActivatedWackyNewsEffectsArray, setAchievementFlagArray, getAchievementFlagArray, getTechUnlockedArray, getUnlockedResourcesArray, getCurrentTheme, getCurrentOptionPane, getGameStartTime, getMiningObject, getStatRun, getStarVisionDistance, getAlreadySeenNewsTickerArray, getCurrentStarSystem, getGameActiveCountTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
 import { showNotification } from "./ui.js";
 
 export let achievementImageUrls;
@@ -1524,7 +1524,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'allResources',
-                quantity: 1.2
+                quantity: 0.2
             }
         },
         notification: "seeAllNewsTickersNotification"
@@ -2054,7 +2054,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'allResources',
-                quantity: 1.3
+                quantity: 0.3
             }
         },
         notification: "rebirthNotification"
@@ -2483,12 +2483,105 @@ export let resourceDataRebirthCopy = structuredClone(resourceData);
 
 export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
     const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
-    //const galacticBuffsList = 
     Object.assign(resourceData, resourceDataRebirthCopy);
 
     addPermanentBuffsBackInAfterRebirth();
-    //add permanent buffs back in and any immediate effects here such as start up bonuses for new run
+    addPermanentResourcesModifiersBackIn();
+    addPermanentCompoundsModifiersBackIn();
+
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
+function addPermanentCompoundsModifiersBackIn() {
+    const permanentCompoundsModifier = getMultiplierPermanentCompounds();
+    const allCompounds = getResourceDataObject('compounds');
+                
+    for (const compoundKey in allCompounds) {
+        for (let i = 1; i <= 4; i++) {
+            const ratioKey = `createsFromRatio${i}`;
+            const currentRatio = getResourceDataObject('compounds', [compoundKey, ratioKey]);
+
+            if (currentRatio > 0) {
+                const newRatio = Math.max(1, Math.floor(currentRatio * permanentCompoundsModifier));
+                setResourceDataObject(newRatio, 'compounds', [compoundKey, ratioKey]);
+            }
+        }
+
+        const originalCompoundText = getCompoundCreateDropdownRecipeText(compoundKey);
+        const updatedCompoundText = {};
+        
+        for (const key of ['max', 'threeQuarters', 'twoThirds', 'half', 'oneThird']) {
+            if (originalCompoundText[key]) {
+                updatedCompoundText[key] = originalCompoundText[key];
+            }
+        }
+
+        const resourceShortNames = {
+            iron: 'Irn',
+            carbon: 'Crb',
+            sodium: 'Sod',
+            neon: 'Neo',
+            hydrogen: 'Hyd',
+            oxygen: 'Oxy',
+            silicon: 'Sil'
+        };
+
+        const quantitiesToUpdate = {
+            '50000': 50000,
+            '5000': 5000,
+            '500': 500,
+            '50': 50,
+            '5': 5,
+            '1': 1
+        };
+
+        const sources = [];
+        for (let i = 1; i <= 4; i++) {
+            const from = getResourceDataObject('compounds', [compoundKey, `createsFrom${i}`]);
+            const ratio = getResourceDataObject('compounds', [compoundKey, `createsFromRatio${i}`]);
+            if (from && from[0] && ratio > 0) {
+                const shortName = resourceShortNames[from[0]];
+                sources.push({ compound: shortName, ratio });
+            }
+        }
+
+        for (const [label, baseMultiplier] of Object.entries(quantitiesToUpdate)) {
+            const parts = sources.map(({ compound: compound, ratio }) => {
+                const amount = ratio * baseMultiplier;
+                let formatted;
+            
+                if (amount >= 1000000) {
+                    formatted = `${(amount / 1000000).toFixed(amount % 1000000 === 0 ? 0 : 1)}M`;
+                } else if (amount >= 1000) {
+                    formatted = `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}K`;
+                } else {
+                    formatted = amount;
+                }
+            
+                return `${formatted} ${compound}`;
+            });                            
+            updatedCompoundText[label] = {
+                value: label,
+                text: `${label} - ${parts.join(', ')}`
+            };
+        }
+
+        setCompoundCreateDropdownRecipeText(compoundKey, updatedCompoundText);
+    }
+}
+
+function addPermanentResourcesModifiersBackIn() {
+    const permanentResourcesModifier = getMultiplierPermanentResources();
+    const allResources = getResourceDataObject('resources');
+                
+    for (const resourceKey in allResources) {
+        if (resourceKey === 'solar') continue;                   
+        for (let i = 1; i <= 4; i++) {
+            const tierKey = `tier${i}`;
+            const currentRate = getResourceDataObject('resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+            setResourceDataObject(currentRate * permanentResourcesModifier, 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+        }
+    }
 }
 
 export function getStarSystemDataObject(key, subKeys) {
@@ -2870,6 +2963,9 @@ export function addAchievementBonus(achievement) {
         case 'multiplier':
             switch (type) {
                 case 'createCostCompounds':
+                    if (category === 'multiplierPermanent') {
+                        setMultiplierPermanentCompounds(quantity);
+                    }
                     const allCompounds = getResourceDataObject('compounds');
                 
                     for (const compoundKey in allCompounds) {
@@ -2917,12 +3013,12 @@ export function addAchievementBonus(achievement) {
                             const ratio = getResourceDataObject('compounds', [compoundKey, `createsFromRatio${i}`]);
                             if (from && from[0] && ratio > 0) {
                                 const shortName = resourceShortNames[from[0]];
-                                sources.push({ resource: shortName, ratio });
+                                sources.push({ compound: shortName, ratio });
                             }
                         }
                 
                         for (const [label, baseMultiplier] of Object.entries(quantitiesToUpdate)) {
-                            const parts = sources.map(({ resource, ratio }) => {
+                            const parts = sources.map(({ compound: compound, ratio }) => {
                                 const amount = ratio * baseMultiplier;
                                 let formatted;
                             
@@ -2934,7 +3030,7 @@ export function addAchievementBonus(achievement) {
                                     formatted = amount;
                                 }
                             
-                                return `${formatted} ${resource}`;
+                                return `${formatted} ${compound}`;
                             });                            
                             updatedCompoundText[label] = {
                                 value: label,
@@ -2946,6 +3042,9 @@ export function addAchievementBonus(achievement) {
                     }
                     break;                
                 case 'allResources':
+                    if (category === 'multiplierPermanent') {
+                        setMultiplierPermanentResources(getMultiplierPermanentResources() + quantity);
+                    }
                     const allResources = getResourceDataObject('resources');
                 
                     for (const resourceKey in allResources) {

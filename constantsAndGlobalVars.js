@@ -222,6 +222,8 @@ let apSellForCashPrice = AP_BASE_SELL_PRICE;
 let apBuyForCashPrice = AP_BASE_BUY_PRICE;
 let apLiquidationQuantity = 0;
 let userPlatform = [null, null, null];
+let multiplierPermanentResources = 1;
+let multiplierPermanentCompounds = 1;
 
 let battleUnits = { 
     player: [], 
@@ -1070,6 +1072,8 @@ export function captureGameStatusForSaving(type) {
     gameState.battleResolved = battleResolved;
     gameState.settledStars = settledStars;
     gameState.currentGalacticMarketCommission = currentGalacticMarketCommission;
+    gameState.multiplierPermanentResources = multiplierPermanentResources;
+    gameState.multiplierPermanentCompounds = multiplierPermanentCompounds;
 
     // Flags
     gameState.flags = {
@@ -1250,6 +1254,8 @@ export function restoreGameStatus(gameState, type) {
             collectedPrecipitationQuantityThisRun = gameState.collectedPrecipitationQuantityThisRun ?? 0;
             gameActiveCountTime = gameState.gameActiveCountTime ?? [0, 0];
             userPlatform = gameState.userPlatform ?? [null, null, null];
+            multiplierPermanentResources = gameState.multiplierPermanentResources ?? 1;
+            multiplierPermanentCompounds = gameState.multiplierPermanentCompounds ?? 1;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -4126,5 +4132,21 @@ export function getCompoundCreateDropdownRecipeText(compound) {
 
 export function setCompoundCreateDropdownRecipeText(compound, newOptions) {
     compoundCreateDropdownRecipeText[compound] = newOptions;
+}
+
+export function getMultiplierPermanentResources() {
+    return multiplierPermanentResources;
+}
+
+export function setMultiplierPermanentResources(value) {
+    multiplierPermanentResources = value;
+}
+
+export function getMultiplierPermanentCompounds() {
+    return multiplierPermanentCompounds;
+}
+
+export function setMultiplierPermanentCompounds(value) {
+    multiplierPermanentCompounds = value;
 }
   

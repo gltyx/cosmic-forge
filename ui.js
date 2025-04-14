@@ -884,7 +884,7 @@ export function setupAchievementTooltip() {
             const gridColumnStart= parseInt(window.getComputedStyle(tile).getPropertyValue('grid-column-start'), 10);
             let tooltipContent = getAchievementTooltipDescription(tile.id);
 
-            tooltipContent = tooltipContent + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>"; // DEBUG remove when implemented
+            //tooltipContent = tooltipContent + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>"; // DEBUG remove when implemented
             
             if (tooltipContent) {
                 tooltip.innerHTML = tooltipContent;
@@ -1122,10 +1122,10 @@ export function showWeatherNotification(type) {
 export function showNotification(message, type = 'info', time = 3000, classification = 'default') {
     if (!getNotificationsToggle()) return;
 
-    // If type is 'achievement', append the 'NOT IMPLEMENTED YET' message DEBUG
-    if (type === 'achievement') {
-        message = message + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>";
-    }
+    // // If type is 'achievement', append the 'NOT IMPLEMENTED YET' message DEBUG
+    // if (type === 'achievement') {
+    //     message = message + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>";
+    // }
 
     const queues = getNotificationQueues();
     const status = getNotificationStatus();
