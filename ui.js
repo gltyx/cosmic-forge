@@ -332,6 +332,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 
+export function removeTabAttentionIfNoIndicators(tabId) {
+    const container = document.getElementById(`${tabId}ContainerGroup`);
+    const tab = document.getElementById(tabId);
+
+    if (container && tab) {
+        const hasIndicators = container.classList.contains('attention-indicator') ||
+                              container.querySelector('.attention-indicator');
+        if (!hasIndicators) {
+            const icon = tab.querySelector('.attention-indicator');
+            if (icon) {
+                icon.remove();
+            }
+        }
+    }
+}
+
 export function updateContent(heading, tab, type) {
     playClickSfx();
     const optionDescriptionElements = getElements().optionPaneDescriptions;
@@ -346,9 +362,15 @@ export function updateContent(heading, tab, type) {
     optionContentElement = document.getElementById(`optionContentTab${tabNumber}`);
 
     headerContentElement.innerText = heading;
+    
+    if (heading.includes('⚠️')) {
+        heading = heading.replace(/⚠️/, '').trimEnd();
+        headerContentElement.innerText = heading;
+    }    
+
     optionContentElement.innerHTML = '';
        
-    if (type === 'intro') {
+    if (type === 'intro') {      
         optionDescription = getHeaderDescriptions([heading]);
         optionDescriptionElement = optionDescriptionElements[tabNumber - 1];
         optionDescriptionElement.innerHTML = optionDescription;
@@ -918,6 +940,95 @@ export function setupAchievementTooltip() {
         }
     });
 }
+
+const attentionRules = [
+    {
+    selector: '#tab1',
+    condition: () => {
+        const container = document.getElementById('tab1ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab2',
+    condition: () => {
+        const container = document.getElementById('tab2ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab3',
+    condition: () => {
+        const container = document.getElementById('tab3ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab4',
+    condition: () => {
+        const container = document.getElementById('tab4ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab5',
+    condition: () => {
+        const container = document.getElementById('tab5ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab6',
+    condition: () => {
+        const container = document.getElementById('tab6ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab7',
+    condition: () => {
+        const container = document.getElementById('tab7ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    },
+    {
+    selector: '#tab8',
+    condition: () => {
+        const container = document.getElementById('tab8ContainerGroup');
+        return container && container.querySelector('.attention-indicator') !== null;
+    }
+    }
+  ];
+  
+export function updateAttentionIndicators() {
+    attentionRules.forEach(rule => {
+      const element = document.querySelector(rule.selector);
+  
+      if (rule.condition()) {
+        appendAttentionIndicator(element);
+      } else {
+        removeAttentionIndicator(element);
+      }
+    });
+}
+
+export function appendAttentionIndicator(element) {
+    if (!element || !(element instanceof HTMLElement)) return;
+    if (!element.querySelector('.attention-indicator')) {
+      const icon = document.createElement('span');
+      icon.className = 'attention-indicator';
+      icon.textContent = ' ⚠️';
+      element.appendChild(icon);
+    }
+  }
+
+export function removeAttentionIndicator(element) {
+    const icon = element?.querySelector('.attention-indicator');
+    if (icon) {
+      icon.remove();
+    }
+  }
+  
 
 export function createHtmlTableAchievementsGrid(id, classList = [], achievementsData = []) {
     const container = document.createElement('div');
@@ -2781,6 +2892,15 @@ export function checkOrderOfTabs() {
     if (!unlockedTabs.includes(8)) {
         unlockedTabs.push(8);
     }
+
+    allTabs.forEach(tab => {
+        const container = document.getElementById(`${tab.id}ContainerGroup`);
+        if (container && container.querySelector('.attention-indicator')) {
+            appendAttentionIndicator(tab);
+        } else {
+            removeAttentionIndicator(tab);
+        }
+    });
 
     const currentOrder = Array.from(document.getElementById('tabsContainer').children).map(tab =>
         parseInt(tab.id.replace('tab', ''), 10)

@@ -1,9 +1,18 @@
 import { getCompoundCreateDropdownRecipeText, getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getImageUrls, getTimerRateRatio, getCompoundSalePreview, getCompoundCreatePreview, setCreateCompoundPreview, setAchievementFlagArray } from './constantsAndGlobalVars.js';
 import { increaseResourceStorage, createCompound, sellCompound, gain } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
+import { removeTabAttentionIfNoIndicators, createTextElement, createToggleSwitch, createOptionRow, createDropdown, createButton } from './ui.js';
 
 export function drawTab4Content(heading, optionContentElement) {
+        const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+        if (optionElement) {
+            const warningIcon = optionElement.querySelector('span.attention-indicator');
+            if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+                warningIcon.remove();
+            }
+        }
+        removeTabAttentionIfNoIndicators('tab4');
+
         if (heading === 'Diesel') {
             let storagePrice = getResourceDataObject('compounds', ['diesel', 'storageCapacity']);
             let autobuyer1Price = getResourceDataObject('compounds', ['diesel', 'upgrades', 'autoBuyer', 'tier1', 'price']);

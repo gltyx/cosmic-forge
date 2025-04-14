@@ -314,7 +314,9 @@ import {
     resetTab4ClassesRebirth,
     resetTab5ClassesRebirth,
     resetTab6ClassesRebirth,
-    showGalacticTabPopup
+    showGalacticTabPopup,
+    updateAttentionIndicators,
+    appendAttentionIndicator
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -369,6 +371,7 @@ export function calculateElapsedActiveGameTime() {
 
 export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
+        updateAttentionIndicators();
         calculateElapsedActiveGameTime();
 
         if (document.getElementById('variableDebuggerWindow').style.display === 'block') {
@@ -816,6 +819,7 @@ export function fuseResource(resource, fuseTargets) {
             mainCategoryToShow.classList.remove('invisible');
             categoryToShow.classList.remove('invisible');
             setUnlockedResourcesArray(fuseTo);
+            appendAttentionIndicator(document.getElementById(`${fuseTo}Option`));
             fuseData = getResourceSalePreview(resource);
             amountToDeductFromResource = parseInt(fuseData.match(/\((\d+)/)[1], 10);
             const amountToAdd = Math.ceil((amountToDeductFromResource * ratio) / 4);
@@ -4977,7 +4981,7 @@ function startInitialTimers() {
                             setResourceDataObject(amountToAdd, 'compounds', [compound, 'quantity']);
                             addToResourceAllTimeStat((currentQuantity >= storageCapacity) ? 0 : calculatedCompoundRate, compound);
 
-                            if (compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']) && getUnlockedCompoundsArray().includes(getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']))) {
+                            if (getCurrentStarSystemWeatherEfficiency()[2] === 'rain' && compound === getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']) && getUnlockedCompoundsArray().includes(getStarSystemDataObject('stars', [getCurrentStarSystem(), 'precipitationType']))) {
                                 const amountOfPrecipitationThisTimerIteration = (currentQuantity >= storageCapacity) ? 0 : autoBuyerExtractionRate;
                                 setCollectedPrecipitationQuantityThisRun(getCollectedPrecipitationQuantityThisRun() + amountOfPrecipitationThisTimerIteration);
                             }

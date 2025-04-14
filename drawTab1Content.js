@@ -1,9 +1,18 @@
 import { getLastSellResourceCompoundDropdownOption, setLastSellResourceCompoundDropdownOption, getResourceSalePreview, getTimerRateRatio } from './constantsAndGlobalVars.js';
 import { sellResource, fuseResource, gain, increaseResourceStorage } from './game.js';
 import { getResourceDataObject, setResourceDataObject } from './resourceDataObject.js';
-import { createToggleSwitch, createTextElement, createOptionRow, createDropdown, createButton } from './ui.js';
+import { createToggleSwitch, createTextElement, createOptionRow, createDropdown, createButton, removeTabAttentionIfNoIndicators } from './ui.js';
 
 export function drawTab1Content(heading, optionContentElement) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab1');   
+
     if (heading === 'Hydrogen') {
         let storagePrice = getResourceDataObject('resources', ['hydrogen', 'storageCapacity']);
         let autobuyer1Price = getResourceDataObject('resources', ['hydrogen', 'upgrades', 'autoBuyer', 'tier1', 'price']);

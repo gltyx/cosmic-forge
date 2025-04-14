@@ -1,7 +1,7 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
-import { createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow } from './ui.js';
+import { createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
@@ -277,6 +277,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         updateDescriptionRow('neonSellRow', 'content2');
                         showNotification(techNotificationMessages.neonFusion, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('water');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`waterOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neonFusion', null, 'research', true, null, 'tech'),
                     null,
@@ -400,6 +403,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('glassManufacture');
                         showNotification(techNotificationMessages.glassManufacture, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('glass');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`glassOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'glassManufacture', null, 'research', true, null, 'tech'),
                     null,
@@ -431,6 +437,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('aggregateMixing');
                         showNotification(techNotificationMessages.aggregateMixing, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('concrete');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`concreteOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'aggregateMixing', null, 'research', true, null, 'tech'),
                     null,
@@ -462,6 +471,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('neutronCapture');
                         showNotification(techNotificationMessages.neutronCapture, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('titanium');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`titaniumOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'neutronCapture', null, 'research', true, null, 'tech'),
                     null,
@@ -559,6 +571,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('hydroCarbons');
                         showNotification(techNotificationMessages.hydroCarbons, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('diesel');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`dieselOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'hydroCarbons', null, 'research', true, null, 'tech'),
                     null,
@@ -930,6 +945,9 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('steelFoundries');
                         showNotification(techNotificationMessages.steelFoundries, 'info', 3000, 'tech');
                         setUnlockedCompoundsArray('steel');
+                        if (getTechUnlockedArray().includes('compounds')) {
+                            appendAttentionIndicator(document.getElementById(`steelOption`));
+                        }
                         setRenderedTechTree(false);
                     }, 'techUnlock', '', 'steelFoundries', null, 'research', true, null, 'tech'),
                     null,
