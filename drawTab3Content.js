@@ -1,10 +1,19 @@
 import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
-import { createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
+import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab3');
+
     sortTechRows(true);
     if (heading === 'Research') {
         const researchScienceKitRow = createOptionRow(

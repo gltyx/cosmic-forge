@@ -1,11 +1,20 @@
 import { getImageUrls, getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
 import { sellBuilding, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
+import { removeTabAttentionIfNoIndicators, switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 import { sfxPlayer, playClickSfx } from './audioManager.js';
 
 export function drawTab2Content(heading, optionContentElement) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab2');
+    
     let toggleButtonText;
     if (heading === 'Energy Storage') {
 

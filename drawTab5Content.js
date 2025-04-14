@@ -1,10 +1,19 @@
-import { createBattleCanvas, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, createHtmlTextAreaProse, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
-import { setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, setStellarScannerBuilt, getStarShipTravelling, setStarShipTravelling, setDestinationStar, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray } from './constantsAndGlobalVars.js';
+import { removeTabAttentionIfNoIndicators, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
+import { setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, getStarShipTravelling, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
 
 export async function drawTab5Content(heading, optionContentElement, starDestinationInfoRedraw, diplomacyRedraw) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab5');
+
     if (heading === 'Star Map') {
         const headerRow = document.getElementById('headerContentTab5');
         

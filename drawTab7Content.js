@@ -1,10 +1,19 @@
-import { createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
-import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, getGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, getGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, getGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
+import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
+import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
 import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
-import { setAscendencyBuffDataObject, getAscendencyBuffDataObject } from './resourceDataObject.js';
+import { getAscendencyBuffDataObject } from './resourceDataObject.js';
 import { capitaliseString } from './utilityFunctions.js';
 
 export function drawTab7Content(heading, optionContentElement) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab7');
+
     if (heading === 'Rebirth') {
     
             const rebirthRow = createOptionRow(

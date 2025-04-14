@@ -1,12 +1,21 @@
 import { getTimeLeftUntilStarInvestigationTimerFinishes, getCurrentlyInvestigatingStar, getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
 import { startTravelToAndFromAsteroidTimer, startInvestigateStarTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding, addToResourceAllTimeStat } from './game.js';
 import { timerManager } from './timerManager.js';
-import { getRocketPartsNeededInTotalPerRocket, getRocketParts, setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
-import { createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
+import { getRocketPartsNeededInTotalPerRocket, getRocketParts, getResourceDataObject } from './resourceDataObject.js';
+import { removeTabAttentionIfNoIndicators, createSvgElement, createDropdown, handleSortAsteroidClick, sortAsteroidTable, switchFuelGaugeWhenFuellerBought, createTextElement, createOptionRow, createButton, showNotification, renameRocket } from './ui.js';
 import { capitaliseString } from './utilityFunctions.js';
 import { sfxPlayer } from './audioManager.js'
 
 export function drawTab6Content(heading, optionContentElement) {
+    const optionElement = document.getElementById(`${heading.toLowerCase()}Option`);
+    if (optionElement) {
+        const warningIcon = optionElement.querySelector('span.attention-indicator');
+        if (warningIcon && warningIcon.innerHTML.includes('⚠️')) {
+            warningIcon.remove();
+        }
+    }
+    removeTabAttentionIfNoIndicators('tab6');
+
     const asteroids = getAsteroidArray();
     const asteroidsBeingMinedOrExhausted = getMiningObject();
     if (heading === 'Space Telescope') {
