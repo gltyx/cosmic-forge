@@ -4466,6 +4466,9 @@ export function setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(eleme
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
     } else if (type === 'fuse') {
+        if (getCurrentOptionPane() === 'iron') {
+            return;
+        }
         const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         if (accompanyingLabel.textContent.includes('!!')) {
             element.classList.add('warning-orange-text');
