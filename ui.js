@@ -3714,6 +3714,8 @@ export async function showNewsTickerMessage(newsTickerContainer) {
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
 
     let message = newsTickerContainer[category][randomIndex];
+    // let message = newsTickerContainer['wackyEffects'][newsTickerContainer['wackyEffects'].length - 1]; //DEBUG MESSAGES
+    // category = 'wackyEffects'; //DEBUG
 
     if (category === 'prize' || category === 'oneOff' || category === 'wackyEffects') {
         if (category === 'oneOff') {
