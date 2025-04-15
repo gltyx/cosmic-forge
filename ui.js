@@ -927,6 +927,12 @@ export function setupAchievementTooltip() {
         if (tooltip.style.display === 'block') {
             const tile = e.target;
             const gridColumnStart= parseInt(window.getComputedStyle(tile).getPropertyValue('grid-column-start'), 10);
+
+            let tooltipContent = getAchievementTooltipDescription(tile.id);
+            if (tooltipContent) {
+                tooltip.innerHTML = tooltipContent;
+            }
+
             if (gridColumnStart > 5) {
                 tooltip.style.left = `${e.pageX - containerWidth + 10}px`;
             } else {

@@ -327,7 +327,7 @@ import {
     capitaliseWordsWithRomanNumerals
  } from './utilityFunctions.js';
 
- import { newsTickerContent } from './descriptions.js';
+ import { newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
  import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
@@ -374,6 +374,7 @@ export async function gameLoop() {
     if (gameState === getGameVisibleActive()) {
         updateAttentionIndicators();
         calculateElapsedActiveGameTime();
+        refreshAchievementTooltipDescriptions();
 
         if (document.getElementById('variableDebuggerWindow').style.display === 'block') {
             populateVariableDebugger();

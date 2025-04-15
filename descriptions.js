@@ -1,4 +1,4 @@
-import { getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol } from "./constantsAndGlobalVars.js";
+import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol } from "./constantsAndGlobalVars.js";
 import { getAchievementDataObject, getResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals } from "./utilityFunctions.js";
 
@@ -2390,8 +2390,18 @@ function generateAchievementTooltipDescriptions() {
         "have50HoursWithOnePioneer": `
         ${getAchievementTooltipDescriptionTexts('have50HoursWithOnePioneer')}<br>
         <span class="green-ready-text">Reward: 50 AP</span><br>
-        <span class="${getAchievementDataObject('have50HoursWithOnePioneer', ['resetOnRebirth']) ? 'green-ready-text' : ''}">
-            Reset on Rebirth: ${getAchievementDataObject('have50HoursWithOnePioneer', ['resetOnRebirth']) ? 'YES' : 'NO'}
+        <span class="green-ready-text">
+        Logged: ${
+            (() => {
+                const ms = getGameActiveCountTime()[0];
+                const totalSeconds = Math.floor(ms / 1000);
+                const days = Math.floor(totalSeconds / 86400);
+                const hours = Math.floor((totalSeconds % 86400) / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            })()
+        }
         </span><br><br>
         <span class="${getAchievementDataObject('have50HoursWithOnePioneer', ['active']) ? 'green-ready-text' : ''}">
             Status: ${getAchievementDataObject('have50HoursWithOnePioneer', ['active']) ? 'ACHIEVED' : 'NOT ACHIEVED'}
