@@ -3729,7 +3729,7 @@ export async function showNewsTickerMessage(newsTickerContainer) {
         }
     }
 
-    if (message === false || message === undefined || message.includes('Wanna Give FeedBack') && getFeedbackGiven()) {
+    if (message === false || message === undefined || message.includes('Wanna Give FeedBack') && !getFeedbackCanBeRequested()) {
         showNewsTickerMessage(newsTickerContainer);
     } else {
         if (category === 'noPrize') {
