@@ -3642,10 +3642,13 @@ export function getCollectedPrecipitationQuantityThisRun() {
 }
 
 export function setActivatedWackyNewsEffectsArray(value, extra = null) {
-    activatedWackyNewsEffectsArray.push(value);
-    if (extra !== null) {
-        setFeedbackGiven(extra);
-        console.log('FeedBack Given: ' + extra);
+    if (!getActivatedWackyNewsEffectsArray().includes(value)) {
+        activatedWackyNewsEffectsArray.push(value);
+
+        if (extra !== null) {
+            setFeedbackGiven(extra);
+            console.log('FeedBack Given: ' + extra);
+        }
     }
 }
 

@@ -1837,9 +1837,9 @@ export async function triggerFeedBackModal(feedback) {
     }; 
 
     sendFeedBackCancelButton.onclick = function () {
+        setFeedbackValueAndSaveGame('refused', document.getElementById('feedbackArea').value);
         sendFeedBackConfirmButton.classList.add('invisible');
         sendFeedBackCancelButton.classList.add('invisible');
-        setFeedbackValueAndSaveGame('refused', document.getElementById('feedbackArea').value);
         showHideModal();
     }; 
 
@@ -4173,20 +4173,15 @@ function addWackyEffectsEventListeners() {
                 break;
         }
 
-        if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
-            if (effectItem === 'feedback') {
-                setActivatedWackyNewsEffectsArray(effectItem, 'good');
-                saveGame('feedbackSave');
-                const saveData = getSaveData();
-                if (saveData) {
-                    saveGameToCloud(saveData, 'manualExportCloud');
-                }
-                setSaveData(null);
-            } else {
-                setActivatedWackyNewsEffectsArray(effectItem);
+        if (effectItem === 'feedback') {
+            setActivatedWackyNewsEffectsArray(effectItem, 'good');
+            if (getFeedbackCanBeRequested()) {
+                triggerFeedBackModal('good');
             }
+        } else {
+            setActivatedWackyNewsEffectsArray(effectItem);
         }
-
+        
         targetElement.style.animation = newAnimation;
 
         prizeTickerSpan.style.pointerEvents = 'none';
@@ -4221,21 +4216,15 @@ function addWackyEffectsEventListeners() {
                     break;
             }
         
-            if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
-                if (effectItem === 'feedback') {
-                    setActivatedWackyNewsEffectsArray(effectItem, 'bad');
-                    saveGame('feedbackSave');
-                    const saveData = getSaveData();
-                    if (saveData) {
-                        saveGameToCloud(saveData, 'manualExportCloud');
-                    }
-                    setSaveData(null);
-                    if (getFeedbackCanBeRequested()) {
-                        triggerFeedBackModal('bad');
-                    }
+            if (effectItem === 'feedback') {
+                setActivatedWackyNewsEffectsArray(effectItem, 'bad');
+                if (getFeedbackCanBeRequested()) {
+                    triggerFeedBackModal('bad');
                 }
+            }  else {
+                setActivatedWackyNewsEffectsArray(effectItem);
             }
-        
+            
             targetElement.style.animation = newAnimation;
         
             prizeTickerSpan2.style.pointerEvents = 'none';
