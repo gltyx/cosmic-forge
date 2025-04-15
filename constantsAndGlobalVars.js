@@ -163,6 +163,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let feedbackGiven = null;
 let gameStartTimeStamp = null;
 let runStartTimeStamp = null;
 let gameActiveCountTime = [0, 0];
@@ -1078,6 +1079,7 @@ export function captureGameStatusForSaving(type) {
     gameState.currentGalacticMarketCommission = currentGalacticMarketCommission;
     gameState.multiplierPermanentResources = multiplierPermanentResources;
     gameState.multiplierPermanentCompounds = multiplierPermanentCompounds;
+    gameState.feedbackGiven = feedbackGiven;
 
     // Flags
     gameState.flags = {
@@ -1261,6 +1263,7 @@ export function restoreGameStatus(gameState, type) {
             multiplierPermanentResources = gameState.multiplierPermanentResources ?? 1;
             multiplierPermanentCompounds = gameState.multiplierPermanentCompounds ?? 1;
             firstAccessArray = gameState.firstAccessArray ?? [];
+            feedbackGiven = gameState.feedbackGiven ?? null;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3632,8 +3635,20 @@ export function getCollectedPrecipitationQuantityThisRun() {
     return collectedPrecipitationQuantityThisRun;
 }
 
-export function setActivatedWackyNewsEffectsArray(value) {
+export function setActivatedWackyNewsEffectsArray(value, extra = null) {
     activatedWackyNewsEffectsArray.push(value);
+    if (extra !== null) {
+        setFeedbackGiven(extra);
+        console.log('FeedBack Given: ' + extra);
+    }
+}
+
+export function getFeedbackGiven() {
+    return feedbackGiven;
+}
+
+export function setFeedbackGiven(value) {
+    feedbackGiven = value;
 }
 
 export function getAlreadySeenNewsTickerArray() {

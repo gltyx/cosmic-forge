@@ -9,7 +9,8 @@ import {
     getAutoSaveFrequency,
     getAutoSaveToggle,
     getSaveData,
-    getUserPlatform
+    getUserPlatform,
+    getFeedbackGiven
 } from './constantsAndGlobalVars.js';
 
 import { setAchievementIconImageUrls } from './resourceDataObject.js';
@@ -79,7 +80,8 @@ export async function saveGameToCloud(gameData, type) {
                 .update({ 
                     data: gameData,
                     'created_at': currentTimestamp,
-                    'region': getUserPlatform()
+                    'region': getUserPlatform(),
+                    'feedback': getFeedbackGiven()
                 })
                 .eq('pioneer_name', userId);
 

@@ -1120,6 +1120,7 @@ export function initialiseDescriptions() {
                 body: "Stretch Me!",
                 item: "wave",
                 linkWord: "Stretch Me!",
+                linkWord2: "",
                 class: "",
                 id: 1000
             },
@@ -1127,6 +1128,7 @@ export function initialiseDescriptions() {
                 body: "🕺💃 D.I.S.C.O. 🕺💃",
                 item: "disco",
                 linkWord: "🕺💃 D.I.S.C.O. 🕺💃",
+                linkWord2: "",
                 class: "",
                 id: 1001
             },
@@ -1134,6 +1136,7 @@ export function initialiseDescriptions() {
                 body: "Boing!",
                 item: "bounce",
                 linkWord: "Boing!",
+                linkWord2: "",
                 class: "",
                 id: 1002
             },
@@ -1141,6 +1144,7 @@ export function initialiseDescriptions() {
                 body: "There Or Not?",
                 item: "fade",
                 linkWord: "There Or Not?",
+                linkWord2: "",
                 class: "",
                 id: 1003
             },
@@ -1148,6 +1152,7 @@ export function initialiseDescriptions() {
                 body: "Bzzzzzzz!",
                 item: "glitch",
                 linkWord: "Bzzzzzzz!",
+                linkWord2: "",
                 class: "",
                 id: 1004
             },
@@ -1155,6 +1160,7 @@ export function initialiseDescriptions() {
                 body: "Wibble Wobble!",
                 item: "wobble",
                 linkWord: "Wibble Wobble!",
+                linkWord2: "",
                 class: "",
                 id: 1005
             },
@@ -1162,9 +1168,18 @@ export function initialiseDescriptions() {
                 body: "Dont Click This: Boo!",
                 item: "boo",
                 linkWord: "Boo!",
+                linkWord2: "",
                 class: "boo",
                 id: 1006
-            }     
+            },
+            {
+                body: "Wanna Give FeedBack? Do you like Cosmic Forge? 👍🏽👍🏽👍🏽 Or is it more like 👎🏽👎🏽👎🏽",
+                item: "feedback",
+                linkWord: "👍🏽👍🏽👍🏽",
+                linkWord2: "👎🏽👎🏽👎🏽",
+                class: "",
+                id: 1007
+            } 
         ],        
         oneOff: [
             {

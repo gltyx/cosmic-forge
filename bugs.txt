@@ -5,3 +5,4 @@ turn off autobuyers ie carbon burner not redrawing the rate/s
 remove asteroid from travel to dropdown if one already on way there
 
 neon autobuyers research to add or ascendency perk
+feedback modal

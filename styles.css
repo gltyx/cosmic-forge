@@ -1936,7 +1936,38 @@ canvas {
     }
 }
 
-/* Wobble Effect */
+.feedbackGood {
+    animation: feedbackGood 0.4s ease-in-out forwards;
+}
+
+@keyframes feedbackGood {
+    0% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(1.5) translateY(-20px);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+    }
+}
+
+.feedbackBad {
+    animation: feedbackBad 0.4s ease-in-out forwards;
+}
+
+@keyframes feedbackBad {
+    0% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(0.5) translateY(20px);
+    }
+    100% {
+        transform: scale(1) translateY(0);
+    }
+}
+
 .wobble {
     animation: wobbleAnimation;
 }

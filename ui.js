@@ -1,4 +1,5 @@
 import {
+    setSaveData,
     getNotificationQueues,
     setNotificationQueues,
     getNotificationStatus,
@@ -104,7 +105,8 @@ import {
     getActivatedWackyNewsEffectsArray,
     setActivatedWackyNewsEffectsArray,
     setFirstAccessArray,
-    getFirstAccessArray
+    getFirstAccessArray,
+    getFeedbackGiven
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -3616,7 +3618,7 @@ export function spaceTravelButtonHideAndShowDescription() {
     }
 }
 
-export function showNewsTickerMessage(newsTickerContainer) {
+export async function showNewsTickerMessage(newsTickerContainer) {
     const randomValue = Math.random();
     let category;
 
@@ -3633,6 +3635,8 @@ export function showNewsTickerMessage(newsTickerContainer) {
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
 
     let message = newsTickerContainer[category][randomIndex];
+    // let message = newsTickerContainer['wackyEffects'][newsTickerContainer['wackyEffects'].length - 1]; //DEBUG MESSAGES
+    // category = 'wackyEffects'; //DEBUG
 
     if (category === 'prize' || category === 'oneOff' || category === 'wackyEffects') {
         if (category === 'oneOff') {
@@ -3640,15 +3644,15 @@ export function showNewsTickerMessage(newsTickerContainer) {
                 message = false;
             } else {
                 addMessageToSeenArray(message.id);
-                message = specialMessageBuilder(message, category);
+                message = await specialMessageBuilder(message, category);
             }
         } else {
             addMessageToSeenArray(message.id)
-            message = specialMessageBuilder(message, category);
+           message = await specialMessageBuilder(message, category);
         }
     }
 
-    if (message === false || message === undefined) {
+    if (message === false || message === undefined || message.includes('Wanna Give FeedBack') && getFeedbackGiven()) {
         showNewsTickerMessage(newsTickerContainer);
     } else {
         if (category === 'noPrize') {
@@ -3700,6 +3704,7 @@ function displayNewsTickerMessage(message) {
 
     let timeoutId;
     let prizeElement = document.getElementById('prizeTickerSpan');
+    let prizeElement2 = document.getElementById('prizeTickerSpan2');
 
     function handleVisibilityChange() {
         if (document.hidden) {
@@ -3707,6 +3712,10 @@ function displayNewsTickerMessage(message) {
             if (prizeElement) {
                 document.querySelector('.news-ticker-content').style.animation = 'none';
                 prizeElement.remove();
+            }
+            if (prizeElement2) {
+                document.querySelector('.news-ticker-content').style.animation = 'none';
+                prizeElement2.remove();
             }
             clearTimeout(timeoutId);
         } else {
@@ -3723,7 +3732,11 @@ function displayNewsTickerMessage(message) {
         if (prizeElement) {
             document.querySelector('.news-ticker-content').style.animation = 'none';
             prizeElement.remove();
-        }        
+        } 
+        if (prizeElement2) {
+            document.querySelector('.news-ticker-content').style.animation = 'none';
+            prizeElement2.remove();
+        }       
         document.head.removeChild(styleTag);
         startNewsTickerTimer();
         clearTimeout(timeoutId);
@@ -3813,6 +3826,7 @@ function specialMessageBuilder(message, prizeCategory) {
     } else if (prizeCategory === 'wackyEffects') {
         let newMessage = message.body;
         const linkWord = message.linkWord;
+        const linkWord2 = message.linkWord2;
 
         if (newMessage.includes(linkWord)) {
             newMessage = newMessage.split(linkWord).join(`
@@ -3821,6 +3835,17 @@ function specialMessageBuilder(message, prizeCategory) {
                     ${message.class ? `class="${message.class}"` : ''} 
                     data-effect-item='${message.item}'>
                     ${linkWord}
+                </span>
+            `);
+        }
+
+        if (linkWord2 !== '' && newMessage.includes(linkWord2)) {
+            newMessage = newMessage.split(linkWord2).join(`
+                <span 
+                    id="prizeTickerSpan2"
+                    ${message.class ? `class="${message.class}"` : ''} 
+                    data-effect-item='${message.item}'>
+                    ${linkWord2}
                 </span>
             `);
         }
@@ -3999,6 +4024,7 @@ function addPrizeEventListeners() {
 
 function addWackyEffectsEventListeners() {
     const prizeTickerSpan = document.getElementById('prizeTickerSpan');
+    const prizeTickerSpan2 = document.getElementById('prizeTickerSpan2');
     
     if (!prizeTickerSpan) return;
 
@@ -4010,6 +4036,7 @@ function addWackyEffectsEventListeners() {
 
         const existingAnimation = targetElement.style.animation || '';
         let newAnimation = existingAnimation;
+        let otherElement = prizeTickerSpan.parentElement.parentElement.querySelector('span#prizeTickerSpan2');
 
         switch (effectItem) {
             case 'wave':
@@ -4050,18 +4077,80 @@ function addWackyEffectsEventListeners() {
                 //add sound effect
                 prizeTickerSpan.classList.remove('boo');
                 break;
+            case 'feedback':
+                targetElement = prizeTickerSpan.parentElement.parentElement;
+                newAnimation += ', feedbackGood 0.4s ease-in-out forwards';
+                prizeTickerSpan.style.opacity = '0.5';
+                if (otherElement) {
+                    otherElement.style.opacity = '0.5';
+                }
+
+                saveGame('manualExportCloud');
+                const saveData = getSaveData();
+                if (saveData) {
+                    saveGameToCloud(saveData, 'manualExportCloud');
+                    setSaveExportCloudFlag(saveData);
+                }
+                setSaveData(null);
+                break;
             default:
                 console.warn('Unknown effect item:', effectItem);
                 break;
         }
 
         if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
-            setActivatedWackyNewsEffectsArray(effectItem);
+            setActivatedWackyNewsEffectsArray(effectItem, 'good');
         }
 
         targetElement.style.animation = newAnimation;
 
         prizeTickerSpan.style.pointerEvents = 'none';
+        if (otherElement) {
+            otherElement.style.pointerEvents = 'none';
+        }
+    });
+
+    prizeTickerSpan2.addEventListener('click', () => {
+        const effectItem = prizeTickerSpan2.getAttribute('data-effect-item');
+        let targetElement = prizeTickerSpan2.parentElement;
+    
+        if (!targetElement) return;
+    
+        const existingAnimation = targetElement.style.animation || '';
+        let newAnimation = existingAnimation;
+        let otherElement = prizeTickerSpan2.parentElement.parentElement.querySelector('span#prizeTickerSpan');
+    
+        switch (effectItem) {
+            case 'feedback':
+                targetElement = prizeTickerSpan2.parentElement.parentElement;
+                newAnimation += ', feedbackBad 0.4s ease-in-out forwards';
+                prizeTickerSpan2.style.opacity = '0.5';
+                if (otherElement) {
+                    otherElement.style.opacity = '0.5';
+                    otherElement.style.pointerEvents = 'none';
+                }
+                saveGame('manualExportCloud');
+                const saveData = getSaveData();
+                if (saveData) {
+                    saveGameToCloud(saveData, 'manualExportCloud');
+                }
+                setSaveData(null);
+                break;
+            default:
+                console.warn('Unknown effect item:', effectItem);
+                break;
+        }
+    
+        if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
+            setActivatedWackyNewsEffectsArray(effectItem, 'bad');
+        }
+    
+        targetElement.style.animation = newAnimation;
+    
+        prizeTickerSpan2.style.pointerEvents = 'none';
+        if (otherElement) {
+            otherElement.style.pointerEvents = 'none';
+        }
     });
 }
 
