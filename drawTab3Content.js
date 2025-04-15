@@ -1367,7 +1367,7 @@ export function drawTab3Content(heading, optionContentElement) {
 }
 
 function indicateAllResources() {
-    const resources = ['hydrogen', 'helium', 'carbon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const resources = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
 
     resources.forEach(resource => {
         if (getUnlockedResourcesArray().includes(resource)) {

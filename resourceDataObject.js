@@ -135,8 +135,8 @@ export let resourceData = {
             revealedYet: false,
             upgrades: {
                 autoBuyer: {
-                    currentTierLevel: 0,
-                    normalProgression: false,
+                    currentTierLevel: 1,
+                    normalProgression: true,
                     tier1: { nameUpgrade: 'Neon Extractor', screen: 'neon', place: 'neonAutoBuyer1Row', price: 120, rate: 0.02, quantity: 0, setPrice: 'neonAB1Price', energyUse: 0, active: true },
                     tier2: { nameUpgrade: 'Advanced Neon Extractor', screen: 'neon', place: 'neonAutoBuyer2Row', price: 960, rate: 0.125, quantity: 0, setPrice: 'neonAB2Price', energyUse: 0.03, active: true },
                     tier3: { nameUpgrade: 'Industrial Neon Extractor', screen: 'neon', place: 'neonAutoBuyer3Row', price: 4800, rate: 0.625, quantity: 0, setPrice: 'neonAB3Price', energyUse: 0.15, active: true },

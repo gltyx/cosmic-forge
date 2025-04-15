@@ -1306,6 +1306,7 @@ export function restoreGameStatus(gameState, type) {
             }
 
             //replaceRocketNames(gameState.rocketNames);
+            patchNeonAutoBuyers();
             patchAchievementsPrecipitation();
             fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray);
             
@@ -1364,6 +1365,21 @@ function attachAchievementFunctions(data) {
     }
 
     return data;
+}
+
+export function patchNeonAutoBuyers() {
+    setResourceDataObject(true, 'resources', ['neon', 'upgrades', 'autoBuyer', 'normalProgression']);
+
+    const tech = getTechUnlockedArray();
+    const tier =
+        tech.includes('rocketComposites') ? 4 :
+        tech.includes('quantumComputers') ? 2 :
+        getResourceDataObject('resources', ['neon', 'upgrades', 'autoBuyer', 'currentTierLevel']) === 0 ? 1 :
+        null;
+
+    if (tier) {
+        setResourceDataObject(tier, 'resources', ['neon', 'upgrades', 'autoBuyer', 'currentTierLevel']);
+    }
 }
 
 export function patchAchievementsPrecipitation() { //to add unlocked compounds to saves
