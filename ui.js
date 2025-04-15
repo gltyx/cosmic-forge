@@ -1342,6 +1342,36 @@ function sendNotification(message, type, classification, duration) {
         existing.remove();
     }
 
+    const button = document.createElement('button');
+    button.className = 'notification-button';
+    button.innerText = 'Clear All';
+    button.onclick = () => {
+        const queues = getNotificationQueues();
+        const containers = getNotificationContainers();
+        const status = getNotificationStatus();
+        const order = getClassificationOrder();
+    
+        queues[classification] = [];
+        setNotificationQueues(queues);
+    
+        const container = containers[classification];
+        if (container) {
+            container.remove();
+            delete containers[classification];
+            setNotificationContainers(containers);
+        }
+
+        delete status[classification];
+        setNotificationStatus(status);
+    
+        const newOrder = order.filter(c => c !== classification);
+        setClassificationOrder(newOrder);
+    
+        updateContainerPositions();
+    };
+
+notification.appendChild(button);
+
     container.appendChild(notification);
 
     setTimeout(() => {
