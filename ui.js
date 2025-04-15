@@ -4172,13 +4172,17 @@ function addWackyEffectsEventListeners() {
         }
 
         if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
-            setActivatedWackyNewsEffectsArray(effectItem, 'good');
-            saveGame('feedbackSave');
-            const saveData = getSaveData();
-            if (saveData) {
-                saveGameToCloud(saveData, 'manualExportCloud');
+            if (effectItem === 'feedback') {
+                setActivatedWackyNewsEffectsArray(effectItem, 'good');
+                saveGame('feedbackSave');
+                const saveData = getSaveData();
+                if (saveData) {
+                    saveGameToCloud(saveData, 'manualExportCloud');
+                }
+                setSaveData(null);
+            } else {
+                setActivatedWackyNewsEffectsArray(effectItem);
             }
-            setSaveData(null);
         }
 
         targetElement.style.animation = newAnimation;
@@ -4189,51 +4193,55 @@ function addWackyEffectsEventListeners() {
         }
     });
 
-    prizeTickerSpan2.addEventListener('click', () => {
-        const effectItem = prizeTickerSpan2.getAttribute('data-effect-item');
-        let targetElement = prizeTickerSpan2.parentElement;
-    
-        if (!targetElement) return;
-    
-        const existingAnimation = targetElement.style.animation || '';
-        let newAnimation = existingAnimation;
-        let otherElement = prizeTickerSpan2.parentElement.parentElement.querySelector('span#prizeTickerSpan');
-    
-        switch (effectItem) {
-            case 'feedback':
-                targetElement = prizeTickerSpan2.parentElement.parentElement;
-                newAnimation += ', feedbackBad 0.4s ease-in-out forwards';
-                prizeTickerSpan2.style.opacity = '0.5';
-                if (otherElement) {
-                    otherElement.style.opacity = '0.5';
-                    otherElement.style.pointerEvents = 'none';
+    if (prizeTickerSpan2) {
+        prizeTickerSpan2.addEventListener('click', () => {
+            const effectItem = prizeTickerSpan2.getAttribute('data-effect-item');
+            let targetElement = prizeTickerSpan2.parentElement;
+        
+            if (!targetElement) return;
+        
+            const existingAnimation = targetElement.style.animation || '';
+            let newAnimation = existingAnimation;
+            let otherElement = prizeTickerSpan2.parentElement.parentElement.querySelector('span#prizeTickerSpan');
+        
+            switch (effectItem) {
+                case 'feedback':
+                    targetElement = prizeTickerSpan2.parentElement.parentElement;
+                    newAnimation += ', feedbackBad 0.4s ease-in-out forwards';
+                    prizeTickerSpan2.style.opacity = '0.5';
+                    if (otherElement) {
+                        otherElement.style.opacity = '0.5';
+                        otherElement.style.pointerEvents = 'none';
+                    }
+                    break;
+                default:
+                    console.warn('Unknown effect item:', effectItem);
+                    break;
+            }
+        
+            if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
+                if (effectItem === 'feedback') {
+                    setActivatedWackyNewsEffectsArray(effectItem, 'bad');
+                    saveGame('feedbackSave');
+                    const saveData = getSaveData();
+                    if (saveData) {
+                        saveGameToCloud(saveData, 'manualExportCloud');
+                    }
+                    setSaveData(null);
+                    if (getFeedbackCanBeRequested()) {
+                        triggerFeedBackModal('bad');
+                    }
                 }
-                break;
-            default:
-                console.warn('Unknown effect item:', effectItem);
-                break;
-        }
-    
-        if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
-            setActivatedWackyNewsEffectsArray(effectItem, 'bad');
-            saveGame('feedbackSave');
-            const saveData = getSaveData();
-            if (saveData) {
-                saveGameToCloud(saveData, 'manualExportCloud');
             }
-            setSaveData(null);
-            if (getFeedbackCanBeRequested()) {
-                triggerFeedBackModal('bad');
+        
+            targetElement.style.animation = newAnimation;
+        
+            prizeTickerSpan2.style.pointerEvents = 'none';
+            if (otherElement) {
+                otherElement.style.pointerEvents = 'none';
             }
-        }
-    
-        targetElement.style.animation = newAnimation;
-    
-        prizeTickerSpan2.style.pointerEvents = 'none';
-        if (otherElement) {
-            otherElement.style.pointerEvents = 'none';
-        }
-    });
+        });
+    }
 }
 
 let particleInterval;
