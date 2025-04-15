@@ -40,6 +40,11 @@ export let modalGalacticTabUnlockHeader;
 export let modalGalacticTabUnlockText;
 export let achievementTooltipDescriptions;
 export let achievementTooltipDescriptionTexts;
+export let modalFeedbackThanksHeaderText;
+export let modalFeedbackHeaderText;
+export let modalFeedbackContentThanks;
+export let modalFeedbackContentTextGood;
+export let modalFeedbackContentTextBad;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -74,6 +79,11 @@ export function initialiseDescriptions() {
     modalRebirthText = `You are about to reset your progress and start again at the new System.<br><br>Are you sure you want to do this?<br><br><span class="green-ready-text">You will carry over X AP!</span>`;
     modalGalacticTabUnlockHeader = `Star System reached!`;
     modalGalacticTabUnlockText = `As you approach the new System, your scanners detect a faint communication signal...<br><br>"You have shown great innovation, you may now access our Galactic Trading Platform"<br><br><span class="green-ready-text">Galactic Tab Unlocked!</span>`;
+    modalFeedbackHeaderText = `SEND FEEDBACK`;
+    modalFeedbackContentTextGood = `Glad to hear it!<br><br>Let us know what you love and if there’s anything you’d like to see more of.<br>Your feedback helps us improve Cosmic Forge!`;
+    modalFeedbackContentTextBad = `Oh no!<br><br>Please let us know what’s not working for you or what you'd like changed.<br>We read everything and really value your thoughts!`;    
+    modalFeedbackThanksHeaderText = `THANK YOU FOR YOUR FEEDBACK!`;
+    modalFeedbackContentThanks = `Your feedback has been received.<br><br>It really helps shape the future of Cosmic Forge!<br>Feel free to check out our Discord<br>(There is an invite in the Contact section of the Settings Tab)`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

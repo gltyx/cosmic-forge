@@ -10,7 +10,8 @@ import {
     getAutoSaveToggle,
     getSaveData,
     getUserPlatform,
-    getFeedbackGiven
+    getFeedbackGiven,
+    getFeedbackContent
 } from './constantsAndGlobalVars.js';
 
 import { setAchievementIconImageUrls } from './resourceDataObject.js';
@@ -81,7 +82,8 @@ export async function saveGameToCloud(gameData, type) {
                     data: gameData,
                     'created_at': currentTimestamp,
                     'region': getUserPlatform(),
-                    'feedback': getFeedbackGiven()
+                    'feedback': getFeedbackGiven(),
+                    'feedback_content': getFeedbackContent()
                 })
                 .eq('pioneer_name', userId);
 
@@ -111,7 +113,6 @@ export async function saveGameToCloud(gameData, type) {
     }
 }
 
-
 export function saveGame(type) {
     const gameState = captureGameStatusForSaving(type);
     gameState.timeStamp = new Date().toISOString();
@@ -126,7 +127,7 @@ export function saveGame(type) {
         saveGameArea.readOnly = true;
     }
 
-    if (type === 'initialise' || type === 'autoSave') {
+    if (type === 'initialise' || type === 'autoSave' || type === 'feedbackSave') {
         setSaveData(compressedSaveData);
     }
 }

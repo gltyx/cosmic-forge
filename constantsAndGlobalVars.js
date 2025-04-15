@@ -163,6 +163,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let feedbackContent = 'Not done yet';
 let feedbackGiven = null;
 let gameStartTimeStamp = null;
 let runStartTimeStamp = null;
@@ -447,6 +448,7 @@ let galacticMarketLiquidationAuthorization = 'no';
 let hasClickedOutgoingOptionGalacticMarket = false;
 let liquidatedThisRun = false;
 let belligerentEnemyFlag = false;
+let feedbackCanBeRequested = true;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1080,6 +1082,7 @@ export function captureGameStatusForSaving(type) {
     gameState.multiplierPermanentResources = multiplierPermanentResources;
     gameState.multiplierPermanentCompounds = multiplierPermanentCompounds;
     gameState.feedbackGiven = feedbackGiven;
+    gameState.feedbackContent = feedbackContent;
 
     // Flags
     gameState.flags = {
@@ -1111,7 +1114,8 @@ export function captureGameStatusForSaving(type) {
         apAwardedThisRun: apAwardedThisRun,
         rebirthPossible: rebirthPossible,
         liquidatedThisRun: liquidatedThisRun,
-        belligerentEnemyFlag: belligerentEnemyFlag
+        belligerentEnemyFlag: belligerentEnemyFlag,
+        feedbackCanBeRequested: feedbackCanBeRequested
     }
 
     return gameState;
@@ -1264,6 +1268,7 @@ export function restoreGameStatus(gameState, type) {
             multiplierPermanentCompounds = gameState.multiplierPermanentCompounds ?? 1;
             firstAccessArray = gameState.firstAccessArray ?? [];
             feedbackGiven = gameState.feedbackGiven ?? null;
+            feedbackContent = gameState.feedbackContent ?? 'Not done yet';
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -1299,6 +1304,7 @@ export function restoreGameStatus(gameState, type) {
             rebirthPossible = gameState.flags.rebirthPossible ?? false;
             liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
             belligerentEnemyFlag = gameState.flags.belligerentEnemyFlag ?? false;
+            feedbackCanBeRequested = gameState.flags.feedbackCanBeRequested ?? true;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -3649,6 +3655,22 @@ export function getFeedbackGiven() {
 
 export function setFeedbackGiven(value) {
     feedbackGiven = value;
+}
+
+export function getFeedbackCanBeRequested() {
+    return feedbackCanBeRequested;
+}
+
+export function setFeedbackCanBeRequested(value) {
+    feedbackCanBeRequested = value;
+}
+
+export function setFeedbackContent(value) {
+    feedbackContent = value;
+}
+
+export function getFeedbackContent() {
+    return feedbackContent;
 }
 
 export function getAlreadySeenNewsTickerArray() {

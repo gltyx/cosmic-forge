@@ -1,4 +1,5 @@
 import {
+    setFeedbackContent,
     setSaveData,
     getNotificationQueues,
     setNotificationQueues,
@@ -106,7 +107,9 @@ import {
     setActivatedWackyNewsEffectsArray,
     setFirstAccessArray,
     getFirstAccessArray,
-    getFeedbackGiven
+    getFeedbackGiven,
+    getFeedbackCanBeRequested,
+    setFeedbackCanBeRequested
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -147,6 +150,11 @@ import {
     modalRebirthText,
     modalGalacticTabUnlockHeader,
     modalGalacticTabUnlockText,
+    modalFeedbackHeaderText,
+    modalFeedbackThanksHeaderText,
+    modalFeedbackContentTextGood,
+    modalFeedbackContentTextBad,
+    modalFeedbackContentThanks,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1780,6 +1788,77 @@ export function showEnterWarModeModal(reason) {
             resolve();
         };
     });
+}
+
+export async function triggerFeedBackModal(feedback) {
+    const modalContainer = getElements().modalContainer;
+    const overlay = getElements().overlay;
+    const sendFeedBackConfirmButton = document.getElementById('sendFeedBackConfirmButton');
+    const sendFeedBackCancelButton = document.getElementById('sendFeedBackCancelButton');
+    const sendFeedBackThanksButton = document.getElementById('sendFeedBackThanksButton');
+    
+    let headerText = modalFeedbackHeaderText;
+    let content; 
+
+    if (feedback === 'good') {
+        content = modalFeedbackContentTextGood + `<br><br><textarea id="feedbackArea" class="text-area-style text-area-width text-area-height" placeholder="Leave your thoughts here..."></textarea>`;
+    } else {
+        content = modalFeedbackContentTextBad + `<br><bar><textarea id="feedbackArea" class="text-area-style text-area-width text-area-height" placeholder="Leave your thoughts here..."></textarea>`;
+    }    
+
+    document.getElementById('modalButton').classList.add('invisible');
+    document.getElementById('modalSaveButton').classList.add('invisible');
+    document.getElementById('launchConfirmButton').classList.add('invisible');
+    document.getElementById('launchCancelButton').classList.add('invisible');
+    document.getElementById('enterWarModeConfirmButton').classList.add('invisible');
+    document.getElementById('enterWarModeCancelButton').classList.add('invisible');
+    document.getElementById('battleOutcomeConfirmButton').classList.add('invisible');
+    document.getElementById('rebirthConfirmButton').classList.add('invisible');
+    document.getElementById('rebirthCancelButton').classList.add('invisible');
+    document.getElementById('galacticTabUnlockConfirmButton').classList.add('invisible');
+    document.getElementById('sendFeedBackThanksButton').classList.add('invisible');    
+
+    sendFeedBackConfirmButton.classList.remove('invisible');
+    sendFeedBackCancelButton.classList.remove('invisible');
+
+    populateModal(headerText, content);
+
+    modalContainer.style.display = 'flex';
+    overlay.style.display = 'flex';
+
+    sendFeedBackConfirmButton.onclick = function () {
+        setFeedbackValueAndSaveGame('accepted', document.getElementById('feedbackArea').value);
+        headerText = modalFeedbackThanksHeaderText;
+        content = modalFeedbackContentThanks;
+        sendFeedBackConfirmButton.classList.add('invisible');
+        sendFeedBackCancelButton.classList.add('invisible');
+        sendFeedBackThanksButton.classList.remove('invisible');
+        populateModal(headerText, content);
+    }; 
+
+    sendFeedBackCancelButton.onclick = function () {
+        sendFeedBackConfirmButton.classList.add('invisible');
+        sendFeedBackCancelButton.classList.add('invisible');
+        setFeedbackValueAndSaveGame('refused', document.getElementById('feedbackArea').value);
+        showHideModal();
+    }; 
+
+    sendFeedBackThanksButton.onclick = function () {
+        sendFeedBackThanksButton.classList.add('invisible');
+        showHideModal();
+    }; 
+}
+
+function setFeedbackValueAndSaveGame(wanted, text) {
+    setFeedbackCanBeRequested(false);
+    setFeedbackContent([wanted, text]);
+
+    saveGame('feedbackSave');
+    const saveData = getSaveData();
+    if (saveData) {
+        saveGameToCloud(saveData, 'manualExportCloud');
+    }
+    setSaveData(null);
 }
 
 export function showBattlePopup(won, apGain = 0) {
@@ -3635,8 +3714,6 @@ export async function showNewsTickerMessage(newsTickerContainer) {
     const randomIndex = Math.floor(Math.random() * newsTickerContainer[category].length);
 
     let message = newsTickerContainer[category][randomIndex];
-    // let message = newsTickerContainer['wackyEffects'][newsTickerContainer['wackyEffects'].length - 1]; //DEBUG MESSAGES
-    // category = 'wackyEffects'; //DEBUG
 
     if (category === 'prize' || category === 'oneOff' || category === 'wackyEffects') {
         if (category === 'oneOff') {
@@ -4085,13 +4162,9 @@ function addWackyEffectsEventListeners() {
                     otherElement.style.opacity = '0.5';
                 }
 
-                saveGame('manualExportCloud');
-                const saveData = getSaveData();
-                if (saveData) {
-                    saveGameToCloud(saveData, 'manualExportCloud');
-                    setSaveExportCloudFlag(saveData);
+                if (getFeedbackCanBeRequested()) {
+                    triggerFeedBackModal('good');
                 }
-                setSaveData(null);
                 break;
             default:
                 console.warn('Unknown effect item:', effectItem);
@@ -4100,6 +4173,12 @@ function addWackyEffectsEventListeners() {
 
         if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
             setActivatedWackyNewsEffectsArray(effectItem, 'good');
+            saveGame('feedbackSave');
+            const saveData = getSaveData();
+            if (saveData) {
+                saveGameToCloud(saveData, 'manualExportCloud');
+            }
+            setSaveData(null);
         }
 
         targetElement.style.animation = newAnimation;
@@ -4129,12 +4208,6 @@ function addWackyEffectsEventListeners() {
                     otherElement.style.opacity = '0.5';
                     otherElement.style.pointerEvents = 'none';
                 }
-                saveGame('manualExportCloud');
-                const saveData = getSaveData();
-                if (saveData) {
-                    saveGameToCloud(saveData, 'manualExportCloud');
-                }
-                setSaveData(null);
                 break;
             default:
                 console.warn('Unknown effect item:', effectItem);
@@ -4143,6 +4216,15 @@ function addWackyEffectsEventListeners() {
     
         if (!getActivatedWackyNewsEffectsArray().includes(effectItem)) {
             setActivatedWackyNewsEffectsArray(effectItem, 'bad');
+            saveGame('feedbackSave');
+            const saveData = getSaveData();
+            if (saveData) {
+                saveGameToCloud(saveData, 'manualExportCloud');
+            }
+            setSaveData(null);
+            if (getFeedbackCanBeRequested()) {
+                triggerFeedBackModal('bad');
+            }
         }
     
         targetElement.style.animation = newAnimation;

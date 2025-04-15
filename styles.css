@@ -326,7 +326,9 @@ button {
 #enterWarModeConfirmButton,
 #battleOutcomeConfirmButton,
 #rebirthConfirmButton,
-#galacticTabUnlockConfirmButton
+#galacticTabUnlockConfirmButton,
+#sendFeedBackConfirmButton,
+#sendFeedBackThanksButton
 {
     position: fixed;
     bottom: 12%;
@@ -337,7 +339,8 @@ button {
 
 #launchCancelButton,
 #enterWarModeCancelButton,
-#rebirthCancelButton
+#rebirthCancelButton,
+#sendFeedBackCancelButton
 {
     position: fixed;
     bottom: 5%;
