@@ -3182,16 +3182,19 @@ function setStateOfButtonsBasedOnDescriptionStateForBuildingPurchases(element) {
         }
     });
 
-    const buyButton = element.parentElement.parentElement.querySelector('button');
-    if (buyButton.classList.contains('sell-building-button')) return; //sell button
+    const buttons = element.parentElement.parentElement.querySelectorAll('button');
 
-    if (hasRedDisabledText) {
-        buyButton.classList.add('red-disabled-text');
-    } else {
-        if (buyButton.innerHTML !== 'Built!' && buyButton.innerHTML !== 'Launched!') {
-            buyButton.classList.remove('red-disabled-text');
+    buttons.forEach(buyButton => {
+        if (buyButton.classList.contains('sell-building-button')) return; // Skip sell buttons
+    
+        if (hasRedDisabledText) {
+            buyButton.classList.add('red-disabled-text');
+        } else {
+            if (buyButton.innerHTML !== 'Built!' && buyButton.innerHTML !== 'Launched!') {
+                buyButton.classList.remove('red-disabled-text');
+            }
         }
-    }
+    });    
 }
 
 function handleVisibilityOfOneOffPurchaseButtonsAndDescriptions(element) {
@@ -3457,6 +3460,13 @@ function autoCreateChecks(element) {
         if (textAutoContainer && textAutoContainer.classList.contains('invisible')) {
             textAutoContainer.classList.remove('invisible');
         }
+        if (!getPowerOnOff()) {
+            toggleSwitchContainer.style.pointerEvents = 'none';
+            toggleSwitchContainer.style.opacity = '0.5';
+        } else {
+            toggleSwitchContainer.style.pointerEvents = 'auto';
+            toggleSwitchContainer.style.opacity = '1';
+        }
     } else {
         if (!toggleSwitchContainer.classList.contains('invisible')) {
             toggleSwitchContainer.classList.add('invisible');
@@ -3465,6 +3475,8 @@ function autoCreateChecks(element) {
             textAutoContainer.classList.add('invisible');
         }
     }
+
+
 }
 
 
