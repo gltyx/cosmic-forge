@@ -466,11 +466,22 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
     const fuelledUpState = getRocketsFuellerStartedArray().includes(`${rocketId}FuelledUp`);
     const launchedState = getLaunchedRockets().includes(rocketId);
 
+    const destinationAsteroids = [
+        getDestinationAsteroid('rocket1'),
+        getDestinationAsteroid('rocket2'),
+        getDestinationAsteroid('rocket3'),
+        getDestinationAsteroid('rocket4')
+    ].filter(Boolean);
+
     let filteredAsteroids = asteroids.filter(obj => {
         const asteroidName = Object.keys(obj)[0];
         const asteroid = obj[asteroidName];
-    
-        return !Object.values(asteroidsBeingMined).includes(asteroidName) && asteroid.quantity[0] > 0;
+
+        const isBeingMined = Object.values(asteroidsBeingMined).includes(asteroidName);
+        const isDestination = destinationAsteroids.includes(asteroidName);
+        const hasQuantity = asteroid.quantity[0] > 0;
+
+        return !isBeingMined && !isDestination && hasQuantity;
     });
     
     const rocketAutoBuyerRow = createOptionRow(

@@ -2602,8 +2602,18 @@ function drawLeftSideOfAntimatterSvg(asteroidsArray, rocketData, svgElement, svg
         }
 
         let textLines = rocketInfo ? [
-            ['', `${getRocketUserName('rocket' + (index + 1))}`],
-            ["Asteroid:", rocketInfo[1]],
+            ['', (() => {
+                const name = getRocketUserName('rocket' + (index + 1));
+                const spaceIdx = name.indexOf(' ');
+                if (spaceIdx > 0) return name.slice(0, spaceIdx) + '...';
+                return name.length > 13 ? name.slice(0, 13) + '...' : name;
+            })()],
+            ["Asteroid:", (() => {
+                const name = rocketInfo[1];
+                const spaceIdx = name.indexOf(' ');
+                if (spaceIdx > 0) return name.slice(0, spaceIdx) + '...';
+                return name.length > 13 ? name.slice(0, 13) + '...' : name;
+            })()],           
             ["Complexity:", rocketInfo[2]],
             ["Antimatter Left:", Math.floor(rocketInfo[4])]
         ] : [
