@@ -185,7 +185,8 @@ import {
     setEnemyFleetPower,
     rebirth,
     settleSystemAfterBattle,
-    setAutoSellToggleState
+    setAutoSellToggleState,
+    setAutoCreateToggleState
 } from './game.js';
 
 import { 
@@ -3276,6 +3277,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('diesel');
             updateContent('Diesel', 'tab4', 'content');
             setAutoSellToggleState('diesel', 'compounds');
+            setAutoCreateToggleState('diesel');
             setFirstAccessArray('diesel');
         });
     });
@@ -3287,6 +3289,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('glass');
             updateContent('Glass', 'tab4', 'content');
             setAutoSellToggleState('glass', 'compounds');
+            setAutoCreateToggleState('glass');
             setFirstAccessArray('glass');
         });
     });
@@ -3298,6 +3301,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('steel');
             updateContent('Steel', 'tab4', 'content');
             setAutoSellToggleState('steel', 'compounds');
+            setAutoCreateToggleState('steel');
             setFirstAccessArray('steel');
         });
     });
@@ -3309,6 +3313,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('concrete');
             updateContent('Concrete', 'tab4', 'content');
             setAutoSellToggleState('concrete', 'compounds');
+            setAutoCreateToggleState('compounds');
             setFirstAccessArray('concrete');
         });
     });
@@ -3320,6 +3325,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('water');
             updateContent('Water', 'tab4', 'content');
             setAutoSellToggleState('water', 'compounds');
+            setAutoCreateToggleState('water');
             setFirstAccessArray('water');
         });
     });
@@ -3331,6 +3337,7 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('titanium');
             updateContent('Titanium', 'tab4', 'content');
             setAutoSellToggleState('titanium', 'compounds');
+            setAutoCreateToggleState('titanium');
             setFirstAccessArray('titanium');
         });
     });
@@ -3678,6 +3685,7 @@ function initializeTabEventListeners() {
                         setCurrentOptionPane(lastOpenOptionPane);
                         updateContent(capitaliseString(lastOpenOptionPane), 'tab4', 'content');
                         setAutoSellToggleState(lastOpenOptionPane, 'compounds');
+                        setAutoCreateToggleState(lastOpenOptionPane);
                     }
                     setCurrentOptionPane(lastOpenOptionPane);
                 }

@@ -42,8 +42,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('diesel');
                 }, 'createCompound', null, null, null, 'diesel', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['diesel', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('diesel')}`,
                 null,
@@ -268,8 +270,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('glass');
                 }, 'createCompound', null, null, null, 'glass', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['glass', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('glass')}`,
                 null,
@@ -495,8 +499,10 @@ export function drawTab4Content(heading, optionContentElement) {
                     createCompound('steel');
                     setAchievementFlagArray('createSteel', 'add');
                 }, 'createCompound', null, null, null, 'steel', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['steel', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('steel')}`,
                 null,
@@ -721,8 +727,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('concrete');
                 }, 'createCompound', null, null, null, 'concrete', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['concrete', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('concrete')}`,
                 null,
@@ -949,8 +957,10 @@ export function drawTab4Content(heading, optionContentElement) {
                 createButton('Create', ['option-button', 'red-disabled-text', 'compound-cost-sell-check', 'create'], () => {
                     createCompound('water');
                 }, 'createCompound', null, null, null, 'water', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['water', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('water')}`,
                 null,
@@ -1176,8 +1186,10 @@ export function drawTab4Content(heading, optionContentElement) {
                     createCompound('titanium');
                     setAchievementFlagArray('createTitanium', 'add');
                 }, 'createCompound', null, null, null, 'titanium', true, null, 'compound'),
-                null,
-                null,
+                createTextElement(`Auto:`, '', ['autoBuyer-building-quantity']),
+                createToggleSwitch('autoCreateToggle', false, (isEnabled) => {
+                    setResourceDataObject(isEnabled, 'compounds', ['titanium', 'autoCreate']);
+                }, ['toggle-switch-spacing']),
                 null,
                 `${getCompoundCreatePreview('titanium')}`,
                 null,

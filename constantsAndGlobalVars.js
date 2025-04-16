@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.62;
+export const GAME_VERSION_FOR_SAVES = 0.64;
 export const deferredActions = [];
 
 //NOTIFICATIONS
@@ -2009,7 +2009,7 @@ export function getTechUnlockedArray() {
 }
 
 export function setTechUnlockedArray(value) {
-    if (value === 'run1' && techUnlockedArray.length === 1 && techUnlockedArray[0] === 'apAwardedThisRun') {
+    if (value === 'run1' && techUnlockedArray.length === 1 && techUnlockedArray[0] === 'apAwardedThisRun' && value !== 'compoundMachining') {
         techUnlockedArray = [];
         return;
     }

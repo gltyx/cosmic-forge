@@ -148,7 +148,7 @@ export function initialiseDescriptions() {
     };
 
     rocketNames = {
-        version: 0.62,
+        version: 0.64,
         rocketDescription: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         [getRocketUserName('rocket1').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         [getRocketUserName('rocket2').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
@@ -1089,6 +1089,11 @@ export function initialiseDescriptions() {
         },
         buffOptimizedPowerGridsRow: {
             content1: "Increases the effectiveness of power grid upgrades by 20%.",
+            content2: "",
+            updateAt: ""
+        },
+        buffCompoundAutomationRow: {
+            content1: "Enable Compound Auto Creation",
             content2: "",
             updateAt: ""
         },

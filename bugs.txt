@@ -6,3 +6,14 @@ remove asteroid from travel to dropdown if one already on way there
 
 neon autobuyers research to add or ascendency perk
 feedback modal
+
+
+
+creator autobuyers
+logic working
+
+need:
+disable autosell buttons and set to off for resources affected when auto create is on (and enable if switched off)
+force descriptions for compounds to say Auto Creating...
+force descriptions for resources to say Auto Creating...
+make auto create toggle stay on when it is on including during saving

@@ -7,7 +7,7 @@ import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsT
 export let achievementImageUrls;
 
 export let resourceData = {
-    version: 0.62, //update this whenever changes are made to the structure
+    version: 0.64, //update this whenever changes are made to the structure
     resources: {
         solar: {
             autoSell: false,
@@ -265,6 +265,7 @@ export let resourceData = {
     compounds: {
         diesel: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Diesel',
             screenName: 'diesel',
             saleValue: 0.3,
@@ -298,6 +299,7 @@ export let resourceData = {
         },        
         glass: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Glass',
             screenName: 'glass',
             saleValue: 0.8,
@@ -331,6 +333,7 @@ export let resourceData = {
         },
         steel: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Steel',
             screenName: 'steel',
             saleValue: 1.8,
@@ -364,6 +367,7 @@ export let resourceData = {
         },
         concrete: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Concrete',
             screenName: 'concrete',
             saleValue: 0.8,
@@ -397,6 +401,7 @@ export let resourceData = {
         },
         water: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Water',
             screenName: 'water',
             saleValue: 1.6,
@@ -430,6 +435,7 @@ export let resourceData = {
         },
         titanium: {
             autoSell: false,
+            autoCreate: false,
             nameResource: 'Titanium',
             screenName: 'titanium',
             saleValue: 6,
@@ -859,7 +865,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.62,
+    version: 0.64,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
@@ -878,7 +884,7 @@ export let starSystems = {
 };
 
 export let galacticMarket = {
-    version: 0.62,
+    version: 0.64,
     resources: {
         hydrogen: { 
             name: "Hydrogen", 
@@ -984,7 +990,7 @@ export let galacticMarket = {
 };
 
 export let ascendencyBuffs = {
-    version: 0.62,
+    version: 0.64,
     "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",
@@ -1022,6 +1028,16 @@ export let ascendencyBuffs = {
         rebuyableIncreaseMultiple: 2,
         baseCostAp: 25,
         effectCategoryMagnitude: 1.2,
+        boughtYet: 0,
+        timesRebuyable: 100000
+    },
+    "compoundAutomation": {  //done
+        name: "Compound Automation",
+        description: "buffCompoundAutomationRow",
+        rebuyable: false,
+        rebuyableIncreaseMultiple: 1,
+        baseCostAp: 15,
+        effectCategoryMagnitude: 1,
         boughtYet: 0,
         timesRebuyable: 100000
     },
@@ -2251,6 +2267,10 @@ export function getBuffJumpstartResearchData() {
 
 export function getBuffOptimizedPowerGridsData() {
     return ascendencyBuffs["optimizedPowerGrids"];
+}
+
+export function getBuffCompoundAutomationData() {
+    return ascendencyBuffs["compoundAutomation"];
 }
 
 export function getBuffFasterAsteroidScanData() {

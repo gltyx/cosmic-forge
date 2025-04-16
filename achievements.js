@@ -156,7 +156,7 @@ export function addAchievementBonus(achievement) {
                             const currentRatio = getResourceDataObject('compounds', [compoundKey, ratioKey]);
 
                             if (currentRatio > 0) {
-                                const newRatio = Math.max(1, Math.floor(currentRatio * quantity));
+                                const newRatio = Math.max(1, currentRatio * quantity);
                                 setResourceDataObject(newRatio, 'compounds', [compoundKey, ratioKey]);
                             }
                         }

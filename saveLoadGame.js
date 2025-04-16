@@ -574,8 +574,38 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
             }
             saveData.version = 0.62;
         }
+
+        if (saveData.version < 0.64) {
+            if (objectType === 'resourceData') {
+                saveData.compounds.diesel.autoCreate = false;
+                saveData.compounds.glass.autoCreate = false;
+                saveData.compounds.steel.autoCreate = false;
+                saveData.compounds.concrete.autoCreate = false;
+                saveData.compounds.water.autoCreate = false;
+                saveData.compounds.titanium.autoCreate = false;
+
+            } else if (objectType === 'starSystemsData') {
+
+            } else if (objectType === 'rocketNames') {
+            
+            } else if (objectType === 'galacticMarketData') {
+
+            } else if (objectType === 'ascendencyBuffsData') {
+                saveData.compoundAutomation = {
+                    name: "Compound Automation",
+                    description: "buffCompoundAutomationRow",
+                    rebuyable: false,
+                    rebuyableIncreaseMultiple: 1,
+                    baseCostAp: 15,
+                    effectCategoryMagnitude: 1,
+                    boughtYet: 0,
+                    timesRebuyable: 100000
+                };
+            }
+            saveData.version = 0.64;
+        }
     
-        saveData.version += 0.01;
+        saveData.version += 0.001;
     }   
 
     return saveData;

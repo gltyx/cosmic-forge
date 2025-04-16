@@ -268,6 +268,7 @@ import {
     getBuffSmartAutoBuyersData,
     getBuffJumpstartResearchData,
     getBuffOptimizedPowerGridsData,
+    getBuffCompoundAutomationData,
     getBuffFasterAsteroidScanData,
     getBuffDeeperStarStudyData,
     getBuffAsteroidScannerBoostData,
@@ -438,14 +439,16 @@ export async function gameLoop() {
 
         const elementsToCheck = [
             ...document.querySelectorAll(
-                '#autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
+                '#autoCreateToggle, #autoSellToggle, .energy-check, .fuel-check, .resource-cost-sell-check, .compound-cost-sell-check, [class*="travel-starship"], .diplomacy-button'
             ),
             ...Array.from(document.querySelectorAll('*')).filter(element =>
                 /^.+[1-4]Toggle$/.test(element.id) ||
                 ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)
             )
         ];        
-        elementsToCheck.forEach(checkStatusAndSetTextClasses);        
+        elementsToCheck.forEach(checkStatusAndSetTextClasses); 
+        
+        handleAutoCreateResourceSellRows();
 
         starChecks();
         starShipUiChecks();
@@ -547,6 +550,27 @@ export async function gameLoop() {
 
         requestAnimationFrame(gameLoop);
     }
+}
+
+function handleAutoCreateResourceSellRows() {
+    const autoCreateCompoundsActivated = Object.keys(getResourceDataObject('compounds'))
+        .filter(key => getResourceDataObject('compounds', [key, 'autoCreate']) === true);
+
+    autoCreateCompoundsActivated.forEach(autoCreateCompound => {
+        const resources = [1, 2, 3, 4]
+            .map(i => getResourceDataObject('compounds', [autoCreateCompound, `createsFrom${i}`])[0])
+            .filter(resource => resource !== '' && resource !== undefined);
+
+        const currentPane = getCurrentOptionPane();
+
+        if (resources.includes(currentPane)) {
+            const sellRowElement = document.getElementById(`${currentPane}SellRow`);
+            if (sellRowElement) {
+                sellRowElement.style.pointerEvents = 'none';
+                sellRowElement.style.opacity = '0.5';
+            }
+        }
+    });
 }
 
 function updateAllPowerPlantRates() {
@@ -1034,6 +1058,10 @@ function updateAllCreatePreviews() {
             if (createPreviewElement) {
                 createPreviewElement.innerHTML = cleanedString;
             }
+
+            if (getResourceDataObject('compounds', [compound, 'autoCreate'])) {
+                createPreviewElement.innerHTML = '<span class="red-disabled-text">Auto Creating...</span>';
+            }
         }
     }
 }
@@ -1060,6 +1088,11 @@ function updateAllSalePricePreviews() {
     
             if (salePreviewElement) {
                 salePreviewElement.innerHTML = cleanedString;
+            }
+
+            const sellDescription = document.getElementById(`${resource}SellRow`);
+            if (sellDescription && getComputedStyle(sellDescription).pointerEvents === 'none') {
+                salePreviewElement.innerHTML = '<span class="red-disabled-text">Auto Creating...</span>';
             }
         }
     }
@@ -3373,6 +3406,10 @@ function checkStatusAndSetTextClasses(element) {
         return autoSellerChecks(element);
     }
 
+    if (element.id === 'autoCreateToggle') {
+       return autoCreateChecks(element);
+    }
+
     if (/^.+[1-4]Toggle$/.test(element.id) || ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)) {
         return autoBuyerToggleChecks(element);
     }    
@@ -3406,6 +3443,27 @@ function autoBuyerToggleChecks(element) {
         const item = element.id.replace('Toggle', '');
         const active = getResourceDataObject('research', ['upgrades', item, 'active']);
         element.checked = active;
+    }
+}
+
+function autoCreateChecks(element) {
+    const toggleSwitchContainer = element.parentElement;
+    const textAutoContainer = toggleSwitchContainer.parentElement.querySelector('.autoBuyer-building-quantity');
+
+    if (getTechUnlockedArray().includes('compoundMachining')) {
+        if (toggleSwitchContainer.classList.contains('invisible')) {
+            toggleSwitchContainer.classList.remove('invisible');
+        }
+        if (textAutoContainer && textAutoContainer.classList.contains('invisible')) {
+            textAutoContainer.classList.remove('invisible');
+        }
+    } else {
+        if (!toggleSwitchContainer.classList.contains('invisible')) {
+            toggleSwitchContainer.classList.add('invisible');
+        }
+        if (textAutoContainer && !textAutoContainer.classList.contains('invisible')) {
+            textAutoContainer.classList.add('invisible');
+        }
     }
 }
 
@@ -4559,6 +4617,7 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
         
             const resourceAutoSell = getResourceDataObject('resources', [baseId, 'autoSell'], true);
             const compoundAutoSell = getResourceDataObject('compounds', [baseId, 'autoSell'], true);
+            const compoundsAutoCreate = getResourceDataObject('compounds', [baseId, 'autoCreate'], true);
 
             if (resourceAutoSell || compoundAutoSell) {  //if autosell is on
                 let storageCapacity = 0;
@@ -4574,6 +4633,21 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
                 }
             } else {
                 element.classList.remove('stats-text');
+            }
+
+            if (compoundsAutoCreate !== undefined) {
+                if (compoundsAutoCreate) { // if on
+                    const storageCapacity = getResourceDataObject('compounds', [baseId, 'storageCapacity']);
+                    const quantity = getResourceDataObject('compounds', [baseId, 'quantity']);
+
+                    if (quantity < storageCapacity) {
+                        element.classList.add('stats-text');
+                        element.classList.remove('green-ready-text');
+                    } else {
+                        element.classList.remove('stats-text');
+                        element.classList.add('green-ready-text');
+                    }
+                }
             }
         }        
 
@@ -5071,6 +5145,35 @@ function startInitialTimers() {
                                 processAutoSell(compound, autoSellQuantity, 'compounds');
                             }
                         }
+
+                        if (getResourceDataObject('compounds', [compound, 'autoCreate'])) {
+                            const resources = [1, 2, 3, 4].map(i =>
+                                getResourceDataObject('compounds', [compound, `createsFrom${i}`])[0]
+                            );
+                        
+                            resources.forEach(resource => {
+                                if (resource !== '' && resource !== undefined) setResourceDataObject(false, 'resources', [resource, 'autoSell']);
+                            });
+                        
+                            const currentQuantity = getResourceDataObject('compounds', [compound, 'quantity']);
+                            const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
+                        
+                            if (currentQuantity < storageCapacity) {
+                                const amountToCreateArray = calculateCreatableCompoundAmount(compound);
+                                const availableStorage = Math.floor(storageCapacity - currentQuantity);
+                                const amountToCreate = Math.min(amountToCreateArray[0], availableStorage);
+                        
+                                setResourceDataObject(currentQuantity + amountToCreate, 'compounds', [compound, 'quantity']);
+                        
+                                amountToCreateArray.slice(1).forEach(([amountPerUnit, resource]) => {
+                                    if (resource && amountPerUnit > 0) setResourceDataObject(
+                                        (getResourceDataObject('resources', [resource, 'quantity']) || 0) - Math.floor((amountToCreate / amountToCreateArray[0]) * amountPerUnit),
+                                        'resources',
+                                        [resource, 'quantity']
+                                    );
+                                });
+                            }
+                        }                        
                     });
                 }
             });
@@ -5354,6 +5457,31 @@ function changeWeather(weatherCountDownToChangeInterval) {
     }, 1000);
 }
 
+function calculateCreatableCompoundAmount(compoundToCreate) {
+    const buffer = 100;
+
+    const parts = [1, 2, 3, 4].map(i => {
+        const ratio = getResourceDataObject('compounds', [compoundToCreate, `createsFromRatio${i}`]) || 0;
+        const [part, type] = getResourceDataObject('compounds', [compoundToCreate, `createsFrom${i}`]) || [];
+        const quantity = (type && part) ? getResourceDataObject(type, [part, 'quantity']) || 0 : 0;
+        return { quantity, ratio, part };
+    });
+
+    const maxCreatableWithBuffer = Math.min(...parts.map(({ quantity, ratio }) => {
+        if (ratio > 0) {
+            const usableAmount = Math.max(0, quantity - buffer);
+            return Math.floor(usableAmount / ratio);
+        }
+        return Infinity;
+    }));
+
+    const resourcesUsed = parts.map(({ ratio, part }) =>
+        ratio > 0 ? [maxCreatableWithBuffer * ratio, part] : [0, part]
+    );
+
+    return [maxCreatableWithBuffer, ...resourcesUsed];
+}
+
 function calculateNewLiquidationPricePerApGained() {
     const basePrice = getApBaseBuyPrice();
     const minPrice = basePrice * 1;
@@ -5567,6 +5695,9 @@ export function purchaseBuff(buff) {
         buffOptimizedPowerGridsMultiplier();
     }
 
+    if (buff === 'compoundAutomation') {
+        setTechUnlockedArray('compoundMachining');
+    }
 }
 
 function calculateStarTravelDuration(destination) {
@@ -8520,6 +8651,10 @@ export function addPermanentBuffsBackInAfterRebirth() {
             }
         }
     }
+
+    if (getBuffCompoundAutomationData()['boughtYet'] > 0) {
+        setTechUnlockedArray('compoundMachining');
+    }
 }
 
 export function rebirth() {
@@ -8640,6 +8775,27 @@ export function setAutoSellToggleState(item, type) {
         });
 
         targetElement.checked = autoSellValue;
+    }
+}
+
+export function setAutoCreateToggleState(item) {
+    if (!getTechUnlockedArray().includes('compoundMachining')) {
+        return;
+    }
+
+    const createRow = document.getElementById(`${item}CreateRow`);
+    const autoCreateValue = getResourceDataObject('compounds', [item, 'autoCreate']);
+    const targetElement = createRow.querySelector(`#autoCreateToggle`);
+
+    if (targetElement) {
+        const allWithSameId = document.querySelectorAll('#autoCreateToggle');
+        allWithSameId.forEach(el => {
+            if (el !== targetElement) {
+                el.remove();
+            }
+        });
+
+        targetElement.checked = autoCreateValue;
     }
 }
 
