@@ -45,6 +45,13 @@ export let modalFeedbackHeaderText;
 export let modalFeedbackContentThanks;
 export let modalFeedbackContentTextGood;
 export let modalFeedbackContentTextBad;
+export let modalPlayerLeaderStyleHeaderText;
+export let modalPlayerLeaderStyleContentText;
+export let modalPlayerLeaderIntroHeaderText;
+export let modalPlayerLeaderIntroContentText1;
+export let modalPlayerLeaderIntroContentText2;
+export let modalPlayerLeaderIntroContentText3;
+export let modalPlayerLeaderIntroContentText4;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -84,7 +91,14 @@ export function initialiseDescriptions() {
     modalFeedbackContentTextBad = `Oh no!<br><br>Please let us know what’s not working for you or what you'd like changed.<br>We read everything and really value your thoughts!`;    
     modalFeedbackThanksHeaderText = `THANK YOU FOR YOUR FEEDBACK!`;
     modalFeedbackContentThanks = `Your feedback has been received.<br><br>It really helps shape the future of Cosmic Forge!<br>Feel free to check out our Discord<br>(There is an invite in the Contact section of the Settings Tab)`;
-
+    modalPlayerLeaderStyleHeaderText = `PONDERING THE HEAVENS`;
+    modalPlayerLeaderStyleContentText = `While gazing at the heavens in your Space Telescope, you ponder<br>what the future holds and who you really are.  You decided that<br>as per your forefathers, you have always been a...<br><br>THIS CHOICE AFFECTS YOUR PLAYTHROUGH SO CHOOSE CAREFULLY! <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderIntroHeaderText = `THE AWAKENING`;
+    modalPlayerLeaderIntroContentText1 = `You are a Constructor.<br>Blueprints flow through your veins.<br><span class="green-ready-text">All building costs are reduced after the first Rebirth, forever.</span><br>Build the future, one module at a time. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderIntroContentText2 = `You are a Supremacist.<br>Strength is your law, dominance your goal.<br><span class="green-ready-text">Fleet units are cheaper and stronger after the first Rebirth, forever.</span><br><span class="green-ready-text">Enemies are more afraid.</span><br>They will bend or be broken. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderIntroContentText3 = `You are Voidborn.<br>You were born among the stars, and the void whispers to you.<br><span class="green-ready-text">Star studies are faster and reveal more after the first Rebirth, forever.</span><br><span class="green-ready-text">Asteroids are better.</span><br><span class="green-ready-text">Diplomacy is more favorable.</span><br>The darkness is your ally. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderIntroContentText4 = `You are an Expansionist.<br>The horizon always calls.<br><span class="green-ready-text">Starships and Rockets much cheaper to build, after the first Rebirth, forever.</span><br><span class="green-ready-text">Fuelling and travelling take less time.</span><br>Spread across the galaxy like wildfire. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
         'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',

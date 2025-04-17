@@ -320,8 +320,7 @@ button {
     line-height: 1.8;
 }
   
-#modalConfirm
-{
+#modalConfirm {
     position: fixed;
     bottom: 12%;
     left: 50%;
@@ -329,13 +328,30 @@ button {
     transform: translateX(-50%);
 }
 
-#modalCancel
-{
+#modalCancel,
+#modalConfirm,
+#modalExtraChoice1,
+#modalExtraChoice2 {
     position: fixed;
-    bottom: 5%;
     left: 50%;
     width: 40%;
     transform: translateX(-50%);
+}
+
+#modalExtraChoice1 {
+    bottom: 26%;
+}
+
+#modalExtraChoice2 {
+    bottom: 19%;
+}
+
+#modalConfirm {
+    bottom: 12%;
+}
+
+#modalCancel {
+    bottom: 5%;
 }
 
 #fullScreenCheckBox,

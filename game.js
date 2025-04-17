@@ -1,4 +1,6 @@
 import {
+    getPlayerStyle,
+    setPlayerStyle,
     getUserPlatform,
     setUserPlatform,
     setGameActiveCountTime,
@@ -318,7 +320,10 @@ import {
     resetTab6ClassesRebirth,
     showGalacticTabPopup,
     updateAttentionIndicators,
-    appendAttentionIndicator
+    appendAttentionIndicator,
+    showPlayerLeaderStyleSelectionPopup,
+    showPlayerStyleIntroPopup,
+    setupModalButtonTooltips
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -356,6 +361,7 @@ export function startGame() {
     }
     setAchievementIconImageUrls();
     getNavigatorLanguage();
+    setupModalButtonTooltips();
     gameLoop();
 }
 
@@ -5946,6 +5952,9 @@ export function startInvestigateStarTimer(adjustment) {
                 
                 if (counter >= searchDuration) {
                     extendStarDataRange(false);
+                    if (!getPlayerStyle()) {
+                        showPlayerLeaderStyleSelectionPopup();
+                    }
                     timerManager.removeTimer(timerName);
                     if (searchTimerDescriptionElement) {             
                         searchTimerDescriptionElement.innerText = 'Ready To Study';
@@ -8618,7 +8627,7 @@ export function turnAround(unit) {
     setBattleUnits(unit.owner, updatedUnits);
 }
 
-export function settleSystemAfterBattle(accessPoint) {
+export async function settleSystemAfterBattle(accessPoint) {
     setAchievementFlagArray('settleSystem', 'add');
     setRebirthPossible(true);
     const apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
@@ -8627,6 +8636,10 @@ export function settleSystemAfterBattle(accessPoint) {
     if (!getApAwardedThisRun()) {   
         setResourceDataObject(Math.floor(apGain + getResourceDataObject('ascendencyPoints', ['quantity'])), 'ascendencyPoints', ['quantity']);
         setApAwardedThisRun(true);
+    }
+
+    if (getStatRun() < 10) {
+        await showPlayerStyleIntroPopup();
     }
 
     switch(accessPoint) {

@@ -163,6 +163,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let playerStyle = null;
 let feedbackContent = 'Not done yet';
 let feedbackGiven = null;
 let gameStartTimeStamp = null;
@@ -1060,6 +1061,7 @@ export function captureGameStatusForSaving(type) {
     gameState.userPlatform = userPlatform;
     gameState.compoundCreateDropdownRecipeText = compoundCreateDropdownRecipeText;
     gameState.firstAccessArray = firstAccessArray;
+    gameState.playerStyle = playerStyle;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1267,6 +1269,7 @@ export function restoreGameStatus(gameState, type) {
             firstAccessArray = gameState.firstAccessArray ?? [];
             feedbackGiven = gameState.feedbackGiven ?? null;
             feedbackContent = gameState.feedbackContent ?? 'Not done yet';
+            playerStyle = gameState.playerStyle ?? null;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3717,6 +3720,14 @@ export function getSettledStars() {
 
 export function setSettledStars(value) {
     settledStars.push(value);
+}
+
+export function getPlayerStyle() {
+    return playerStyle;
+}
+
+export function setPlayerStyle(value) {
+    playerStyle = value;
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------
