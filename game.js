@@ -2378,7 +2378,7 @@ function travelToAsteroidChecks(element) {
 
             if (getRocketReadyToTravel(rocketName) && getLaunchedRockets().includes(rocketName) && getCanTravelToAsteroids()) {
                 accompanyingLabel.classList.remove('red-disabled-text');
-                accompanyingLabel.innerText = 'Ready To Travel...';
+                accompanyingLabel.innerHTML = `Ready To Travel...<br>${getDestinationAsteroid(getCurrentOptionPane())}`;
                 accompanyingLabel.classList.add('green-ready-text');
                 travelToProgressBarElement.classList.add('invisible');
                 destinationAsteroidTextElement.classList.add('invisible');

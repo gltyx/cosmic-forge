@@ -466,12 +466,10 @@ function createRocketUI(rocketId, optionContentElement, asteroids, asteroidsBein
     const fuelledUpState = getRocketsFuellerStartedArray().includes(`${rocketId}FuelledUp`);
     const launchedState = getLaunchedRockets().includes(rocketId);
 
-    const destinationAsteroids = [
-        getDestinationAsteroid('rocket1'),
-        getDestinationAsteroid('rocket2'),
-        getDestinationAsteroid('rocket3'),
-        getDestinationAsteroid('rocket4')
-    ].filter(Boolean);
+    const destinationAsteroids = ['rocket1', 'rocket2', 'rocket3', 'rocket4']
+    .filter(id => id !== rocketId) // exclude the current rocket
+    .map(id => getDestinationAsteroid(id))
+    .filter(Boolean); // remove null/undefined
 
     let filteredAsteroids = asteroids.filter(obj => {
         const asteroidName = Object.keys(obj)[0];

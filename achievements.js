@@ -234,7 +234,11 @@ export function addAchievementBonus(achievement) {
                         for (let i = 1; i <= 4; i++) {
                             const tierKey = `tier${i}`;
                             const currentRate = getResourceDataObject('resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
-                            setResourceDataObject(currentRate * quantity, 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                            if (category === 'multiplierPermanent') {
+                                setResourceDataObject(currentRate * getMultiplierPermanentResources(), 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                            } else {
+                                setResourceDataObject(currentRate * quantity, 'resources', [resourceKey, 'upgrades', 'autoBuyer', tierKey, 'rate']);
+                            }
                         }
                     }
                     break;

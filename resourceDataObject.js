@@ -1561,7 +1561,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'createCostCompounds',
-                quantity: 0.80
+                quantity: 0.8
             }
         },
         notification: "activateAllWackyNewsTickersNotification"
