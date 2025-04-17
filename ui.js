@@ -245,24 +245,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelector('.fullScreenContainer').style.display = 'flex';
     getElements().overlay.style.display = 'flex';
 
-    getElements().modalOKButton.addEventListener('click', () => {
+    const modalConfirmBtn = document.getElementById('modalConfirm');
+
+    const startGameClickHandler = () => {
         if (document.getElementById('fullScreenCheckBox').classList.contains('checked')) {
             toggleGameFullScreen();
         }
-        const handleClick = async () => {
-            document.querySelector('.fullScreenContainer').style.display = 'none';
-            showHideModal();
-            try {
-                await loadGameFromCloud(); 
-    
-                saveGame('initialise');
-                // saveGameToCloud(getSaveData(), 'initialise');
-            } catch (error) {
-                console.error("Error during game loading:", error);
-            }
-        };
-        handleClick();
-    });
+        document.querySelector('.fullScreenContainer').style.display = 'none';
+        showHideModal();
+
+        modalConfirmBtn.removeEventListener('click', startGameClickHandler);
+    };
+
+    modalConfirmBtn.addEventListener('click', startGameClickHandler);
     
     startGame();
 
@@ -1633,12 +1628,12 @@ export function createStarDestinationRow(starData, isInteresting) {
 function showLaunchWarningModal(show) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
-    const launchConfirmButton = document.getElementById('launchConfirmButton');
-    const launchCancelButton = document.getElementById('launchCancelButton');
+    const launchConfirmButton = document.getElementById('modalConfirm');
+    const launchCancelButton = document.getElementById('modalCancel');
+    launchConfirmButton.innerText = 'CONFIRM';
+    launchCancelButton.innerText = 'CANCEL';
 
     if (show) {
-        document.getElementById('modalButton').classList.add('invisible');
-        document.getElementById('modalSaveButton').classList.add('invisible');
         launchConfirmButton.classList.remove('invisible');
         launchCancelButton.classList.remove('invisible');
 
@@ -1680,14 +1675,13 @@ export function showEnterWarModeModal(reason) {
 
         const modalContainer = getElements().modalContainer;
         const overlay = getElements().overlay;
-        const enterWarModeConfirmButton = document.getElementById('enterWarModeConfirmButton');
-        const enterWarModeCancelButton = document.getElementById('enterWarModeCancelButton');
+        const enterWarModeConfirmButton = document.getElementById('modalConfirm');
+        const enterWarModeCancelButton = document.getElementById('modalCancel');
+        enterWarModeConfirmButton.innerText = 'CONFIRM';
+        enterWarModeCancelButton.innerText = 'CANCEL';
 
-        document.getElementById('modalButton').classList.add('invisible');
-        document.getElementById('modalSaveButton').classList.add('invisible');
-        document.getElementById('launchConfirmButton').classList.add('invisible');
-        document.getElementById('launchCancelButton').classList.add('invisible');
         enterWarModeConfirmButton.classList.remove('invisible');
+        enterWarModeCancelButton.classList.add('invisible');
 
         const starData = getStarSystemDataObject('stars', ['destinationStar']);
 
@@ -1794,30 +1788,19 @@ export function showEnterWarModeModal(reason) {
 export async function triggerFeedBackModal(feedback) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
-    const sendFeedBackConfirmButton = document.getElementById('sendFeedBackConfirmButton');
-    const sendFeedBackCancelButton = document.getElementById('sendFeedBackCancelButton');
-    const sendFeedBackThanksButton = document.getElementById('sendFeedBackThanksButton');
+    const sendFeedBackConfirmButton = document.getElementById('modalConfirm');
+    const sendFeedBackCancelButton = document.getElementById('modalCancel');
+    sendFeedBackConfirmButton.innerText = 'SEND FEEDBACK';
+    sendFeedBackCancelButton.innerText = 'NO THANKS';
     
     let headerText = modalFeedbackHeaderText;
-    let content; 
+    let content;
 
     if (feedback === 'good') {
         content = modalFeedbackContentTextGood + `<br><br><textarea id="feedbackArea" class="text-area-style text-area-width text-area-height" placeholder="Leave your thoughts here..."></textarea>`;
     } else {
-        content = modalFeedbackContentTextBad + `<br><bar><textarea id="feedbackArea" class="text-area-style text-area-width text-area-height" placeholder="Leave your thoughts here..."></textarea>`;
-    }    
-
-    document.getElementById('modalButton').classList.add('invisible');
-    document.getElementById('modalSaveButton').classList.add('invisible');
-    document.getElementById('launchConfirmButton').classList.add('invisible');
-    document.getElementById('launchCancelButton').classList.add('invisible');
-    document.getElementById('enterWarModeConfirmButton').classList.add('invisible');
-    document.getElementById('enterWarModeCancelButton').classList.add('invisible');
-    document.getElementById('battleOutcomeConfirmButton').classList.add('invisible');
-    document.getElementById('rebirthConfirmButton').classList.add('invisible');
-    document.getElementById('rebirthCancelButton').classList.add('invisible');
-    document.getElementById('galacticTabUnlockConfirmButton').classList.add('invisible');
-    document.getElementById('sendFeedBackThanksButton').classList.add('invisible');    
+        content = modalFeedbackContentTextBad + `<br><br><textarea id="feedbackArea" class="text-area-style text-area-width text-area-height" placeholder="Leave your thoughts here..."></textarea>`;
+    }
 
     sendFeedBackConfirmButton.classList.remove('invisible');
     sendFeedBackCancelButton.classList.remove('invisible');
@@ -1827,27 +1810,25 @@ export async function triggerFeedBackModal(feedback) {
     modalContainer.style.display = 'flex';
     overlay.style.display = 'flex';
 
-    sendFeedBackConfirmButton.onclick = function () {
+    const firstConfirmClickHandler = function () {
         setFeedbackValueAndSaveGame('accepted', document.getElementById('feedbackArea').value);
         headerText = modalFeedbackThanksHeaderText;
         content = modalFeedbackContentThanks;
-        sendFeedBackConfirmButton.classList.add('invisible');
+        sendFeedBackConfirmButton.innerText = 'OK';
         sendFeedBackCancelButton.classList.add('invisible');
-        sendFeedBackThanksButton.classList.remove('invisible');
         populateModal(headerText, content);
-    }; 
+
+        sendFeedBackConfirmButton.onclick = function () {
+            showHideModal();
+        };
+    };
+
+    sendFeedBackConfirmButton.onclick = firstConfirmClickHandler;
 
     sendFeedBackCancelButton.onclick = function () {
         setFeedbackValueAndSaveGame('refused', document.getElementById('feedbackArea').value);
-        sendFeedBackConfirmButton.classList.add('invisible');
-        sendFeedBackCancelButton.classList.add('invisible');
         showHideModal();
-    }; 
-
-    sendFeedBackThanksButton.onclick = function () {
-        sendFeedBackThanksButton.classList.add('invisible');
-        showHideModal();
-    }; 
+    };
 }
 
 function setFeedbackValueAndSaveGame(wanted, text) {
@@ -1865,7 +1846,9 @@ function setFeedbackValueAndSaveGame(wanted, text) {
 export function showBattlePopup(won, apGain = 0) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
-    const battleOutcomeConfirmButton = document.getElementById('battleOutcomeConfirmButton');
+    const battleOutcomeConfirmButton = document.getElementById('modalConfirm');
+    const battleOutcomeCancelButton = document.getElementById('modalCancel');
+    battleOutcomeConfirmButton.innerText = 'CONFIRM';
     
     let headerText = modalBattleHeaderText;
     let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
@@ -1875,10 +1858,8 @@ export function showBattlePopup(won, apGain = 0) {
         content = modalBattleNoSentientLifeText.replace(' X ', ` ${apGain} `);
     }
 
-    document.getElementById('enterWarModeConfirmButton').classList.add('invisible');
-    document.getElementById('enterWarModeCancelButton').classList.add('invisible');
-
-    document.getElementById('battleOutcomeConfirmButton').classList.remove('invisible');
+    battleOutcomeConfirmButton.classList.remove('invisible');
+    battleOutcomeCancelButton.classList.add('invisible');
 
     populateModal(headerText, content);
 
@@ -2226,21 +2207,28 @@ function populateModal(headerText, content) {
 
 async function getUserSaveName() {
     return new Promise((resolve) => {
-        const saveNameButton = getElements().modalSaveButton;
+        const saveNameButton = document.getElementById('modalConfirm');
         const saveNameField = document.getElementById('pioneerCodeName');
+        saveNameButton.classList.remove('invisible');
+        saveNameButton.innerText = 'CONFIRM';
 
-        saveNameButton.addEventListener('click', () => {
+        const handleSaveNameClick = () => {
             const userName = saveNameField.value.trim();
             if (userName) {
                 setSaveName(userName);
                 localStorage.setItem('saveName', getSaveName());
-                getElements().modalSaveButton.classList.add('invisible');
-                getElements().modalOKButton.classList.remove('invisible');
+                saveNameButton.innerText = 'START';
+                showHideModal();
+                loadGameFromCloud();
+                saveGame('initialise');
+                saveNameButton.removeEventListener('click', handleSaveNameClick); // Remove handler after successful input
                 resolve();
             } else {
                 alert("Please enter a valid code name!");
             }
-        });
+        };
+
+        saveNameButton.addEventListener('click', handleSaveNameClick);
     });
 }
 
@@ -4181,10 +4169,6 @@ function addWackyEffectsEventListeners() {
                 if (otherElement) {
                     otherElement.style.opacity = '0.5';
                 }
-
-                if (getFeedbackCanBeRequested()) {
-                    triggerFeedBackModal('good');
-                }
                 break;
             default:
                 console.warn('Unknown effect item:', effectItem);
@@ -5226,15 +5210,15 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
     export function showGalacticTabPopup() {
         const modalContainer = getElements().modalContainer;
         const overlay = getElements().overlay;
-        const galacticTabUnlockConfirmButton = document.getElementById('galacticTabUnlockConfirmButton');
+        const galacticTabUnlockConfirmButton = document.getElementById('modalConfirm');
+        const galacticTabUnlockCancelButton = document.getElementById('modalCancel');
+        galacticTabUnlockConfirmButton.innerText = 'CONFIRM';
         
         let headerText = modalGalacticTabUnlockHeader;
         let content = modalGalacticTabUnlockText;
-    
-        document.getElementById('launchCancelButton').classList.add('invisible');
-        document.getElementById('launchConfirmButton').classList.add('invisible');
 
         galacticTabUnlockConfirmButton.classList.remove('invisible');
+        galacticTabUnlockCancelButton.classList.add('invisible');
     
         populateModal(headerText, content);
     
@@ -5244,15 +5228,16 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         galacticTabUnlockConfirmButton.onclick = function () {
             showHideModal();
             showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
-            galacticTabUnlockConfirmButton.classList.add('invisible');
         };
     }
 
     export function showRebirthPopup() {
         const modalContainer = getElements().modalContainer;
         const overlay = getElements().overlay;
-        const rebirthConfirmButton = document.getElementById('rebirthConfirmButton');
-        const rebirthCancelButton = document.getElementById('rebirthCancelButton');
+        const rebirthConfirmButton = document.getElementById('modalConfirm');
+        const rebirthCancelButton = document.getElementById('modalCancel');
+        rebirthConfirmButton.innerText = 'RESET ALL PROGRESS AND KEEP AP';
+        rebirthCancelButton.innerText = 'CANCEL';
         
         let headerText = modalRebirthHeader;
         let content = modalRebirthText;
@@ -5265,8 +5250,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
         );
     
-        document.getElementById('battleOutcomeConfirmButton').classList.add('invisible');
-    
         rebirthConfirmButton.classList.remove('invisible');
         rebirthCancelButton.classList.remove('invisible');
     
@@ -5278,8 +5261,6 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
         rebirthConfirmButton.onclick = function () {
             rebirth();
             showHideModal();
-            rebirthConfirmButton.classList.add('invisible');
-            rebirthCancelButton.classList.add('invisible');
         };
     
         rebirthCancelButton.onclick = function () {

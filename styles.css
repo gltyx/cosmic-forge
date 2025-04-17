@@ -320,15 +320,7 @@ button {
     line-height: 1.8;
 }
   
-#modalButton,
-#modalSaveButton,
-#launchConfirmButton,
-#enterWarModeConfirmButton,
-#battleOutcomeConfirmButton,
-#rebirthConfirmButton,
-#galacticTabUnlockConfirmButton,
-#sendFeedBackConfirmButton,
-#sendFeedBackThanksButton
+#modalConfirm
 {
     position: fixed;
     bottom: 12%;
@@ -337,22 +329,10 @@ button {
     transform: translateX(-50%);
 }
 
-#launchCancelButton,
-#enterWarModeCancelButton,
-#rebirthCancelButton,
-#sendFeedBackCancelButton
+#modalCancel
 {
     position: fixed;
     bottom: 5%;
-    left: 50%;
-    width: 40%;
-    transform: translateX(-50%);
-}
-
-.fullScreenContainer {
-    display: none;
-    position: fixed;
-    bottom: 20%;
     left: 50%;
     width: 40%;
     transform: translateX(-50%);
@@ -366,11 +346,9 @@ button {
 .fullScreenContainer {
     display: none;
     position: fixed;
-    /* bottom: 0; */
     bottom: 20%;
     left: 50%;
     width: 40%;
-    /* transform: translateX(-60%) translateY(90%); */
     transform: translateX(-50%);
     text-align: center;
     align-items: center;

@@ -535,8 +535,6 @@ export function setElements() {
         modalContainer: document.getElementById('modal'),
         modalHeader: document.querySelector('.modal-header h4'),
         modalContent: document.querySelector('.modal-content p'),
-        modalOKButton: document.getElementById('modalButton'),
-        modalSaveButton: document.getElementById('modalSaveButton'),
         overlay: document.getElementById('overlay'),
     };
 }
