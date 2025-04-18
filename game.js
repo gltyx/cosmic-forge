@@ -2872,7 +2872,11 @@ function resourceCostSellChecks(element) {
 
     if (element.classList.contains('tech-unlock') || element.dataset.conditionCheck === 'techUnlock') { 
         return handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName);
-    }        
+    }   
+    
+    if (element.classList.contains('philosophy-tech-unlock') || element.dataset.conditionCheck === 'techUnlockPhilosophy') { 
+        return handlePhilosophyTechnologyScreenButtonAndDescriptionStates(element, quantity, techName);
+    }  
 
     let price = setPriceForAllPurchases(element, type, resource, scienceUpgradeType, buildingUpgradeType, spaceUpgradeType);
 
@@ -3023,6 +3027,20 @@ function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, tec
         element.textContent = 'Researched';
         element.style.pointerEvents = 'none';
         setTechRenderChange(true);
+    }
+}
+
+function handlePhilosophyTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
+    if (element && quantity >= getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), techName, 'price'])) {
+        element.classList.remove('red-disabled-text');
+    } else if (element) {
+        element.classList.add('red-disabled-text');
+    }
+
+    if (element.tagName.toLowerCase() === 'button') {
+        if (quantity >= getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), techName, 'price'])) {
+            element.classList.remove('red-disabled-text');
+        }
     }
 }
 
@@ -4529,24 +4547,23 @@ function checkTravelToDescriptions(element) {
 }
 
 export function setSellFuseCreateTextDescriptionClassesBasedOnButtonStates(element, type) {
+    const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
     if (type === 'create') {
-        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         if (accompanyingLabel.textContent.includes('!')) {
             accompanyingLabel.classList.add('warning-orange-text');
         } else {
             accompanyingLabel.classList.remove('warning-orange-text');
         }
     } else if (type === 'green') {
-        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
         accompanyingLabel.classList.remove('red-disabled-text');
         accompanyingLabel.classList.add('unlocked-tech');
         accompanyingLabel.classList.add('green-ready-text');
         accompanyingLabel.textContent = 'Researched';
-    } else if (type === 'fuse') {
+    }  else if (type === 'fuse') {
         if (getCurrentOptionPane() === 'iron' || getCurrentOptionPane() === 'sodium') {
             return;
         }
-        const accompanyingLabel = element.parentElement.nextElementSibling.querySelector('label');
+        
         if (accompanyingLabel.textContent.includes('!!')) {
             element.classList.add('warning-orange-text');
             element.classList.remove('red-disabled-text');
@@ -4730,6 +4747,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         resourceType = 'research';
     } else if (resourceCategory === 'techs') { 
         resourceType = 'techs';
+    } else if (resourceCategory === 'techsPhilosophy') { 
+        resourceType = 'techsPhilosophy';
     } else if (resourceCategory === 'scienceUpgrade') { 
         resourceType = 'scienceUpgrade';
     } else if (resourceCategory === 'energy') { 
@@ -4744,6 +4763,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
 
     if (item && item === 'techUnlock') {
         currentQuantity = getResourceDataObject('techs', [incrementAmount, 'price']);
+    } else if (item && item === 'techUnlockPhilosophy') {
+        currentQuantity = getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), incrementAmount, 'price']); 
     } else if (item && item.startsWith('science')) {
         currentQuantity = getResourceDataObject('research', ['upgrades', item, 'quantity']); 
     } else if ((item && item.startsWith('power')) || (item && item.startsWith('battery'))) {
@@ -4759,7 +4780,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     }
 
     if (ABOrTechPurchase) {
-        if (ABOrTechPurchase === 'techUnlock') {
+        if (ABOrTechPurchase === 'techUnlock' || ABOrTechPurchase === 'techUnlockPhilosophy') {
             setResourceDataObject(getResourceDataObject('research', ['quantity']) - currentQuantity, 'research', ['quantity']);
         } else {
             setResourceDataObject(currentQuantity + incrementAmount, itemType, [resourceCategory, 'upgrades', 'autoBuyer', tierAB, 'quantity']); //ab end up here should add to ab
@@ -4818,19 +4839,30 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     let itemSetNewPrice;
 
     let itemObject;
-    if (resourceCategory === 'research') {
-        itemObject = getResourceDataObject('research', ['upgrades', item]);
-    } else if (resourceCategory === 'techs') {
-        sortTechRows(false);
+
+    if (resourceCategory !== 'techsPhilosophy') {
+        if (resourceCategory === 'research') {
+            itemObject = getResourceDataObject('research', ['upgrades', item]);
+        } else if (resourceCategory === 'techs') {
+            sortTechRows(false);
+            return;
+        } else if (resourceCategory === 'scienceUpgrade') {
+            itemObject = getResourceDataObject('research', ['upgrades', item]);
+        } else if (resourceCategory === 'energy') {
+            itemObject = getResourceDataObject('buildings', ['energy', 'upgrades', item]);
+        } else if (resourceCategory === 'space') {
+            itemObject = getResourceDataObject('space', ['upgrades', item]);
+        } else {
+            itemObject = getResourceDataObject(itemType, [resourceCategory]);
+        }
+    } else { //TODO PHILOSOPHY
+        //if special ability:
+        //setSpecialAbilityUnlocked(getPlayerPhilosophy());
+        //set special ablility bought (then set button text and state once bought on gameloop)
+        //else repeatable:
+        //addRepeatableEffectToAPermanentModifier
+        //increasePriceOfTech
         return;
-    } else if (resourceCategory === 'scienceUpgrade') {
-        itemObject = getResourceDataObject('research', ['upgrades', item]);
-    } else if (resourceCategory === 'energy') {
-        itemObject = getResourceDataObject('buildings', ['energy', 'upgrades', item]);
-    } else if (resourceCategory === 'space') {
-        itemObject = getResourceDataObject('space', ['upgrades', item]);
-    } else {
-        itemObject = getResourceDataObject(itemType, [resourceCategory]);
     }
     
     if (ABOrTechPurchase) {

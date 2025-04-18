@@ -804,7 +804,7 @@ export function createButton(text, classNames, onClick, dataConditionCheck, reso
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.type = objectSectionArgument1;
             button.dataset.resourceToFuseTo = objectSectionArgument2;
-        } else if (dataConditionCheck === 'techUnlock') {
+        } else if (dataConditionCheck === 'techUnlock' || dataConditionCheck === 'techUnlockPhilosophy') {
             button.dataset.conditionCheck = dataConditionCheck;
             button.dataset.argumentCheckQuantity = quantityArgument;
             button.dataset.type = objectSectionArgument1;
@@ -5786,6 +5786,14 @@ give100Button.addEventListener('click', () => {
     
     showNotification('CHEAT! $100 set', 'info', 3000, 'debug');
     console.log('$100 set! Current cash:', newCash);
+});
+
+const give1MResearchButton = document.getElementById('give1MResearch');
+give1MResearchButton.addEventListener('click', () => {
+    setResourceDataObject(1000000, 'research', ['quantity']);
+    
+    showNotification('CHEAT! 1M research points added!', 'info', 3000, 'debug');
+    console.log('1M storage capacity granted to all resources and compounds!');
 });
 
 const give1MAllResourcesAndCompoundsButton = document.getElementById('give1MAllResourcesAndCompounds');

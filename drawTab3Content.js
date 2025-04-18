@@ -1,4 +1,4 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setPlayerPhilosophy } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
@@ -1375,14 +1375,13 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Storage Research:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('spaceStorageTankResearch', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
-                        setSpecialAbilityUnlocked('constructor');
                         showNotification('ABILITY: Base storage expansion multiplier now 5x instead of 2x!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'spaceStorageTankResearch', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['spaceStorageTankResearch', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['spaceStorageTankResearch', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="spaceStorageTankResearchPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['spaceStorageTankResearch', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'spaceStorageTankResearch', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'spaceStorageTankResearch',
@@ -1409,7 +1408,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['efficientAssembly', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['efficientAssembly', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="efficientAssemblyPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['efficientAssembly', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'efficientAssembly', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'efficientAssembly',
@@ -1436,7 +1435,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['laserMining', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['laserMining', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="laserMiningPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['laserMining', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'laserMining', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'laserMining',
@@ -1463,7 +1462,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['massCompoundAssembly', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['massCompoundAssembly', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="massCompoundAssemblyPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['massCompoundAssembly', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'massCompoundAssembly', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'massCompoundAssembly',
@@ -1490,7 +1489,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['energyDrones', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['energyDrones', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="energyDronesPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['energyDrones', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'energyDrones', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'energyDrones',
@@ -1514,14 +1513,13 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Fleet Holograms:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('fleetHolograms', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
-                        setSpecialAbilityUnlocked('supremacist');
                         showNotification('ABILITY: You can now always Vassalize enemies provided your fleet is 3x larger than theirs!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'fleetHolograms', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['fleetHolograms', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['fleetHolograms', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="fleetHologramsPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['fleetHolograms', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'fleetHolograms', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'fleetHolograms',
@@ -1548,7 +1546,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['hangarAutomation', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['hangarAutomation', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="hangarAutomationPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['hangarAutomation', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'hangarAutomation', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'hangarAutomation',
@@ -1575,7 +1573,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['syntheticPlating', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['syntheticPlating', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="syntheticPlatingPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['syntheticPlating', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'syntheticPlating', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'syntheticPlating',
@@ -1602,7 +1600,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['antimatterEngineMinaturization', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['antimatterEngineMinaturization', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="antimatterEngineMinaturizationPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['antimatterEngineMinaturization', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'antimatterEngineMinaturization', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'antimatterEngineMinaturization',
@@ -1629,7 +1627,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['laserIntensityResearch', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['laserIntensityResearch', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="laserIntensityResearchPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['laserIntensityResearch', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'laserIntensityResearch', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'laserIntensityResearch',
@@ -1653,14 +1651,13 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Void Seers:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('voidSeers', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
-                        setSpecialAbilityUnlocked('voidborn');
                         showNotification('ABILITY: Space Telescope can now scan for instant Resources and Compounds!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'voidSeers', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidSeers', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['voidSeers', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="voidSeersPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['voidSeers', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'voidSeers', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'voidSeers',
@@ -1687,7 +1684,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['stellarWhispers', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['stellarWhispers', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="stellarWhispersPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['stellarWhispers', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'stellarWhispers', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'stellarWhispers',
@@ -1714,7 +1711,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['stellarInsightManifold', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['stellarInsightManifold', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="stellarInsightManifoldPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['stellarInsightManifold', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'stellarInsightManifold', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'stellarInsightManifold',
@@ -1741,7 +1738,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['asteroidDwellers', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['asteroidDwellers', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="asteroidDwellersPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['asteroidDwellers', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'asteroidDwellers', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'asteroidDwellers',
@@ -1768,7 +1765,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['ascendencyPhilosophy', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['ascendencyPhilosophy', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="ascendencyPhilosophyPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['ascendencyPhilosophy', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'ascendencyPhilosophy', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'ascendencyPhilosophy',
@@ -1792,14 +1789,13 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Rapid Expansion:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('rapidExpansion', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
-                        setSpecialAbilityUnlocked('expansionist');
                         showNotification('ABILITY: You now have a chance of capturing up to 3 nearby Systems for every 1!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'rapidExpansion', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['rapidExpansion', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['rapidExpansion', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="rapidExpansionPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['rapidExpansion', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'rapidExpansion', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'rapidExpansion',
@@ -1826,7 +1822,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['spaceElevator', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['spaceElevator', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="spaceElevatorPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['spaceElevator', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'spaceElevator', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'spaceElevator',
@@ -1853,7 +1849,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['launchPadMassProduction', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['launchPadMassProduction', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="launchPadMassProductionPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['launchPadMassProduction', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'launchPadMassProduction', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'launchPadMassProduction',
@@ -1880,7 +1876,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['asteroidAttractors', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['asteroidAttractors', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="asteroidAttractorsPrereq">${getResourceDataObject('philosophyRepeatableTechs', ['asteroidAttractors', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'asteroidAttractors', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'asteroidAttractors',
@@ -1907,7 +1903,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     null,
                     null,
-                    `${getResourceDataObject('philosophyRepeatableTechs', ['warpDrive', 'price'])} Research${getResourceDataObject('philosophyRepeatableTechs', ['warpDrive', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="warpDrivePrereq">${getResourceDataObject('philosophyRepeatableTechs', ['warpDrive', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    `${getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'warpDrive', 'price'])} Research`,
                     '',
                     'techUnlockPhilosophy',
                     'warpDrive',
@@ -1937,6 +1933,7 @@ export function drawTab3Content(heading, optionContentElement) {
             case 'expansionist':
                 specificPhilosophyRows = expansionistRows;
                 break;
+            default: return;
         }
 
         specificPhilosophyRows.forEach(item => {
