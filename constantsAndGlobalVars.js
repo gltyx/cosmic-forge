@@ -163,7 +163,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
-let playerStyle = null;
+let philosophy = null;
 let feedbackContent = 'Not done yet';
 let feedbackGiven = null;
 let gameStartTimeStamp = null;
@@ -202,7 +202,7 @@ let revealedTechArray = [];
 let upcomingTechArray = [];
 let unlockedResourcesArray = ['hydrogen'];
 let unlockedCompoundsArray = [];
-let temporaryRowsRepo = null;
+let temporaryCoreTechRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
 let baseSearchAsteroidTimerDuration = 120000;
@@ -707,7 +707,7 @@ export function resetAllVariablesOnRebirth() {
     upcomingTechArray = [];
     unlockedResourcesArray = ['hydrogen'];
     unlockedCompoundsArray = [];
-    temporaryRowsRepo = null;
+    temporaryCoreTechRowsRepo = null;
     canAffordDeferred = null;
     originalFrameNumbers = {};
     baseSearchAsteroidTimerDuration = 120000;
@@ -1061,7 +1061,7 @@ export function captureGameStatusForSaving(type) {
     gameState.userPlatform = userPlatform;
     gameState.compoundCreateDropdownRecipeText = compoundCreateDropdownRecipeText;
     gameState.firstAccessArray = firstAccessArray;
-    gameState.playerStyle = playerStyle;
+    gameState.philosophy = philosophy;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1269,7 +1269,7 @@ export function restoreGameStatus(gameState, type) {
             firstAccessArray = gameState.firstAccessArray ?? [];
             feedbackGiven = gameState.feedbackGiven ?? null;
             feedbackContent = gameState.feedbackContent ?? 'Not done yet';
-            playerStyle = gameState.playerStyle ?? null;
+            philosophy = gameState.philosophy ?? null;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -2059,19 +2059,19 @@ export function setOriginalFrameNumbers(value) {
     originalFrameNumbers = value;
 }
 
-export function getTemporaryRowsRepo(key) {
-    return temporaryRowsRepo[key];
+export function getTemporaryCoreTechRowsRepo(key) {
+    return temporaryCoreTechRowsRepo[key];
 }
 
-export function setTemporaryRowsRepo(containerValue, rowsValue) {
-    if (!temporaryRowsRepo) {
-        temporaryRowsRepo = {};
+export function setTemporaryCoreTechRowsRepo(containerValue, rowsValue) {
+    if (!temporaryCoreTechRowsRepo) {
+        temporaryCoreTechRowsRepo = {};
     }
     if (containerValue !== 'noChange') {
-        temporaryRowsRepo.container = containerValue;
+        temporaryCoreTechRowsRepo.container = containerValue;
     }
     
-    temporaryRowsRepo.rows = rowsValue;
+    temporaryCoreTechRowsRepo.rows = rowsValue;
 }
 
 export function getCanAffordDeferred() {
@@ -3722,12 +3722,12 @@ export function setSettledStars(value) {
     settledStars.push(value);
 }
 
-export function getPlayerStyle() {
-    return playerStyle;
+export function getPlayerPhilosophy() {
+    return philosophy;
 }
 
-export function setPlayerStyle(value) {
-    playerStyle = value;
+export function setPlayerPhilosophy(value) {
+    philosophy = value;
 }
 
 //image urls----------------------------------------------------------------------------------------------------------------------
@@ -3967,7 +3967,7 @@ export function populateVariableDebugger() {
         { label: "itemsToIncreasePrice", value: itemsToIncreasePrice },
         { label: "unlockedResourcesArray", value: unlockedResourcesArray },
         { label: "unlockedCompoundsArray", value: unlockedCompoundsArray },
-        { label: "temporaryRowsRepo", value: temporaryRowsRepo },
+        { label: "temporaryCoreTechsRowsRepo", value: temporaryCoreTechRowsRepo },
         { label: "canAffordDeferred", value: canAffordDeferred },
         { label: "originalFrameNumbers", value: originalFrameNumbers },
 

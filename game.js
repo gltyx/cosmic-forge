@@ -1,6 +1,6 @@
 import {
-    getPlayerStyle,
-    setPlayerStyle,
+    getPlayerPhilosophy,
+    setPlayerPhilosophy,
     getUserPlatform,
     setUserPlatform,
     setGameActiveCountTime,
@@ -170,8 +170,8 @@ import {
     deferredActions,
     getCanAffordDeferred,
     setCanAffordDeferred,
-    getTemporaryRowsRepo,
-    setTemporaryRowsRepo,
+    getTemporaryCoreTechRowsRepo,
+    setTemporaryCoreTechRowsRepo,
     setOriginalFrameNumbers,
     getOriginalFrameNumbers,
     getUnlockedResourcesArray,
@@ -321,8 +321,8 @@ import {
     showGalacticTabPopup,
     updateAttentionIndicators,
     appendAttentionIndicator,
-    showPlayerLeaderStyleSelectionPopup,
-    showPlayerStyleIntroPopup,
+    showPlayerLeaderPhilosophySelectionPopup,
+    showPlayerPhilosophyIntroPopup,
     setupModalButtonTooltips
 } from "./ui.js";
 
@@ -500,8 +500,8 @@ export async function gameLoop() {
         if (getCurrentOptionPane() === 'technology') {
             updateClassesInRowsToRender();
 
-            const sortedRows = sortRowsByRenderPosition(getTemporaryRowsRepo('rows'), 'techs');
-            const containerToRenderTo = getTemporaryRowsRepo('container');
+            const sortedRows = sortRowsByRenderPosition(getTemporaryCoreTechRowsRepo('rows'), 'techs');
+            const containerToRenderTo = getTemporaryCoreTechRowsRepo('container');
         
             if (getTechRenderChange()) {
                 setTechRenderCounter(getTechRenderCounter() + 1);
@@ -5952,8 +5952,8 @@ export function startInvestigateStarTimer(adjustment) {
                 
                 if (counter >= searchDuration) {
                     extendStarDataRange(false);
-                    if (!getPlayerStyle()) {
-                        showPlayerLeaderStyleSelectionPopup();
+                    if (!getPlayerPhilosophy()) {
+                        showPlayerLeaderPhilosophySelectionPopup();
                     }
                     timerManager.removeTimer(timerName);
                     if (searchTimerDescriptionElement) {             
@@ -6358,7 +6358,7 @@ function sortRowsByRenderPosition(rows, mainKey) {
 }
 
 function updateClassesInRowsToRender() {
-    const unsortedRows = getTemporaryRowsRepo('rows');
+    const unsortedRows = getTemporaryCoreTechRowsRepo('rows');
 
     unsortedRows.forEach(rowObj => { 
         const domElement = document.getElementById(rowObj.row.id);
@@ -6368,7 +6368,7 @@ function updateClassesInRowsToRender() {
         }
     });
 
-    setTemporaryRowsRepo('noChange', unsortedRows);
+    setTemporaryCoreTechRowsRepo('noChange', unsortedRows);
 }
 
 function setEnergyUse() {
@@ -8639,7 +8639,7 @@ export async function settleSystemAfterBattle(accessPoint) {
     }
 
     if (getStatRun() < 10) {
-        await showPlayerStyleIntroPopup();
+        await showPlayerPhilosophyIntroPopup();
     }
 
     switch(accessPoint) {

@@ -1,6 +1,6 @@
 import {
-    setPlayerStyle,
-    getPlayerStyle,
+    setPlayerPhilosophy,
+    getPlayerPhilosophy,
     setFeedbackContent,
     setSaveData,
     getNotificationQueues,
@@ -157,8 +157,8 @@ import {
     modalFeedbackContentTextGood,
     modalFeedbackContentTextBad,
     modalFeedbackContentThanks,
-    modalPlayerLeaderStyleHeaderText,
-    modalPlayerLeaderStyleContentText,
+    modalPlayerLeaderPhilosophyHeaderText,
+    modalPlayerLeaderPhilosophyContentText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -1744,17 +1744,17 @@ export function showGalacticTabPopup() {
     };
 }
 
-export async function showPlayerStyleIntroPopup() {
+export async function showPlayerPhilosophyIntroPopup() {
     return new Promise((resolve) => {
         const modalContainer = getElements().modalContainer;
         const overlay = getElements().overlay;
-        const playerStyleIntroConfirmButton = document.getElementById('modalConfirm');
-        const playerStyleIntroCancelButton = document.getElementById('modalCancel');
-        playerStyleIntroConfirmButton.innerText = 'IT SHALL BE DONE';
+        const playerPhilosophyIntroConfirmButton = document.getElementById('modalConfirm');
+        const playerPhilosophyIntroCancelButton = document.getElementById('modalCancel');
+        playerPhilosophyIntroConfirmButton.innerText = 'IT SHALL BE DONE';
 
         let modalPlayerLeaderIntroContentText;
 
-        switch (getPlayerStyle()) {
+        switch (getPlayerPhilosophy()) {
             case 'constructor':
                 modalPlayerLeaderIntroContentText = modalPlayerLeaderIntroContentText1;
                 break;
@@ -1772,41 +1772,41 @@ export async function showPlayerStyleIntroPopup() {
         let headerText = modalPlayerLeaderIntroHeaderText;
         let content = modalPlayerLeaderIntroContentText;
 
-        playerStyleIntroConfirmButton.classList.remove('invisible');
-        playerStyleIntroCancelButton.classList.add('invisible');
+        playerPhilosophyIntroConfirmButton.classList.remove('invisible');
+        playerPhilosophyIntroCancelButton.classList.add('invisible');
 
         populateModal(headerText, content);
 
         modalContainer.style.display = 'flex';
         overlay.style.display = 'flex';
 
-        playerStyleIntroConfirmButton.onclick = function () {
+        playerPhilosophyIntroConfirmButton.onclick = function () {
             showHideModal();
             resolve();
         };
     });
 }
 
-export function showPlayerLeaderStyleSelectionPopup() {
+export function showPlayerLeaderPhilosophySelectionPopup() {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
-    const playerLeaderStyleChoice1Button = document.getElementById('modalExtraChoice1');
-    const playerLeaderStyleChoice2Button = document.getElementById('modalExtraChoice2');
-    const playerLeaderStyleChoice3Button = document.getElementById('modalConfirm');
-    const playerLeaderStyleChoice4Button = document.getElementById('modalCancel');
+    const playerLeaderPhilosophyChoice1Button = document.getElementById('modalExtraChoice1');
+    const playerLeaderPhilosophyChoice2Button = document.getElementById('modalExtraChoice2');
+    const playerLeaderPhilosophyChoice3Button = document.getElementById('modalConfirm');
+    const playerLeaderPhilosophyChoice4Button = document.getElementById('modalCancel');
 
-    playerLeaderStyleChoice1Button.innerText = 'CONSTRUCTOR'; //buildings, storages and megastructures are cheaper
-    playerLeaderStyleChoice2Button.innerText = 'SUPREMACIST'; //fleets are cheaper and stronger
-    playerLeaderStyleChoice3Button.innerText = 'VOIDBORN'; //stars studied easier, asteroids better, diplomacy easier
-    playerLeaderStyleChoice4Button.innerText = 'EXPANSIONIST'; // rocket and starship parts are cheaper and travel faster
+    playerLeaderPhilosophyChoice1Button.innerText = 'CONSTRUCTOR'; //buildings, storages and megastructures are cheaper
+    playerLeaderPhilosophyChoice2Button.innerText = 'SUPREMACIST'; //fleets are cheaper and stronger
+    playerLeaderPhilosophyChoice3Button.innerText = 'VOIDBORN'; //stars studied easier, asteroids better, diplomacy easier
+    playerLeaderPhilosophyChoice4Button.innerText = 'EXPANSIONIST'; // rocket and starship parts are cheaper and travel faster
     
-    let headerText = modalPlayerLeaderStyleHeaderText;
-    let content = modalPlayerLeaderStyleContentText;
+    let headerText = modalPlayerLeaderPhilosophyHeaderText;
+    let content = modalPlayerLeaderPhilosophyContentText;
 
-    playerLeaderStyleChoice1Button.classList.remove('invisible');
-    playerLeaderStyleChoice2Button.classList.remove('invisible');
-    playerLeaderStyleChoice3Button.classList.remove('invisible');
-    playerLeaderStyleChoice4Button.classList.remove('invisible');
+    playerLeaderPhilosophyChoice1Button.classList.remove('invisible');
+    playerLeaderPhilosophyChoice2Button.classList.remove('invisible');
+    playerLeaderPhilosophyChoice3Button.classList.remove('invisible');
+    playerLeaderPhilosophyChoice4Button.classList.remove('invisible');
 
     populateModal(headerText, content);
 
@@ -1814,57 +1814,57 @@ export function showPlayerLeaderStyleSelectionPopup() {
     overlay.style.display = 'flex';
 
     const onChoice1Click = () => {
-        setPlayerStyle('constructor');
+        setPlayerPhilosophy('constructor');
         showNotification('You are a CONSTRUCTOR!', 'warning', 3000, 'special');
-        playerLeaderStyleChoice1Button.classList.add('invisible');
-        playerLeaderStyleChoice2Button.classList.add('invisible');
-        playerLeaderStyleChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderStyleChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderStyleChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderStyleChoice4Button.removeEventListener('click', onChoice4Click);
+        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
+        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
+        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
+        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
     };
 
     const onChoice2Click = () => {
-        setPlayerStyle('supremacist');
+        setPlayerPhilosophy('supremacist');
         showNotification('You are a SUPREMACIST!', 'warning', 3000, 'special');
-        playerLeaderStyleChoice1Button.classList.add('invisible');
-        playerLeaderStyleChoice2Button.classList.add('invisible');
-        playerLeaderStyleChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderStyleChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderStyleChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderStyleChoice4Button.removeEventListener('click', onChoice4Click);
+        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
+        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
+        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
+        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
     };
 
     const onChoice3Click = () => {
-        setPlayerStyle('voidborn');
+        setPlayerPhilosophy('voidborn');
         showNotification('You are VOIDBORN!', 'warning', 3000, 'special');
-        playerLeaderStyleChoice1Button.classList.add('invisible');
-        playerLeaderStyleChoice2Button.classList.add('invisible');
-        playerLeaderStyleChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderStyleChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderStyleChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderStyleChoice4Button.removeEventListener('click', onChoice4Click);
+        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
+        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
+        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
+        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
     };
 
     const onChoice4Click = () => {
-        setPlayerStyle('expansionist');
+        setPlayerPhilosophy('expansionist');
         showNotification('You are an EXPANSIONIST!', 'warning', 3000, 'special');
-        playerLeaderStyleChoice1Button.classList.add('invisible');
-        playerLeaderStyleChoice2Button.classList.add('invisible');
-        playerLeaderStyleChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderStyleChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderStyleChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderStyleChoice4Button.removeEventListener('click', onChoice4Click);
+        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
+        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
+        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
+        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
+        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
     };
 
-    playerLeaderStyleChoice1Button.addEventListener('click', onChoice1Click);
-    playerLeaderStyleChoice2Button.addEventListener('click', onChoice2Click);
-    playerLeaderStyleChoice3Button.addEventListener('click', onChoice3Click);
-    playerLeaderStyleChoice4Button.addEventListener('click', onChoice4Click);
+    playerLeaderPhilosophyChoice1Button.addEventListener('click', onChoice1Click);
+    playerLeaderPhilosophyChoice2Button.addEventListener('click', onChoice2Click);
+    playerLeaderPhilosophyChoice3Button.addEventListener('click', onChoice3Click);
+    playerLeaderPhilosophyChoice4Button.addEventListener('click', onChoice4Click);
 }
 
 export function showRebirthPopup() {
@@ -3504,6 +3504,16 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('tech tree');
             updateContent('Tech Tree', 'tab3', 'content');
             setFirstAccessArray('tech tree');
+        });
+    });
+
+    document.querySelectorAll('[class*="tab3"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab3', 'philosophy');
+            setCurrentOptionPane('philosophy');
+            updateContent('Philosophy', 'tab3', 'content');
+            setFirstAccessArray('philosophy');
         });
     });
 

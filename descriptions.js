@@ -45,8 +45,8 @@ export let modalFeedbackHeaderText;
 export let modalFeedbackContentThanks;
 export let modalFeedbackContentTextGood;
 export let modalFeedbackContentTextBad;
-export let modalPlayerLeaderStyleHeaderText;
-export let modalPlayerLeaderStyleContentText;
+export let modalPlayerLeaderPhilosophyHeaderText;
+export let modalPlayerLeaderPhilosophyContentText;
 export let modalPlayerLeaderIntroHeaderText;
 export let modalPlayerLeaderIntroContentText1;
 export let modalPlayerLeaderIntroContentText2;
@@ -91,8 +91,8 @@ export function initialiseDescriptions() {
     modalFeedbackContentTextBad = `Oh no!<br><br>Please let us know what’s not working for you or what you'd like changed.<br>We read everything and really value your thoughts!`;    
     modalFeedbackThanksHeaderText = `THANK YOU FOR YOUR FEEDBACK!`;
     modalFeedbackContentThanks = `Your feedback has been received.<br><br>It really helps shape the future of Cosmic Forge!<br>Feel free to check out our Discord<br>(There is an invite in the Contact section of the Settings Tab)`;
-    modalPlayerLeaderStyleHeaderText = `PONDERING THE HEAVENS`;
-    modalPlayerLeaderStyleContentText = `While gazing at the heavens in your Space Telescope, you ponder<br>what the future holds and who you really are.  You decided that<br>as per your forefathers, you have always been a...<br><br>THIS CHOICE AFFECTS YOUR PLAYTHROUGH SO CHOOSE CAREFULLY! <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderPhilosophyHeaderText = `PONDERING THE HEAVENS`;
+    modalPlayerLeaderPhilosophyContentText = `While gazing at the heavens in your Space Telescope, you ponder<br>what the future holds and who you really are.  You decided that<br>as per your forefathers, you have always been a...<br><br>THIS CHOICE AFFECTS YOUR PLAYTHROUGH SO CHOOSE CAREFULLY! <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
     modalPlayerLeaderIntroHeaderText = `THE AWAKENING`;
     modalPlayerLeaderIntroContentText1 = `You are a Constructor.<br>Blueprints flow through your veins.<br><span class="green-ready-text">All building costs are reduced after the first Rebirth, forever.</span><br>Build the future, one module at a time. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
     modalPlayerLeaderIntroContentText2 = `You are a Supremacist.<br>Strength is your law, dominance your goal.<br><span class="green-ready-text">Fleet units are cheaper and stronger after the first Rebirth, forever.</span><br><span class="green-ready-text">Enemies are more afraid.</span><br>They will bend or be broken. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
@@ -125,6 +125,7 @@ export function initialiseDescriptions() {
         'research': "Here you can buy upgrades to generate research points for unlocking new technology.",
         'technology': "Here you can unlock new technologies to improve your game, provided you have enough research points!",
         'tech tree': 'Here you can see a visual representation of technologies and what they provide.',
+        'philosophy': 'Here you can unlock special abilities for your philosophy, and research repeatble techs that improve your game.',
     
         'diesel': 'The first compound created by your hands, it is a useful early fuel.',
         'glass': 'This is reinforced specialist glass and is great for solar applications.',
