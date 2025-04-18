@@ -247,7 +247,9 @@ import {
     getCurrentGalacticMarketCommission,
     getAchievementFlagArray,
     getBelligerentEnemyFlag,
-    getFirstAccessArray
+    getFirstAccessArray,
+    setPhilosophyAbilityActive,
+    getPhilosophyAbilityActive
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3041,6 +3043,12 @@ function handlePhilosophyTechnologyScreenButtonAndDescriptionStates(element, qua
         if (quantity >= getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), techName, 'price'])) {
             element.classList.remove('red-disabled-text');
         }
+
+        if (element.classList.contains('special-ability')) {
+            if (getPhilosophyAbilityActive()) {
+                element.classList.add('red-disabled-text');
+            }
+        }
     }
 }
 
@@ -4856,8 +4864,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             itemObject = getResourceDataObject(itemType, [resourceCategory]);
         }
     } else { //TODO PHILOSOPHY
-        //if special ability:
-        //setSpecialAbilityUnlocked(getPlayerPhilosophy());
+        setPhilosophyAbilityActive(true);
         //set special ablility bought (then set button text and state once bought on gameloop)
         //else repeatable:
         //addRepeatableEffectToAPermanentModifier

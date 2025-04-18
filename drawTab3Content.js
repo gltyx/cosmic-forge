@@ -1373,7 +1373,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'spaceStorageTankResearchRow',
                     null,
                     'Storage Research:',
-                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
+                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('spaceStorageTankResearch', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
                         showNotification('ABILITY: Base storage expansion multiplier now 5x instead of 2x!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'spaceStorageTankResearch', null, 'research', true, null, 'techPhilosophy'),
@@ -1511,7 +1511,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'techPhilosophyFleetHologramsRow',
                     null,
                     'Fleet Holograms:',
-                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
+                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('fleetHolograms', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
                         showNotification('ABILITY: You can now always Vassalize enemies provided your fleet is 3x larger than theirs!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'fleetHolograms', null, 'research', true, null, 'techPhilosophy'),
@@ -1649,7 +1649,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'techPhilosophyVoidSeersRow',
                     null,
                     'Void Seers:',
-                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
+                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('voidSeers', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
                         showNotification('ABILITY: Space Telescope can now scan for instant Resources and Compounds!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'voidSeers', null, 'research', true, null, 'techPhilosophy'),
@@ -1787,7 +1787,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'techPhilosophyRapidExpansionRow',
                     null,
                     'Rapid Expansion:',
-                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
+                    createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('rapidExpansion', null, 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'resources');
                         showNotification('ABILITY: You now have a chance of capturing up to 3 nearby Systems for every 1!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'rapidExpansion', null, 'research', true, null, 'techPhilosophy'),

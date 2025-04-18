@@ -78,6 +78,13 @@ export let classificationOrder = [];
 
 export let firstAccessArray = [];
 
+export let repeatableTechMultipliers = {
+    1: 1,
+    2: 1,
+    3: 1,
+    4: 1
+};
+
 let compoundCreateDropdownRecipeText = {
     diesel: {
       max: { value: 'max', text: 'Max Possible' },
@@ -450,6 +457,7 @@ let hasClickedOutgoingOptionGalacticMarket = false;
 let liquidatedThisRun = false;
 let belligerentEnemyFlag = false;
 let feedbackCanBeRequested = true;
+let philosophyAbilityActive = false;
 
 //GETTER SETTER METHODS
 export function setElements() {
@@ -1083,6 +1091,7 @@ export function captureGameStatusForSaving(type) {
     gameState.multiplierPermanentCompounds = multiplierPermanentCompounds;
     gameState.feedbackGiven = feedbackGiven;
     gameState.feedbackContent = feedbackContent;
+    gameState.repeatableTechMultipliers = repeatableTechMultipliers;
 
     // Flags
     gameState.flags = {
@@ -1115,7 +1124,8 @@ export function captureGameStatusForSaving(type) {
         rebirthPossible: rebirthPossible,
         liquidatedThisRun: liquidatedThisRun,
         belligerentEnemyFlag: belligerentEnemyFlag,
-        feedbackCanBeRequested: feedbackCanBeRequested
+        feedbackCanBeRequested: feedbackCanBeRequested,
+        philosophyAbilityActive: philosophyAbilityActive
     }
 
     return gameState;
@@ -1270,6 +1280,7 @@ export function restoreGameStatus(gameState, type) {
             feedbackGiven = gameState.feedbackGiven ?? null;
             feedbackContent = gameState.feedbackContent ?? 'Not done yet';
             philosophy = gameState.philosophy ?? null;
+            repeatableTechMultipliers = gameState.repeatableTechMultipliers ?? { 1: 1, 2: 1, 3: 1, 4: 1 };
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -1306,6 +1317,7 @@ export function restoreGameStatus(gameState, type) {
             liquidatedThisRun = gameState.flags.liquidatedThisRun ?? false;
             belligerentEnemyFlag = gameState.flags.belligerentEnemyFlag ?? false;
             feedbackCanBeRequested = gameState.flags.feedbackCanBeRequested ?? true;
+            philosophyAbilityActive = gameState.flags.philosophyAbilityActive ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -4229,4 +4241,19 @@ export function setFirstAccessArray(value) {
         firstAccessArray.push(value);
     }
 }
-  
+
+export function getPhilosophyAbilityActive() {
+    return philosophyAbilityActive;
+}
+
+export function setPhilosophyAbilityActive(value) {
+    philosophyAbilityActive = value;
+}
+
+export function getRepeatableTechMultipliers() {
+    return repeatableTechMultipliers;
+}
+
+export function setRepeatableTechMultipliers(key, value) {
+    repeatableTechMultipliers[key] = value;
+}  

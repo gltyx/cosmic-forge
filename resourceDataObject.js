@@ -853,32 +853,32 @@ export let resourceData = {
     //     //these techs will be repeatable and more expensive and give a cumulative bonus each time
     //     //these bonuses are permanent and carry over between runs
     //     constructor: {
-    //         spaceStorageTankResearch: { multiplier: 1, price: 500000, affects: 'specialAbility', philosophy: 'constructor', repeatable: false }, // ABILITY : storage increases no x2 but x5 every time
-    //         efficientAssembly: { multiplier: 1.01, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true }, // cheaper one off buildings
-    //         laserMining: { multiplier: 1.01, price: 10000, affects: 'resources', philosophy: 'constructor', repeatable: true }, // cheaper resource autobuyers
-    //         massCompoundAssembly: { multiplier: 1.01, price: 10000, affects: 'compounds', philosophy: 'constructor', repeatable: true }, // cheaper compound recipes
-    //         energyDrones: { multiplier: 1.01, price: 10000, affects: 'buildings', philosophy: 'constructor', repeatable: true } // cheaper energy buildings
+    //         spaceStorageTankResearch: { multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'constructor', repeatable: false }, // ABILITY : storage increases no x2 but x5 every time
+    //         efficientAssembly: { multiplier: 1, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true }, // cheaper one off buildings
+    //         laserMining: { multiplier: 1, price: 10000, affects: 'resources', philosophy: 'constructor', repeatable: true }, // cheaper resource autobuyers
+    //         massCompoundAssembly: { multiplier: 1, price: 10000, affects: 'compounds', philosophy: 'constructor', repeatable: true }, // cheaper compound recipes
+    //         energyDrones: { multiplier: 1, price: 10000, affects: 'buildings', philosophy: 'constructor', repeatable: true } // cheaper energy buildings
     //     },
     //     supremacist: {
-    //         fleetHolograms: { multiplier: 1, price: 500000, affects: 'specialAbility', philosophy: 'supremacist', repeatable: false }, // ABILITY : guaranteed vassalization if fleet 3x larger, regardless of leader traits
-    //         hangarAutomation: { multiplier: 1.01, price: 10000, affects: 'fleetCosts', philosophy: 'supremacist', repeatable: true }, // cheaper fleets
-    //         syntheticPlating: { multiplier: 1.01, price: 10000, affects: 'fleetHealth', philosophy: 'supremacist', repeatable: true }, // fleets higher health armor
-    //         antimatterEngineMinaturization: { multiplier: 1.01, price: 10000, affects: 'fleetSpeed', philosophy: 'supremacist', repeatable: true }, // fleets faster
-    //         laserIntensityResearch: { multiplier: 1.01, price: 10000, affects: 'fleetAttackPower', philosophy: 'supremacist', repeatable: true } // fleets more damage dealt
+    //         fleetHolograms: { multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'supremacist', repeatable: false }, // ABILITY : guaranteed vassalization if fleet 3x larger, regardless of leader traits
+    //         hangarAutomation: { multiplier: 1, price: 10000, affects: 'fleetCosts', philosophy: 'supremacist', repeatable: true }, // cheaper fleets
+    //         syntheticPlating: { multiplier: 1, price: 10000, affects: 'fleetHealth', philosophy: 'supremacist', repeatable: true }, // fleets higher health armor
+    //         antimatterEngineMinaturization: { multiplier: 1, price: 10000, affects: 'fleetSpeed', philosophy: 'supremacist', repeatable: true }, // fleets faster
+    //         laserIntensityResearch: { multiplier: 1, price: 10000, affects: 'fleetAttackPower', philosophy: 'supremacist', repeatable: true } // fleets more damage dealt
     //     },
     //     voidborn: {
-    //         voidSeers: { multiplier: 1, price: 500000, affects: 'specialAbility', philosophy: 'voidborn', repeatable: false }, // ABILITY: unlock space telescope ability search void instant credits of resources / compounds
-    //         stellarWhispers: { multiplier: 1.01, price: 10000, affects: 'initialImpression', philosophy: 'voidborn', repeatable: true }, // improve starting impression of enemies
-    //         stellarInsightManifold: { multiplier: 1.01, price: 10000, affects: 'starStudy', philosophy: 'voidborn', repeatable: true }, // star study quicker
-    //         asteroidDwellers: { multiplier: 1.01, price: 10000, affects: 'asteroidSearch', philosophy: 'voidborn', repeatable: true }, // asteroid search quicker
+    //         voidSeers: { multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'voidborn', repeatable: false }, // ABILITY: unlock space telescope ability search void instant credits of resources / compounds
+    //         stellarWhispers: { multiplier: 1, price: 10000, affects: 'initialImpression', philosophy: 'voidborn', repeatable: true }, // improve starting impression of enemies
+    //         stellarInsightManifold: { multiplier: 1, price: 10000, affects: 'starStudy', philosophy: 'voidborn', repeatable: true }, // star study quicker
+    //         asteroidDwellers: { multiplier: 1, price: 10000, affects: 'asteroidSearch', philosophy: 'voidborn', repeatable: true }, // asteroid search quicker
     //         ascendencyPhilosophy: { multiplier: 1, price: 10000, affects: 'ascendencyPoints', philosophy: 'voidborn', repeatable: true } // improve base awarded AP by 1pt each time
     //     },
     //     expansionist: {
-    //         rapidExpansion: { multiplier: 1, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one
-    //         spaceElevator: { multiplier: 1.01, price: 10000, affects: 'starshipPartsCost', philosophy: 'expansionist', repeatable: true }, // reduce starship parts costs
-    //         launchPadMassProduction: { multiplier: 1.01, price: 10000, affects: 'rocketPartsCost', philosophy: 'expansionist', repeatable: true }, // reduce rocket parts costs
-    //         asteroidAttractors: { multiplier: 1.01, price: 10000, affects: 'rocketTravelTime', philosophy: 'expansionist', repeatable: true }, // reduce rocket travel time
-    //         warpDrive: { multiplier: 1.01, price: 10000, affects: 'starshipTravelTime', philosophy: 'expansionist', repeatable: true } // reduce starship travel time
+    //         rapidExpansion: { multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one
+    //         spaceElevator: { multiplier: 1, price: 10000, affects: 'starshipPartsCost', philosophy: 'expansionist', repeatable: true }, // reduce starship parts costs
+    //         launchPadMassProduction: { multiplier: 1, price: 10000, affects: 'rocketPartsCost', philosophy: 'expansionist', repeatable: true }, // reduce rocket parts costs
+    //         asteroidAttractors: { multiplier: 1, price: 10000, affects: 'rocketTravelTime', philosophy: 'expansionist', repeatable: true }, // reduce rocket travel time
+    //         warpDrive: { multiplier: 1, price: 10000, affects: 'starshipTravelTime', philosophy: 'expansionist', repeatable: true } // reduce starship travel time
     //     }
     // },  
     // megastructureTechs: {
