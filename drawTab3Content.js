@@ -1508,7 +1508,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'fleetHolograms',
                 row: createOptionRow(
-                    'fleetHologramsRow',
+                    'techPhilosophyFleetHologramsRow',
                     null,
                     'Fleet Holograms:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1535,7 +1535,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'hangarAutomation',
                 row: createOptionRow(
-                    'hangarAutomationRow',
+                    'techPhilosophyHangarAutomationRow',
                     null,
                     'Hangar Automation:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1562,7 +1562,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'syntheticPlating',
                 row: createOptionRow(
-                    'syntheticPlatingRow',
+                    'techPhilosophySyntheticPlatingRow',
                     null,
                     'Synthetic Plating:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1589,7 +1589,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'antimatterEngineMinaturization',
                 row: createOptionRow(
-                    'antimatterEngineMinaturizationRow',
+                    'techPhilosophyAntimatterEngineMinaturizationRow',
                     null,
                     'Antimatter Engine Miniaturization:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1616,7 +1616,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'laserIntensityResearch',
                 row: createOptionRow(
-                    'laserIntensityResearchRow',
+                    'techPhilosophyLaserIntensityResearchRow',
                     null,
                     'Laser Intensity Research:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1646,7 +1646,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'voidSeers',
                 row: createOptionRow(
-                    'voidSeersRow',
+                    'techPhilosophyVoidSeersRow',
                     null,
                     'Void Seers:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1673,7 +1673,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'stellarWhispers',
                 row: createOptionRow(
-                    'stellarWhispersRow',
+                    'techPhilosophyStellarWhispersRow',
                     null,
                     'Stellar Whispers:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1700,7 +1700,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'stellarInsightManifold',
                 row: createOptionRow(
-                    'stellarInsightManifoldRow',
+                    'techPhilosophyStellarInsightManifoldRow',
                     null,
                     'Stellar Insight Manifold:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1727,7 +1727,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'asteroidDwellers',
                 row: createOptionRow(
-                    'asteroidDwellersRow',
+                    'techPhilosophyAsteroidDwellersRow',
                     null,
                     'Asteroid Dwellers:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1754,7 +1754,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'ascendencyPhilosophy',
                 row: createOptionRow(
-                    'ascendencyPhilosophyRow',
+                    'techPhilosophyAscendencyPhilosophyRow',
                     null,
                     'Ascendency Philosophy:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1784,7 +1784,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'rapidExpansion',
                 row: createOptionRow(
-                    'rapidExpansionRow',
+                    'techPhilosophyRapidExpansionRow',
                     null,
                     'Rapid Expansion:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1811,7 +1811,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'spaceElevator',
                 row: createOptionRow(
-                    'spaceElevatorRow',
+                    'techPhilosophySpaceElevatorRow',
                     null,
                     'Space Elevator:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1838,7 +1838,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'launchPadMassProduction',
                 row: createOptionRow(
-                    'launchPadMassProductionRow',
+                    'techPhilosophyLaunchPadMassProductionRow',
                     null,
                     'Launch Pad Mass Production:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1865,7 +1865,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'asteroidAttractors',
                 row: createOptionRow(
-                    'asteroidAttractorsRow',
+                    'techPhilosophyAsteroidAttractorsRow',
                     null,
                     'Asteroid Attractors:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1892,7 +1892,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'warpDrive',
                 row: createOptionRow(
-                    'warpDriveRow',
+                    'techPhilosophyWarpDriveRow',
                     null,
                     'Warp Drive:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {

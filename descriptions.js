@@ -907,7 +907,107 @@ export function initialiseDescriptions() {
             content1: "Unlock Stellar Scanners to identify life signatures around Star Systems.",
             content2: "Unlock Stellar Scanners to identify life signatures around Star Systems.<br><br><span class='green-ready-text'>Allow building of Stellar Scanner onboard the Star Ship!</span>",
             updateAt: ""
-        },               
+        },       
+        techPhilosophySpaceStorageTankResearchRow: {
+            content1: "ABILITY: Unlock Storage Research and base storage increases are not x2 but x5 every time.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyFleetHologramsRow: {
+            content1: "ABILITY: Unlock Fleet Holograms to guarantee vassalization if fleet 3x larger, regardless of leader traits.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyVoidSeersRow: {
+            content1: "ABILITY: Unlock Void Seers to gain the ablity to use Space Telescope for scanning Resources and Compounds in the Void.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyRapidExpansionRow: {
+            content1: "ABILITY: Unlock Rapid Expansion to have a chance of conquering up to 3 extra systems when you conquer 1.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyEfficientAssemblyRow: {
+            content1: "Research Efficient Assembly to reduce building costs by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyLaserMiningRow: {
+            content1: "Research Laser Mining to lower the cost of resource autobuyers by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyMassCompoundAssemblyRow: {
+            content1: "Research Mass Compound Assembly to reduce compound recipe costs by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyEnergyDronesRow: {
+            content1: "Research Energy Drones to make energy buildings 1% cheaper.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyHangarAutomationRow: {
+            content1: "Research Hangar Automation to reduce fleet construction costs by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophySyntheticPlatingRow: {
+            content1: "Research Synthetic Plating to improve fleet armor and health by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyAntimatterEngineMinaturizationRow: {
+            content1: "Research Antimatter Engine Miniaturization to boost fleet speed by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyLaserIntensityResearchRow: {
+            content1: "Research Laser Intensity to increase fleet attack power by 1%.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyStellarWhispersRow: {
+            content1: "Research Stellar Whispers to improve initial diplomacy with alien species.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyStellarInsightManifoldRow: {
+            content1: "Research Stellar Insight Manifold to accelerate Star Study speed.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyAsteroidDwellersRow: {
+            content1: "Research Asteroid Dwellers to improve Asteroid exploration speed.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyAscendencyPhilosophyRow: {
+            content1: "Research Ascendency Philosophy to improve base AP gain.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophySpaceElevatorRow: {
+            content1: "Research Space Elevator to reduce the cost of Star Ship parts.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyLaunchPadMassProductionRow: {
+            content1: "Research Launch Pad Mass Production to lower Rocket part costs.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyAsteroidAttractorsRow: {
+            content1: "Research Asteroid Attractors to reduce Rocket travel time.",
+            content2: "",
+            updateAt: ""
+        },
+        techPhilosophyWarpDriveRow: {
+            content1: "Research Warp Drive to reduce Star Ship travel time significantly.",
+            content2: "",
+            updateAt: ""
+        },        
         energyPowerPlant1Row: {
             content1: "This is the first building available to produce energy.",
             content2: "",
