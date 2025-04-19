@@ -1,3 +1,20 @@
 stats bugs in general
 
-remove asteroid from travel to dropdown if one already on way there
+philosophies:
+add data - DONE
+add new ui screen under research tab - DONE
+add logic to show correct ui based on philosophy choice - DONE
+add price increasing logic and unlock for special ability - DONE
+deduct research points when researching ability or repeatable tech - DONE
+when unlocking special ability set flag - DONE
+add classes for ui based on locked/unlocked ability and affordability for repeatables - DONE
+add notification when any are bought - DONE
+
+when buying special ability, add individual features logic based on philosophy choice - TODO
+when buying repeatables, increment multipier in repeatableTechMultipliers array - TODO
+add repeatableTechMultipliers to all calculating logic for various areas depending on which ones they affect - TODO
+add notice that unfortunately saves must be reset when the feature is rolled out but can continue to play on 0.58 on itch and they will work - TODO
+
+megaStructures:
+-TODO
+
