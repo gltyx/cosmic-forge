@@ -848,10 +848,10 @@ export let resourceData = {
         stellarScanners: { appearsAt: [70000, "FTLTravelTheory", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Orbital Construction'], price: 72000, idForRenderPosition: 9105 }
     },
     // philosophyRepeatableTechs: {
-    //     //these techs will be specific to the philosophy chosen by the player 
-    //     //each philosophy will have one expensive special ability that when unlocked carries through all runs
-    //     //these techs will be repeatable and more expensive and give a cumulative bonus each time
-    //     //these bonuses are permanent and carry over between runs
+    //     // these techs will be specific to the philosophy chosen by the player 
+    //     // each philosophy will have one expensive special ability that when unlocked carries through all runs
+    //     // these techs will be repeatable and more expensive and give a cumulative bonus each time
+    //     // these bonuses are permanent and carry over between runs
     //     constructor: {
     //         spaceStorageTankResearch: { multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'constructor', repeatable: false, setPrice: 'spaceStorageTankResearchTechPhilosophyPrice' }, // ABILITY : storage increases not x2 but x5 every time
     //         efficientAssembly: { multiplier: 1, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true, setPrice: 'efficientAssemblyTechPhilosophyPrice' }, // cheaper one off buildings

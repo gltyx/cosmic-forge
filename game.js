@@ -451,16 +451,9 @@ export async function gameLoop() {
             ),
             ...Array.from(document.querySelectorAll('*')).filter(element =>
                 /^.+[1-4]Toggle$/.test(element.id) ||
-                ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)
-            ),
-            ...[
-                '#spaceStorageTankResearchDescription',
-                '#fleetHologramsDescription',
-                '#voidSeersDescription',
-                '#rapidExpansionDescription'
-            ]
-            .map(selector => document.querySelector(selector))
-            .filter(element => element) 
+                ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id) ||
+                element.id.endsWith('Description') && !element.id.startsWith('tech')
+            )
         ];
         
         elementsToCheck.forEach(checkStatusAndSetTextClasses);        
@@ -3179,18 +3172,31 @@ function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, tec
 function handlePhilosophyTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
     if (element && quantity >= getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), techName, 'price'])) {
         element.classList.remove('red-disabled-text');
+        element.parentElement.parentElement?.querySelector('.description-container label span')?.classList.remove('red-disabled-text');
+    
+        element.classList.add('green-ready-text');
+        element.parentElement.parentElement?.querySelector('.description-container label span')?.classList.add('green-ready-text');
     } else if (element) {
         element.classList.add('red-disabled-text');
+        element.parentElement.parentElement?.querySelector('.description-container label span')?.classList.add('red-disabled-text');
+    
+        element.classList.remove('green-ready-text');
+        element.parentElement.parentElement?.querySelector('.description-container label span')?.classList.remove('green-ready-text');
     }
+    
 
     if (element.tagName.toLowerCase() === 'button') {
         if (quantity >= getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), techName, 'price'])) {
             element.classList.remove('red-disabled-text');
+            element.parentElement.parentElement?.querySelector('.description-container label span').classList.remove('red-disabled-text');
+            element.classList.add('green-ready-text');
+            element.parentElement.parentElement?.querySelector('.description-container label span').classList.add('green-ready-text');
         }
 
         if (element.classList.contains('special-ability')) {
             if (getPhilosophyAbilityActive()) {
                 element.classList.add('red-disabled-text');
+                element.classList.remove('green-ready-text');
             }
         }
     }
@@ -5023,8 +5029,8 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
         } else {
             itemObject = getResourceDataObject(itemType, [resourceCategory]);
         }
-    } else { //TODO PHILOSOPHY
-        if (elementId === 'ability') { //if special ability
+    } else {
+        if (elementId === 'ability') {
             setPhilosophyAbilityActive(true);
             return;
         }
