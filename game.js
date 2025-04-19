@@ -3541,7 +3541,6 @@ function checkStatusAndSetTextClasses(element) {
         return;
     }
 
-    console.log(element);
     if ([...element.classList].some(clas => clas.includes('travel-starship'))) {
         return checkTravelToStarElements(element);
     }
