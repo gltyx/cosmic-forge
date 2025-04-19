@@ -3105,12 +3105,13 @@ function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, tec
             prerequisiteArray[index] = 'FTLTravelTheory';
         }
     }
-    
 
     if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
         element.classList.remove('red-disabled-text');
+        element.classList.add('green-ready-text');
     } else if (element) {
         element.classList.add('red-disabled-text');
+        element.classList.remove('green-ready-text');
     }
 
     if (element.tagName.toLowerCase() === 'button') {
@@ -3195,8 +3196,8 @@ function handlePhilosophyTechnologyScreenButtonAndDescriptionStates(element, qua
 
         if (element.classList.contains('special-ability')) {
             if (getPhilosophyAbilityActive()) {
-                element.classList.add('red-disabled-text');
-                element.classList.remove('green-ready-text');
+                element.innerHTML = 'UNLOCKED';
+                element.style.pointerEvents = 'none';
             }
         }
     }
@@ -3543,6 +3544,8 @@ function checkStatusAndSetTextClasses(element) {
     if (element.id === 'spaceStorageTankResearchDescription' || element.id === 'fleetHologramsDescription' || element.id === 'voidSeersDescription' || element.id === 'rapidExpansionDescription') {
         if (element.innerHTML === 'UNLOCKED' || (element.querySelector('span') && element.querySelector('span').innerHTML === 'UNLOCKED')) {
             element.innerHTML = '<span class="green-ready-text">UNLOCKED</span>';
+            element.parentElement.parentElement.parentElement.querySelector('.special-ability').classList.remove('red-disabled-text');
+            element.parentElement.parentElement.parentElement.querySelector('.special-ability').classList.add('green-ready-text');
         }
         return;
     }
