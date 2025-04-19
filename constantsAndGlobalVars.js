@@ -1578,34 +1578,38 @@ export function setItemsToIncreasePrice(name, setPriceTarget, currentPrice, item
     if (!itemsToIncreasePrice[name]) {
         itemsToIncreasePrice[name] = {};
     }
-    if (!itemsToIncreasePrice[optionalName1]) {
-        itemsToIncreasePrice[optionalName1] = {};
-    }
-    if (!itemsToIncreasePrice[optionalName2]) {
-        itemsToIncreasePrice[optionalName2] = {};
-    }
-    if (!itemsToIncreasePrice[optionalName3]) {
-        itemsToIncreasePrice[optionalName3] = {};
+    if (itemResourceOrCompound !== 'research') {
+        if (!itemsToIncreasePrice[optionalName1]) {
+            itemsToIncreasePrice[optionalName1] = {};
+        }
+        if (!itemsToIncreasePrice[optionalName2]) {
+            itemsToIncreasePrice[optionalName2] = {};
+        }
+        if (!itemsToIncreasePrice[optionalName3]) {
+            itemsToIncreasePrice[optionalName3] = {};
+        }
     }
 
     itemsToIncreasePrice[name].currentPrice = currentPrice;
     itemsToIncreasePrice[name].setPriceTarget = setPriceTarget;
     itemsToIncreasePrice[name].typeOfResourceCompound = itemResourceOrCompound;
 
-    itemsToIncreasePrice[optionalName1].currentPrice = resourcePrices[0][0];
-    itemsToIncreasePrice[optionalName1].setPriceTarget = setPriceTarget;
-    itemsToIncreasePrice[optionalName1].typeOfResourceCompound = resourcePrices[0][2];
-    itemsToIncreasePrice[optionalName1].resourceOrder = 'resource1Price';
-    
-    itemsToIncreasePrice[optionalName2].currentPrice = resourcePrices[1][0];
-    itemsToIncreasePrice[optionalName2].setPriceTarget = setPriceTarget;
-    itemsToIncreasePrice[optionalName2].typeOfResourceCompound = resourcePrices[1][2];
-    itemsToIncreasePrice[optionalName2].resourceOrder = 'resource2Price';
-    
-    itemsToIncreasePrice[optionalName3].currentPrice = resourcePrices[2][0];
-    itemsToIncreasePrice[optionalName3].setPriceTarget = setPriceTarget;
-    itemsToIncreasePrice[optionalName3].typeOfResourceCompound = resourcePrices[2][2];
-    itemsToIncreasePrice[optionalName3].resourceOrder = 'resource3Price';
+    if (itemResourceOrCompound !== 'research') {
+        itemsToIncreasePrice[optionalName1].currentPrice = resourcePrices[0][0];
+        itemsToIncreasePrice[optionalName1].setPriceTarget = setPriceTarget;
+        itemsToIncreasePrice[optionalName1].typeOfResourceCompound = resourcePrices[0][2];
+        itemsToIncreasePrice[optionalName1].resourceOrder = 'resource1Price';
+        
+        itemsToIncreasePrice[optionalName2].currentPrice = resourcePrices[1][0];
+        itemsToIncreasePrice[optionalName2].setPriceTarget = setPriceTarget;
+        itemsToIncreasePrice[optionalName2].typeOfResourceCompound = resourcePrices[1][2];
+        itemsToIncreasePrice[optionalName2].resourceOrder = 'resource2Price';
+        
+        itemsToIncreasePrice[optionalName3].currentPrice = resourcePrices[2][0];
+        itemsToIncreasePrice[optionalName3].setPriceTarget = setPriceTarget;
+        itemsToIncreasePrice[optionalName3].typeOfResourceCompound = resourcePrices[2][2];
+        itemsToIncreasePrice[optionalName3].resourceOrder = 'resource3Price';
+    }
 }
 
 export function getItemsToIncreasePrice() {

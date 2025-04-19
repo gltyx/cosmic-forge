@@ -452,9 +452,18 @@ export async function gameLoop() {
             ...Array.from(document.querySelectorAll('*')).filter(element =>
                 /^.+[1-4]Toggle$/.test(element.id) ||
                 ['scienceKitToggle', 'scienceClubToggle', 'scienceLabToggle'].includes(element.id)
-            )
-        ];        
-        elementsToCheck.forEach(checkStatusAndSetTextClasses); 
+            ),
+            ...[
+                '#spaceStorageTankResearchDescription',
+                '#fleetHologramsDescription',
+                '#voidSeersDescription',
+                '#rapidExpansionDescription'
+            ]
+            .map(selector => document.querySelector(selector))
+            .filter(element => element) 
+        ];
+        
+        elementsToCheck.forEach(checkStatusAndSetTextClasses);        
         
         handleAutoCreateResourceSellRows();
 
@@ -1160,6 +1169,8 @@ function checkAndIncreasePrices() {
                     } else {
                         setNewItemPrice(currentPrice, setPriceTarget, null, null, priceIncreaseObject);
                     }
+                } else if (setPriceTarget.includes('TechPhilosophy'))    {
+                    setNewItemPrice(currentPrice, setPriceTarget, null, null, 'research');
                 } else {
                     const tierMatch = setPriceTarget.match(new RegExp(`${priceIncrease}AB(\\d+)Price`));
                     if (tierMatch && tierMatch[1]) {
@@ -1188,11 +1199,11 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
     let resource3Category = '';
 
     if (elementName) {
-        const newCurrencyPrice = Math.ceil(currentPrice * getGameCostMultiplier());
+        const newCorePrice = Math.ceil(currentPrice * getGameCostMultiplier());
 
-        if (optionalResource && optionalResource !== 'cash') {
+        if (optionalResource && optionalResource !== 'cash' && optionalResource !== 'research') {
             for (const item in optionalResource) {
-                if (optionalResource.hasOwnProperty(item) && item !== 'cash') {
+                if (optionalResource.hasOwnProperty(item)) {
                     const resource = optionalResource[item];
                     const resourceOrder = resource.resourceOrder;
     
@@ -1231,11 +1242,11 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
         
         if (elementName.startsWith('science')) {
             const strippedElementName = elementName.slice(0, -5);        
-            setResourceDataObject(newCurrencyPrice, 'research', ['upgrades', strippedElementName, 'price']);
+            setResourceDataObject(newCorePrice, 'research', ['upgrades', strippedElementName, 'price']);
         } else if (elementName.startsWith('power') || elementName.startsWith('battery')) {
             const strippedElementName = elementName.slice(0, -5);
             if (optionalResource === 'cash') {
-                setResourceDataObject(newCurrencyPrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
+                setResourceDataObject(newCorePrice, 'buildings', ['energy', 'upgrades', strippedElementName, 'price']);
             }        
             if (resource1Price > 0) {
                 setResourceDataObject(newResource1Price, 'buildings', ['energy', 'upgrades', strippedElementName, 'resource1Price']);
@@ -1249,7 +1260,7 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
         } else if (elementName.startsWith('rocket') || elementName.startsWith('ss') || elementName.startsWith('fleet')) {
             const strippedElementName = elementName.slice(0, -5);
             if (optionalResource === 'cash') {
-                setResourceDataObject(newCurrencyPrice, 'space', ['upgrades', strippedElementName, 'price']);
+                setResourceDataObject(newCorePrice, 'space', ['upgrades', strippedElementName, 'price']);
             }        
             if (resource1Price > 0) {
                 setResourceDataObject(newResource1Price, 'space', ['upgrades', strippedElementName, 'resource1Price']);
@@ -1260,9 +1271,12 @@ function setNewItemPrice(currentPrice, elementName, tier, typeOfResourceCompound
             if (resource3Price > 0) {
                 setResourceDataObject(newResource3Price, 'space', ['upgrades', strippedElementName, 'resource3Price']);
             }
+        } else if (elementName.includes('TechPhilosophy')) {
+            const repeatableTech = elementName.split("TechPhilosophy")[0];
+            setResourceDataObject(newCorePrice, 'philosophyRepeatableTechs', [getPlayerPhilosophy(), repeatableTech, 'price']);
         } else { //autoBuyer
             const itemName = elementName.replace(/([A-Z])/g, '-$1').toLowerCase().split('-')[0];
-            setResourceDataObject(newCurrencyPrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
+            setResourceDataObject(newCorePrice, typeOfResourceCompound, [itemName, 'upgrades', 'autoBuyer', `tier${tier}`, 'price']);       
         }
     }
 }
@@ -1567,10 +1581,140 @@ function getAllDynamicDescriptionElements(resourceTierPairs, compoundTierPairs) 
     const spaceMiningElements = getSpaceMiningResourceDescriptionElements();
     const starShipElements = getStarShipResourceDescriptionElements();
     const fleetElements = getFleetResourceDescriptionElements();
+    const philosophyTechElements = getPhilosophyTechElements();
 
-    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements, starShipElements, fleetElements);
+    Object.assign(elements, scienceElements, buildingsElements, spaceMiningElements, starShipElements, fleetElements, philosophyTechElements);
 
     return elements;
+}
+
+function getPhilosophyTechElements() {
+    if (getCurrentOptionPane() === 'philosophy') {
+        let abilityRow;
+        let repeatable1Row;
+        let repeatable2Row;
+        let repeatable3Row;
+        let repeatable4Row;
+
+        let abilityPrice;
+        let repeatable1RowPrice;
+        let repeatable2RowPrice;
+        let repeatable3RowPrice;
+        let repeatable4RowPrice;
+        
+        switch(getPlayerPhilosophy()) {
+            case 'constructor':
+                abilityRow = document.getElementById('spaceStorageTankResearchDescription');
+                abilityPrice = getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'spaceStorageTankResearch', 'price']);
+        
+                repeatable1Row = document.getElementById('efficientAssemblyDescription');
+                repeatable1RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'efficientAssembly', 'price']);
+        
+                repeatable2Row = document.getElementById('laserMiningDescription');
+                repeatable2RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'laserMining', 'price']);
+        
+                repeatable3Row = document.getElementById('massCompoundAssemblyDescription');
+                repeatable3RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'massCompoundAssembly', 'price']);
+        
+                repeatable4Row = document.getElementById('energyDronesDescription');
+                repeatable4RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['constructor', 'energyDrones', 'price']);
+                break;
+        
+            case 'supremacist':
+                abilityRow = document.getElementById('fleetHologramsDescription');
+                abilityPrice = getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'fleetHolograms', 'price']);
+        
+                repeatable1Row = document.getElementById('hangarAutomationDescription');
+                repeatable1RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'hangarAutomation', 'price']);
+        
+                repeatable2Row = document.getElementById('syntheticPlatingDescription');
+                repeatable2RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'syntheticPlating', 'price']);
+        
+                repeatable3Row = document.getElementById('antimatterEngineMinaturizationDescription');
+                repeatable3RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'antimatterEngineMinaturization', 'price']);
+        
+                repeatable4Row = document.getElementById('laserIntensityResearchDescription');
+                repeatable4RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['supremacist', 'laserIntensityResearch', 'price']);
+                break;
+        
+            case 'voidborn':
+                abilityRow = document.getElementById('voidSeersDescription');
+                abilityPrice = getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'voidSeers', 'price']);
+        
+                repeatable1Row = document.getElementById('stellarWhispersDescription');
+                repeatable1RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'stellarWhispers', 'price']);
+        
+                repeatable2Row = document.getElementById('stellarInsightManifoldDescription');
+                repeatable2RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'stellarInsightManifold', 'price']);
+        
+                repeatable3Row = document.getElementById('asteroidDwellersDescription');
+                repeatable3RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'asteroidDwellers', 'price']);
+        
+                repeatable4Row = document.getElementById('ascendencyPhilosophyDescription');
+                repeatable4RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['voidborn', 'ascendencyPhilosophy', 'price']);
+                break;
+        
+            case 'expansionist':
+                abilityRow = document.getElementById('rapidExpansionDescription');
+                abilityPrice = getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'rapidExpansion', 'price']);
+        
+                repeatable1Row = document.getElementById('spaceElevatorDescription');
+                repeatable1RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'spaceElevator', 'price']);
+        
+                repeatable2Row = document.getElementById('launchPadMassProductionDescription');
+                repeatable2RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'launchPadMassProduction', 'price']);
+        
+                repeatable3Row = document.getElementById('asteroidAttractorsDescription');
+                repeatable3RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'asteroidAttractors', 'price']);
+        
+                repeatable4Row = document.getElementById('warpDriveDescription');
+                repeatable4RowPrice = getResourceDataObject('philosophyRepeatableTechs', ['expansionist', 'warpDrive', 'price']);
+                break;
+        }        
+
+        const abilityDescElement = abilityRow;
+        const abilityPriceAmount = abilityPrice;
+        
+        const repeatable1DescElement = repeatable1Row;
+        const repeatable1PriceAmount = repeatable1RowPrice;
+        
+        const repeatable2DescElement = repeatable2Row;
+        const repeatable2PriceAmount = repeatable2RowPrice;
+        
+        const repeatable3DescElement = repeatable3Row;
+        const repeatable3PriceAmount = repeatable3RowPrice;
+        
+        const repeatable4DescElement = repeatable4Row;
+        const repeatable4PriceAmount = repeatable4RowPrice;
+        
+        return {
+            abilityBuy: {
+                element: abilityDescElement,
+                price: abilityPriceAmount,
+                string1: 'Research'
+            },
+            repeatable1Buy: {
+                element: repeatable1DescElement,
+                price: repeatable1PriceAmount,
+                string1: 'Research'
+            },
+            repeatable2Buy: {
+                element: repeatable2DescElement,
+                price: repeatable2PriceAmount,
+                string1: 'Research'
+            },
+            repeatable3Buy: {
+                element: repeatable3DescElement,
+                price: repeatable3PriceAmount,
+                string1: 'Research'
+            },
+            repeatable4Buy: {
+                element: repeatable4DescElement,
+                price: repeatable4PriceAmount,
+                string1: 'Research'
+            }
+        };        
+    }
 }
 
 function getFleetResourceDescriptionElements() {
@@ -3390,6 +3534,14 @@ function handleSpaceUpgradeResourceType(element) {
 }
 
 function checkStatusAndSetTextClasses(element) {
+    if (element.id === 'spaceStorageTankResearchDescription' || element.id === 'fleetHologramsDescription' || element.id === 'voidSeersDescription' || element.id === 'rapidExpansionDescription') {
+        if (element.innerHTML === 'UNLOCKED' || (element.querySelector('span') && element.querySelector('span').innerHTML === 'UNLOCKED')) {
+            element.innerHTML = '<span class="green-ready-text">UNLOCKED</span>';
+        }
+        return;
+    }
+
+    console.log(element);
     if ([...element.classList].some(clas => clas.includes('travel-starship'))) {
         return checkTravelToStarElements(element);
     }
@@ -4602,7 +4754,15 @@ const updateQuantityDisplays = (element, data1, data2, resourceData1, resourceDa
             } else if (data2 === getCurrencySymbol()) {
                 priceString = data2 + data1;
             } else {
-                priceString = data1 + ' ' + data2;
+                if (element.dataset.type !== 'spaceStorageTankResearch' && element.dataset.type !== 'fleetHolograms' && element.dataset.type !== 'voidSeers' && element.dataset.type !== 'rapidExpansion') {
+                    priceString = data1 + ' ' + data2;
+                } else {
+                    if (getPhilosophyAbilityActive()) {
+                        priceString = 'UNLOCKED';
+                    } else {
+                        priceString = data1 + ' ' + data2;
+                    }
+                }
             }
     
             const resourceParts = [];
@@ -4847,6 +5007,7 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     let itemSetNewPrice;
 
     let itemObject;
+    let itemToDeduct1Name;
 
     if (resourceCategory !== 'techsPhilosophy') {
         if (resourceCategory === 'research') {
@@ -4864,28 +5025,17 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
             itemObject = getResourceDataObject(itemType, [resourceCategory]);
         }
     } else { //TODO PHILOSOPHY
-        setPhilosophyAbilityActive(true);
-        //set special ablility bought (then set button text and state once bought on gameloop)
-        //else repeatable:
-        //addRepeatableEffectToAPermanentModifier
-        //increasePriceOfTech
-        return;
-    }
-    
-    if (ABOrTechPurchase) {
-        amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
-        itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
-    } else { //energy / space
-        amountToDeduct = itemObject.price;
-        if (resourceCategory === 'energy' || resourceCategory === 'space') {
-            resource1ToDeduct = itemObject.resource1Price[0];
-            resource2ToDeduct = itemObject.resource2Price[0];
-            resource3ToDeduct = itemObject.resource3Price[0];
+        if (elementId === 'ability') { //if special ability
+            setPhilosophyAbilityActive(true);
+            return;
         }
+        itemObject = getResourceDataObject('philosophyRepeatableTechs', [getPlayerPhilosophy(), elementId]);
         itemSetNewPrice = itemObject.setPrice;
+        amountToDeduct = itemObject.price;
+        itemToDeduct1Name = elementId;  
+        setCanAffordDeferred(true);     
     }
 
-    let itemToDeduct1Name;
     let itemToDeduct2Name = '';
     let itemToDeduct3Name = '';
     let itemToDeduct4Name = '';
@@ -4893,30 +5043,44 @@ export function gain(incrementAmount, elementId, item, ABOrTechPurchase, tierAB,
     let itemCategory1 = '';
     let itemCategory2 = '';
     let itemCategory3 = '';
-
     let resourcePrices = [[0,''],[0,''],[0,'']];
 
-    if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy' || resourceCategory === 'space') {
-        itemToDeduct1Name = 'cash';
-        if (resourceCategory === 'energy' || resourceCategory === 'space') {
-            itemToDeduct2Name = itemObject.resource1Price[1];
-            itemToDeduct3Name = itemObject.resource2Price[1];
-            itemToDeduct4Name = itemObject.resource3Price[1];
-
-            itemCategory1 = itemObject.resource1Price[2];
-            itemCategory2 = itemObject.resource2Price[2];
-            itemCategory3 = itemObject.resource3Price[2];
+    if (ABOrTechPurchase !== 'techUnlockPhilosophy') {
+        if (ABOrTechPurchase) {
+            amountToDeduct = itemObject.upgrades.autoBuyer[tierAB].price;
+            itemSetNewPrice = itemObject.upgrades.autoBuyer[tierAB].setPrice;
+        } else { //energy / space
+            amountToDeduct = itemObject.price;
+            if (resourceCategory === 'energy' || resourceCategory === 'space') {
+                resource1ToDeduct = itemObject.resource1Price[0];
+                resource2ToDeduct = itemObject.resource2Price[0];
+                resource3ToDeduct = itemObject.resource3Price[0];
+            }
+            itemSetNewPrice = itemObject.setPrice;
         }
-        resourcePrices = [[resource1ToDeduct, itemToDeduct2Name, itemCategory1], [resource2ToDeduct, itemToDeduct3Name, itemCategory2], [resource3ToDeduct, itemToDeduct4Name, itemCategory3]];
-    } else {
-        itemToDeduct1Name = itemObject.screenName;
+    
+        if (resourceCategory === 'scienceUpgrade' || resourceCategory === 'energy' || resourceCategory === 'space') {
+            itemToDeduct1Name = 'cash';
+            if (resourceCategory === 'energy' || resourceCategory === 'space') {
+                itemToDeduct2Name = itemObject.resource1Price[1];
+                itemToDeduct3Name = itemObject.resource2Price[1];
+                itemToDeduct4Name = itemObject.resource3Price[1];
+    
+                itemCategory1 = itemObject.resource1Price[2];
+                itemCategory2 = itemObject.resource2Price[2];
+                itemCategory3 = itemObject.resource3Price[2];
+            }
+            resourcePrices = [[resource1ToDeduct, itemToDeduct2Name, itemCategory1], [resource2ToDeduct, itemToDeduct3Name, itemCategory2], [resource3ToDeduct, itemToDeduct4Name, itemCategory3]];
+        } else {
+            itemToDeduct1Name = itemObject.screenName;
+        }
+    
+        let itemToDeduct1NameArray = [itemToDeduct1Name];
+        let amountToDeductArray = [amountToDeduct];
+        let itemTypeArray = [itemType];
+    
+        setItemsToDeduct(itemToDeduct1NameArray, amountToDeductArray, itemTypeArray, resourcePrices);
     }
-
-    let itemToDeduct1NameArray = [itemToDeduct1Name];
-    let amountToDeductArray = [amountToDeduct];
-    let itemTypeArray = [itemType];
-
-    setItemsToDeduct(itemToDeduct1NameArray, amountToDeductArray, itemTypeArray, resourcePrices);
     setItemsToIncreasePrice(itemToDeduct1Name, itemSetNewPrice, amountToDeduct, itemType, resourcePrices);
 }
 
