@@ -579,8 +579,8 @@ function checkRepeatables() {
             "3": () => { // cheaper compound recipes
                 setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers(3));
             },
-            "4": () => { // cheaper energy buildings
-                setEnergyBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(4));
+            "4": () => { // cheaper energy and research buildings
+                setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(4));
             }
         },
         supremacist: {
@@ -666,7 +666,7 @@ function setCompoundRecipePricesAfterRepeatables() {
 }
 
 // 4. For Constructor - cheaper energy buildings
-function setEnergyBuildingPricesAfterRepeatables() {
+function setEnergyAndResearchBuildingPricesAfterRepeatables() {
     // logic for setting energy building discounts
 }
 

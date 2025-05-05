@@ -1491,7 +1491,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('energyDrones', 'energyDrones', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('4');
                         setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier);
-                        showNotification('Energy Buildings 1% cheaper!', 'info', 3000, 'tech');
+                        showNotification('Energy and Research Buildings 1% cheaper!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'energyDrones', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,

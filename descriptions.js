@@ -944,7 +944,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyEnergyDronesRow: {
-            content1: "Research Energy Drones to make energy buildings 1% cheaper.",
+            content1: "Research Energy Drones to make energy and research buildings 1% cheaper.",
             content2: "",
             updateAt: ""
         },

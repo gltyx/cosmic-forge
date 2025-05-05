@@ -859,7 +859,7 @@ export let resourceData = {
             efficientAssembly: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true, setPrice: 'efficientAssemblyTechPhilosophyPrice' }, // cheaper one off buildings
             laserMining: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'resources', philosophy: 'constructor', repeatable: true, setPrice: 'laserMiningTechPhilosophyPrice' }, // cheaper resource autobuyers
             massCompoundAssembly: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'compounds', philosophy: 'constructor', repeatable: true, setPrice: 'massCompoundAssemblyTechPhilosophyPrice' }, // cheaper compound recipes
-            energyDrones: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'buildings', philosophy: 'constructor', repeatable: true, setPrice: 'energyDronesTechPhilosophyPrice' } // cheaper energy buildings
+            energyDrones: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'buildings', philosophy: 'constructor', repeatable: true, setPrice: 'energyDronesTechPhilosophyPrice' } // cheaper energy and research buildings
         },
         supremacist: {
             fleetHolograms: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'supremacist', repeatable: false, setPrice: 'fleetHologramsTechPhilosophyPrice' }, // ABILITY : guaranteed vassalization if fleet 3x larger, regardless of leader traits
