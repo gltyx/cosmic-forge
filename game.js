@@ -570,67 +570,66 @@ function checkRepeatables() {
 
     const handlers = {
         constructor: {
-            1: () => { // cheaper one off buildings
+            "1": () => { // cheaper one off buildings
                 setOneOffBuildingPrices(getRepeatableTechMultipliers(1));
             },
-            2: () => { // cheaper resource autobuyers
+            "2": () => { // cheaper resource autobuyers
                 setResourceAutobuyerDiscounts();
             },
-            3: () => { // cheaper compound recipes
+            "3": () => { // cheaper compound recipes
                 setCompoundRecipeDiscounts();
             },
-            4: () => { // cheaper energy buildings
+            "4": () => { // cheaper energy buildings
                 setEnergyBuildingDiscounts();
             }
         },
         supremacist: {
-            1: () => { // cheaper fleets
+            "1": () => { // cheaper fleets
                 setFleetCostReductions();
             },
-            2: () => { // fleets higher health armor
+            "2": () => { // fleets higher health armor
                 setFleetArmorBuffs();
             },
-            3: () => { // fleets faster
+            "3": () => { // fleets faster
                 setFleetSpeedIncreases();
             },
-            4: () => { // fleets more damage dealt
+            "4": () => { // fleets more damage dealt
                 setFleetAttackBoosts();
             }
         },
         voidborn: {
-            1: () => { // improve starting impression of enemies
+            "1": () => { // improve starting impression of enemies
                 setInitialImpressionBonuses();
             },
-            2: () => { // star study quicker
+            "2": () => { // star study quicker
                 setStarStudyEfficiency();
             },
-            3: () => { // asteroid search quicker
+            "3": () => { // asteroid search quicker
                 setAsteroidSearchSpeed();
             },
-            4: () => { // improve base awarded AP by 1pt each time
+            "4": () => { // improve base awarded AP by 1pt each time
                 boostAscendencyPointGain();
             }
         },
         expansionist: {
-            1: () => { // reduce starship parts costs
+            "1": () => { // reduce starship parts costs
                 setStarshipPartDiscounts();
             },
-            2: () => { // reduce rocket parts costs
+            "2": () => { // reduce rocket parts costs
                 setRocketPartDiscounts();
             },
-            3: () => { // reduce rocket travel time
+            "3": () => { // reduce rocket travel time
                 setRocketTravelTimeReduction();
             },
-            4: () => { // reduce starship travel time
+            "4": () => { // reduce starship travel time
                 setStarshipTravelTimeReduction();
             }
         }
-    };       
+    };
 
     for (const key in repeatableObject) {
         if (repeatableObject.hasOwnProperty(key)) {
-            const parsedKey = parseInt(key);
-            const handler = handlers[playerPhilosophy]?.[parsedKey];
+            const handler = handlers[playerPhilosophy]?.[key];
             if (handler) {
                 handler(); // call the matching logic function
             }
