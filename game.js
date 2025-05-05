@@ -574,55 +574,55 @@ function checkRepeatables() {
                 setOneOffBuildingPrices(getRepeatableTechMultipliers(1));
             },
             "2": () => { // cheaper resource autobuyers
-                setResourceAutobuyerDiscounts();
+                setResourceAutobuyerDiscounts(getRepeatableTechMultipliers(2));
             },
             "3": () => { // cheaper compound recipes
-                setCompoundRecipeDiscounts();
+                setCompoundRecipeDiscounts(getRepeatableTechMultipliers(3));
             },
             "4": () => { // cheaper energy buildings
-                setEnergyBuildingDiscounts();
+                setEnergyBuildingDiscounts(getRepeatableTechMultipliers(4));
             }
         },
         supremacist: {
             "1": () => { // cheaper fleets
-                setFleetCostReductions();
+                setFleetCostReductions(getRepeatableTechMultipliers(1));
             },
             "2": () => { // fleets higher health armor
-                setFleetArmorBuffs();
+                setFleetArmorBuffs(getRepeatableTechMultipliers(2));
             },
             "3": () => { // fleets faster
-                setFleetSpeedIncreases();
+                setFleetSpeedIncreases(getRepeatableTechMultipliers(3));
             },
             "4": () => { // fleets more damage dealt
-                setFleetAttackBoosts();
+                setFleetAttackBoosts(getRepeatableTechMultipliers(4));
             }
         },
         voidborn: {
             "1": () => { // improve starting impression of enemies
-                setInitialImpressionBonuses();
+                setInitialImpressionBonuses(getRepeatableTechMultipliers(1));
             },
             "2": () => { // star study quicker
-                setStarStudyEfficiency();
+                setStarStudyEfficiency(getRepeatableTechMultipliers(2));
             },
             "3": () => { // asteroid search quicker
-                setAsteroidSearchSpeed();
+                setAsteroidSearchSpeed(getRepeatableTechMultipliers(3));
             },
             "4": () => { // improve base awarded AP by 1pt each time
-                boostAscendencyPointGain();
+                boostAscendencyPointGain(getRepeatableTechMultipliers(4));
             }
         },
         expansionist: {
             "1": () => { // reduce starship parts costs
-                setStarshipPartDiscounts();
+                setStarshipPartDiscounts(getRepeatableTechMultipliers(1));
             },
             "2": () => { // reduce rocket parts costs
-                setRocketPartDiscounts();
+                setRocketPartDiscounts(getRepeatableTechMultipliers(2));
             },
             "3": () => { // reduce rocket travel time
-                setRocketTravelTimeReduction();
+                setRocketTravelTimeReduction(getRepeatableTechMultipliers(3));
             },
             "4": () => { // reduce starship travel time
-                setStarshipTravelTimeReduction();
+                setStarshipTravelTimeReduction(getRepeatableTechMultipliers(4));
             }
         }
     };
@@ -631,7 +631,7 @@ function checkRepeatables() {
         if (repeatableObject.hasOwnProperty(key)) {
             const handler = handlers[playerPhilosophy]?.[key];
             if (handler) {
-                handler(); // call the matching logic function
+                handler();
             }
         }
     }
