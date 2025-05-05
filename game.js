@@ -571,58 +571,58 @@ function checkRepeatables() {
     const handlers = {
         constructor: {
             "1": () => { // cheaper one off buildings
-                setOneOffBuildingPrices(getRepeatableTechMultipliers(1));
+                setOneOffBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(1));
             },
             "2": () => { // cheaper resource autobuyers
-                setResourceAutobuyerDiscounts(getRepeatableTechMultipliers(2));
+                setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers(2));
             },
             "3": () => { // cheaper compound recipes
-                setCompoundRecipeDiscounts(getRepeatableTechMultipliers(3));
+                setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers(3));
             },
             "4": () => { // cheaper energy buildings
-                setEnergyBuildingDiscounts(getRepeatableTechMultipliers(4));
+                setEnergyBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(4));
             }
         },
         supremacist: {
             "1": () => { // cheaper fleets
-                setFleetCostReductions(getRepeatableTechMultipliers(1));
+                setFleetPricesAfterRepeatables(getRepeatableTechMultipliers(1));
             },
             "2": () => { // fleets higher health armor
-                setFleetArmorBuffs(getRepeatableTechMultipliers(2));
+                setFleetArmorBuffsAfterRepeatables(getRepeatableTechMultipliers(2));
             },
             "3": () => { // fleets faster
-                setFleetSpeedIncreases(getRepeatableTechMultipliers(3));
+                setFleetSpeedsAfterRepeatables(getRepeatableTechMultipliers(3));
             },
             "4": () => { // fleets more damage dealt
-                setFleetAttackBoosts(getRepeatableTechMultipliers(4));
+                setFleetAttackDamageAfterRepeatables(getRepeatableTechMultipliers(4));
             }
         },
         voidborn: {
             "1": () => { // improve starting impression of enemies
-                setInitialImpressionBonuses(getRepeatableTechMultipliers(1));
+                setInitialImpressionBaseAfterRepeatables(getRepeatableTechMultipliers(1));
             },
             "2": () => { // star study quicker
-                setStarStudyEfficiency(getRepeatableTechMultipliers(2));
+                setStarStudyEfficiencyAfterRepeatables(getRepeatableTechMultipliers(2));
             },
             "3": () => { // asteroid search quicker
-                setAsteroidSearchSpeed(getRepeatableTechMultipliers(3));
+                setAsteroidSearchEfficiencyAfterRepeatables(getRepeatableTechMultipliers(3));
             },
             "4": () => { // improve base awarded AP by 1pt each time
-                boostAscendencyPointGain(getRepeatableTechMultipliers(4));
+                setBaseAscendencyPointGainAfterRepeatables(getRepeatableTechMultipliers(4));
             }
         },
         expansionist: {
             "1": () => { // reduce starship parts costs
-                setStarshipPartDiscounts(getRepeatableTechMultipliers(1));
+                setStarshipPartPricesAfterRepeatables(getRepeatableTechMultipliers(1));
             },
             "2": () => { // reduce rocket parts costs
-                setRocketPartDiscounts(getRepeatableTechMultipliers(2));
+                setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers(2));
             },
             "3": () => { // reduce rocket travel time
-                setRocketTravelTimeReduction(getRepeatableTechMultipliers(3));
+                setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers(3));
             },
             "4": () => { // reduce starship travel time
-                setStarshipTravelTimeReduction(getRepeatableTechMultipliers(4));
+                setStarshipTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers(4));
             }
         }
     };
@@ -637,7 +637,7 @@ function checkRepeatables() {
     }
 }
 
-function setOneOffBuildingPrices(multiple = 1) { // 1. For Constructor - cheaper one off buildings
+function setOneOffBuildingPricesAfterRepeatables(multiple = 1) { // 1. For Constructor - cheaper one off buildings
     const reductionFactor = 1 - (multiple - 1) * 0.01; // reduce by 1% for each level of repeatable tech purchased
 
     function applyPriceReduction(basePrices, upgradeName, resource1, resource1Type, resource2, resource2Type, resource3, resource3Type) {
@@ -656,77 +656,77 @@ function setOneOffBuildingPrices(multiple = 1) { // 1. For Constructor - cheaper
 }
 
 // 2. For Constructor - cheaper resource autobuyers
-function setResourceAutobuyerDiscounts() {
+function setResourceAutobuyerPricesAfterRepeatables() {
     // logic for setting resource autobuyer discounts
 }
 
 // 3. For Constructor - cheaper compound recipes
-function setCompoundRecipeDiscounts() {
+function setCompoundRecipePricesAfterRepeatables() {
     // logic for setting compound recipe discounts
 }
 
 // 4. For Constructor - cheaper energy buildings
-function setEnergyBuildingDiscounts() {
+function setEnergyBuildingPricesAfterRepeatables() {
     // logic for setting energy building discounts
 }
 
 // 1. For Supremacist - cheaper fleets
-function setFleetCostReductions() {
+function setFleetPricesAfterRepeatables() {
     // logic for setting fleet cost reductions
 }
 
 // 2. For Supremacist - fleets higher health armor
-function setFleetArmorBuffs() {
+function setFleetArmorBuffsAfterRepeatables() {
     // logic for setting fleet armor buffs
 }
 
 // 3. For Supremacist - fleets faster
-function setFleetSpeedIncreases() {
+function setFleetSpeedsAfterRepeatables() {
     // logic for setting fleet speed increases
 }
 
 // 4. For Supremacist - fleets more damage dealt
-function setFleetAttackBoosts() {
+function setFleetAttackDamageAfterRepeatables() {
     // logic for setting fleet attack boosts
 }
 
 // 1. For Voidborn - improve starting impression of enemies
-function setInitialImpressionBonuses() {
+function setInitialImpressionBaseAfterRepeatables() {
     // logic for setting initial impression bonuses
 }
 
 // 2. For Voidborn - star study quicker
-function setStarStudyEfficiency() {
+function setStarStudyEfficiencyAfterRepeatables() {
     // logic for setting star study efficiency
 }
 
 // 3. For Voidborn - asteroid search quicker
-function setAsteroidSearchSpeed() {
+function setAsteroidSearchEfficiencyAfterRepeatables() {
     // logic for setting asteroid search speed
 }
 
 // 4. For Voidborn - improve base awarded AP by 1pt each time
-function boostAscendencyPointGain() {
+function setBaseAscendencyPointGainAfterRepeatables() {
     // logic for boosting ascendency point gain
 }
 
 // 1. For Expansionist - reduce starship parts costs
-function setStarshipPartDiscounts() {
+function setStarshipPartPricesAfterRepeatables() {
     // logic for setting starship part discounts
 }
 
 // 2. For Expansionist - reduce rocket parts costs
-function setRocketPartDiscounts() {
+function setRocketPartPricesAfterRepeatables() {
     // logic for setting rocket part discounts
 }
 
 // 3. For Expansionist - reduce rocket travel time
-function setRocketTravelTimeReduction() {
+function setRocketTravelTimeReductionAfterRepeatables() {
     // logic for setting rocket travel time reduction
 }
 
 // 4. For Expansionist - reduce starship travel time
-function setStarshipTravelTimeReduction() {
+function setStarshipTravelTimeReductionAfterRepeatables() {
     // logic for setting starship travel time reduction
 }
 
