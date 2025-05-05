@@ -959,7 +959,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyAntimatterEngineMinaturizationRow: {
-            content1: "Research Antimatter Engine Miniaturization to boost fleet speed by 1%.",
+            content1: "Research Antimatter Engine Minaturization to boost fleet speed by 1%.",
             content2: "",
             updateAt: ""
         },
