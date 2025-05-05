@@ -929,7 +929,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyEfficientAssemblyRow: {
-            content1: "Research Efficient Assembly to reduce building costs by 1%.",
+            content1: "Research Efficient Assembly to reduce space building costs by 1%.",
             content2: "",
             updateAt: ""
         },

@@ -215,6 +215,8 @@ import { drawTab6Content } from './drawTab6Content.js';
 import { drawTab7Content } from './drawTab7Content.js';
 import { drawTab8Content } from './drawTab8Content.js';
 
+let modalTooltipHandlers = {};
+
 const variableDebuggerWindow = document.getElementById('variableDebuggerWindow');
 const debugWindow = document.getElementById('debugWindow');
 const closeButton = document.querySelector('.close-btn');
@@ -986,7 +988,7 @@ export function setupModalButtonTooltips() {
         modalCancel: modalPlayerLeaderIntroContentText4
     };
 
-    document.addEventListener('mouseover', (e) => {
+    modalTooltipHandlers.mouseover = (e) => {
         const target = e.target;
         if (target && tooltipTextMap.hasOwnProperty(target.id)) {
             tooltip.innerHTML = tooltipTextMap[target.id];
@@ -994,20 +996,38 @@ export function setupModalButtonTooltips() {
             tooltip.style.left = `${e.pageX + 10}px`;
             tooltip.style.top = `${e.pageY + 10}px`;
         }
-    });
+    };
 
-    document.addEventListener('mousemove', (e) => {
+    modalTooltipHandlers.mousemove = (e) => {
         if (tooltip.style.display === 'block') {
             tooltip.style.left = `${e.pageX + 10}px`;
             tooltip.style.top = `${e.pageY + 10}px`;
         }
-    });
+    };
 
-    document.addEventListener('mouseout', (e) => {
+    modalTooltipHandlers.mouseout = (e) => {
         if (e.target && tooltipTextMap.hasOwnProperty(e.target.id)) {
             tooltip.style.display = 'none';
         }
-    });
+    };
+
+    document.addEventListener('mouseover', modalTooltipHandlers.mouseover);
+    document.addEventListener('mousemove', modalTooltipHandlers.mousemove);
+    document.addEventListener('mouseout', modalTooltipHandlers.mouseout);
+}
+
+export function removeModalButtonTooltips() {
+    const tooltip = document.getElementById('modal-button-tooltip');
+    if (tooltip) {
+        tooltip.remove();
+    }
+
+    if (modalTooltipHandlers.mouseover) {
+        document.removeEventListener('mouseover', modalTooltipHandlers.mouseover);
+        document.removeEventListener('mousemove', modalTooltipHandlers.mousemove);
+        document.removeEventListener('mouseout', modalTooltipHandlers.mouseout);
+        modalTooltipHandlers = {};
+    }
 }
 
 const attentionRules = [
@@ -1788,6 +1808,8 @@ export async function showPlayerPhilosophyIntroPopup() {
 }
 
 export function showPlayerLeaderPhilosophySelectionPopup() {
+    setupModalButtonTooltips();
+
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
     const playerLeaderPhilosophyChoice1Button = document.getElementById('modalExtraChoice1');
@@ -1823,6 +1845,7 @@ export function showPlayerLeaderPhilosophySelectionPopup() {
         playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
         playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
+        removeModalButtonTooltips();
     };
 
     const onChoice2Click = () => {
@@ -1835,6 +1858,7 @@ export function showPlayerLeaderPhilosophySelectionPopup() {
         playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
         playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
+        removeModalButtonTooltips();
     };
 
     const onChoice3Click = () => {
@@ -1847,6 +1871,7 @@ export function showPlayerLeaderPhilosophySelectionPopup() {
         playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
         playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
+        removeModalButtonTooltips();
     };
 
     const onChoice4Click = () => {
@@ -1859,6 +1884,7 @@ export function showPlayerLeaderPhilosophySelectionPopup() {
         playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
         playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
         showHideModal();
+        removeModalButtonTooltips();
     };
 
     playerLeaderPhilosophyChoice1Button.addEventListener('click', onChoice1Click);

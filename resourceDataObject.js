@@ -556,6 +556,7 @@ export let resourceData = {
         upgrades: {
             spaceTelescope: { 
                 spaceTelescopeBoughtYet: false,
+                basePrices: [10000, 20000, 15000, 20000],
                 price: 10000,
                 resource1Price: [20000, 'iron', 'resources'],
                 resource2Price: [15000, 'glass', 'compounds'],
@@ -565,6 +566,7 @@ export let resourceData = {
             },
             launchPad: { 
                 launchPadBoughtYet: false,
+                basePrices: [40000, 10000, 1000, 20000],
                 price: 40000,
                 resource1Price: [10000, 'iron', 'resources'],
                 resource2Price: [1000, 'titanium', 'compounds'],

@@ -1370,7 +1370,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'spaceStorageTankResearch',
                 row: createOptionRow(
-                    'spaceStorageTankResearchRow',
+                    'techPhilosophySpaceStorageTankResearchRow',
                     null,
                     'Space Storage Tank Research:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
@@ -1397,7 +1397,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'efficientAssembly',
                 row: createOptionRow(
-                    'efficientAssemblyRow',
+                    'techPhilosophyEfficientAssemblyRow',
                     null,
                     'Efficient Assembly:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1426,7 +1426,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'laserMining',
                 row: createOptionRow(
-                    'laserMiningRow',
+                    'techPhilosophyLaserMiningRow',
                     null,
                     'Laser Mining:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1455,7 +1455,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'massCompoundAssembly',
                 row: createOptionRow(
-                    'massCompoundAssemblyRow',
+                    'techPhilosophyMassCompoundAssemblyRow',
                     null,
                     'Mass Compound Assembly:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
@@ -1484,7 +1484,7 @@ export function drawTab3Content(heading, optionContentElement) {
             {
                 techName: 'energyDrones',
                 row: createOptionRow(
-                    'energyDronesRow',
+                    'techPhilosophyEnergyDronesRow',
                     null,
                     'Energy Drones:',
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {

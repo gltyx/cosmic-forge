@@ -1,4 +1,5 @@
 import {
+    getAllRepeatableTechMultipliersObject,
     getPlayerPhilosophy,
     setPlayerPhilosophy,
     getUserPlatform,
@@ -249,7 +250,8 @@ import {
     getBelligerentEnemyFlag,
     getFirstAccessArray,
     setPhilosophyAbilityActive,
-    getPhilosophyAbilityActive
+    getPhilosophyAbilityActive,
+    getRepeatableTechMultipliers
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -324,8 +326,7 @@ import {
     updateAttentionIndicators,
     appendAttentionIndicator,
     showPlayerLeaderPhilosophySelectionPopup,
-    showPlayerPhilosophyIntroPopup,
-    setupModalButtonTooltips
+    showPlayerPhilosophyIntroPopup
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -363,7 +364,6 @@ export function startGame() {
     }
     setAchievementIconImageUrls();
     getNavigatorLanguage();
-    setupModalButtonTooltips();
     gameLoop();
 }
 
@@ -444,6 +444,8 @@ export async function gameLoop() {
         if (getItemsToIncreasePrice() && Object.keys(getItemsToIncreasePrice()).length > 0) {
             checkAndIncreasePrices();
         }
+
+        checkRepeatables();
 
         const elementsToCheck = [
             ...document.querySelectorAll(
@@ -560,6 +562,173 @@ export async function gameLoop() {
 
         requestAnimationFrame(gameLoop);
     }
+}
+
+function checkRepeatables() {
+    const playerPhilosophy = getPlayerPhilosophy();
+    const repeatableObject = getAllRepeatableTechMultipliersObject();
+
+    const handlers = {
+        constructor: {
+            1: () => { // cheaper one off buildings
+                setOneOffBuildingPrices(getRepeatableTechMultipliers(1));
+            },
+            2: () => { // cheaper resource autobuyers
+                setResourceAutobuyerDiscounts();
+            },
+            3: () => { // cheaper compound recipes
+                setCompoundRecipeDiscounts();
+            },
+            4: () => { // cheaper energy buildings
+                setEnergyBuildingDiscounts();
+            }
+        },
+        supremacist: {
+            1: () => { // cheaper fleets
+                setFleetCostReductions();
+            },
+            2: () => { // fleets higher health armor
+                setFleetArmorBuffs();
+            },
+            3: () => { // fleets faster
+                setFleetSpeedIncreases();
+            },
+            4: () => { // fleets more damage dealt
+                setFleetAttackBoosts();
+            }
+        },
+        voidborn: {
+            1: () => { // improve starting impression of enemies
+                setInitialImpressionBonuses();
+            },
+            2: () => { // star study quicker
+                setStarStudyEfficiency();
+            },
+            3: () => { // asteroid search quicker
+                setAsteroidSearchSpeed();
+            },
+            4: () => { // improve base awarded AP by 1pt each time
+                boostAscendencyPointGain();
+            }
+        },
+        expansionist: {
+            1: () => { // reduce starship parts costs
+                setStarshipPartDiscounts();
+            },
+            2: () => { // reduce rocket parts costs
+                setRocketPartDiscounts();
+            },
+            3: () => { // reduce rocket travel time
+                setRocketTravelTimeReduction();
+            },
+            4: () => { // reduce starship travel time
+                setStarshipTravelTimeReduction();
+            }
+        }
+    };       
+
+    for (const key in repeatableObject) {
+        if (repeatableObject.hasOwnProperty(key)) {
+            const parsedKey = parseInt(key);
+            const handler = handlers[playerPhilosophy]?.[parsedKey];
+            if (handler) {
+                handler(); // call the matching logic function
+            }
+        }
+    }
+}
+
+function setOneOffBuildingPrices(multiple = 1) { // 1. For Constructor - cheaper one off buildings
+    const reductionFactor = 1 - (multiple - 1) * 0.01; // reduce by 1% for each level of repeatable tech purchased
+
+    function applyPriceReduction(basePrices, upgradeName, resource1, resource1Type, resource2, resource2Type, resource3, resource3Type) {
+        const modifiedPrices = basePrices.map(price => price * reductionFactor);
+        setResourceDataObject(modifiedPrices[0], 'space', ['upgrades', upgradeName, 'price']);
+        setResourceDataObject([modifiedPrices[1], resource1, resource1Type], 'space', ['upgrades', upgradeName, 'resource1Price']);
+        setResourceDataObject([modifiedPrices[2], resource2, resource2Type], 'space', ['upgrades', upgradeName, 'resource2Price']);
+        setResourceDataObject([modifiedPrices[3], resource3, resource3Type], 'space', ['upgrades', upgradeName, 'resource3Price']);
+    }
+
+    const basePricesTelescope = getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'basePrices']);
+    const basePricesLaunchPad = getResourceDataObject('space', ['upgrades', 'launchPad', 'basePrices']);
+
+    applyPriceReduction(basePricesTelescope, 'spaceTelescope', 'iron', 'resources', 'titanium', 'compounds', 'concrete', 'compounds');
+    applyPriceReduction(basePricesLaunchPad, 'launchPad', 'glass', 'compounds', 'titanium', 'compounds', 'steel', 'compounds');
+}
+
+// 2. For Constructor - cheaper resource autobuyers
+function setResourceAutobuyerDiscounts() {
+    // logic for setting resource autobuyer discounts
+}
+
+// 3. For Constructor - cheaper compound recipes
+function setCompoundRecipeDiscounts() {
+    // logic for setting compound recipe discounts
+}
+
+// 4. For Constructor - cheaper energy buildings
+function setEnergyBuildingDiscounts() {
+    // logic for setting energy building discounts
+}
+
+// 1. For Supremacist - cheaper fleets
+function setFleetCostReductions() {
+    // logic for setting fleet cost reductions
+}
+
+// 2. For Supremacist - fleets higher health armor
+function setFleetArmorBuffs() {
+    // logic for setting fleet armor buffs
+}
+
+// 3. For Supremacist - fleets faster
+function setFleetSpeedIncreases() {
+    // logic for setting fleet speed increases
+}
+
+// 4. For Supremacist - fleets more damage dealt
+function setFleetAttackBoosts() {
+    // logic for setting fleet attack boosts
+}
+
+// 1. For Voidborn - improve starting impression of enemies
+function setInitialImpressionBonuses() {
+    // logic for setting initial impression bonuses
+}
+
+// 2. For Voidborn - star study quicker
+function setStarStudyEfficiency() {
+    // logic for setting star study efficiency
+}
+
+// 3. For Voidborn - asteroid search quicker
+function setAsteroidSearchSpeed() {
+    // logic for setting asteroid search speed
+}
+
+// 4. For Voidborn - improve base awarded AP by 1pt each time
+function boostAscendencyPointGain() {
+    // logic for boosting ascendency point gain
+}
+
+// 1. For Expansionist - reduce starship parts costs
+function setStarshipPartDiscounts() {
+    // logic for setting starship part discounts
+}
+
+// 2. For Expansionist - reduce rocket parts costs
+function setRocketPartDiscounts() {
+    // logic for setting rocket part discounts
+}
+
+// 3. For Expansionist - reduce rocket travel time
+function setRocketTravelTimeReduction() {
+    // logic for setting rocket travel time reduction
+}
+
+// 4. For Expansionist - reduce starship travel time
+function setStarshipTravelTimeReduction() {
+    // logic for setting starship travel time reduction
 }
 
 function handleAutoCreateResourceSellRows() {

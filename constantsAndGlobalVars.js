@@ -4254,6 +4254,10 @@ export function setPhilosophyAbilityActive(value) {
     philosophyAbilityActive = value;
 }
 
+export function getAllRepeatableTechMultipliersObject() {
+    return repeatableTechMultipliers;
+}
+
 export function getRepeatableTechMultipliers(key) {
     return repeatableTechMultipliers[key];
 }
