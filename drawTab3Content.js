@@ -1,5 +1,5 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers } from './constantsAndGlobalVars.js';
-import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat } from './game.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setPlayerStartingUnitHealth } from './constantsAndGlobalVars.js';
+import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
@@ -1404,7 +1404,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         gain('efficientAssembly', 'efficientAssembly', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('1');
                         setRepeatableTechMultipliers('1', ++currentRepeatableTechMultiplier);
-                        showNotification('Special Building costs reduced by 1%!', 'info', 3000, 'tech');
+                        showNotification('Space Building costs reduced by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'efficientAssembly', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
@@ -1579,7 +1579,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('syntheticPlating', 'syntheticPlating', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('2');
-                        setRepeatableTechMultipliers('2', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('2', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setFleetArmorBuffsAfterRepeatables();
                         showNotification('Fleet Armor increased by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'syntheticPlating', null, 'research', true, null, 'techPhilosophy'),
                     null,
@@ -1608,7 +1609,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('antimatterEngineMinaturization', 'antimatterEngineMinaturization', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('3');
-                        setRepeatableTechMultipliers('3', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('3', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setFleetSpeedsAfterRepeatables();
                         showNotification('Fleet Speed increased by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'antimatterEngineMinaturization', null, 'research', true, null, 'techPhilosophy'),
                     null,
@@ -1637,8 +1639,9 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('laserIntensityResearch', 'laserIntensityResearch', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('4');
-                        setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier);
-                        showNotification('Fleet Attack Power increased by 1%!', 'info', 3000, 'tech');
+                        setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setFleetAttackDamageAfterRepeatables();
+                        showNotification('Fleet Attack Power increased by 1%! (Applicable to Newly Built Ships)', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'laserIntensityResearch', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
@@ -1697,7 +1700,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('stellarWhispers', 'stellarWhispers', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('1');
-                        setRepeatableTechMultipliers('1', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('1', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setInitialImpressionBaseAfterRepeatables();
                         showNotification('Initial Impression of enemies improved by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'stellarWhispers', null, 'research', true, null, 'techPhilosophy'),
                     null,
@@ -1726,7 +1730,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('stellarInsightManifold', 'stellarInsightManifold', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('2');
-                        setRepeatableTechMultipliers('2', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('2', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setStarStudyEfficiencyAfterRepeatables();
                         showNotification('Star Study speed increased by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'stellarInsightManifold', null, 'research', true, null, 'techPhilosophy'),
                     null,
@@ -1755,7 +1760,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('asteroidDwellers', 'asteroidDwellers', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('3');
-                        setRepeatableTechMultipliers('3', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('3', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setAsteroidSearchEfficiencyAfterRepeatables();
                         showNotification('Asteroid Search speed increased by 1%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'asteroidDwellers', null, 'research', true, null, 'techPhilosophy'),
                     null,

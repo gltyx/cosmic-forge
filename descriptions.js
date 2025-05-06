@@ -964,7 +964,7 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyLaserIntensityResearchRow: {
-            content1: "Research Laser Intensity to increase fleet attack power by 1%.",
+            content1: "Research Laser Intensity to increase fleet attack power by 1% on newly built Fleet Ships.",
             content2: "",
             updateAt: ""
         },

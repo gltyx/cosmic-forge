@@ -1,4 +1,6 @@
 import {
+    setBaseInvestigateStarTimerDuration,
+    getInitialImpression,
     getAllRepeatableTechMultipliersObject,
     getPlayerPhilosophy,
     setPlayerPhilosophy,
@@ -227,31 +229,25 @@ import {
     setTechUnlockedArray,
     getStatRun,
     populateVariableDebugger,
-    setLastScreenOpenRegister,
-    getLastScreenOpenRegister,
     setLastSavedTimeStamp,
-    setGalacticMarketOutgoingStockType, 
     getGalacticMarketOutgoingStockType, 
     setGalacticMarketIncomingStockType, 
     getGalacticMarketIncomingStockType, 
     setGalacticMarketOutgoingQuantitySelectionType, 
     getGalacticMarketOutgoingQuantitySelectionType, 
-    setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, 
-    getGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, 
-    setGalacticMarketSellApForCashQuantity, 
     getGalacticMarketSellApForCashQuantity, 
-    setGalacticMarketLiquidationAuthorization, 
     getGalacticMarketLiquidationAuthorization,
     setGalacticMarketIncomingQuantity,
     getGalacticMarketIncomingQuantity,
     setCurrentGalacticMarketCommission,
     getCurrentGalacticMarketCommission,
-    getAchievementFlagArray,
     getBelligerentEnemyFlag,
-    getFirstAccessArray,
     setPhilosophyAbilityActive,
     getPhilosophyAbilityActive,
-    getRepeatableTechMultipliers
+    getRepeatableTechMultipliers,
+    setPlayerStartingUnitHealth,
+    getPlayerStartingUnitHealth,
+    setInitialImpression
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -571,58 +567,58 @@ function checkRepeatables() {
     const handlers = {
         constructor: {
             "1": () => { // cheaper one off buildings
-                setOneOffBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(1));
+                setOneOffBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('1')); // DONE
             },
             "2": () => { // cheaper resource autobuyers
-                setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers(2));
+                setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers('2'));
             },
             "3": () => { // cheaper compound recipes
-                setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers(3));
+                setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers('3'));
             },
             "4": () => { // cheaper energy and research buildings
-                setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers(4));
+                setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('4'));
             }
         },
         supremacist: {
             "1": () => { // cheaper fleets
-                setFleetPricesAfterRepeatables(getRepeatableTechMultipliers(1));
+                setFleetPricesAfterRepeatables(getRepeatableTechMultipliers('1'));
             },
             "2": () => { // fleets higher health armor
-                setFleetArmorBuffsAfterRepeatables(getRepeatableTechMultipliers(2));
+                //setFleetArmorBuffsAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
             },
             "3": () => { // fleets faster
-                setFleetSpeedsAfterRepeatables(getRepeatableTechMultipliers(3));
+                //setFleetSpeedsAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // fleets more damage dealt
-                setFleetAttackDamageAfterRepeatables(getRepeatableTechMultipliers(4));
+                //setFleetAttackDamageAfterRepeatables(getRepeatableTechMultipliers('4')); //already DONE in upgrade button logic
             }
         },
         voidborn: {
             "1": () => { // improve starting impression of enemies
-                setInitialImpressionBaseAfterRepeatables(getRepeatableTechMultipliers(1));
+                //setInitialImpressionBaseAfterRepeatables(getRepeatableTechMultipliers('1')); //already DONE in upgrade button logic
             },
             "2": () => { // star study quicker
-                setStarStudyEfficiencyAfterRepeatables(getRepeatableTechMultipliers(2));
+                //setStarStudyEfficiencyAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
             },
             "3": () => { // asteroid search quicker
-                setAsteroidSearchEfficiencyAfterRepeatables(getRepeatableTechMultipliers(3));
+                //setAsteroidSearchEfficiencyAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // improve base awarded AP by 1pt each time
-                setBaseAscendencyPointGainAfterRepeatables(getRepeatableTechMultipliers(4));
+                setBaseAscendencyPointGainAfterRepeatables(getRepeatableTechMultipliers('4'));
             }
         },
         expansionist: {
             "1": () => { // reduce starship parts costs
-                setStarshipPartPricesAfterRepeatables(getRepeatableTechMultipliers(1));
+                setStarshipPartPricesAfterRepeatables(getRepeatableTechMultipliers('1'));
             },
             "2": () => { // reduce rocket parts costs
-                setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers(2));
+                setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers('2'));
             },
             "3": () => { // reduce rocket travel time
-                setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers(3));
+                setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('3'));
             },
             "4": () => { // reduce starship travel time
-                setStarshipTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers(4));
+                setStarshipTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('4'));
             }
         }
     };
@@ -665,7 +661,7 @@ function setCompoundRecipePricesAfterRepeatables() {
     // logic for setting compound recipe discounts
 }
 
-// 4. For Constructor - cheaper energy buildings
+// 4. For Constructor - cheaper energy and research buildings
 function setEnergyAndResearchBuildingPricesAfterRepeatables() {
     // logic for setting energy building discounts
 }
@@ -675,34 +671,54 @@ function setFleetPricesAfterRepeatables() {
     // logic for setting fleet cost reductions
 }
 
-// 2. For Supremacist - fleets higher health armor
-function setFleetArmorBuffsAfterRepeatables() {
-    // logic for setting fleet armor buffs
+// 2. For Supremacist - fleets higher health
+export function setFleetArmorBuffsAfterRepeatables() {
+    const current = getPlayerStartingUnitHealth();
+    const updated = current * 1.01;
+    setPlayerStartingUnitHealth(updated);
 }
 
 // 3. For Supremacist - fleets faster
-function setFleetSpeedsAfterRepeatables() {
-    // logic for setting fleet speed increases
+export function setFleetSpeedsAfterRepeatables() {
+    const fleets = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
+
+    for (const fleet of fleets) {
+        const path = ['upgrades', fleet, 'speed'];
+        const current = getResourceDataObject('space', path);
+        const updated = current * 1.01;
+        setResourceDataObject(updated, 'space', path);
+    }
 }
 
 // 4. For Supremacist - fleets more damage dealt
-function setFleetAttackDamageAfterRepeatables() {
-    // logic for setting fleet attack boosts
+export function setFleetAttackDamageAfterRepeatables() {
+    const fleets = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
+
+    for (const fleet of fleets) {
+        const path = ['upgrades', fleet, 'baseAttackStrength'];
+        const current = getResourceDataObject('space', path);
+        const updated = current * 1.01;
+        setResourceDataObject(updated, 'space', path);
+    }
 }
 
 // 1. For Voidborn - improve starting impression of enemies
-function setInitialImpressionBaseAfterRepeatables() {
-    // logic for setting initial impression bonuses
+export function setInitialImpressionBaseAfterRepeatables() {
+    setInitialImpression(getInitialImpression() + 1);
 }
 
 // 2. For Voidborn - star study quicker
-function setStarStudyEfficiencyAfterRepeatables() {
-    // logic for setting star study efficiency
+export function setStarStudyEfficiencyAfterRepeatables() {
+    const currentDuration = getBaseInvestigateStarTimerDuration();
+    const newDuration = currentDuration * 0.99;
+    setBaseInvestigateStarTimerDuration(newDuration);
 }
 
 // 3. For Voidborn - asteroid search quicker
-function setAsteroidSearchEfficiencyAfterRepeatables() {
-    // logic for setting asteroid search speed
+export function setAsteroidSearchEfficiencyAfterRepeatables() {
+    const currentDuration = getBaseSearchAsteroidTimerDuration();
+    const newDuration = currentDuration * 0.99;
+    setBaseSearchAsteroidTimerDuration(newDuration);
 }
 
 // 4. For Voidborn - improve base awarded AP by 1pt each time
@@ -8352,7 +8368,7 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
         return 100;
     }
 
-    let impression = 35;
+    let impression = getInitialImpression();
 
     if (lifeformTraits.some(trait => trait[0] === "Diplomatic")) {
         impression = 50;

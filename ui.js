@@ -1,4 +1,5 @@
 import {
+    getPlayerStartingUnitHealth,
     setPlayerPhilosophy,
     getPlayerPhilosophy,
     setFeedbackContent,
@@ -4972,7 +4973,7 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
                 width, 
                 height,
                 size, 
-                health: (owner === 'enemy' && starData.lifeformTraits[2][0] === 'Hive Mind') ? 50 : 100, 
+                health: owner === 'enemy' ? (starData.lifeformTraits[2][0] === 'Hive Mind' ? 50 : 100) : getPlayerStartingUnitHealth(),
                 owner, 
                 speed: speed,
                 verticalSpeed: 0,

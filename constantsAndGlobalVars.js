@@ -237,6 +237,8 @@ let apLiquidationQuantity = 0;
 let userPlatform = [null, null, null];
 let multiplierPermanentResources = 1;
 let multiplierPermanentCompounds = 1;
+let playerStartingUnitHealth = 100;
+let initialImpression = 35;
 
 let battleUnits = { 
     player: [], 
@@ -1070,6 +1072,9 @@ export function captureGameStatusForSaving(type) {
     gameState.compoundCreateDropdownRecipeText = compoundCreateDropdownRecipeText;
     gameState.firstAccessArray = firstAccessArray;
     gameState.philosophy = philosophy;
+    gameState.repeatableTechMultipliers = repeatableTechMultipliers;
+    gameState.playerStartingUnitHealth = playerStartingUnitHealth;
+    gameState.initialImpression = initialImpression;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1091,7 +1096,6 @@ export function captureGameStatusForSaving(type) {
     gameState.multiplierPermanentCompounds = multiplierPermanentCompounds;
     gameState.feedbackGiven = feedbackGiven;
     gameState.feedbackContent = feedbackContent;
-    gameState.repeatableTechMultipliers = repeatableTechMultipliers;
 
     // Flags
     gameState.flags = {
@@ -1281,6 +1285,8 @@ export function restoreGameStatus(gameState, type) {
             feedbackContent = gameState.feedbackContent ?? 'Not done yet';
             philosophy = gameState.philosophy ?? null;
             repeatableTechMultipliers = gameState.repeatableTechMultipliers ?? { 1: 1, 2: 1, 3: 1, 4: 1 };
+            playerStartingUnitHealth = gameState.playerStartingUnitHealth ?? 100;
+            initialImpression = gameState.initialImpression ?? 35;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -2959,6 +2965,22 @@ export function getBattleTriggeredByPlayer() {
 
 export function setBattleTriggeredByPlayer(value) {
     battleTriggeredByPlayer = value;
+}
+
+export function getPlayerStartingUnitHealth() {
+    return playerStartingUnitHealth ?? 100;
+}
+
+export function setPlayerStartingUnitHealth(value) {
+    playerStartingUnitHealth = value;
+}
+
+export function getInitialImpression() {
+    return initialImpression ?? 35;
+}
+
+export function setInitialImpression(value) {
+    initialImpression = value;
 }
 
 export function getFormationGoal() {
