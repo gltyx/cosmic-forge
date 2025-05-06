@@ -1,4 +1,5 @@
-import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol } from "./constantsAndGlobalVars.js";
+import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol, getPlayerPhilosophy, getRepeatableTechMultipliers } from "./constantsAndGlobalVars.js";
+import { calculateAndAddExtraAPFromPhilosophyRepeatable } from "./game.js";
 import { getAchievementDataObject, getResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals } from "./utilityFunctions.js";
 
@@ -1430,14 +1431,14 @@ export function initialiseDescriptions() {
                 linkWord: "here"
             },            
             {
-                id : 3013,
-                body: "Get 1 free AP here!",
-                type: ["adder", 1],
+                id: 3013,
+                body: `Get ${getPlayerPhilosophy() === 'voidborn' ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1} free AP here!`,
+                type: ["adder", getPlayerPhilosophy() === 'voidborn' ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1],
                 condition: "visible",
                 category: "ascendencyPoints",
                 item: "quantity",
                 linkWord: "here"
-            }
+            }                
         ],
         prize: [
             {

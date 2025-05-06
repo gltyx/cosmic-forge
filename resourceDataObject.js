@@ -873,7 +873,7 @@ export let resourceData = {
             stellarWhispers: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'initialImpression', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarWhispersTechPhilosophyPrice' }, // improve starting impression of enemies
             stellarInsightManifold: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'starStudy', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarInsightManifoldTechPhilosophyPrice' }, // star study quicker
             asteroidDwellers: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'asteroidSearch', philosophy: 'voidborn', repeatable: true, setPrice: 'asteroidDwellersTechPhilosophyPrice' }, // asteroid search quicker
-            ascendencyPhilosophy: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'ascendencyPoints', philosophy: 'voidborn', repeatable: true, setPrice: 'ascendencyPhilosophyTechPhilosophyPrice' } // improve base awarded AP by 1pt each time
+            ascendencyPhilosophy: { idWithinCategory: 4, multiplier: 0, price: 10000, affects: 'ascendencyPoints', philosophy: 'voidborn', repeatable: true, setPrice: 'ascendencyPhilosophyTechPhilosophyPrice' } // improve base awarded AP by 1pt each time
         },
         expansionist: {
             rapidExpansion: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false, setPrice: 'rapidExpansionTechPhilosophyPrice' }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one

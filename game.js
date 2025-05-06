@@ -604,7 +604,7 @@ function checkRepeatables() {
                 //setAsteroidSearchEfficiencyAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // improve base awarded AP by 1pt each time
-                setBaseAscendencyPointGainAfterRepeatables(getRepeatableTechMultipliers('4'));
+                //calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4')); //already DONE in upgrade button logic
             }
         },
         expansionist: {
@@ -722,8 +722,8 @@ export function setAsteroidSearchEfficiencyAfterRepeatables() {
 }
 
 // 4. For Voidborn - improve base awarded AP by 1pt each time
-function setBaseAscendencyPointGainAfterRepeatables() {
-    // logic for boosting ascendency point gain
+export function calculateAndAddExtraAPFromPhilosophyRepeatable(amountToAdd = 0) {
+    return amountToAdd;
 }
 
 // 1. For Expansionist - reduce starship parts costs
@@ -4393,8 +4393,13 @@ export function calculateLiquidationValue() {
     setLiquidationValue(totalLiquidationValue);
     const apCost = getApBuyPrice();
     const apAmount = Math.floor(totalLiquidationValue / apCost);
+    let apFromPhilosophy = 0;
+    
+    if (getPlayerPhilosophy() === 'voidborn') {
+        apFromPhilosophy = calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'));
+    }
 
-    setApLiquidationQuantity(apAmount);
+    setApLiquidationQuantity(apAmount + apFromPhilosophy);
 
     if (getCurrentOptionPane() === 'galactic market') {
         document.getElementById('galacticMarketApLiquidationQuantity').innerHTML = getApLiquidationQuantity();
@@ -8008,6 +8013,12 @@ export function calculateAscendencyPoints(distance) {
         if (Math.random() < 0.2) {
             modifiedAP -= Math.ceil(Math.random() * Math.max(1, modifiedAP * 0.1)); // Small random reduction
         }
+    }
+
+    // Add any extra AP for voidborn players
+    if (getPlayerPhilosophy() === 'voidborn') {
+        const amountOfAPToAddFromRepeatables = calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'));
+        modifiedAP += amountOfAPToAddFromRepeatables;
     }
 
     return modifiedAP;

@@ -251,6 +251,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await getUserSaveName();
 
+    initialiseDescriptions(); //called again after loading to set the correct number of AP to add to the news ticker prize, remove if not needed
+
     content = gameIntroText;
     populateModal(headerText, content);
     getElements().modalContainer.style.display = 'flex';
