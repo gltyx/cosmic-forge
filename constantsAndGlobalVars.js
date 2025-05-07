@@ -27,7 +27,6 @@ export const STACK_WIDTH = 220;
 export const BASE_RIGHT = 0;        
 
 export const MENU_STATE = 'menuState';
-export const INCREASE_STORAGE_FACTOR = 2;
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
@@ -168,6 +167,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let increaseStorageFactor = 2;
 let rocketTravelSpeed = 0.1;
 let starShipTravelSpeed = 360000; //3600000 one real hour per light year
 let philosophy = null;
@@ -1077,6 +1077,7 @@ export function captureGameStatusForSaving(type) {
     gameState.initialImpression = initialImpression;
     gameState.rocketTravelSpeed = rocketTravelSpeed;
     gameState.starShipTravelSpeed = starShipTravelSpeed;
+    gameState.increaseStorageFactor = increaseStorageFactor;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1291,6 +1292,7 @@ export function restoreGameStatus(gameState, type) {
             initialImpression = gameState.initialImpression ?? 35;
             rocketTravelSpeed = gameState.rocketTravelSpeed ?? 0.1;
             starShipTravelSpeed = gameState.starShipTravelSpeed ?? 360000;
+            increaseStorageFactor = gameState.increaseStorageFactor ?? 2;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -1516,7 +1518,11 @@ export function setNotationType(value) {
 }
 
 export function getIncreaseStorageFactor() {
-    return INCREASE_STORAGE_FACTOR;
+    return increaseStorageFactor;
+}
+
+export function setIncreaseStorageFactor(value) {
+    increaseStorageFactor = value;
 }
 
 export function getCurrentOptionPane() {

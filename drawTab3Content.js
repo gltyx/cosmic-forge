@@ -1,4 +1,4 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
@@ -1375,6 +1375,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Space Storage Tank Research:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('spaceStorageTankResearch', 'ability', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
+                        setIncreaseStorageFactor(5);
                         showNotification('ABILITY: Base storage expansion multiplier now 5x instead of 2x!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'spaceStorageTankResearch', null, 'research', true, null, 'techPhilosophy'),
                     null,
