@@ -1,19 +1,15 @@
 stats bugs in general
 
 philosophies:
-add data - DONE
-add new ui screen under research tab - DONE
-add logic to show correct ui based on philosophy choice - DONE
-add price increasing logic and unlock for special ability - DONE
-deduct research points when researching ability or repeatable tech - DONE
-when unlocking special ability set flag - DONE
-add classes for ui based on locked/unlocked ability and affordability for repeatables - DONE
-add notification when any are bought - DONE
-
-when buying special ability, add individual features logic based on philosophy choice - TODO
-add repeatableTechMultipliers to all calculating logic for various areas depending on which ones they affect - TODO
-note: when the repeatabletechmultipliers are applied, they are logged in the techrepeatbles object and if they are not in the gameloop checker function like the one off space buildings is, they have to be reapplied whenever the player rebirths if they are prices or things that are reset on rebirth, ie like addPermanentCompoundsModifiersBackIn() and addPermanentResourcesModifiersBackIn() do
+when buying special ability, add individual features logic based on philosophy choice - TODO 2 left
+add repeatableTechMultipliers to all calculating logic for various areas depending on which ones they affect - TODO 5 left
+note: when the repeatabletechmultipliers are applied, they are logged in the techrepeatbles object and if they are not in the gameloop checker function like the one off space buildings is, they have to be reapplied whenever the player rebirths if they are prices or things that are reset on rebirth, ie like addPermanentCompoundsModifiersBackIn() and addPermanentResourcesModifiersBackIn() do - TODO
 
 megaStructures:
 -TODO
+
+
+
+
+
 
