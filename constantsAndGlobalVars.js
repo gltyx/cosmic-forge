@@ -36,8 +36,6 @@ export const NOW = 30; //READY TO SORT NOW needs total of 150
 export const BUILDING_TYPES = ['energy', 'space', 'starShip', 'fleetHangar', 'colonise'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
-export const ROCKET_TRAVEL_SPEED = 0.1;
-export const STARSHIP_TRAVEL_SPEED = 36000; //3600000 one real hour per light year
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
 export const BOOST_ANTIMATTER_RATE_MULTIPLIER = 2;
 export const STARTING_STAR_SYSTEM = 'spica';
@@ -170,6 +168,8 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let rocketTravelSpeed = 0.1;
+let starShipTravelSpeed = 360000; //3600000 one real hour per light year
 let philosophy = null;
 let feedbackContent = 'Not done yet';
 let feedbackGiven = null;
@@ -1075,6 +1075,8 @@ export function captureGameStatusForSaving(type) {
     gameState.repeatableTechMultipliers = repeatableTechMultipliers;
     gameState.playerStartingUnitHealth = playerStartingUnitHealth;
     gameState.initialImpression = initialImpression;
+    gameState.rocketTravelSpeed = rocketTravelSpeed;
+    gameState.starShipTravelSpeed = starShipTravelSpeed;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1287,6 +1289,8 @@ export function restoreGameStatus(gameState, type) {
             repeatableTechMultipliers = gameState.repeatableTechMultipliers ?? { 1: 1, 2: 1, 3: 1, 4: 1 };
             playerStartingUnitHealth = gameState.playerStartingUnitHealth ?? 100;
             initialImpression = gameState.initialImpression ?? 35;
+            rocketTravelSpeed = gameState.rocketTravelSpeed ?? 0.1;
+            starShipTravelSpeed = gameState.starShipTravelSpeed ?? 360000;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -2688,11 +2692,19 @@ export function getSortStarMethod() {
 }
 
 export function getRocketTravelSpeed() {
-    return ROCKET_TRAVEL_SPEED;
+    return rocketTravelSpeed;
+}
+
+export function setRocketTravelSpeed(value) {
+    rocketTravelSpeed = value;
 }
 
 export function getStarShipTravelSpeed() {
-    return STARSHIP_TRAVEL_SPEED;
+    return starShipTravelSpeed;
+}
+
+export function setStarShipTravelSpeed(value) {
+    starShipTravelSpeed = value;
 }
 
 export function getAntimatterUnlocked() {

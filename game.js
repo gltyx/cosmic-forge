@@ -247,7 +247,9 @@ import {
     getRepeatableTechMultipliers,
     setPlayerStartingUnitHealth,
     getPlayerStartingUnitHealth,
-    setInitialImpression
+    setInitialImpression,
+    setRocketTravelSpeed,
+    setStarShipTravelSpeed
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -615,10 +617,10 @@ function checkRepeatables() {
                 setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers('2'));
             },
             "3": () => { // reduce rocket travel time
-                setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('3'));
+                //setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // reduce starship travel time
-                setStarshipTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('4'));
+                //setStarshipTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('4')); //already DONE in upgrade button logic
             }
         }
     };
@@ -736,14 +738,18 @@ function setRocketPartPricesAfterRepeatables() {
     // logic for setting rocket part discounts
 }
 
-// 3. For Expansionist - reduce rocket travel time
-function setRocketTravelTimeReductionAfterRepeatables() {
-    // logic for setting rocket travel time reduction
+// 3. For Expansionist - reduce rocket travel time by 5%
+export function setRocketTravelTimeReductionAfterRepeatables() {
+    const currentSpeed = getRocketTravelSpeed();
+    const newSpeed = currentSpeed / 0.95;
+    setRocketTravelSpeed(newSpeed);
 }
 
-// 4. For Expansionist - reduce starship travel time
-function setStarshipTravelTimeReductionAfterRepeatables() {
-    // logic for setting starship travel time reduction
+// 4. For Expansionist - reduce starship travel time by 5%
+export function setStarshipTravelTimeReductionAfterRepeatables() {
+    const currentSpeed = getStarShipTravelSpeed();
+    const newSpeed = currentSpeed * 0.95;
+    setStarShipTravelSpeed(newSpeed);
 }
 
 function handleAutoCreateResourceSellRows() {

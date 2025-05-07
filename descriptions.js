@@ -1000,12 +1000,12 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyAsteroidAttractorsRow: {
-            content1: "Research Asteroid Attractors to reduce Rocket travel time.",
+            content1: "Research Asteroid Attractors to reduce Rocket travel time by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyWarpDriveRow: {
-            content1: "Research Warp Drive to reduce Star Ship travel time significantly.",
+            content1: "Research Warp Drive to reduce Star Ship travel time by 5%.",
             content2: "",
             updateAt: ""
         },        
