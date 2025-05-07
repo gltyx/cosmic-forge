@@ -635,8 +635,8 @@ function checkRepeatables() {
     }
 }
 
-function setOneOffBuildingPricesAfterRepeatables(multiple = 1) { // 1. For Constructor - cheaper one off buildings
-    const reductionFactor = 1 - (multiple - 1) * 0.01; // reduce by 1% for each level of repeatable tech purchased
+function setOneOffBuildingPricesAfterRepeatables(multiple = 1) {
+    const reductionFactor = 1 - (multiple - 1) * 0.01;
 
     function applyPriceReduction(basePrices, upgradeName, resource1, resource1Type, resource2, resource2Type, resource3, resource3Type) {
         const modifiedPrices = basePrices.map(price => price * reductionFactor);
@@ -673,14 +673,12 @@ function setFleetPricesAfterRepeatables() {
     // logic for setting fleet cost reductions
 }
 
-// 2. For Supremacist - fleets higher health
 export function setFleetArmorBuffsAfterRepeatables() {
     const current = getPlayerStartingUnitHealth();
     const updated = current * 1.01;
     setPlayerStartingUnitHealth(updated);
 }
 
-// 3. For Supremacist - fleets faster
 export function setFleetSpeedsAfterRepeatables() {
     const fleets = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
 
@@ -692,7 +690,6 @@ export function setFleetSpeedsAfterRepeatables() {
     }
 }
 
-// 4. For Supremacist - fleets more damage dealt
 export function setFleetAttackDamageAfterRepeatables() {
     const fleets = ['fleetScout', 'fleetMarauder', 'fleetLandStalker', 'fleetNavalStrafer'];
 
@@ -704,48 +701,40 @@ export function setFleetAttackDamageAfterRepeatables() {
     }
 }
 
-// 1. For Voidborn - improve starting impression of enemies
 export function setInitialImpressionBaseAfterRepeatables() {
     setInitialImpression(getInitialImpression() + 1);
 }
 
-// 2. For Voidborn - star study quicker
 export function setStarStudyEfficiencyAfterRepeatables() {
     const currentDuration = getBaseInvestigateStarTimerDuration();
     const newDuration = currentDuration * 0.99;
     setBaseInvestigateStarTimerDuration(newDuration);
 }
 
-// 3. For Voidborn - asteroid search quicker
 export function setAsteroidSearchEfficiencyAfterRepeatables() {
     const currentDuration = getBaseSearchAsteroidTimerDuration();
     const newDuration = currentDuration * 0.99;
     setBaseSearchAsteroidTimerDuration(newDuration);
 }
 
-// 4. For Voidborn - improve base awarded AP by 1pt each time
 export function calculateAndAddExtraAPFromPhilosophyRepeatable(amountToAdd = 0) {
     return amountToAdd;
 }
 
-// 1. For Expansionist - reduce starship parts costs
 function setStarshipPartPricesAfterRepeatables() {
     // logic for setting starship part discounts
 }
 
-// 2. For Expansionist - reduce rocket parts costs
 function setRocketPartPricesAfterRepeatables() {
     // logic for setting rocket part discounts
 }
 
-// 3. For Expansionist - reduce rocket travel time by 5%
 export function setRocketTravelTimeReductionAfterRepeatables() {
     const currentSpeed = getRocketTravelSpeed();
     const newSpeed = currentSpeed / 0.95;
     setRocketTravelSpeed(newSpeed);
 }
 
-// 4. For Expansionist - reduce starship travel time by 5%
 export function setStarshipTravelTimeReductionAfterRepeatables() {
     const currentSpeed = getStarShipTravelSpeed();
     const newSpeed = currentSpeed * 0.95;
