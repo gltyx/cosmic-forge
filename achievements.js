@@ -209,7 +209,7 @@ export function addAchievementBonus(achievement) {
                                 } else if (amount >= 1000) {
                                     formatted = `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}K`;
                                 } else {
-                                    formatted = amount;
+                                    formatted = Math.round(amount);
                                 }
 
                                 return `${formatted} ${compound}`;

@@ -1,4 +1,6 @@
 import {
+    getCompoundCreateDropdownRecipeText,
+    setCompoundCreateDropdownRecipeText,
     setBaseInvestigateStarTimerDuration,
     getInitialImpression,
     getAllRepeatableTechMultipliersObject,
@@ -575,7 +577,7 @@ function checkRepeatables() {
                 //setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
             },
             "3": () => { // cheaper compound recipes
-                setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers('3'));
+                //setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // cheaper energy and research buildings
                 setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('4'));
@@ -669,9 +671,82 @@ export function setResourceAutobuyerPricesAfterRepeatables() {
     });
 }
 
-// 3. For Constructor - cheaper compound recipes
-function setCompoundRecipePricesAfterRepeatables() {
-    // logic for setting compound recipe discounts
+export function setCompoundRecipePricesAfterRepeatables() {
+    const allCompounds = getResourceDataObject('compounds');
+
+    for (const compoundKey in allCompounds) {
+        for (let i = 1; i <= 4; i++) {
+            const ratioKey = `createsFromRatio${i}`;
+            const currentRatio = getResourceDataObject('compounds', [compoundKey, ratioKey]);
+
+            if (currentRatio > 0) {
+                const newRatio = Math.max(1, currentRatio * 0.95);
+                setResourceDataObject(newRatio, 'compounds', [compoundKey, ratioKey]);
+            }
+        }
+
+        const originalCompoundText = getCompoundCreateDropdownRecipeText(compoundKey);
+        const updatedCompoundText = {};
+
+        for (const key of ['max', 'threeQuarters', 'twoThirds', 'half', 'oneThird']) {
+            if (originalCompoundText[key]) {
+                updatedCompoundText[key] = originalCompoundText[key];
+            }
+        }
+
+        const resourceShortNames = {
+            iron: 'Irn',
+            carbon: 'Crb',
+            sodium: 'Sod',
+            neon: 'Neo',
+            hydrogen: 'Hyd',
+            oxygen: 'Oxy',
+            silicon: 'Sil'
+        };
+
+        const quantitiesToUpdate = {
+            '50000': 50000,
+            '5000': 5000,
+            '500': 500,
+            '50': 50,
+            '5': 5,
+            '1': 1
+        };
+
+        const sources = [];
+        for (let i = 1; i <= 4; i++) {
+            const from = getResourceDataObject('compounds', [compoundKey, `createsFrom${i}`]);
+            const ratio = getResourceDataObject('compounds', [compoundKey, `createsFromRatio${i}`]);
+            if (from && from[0] && ratio > 0) {
+                const shortName = resourceShortNames[from[0]];
+                sources.push({ compound: shortName, ratio });
+            }
+        }
+
+        for (const [label, baseMultiplier] of Object.entries(quantitiesToUpdate)) {
+            const parts = sources.map(({ compound, ratio }) => {
+                const amount = ratio * baseMultiplier;
+                let formatted;
+
+                if (amount >= 1000000) {
+                    formatted = `${(amount / 1000000).toFixed(amount % 1000000 === 0 ? 0 : 1)}M`;
+                } else if (amount >= 1000) {
+                    formatted = `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}K`;
+                } else {
+                    formatted = Math.round(amount);
+                }
+
+                return `${formatted} ${compound}`;
+            });
+
+            updatedCompoundText[label] = {
+                value: label,
+                text: `${label} - ${parts.join(', ')}`
+            };
+        }
+
+        setCompoundCreateDropdownRecipeText(compoundKey, updatedCompoundText);
+    }
 }
 
 // 4. For Constructor - cheaper energy and research buildings
@@ -3780,7 +3855,11 @@ function checkStatusAndSetTextClasses(element) {
     }  
 
     if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        return compoundCostSellCreateChecks(element);
+        if (getCurrentTab()[1] === 'Compounds') {
+            return compoundCostSellCreateChecks(element);
+        } else {
+            return;
+        }
     }
 
     if (element.classList.contains('resource-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
