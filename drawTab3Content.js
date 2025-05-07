@@ -1524,7 +1524,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     'Fleet Holograms:',
                     createButton(`UNLOCK`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock', 'special-ability'], (event) => {
                         gain('fleetHolograms', 'ability', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
-                        //addAbilityPermanentModifier
+                        //this ability is checked elsewhere not here
                         showNotification('ABILITY: You can now always Vassalize enemies provided your fleet is 3x larger than theirs!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'fleetHolograms', null, 'research', true, null, 'techPhilosophy'),
                     null,

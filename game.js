@@ -4892,9 +4892,10 @@ function checkDiplomacyButtons(element) {
                 active = true;
                 break;
 
-            case classList.contains('vassalize') && playerAttackPower > (enemyPower * 1.5) && enemyTraitMain !== 'Aggressive' && currentImpression >= 95:
-                active = true;
-                break;
+            case (classList.contains('vassalize') && playerAttackPower > (enemyPower * 1.5) && enemyTraitMain !== 'Aggressive' && currentImpression >= 95) || (getPlayerPhilosophy() === 'supremacist' && getPhilosophyAbilityActive() === true && playerAttackPower > enemyPower * 3):
+               active = true;
+               break;
+           
         }
     }    
 
@@ -8799,7 +8800,11 @@ async function tryToImproveImpression() {
 function tryToVassalizeEnemy() {
     let probability = 0.75;
 
-    const vassalizeSuccess = Math.random() < probability;
+    let vassalizeSuccess = Math.random() < probability;
+
+    if (getPlayerPhilosophy() === 'supremacist' && getPhilosophyAbilityActive()) {
+        vassalizeSuccess = true;
+    }
 
     if (vassalizeSuccess) {
         setStarSystemDataObject("Surrendered", 'stars', ['destinationStar', 'attitude']);
