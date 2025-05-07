@@ -572,7 +572,7 @@ function checkRepeatables() {
                 setOneOffBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('1')); // DONE
             },
             "2": () => { // cheaper resource autobuyers
-                setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers('2'));
+                //setResourceAutobuyerPricesAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
             },
             "3": () => { // cheaper compound recipes
                 setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers('3'));
@@ -653,9 +653,20 @@ function setOneOffBuildingPricesAfterRepeatables(multiple = 1) {
     applyPriceReduction(basePricesLaunchPad, 'launchPad', 'glass', 'compounds', 'titanium', 'compounds', 'steel', 'compounds');
 }
 
-// 2. For Constructor - cheaper resource autobuyers
-function setResourceAutobuyerPricesAfterRepeatables() {
-    // logic for setting resource autobuyer discounts
+export function setResourceAutobuyerPricesAfterRepeatables() {
+    const resources = getResourceDataObject('resources');
+    
+    Object.keys(resources).forEach(resource => {
+        if (resource === 'solar') return;
+
+        for (let tier = 1; tier <= 4; tier++) {
+            const pricePath = ['upgrades', 'autoBuyer', `tier${tier}`, 'price'];
+            const currentPrice = getResourceDataObject('resources', [resource, ...pricePath]);
+
+            const updatedPrice = currentPrice * 0.95;
+            setResourceDataObject(updatedPrice, 'resources', [resource, ...pricePath]);
+        }
+    });
 }
 
 // 3. For Constructor - cheaper compound recipes

@@ -935,12 +935,12 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyLaserMiningRow: {
-            content1: "Research Laser Mining to lower the cost of resource autobuyers by 1%.",
+            content1: "Research Laser Mining to lower the cost of resource autobuyers by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyMassCompoundAssemblyRow: {
-            content1: "Research Mass Compound Assembly to reduce compound recipe costs by 1%.",
+            content1: "Research Mass Compound Assembly to reduce compound recipe costs by 5%.",
             content2: "",
             updateAt: ""
         },
