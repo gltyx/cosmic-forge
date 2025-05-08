@@ -1099,15 +1099,15 @@ const attentionRules = [
   
 export function updateAttentionIndicators() {
     attentionRules.forEach(rule => {
-      const element = document.querySelector(rule.selector);
-  
-      if (rule.condition()) {
-        if (!element.innerHTML.includes('???')) {
-            appendAttentionIndicator(element);
+        const element = document.querySelector(rule.selector);
+
+        if (rule.condition()) {
+            element.innerHTML.includes('???')
+                ? removeAttentionIndicator(element)
+                : appendAttentionIndicator(element);
+        } else {
+            removeAttentionIndicator(element);
         }
-      } else {
-        removeAttentionIndicator(element);
-      }
     });
 }
 
@@ -2757,6 +2757,15 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
 
     ctx.fillText('Gen.', genLabelX, height + 20);
     ctx.fillText('Con.', consLabelX, height + 20);
+}
+
+export function removeAllIndicatorIcons(iconText = '⚠️', indicatorClass = 'attention-indicator') {
+    const indicators = document.querySelectorAll(`.${indicatorClass}`);
+    indicators.forEach(indicator => {
+        if (indicator.innerHTML.includes(iconText)) {
+            indicator.remove();
+        }
+    });
 }
 
 export function updateDynamicUiContent() {

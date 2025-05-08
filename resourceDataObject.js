@@ -876,7 +876,7 @@ export let resourceData = {
             ascendencyPhilosophy: { idWithinCategory: 4, multiplier: 0, price: 10000, affects: 'ascendencyPoints', philosophy: 'voidborn', repeatable: true, setPrice: 'ascendencyPhilosophyTechPhilosophyPrice' } // improve base awarded AP by 1pt each time
         },
         expansionist: {
-            rapidExpansion: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false, setPrice: 'rapidExpansionTechPhilosophyPrice' }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one //need investigation and new mechanics to decide randomly how many systems and then calculate the closest ones and update everything, quite large mini project
+            rapidExpansion: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false, setPrice: 'rapidExpansionTechPhilosophyPrice' }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one
             spaceElevator: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'starshipPartsCost', philosophy: 'expansionist', repeatable: true, setPrice: 'spaceElevatorTechPhilosophyPrice' }, // reduce starship parts costs
             launchPadMassProduction: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'rocketPartsCost', philosophy: 'expansionist', repeatable: true, setPrice: 'launchPadMassProductionTechPhilosophyPrice' }, // reduce rocket parts costs
             asteroidAttractors: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'rocketTravelTime', philosophy: 'expansionist', repeatable: true, setPrice: 'asteroidAttractorsTechPhilosophyPrice' }, // reduce rocket travel time

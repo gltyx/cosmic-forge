@@ -330,7 +330,8 @@ import {
     appendAttentionIndicator,
     showPlayerLeaderPhilosophySelectionPopup,
     showPlayerPhilosophyIntroPopup,
-    getStarDataAndDistancesToAllStarsFromSettledStar
+    getStarDataAndDistancesToAllStarsFromSettledStar,
+    removeAllIndicatorIcons
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -3931,7 +3932,7 @@ function checkStatusAndSetTextClasses(element) {
         return checkTravelToStarElements(element);
     }
 
-    if (element.classList.contains('diplomacy-button')) {
+    if (getCurrentOptionPane() === 'colonise' && element.classList.contains('diplomacy-button')) {
         return checkDiplomacyButtons(element);
     }
 

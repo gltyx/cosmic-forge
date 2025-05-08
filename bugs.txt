@@ -1,7 +1,5 @@
-remove all indicators when rebirthing to hide tabs that should not be shown
-
 philosophies:
-when buying special ability, add individual features logic based on philosophy choice - TODO 2 left
+when buying special ability, add individual features logic based on philosophy choice - TODO 1 left
 megaStructures:
 -TODO
 
