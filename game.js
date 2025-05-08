@@ -580,12 +580,12 @@ function checkRepeatables() {
                 //setCompoundRecipePricesAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
             },
             "4": () => { // cheaper energy and research buildings
-                setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('4'));
+                //setEnergyAndResearchBuildingPricesAfterRepeatables(getRepeatableTechMultipliers('4')); //already DONE in upgrade button logic
             }
         },
         supremacist: {
             "1": () => { // cheaper fleets
-                setFleetPricesAfterRepeatables(getRepeatableTechMultipliers('1'));
+                //setFleetPricesAfterRepeatables(getRepeatableTechMultipliers('1')); //already DONE in upgrade button logic
             },
             "2": () => { // fleets higher health armor
                 //setFleetArmorBuffsAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
@@ -749,19 +749,73 @@ export function setCompoundRecipePricesAfterRepeatables() {
     }
 }
 
-// 4. For Constructor - cheaper energy and research buildings
-function setEnergyAndResearchBuildingPricesAfterRepeatables() {
-    // logic for setting energy building discounts
+export function setEnergyAndResearchBuildingPricesAfterRepeatables() {
+    const energyBuildings = getResourceDataObject('buildings', ['energy', 'upgrades']);
+    const researchBuildings = getResourceDataObject('research', ['upgrades']);
+
+    const reducePrice = (value) => value > 0 ? value * 0.95 : value;
+
+    const updateBuildingPrices = (key, subKeys) => {
+        const price = getResourceDataObject(key, [...subKeys, 'price']);
+        if (price > 0) {
+            setResourceDataObject(reducePrice(price), key, [...subKeys, 'price']);
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            const resourceKey = `resource${i}Price`;
+            const priceArray = getResourceDataObject(key, [...subKeys, resourceKey]);
+
+            if (Array.isArray(priceArray) && priceArray[0] > 0) {
+                const newPriceArray = [...priceArray];
+                newPriceArray[0] = reducePrice(priceArray[0]);
+                setResourceDataObject(newPriceArray, key, [...subKeys, resourceKey]);
+            }
+        }
+    };
+
+    Object.keys(energyBuildings).forEach(buildingKey => {
+        updateBuildingPrices('buildings', ['energy', 'upgrades', buildingKey]);
+    });
+
+    Object.keys(researchBuildings).forEach(researchKey => {
+        updateBuildingPrices('research', ['upgrades', researchKey]);
+    });
 }
 
-// 1. For Supremacist - cheaper fleets
-function setFleetPricesAfterRepeatables() {
-    // logic for setting fleet cost reductions
+export function setFleetPricesAfterRepeatables() {
+    const spaceUpgrades = getResourceDataObject('space', ['upgrades']);
+    const reducePrice = (value) => value > 0 ? value * 0.95 : value;
+
+    const updateFleetPrices = (fleetKey) => {
+        const basePath = ['upgrades', fleetKey];
+
+        const price = getResourceDataObject('space', [...basePath, 'price']);
+        if (price > 0) {
+            setResourceDataObject(reducePrice(price), 'space', [...basePath, 'price']);
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            const resourceKey = `resource${i}Price`;
+            const priceArray = getResourceDataObject('space', [...basePath, resourceKey]);
+
+            if (Array.isArray(priceArray) && priceArray[0] > 0) {
+                const newPriceArray = [...priceArray];
+                newPriceArray[0] = reducePrice(priceArray[0]);
+                setResourceDataObject(newPriceArray, 'space', [...basePath, resourceKey]);
+            }
+        }
+    };
+
+    Object.keys(spaceUpgrades).forEach(key => {
+        if (key.startsWith('fleet')) {
+            updateFleetPrices(key);
+        }
+    });
 }
 
 export function setFleetArmorBuffsAfterRepeatables() {
     const current = getPlayerStartingUnitHealth();
-    const updated = current * 1.01;
+    const updated = current * 1.05;
     setPlayerStartingUnitHealth(updated);
 }
 
@@ -771,7 +825,7 @@ export function setFleetSpeedsAfterRepeatables() {
     for (const fleet of fleets) {
         const path = ['upgrades', fleet, 'speed'];
         const current = getResourceDataObject('space', path);
-        const updated = current * 1.01;
+        const updated = current * 1.05;
         setResourceDataObject(updated, 'space', path);
     }
 }
@@ -782,7 +836,7 @@ export function setFleetAttackDamageAfterRepeatables() {
     for (const fleet of fleets) {
         const path = ['upgrades', fleet, 'baseAttackStrength'];
         const current = getResourceDataObject('space', path);
-        const updated = current * 1.01;
+        const updated = current * 1.05;
         setResourceDataObject(updated, 'space', path);
     }
 }
@@ -4028,7 +4082,7 @@ function starShipUiChecks() {
 
 function fleetHangarChecks() {
     if (getCurrentOptionPane() === 'fleet hangar') {
-        document.getElementById('descriptionContentTab5').innerHTML = `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+        document.getElementById('descriptionContentTab5').innerHTML = `Build your fleets to conquer visited Systems - Fleet Strength: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span>`;
         if (getStarShipStatus()[0] !== 'preconstruction' && getStarShipStatus()[0] !== 'readyForTravel' && !getStellarScannerBuilt()) {
             if (document.getElementById('spaceFleetEnvoyBuildRow')) {
                 document.getElementById('spaceFleetEnvoyBuildRow').classList.add('invisible');
@@ -4097,8 +4151,8 @@ export function updateFleetsAfterDestroyingAUnit(unit) {
         
         const currentAttackPower = getResourceDataObject('fleets', ['attackPower']);
         const currentDefensePower = getResourceDataObject('fleets', ['defensePower']);
-        setResourceDataObject(Math.max(0, Math.floor(currentAttackPower - unitBaseStrength)), 'fleets', ['attackPower']);
-        setResourceDataObject(Math.max(0, Math.floor(currentDefensePower - unitBaseStrength)), 'fleets', ['defensePower']);
+        setResourceDataObject(Math.max(0, currentAttackPower - unitBaseStrength), 'fleets', ['attackPower']);
+        setResourceDataObject(Math.max(0, currentDefensePower - unitBaseStrength), 'fleets', ['defensePower']);
     } else {
         const newEnemyFleetsCount = Math.max(0, Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]) - 1));
         setStarSystemDataObject(newEnemyFleetsCount, 'stars', ['destinationStar', 'enemyFleets', fleetNameEnemy]);
@@ -4113,7 +4167,7 @@ export function updateFleetsAfterDestroyingAUnit(unit) {
 
 
 export function writeBattleTopDescriptionUpdate() {
-    document.getElementById('descriptionContentTab5').innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
+    document.getElementById('descriptionContentTab5').innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower']).toFixed(0)}</span>`;
 }
 
 export function writeEnemyFleetStats(type) {
@@ -4756,9 +4810,9 @@ async function coloniseChecks() {
             if (patience <= 0 && fleetPowerPlayer === 0) {
                 document.querySelectorAll("button.bully, button.passive, button.harmony, button.conquest, button.vassalize")
                 .forEach(button => button.classList.add("red-disabled-text"));
-                document.getElementById('descriptionContentTab5').innerHTML = `<span class="green-ready-text">Build Your Fleets to Engage the Enemy! - Fleet Power: </span><span class="red-disabled-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+                document.getElementById('descriptionContentTab5').innerHTML = `<span class="green-ready-text">Build Your Fleets to Engage the Enemy! - Fleet Power: </span><span class="red-disabled-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span>`;
             } else {
-                document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`;
+                document.getElementById('descriptionContentTab5').innerHTML = `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span>`;
             }
 
             if (civilizationLevel === 'None' || civilizationLevel === 'Unsentient') {
@@ -4776,7 +4830,7 @@ async function coloniseChecks() {
 
             if (getRedrawBattleDescription()) { //set this true when fleet power changes during battle
                 writeBattleTopDescriptionUpdate();
-                descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower'])}</span>`;
+                descriptionTab.innerHTML = `Defeat The Enemy! - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span> Enemy Fleet Power: <span class="red-disabled-text">${getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'fleetPower']).toFixed(0)}</span>`;
                 button = document.createElement('button');
                 button.id = 'battleButton';
                 button.classList.add('option-button', 'red-disabled-text', 'battle-button');
@@ -5150,8 +5204,8 @@ export function increaseAttackAndDefensePower(fleetShipId) {
         const attackPowerToAdd = getResourceDataObject('space', ['upgrades', fleetShipId, 'baseAttackStrength']);
         const defensePowerToAdd = getResourceDataObject('space', ['upgrades', fleetShipId, 'defenseStrength']);
 
-        setResourceDataObject(Math.floor(currentAttackPower + attackPowerToAdd), 'fleets', ['attackPower']);
-        setResourceDataObject(Math.floor(currentDefensePower + defensePowerToAdd), 'fleets', ['defensePower']);
+        setResourceDataObject(currentAttackPower + attackPowerToAdd, 'fleets', ['attackPower']);
+        setResourceDataObject(currentDefensePower + defensePowerToAdd, 'fleets', ['defensePower']);
     }   
 }
 

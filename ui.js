@@ -112,7 +112,8 @@ import {
     getFirstAccessArray,
     getFeedbackGiven,
     getFeedbackCanBeRequested,
-    setFeedbackCanBeRequested
+    setFeedbackCanBeRequested,
+    getRepeatableTechMultipliers
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1934,7 +1935,7 @@ export function showRebirthPopup() {
 }
 
 export function showEnterWarModeModal(reason) {
-    if (getEnemyFleetsAdjustedForDiplomacy() && getResourceDataObject('fleets', ['attackPower']) === 0) {
+    if (getEnemyFleetsAdjustedForDiplomacy() && getResourceDataObject('fleets', ['attackPower']) <= 0) {
         return;
     }
 
@@ -4964,9 +4965,18 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             const visionDistanceAir = getFleetConstantData('air').visionDistance;
             const visionDistanceLand = getFleetConstantData('land').visionDistance;
             const visionDistanceSea = getFleetConstantData('sea').visionDistance;
-            const accelerationAir = getFleetConstantData('air').acceleration;
-            const accelerationLand = getFleetConstantData('land').acceleration;
-            const accelerationSea = getFleetConstantData('sea').acceleration;
+            let accelerationAir = getFleetConstantData('air').acceleration;
+            let accelerationLand = getFleetConstantData('land').acceleration;
+            let accelerationSea = getFleetConstantData('sea').acceleration;
+
+            if (getPlayerPhilosophy() === 'supremacist' && owner === 'player') {
+                const speedUpgradeBoughtTimes = getRepeatableTechMultipliers('3') - 1;
+                const multiplier = Math.pow(1.05, speedUpgradeBoughtTimes);
+            
+                accelerationAir *= multiplier;
+                accelerationLand *= multiplier;
+                accelerationSea *= multiplier;
+            }
 
             return { 
                 id: `${idCounter}_${unitType}`, 

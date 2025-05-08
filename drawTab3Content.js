@@ -1,5 +1,5 @@
 import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor } from './constantsAndGlobalVars.js';
-import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables } from './game.js';
+import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
 import { techNotificationMessages } from './descriptions.js';
@@ -1493,7 +1493,8 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('energyDrones', 'energyDrones', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('4');
-                        setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier);
+                        setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setEnergyAndResearchBuildingPricesAfterRepeatables();
                         showNotification('Energy and Research Buildings 1% cheaper!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'energyDrones', null, 'research', true, null, 'techPhilosophy'),
                     null,
@@ -1553,8 +1554,9 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'philosophy-tech-unlock'], (event) => {
                         gain('hangarAutomation', 'hangarAutomation', 'techUnlockPhilosophy', 'techUnlockPhilosophy', false, 'techsPhilosophy', 'research');
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('1');
-                        setRepeatableTechMultipliers('1', ++currentRepeatableTechMultiplier);
-                        showNotification('Fleet build costs reduced by 1%!', 'info', 3000, 'tech');
+                        setRepeatableTechMultipliers('1', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
+                        setFleetPricesAfterRepeatables();
+                        showNotification('Fleet build costs reduced by 5%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'hangarAutomation', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
@@ -1584,7 +1586,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('2');
                         setRepeatableTechMultipliers('2', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
                         setFleetArmorBuffsAfterRepeatables();
-                        showNotification('Fleet Armor increased by 1%!', 'info', 3000, 'tech');
+                        showNotification('Fleet Armor increased by 5%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'syntheticPlating', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
@@ -1614,7 +1616,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('3');
                         setRepeatableTechMultipliers('3', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
                         setFleetSpeedsAfterRepeatables();
-                        showNotification('Fleet Speed increased by 1%!', 'info', 3000, 'tech');
+                        showNotification('Fleet Speed increased by 5%!', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'antimatterEngineMinaturization', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,
@@ -1644,7 +1646,7 @@ export function drawTab3Content(heading, optionContentElement) {
                         let currentRepeatableTechMultiplier = getRepeatableTechMultipliers('4');
                         setRepeatableTechMultipliers('4', ++currentRepeatableTechMultiplier); //logged but not needed for calc below
                         setFleetAttackDamageAfterRepeatables();
-                        showNotification('Fleet Attack Power increased by 1%! (Applicable to Newly Built Ships)', 'info', 3000, 'tech');
+                        showNotification('Fleet Attack Power increased by 5%! (Applicable to Newly Built Ships)', 'info', 3000, 'tech');
                     }, 'techUnlockPhilosophy', '', 'laserIntensityResearch', null, 'research', true, null, 'techPhilosophy'),
                     null,
                     null,

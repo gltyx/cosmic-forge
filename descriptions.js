@@ -138,8 +138,8 @@ export function initialiseDescriptions() {
         'star map': "This is a map of the known galaxy.",
         'star data': "Here you can find information about studied stars.",
         'star ship': "Here you can build and manage your Star Ship to travel to and scan studied Stars.",
-        'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
-        'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower'])}</span>`,
+        'fleet hangar': `Build your fleets to conquer visited Systems - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span>`,
+        'colonise': `Engage in Diplomacy and War to establish your new colony at <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> - Fleet Power: <span class="green-ready-text">${getResourceDataObject('fleets', ['attackPower']).toFixed(0)}</span>`,
 
         'mining': "This shows Antimatter being produced, where, and by which Rocket Miner.",
         'space telescope': "Here you can build a telescope to search for asteroids to mine Antimatter.",
@@ -945,27 +945,27 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyEnergyDronesRow: {
-            content1: "Research Energy Drones to make energy and research buildings 1% cheaper.",
+            content1: "Research Energy Drones to make energy and research buildings 5% cheaper.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyHangarAutomationRow: {
-            content1: "Research Hangar Automation to reduce fleet construction costs by 1%.",
+            content1: "Research Hangar Automation to reduce fleet construction costs by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophySyntheticPlatingRow: {
-            content1: "Research Synthetic Plating to improve fleet armor and health by 1%.",
+            content1: "Research Synthetic Plating to improve fleet armor and health by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyAntimatterEngineMinaturizationRow: {
-            content1: "Research Antimatter Engine Minaturization to boost fleet speed by 1%.",
+            content1: "Research Antimatter Engine Minaturization to boost fleet speed by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyLaserIntensityResearchRow: {
-            content1: "Research Laser Intensity to increase fleet attack power by 1% on newly built Fleet Ships.",
+            content1: "Research Laser Intensity to increase fleet attack power by 5% on newly built Fleet Ships.",
             content2: "",
             updateAt: ""
         },
