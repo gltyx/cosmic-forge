@@ -2573,7 +2573,7 @@ export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() 
     addPermanentResourcesModifiersBackIn();
     addPermanentCompoundsModifiersBackIn();
 
-    if (getStatRun() > 0) { //player can buy repeatables from the start of run 2
+    if (getStatRun() > 2) { //player can buy repeatables from the start of run 2
         addPhilosophyRepeatablesBackInAfterRebirth();
         setPricesForRepeatablesAfterRebirth(currentPricesForRepeatables);
     }
