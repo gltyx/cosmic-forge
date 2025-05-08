@@ -1,4 +1,5 @@
 import {
+    getAdditionalSystemsToSettleThisRun,
     getPlayerStartingUnitHealth,
     setPlayerPhilosophy,
     getPlayerPhilosophy,
@@ -2141,9 +2142,22 @@ export async function showBattlePopup(won, apGain = 0) {
         let headerText = modalBattleHeaderText;
         let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
 
+        if (won) {
+            content += `<br>- You have conquered the <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!`;
+
+            const extraSystems = getAdditionalSystemsToSettleThisRun();
+            if (Array.isArray(extraSystems) && extraSystems.length > 0) {
+                extraSystems.forEach(([name, distance]) => {
+                    const formattedDistance = distance.toFixed(1);
+                    content += `<br>- Leaders ${formattedDistance}ly away in the <span class="green-ready-text">${name}</span> System<br>have also heard of your greatness and have ceded their System!`;
+                });
+            }
+        }
+
         if (won === 'noSentientLife') {
             headerText = modalBattleNoSentientLifeHeader;
             content = modalBattleNoSentientLifeText.replace(' X ', ` ${apGain} `);
+            content += `<br>- You have settled the <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!`;
         }
 
         battleOutcomeConfirmButton.classList.remove('invisible');

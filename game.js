@@ -9266,11 +9266,15 @@ export async function settleSystemAfterBattle(accessPoint) {
 }
 
 function decideIfMoreSystemsAreAutomaticallySettled() {
+    const extraPossibleSystemsAllowed = Math.floor(Math.random() * 4);
+    if (extraPossibleSystemsAllowed === 0) return [];
+
     const { stars, starDistanceData } = getStarDataAndDistancesToAllStarsFromSettledStar(getDestinationStar());
 
     const currentStar = getCurrentStarSystem().toLowerCase();
     const destinationStar = getDestinationStar().toLowerCase();
     const settledStars = getSettledStars();
+    const playerFleetPower = getResourceDataObject('fleets', ['attackPower']);
 
     const filteredStars = stars
         .filter(star => {
@@ -9281,20 +9285,55 @@ function decideIfMoreSystemsAreAutomaticallySettled() {
 
             return !settledStars.some(settled => capitaliseWordsWithRomanNumerals(settled) === star.name);
         })
-        .map(star => {
-            return {
-                ...star,
-                distanceFromSettledStar: starDistanceData[star.name]
-            };
-        });
+        .map(star => ({
+            ...star,
+            distanceFromSettledStar: starDistanceData[star.name]
+        }));
 
-        const starsWithinTenLightYears = filteredStars.filter(star => star.distanceFromSettledStar <= 10);
+    const starsWithinTenLightYears = filteredStars.filter(star => star.distanceFromSettledStar <= 10);
 
-    // get player attack power after battle as it is now
-    // use fleet power versus distance to determine if we project enough power to settle the system
-    // if we do, use this to set a probability of settling the system
-    // decide based on die roll for this probability
-    // return systems that are additionally settled 
+    function calculateSettleProbability(distance, fleetPower) {
+        const fleetRatio = Math.min(fleetPower / 275, 1);
+        const fleetScore = fleetRatio * 50;
+
+        let distanceScore = 0;
+        if (distance < 1) {
+            distanceScore = 50;
+        } else if (distance >= 10) {
+            distanceScore = 0;
+        } else {
+            const distanceRatio = 1 - ((distance - 1) / 9);
+            distanceScore = distanceRatio * 50;
+        }
+
+        return fleetScore + distanceScore;
+    }
+
+    function selectRandomCandidateSystemsFromFilteredStars(array, count) {
+        const copy = [...array];
+        const result = [];
+        while (result.length < count && copy.length > 0) {
+            const index = Math.floor(Math.random() * copy.length);
+            result.push(copy.splice(index, 1)[0]);
+        }
+        return result;
+    }
+
+    const candidateStars = selectRandomCandidateSystemsFromFilteredStars(starsWithinTenLightYears, extraPossibleSystemsAllowed);
+    const probabilities = candidateStars.map(star =>
+        calculateSettleProbability(star.distanceFromSettledStar, playerFleetPower)
+    );
+
+    const additionallySettledSystems = [];
+    candidateStars.forEach((star, index) => {
+        const chance = probabilities[index];
+        const roll = Math.random() * 100;
+        if (roll <= chance) {
+            additionallySettledSystems.push([star.name, star.distanceFromSettledStar]);
+        }
+    });
+
+    return additionallySettledSystems;
 }
 
 export function addPermanentBuffsBackInAfterRebirth() {
@@ -9333,6 +9372,16 @@ export function rebirth() {
     autoSelectOption('hydrogenOption');
     setCurrentStarSystem(getStarSystemDataObject('stars', ['destinationStar', 'name']));
     setSettledStars(getCurrentStarSystem());
+
+    if (getPlayerPhilosophy() === 'expansionist' && getPhilosophyAbilityActive()) {
+        const extraSystems = getAdditionalSystemsToSettleThisRun();
+        if (Array.isArray(extraSystems) && extraSystems.length > 0) {
+            extraSystems.forEach(([name]) => {
+                setSettledStars(name.toLowerCase());
+            });
+        }
+    }
+
     setupNewRunStarSystem();
     setRebirthPossible(false);
     resetAllVariablesOnRebirth();
