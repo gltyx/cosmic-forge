@@ -37,7 +37,7 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
 
                 const starContainer = document.querySelector('#optionContentTab5');
                 starContainer.innerHTML = '';
-                generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode());
+                generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode(), false, null);
             }, '', '', '', null, '', true, '', '');
             
             starButtonContainer.appendChild(buttonElement);
@@ -49,7 +49,7 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
         
         const starContainer = document.querySelector('#optionContentTab5');   
         starContainer.innerHTML = '';     
-        generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode());
+        generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode(), false, null);
         if (getStarShipTravelling()) {
             drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'travelling');
             const starData = getStarSystemDataObject('stars');

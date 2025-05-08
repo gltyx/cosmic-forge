@@ -113,7 +113,10 @@ import {
     getFeedbackGiven,
     getFeedbackCanBeRequested,
     setFeedbackCanBeRequested,
-    getRepeatableTechMultipliers
+    getRepeatableTechMultipliers,
+    STAR_FIELD_SEED,
+    NUMBER_OF_STARS,
+    getStarMapMode
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -302,7 +305,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (getCurrentOptionPane()) {
             const starContainer = document.querySelector('#optionContentTab5');
             starContainer.innerHTML = '';
-            generateStarfield(starContainer, 100, 80);
+            generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode(), false, null);
         }
     });
 
@@ -1553,7 +1556,13 @@ function getStarColorForTravel(fuelRequired, starName) {
     return color;
 }
 
-export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode) {
+export function getStarDataAndDistancesToAllStarsFromSettledStar(settledStar) {
+    const dummyContainer = document.createElement('div');
+    const { stars, starDistanceData } = generateStarfield(dummyContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, null, true, settledStar);
+    return { stars, starDistanceData };
+}
+
+export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode, calculationMode = false, originStarName = null) {
     const stars = [];
     const starDistanceData = {};
     const minSize = 2;
@@ -1575,7 +1584,12 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         stars.push({ name, x, y, z, size, width: size * 1.1, height: size * 1.1, left: x, top: y });
     }
 
-    currentStar = stars.find(star => star.name === capitaliseString(getCurrentStarSystem()));
+    if (calculationMode && originStarName) {
+        currentStar = stars.find(star => star.name.toLowerCase() === originStarName.toLowerCase());
+    } else {
+        currentStar = stars.find(star => star.name === capitaliseString(getCurrentStarSystem()));
+    }
+
     stars.forEach(star => {
         starDistanceData[star.name] = calculate3DDistance(
             currentStar.left + currentStar.width / 2,
@@ -1586,6 +1600,10 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             star.z
         );
     });
+
+    if (calculationMode) {
+        return { stars, starDistanceData };
+    }
 
     stars.forEach(star => {
         const distance = starDistanceData[star.name];
@@ -2112,32 +2130,35 @@ function setFeedbackValueAndSaveGame(wanted, text) {
     setSaveData(null);
 }
 
-export function showBattlePopup(won, apGain = 0) {
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const battleOutcomeConfirmButton = document.getElementById('modalConfirm');
-    const battleOutcomeCancelButton = document.getElementById('modalCancel');
-    battleOutcomeConfirmButton.innerText = 'CONFIRM';
-    
-    let headerText = modalBattleHeaderText;
-    let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
-    
-    if (won === 'noSentientLife') {
-        headerText = modalBattleNoSentientLifeHeader;
-        content = modalBattleNoSentientLifeText.replace(' X ', ` ${apGain} `);
-    }
+export async function showBattlePopup(won, apGain = 0) {
+    return new Promise((resolve) => {
+        const modalContainer = getElements().modalContainer;
+        const overlay = getElements().overlay;
+        const battleOutcomeConfirmButton = document.getElementById('modalConfirm');
+        const battleOutcomeCancelButton = document.getElementById('modalCancel');
+        battleOutcomeConfirmButton.innerText = 'CONFIRM';
 
-    battleOutcomeConfirmButton.classList.remove('invisible');
-    battleOutcomeCancelButton.classList.add('invisible');
+        let headerText = modalBattleHeaderText;
+        let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
 
-    populateModal(headerText, content);
+        if (won === 'noSentientLife') {
+            headerText = modalBattleNoSentientLifeHeader;
+            content = modalBattleNoSentientLifeText.replace(' X ', ` ${apGain} `);
+        }
 
-    modalContainer.style.display = 'flex';
-    overlay.style.display = 'flex';
+        battleOutcomeConfirmButton.classList.remove('invisible');
+        battleOutcomeCancelButton.classList.add('invisible');
 
-    battleOutcomeConfirmButton.onclick = function () {
-        showHideModal();
-    };
+        populateModal(headerText, content);
+
+        modalContainer.style.display = 'flex';
+        overlay.style.display = 'flex';
+
+        battleOutcomeConfirmButton.onclick = function () {
+            showHideModal();
+            resolve();
+        };
+    });
 }
 
 export function setWarUI(setWarState) {

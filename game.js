@@ -1,4 +1,6 @@
 import {
+    getAdditionalSystemsToSettleThisRun,
+    setAdditionalSystemsToSettleThisRun,
     getCompoundCreateDropdownRecipeText,
     setCompoundCreateDropdownRecipeText,
     setBaseInvestigateStarTimerDuration,
@@ -251,7 +253,8 @@ import {
     getPlayerStartingUnitHealth,
     setInitialImpression,
     setRocketTravelSpeed,
-    setStarShipTravelSpeed
+    setStarShipTravelSpeed,
+    getSettledStars
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -326,7 +329,8 @@ import {
     updateAttentionIndicators,
     appendAttentionIndicator,
     showPlayerLeaderPhilosophySelectionPopup,
-    showPlayerPhilosophyIntroPopup
+    showPlayerPhilosophyIntroPopup,
+    getStarDataAndDistancesToAllStarsFromSettledStar
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -9242,20 +9246,55 @@ export async function settleSystemAfterBattle(accessPoint) {
         setApAwardedThisRun(true);
     }
 
-    if (getStatRun() < 10) {
+    if (getStatRun() < 2) {
         await showPlayerPhilosophyIntroPopup();
     }
 
     switch(accessPoint) {
         case 'noSentientLife':
-            showBattlePopup('noSentientLife', apGain);
+            await showBattlePopup('noSentientLife', apGain);
             break;
         case 'battle':
-            showBattlePopup(true, apGain);
+            if (getPlayerPhilosophy() === 'expansionist' && getPhilosophyAbilityActive()) {
+                setAdditionalSystemsToSettleThisRun(decideIfMoreSystemsAreAutomaticallySettled());
+            }
+            await showBattlePopup(true, apGain);
             break;
     }
 
     autoSelectOption('fleetHangarOption', apGain);
+}
+
+function decideIfMoreSystemsAreAutomaticallySettled() {
+    const { stars, starDistanceData } = getStarDataAndDistancesToAllStarsFromSettledStar(getDestinationStar());
+
+    const currentStar = getCurrentStarSystem().toLowerCase();
+    const destinationStar = getDestinationStar().toLowerCase();
+    const settledStars = getSettledStars();
+
+    const filteredStars = stars
+        .filter(star => {
+            const starNameLower = star.name.toLowerCase();
+            if (starNameLower === destinationStar || starNameLower === currentStar) {
+                return false;
+            }
+
+            return !settledStars.some(settled => capitaliseWordsWithRomanNumerals(settled) === star.name);
+        })
+        .map(star => {
+            return {
+                ...star,
+                distanceFromSettledStar: starDistanceData[star.name]
+            };
+        });
+
+        const starsWithinTenLightYears = filteredStars.filter(star => star.distanceFromSettledStar <= 10);
+
+    // get player attack power after battle as it is now
+    // use fleet power versus distance to determine if we project enough power to settle the system
+    // if we do, use this to set a probability of settling the system
+    // decide based on die roll for this probability
+    // return systems that are additionally settled 
 }
 
 export function addPermanentBuffsBackInAfterRebirth() {

@@ -239,6 +239,7 @@ let multiplierPermanentResources = 1;
 let multiplierPermanentCompounds = 1;
 let playerStartingUnitHealth = 100;
 let initialImpression = 35;
+let additionalSystemsToSettleThisRun = [];
 
 let battleUnits = { 
     player: [], 
@@ -740,6 +741,7 @@ export function resetAllVariablesOnRebirth() {
     currentStarObject = null;
     starShipStatus = ['preconstruction', null];
     collectedPrecipitationQuantityThisRun = 0;
+    additionalSystemsToSettleThisRun = [];
 
     runNumber++;
     
@@ -1080,6 +1082,7 @@ export function captureGameStatusForSaving(type) {
     gameState.rocketTravelSpeed = rocketTravelSpeed;
     gameState.starShipTravelSpeed = starShipTravelSpeed;
     gameState.increaseStorageFactor = increaseStorageFactor;
+    gameState.additionalSystemsToSettleThisRun = additionalSystemsToSettleThisRun;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1295,6 +1298,7 @@ export function restoreGameStatus(gameState, type) {
             rocketTravelSpeed = gameState.rocketTravelSpeed ?? 0.1;
             starShipTravelSpeed = gameState.starShipTravelSpeed ?? 360000;
             increaseStorageFactor = gameState.increaseStorageFactor ?? 2;
+            additionalSystemsToSettleThisRun = gameState.additionalSystemsToSettleThisRun ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3234,6 +3238,14 @@ export function getClassificationOrder() {
 
 export function setClassificationOrder(value) {
     classificationOrder = value;
+}
+
+export function setAdditionalSystemsToSettleThisRun(value) {
+    additionalSystemsToSettleThisRun = value;
+}
+
+export function getAdditionalSystemsToSettleThisRun() {
+    return additionalSystemsToSettleThisRun;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
