@@ -613,10 +613,10 @@ function checkRepeatables() {
         },
         expansionist: {
             "1": () => { // reduce starship parts costs
-                setStarshipPartPricesAfterRepeatables(getRepeatableTechMultipliers('1'));
+                //setStarshipPartPricesAfterRepeatables(getRepeatableTechMultipliers('1')); //already DONE in upgrade button logic
             },
             "2": () => { // reduce rocket parts costs
-                setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers('2'));
+                //setRocketPartPricesAfterRepeatables(getRepeatableTechMultipliers('2')); //already DONE in upgrade button logic
             },
             "3": () => { // reduce rocket travel time
                 //setRocketTravelTimeReductionAfterRepeatables(getRepeatableTechMultipliers('3')); //already DONE in upgrade button logic
@@ -861,12 +861,66 @@ export function calculateAndAddExtraAPFromPhilosophyRepeatable(amountToAdd = 0) 
     return amountToAdd;
 }
 
-function setStarshipPartPricesAfterRepeatables() {
-    // logic for setting starship part discounts
+export function setStarshipPartPricesAfterRepeatables() {
+    const spaceUpgrades = getResourceDataObject('space', ['upgrades']);
+    const reducePrice = (value) => value > 0 ? value * 0.95 : value;
+
+    const updateStarshipPartPrices = (partKey) => {
+        const basePath = ['upgrades', partKey];
+
+        const price = getResourceDataObject('space', [...basePath, 'price']);
+        if (price > 0) {
+            setResourceDataObject(reducePrice(price), 'space', [...basePath, 'price']);
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            const resourceKey = `resource${i}Price`;
+            const priceArray = getResourceDataObject('space', [...basePath, resourceKey]);
+
+            if (Array.isArray(priceArray) && priceArray[0] > 0) {
+                const newPriceArray = [...priceArray];
+                newPriceArray[0] = reducePrice(priceArray[0]);
+                setResourceDataObject(newPriceArray, 'space', [...basePath, resourceKey]);
+            }
+        }
+    };
+
+    Object.keys(spaceUpgrades).forEach(key => {
+        if (key.startsWith('ss')) {
+            updateStarshipPartPrices(key);
+        }
+    });
 }
 
-function setRocketPartPricesAfterRepeatables() {
-    // logic for setting rocket part discounts
+export function setRocketPartPricesAfterRepeatables() {
+    const spaceUpgrades = getResourceDataObject('space', ['upgrades']);
+    const reducePrice = (value) => value > 0 ? value * 0.95 : value;
+
+    const updateRocketPartPrices = (partKey) => {
+        const basePath = ['upgrades', partKey];
+
+        const price = getResourceDataObject('space', [...basePath, 'price']);
+        if (price > 0) {
+            setResourceDataObject(reducePrice(price), 'space', [...basePath, 'price']);
+        }
+
+        for (let i = 1; i <= 3; i++) {
+            const resourceKey = `resource${i}Price`;
+            const priceArray = getResourceDataObject('space', [...basePath, resourceKey]);
+
+            if (Array.isArray(priceArray) && priceArray[0] > 0) {
+                const newPriceArray = [...priceArray];
+                newPriceArray[0] = reducePrice(priceArray[0]);
+                setResourceDataObject(newPriceArray, 'space', [...basePath, resourceKey]);
+            }
+        }
+    };
+
+    Object.keys(spaceUpgrades).forEach(key => {
+        if (key.startsWith('rocket')) {
+            updateRocketPartPrices(key);
+        }
+    });
 }
 
 export function setRocketTravelTimeReductionAfterRepeatables() {

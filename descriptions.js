@@ -970,17 +970,17 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophyStellarWhispersRow: {
-            content1: "Research Stellar Whispers to improve initial diplomacy with alien species.",
+            content1: "Research Stellar Whispers to improve initial diplomacy with alien species by 1% each purchase.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyStellarInsightManifoldRow: {
-            content1: "Research Stellar Insight Manifold to accelerate Star Study speed.",
+            content1: "Research Stellar Insight Manifold to accelerate Star Study speed by 1% each time.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyAsteroidDwellersRow: {
-            content1: "Research Asteroid Dwellers to improve Asteroid exploration speed.",
+            content1: "Research Asteroid Dwellers to improve Asteroid exploration speed by 1% each time.",
             content2: "",
             updateAt: ""
         },
@@ -990,12 +990,12 @@ export function initialiseDescriptions() {
             updateAt: ""
         },
         techPhilosophySpaceElevatorRow: {
-            content1: "Research Space Elevator to reduce the cost of Star Ship parts.",
+            content1: "Research Space Elevator to reduce the cost of Star Ship parts by 5%.",
             content2: "",
             updateAt: ""
         },
         techPhilosophyLaunchPadMassProductionRow: {
-            content1: "Research Launch Pad Mass Production to lower Rocket part costs.",
+            content1: "Research Launch Pad Mass Production to lower Rocket part costs by 5%",
             content2: "",
             updateAt: ""
         },
