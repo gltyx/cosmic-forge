@@ -1,7 +1,7 @@
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
-import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, getGameStartTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
+import { addPermanentBuffsBackInAfterRebirth, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, calculateAndAddExtraAPFromPhilosophyRepeatable, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables } from './game.js';
+import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText, getStatRun, getPlayerPhilosophy, getAllRepeatableTechMultipliersObject } from "./constantsAndGlobalVars.js";
 import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsTickers, achievementBeatEnemy, achievementCollect100Precipitation, achievementCollect100TitaniumAsPrecipitation, achievementConquerStarSystems, achievementCreateCompound, achievementDiscoverAsteroid, achievementDiscoverLegendaryAsteroid, achievementHave4RocketsMiningAntimatter, achievementHave50HoursWithOnePioneer, achievementInitiateDiplomacyWithAlienRace, achievementLaunchRocket, achievementLaunchStarShip, achievementLiquidateAllAssets, achievementMineAllAntimatterAsteroid, achievementPerformGalaticMarketTransaction, achievementRebirth, achievementResearchAllTechnologies, achievementSeeAllNewsTickers, achievementSpendAp, achievementStudyAllStarsInOneRun, achievementStudyAStar, achievementTrade10APForCash, achievementTripPower } from "./achievements.js";
 
 export let achievementImageUrls;
@@ -2554,13 +2554,107 @@ export let resourceDataRebirthCopy = structuredClone(resourceData);
 
 export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
     const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+    const currentPricesForRepeatables = {};
+    const playerPhilosophy = getPlayerPhilosophy();
+    const allPhilosophyTechs = getResourceDataObject('philosophyRepeatableTechs');
+    
+    const philosophyTechs = allPhilosophyTechs[playerPhilosophy];
+    
+    Object.values(philosophyTechs).forEach(tech => {
+        const id = tech.idWithinCategory;
+        if (tech.repeatable && id >= 1 && id <= 4) {
+            currentPricesForRepeatables[id] = tech.price;
+        }
+    });
+
     Object.assign(resourceData, resourceDataRebirthCopy);
 
     addPermanentBuffsBackInAfterRebirth();
     addPermanentResourcesModifiersBackIn();
     addPermanentCompoundsModifiersBackIn();
 
+    if (getStatRun() > 0) { //player can buy repeatables from the start of run 2
+        addPhilosophyRepeatablesBackInAfterRebirth();
+        setPricesForRepeatablesAfterRebirth(currentPricesForRepeatables);
+    }
+
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
+export function setPricesForRepeatablesAfterRebirth(currentPricesForRepeatables) {
+    const playerPhilosophy = getPlayerPhilosophy();
+    const allPhilosophyTechs = getResourceDataObject('philosophyRepeatableTechs');
+    const philosophyTechs = allPhilosophyTechs[playerPhilosophy];
+
+    Object.entries(philosophyTechs).forEach(([techKey, tech]) => {
+        const id = tech.idWithinCategory;
+        if (tech.repeatable && id >= 1 && id <= 4 && currentPricesForRepeatables.hasOwnProperty(id)) {
+            setResourceDataObject(
+                currentPricesForRepeatables[id],
+                'philosophyRepeatableTechs',
+                [playerPhilosophy, techKey, 'price']
+            );
+        }
+    });
+}
+
+function addPhilosophyRepeatablesBackInAfterRebirth() {
+    const playerPhilosophy = getPlayerPhilosophy();
+    const repeatablesValues = getAllRepeatableTechMultipliersObject();
+
+    Object.keys(repeatablesValues).forEach(key => {
+        const times = repeatablesValues[key] - 1;
+        if (times <= 0) return;
+
+        let mappedRepeatableFunction;
+
+        switch (playerPhilosophy) {
+            case 'constructor': //DONE
+                if (key === '1') return;
+                mappedRepeatableFunction = {
+                    '2': () => setResourceAutobuyerPricesAfterRepeatables(),
+                    '3': () => setCompoundRecipePricesAfterRepeatables(),
+                    '4': () => setEnergyAndResearchBuildingPricesAfterRepeatables()
+                }[key];
+                break;
+
+            case 'supremacist': //DONE
+                if (key === '2') return;
+                mappedRepeatableFunction = {
+                    '1': () => setFleetPricesAfterRepeatables(),
+                    '3': () => setFleetSpeedsAfterRepeatables(),
+                    '4': () => setFleetAttackDamageAfterRepeatables()
+                }[key];
+                break;
+
+            case 'voidborn': //DONE
+                if (key === '1' || key === '4') return;
+                mappedRepeatableFunction = {
+                    '2': () => setStarStudyEfficiencyAfterRepeatables(),
+                    '3': () => setAsteroidSearchEfficiencyAfterRepeatables(),
+                }[key];
+                break;
+
+            case 'expansionist': //DONE
+                mappedRepeatableFunction = {
+                    '1': () => setStarshipPartPricesAfterRepeatables(),
+                    '2': () => setRocketPartPricesAfterRepeatables(),
+                    '3': () => setRocketTravelTimeReductionAfterRepeatables(),
+                    '4': () => setStarshipTravelTimeReductionAfterRepeatables()
+                }[key];
+                break;
+
+            default:
+                console.warn(`Unknown philosophy: ${playerPhilosophy}`);
+                return;
+        }
+
+        if (typeof mappedRepeatableFunction === 'function') {
+            for (let i = 0; i < times; i++) {
+                mappedRepeatableFunction();
+            }
+        }
+    });
 }
 
 function addPermanentCompoundsModifiersBackIn() {

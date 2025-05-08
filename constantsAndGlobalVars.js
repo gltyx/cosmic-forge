@@ -692,6 +692,8 @@ export function getElements() {
 export function resetAllVariablesOnRebirth() {
 
     //resetAchievements() TODO
+    rocketTravelSpeed = 0.1;
+    starShipTravelSpeed = 360000; //3600000 one real hour per light year
     runStartTimeStamp = null;
     rocketUserName = {rocket1: 'Rocket 1', rocket2: 'Rocket 2', rocket3: 'Rocket 3', rocket4: 'Rocket 4'};
     asteroidArray = [];

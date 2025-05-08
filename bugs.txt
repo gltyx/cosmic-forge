@@ -1,9 +1,7 @@
-stats bugs in general
+remove all indicators when rebirthing to hide tabs that should not be shown
 
 philosophies:
 when buying special ability, add individual features logic based on philosophy choice - TODO 2 left
-note: when the repeatabletechmultipliers are applied, they are logged in the techrepeatbles object and if they are not in the gameloop checker function like the one off space buildings is, they have to be reapplied whenever the player rebirths if they are prices or things that are reset on rebirth, ie like addPermanentCompoundsModifiersBackIn() and addPermanentResourcesModifiersBackIn() do - TODO
-
 megaStructures:
 -TODO
 

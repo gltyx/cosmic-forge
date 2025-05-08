@@ -9259,6 +9259,7 @@ export async function settleSystemAfterBattle(accessPoint) {
 }
 
 export function addPermanentBuffsBackInAfterRebirth() {
+    //might need to add buffs back affecting rocket and starship travel time TODO
     if (getBuffSmartAutoBuyersData()['boughtYet'] > 0) {
         for (let i = 0; i < getBuffSmartAutoBuyersData()['boughtYet']; i++) {
             buffSmartAutoBuyersRateMultiplier();
@@ -9355,7 +9356,6 @@ export function buffOptimizedPowerGridsMultiplier() {
         }
     });
 }
-
 
 export function buffSmartAutoBuyersRateMultiplier() {
     const multiplier = getAscendencyBuffDataObject()['smartAutoBuyers'].effectCategoryMagnitude;
