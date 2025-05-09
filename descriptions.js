@@ -1064,6 +1064,11 @@ export function initialiseDescriptions() {
             content2: "",
             updateAt: "" 
         },
+        spaceTelescopePhilosophyBoostResourcesAndCompoundsRow: {
+            content1: `Target beam at the Void, and pillage its riches! - Power: ${Math.floor(getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'energyUsePhilosophyBoostResourcesAndCompounds']) * getTimerRateRatio())}KW / s`,
+            content2: "",
+            updateAt: "" 
+        },
         spaceRocket1TravelRow: {
             content1: `Select an Asteroid to travel there and begin mining Antimatter`,
             content2: "",

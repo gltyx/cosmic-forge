@@ -563,6 +563,7 @@ export let resourceData = {
                 resource3Price: [20000, 'silicon', 'resources'],
                 energyUseSearchAsteroid: 0.4,
                 energyUseInvestigateStar: 0.7,
+                energyUsePhilosophyBoostResourcesAndCompounds: 1.1,
             },
             launchPad: { 
                 launchPadBoughtYet: false,

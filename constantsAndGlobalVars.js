@@ -214,10 +214,13 @@ let canAffordDeferred = null;
 let originalFrameNumbers = {};
 let baseSearchAsteroidTimerDuration = 120000;
 let baseInvestigateStarTimerDuration = 800000;
+let basePillageVoidTimerDuration = 300000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let currentInvestigateStarTimerDurationTotal = 0;
+let currentPillageVoidTimerDurationTotal = 0;
 let timeLeftUntilAsteroidScannerTimerFinishes = 0;
 let timeLeftUntilTravelToDestinationStarTimerFinishes = 0;
+let timeLeftUntilPillageVoidTimerFinishes = 0;
 let timeLeftUntilStarInvestigationTimerFinishes = 0;
 let oldAntimatterRightBoxSvgData = null;
 let currentDestinationDropdownText = 'Select an option';
@@ -430,9 +433,11 @@ let weatherEffectOn = false;
 let weatherEfficiencyApplied = false;
 let currentlySearchingAsteroid = false;
 let currentlyInvestigatingStar = false;
+let currentlyPillagingVoid = false;
 let telescopeReadyToSearch = true;
 let asteroidTimerCanContinue = false;
 let starInvestigationTimerCanContinue = false;
+let pillageVoidTimerCanContinue = false;
 let antimatterUnlocked = false;
 let isAntimatterBoostActive = false;
 let antimatterSvgEventListeners = false;
@@ -727,8 +732,10 @@ export function resetAllVariablesOnRebirth() {
     baseInvestigateStarTimerDuration = 800000;
     currentAsteroidSearchTimerDurationTotal = 0;
     currentInvestigateStarTimerDurationTotal = 0;
+    currentPillageVoidTimerDurationTotal = 0;
     timeLeftUntilAsteroidScannerTimerFinishes = 0;
     timeLeftUntilTravelToDestinationStarTimerFinishes = 0;
+    timeLeftUntilPillageVoidTimerFinishes = 0;
     timeLeftUntilStarInvestigationTimerFinishes = 0;
     oldAntimatterRightBoxSvgData = null;
     currentDestinationDropdownText = 'Select an option';
@@ -940,9 +947,11 @@ export function resetAllVariablesOnRebirth() {
     weatherEfficiencyApplied = false;
     currentlySearchingAsteroid = false;
     currentlyInvestigatingStar = false;
+    currentlyPillagingVoid = false;
     telescopeReadyToSearch = true;
     asteroidTimerCanContinue = false;
     starInvestigationTimerCanContinue = false;
+    pillageVoidTimerCanContinue = false;
     antimatterUnlocked = false;
     isAntimatterBoostActive = false;
     antimatterSvgEventListeners = false;
@@ -1017,9 +1026,11 @@ export function captureGameStatusForSaving(type) {
     gameState.baseSearchTimerDuration = baseSearchAsteroidTimerDuration;
     gameState.timeLeftUntilAsteroidScannerTimerFinishes = timeLeftUntilAsteroidScannerTimerFinishes;
     gameState.timeLeftUntilStarInvestigationTimerFinishes = timeLeftUntilStarInvestigationTimerFinishes;
+    gameState.timeLeftUntilPillageVoidTimerFinishes = timeLeftUntilPillageVoidTimerFinishes;
     gameState.timeLeftUntilTravelToDestinationStarTimerFinishes = timeLeftUntilTravelToDestinationStarTimerFinishes;
     gameState.currentAsteroidSearchTimerDurationTotal = currentAsteroidSearchTimerDurationTotal;
     gameState.currentInvestigateStarTimerDurationTotal = currentInvestigateStarTimerDurationTotal;
+    gameState.currentPillageVoidTimerDurationTotal = currentPillageVoidTimerDurationTotal;
     gameState.timeLeftUntilRocketTravelToAsteroidTimerFinishes = timeLeftUntilRocketTravelToAsteroidTimerFinishes;
     gameState.asteroidArray = asteroidArray;
     gameState.rocketTravelDuration = rocketTravelDuration;
@@ -1117,6 +1128,7 @@ export function captureGameStatusForSaving(type) {
         trippedStatus: trippedStatus,
         currentlySearchingAsteroid: currentlySearchingAsteroid,
         currentlyInvestigatingStar: currentlyInvestigatingStar,
+        currentlyPillagingVoid: currentlyPillagingVoid,
         telescopeReadyToSearch: telescopeReadyToSearch,
         currentlyTravellingToAsteroid: currentlyTravellingToAsteroid,
         rocketReadyToTravel: rocketReadyToTravel,
@@ -1215,10 +1227,12 @@ export function restoreGameStatus(gameState, type) {
             baseSearchAsteroidTimerDuration = gameState.baseSearchTimerDuration ?? 120000;
             timeLeftUntilAsteroidScannerTimerFinishes = gameState.timeLeftUntilAsteroidScannerTimerFinishes ?? 0;
             timeLeftUntilStarInvestigationTimerFinishes = gameState.timeLeftUntilStarInvestigationTimerFinishes ?? 0;
+            timeLeftUntilPillageVoidTimerFinishes = gameState.timeLeftUntilPillageVoidTimerFinishes ?? 0;
             timeLeftUntilRocketTravelToAsteroidTimerFinishes = gameState.timeLeftUntilRocketTravelToAsteroidTimerFinishes ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             timeLeftUntilTravelToDestinationStarTimerFinishes = gameState.timeLeftUntilTravelToDestinationStarTimerFinishes ?? 0;
             currentAsteroidSearchTimerDurationTotal = gameState.currentAsteroidSearchTimerDurationTotal ?? 0;
             currentInvestigateStarTimerDurationTotal = gameState.currentInvestigateStarTimerDurationTotal ?? 0;
+            currentPillageVoidTimerDurationTotal = gameState.currentPillageVoidTimerDurationTotal ?? 0;
             asteroidArray = (gameState.asteroidArray ?? []).filter(item => item !== '') || null;
             rocketTravelDuration = gameState.rocketTravelDuration ?? {rocket1: 0, rocket2: 0, rocket3: 0, rocket4: 0};
             starTravelDuration = gameState.starTravelDuration ?? 0;
@@ -1315,6 +1329,7 @@ export function restoreGameStatus(gameState, type) {
             trippedStatus = gameState.flags.trippedStatus ?? false;
             currentlySearchingAsteroid = gameState.flags.currentlySearchingAsteroid ?? false;
             currentlyInvestigatingStar = gameState.flags.currentlyInvestigatingStar ?? false;
+            currentlyPillagingVoid = gameState.flags.currentlyPillagingVoid ?? false;
             telescopeReadyToSearch = gameState.flags.telescopeReadyToSearch ?? true;            
             currentlyTravellingToAsteroid = gameState.flags.currentlyTravellingToAsteroid ?? { rocket1: false, rocket2: false, rocket3: false, rocket4: false };
             rocketReadyToTravel = gameState.flags.rocketReadyToTravel ?? { rocket1: true, rocket2: true, rocket3: true, rocket4: true };
@@ -2555,6 +2570,14 @@ export function setBaseInvestigateStarTimerDuration(value) {
     baseInvestigateStarTimerDuration = value;
 }
 
+export function getBasePillageVoidTimerDuration() {
+    return basePillageVoidTimerDuration;
+}
+
+export function setBasePillageVoidTimerDuration(value) {
+    basePillageVoidTimerDuration = value;
+}
+
 export function getCurrentlySearchingAsteroid() {
     return currentlySearchingAsteroid;
 }
@@ -2571,12 +2594,28 @@ export function setCurrentlyInvestigatingStar(value) {
     currentlyInvestigatingStar = value ?? false;
 }
 
+export function getCurrentlyPillagingVoid() {
+    return currentlyPillagingVoid;
+}
+
+export function setCurrentlyPillagingVoid(value) {
+    currentlyPillagingVoid = value;
+}
+
 export function getTimeLeftUntilAsteroidScannerTimerFinishes() {
     return timeLeftUntilAsteroidScannerTimerFinishes;
 }
 
 export function setTimeLeftUntilAsteroidScannerTimerFinishes(value) {
     timeLeftUntilAsteroidScannerTimerFinishes = value ?? 0;
+}
+
+export function getTimeLeftUntilPillageVoidTimerFinishes() {
+    return timeLeftUntilPillageVoidTimerFinishes;
+}
+
+export function setTimeLeftUntilPillageVoidTimerFinishes(value) {
+    timeLeftUntilPillageVoidTimerFinishes = value ?? 0;
 }
 
 export function getTimeLeftUntilTravelToDestinationStarTimerFinishes() {
@@ -2627,12 +2666,28 @@ export function setCurrentInvestigateStarTimerDurationTotal(value) {
     currentInvestigateStarTimerDurationTotal = value ?? 0;
 }
 
+export function getCurrentPillageVoidTimerDurationTotal() {
+    return currentPillageVoidTimerDurationTotal;
+}
+
+export function setCurrentPillageVoidTimerDurationTotal(value) {
+    currentPillageVoidTimerDurationTotal = value ?? 0;
+}
+
 export function getAsteroidTimerCanContinue() {
     return asteroidTimerCanContinue;
 }
 
 export function setAsteroidTimerCanContinue(value) {
     asteroidTimerCanContinue = value;
+}
+
+export function getPillageVoidTimerCanContinue() {
+    return pillageVoidTimerCanContinue;
+}
+
+export function setPillageVoidTimerCanContinue(value) {
+    pillageVoidTimerCanContinue = value;
 }
 
 export function getStarInvestigationTimerCanContinue() {
@@ -4122,18 +4177,24 @@ export function populateVariableDebugger() {
 
         { label: "currentlySearchingAsteroid", value: currentlySearchingAsteroid },
         { label: "currentlyInvestigatingStar", value: currentlyInvestigatingStar },
+        { label: "currentlyPillagingVoid", value: currentlyPillagingVoid },
         { label: "telescopeReadyToSearch", value: telescopeReadyToSearch },
         { label: "asteroidTimerCanContinue", value: asteroidTimerCanContinue },
         { label: "starInvestigationTimerCanContinue", value: starInvestigationTimerCanContinue },
+        { label: "pillageVoidTimerCanContinue", value: pillageVoidTimerCanContinue },
         { label: "sortAsteroidMethod", value: sortAsteroidMethod },
         { label: "sortStarMethod", value: sortStarMethod },
         { label: "baseSearchAsteroidTimerDuration", value: baseSearchAsteroidTimerDuration },
         { label: "baseInvestigateStarTimerDuration", value: baseInvestigateStarTimerDuration },
+        { label: "basePillageVoidTimerDuration", value: basePillageVoidTimerDuration },
         { label: "currentAsteroidSearchTimerDurationTotal", value: currentAsteroidSearchTimerDurationTotal },
         { label: "currentInvestigateStarTimerDurationTotal", value: currentInvestigateStarTimerDurationTotal },
+        { label: "currentPillageVoidTimerDurationTotal", value: currentPillageVoidTimerDurationTotal },
+
         { label: "timeLeftUntilAsteroidScannerTimerFinishes", value: timeLeftUntilAsteroidScannerTimerFinishes },
         { label: "timeLeftUntilTravelToDestinationStarTimerFinishes", value: timeLeftUntilTravelToDestinationStarTimerFinishes },
         { label: "timeLeftUntilStarInvestigationTimerFinishes", value: timeLeftUntilStarInvestigationTimerFinishes },
+        { label: "timeLeftUntilPillageVoidTimerFinishes", value: timeLeftUntilPillageVoidTimerFinishes },
         { label: "oldAntimatterRightBoxSvgData", value: oldAntimatterRightBoxSvgData },
 
         { label: "", value: "" },

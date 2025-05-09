@@ -117,7 +117,8 @@ import {
     getRepeatableTechMultipliers,
     STAR_FIELD_SEED,
     NUMBER_OF_STARS,
-    getStarMapMode
+    getStarMapMode,
+    getPhilosophyAbilityActive
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -539,12 +540,20 @@ export function createOptionRow(
         }
     }
 
-    if (getCurrentOptionPane() === 'space telescope') {
-        if (['searchAsteroid', 'investigateStar'].includes(objectSectionArgument2)) {
+    if (getCurrentOptionPane() === 'space telescope') { //TODO THIS IS WHERE WE CAN HIDE THE PILLAGE ROW UNTIL IT IS UNLOCKED
+        if (['searchAsteroid', 'investigateStar', 'pillageVoid'].includes(objectSectionArgument2)) {
             if (!getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
                 wrapper.classList.add('invisible');
             } else {
-                wrapper.classList.remove('invisible');
+                if (objectSectionArgument2 === 'pillageVoid') {
+                    if (getPlayerPhilosophy() === 'voidborn' && getPhilosophyAbilityActive()) {
+                        wrapper.classList.remove('invisible');
+                    } else {
+                        wrapper.classList.add('invisible');
+                    }
+                } else {
+                    wrapper.classList.remove('invisible');
+                }
             }
         }
     }

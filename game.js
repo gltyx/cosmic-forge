@@ -1,4 +1,12 @@
 import {
+    getPillageVoidTimerCanContinue,
+    setPillageVoidTimerCanContinue,
+    getCurrentlyPillagingVoid,
+    setCurrentlyPillagingVoid,
+    getCurrentPillageVoidTimerDurationTotal,
+    setCurrentPillageVoidTimerDurationTotal,
+    getTimeLeftUntilPillageVoidTimerFinishes,
+    setTimeLeftUntilPillageVoidTimerFinishes,
     getAdditionalSystemsToSettleThisRun,
     setAdditionalSystemsToSettleThisRun,
     getCompoundCreateDropdownRecipeText,
@@ -7,8 +15,6 @@ import {
     getInitialImpression,
     getAllRepeatableTechMultipliersObject,
     getPlayerPhilosophy,
-    setPlayerPhilosophy,
-    getUserPlatform,
     setUserPlatform,
     setGameActiveCountTime,
     getGameActiveCountTime,
@@ -17,14 +23,12 @@ import {
     setCollectedPrecipitationQuantityThisRun,
     setBelligerentEnemyFlag,
     setAchievementFlagArray,
-    getAutoSaveFrequency,
     getLiquidatedThisRun,
     setLiquidatedThisRun,
     getCashLiquidationModifier,
     getApLiquidationQuantity,
     setApLiquidationQuantity,
     setLiquidationValue,
-    getLiquidationValue,
     getApBaseBuyPrice,
     getApBuyPrice,
     setApBuyPrice,
@@ -254,7 +258,8 @@ import {
     setInitialImpression,
     setRocketTravelSpeed,
     setStarShipTravelSpeed,
-    getSettledStars
+    getSettledStars,
+    getBasePillageVoidTimerDuration
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -478,7 +483,7 @@ export async function gameLoop() {
 
         handlePowerAllButtonState();
         checkPowerBuildingsFuelLevels();
-        checkPowerForSpaceTelescopeTimer(['searchAsteroidTimer', 'investigateStarTimer']);
+        checkPowerForSpaceTelescopeTimer(['searchAsteroidTimer', 'investigateStarTimer', 'pillageVoidTimer']);
 
         monitorTechTree();
         
@@ -2870,14 +2875,16 @@ function resourceAndCompoundMonitorRevealRowsChecks(element) {
 
 export function checkPowerForSpaceTelescopeTimer(timers) {
     timers.forEach(timerName => {
-        const searchTimer = timerManager.getTimer(timerName);
-        if (searchTimer) {
+        const timer = timerManager.getTimer(timerName);
+        if (timer) {
             if (timerName === 'searchAsteroidTimer' && getAsteroidTimerCanContinue()) {
-                searchTimer.resume();
+                timer.resume();
             } else if (timerName === 'investigateStarTimer' && getStarInvestigationTimerCanContinue()) {
-                searchTimer.resume();
+                timer.resume();
+            } else if (timerName === 'pillageVoidTimer' && getPillageVoidTimerCanContinue()) {
+                timer.resume();
             } else {
-                searchTimer.pause();
+                timer.pause();
             }
         }
     });
@@ -2967,9 +2974,9 @@ function travelToAsteroidChecks(element) {
             }
 
             getCurrentlyTravellingToAsteroid(rocketName) || getMiningObject()[rocketName] !== null ? (element.classList.add('invisible')) : (element.classList.remove('invisible'));
-            const progressBarSearchAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
-            if (progressBarSearchAsteroid) {
-                getCurrentlyTravellingToAsteroid(rocketName) ? progressBarSearchAsteroid.classList.remove('invisible') : progressBarSearchAsteroid.classList.add('invisible');
+            const progressBarTravelToAsteroid = document.getElementById(`spaceTravelToAsteroidProgressBar${capitaliseString(rocketName)}`);
+            if (progressBarTravelToAsteroid) {
+                getCurrentlyTravellingToAsteroid(rocketName) ? progressBarTravelToAsteroid.classList.remove('invisible') : progressBarTravelToAsteroid.classList.add('invisible');
             }
         }
     }
@@ -2977,9 +2984,26 @@ function travelToAsteroidChecks(element) {
 
 function spaceTelescopeChecks(element, type) {
     const isAsteroid = type === 'searchAsteroid';
-    const labelId = isAsteroid ? 'scanAsteroidsDescription' : 'studyStarsDescription';
-    const progressBarId = isAsteroid ? 'spaceTelescopeSearchAsteroidProgressBar' : 'spaceTelescopeInvestigateStarProgressBar';
-    const progressBarContainerId = isAsteroid ? 'spaceTelescopeSearchAsteroidProgressBarContainer' : 'spaceTelescopeInvestigateStarProgressBarContainer';
+    const isStar = type === 'investigateStar';
+    const isPillageVoid = type === 'pillageVoid';
+    
+    const labelId = isAsteroid
+      ? 'scanAsteroidsDescription'
+      : isStar
+        ? 'studyStarsDescription'
+        : 'pillageTheVoidDescription';
+    
+    const progressBarId = isAsteroid
+      ? 'spaceTelescopeSearchAsteroidProgressBar'
+      : isStar
+        ? 'spaceTelescopeInvestigateStarProgressBar'
+        : 'spaceTelescopePillageVoidProgressBar';
+    
+    const progressBarContainerId = isAsteroid
+      ? 'spaceTelescopeSearchAsteroidProgressBarContainer'
+      : isStar
+        ? 'spaceTelescopeInvestigateStarProgressBarContainer'
+        : 'spaceTelescopePillageVoidProgressBarContainer';
     
     const accompanyingLabel = document.getElementById(labelId);
 
@@ -2987,33 +3011,61 @@ function spaceTelescopeChecks(element, type) {
         if (getPowerOnOff()) {
             accompanyingLabel.classList.remove('red-disabled-text');
             if (getTelescopeReadyToSearch()) {
-                accompanyingLabel.innerText = isAsteroid ? 'Ready To Search...' : 'Ready To Study...';
+                accompanyingLabel.innerText = isAsteroid
+                ? 'Ready To Search...'
+                : isStar
+                  ? 'Ready To Study...'
+                  : 'Ready To Pillage...';
+              
                 accompanyingLabel.classList.add('green-ready-text');
             } else {
                 if (isAsteroid) {
-                    if (getCurrentlyInvestigatingStar()) {
-                        accompanyingLabel.innerText = 'Currently Investigating Stars...';
+                    if (getCurrentlyInvestigatingStar() || getCurrentlyPillagingVoid()) {
+                        accompanyingLabel.innerText = getCurrentlyInvestigatingStar()
+                            ? 'Currently Investigating Stars...'
+                            : 'Currently Pillaging the Void...';
                         accompanyingLabel.classList.remove('green-ready-text');
                         accompanyingLabel.classList.add('red-disabled-text');
                     }
-                } else {
-                    if (getCurrentlySearchingAsteroid()) {
-                        accompanyingLabel.innerText = 'Currently Searching Asteroids...';
+                } else if (isStar) {
+                    if (getCurrentlySearchingAsteroid() || getCurrentlyPillagingVoid()) {
+                        accompanyingLabel.innerText = getCurrentlySearchingAsteroid()
+                            ? 'Currently Searching Asteroids...'
+                            : 'Currently Pillaging the Void...';
+                        accompanyingLabel.classList.remove('green-ready-text');
+                        accompanyingLabel.classList.add('red-disabled-text');
+                    }
+                } else if (isPillageVoid) {
+                    if (getCurrentlySearchingAsteroid() || getCurrentlyInvestigatingStar()) {
+                        accompanyingLabel.innerText = getCurrentlySearchingAsteroid()
+                            ? 'Currently Searching Asteroids...'
+                            : 'Currently Investigating Stars...';
                         accompanyingLabel.classList.remove('green-ready-text');
                         accompanyingLabel.classList.add('red-disabled-text');
                     }
                 }
-            }
+            }            
         } else {
             accompanyingLabel.classList.add('red-disabled-text');
             accompanyingLabel.classList.remove('green-ready-text');
             accompanyingLabel.innerText = 'Requires Power!';
-            const elapsedTime = isAsteroid
-                ? getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes()
-                : getCurrentInvestigateStarTimerDurationTotal() - getTimeLeftUntilStarInvestigationTimerFinishes();
-            const progressBarPercentage = (elapsedTime / (isAsteroid ? getCurrentAsteroidSearchTimerDurationTotal() : getCurrentInvestigateStarTimerDurationTotal())) * 100;
+        
+            let elapsedTime, totalDuration;
+        
+            if (isAsteroid) {
+                elapsedTime = getCurrentAsteroidSearchTimerDurationTotal() - getTimeLeftUntilAsteroidScannerTimerFinishes();
+                totalDuration = getCurrentAsteroidSearchTimerDurationTotal();
+            } else if (isStar) {
+                elapsedTime = getCurrentInvestigateStarTimerDurationTotal() - getTimeLeftUntilStarInvestigationTimerFinishes();
+                totalDuration = getCurrentInvestigateStarTimerDurationTotal();
+            } else if (isPillageVoid){
+                elapsedTime = getCurrentPillageVoidTimerDurationTotal() - getTimeLeftUntilPillageVoidTimerFinishes();
+                totalDuration = getCurrentPillageVoidTimerDurationTotal();
+            }
+        
+            const progressBarPercentage = (elapsedTime / totalDuration) * 100;
             document.getElementById(progressBarId).style.width = `${progressBarPercentage}%`;
-        }
+        } 
     }
 
     if (element.dataset.resourceToFuseTo === type) { // Scan button doesnt need specifics for which timer as it is not shown unless getTelescopeReadyToSearch is true
@@ -3023,15 +3075,23 @@ function spaceTelescopeChecks(element, type) {
             element.classList.add('red-disabled-text');
         }
 
-        getTelescopeReadyToSearch() ? element.classList.remove('invisible') : element.classList.add('invisible');
-
+        if (getTelescopeReadyToSearch()) {
+            element.classList.remove('invisible');
+        } else {
+            if (element.tagName.toLowerCase() === 'button') {
+                element.classList.add('invisible');
+            }
+        }
+        
         const progressBarContainer = document.getElementById(progressBarContainerId);
         if (progressBarContainer) {
             if (getTelescopeReadyToSearch()) {
                 progressBarContainer.classList.add('invisible');
             } else if (isAsteroid && getCurrentlySearchingAsteroid()) {
                 progressBarContainer.classList.remove('invisible');
-            } else if (!isAsteroid && getCurrentlyInvestigatingStar()) {
+            } else if (isStar && getCurrentlyInvestigatingStar()) {
+                progressBarContainer.classList.remove('invisible');
+            } else if (isPillageVoid && getCurrentlyPillagingVoid()) {
                 progressBarContainer.classList.remove('invisible');
             } else {
                 progressBarContainer.classList.add('invisible');
@@ -3944,7 +4004,7 @@ function checkStatusAndSetTextClasses(element) {
         return travelToAsteroidChecks(element);
     }
 
-    if (['searchAsteroid', 'investigateStar'].includes(element.dataset.resourceToFuseTo) && getCurrentOptionPane() === 'space telescope') {
+    if (['searchAsteroid', 'investigateStar', 'pillageVoid'].includes(element.dataset.resourceToFuseTo) && getCurrentOptionPane() === 'space telescope') {
         spaceTelescopeChecks(element, element.dataset.resourceToFuseTo);
     }
     
@@ -5922,8 +5982,9 @@ function startInitialTimers() {
             });
         }
 
-        setAsteroidTimerCanContinue(getPowerOnOff() && !getCurrentlyInvestigatingStar());
-        setStarInvestigationTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid());
+        setAsteroidTimerCanContinue(getPowerOnOff() && !getCurrentlyInvestigatingStar() && !getCurrentlyPillagingVoid());
+        setStarInvestigationTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid() && !getCurrentlyPillagingVoid());
+        setPillageVoidTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid() && !getCurrentlyInvestigatingStar());        
     });
 
     let weatherCountDownToChangeInterval;
@@ -6522,6 +6583,57 @@ export function resetRocketForNextJourney(rocket) {
     }
 }
 
+export function startPillageVoidTimer(adjustment) {
+    if (getPillageVoidTimerCanContinue()) {
+        if (adjustment[1] === 'offlineGains' && !getCurrentlyPillagingVoid()) {
+            return;
+        }
+        setTelescopeReadyToSearch(false);
+        setCurrentlyPillagingVoid(true);
+        const timerName = 'pillageVoidTimer';
+        
+        if (!timerManager.getTimer(timerName)) {
+            let counter = 0;
+            const pillageInterval = getTimerUpdateInterval();
+            let pillageDuration = adjustment[0] === 0 ? getPillageVoidDuration() : adjustment[0];
+    
+            // pillageDuration = 8000; //DEBUG
+    
+            if (adjustment[0] === 0) {
+                setCurrentPillageVoidTimerDurationTotal(pillageDuration);
+            }
+            
+            timerManager.addTimer(timerName, pillageInterval, () => {
+                const pillageVoidTimerDescriptionElement = document.getElementById('pillageTheVoidDescription');
+                counter += pillageInterval;
+    
+                const timeLeft = Math.max(pillageDuration - counter, 0);
+                const timeLeftUI = Math.max(Math.floor((pillageDuration - counter) / 1000), 0);
+                
+                if (counter >= pillageDuration) {
+                    gainPillageVoidResourcesAndCompounds();
+                    timerManager.removeTimer(timerName);
+                    if (pillageVoidTimerDescriptionElement) {             
+                        pillageVoidTimerDescriptionElement.innerText = 'Ready To Pillage';
+                    }
+                    setTelescopeReadyToSearch(true);
+                    setCurrentlyPillagingVoid(false);
+                    setTimeLeftUntilPillageVoidTimerFinishes(0);
+                } else {
+                    setTimeLeftUntilPillageVoidTimerFinishes(timeLeft); 
+                    if (pillageVoidTimerDescriptionElement) {
+                        pillageVoidTimerDescriptionElement.classList.add('green-ready-text');
+                        pillageVoidTimerDescriptionElement.innerText = `Pillaging ... ${timeLeftUI}s`;
+                        const elapsedTime = getCurrentPillageVoidTimerDurationTotal() - getTimeLeftUntilPillageVoidTimerFinishes();
+                        const progressBarPercentage = (elapsedTime / getCurrentPillageVoidTimerDurationTotal()) * 100;
+                        document.getElementById('spaceTelescopePillageVoidProgressBar').style.width = `${progressBarPercentage}%`;
+                    }
+                }
+            });
+        }
+    }
+}
+
 export function startInvestigateStarTimer(adjustment) {
     if (getStarInvestigationTimerCanContinue()) {
         if (adjustment[1] === 'offlineGains' && !getCurrentlyInvestigatingStar()) {
@@ -6643,6 +6755,13 @@ function getAsteroidSearchDuration() {
 
 function getStarInvestigationDuration() {
     const baseTimeDuration = getBaseInvestigateStarTimerDuration();
+    const variance = baseTimeDuration * 0.2; // 20% variance
+    const randomOffset = (Math.random() * 2 - 1) * variance;
+    return baseTimeDuration + randomOffset;
+}
+
+function getPillageVoidDuration() {
+    const baseTimeDuration = getBasePillageVoidTimerDuration();
     const variance = baseTimeDuration * 0.2; // 20% variance
     const randomOffset = (Math.random() * 2 - 1) * variance;
     return baseTimeDuration + randomOffset;
@@ -7066,6 +7185,9 @@ function setEnergyUse() {
         if (getCurrentlyInvestigatingStar() && getTimeLeftUntilStarInvestigationTimerFinishes() > 0) {
             energyUse = spaceTelescope.energyUseInvestigateStar;
         }
+        if (getCurrentlyPillagingVoid() && getTimeLeftUntilPillageVoidTimerFinishes() > 0) {
+            energyUse = spaceTelescope.energyUsePhilosophyBoostResourcesAndCompounds;
+        }
         totalEnergyUseSpaceTelescope += energyUse;
     }
 
@@ -7476,9 +7598,10 @@ export function offlineGains(switchedFocus) {
             setResourceDataObject(Math.min(currentRocketFuelQuantity + offlineGains[rocket], getResourceDataObject('space', ['upgrades', rocket, 'fuelQuantityToLaunch'])), 'space', ['upgrades', rocket, 'fuelQuantity']);
         });
 
-        setAsteroidTimerCanContinue(getPowerOnOff() && !getCurrentlyInvestigatingStar());
-        setStarInvestigationTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid());
-    
+        setAsteroidTimerCanContinue(getPowerOnOff() && !getCurrentlyInvestigatingStar() && !getCurrentlyPillagingVoid());
+        setStarInvestigationTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid() && !getCurrentlyPillagingVoid());
+        setPillageVoidTimerCanContinue(getPowerOnOff() && !getCurrentlySearchingAsteroid() && !getCurrentlyInvestigatingStar());        
+
         if (getCurrentlySearchingAsteroid() && getAsteroidTimerCanContinue()) {
             const timeLeft = getTimeLeftUntilAsteroidScannerTimerFinishes();
             const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
@@ -7498,6 +7621,16 @@ export function offlineGains(switchedFocus) {
             timerManager.removeTimer('investigateStarTimer');
             startInvestigateStarTimer([remainingTime, 'offlineGains']);
         }
+
+        if (getCurrentlyPillagingVoid() && getPillageVoidTimerCanContinue()) {
+            const timeLeft = getTimeLeftUntilPillageVoidTimerFinishes();
+            const offlineTimeInMilliseconds = timeDifferenceInSeconds * 1000;
+        
+            const remainingTime = Math.max(timeLeft - offlineTimeInMilliseconds, 100);
+        
+            timerManager.removeTimer('pillageVoidTimer');
+            startPillageVoidTimer([remainingTime, 'offlineGains']);
+        }        
 
         if (getStarShipTravelling() && getStarShipStatus()[0] === 'travelling') {
             const timeLeft = getTimeLeftUntilTravelToDestinationStarTimerFinishes();
@@ -7851,6 +7984,10 @@ function handlePowerAllButtonState() {
             powerAllButton.classList.add('activate-grid-disabled-border');
         }
     }
+}
+
+export function gainPillageVoidResourcesAndCompounds() {
+    console.log('void pillaged!');
 }
 
 export function extendStarDataRange(debug) {

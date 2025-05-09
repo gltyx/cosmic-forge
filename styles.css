@@ -1471,6 +1471,7 @@ button.red-disabled-text {
 #spaceTravelToAsteroidProgressBarRocket4Container,
 #spaceTelescopeSearchAsteroidProgressBarContainer,
 #spaceTelescopeInvestigateStarProgressBarContainer,
+#spaceTelescopePillageVoidProgressBarContainer,
 #spaceTravelToStarProgressBarContainer
  {
     background-color: var(--disabled-text);
@@ -1489,6 +1490,7 @@ button.red-disabled-text {
  #spaceTravelToAsteroidProgressBarRocket4,
  #spaceTelescopeSearchAsteroidProgressBar,
  #spaceTelescopeInvestigateStarProgressBar,
+ #spaceTelescopePillageVoidProgressBar,
  #spaceTravelToStarProgressBar
  {
     background-color: var(--text-color);
