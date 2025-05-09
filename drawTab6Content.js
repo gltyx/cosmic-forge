@@ -1,4 +1,4 @@
-import { getCurrentlyPillagingVoid, getTimeLeftUntilPillageVoidTimerFinishes, getTimeLeftUntilStarInvestigationTimerFinishes, getCurrentlyInvestigatingStar, getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
+import { getCurrentlyPillagingVoid, getTimeLeftUntilPillageVoidTimerFinishes, getTimeLeftUntilStarInvestigationTimerFinishes, getCurrentlyInvestigatingStar, getRocketUserName, setRocketUserName, setRocketDirection, getRocketDirection, getDestinationAsteroid, deferredActions, getSortAsteroidMethod, getAsteroidArray, getImageUrls, setCheckRocketFuellingStatus , getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, setRocketsFuellerStartedArray, getLaunchedRockets, getRocketsFuellerStartedArray, getCurrentlySearchingAsteroid, getTimeLeftUntilAsteroidScannerTimerFinishes, setDestinationAsteroid, getMiningObject, setAsteroidArray, getCurrentStarSystemWeatherEfficiency, getPlayerPhilosophy, getPhilosophyAbilityActive } from './constantsAndGlobalVars.js';
 import { startTravelToAndFromAsteroidTimer, startInvestigateStarTimer, startSearchAsteroidTimer, launchRocket, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, buildSpaceMiningBuilding, addToResourceAllTimeStat, startPillageVoidTimer } from './game.js';
 import { timerManager } from './timerManager.js';
 import { getRocketPartsNeededInTotalPerRocket, getRocketParts, getResourceDataObject } from './resourceDataObject.js';
@@ -28,7 +28,9 @@ export function drawTab6Content(heading, optionContentElement) {
                         sfxPlayer.playAudio('buildTelescope', false);
                         document.getElementById('spaceTelescopeSearchAsteroidRow').classList.remove('invisible');
                         document.getElementById('spaceTelescopeInvestigateStarRow').classList.remove('invisible');
-                        document.getElementById('spaceTelescopePhilosophyBoostResourcesAndCompoundsRow').classList.remove('invisible');
+                        if (getPlayerPhilosophy() === 'voidborn' && getPhilosophyAbilityActive()) {
+                            document.getElementById('spaceTelescopePhilosophyBoostResourcesAndCompoundsRow').classList.remove('invisible');
+                        }
                         spaceBuildTelescopeRow.classList.add('invisible');
                         showNotification('Space Telescope Built!', 'info', 3000, 'special');
                     }, 'upgradeCheck', '', 'spaceUpgrade', 'spaceTelescope', 'cash', true, null, 'spaceMiningPurchase'),

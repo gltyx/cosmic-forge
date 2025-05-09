@@ -1,4 +1,5 @@
 import {
+    setPlayerPhilosophy,
     getPillageVoidTimerCanContinue,
     setPillageVoidTimerCanContinue,
     getCurrentlyPillagingVoid,
