@@ -7988,7 +7988,56 @@ function handlePowerAllButtonState() {
 }
 
 export function gainPillageVoidResourcesAndCompounds() {
-    console.log('void pillaged!');
+    const gained = decideWhichResourcesAndCompoundsGainedByPillage();
+
+    // Store or process the gained resources and compounds as needed
+    console.log("Gained by Pillage:", gained);
+}
+
+export function decideWhichResourcesAndCompoundsGainedByPillage() {
+    function weightedRandom() {
+        const rand = Math.random();
+        if (rand < 0.6) return 1;
+        else if (rand < 0.85) return 2;
+        else return 3;
+    }
+
+    function pickRandomUniqueItems(items, count) {
+        const shuffled = items.slice().sort(() => Math.random() - 0.5);
+        return shuffled.slice(0, count);
+    }
+
+    function pickWeightedItems(items, weights, count) {
+        const weightedPool = [];
+        for (let i = 0; i < items.length; i++) {
+            for (let j = 0; j < weights[i]; j++) {
+                weightedPool.push(items[i]);
+            }
+        }
+
+        const selected = new Set();
+        while (selected.size < count && weightedPool.length > 0) {
+            const choice = weightedPool[Math.floor(Math.random() * weightedPool.length)];
+            selected.add(choice);
+        }
+
+        return Array.from(selected);
+    }
+
+    const resourceTypeQuantity = weightedRandom();
+    const compoundTypeQuantity = weightedRandom();
+
+    const resourceList = ['hydrogen', 'helium', 'carbon', 'neon', 'oxygen', 'sodium', 'silicon', 'iron'];
+    const compoundList = ['diesel', 'glass', 'steel', 'concrete', 'titanium', 'water'];
+    const compoundWeights = [2, 2, 1, 2, 1, 2];
+
+    const selectedResources = pickRandomUniqueItems(resourceList, resourceTypeQuantity);
+    const selectedCompounds = pickWeightedItems(compoundList, compoundWeights, compoundTypeQuantity);
+
+    return {
+        resources: selectedResources,
+        compounds: selectedCompounds
+    };
 }
 
 export function extendStarDataRange(debug) {

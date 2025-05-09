@@ -870,7 +870,7 @@ export let resourceData = {
             laserIntensityResearch: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'fleetAttackPower', philosophy: 'supremacist', repeatable: true, setPrice: 'laserIntensityResearchTechPhilosophyPrice' } // fleets more damage dealt
         },
         voidborn: {
-            voidSeers: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'voidborn', repeatable: false, setPrice: 'voidSeersTechPhilosophyPrice' }, // ABILITY: unlock space telescope ability search void instant credits of resources / compounds //need to add a new row in space telescope and new mechanics and only show if ability is active and philosophy is voidborn
+            voidSeers: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'voidborn', repeatable: false, setPrice: 'voidSeersTechPhilosophyPrice' }, // ABILITY: unlock space telescope ability search void instant credits of resources / compounds
             stellarWhispers: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'initialImpression', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarWhispersTechPhilosophyPrice' }, // improve starting impression of enemies
             stellarInsightManifold: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'starStudy', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarInsightManifoldTechPhilosophyPrice' }, // star study quicker
             asteroidDwellers: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'asteroidSearch', philosophy: 'voidborn', repeatable: true, setPrice: 'asteroidDwellersTechPhilosophyPrice' }, // asteroid search quicker
