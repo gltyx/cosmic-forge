@@ -1,5 +1,6 @@
 philosophies:
-when buying special ability, add individual features logic based on philosophy choice - TODO 1 left
+special row for voidborn added to space telescope and timer added and functions perfectly with offline gains and everything
+now need to write the function to actually give the resources and compounds when the timer finishes.
 megaStructures:
 -TODO
 
