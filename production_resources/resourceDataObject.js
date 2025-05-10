@@ -1,7 +1,7 @@
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
-import { addPermanentBuffsBackInAfterRebirth } from './game.js';
-import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, getGameStartTime, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText } from "./constantsAndGlobalVars.js";
+import { addPermanentBuffsBackInAfterRebirth, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, calculateAndAddExtraAPFromPhilosophyRepeatable, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables } from './game.js';
+import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText, getStatRun, getPlayerPhilosophy, getAllRepeatableTechMultipliersObject } from "./constantsAndGlobalVars.js";
 import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsTickers, achievementBeatEnemy, achievementCollect100Precipitation, achievementCollect100TitaniumAsPrecipitation, achievementConquerStarSystems, achievementCreateCompound, achievementDiscoverAsteroid, achievementDiscoverLegendaryAsteroid, achievementHave4RocketsMiningAntimatter, achievementHave50HoursWithOnePioneer, achievementInitiateDiplomacyWithAlienRace, achievementLaunchRocket, achievementLaunchStarShip, achievementLiquidateAllAssets, achievementMineAllAntimatterAsteroid, achievementPerformGalaticMarketTransaction, achievementRebirth, achievementResearchAllTechnologies, achievementSeeAllNewsTickers, achievementSpendAp, achievementStudyAllStarsInOneRun, achievementStudyAStar, achievementTrade10APForCash, achievementTripPower } from "./achievements.js";
 
 export let achievementImageUrls;
@@ -556,15 +556,18 @@ export let resourceData = {
         upgrades: {
             spaceTelescope: { 
                 spaceTelescopeBoughtYet: false,
+                basePrices: [10000, 20000, 15000, 20000],
                 price: 10000,
                 resource1Price: [20000, 'iron', 'resources'],
                 resource2Price: [15000, 'glass', 'compounds'],
                 resource3Price: [20000, 'silicon', 'resources'],
                 energyUseSearchAsteroid: 0.4,
                 energyUseInvestigateStar: 0.7,
+                energyUsePhilosophyBoostResourcesAndCompounds: 1.1,
             },
             launchPad: { 
                 launchPadBoughtYet: false,
+                basePrices: [40000, 10000, 1000, 20000],
                 price: 40000,
                 resource1Price: [10000, 'iron', 'resources'],
                 resource2Price: [1000, 'titanium', 'compounds'],
@@ -846,7 +849,56 @@ export let resourceData = {
         lifeSupportSystems: { appearsAt: [55000, "orbitalConstruction", "nanoTubeTechnology", "quantumComputing"], prereqs: ['Orbital Construction', 'Nano Tube Technology', 'Quantum Computing'], price: 60000, idForRenderPosition: 9103 },
         starshipFleets: { appearsAt: [80000, "FTLTravelTheory", "antimatterEngines", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Antimatter Engines', 'Orbital Construction'], price: 100000, idForRenderPosition: 9104 },
         stellarScanners: { appearsAt: [70000, "FTLTravelTheory", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Orbital Construction'], price: 72000, idForRenderPosition: 9105 }
-    },    
+    },
+    philosophyRepeatableTechs: {
+        // these techs will be specific to the philosophy chosen by the player 
+        // each philosophy will have one expensive special ability that when unlocked carries through all runs
+        // these techs will be repeatable and more expensive and give a cumulative bonus each time
+        // these bonuses are permanent and carry over between runs
+        constructor: {
+            spaceStorageTankResearch: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'constructor', repeatable: false, setPrice: 'spaceStorageTankResearchTechPhilosophyPrice' }, // ABILITY : storage increases not x2 but x5 every time
+            efficientAssembly: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true, setPrice: 'efficientAssemblyTechPhilosophyPrice' }, // cheaper one off buildings
+            laserMining: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'resources', philosophy: 'constructor', repeatable: true, setPrice: 'laserMiningTechPhilosophyPrice' }, // cheaper resource autobuyers
+            massCompoundAssembly: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'compounds', philosophy: 'constructor', repeatable: true, setPrice: 'massCompoundAssemblyTechPhilosophyPrice' }, // cheaper compound recipes
+            energyDrones: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'buildings', philosophy: 'constructor', repeatable: true, setPrice: 'energyDronesTechPhilosophyPrice' } // cheaper energy and research buildings
+        },
+        supremacist: {
+            fleetHolograms: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'supremacist', repeatable: false, setPrice: 'fleetHologramsTechPhilosophyPrice' }, // ABILITY : guaranteed vassalization if fleet 3x larger, regardless of leader traits
+            hangarAutomation: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'fleetCosts', philosophy: 'supremacist', repeatable: true, setPrice: 'hangarAutomationTechPhilosophyPrice' }, // cheaper fleets
+            syntheticPlating: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'fleetHealth', philosophy: 'supremacist', repeatable: true, setPrice: 'syntheticPlatingTechPhilosophyPrice' }, // fleets higher health armor
+            antimatterEngineMinaturization: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'fleetSpeed', philosophy: 'supremacist', repeatable: true, setPrice: 'antimatterEngineMinaturizationTechPhilosophyPrice' }, // fleets faster
+            laserIntensityResearch: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'fleetAttackPower', philosophy: 'supremacist', repeatable: true, setPrice: 'laserIntensityResearchTechPhilosophyPrice' } // fleets more damage dealt
+        },
+        voidborn: {
+            voidSeers: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'voidborn', repeatable: false, setPrice: 'voidSeersTechPhilosophyPrice' }, // ABILITY: unlock space telescope ability search void instant credits of resources / compounds
+            stellarWhispers: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'initialImpression', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarWhispersTechPhilosophyPrice' }, // improve starting impression of enemies
+            stellarInsightManifold: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'starStudy', philosophy: 'voidborn', repeatable: true, setPrice: 'stellarInsightManifoldTechPhilosophyPrice' }, // star study quicker
+            asteroidDwellers: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'asteroidSearch', philosophy: 'voidborn', repeatable: true, setPrice: 'asteroidDwellersTechPhilosophyPrice' }, // asteroid search quicker
+            ascendencyPhilosophy: { idWithinCategory: 4, multiplier: 0, price: 10000, affects: 'ascendencyPoints', philosophy: 'voidborn', repeatable: true, setPrice: 'ascendencyPhilosophyTechPhilosophyPrice' } // improve base awarded AP by 1pt each time
+        },
+        expansionist: {
+            rapidExpansion: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'expansionist', repeatable: false, setPrice: 'rapidExpansionTechPhilosophyPrice' }, // ABILITY: chance to capture up to 3 neighbouring systems when capturing one
+            spaceElevator: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'starshipPartsCost', philosophy: 'expansionist', repeatable: true, setPrice: 'spaceElevatorTechPhilosophyPrice' }, // reduce starship parts costs
+            launchPadMassProduction: { idWithinCategory: 2, multiplier: 1, price: 10000, affects: 'rocketPartsCost', philosophy: 'expansionist', repeatable: true, setPrice: 'launchPadMassProductionTechPhilosophyPrice' }, // reduce rocket parts costs
+            asteroidAttractors: { idWithinCategory: 3, multiplier: 1, price: 10000, affects: 'rocketTravelTime', philosophy: 'expansionist', repeatable: true, setPrice: 'asteroidAttractorsTechPhilosophyPrice' }, // reduce rocket travel time
+            warpDrive: { idWithinCategory: 4, multiplier: 1, price: 10000, affects: 'starshipTravelTime', philosophy: 'expansionist', repeatable: true, setPrice: 'warpDriveTechPhilosophyPrice' } // reduce starship travel time
+        }    
+    },  
+    megastructureTechs: {
+        //one mini tech tree for each will unlock one expensive tech per run and only advance to the next when the run advances to the next and the previous tech is completed
+        constructor: {
+
+        },
+        supremacist: {
+
+        },
+        voidborn: {
+
+        },
+        expansionist: {
+
+        }
+    },
     currency: {
         cash: 10,
     },
@@ -1561,7 +1613,7 @@ export let achievementsData = {
             gives1: "multiplierPermanent",
             value1: {
                 type: 'createCostCompounds',
-                quantity: 0.80
+                quantity: 0.8
             }
         },
         notification: "activateAllWackyNewsTickersNotification"
@@ -2503,13 +2555,107 @@ export let resourceDataRebirthCopy = structuredClone(resourceData);
 
 export function resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack() {
     const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+    const currentPricesForRepeatables = {};
+    const playerPhilosophy = getPlayerPhilosophy();
+    const allPhilosophyTechs = getResourceDataObject('philosophyRepeatableTechs');
+    
+    const philosophyTechs = allPhilosophyTechs[playerPhilosophy];
+    
+    Object.values(philosophyTechs).forEach(tech => {
+        const id = tech.idWithinCategory;
+        if (tech.repeatable && id >= 1 && id <= 4) {
+            currentPricesForRepeatables[id] = tech.price;
+        }
+    });
+
     Object.assign(resourceData, resourceDataRebirthCopy);
 
     addPermanentBuffsBackInAfterRebirth();
     addPermanentResourcesModifiersBackIn();
     addPermanentCompoundsModifiersBackIn();
 
+    if (getStatRun() > 2) { //player can buy repeatables from the start of run 2
+        addPhilosophyRepeatablesBackInAfterRebirth();
+        setPricesForRepeatablesAfterRebirth(currentPricesForRepeatables);
+    }
+
     setResourceDataObject(currentAp, 'ascendencyPoints', ['quantity']);
+}
+
+export function setPricesForRepeatablesAfterRebirth(currentPricesForRepeatables) {
+    const playerPhilosophy = getPlayerPhilosophy();
+    const allPhilosophyTechs = getResourceDataObject('philosophyRepeatableTechs');
+    const philosophyTechs = allPhilosophyTechs[playerPhilosophy];
+
+    Object.entries(philosophyTechs).forEach(([techKey, tech]) => {
+        const id = tech.idWithinCategory;
+        if (tech.repeatable && id >= 1 && id <= 4 && currentPricesForRepeatables.hasOwnProperty(id)) {
+            setResourceDataObject(
+                currentPricesForRepeatables[id],
+                'philosophyRepeatableTechs',
+                [playerPhilosophy, techKey, 'price']
+            );
+        }
+    });
+}
+
+function addPhilosophyRepeatablesBackInAfterRebirth() {
+    const playerPhilosophy = getPlayerPhilosophy();
+    const repeatablesValues = getAllRepeatableTechMultipliersObject();
+
+    Object.keys(repeatablesValues).forEach(key => {
+        const times = repeatablesValues[key] - 1;
+        if (times <= 0) return;
+
+        let mappedRepeatableFunction;
+
+        switch (playerPhilosophy) {
+            case 'constructor': //DONE
+                if (key === '1') return;
+                mappedRepeatableFunction = {
+                    '2': () => setResourceAutobuyerPricesAfterRepeatables(),
+                    '3': () => setCompoundRecipePricesAfterRepeatables(),
+                    '4': () => setEnergyAndResearchBuildingPricesAfterRepeatables()
+                }[key];
+                break;
+
+            case 'supremacist': //DONE
+                if (key === '2') return;
+                mappedRepeatableFunction = {
+                    '1': () => setFleetPricesAfterRepeatables(),
+                    '3': () => setFleetSpeedsAfterRepeatables(),
+                    '4': () => setFleetAttackDamageAfterRepeatables()
+                }[key];
+                break;
+
+            case 'voidborn': //DONE
+                if (key === '1' || key === '4') return;
+                mappedRepeatableFunction = {
+                    '2': () => setStarStudyEfficiencyAfterRepeatables(),
+                    '3': () => setAsteroidSearchEfficiencyAfterRepeatables(),
+                }[key];
+                break;
+
+            case 'expansionist': //DONE
+                mappedRepeatableFunction = {
+                    '1': () => setStarshipPartPricesAfterRepeatables(),
+                    '2': () => setRocketPartPricesAfterRepeatables(),
+                    '3': () => setRocketTravelTimeReductionAfterRepeatables(),
+                    '4': () => setStarshipTravelTimeReductionAfterRepeatables()
+                }[key];
+                break;
+
+            default:
+                console.warn(`Unknown philosophy: ${playerPhilosophy}`);
+                return;
+        }
+
+        if (typeof mappedRepeatableFunction === 'function') {
+            for (let i = 0; i < times; i++) {
+                mappedRepeatableFunction();
+            }
+        }
+    });
 }
 
 function addPermanentCompoundsModifiersBackIn() {
