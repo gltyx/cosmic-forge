@@ -270,6 +270,10 @@ button {
     border-radius: 10px !important;
 }
 
+.hard-reset-button {
+    color: red !important;
+}
+
 .save-load-input-container {
     flex: 1;
     display: flex;
@@ -1343,6 +1347,7 @@ cursor: pointer;
 #starDestinationDescription,
 .save-name-margin,
 .save-load-button,
+.hard-reset-button,
 .save-load-file-export,
 .star-option-button
 {

@@ -1,4 +1,4 @@
-import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol, getPlayerPhilosophy, getRepeatableTechMultipliers } from "./constantsAndGlobalVars.js";
+import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol, getPlayerPhilosophy, getRepeatableTechMultipliers, getStatRun } from "./constantsAndGlobalVars.js";
 import { calculateAndAddExtraAPFromPhilosophyRepeatable } from "./game.js";
 import { getAchievementDataObject, getResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals } from "./utilityFunctions.js";
@@ -53,6 +53,8 @@ export let modalPlayerLeaderIntroContentText1;
 export let modalPlayerLeaderIntroContentText2;
 export let modalPlayerLeaderIntroContentText3;
 export let modalPlayerLeaderIntroContentText4;
+export let hardResetWarningHeader;
+export let hardResetWarningText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -93,13 +95,15 @@ export function initialiseDescriptions() {
     modalFeedbackThanksHeaderText = `THANK YOU FOR YOUR FEEDBACK!`;
     modalFeedbackContentThanks = `Your feedback has been received.<br><br>It really helps shape the future of Cosmic Forge!<br>Feel free to check out our Discord<br>(There is an invite in the Contact section of the Settings Tab)`;
     modalPlayerLeaderPhilosophyHeaderText = `PONDERING THE HEAVENS`;
-    modalPlayerLeaderPhilosophyContentText = `While gazing at the heavens in your Space Telescope, you ponder<br>what the future holds and who you really are.  You decided that<br>as per your forefathers, you have always been a...<br><br>THIS CHOICE AFFECTS YOUR PLAYTHROUGH SO CHOOSE CAREFULLY! <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
+    modalPlayerLeaderPhilosophyContentText = `While gazing at the heavens in your Space Telescope, you ponder<br>what the future holds and who you really are.  You decided that<br>as per your forefathers, you have always been a...<br><br>THIS CHOICE AFFECTS YOUR PLAYTHROUGH SO CHOOSE CAREFULLY!</span>`;
     modalPlayerLeaderIntroHeaderText = `THE AWAKENING`;
-    modalPlayerLeaderIntroContentText1 = `You are a Constructor.<br>Blueprints flow through your veins.<br><span class="green-ready-text">All building costs are reduced after the first Rebirth, forever.</span><br>Build the future, one module at a time. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
-    modalPlayerLeaderIntroContentText2 = `You are a Supremacist.<br>Strength is your law, dominance your goal.<br><span class="green-ready-text">Fleet units are cheaper and stronger after the first Rebirth, forever.</span><br><span class="green-ready-text">Enemies are more afraid.</span><br>They will bend or be broken. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
-    modalPlayerLeaderIntroContentText3 = `You are Voidborn.<br>You were born among the stars, and the void whispers to you.<br><span class="green-ready-text">Star studies are faster and reveal more after the first Rebirth, forever.</span><br><span class="green-ready-text">Asteroids are better.</span><br><span class="green-ready-text">Diplomacy is more favorable.</span><br>The darkness is your ally. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
-    modalPlayerLeaderIntroContentText4 = `You are an Expansionist.<br>The horizon always calls.<br><span class="green-ready-text">Starships and Rockets much cheaper to build, after the first Rebirth, forever.</span><br><span class="green-ready-text">Fuelling and travelling take less time.</span><br>Spread across the galaxy like wildfire. <span class="red-disabled-text">NOT IMPLEMENTED YET</span>`;
-    
+    modalPlayerLeaderIntroContentText1 = `You are a Constructor.<br>Blueprints flow through your veins.<br><span class="green-ready-text">All building costs can be reduced after the first Rebirth, forever.</span><br>Build the future, one module at a time.`;
+    modalPlayerLeaderIntroContentText2 = `You are a Supremacist.<br>Strength is your law, dominance your goal.<br><span class="green-ready-text">Fleet units are cheaper and stronger after the first Rebirth, forever.</span><br><span class="green-ready-text">Enemies are more afraid.</span><br>They will bend or be broken.`;
+    modalPlayerLeaderIntroContentText3 = `You are Voidborn.<br>You were born among the stars, and the void whispers to you.<br><span class="green-ready-text">Star studies are faster and reveal more after the first Rebirth, forever.</span><br><span class="green-ready-text">Asteroids are better.</span><br><span class="green-ready-text">Diplomacy is more favorable.</span><br>The darkness is your ally.`;
+    modalPlayerLeaderIntroContentText4 = `You are an Expansionist.<br>The horizon always calls.<br><span class="green-ready-text">Starships and Rockets much cheaper to build, after the first Rebirth, forever.</span><br><span class="green-ready-text">Rocket and Starships are faster.</span><br>Spread across the galaxy like wildfire.`;
+    hardResetWarningHeader = `DANGER: HARD RESET!`;
+    hardResetWarningText = `You are about to hard reset your game!<br><br>This will erase all progress and achievements!<br><br>Be very careful and only confirm if you are absolutely sure this<br>is what you want, otherwise CANCEL!`;
+
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
         'Compounds': 'Here you can create and sell compounds from constituent parts or with advanced machinery.',
@@ -155,6 +159,7 @@ export function initialiseDescriptions() {
         'concepts - early': "Early game concepts.",
         'concepts - mid': "Mid game concepts.",
         'concepts - late': "Late game concepts pre rebirth.",
+        'philosophies': "Philosophies and their effects.",
         'visual': "Change the visual settings of the game.",
         'game options': "Change the game options to your liking.",
         'saving / loading': "Save and Load your progress in the game.",
@@ -164,7 +169,7 @@ export function initialiseDescriptions() {
     };
 
     rocketNames = {
-        version: 0.64,
+        version: 0.70,
         rocketDescription: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         [getRocketUserName('rocket1').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
         [getRocketUserName('rocket2').toLowerCase()]: "Build the launch pad to launch built rockets and mine asteroids for Antimatter.",
@@ -1437,8 +1442,8 @@ export function initialiseDescriptions() {
             },            
             {
                 id: 3013,
-                body: `Get ${getPlayerPhilosophy() === 'voidborn' ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1} free AP here!`,
-                type: ["adder", getPlayerPhilosophy() === 'voidborn' ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1],
+                body: `Get ${getPlayerPhilosophy() === 'voidborn' && getStatRun() > 1 ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1} free AP here!`,
+                type: ["adder", getPlayerPhilosophy() === 'voidborn' && getStatRun() > 1 ? (1 + calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'))) : 1],
                 condition: "visible",
                 category: "ascendencyPoints",
                 item: "quantity",
@@ -2022,6 +2027,28 @@ helpContent = {
 
         subHeading10: "Ascendency Perks",
         subBody10: "You can spend acquired AP on permanent buffs that make future runs easier, and the game more replayable and fun!"
+    },
+    'philosophies': {
+    subHeading1: "Philosophies",
+    subBody1: "Philosophies are introduced slowly over the first run.  You are encouraged to select one of four possible paths, each of which is a one off, permanent decision that applies for the rest of the game.  Once a Philosophy is chosen, and you complete the first run, a new option shall appear under the Research Tab where you can research a unique special Ability, and a series of unique Repeatable Techs, fitting for the type of Philosophy you selected.  All these bonuses stay with you throughout the game, even persisting through Rebirths.",
+
+    subHeading2: "Special Ability",
+    subBody2: "Each Philosophy grants a unique special ability. These are extremely powerful and in different ways can make the game a lot more fun, and each one affects different mechanics, so it is wise to think carefully when choosing a Philosophy, as it cannot be changed later, and there can only be one Philosophy path per game.",
+
+    subHeading3: "Repeatable Tech",
+    subBody3: "Each Philosophy grants a series of unique and repeatable Techs.  They offer stacking bonuses that are permanent, and cost Research Points.  Depending on the Philosophy chosen the effects are different, and once a few are purchased, become very powerful indeed.",
+
+    subHeading4: "Constructor",
+    subBody4: "The Constructor Philosophy is centered around cheaper and more efficient upgrading. You gain bonuses to AutoBuyer prices, Storage Capacity, Energy and Research Upgrade prices, and a reduction in the cost of Compound Creation.",
+
+    subHeading5: "Supremacist",
+    subBody5: "The Supremacist Philosophy leans into military power and conquest. Expect tougher, faster, cheaper Fleets, and the ability to force enemies into Vassalization.",
+
+    subHeading6: "VoidBorn",
+    subBody6: "Born of the void, expect bonuses relating to Initial Impressions with Civilizations on foreign Systems, better Asteroid searches and Star studies, opportunities to increase AP gain, and even the ability to Pillage the Void for massive Resource and Compound gains!",
+
+    subHeading7: "Expansionist",
+    subBody7: "Expansionists thrive on colonizing and spreading across the stars. Reduce travel time for Rocket Miners and StarShips and make them cheaper, and also gain the ability to force extra nearby Systems to cede when you conquer one!"
     }
 }
 

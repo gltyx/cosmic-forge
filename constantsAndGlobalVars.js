@@ -17,8 +17,8 @@ let elements;
 let saveData = null;
 
 //CONSTANTS
-export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.2;
-export const GAME_VERSION_FOR_SAVES = 0.64;
+export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.70;
+export const GAME_VERSION_FOR_SAVES = 0.70;
 export const deferredActions = [];
 
 //NOTIFICATIONS
@@ -32,7 +32,7 @@ export const TIMER_UPDATE_INTERVAL = 10;
 export const TIMER_RATE_RATIO = 100;
 export const READY_TO_SORT = 120;
 export const NOW = 30; //READY TO SORT NOW needs total of 150
-export const BUILDING_TYPES = ['energy', 'space', 'starShip', 'fleetHangar', 'colonise'];
+export const BUILDING_TYPES = ['energy', 'space', 'starShip', 'fleetHangar', 'colonise', 'philosophy'];
 export const NEWS_TICKER_SCROLL_DURATION = 40000;
 export const GAME_COST_MULTIPLIER = 1.15;
 export const NORMAL_MAX_ANTIMATTER_RATE = 0.004;
@@ -213,8 +213,8 @@ let temporaryCoreTechRowsRepo = null;
 let canAffordDeferred = null;
 let originalFrameNumbers = {};
 let baseSearchAsteroidTimerDuration = 120000;
-let baseInvestigateStarTimerDuration = 800000;
-let basePillageVoidTimerDuration = 300000;
+let baseInvestigateStarTimerDuration = 400000;
+let basePillageVoidTimerDuration = 500000;
 let currentAsteroidSearchTimerDurationTotal = 0;
 let currentInvestigateStarTimerDurationTotal = 0;
 let currentPillageVoidTimerDurationTotal = 0;
@@ -696,8 +696,6 @@ export function getElements() {
 }
 
 export function resetAllVariablesOnRebirth() {
-
-    //resetAchievements() TODO
     rocketTravelSpeed = 0.1;
     starShipTravelSpeed = 360000; //3600000 one real hour per light year
     runStartTimeStamp = null;
@@ -729,7 +727,7 @@ export function resetAllVariablesOnRebirth() {
     canAffordDeferred = null;
     originalFrameNumbers = {};
     baseSearchAsteroidTimerDuration = 120000;
-    baseInvestigateStarTimerDuration = 800000;
+    baseInvestigateStarTimerDuration = 400000;
     currentAsteroidSearchTimerDurationTotal = 0;
     currentInvestigateStarTimerDurationTotal = 0;
     currentPillageVoidTimerDurationTotal = 0;
@@ -1023,7 +1021,7 @@ export function captureGameStatusForSaving(type) {
     gameState.starShipModulesBuilt = starShipModulesBuilt;
     gameState.rocketsFuellerStartedArray = rocketsFuellerStartedArray;
     gameState.launchedRockets = launchedRockets;
-    gameState.baseSearchTimerDuration = baseSearchAsteroidTimerDuration;
+    gameState.baseSearchAsteroidTimerDuration = baseSearchAsteroidTimerDuration;
     gameState.timeLeftUntilAsteroidScannerTimerFinishes = timeLeftUntilAsteroidScannerTimerFinishes;
     gameState.timeLeftUntilStarInvestigationTimerFinishes = timeLeftUntilStarInvestigationTimerFinishes;
     gameState.timeLeftUntilPillageVoidTimerFinishes = timeLeftUntilPillageVoidTimerFinishes;
@@ -1224,7 +1222,7 @@ export function restoreGameStatus(gameState, type) {
             starShipModulesBuilt = gameState.starShipModulesBuilt ?? [''];
             rocketsFuellerStartedArray = gameState.rocketsFuellerStartedArray ?? [''];
             launchedRockets = gameState.launchedRockets ?? [''];
-            baseSearchAsteroidTimerDuration = gameState.baseSearchTimerDuration ?? 120000;
+            baseSearchAsteroidTimerDuration = gameState.baseSearchAsteroidTimerDuration ?? 120000;
             timeLeftUntilAsteroidScannerTimerFinishes = gameState.timeLeftUntilAsteroidScannerTimerFinishes ?? 0;
             timeLeftUntilStarInvestigationTimerFinishes = gameState.timeLeftUntilStarInvestigationTimerFinishes ?? 0;
             timeLeftUntilPillageVoidTimerFinishes = gameState.timeLeftUntilPillageVoidTimerFinishes ?? 0;
@@ -1360,7 +1358,6 @@ export function restoreGameStatus(gameState, type) {
                 battleUnits = { player: [], enemy: [] };
             }
 
-            //replaceRocketNames(gameState.rocketNames);
             patchNeonAutoBuyers();
             patchAchievementsPrecipitation();
             fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray);

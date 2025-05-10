@@ -7,7 +7,7 @@ import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsT
 export let achievementImageUrls;
 
 export let resourceData = {
-    version: 0.64, //update this whenever changes are made to the structure
+    version: 0.70, //update this whenever changes are made to the structure
     resources: {
         solar: {
             autoSell: false,
@@ -851,10 +851,6 @@ export let resourceData = {
         stellarScanners: { appearsAt: [70000, "FTLTravelTheory", "orbitalConstruction"], prereqs: ['FTL Travel Theory', 'Orbital Construction'], price: 72000, idForRenderPosition: 9105 }
     },
     philosophyRepeatableTechs: {
-        // these techs will be specific to the philosophy chosen by the player 
-        // each philosophy will have one expensive special ability that when unlocked carries through all runs
-        // these techs will be repeatable and more expensive and give a cumulative bonus each time
-        // these bonuses are permanent and carry over between runs
         constructor: {
             spaceStorageTankResearch: { idWithinCategory: 0, multiplier: 0, price: 500000, affects: 'specialAbility', philosophy: 'constructor', repeatable: false, setPrice: 'spaceStorageTankResearchTechPhilosophyPrice' }, // ABILITY : storage increases not x2 but x5 every time
             efficientAssembly: { idWithinCategory: 1, multiplier: 1, price: 10000, affects: 'space', philosophy: 'constructor', repeatable: true, setPrice: 'efficientAssemblyTechPhilosophyPrice' }, // cheaper one off buildings
@@ -917,7 +913,7 @@ export let resourceData = {
 };
 
 export let starSystems = {
-    version: 0.64,
+    version: 0.70,
     stars: {
         spica: {
             mapSize: 5.504440179536064, //might need to add this to star object when added dynamically for after rebirth
@@ -936,7 +932,7 @@ export let starSystems = {
 };
 
 export let galacticMarket = {
-    version: 0.64,
+    version: 0.70,
     resources: {
         hydrogen: { 
             name: "Hydrogen", 
@@ -1042,7 +1038,7 @@ export let galacticMarket = {
 };
 
 export let ascendencyBuffs = {
-    version: 0.64,
+    version: 0.70,
     "efficientStorage": {  //done
         name: "Efficient Storage",
         description: "buffEfficientStorageRow",
@@ -2794,7 +2790,7 @@ export function setStarSystemDataObject(value, key, subKeys = []) {
 export function setupNewRunStarSystem() {
     const destinationStar = getStarSystemDataObject('stars', ['destinationStar']);
     const starObject = {
-        mapSize: destinationStar.mapSize || 5.504440179536064, // TODO
+        mapSize: destinationStar.mapSize || 5.504440179536064,
         startingStar: destinationStar.startingStar || true,
         starCode: destinationStar.starCode,
         precipitationResourceCategory: destinationStar.precipitationResourceCategory,

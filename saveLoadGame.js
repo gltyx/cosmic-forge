@@ -60,6 +60,56 @@ export function initializeAutoSave() {
     autoSaveTimer = setTimeout(autoSaveHandler, frequency);
 }
 
+export async function destroySaveGameOnCloud() {
+    try {
+        const userId = getSaveName();
+
+        const { data: existingRow, error: fetchError } = await supabase
+            .from('CosmicForge_saves')
+            .select('*')
+            .eq('pioneer_name', userId)
+            .single();
+
+        if (fetchError) {
+            throw fetchError;
+        }
+
+        const currentTimestamp = new Date().toISOString();
+        const backupUserId = `graveyard_${userId}`;
+
+        const { error: insertError } = await supabase
+            .from('CosmicForge_saves')
+            .insert([{
+                pioneer_name: backupUserId,
+                data: existingRow.data,
+                created_at: currentTimestamp,
+                region: existingRow.region,
+                feedback: existingRow.feedback,
+                feedback_content: existingRow.feedback_content
+            }]);
+
+        if (insertError) {
+            throw insertError;
+        }
+
+        const { error: updateError } = await supabase
+            .from('CosmicForge_saves')
+            .update({ data: null })
+            .eq('pioneer_name', userId);
+
+        if (updateError) {
+            throw updateError;
+        }
+
+        showNotification('Cloud Save data deleted, Pioneer name can be re-used.', 'info', 3000, 'loadSave');
+
+    } catch (error) {
+        console.error('Error archiving and nulling save data:', error);
+        showNotification('Failed to delete save data.', 'error', 3000, 'loadSave');
+    }
+}
+
+
 export async function saveGameToCloud(gameData, type) {
     try {
         const userId = getSaveName();
@@ -213,27 +263,38 @@ export function copySaveStringToClipBoard() {
 export async function loadGameFromCloud() {
     try {
         const userId = localStorage.getItem('saveName') || getSaveName();
+
         const { data, error } = await supabase
-        .from('CosmicForge_saves')
-        .select('data')
-        .eq('pioneer_name', userId)
-        .single();
-      
-      if (data) {
-        const gameData = data.data;
+            .from('CosmicForge_saves')
+            .select('data')
+            .eq('pioneer_name', userId)
+            .single();
 
-            const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
-            const gameState = JSON.parse(decompressedJson);
+        if (error && error.code !== 'PGRST116') {
+            throw error;
+        }
 
-            await initialiseLoadedGame(gameState, 'cloud');
-            setAchievementIconImageUrls();
-            getNavigatorLanguage();
-            showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
-            return true;
-        } else {
+        if (!data) {
+            // No row found at all
             showNotification('No saved game data found.', 'warning', 3000, 'loadSave');
             return false;
         }
+
+        if (data.data === null) {
+            showNotification('This Pioneer name is being reused for a new game.', 'info', 5000, 'loadSave');
+            return false;
+        }
+
+        const gameData = data.data;
+        const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
+        const gameState = JSON.parse(decompressedJson);
+
+        await initialiseLoadedGame(gameState, 'cloud');
+        setAchievementIconImageUrls();
+        getNavigatorLanguage();
+        showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
+        return true;
+
     } catch (error) {
         console.error("Error loading game from cloud:", error);
         showNotification('Error loading game data from the cloud.', 'error', 3000, 'loadSave');
@@ -315,295 +376,20 @@ export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER T
     saveData.version = saveData.version ? saveData.version : getMinimumVersion();
 
     while (saveData.version < currentVersion) {
-        if (saveData.version < 0.56) {
-            if (objectType === 'resourceData') {
-                saveData.space.upgrades.ssStructural = { finished: false, builtParts: 0, parts: 20, price: 3000, resource1Price: [4000, 'steel', 'compounds'], resource2Price: [1500, 'titanium', 'compounds'], resource3Price: [4500, 'silicon', 'resources'], setPrice: 'ssStructuralPrice' };
-                saveData.space.upgrades.ssLifeSupport = { finished: false, builtParts: 0, parts: 10, price: 7500, resource1Price: [5000, 'glass', 'compounds'], resource2Price: [20000, 'oxygen', 'resources'], resource3Price: [15000, 'water', 'compounds'], setPrice: 'ssLifeSupportPrice' };
-                saveData.space.upgrades.ssAntimatterEngine = { finished: false, builtParts: 0, parts: 16, price: 6000, resource1Price: [3500, 'steel', 'compounds'], resource2Price: [2000, 'titanium', 'compounds'], resource3Price: [10000, 'neon', 'resources'], setPrice: 'ssAntimatterEnginePrice' };
-                saveData.space.upgrades.ssFleetHangar = { finished: false, builtParts: 0, parts: 1, price: 50000, resource1Price: [40000, 'glass', 'compounds'], resource2Price: [20000, 'titanium', 'compounds'], resource3Price: [80000, 'steel', 'compounds'], setPrice: 'ssFleetHangarPrice' };
-                saveData.space.upgrades.ssStellarScanner = { finished: false, builtParts: 0, parts: 8, price: 2500, resource1Price: [1500, 'glass', 'compounds'], resource2Price: [2000, 'silicon', 'resources'], resource3Price: [3000, 'neon', 'resources'], setPrice: 'ssStellarScannerPrice' };
 
-                saveData.resources.solar.autoSell = false;
-                saveData.resources.hydrogen.autoSell = false;
-                saveData.resources.helium.autoSell = false;
-                saveData.resources.carbon.autoSell = false;
-                saveData.resources.neon.autoSell = false;
-                saveData.resources.oxygen.autoSell = false;
-                saveData.resources.sodium.autoSell = false;
-                saveData.resources.silicon.autoSell = false;
-                saveData.resources.iron.autoSell = false;
-                saveData.compounds.diesel.autoSell = false;
-                saveData.compounds.glass.autoSell = false;
-                saveData.compounds.steel.autoSell = false;
-                saveData.compounds.concrete.autoSell = false;
-                saveData.compounds.water.autoSell = false;
-                saveData.compounds.titanium.autoSell = false;
+        // if (saveData.version < 0.64) { //EXAMPLE
+        //     if (objectType === 'resourceData') {
+        //         saveData.compounds.diesel.autoCreate = false;
+        //     } else if (objectType === 'starSystemsData') {
 
-                saveData.techs.nanoBrokers = { appearsAt: [18000, "nanoTubeTechnology", "steelFoundries", "compounds"], prereqs: ['Nano Tube Technology', 'Steel Foundries', 'Compounds'], price: 19000, idForRenderPosition: 498 }
-            } else if (objectType === 'starSystemsData') {
-
-            } else if (objectType === 'rocketNames') {
+        //     } else if (objectType === 'rocketNames') {
             
-            } else if (objectType === 'galacticMarketData') {
+        //     } else if (objectType === 'galacticMarketData') {
 
-            } else if (objectType === 'ascendencyBuffsData') {
-                saveData = {
-                    "efficientStorage": {
-                        name: "Efficient Storage",
-                        description: "buffEfficientStorageRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 10,
-                        effectCategoryMagnitude: 2,
-                        boughtYet: 0,
-                        timesRebuyable: 3
-                    },
-                    "smartAutoBuyers": {
-                        name: "Smart Auto Buyers",
-                        description: "buffSmartAutoBuyersRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 15,
-                        effectCategoryMagnitude: 1.5,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "jumpstartResearch": {
-                        name: "Jumpstart Research",
-                        description: "buffJumpstartResearchRow",
-                        rebuyable: false,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 30,
-                        effectCategoryMagnitude: 100,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "optimizedPowerGrids": {
-                        name: "Optimized Power Grids",
-                        description: "buffOptimizedPowerGridsRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 25,
-                        effectCategoryMagnitude: 1.2,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "fasterAsteroidScan": {
-                        name: "Faster Asteroid Scan",
-                        description: "buffFasterAsteroidScanRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 1.2,
-                        baseCostAp: 20,
-                        effectCategoryMagnitude: 0.25,
-                        boughtYet: 0,
-                        timesRebuyable: 4
-                    },
-                    "deeperStarStudy": {
-                        name: "Deeper Star Study",
-                        description: "buffDeeperStarStudyRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 50,
-                        effectCategoryMagnitude: 2,
-                        boughtYet: 0,
-                        timesRebuyable: 3
-                    },
-                    "asteroidScannerBoost": {
-                        name: "Asteroid Scanner Boost",
-                        description: "buffAsteroidScannerBoostRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 20,
-                        effectCategoryMagnitude: 2,
-                        boughtYet: 0,
-                        timesRebuyable: 2
-                    },
-                    "rocketFuelOptimization": {
-                        name: "Rocket Fuel Optimization",
-                        description: "buffRocketFuelOptimizationRow",
-                        rebuyable: false,
-                        rebuyableIncreaseMultiple: 1,
-                        baseCostAp: 40,
-                        effectCategoryMagnitude: 0.5,
-                        boughtYet: 0,
-                        timesRebuyable: 100000
-                    },
-                    "enhancedMining": {
-                        name: "Enhanced Mining",
-                        description: "buffEnhancedMiningRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 2,
-                        baseCostAp: 15,
-                        effectCategoryMagnitude: 0.25,
-                        boughtYet: 0,
-                        timesRebuyable: 4
-                    },
-                    "quantumEngines": {
-                        name: "Quantum Engines",
-                        description: "buffQuantumEnginesRow",
-                        rebuyable: true,
-                        rebuyableIncreaseMultiple: 1.2,
-                        baseCostAp: 15,
-                        effectCategoryMagnitude: 2,
-                        boughtYet: 0,
-                        timesRebuyable: 10
-                    }
-                }
-                saveData.version = 0.56;
-            }
-        }
-
-        if (saveData.version < 0.60) {
-            if (objectType === 'resourceData') {
-                saveData.resources.solar.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.solar.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.solar.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.solar.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.hydrogen.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.hydrogen.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.hydrogen.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.hydrogen.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.helium.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.helium.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.helium.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.helium.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.carbon.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.carbon.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.carbon.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.carbon.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.neon.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.neon.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.neon.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.neon.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.oxygen.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.oxygen.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.oxygen.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.oxygen.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.sodium.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.sodium.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.sodium.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.sodium.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.silicon.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.silicon.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.silicon.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.silicon.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.resources.iron.upgrades.autoBuyer.tier1.active = true;
-                saveData.resources.iron.upgrades.autoBuyer.tier2.active = true;
-                saveData.resources.iron.upgrades.autoBuyer.tier3.active = true;
-                saveData.resources.iron.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.compounds.diesel.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.diesel.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.diesel.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.diesel.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.compounds.glass.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.glass.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.glass.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.glass.upgrades.autoBuyer.tier4.active = true;
-                
-                saveData.compounds.concrete.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.concrete.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.concrete.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.concrete.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.compounds.steel.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.steel.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.steel.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.steel.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.compounds.water.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.water.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.water.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.water.upgrades.autoBuyer.tier4.active = true;
-
-                saveData.compounds.titanium.upgrades.autoBuyer.tier1.active = true;
-                saveData.compounds.titanium.upgrades.autoBuyer.tier2.active = true;
-                saveData.compounds.titanium.upgrades.autoBuyer.tier3.active = true;
-                saveData.compounds.titanium.upgrades.autoBuyer.tier4.active = true;
-            } else if (objectType === 'starSystemsData') {
-
-            } else if (objectType === 'rocketNames') {
-            
-            } else if (objectType === 'galacticMarketData') {
-
-            } else if (objectType === 'ascendencyBuffsData') {
-            
-            }
-            saveData.version = 0.60;
-        }
-
-        if (saveData.version < 0.62) {
-            if (objectType === 'resourceData') {
-                saveData.resources.hydrogen.saleValue = 0.02;
-                saveData.resources.helium.saleValue = 0.03;
-                saveData.resources.carbon.saleValue = 0.1;
-                saveData.resources.neon.saleValue = 0.40;
-                saveData.resources.oxygen.saleValue = 0.05;
-                saveData.resources.sodium.saleValue = 0.1;
-                saveData.resources.silicon.saleValue = 0.08;
-                saveData.resources.iron.saleValue = 0.17;
-
-                saveData.compounds.diesel.saleValue = 0.3;
-                saveData.compounds.glass.saleValue = 0.8;
-                saveData.compounds.steel.saleValue = 1.8;
-                saveData.compounds.concrete.saleValue = 0.8;
-                saveData.compounds.water.saleValue = 1.6;
-                saveData.compounds.titanium.saleValue = 6;
-
-                saveData.research.upgrades.scienceKit.active = true;
-                saveData.research.upgrades.scienceClub.active = true;
-                saveData.research.upgrades.scienceLab.active = true;
-
-            } else if (objectType === 'starSystemsData') {
-
-            } else if (objectType === 'rocketNames') {
-            
-            } else if (objectType === 'galacticMarketData') {
-
-            } else if (objectType === 'ascendencyBuffsData') {
-            
-            }
-            saveData.version = 0.62;
-        }
-
-        if (saveData.version < 0.64) {
-            if (objectType === 'resourceData') {
-                saveData.compounds.diesel.autoCreate = false;
-                saveData.compounds.glass.autoCreate = false;
-                saveData.compounds.steel.autoCreate = false;
-                saveData.compounds.concrete.autoCreate = false;
-                saveData.compounds.water.autoCreate = false;
-                saveData.compounds.titanium.autoCreate = false;
-
-            } else if (objectType === 'starSystemsData') {
-
-            } else if (objectType === 'rocketNames') {
-            
-            } else if (objectType === 'galacticMarketData') {
-
-            } else if (objectType === 'ascendencyBuffsData') {
-                saveData.compoundAutomation = {
-                    name: "Compound Automation",
-                    description: "buffCompoundAutomationRow",
-                    rebuyable: false,
-                    rebuyableIncreaseMultiple: 1,
-                    baseCostAp: 15,
-                    effectCategoryMagnitude: 1,
-                    boughtYet: 0,
-                    timesRebuyable: 100000
-                };
-            }
-            saveData.version = 0.64;
-        }
+        //     } else if (objectType === 'ascendencyBuffsData') {
+        //     }
+        //     saveData.version = 0.64;
+        // }
     
         saveData.version += 0.001;
     }   

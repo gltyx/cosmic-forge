@@ -1,4 +1,5 @@
 import {
+    getStatRun,
     getAdditionalSystemsToSettleThisRun,
     getPlayerStartingUnitHealth,
     setPlayerPhilosophy,
@@ -166,6 +167,8 @@ import {
     modalFeedbackContentThanks,
     modalPlayerLeaderPhilosophyHeaderText,
     modalPlayerLeaderPhilosophyContentText,
+    hardResetWarningHeader,
+    hardResetWarningText,
     gameSaveNameCollect,
     initialiseDescriptions,
     rocketNames,
@@ -180,7 +183,7 @@ import {
     modalPlayerLeaderIntroContentText4
 } from "./descriptions.js";
 
-import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
+import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud, destroySaveGameOnCloud } from './saveLoadGame.js';
 
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
@@ -257,7 +260,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await getUserSaveName();
 
-    initialiseDescriptions(); //called again after loading to set the correct number of AP to add to the news ticker prize, remove if not needed
+    initialiseDescriptions();
 
     content = gameIntroText;
     populateModal(headerText, content);
@@ -540,13 +543,13 @@ export function createOptionRow(
         }
     }
 
-    if (getCurrentOptionPane() === 'space telescope') { //TODO THIS IS WHERE WE CAN HIDE THE PILLAGE ROW UNTIL IT IS UNLOCKED
+    if (getCurrentOptionPane() === 'space telescope') {
         if (['searchAsteroid', 'investigateStar', 'pillageVoid'].includes(objectSectionArgument2)) {
             if (!getResourceDataObject('space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet'])) {
                 wrapper.classList.add('invisible');
             } else {
                 if (objectSectionArgument2 === 'pillageVoid') {
-                    if (getPlayerPhilosophy() === 'voidborn' && getPhilosophyAbilityActive()) {
+                    if (getPlayerPhilosophy() === 'voidborn' && getPhilosophyAbilityActive() && getStatRun() > 1) {
                         wrapper.classList.remove('invisible');
                     } else {
                         wrapper.classList.add('invisible');
@@ -941,8 +944,6 @@ export function setupAchievementTooltip() {
             const tile = e.target;
             const gridColumnStart= parseInt(window.getComputedStyle(tile).getPropertyValue('grid-column-start'), 10);
             let tooltipContent = getAchievementTooltipDescription(tile.id);
-
-            //tooltipContent = tooltipContent + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>"; // DEBUG remove when implemented
             
             if (tooltipContent) {
                 tooltip.innerHTML = tooltipContent;
@@ -1340,11 +1341,6 @@ export function showWeatherNotification(type) {
 
 export function showNotification(message, type = 'info', time = 3000, classification = 'default') {
     if (!getNotificationsToggle()) return;
-
-    // // If type is 'achievement', append the 'NOT IMPLEMENTED YET' message DEBUG
-    // if (type === 'achievement') {
-    //     message = message + "<br><br><span class='red-disabled-text'>NOT IMPLEMENTED YET</span>";
-    // }
 
     const queues = getNotificationQueues();
     const status = getNotificationStatus();
@@ -1772,7 +1768,9 @@ function showLaunchWarningModal(show) {
     }
 }
 
-export function showGalacticTabPopup() {
+export async function showGalacticTabPopup() {
+    await waitForModalToHide();
+
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
     const galacticTabUnlockConfirmButton = document.getElementById('modalConfirm');
@@ -1839,7 +1837,21 @@ export async function showPlayerPhilosophyIntroPopup() {
     });
 }
 
-export function showPlayerLeaderPhilosophySelectionPopup() {
+function waitForModalToHide() {
+    return new Promise((resolve) => {
+        const interval = setInterval(() => {
+            const modalContainer = getElements().modalContainer;
+            if (modalContainer && modalContainer.style.display === 'none') {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 100);
+    });
+}
+
+export async function showPlayerLeaderPhilosophySelectionPopup() {
+    await waitForModalToHide();
+
     setupModalButtonTooltips();
 
     const modalContainer = getElements().modalContainer;
@@ -1849,10 +1861,10 @@ export function showPlayerLeaderPhilosophySelectionPopup() {
     const playerLeaderPhilosophyChoice3Button = document.getElementById('modalConfirm');
     const playerLeaderPhilosophyChoice4Button = document.getElementById('modalCancel');
 
-    playerLeaderPhilosophyChoice1Button.innerText = 'CONSTRUCTOR'; //buildings, storages and megastructures are cheaper
-    playerLeaderPhilosophyChoice2Button.innerText = 'SUPREMACIST'; //fleets are cheaper and stronger
-    playerLeaderPhilosophyChoice3Button.innerText = 'VOIDBORN'; //stars studied easier, asteroids better, diplomacy easier
-    playerLeaderPhilosophyChoice4Button.innerText = 'EXPANSIONIST'; // rocket and starship parts are cheaper and travel faster
+    playerLeaderPhilosophyChoice1Button.innerText = 'CONSTRUCTOR';
+    playerLeaderPhilosophyChoice2Button.innerText = 'SUPREMACIST';
+    playerLeaderPhilosophyChoice3Button.innerText = 'VOIDBORN';
+    playerLeaderPhilosophyChoice4Button.innerText = 'EXPANSIONIST';
     
     let headerText = modalPlayerLeaderPhilosophyHeaderText;
     let content = modalPlayerLeaderPhilosophyContentText;
@@ -2080,6 +2092,36 @@ export function showEnterWarModeModal(reason) {
             resolve();
         };
     });
+}
+
+export function showHardResetModal() {
+    const modalContainer = getElements().modalContainer;
+    const overlay = getElements().overlay;
+    const hardResetConfirmButton = document.getElementById('modalConfirm');
+    const hardResetCancelButton = document.getElementById('modalCancel');
+    hardResetConfirmButton.innerText = '! RESET ALL PROGRESS, EVEN ON CLOUD !';
+    hardResetCancelButton.innerText = 'CANCEL TO SAFETY';
+
+    hardResetConfirmButton.classList.remove('invisible');
+    hardResetCancelButton.classList.remove('invisible');
+
+    const headerText = hardResetWarningHeader;
+    let content = hardResetWarningText;
+    populateModal(headerText, content);
+
+    modalContainer.style.display = 'flex';
+    overlay.style.display = 'flex';
+
+    hardResetConfirmButton.onclick = function () {
+        destroySaveGameOnCloud();
+        showNotification(`GAME HARD RESET!<br><br>Please REFRESH your Browser and use same Pioneer name to start the new game!`, 'error', 200000000, 'special');
+        showHideModal();
+        overlay.style.display = 'flex';
+    };
+
+    hardResetCancelButton.onclick = function () {
+        showHideModal();
+    };
 }
 
 export async function triggerFeedBackModal(feedback) {
@@ -3931,6 +3973,17 @@ function initializeTabEventListeners() {
             refreshAchievementTooltipDescriptions();
             updateContent('Achievements', 'tab8', 'content');
             setFirstAccessArray('achievements');
+        });    
+    });
+
+        document.querySelectorAll('[class*="tab8"][class*="option11"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab8', 'philosophies');
+            setLastScreenOpenRegister('tab8', 'philosophies');
+            setCurrentOptionPane('philosophies');
+            updateContent('Philosophies', 'tab8', 'content');
+            setFirstAccessArray('philosophies');
         });    
     });
 

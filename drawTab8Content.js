@@ -1,5 +1,5 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx, setWasAutoSaveToggled } from './constantsAndGlobalVars.js';
-import { setupAchievementTooltip, createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme } from './ui.js';
+import { setupAchievementTooltip, createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme, showHardResetModal } from './ui.js';
 import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
 import { getStatisticsContent, getHelpContent } from './descriptions.js';
 import { setAchievementIconImageUrls, getAchievementPositionData } from './resourceDataObject.js';
@@ -10,6 +10,7 @@ export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow', []);
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow', []);
     if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow', []);
+    if (heading === 'Philosophies') createHelpSectionRow('philosophies', []);
     if (heading === 'Statistics') createStatisticsSectionRow('statisticsRow');
     if (heading === 'Achievements') createAchievementsSectionRow('achievementsRow');
 
@@ -453,6 +454,32 @@ export function drawTab8Content(heading, optionContentElement) {
             [true, '25%', '80%']
         );
         optionContentElement.appendChild(importCloudSaveRow);
+
+        const hardResetRow = createOptionRow(
+            'hardResetRow',
+            null,
+            'HARD RESET:',
+            createButton(`!!!RESET ALL GAME PROGRESS FOR THIS PIONEER NAME!!!`, ['option-button', 'hard-reset-button'], () => {
+                showHardResetModal();
+            }),
+            null,
+            null,
+            null,
+            null,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            null,
+            null,
+            [true, '25%', '80%']
+        );
+        optionContentElement.appendChild(hardResetRow);
 
         const autoSaveToggleElement = document.getElementById('autoSaveToggle');
         if (autoSaveToggleElement) {

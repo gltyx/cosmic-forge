@@ -1115,22 +1115,29 @@ function checkAndRevealNewBuildings(type) {
                 element.parentElement.parentElement.classList.add('invisible');
             }
             break;
-            case 'colonise':
-                element = document.getElementById('coloniseOption');
-                const quantitiesFleets = (() => {
-                    const data = getResourceDataObject('space', ['upgrades']);
-                    
-                    return Object.keys(data)
-                        .filter(key => key.startsWith('fleet'))
-                        .map(key => data[key].quantity);
-                })();
-            
-                if (!getApAwardedThisRun() && getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
-                    element.parentElement.parentElement.classList.remove('invisible');
-                } else {
-                    element.parentElement.parentElement.classList.add('invisible');
-                }
-                break;            
+        case 'colonise':
+            element = document.getElementById('coloniseOption');
+            const quantitiesFleets = (() => {
+                const data = getResourceDataObject('space', ['upgrades']);
+                
+                return Object.keys(data)
+                    .filter(key => key.startsWith('fleet'))
+                    .map(key => data[key].quantity);
+            })();
+        
+            if (!getApAwardedThisRun() && getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.add('invisible');
+            }
+            break;
+        case 'philosophy':
+            element = [...document.querySelectorAll('p[class*="tab3"]')].find(el => el.innerHTML.includes('Philosophy'));
+            if (getStatRun() > 1 && getPlayerPhilosophy() !== null) {
+                element.parentElement.parentElement.classList.remove('invisible');
+            } else {
+                element.parentElement.parentElement.classList.add('invisible');
+            }
     }
 }
 
@@ -3537,14 +3544,7 @@ function setPriceForAllPurchases(element, type, resource, scienceUpgradeType, bu
 
 function handleTechnologyScreenButtonAndDescriptionStates(element, quantity, techName) {
     const prerequisiteArray = getResourceDataObject('techs', [techName, 'appearsAt']).slice(1).filter(prereq => prereq !== null && prereq !== '');
-        
-    if (prerequisiteArray.includes('FTLravelTheory')) { // patch for FTLravelArray pre version 0.4
-        const index = prerequisiteArray.indexOf('FTLravelTheory');
-        if (index !== -1) {
-            prerequisiteArray[index] = 'FTLTravelTheory';
-        }
-    }
-
+    
     if (element && quantity >= getResourceDataObject('techs', [techName, 'price'])) {
         element.classList.remove('red-disabled-text');
         element.classList.add('green-ready-text');
@@ -4654,7 +4654,7 @@ export function calculateLiquidationValue() {
     const apAmount = Math.floor(totalLiquidationValue / apCost);
     let apFromPhilosophy = 0;
     
-    if (getPlayerPhilosophy() === 'voidborn') {
+    if (getPlayerPhilosophy() === 'voidborn' && getStatRun() > 1) {
         apFromPhilosophy = calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'));
     }
 
@@ -5066,7 +5066,7 @@ function checkDiplomacyButtons(element) {
                 active = true;
                 break;
 
-            case (classList.contains('vassalize') && playerAttackPower > (enemyPower * 1.5) && enemyTraitMain !== 'Aggressive' && currentImpression >= 95) || (getPlayerPhilosophy() === 'supremacist' && getPhilosophyAbilityActive() === true && playerAttackPower > enemyPower * 3):
+            case (classList.contains('vassalize') && playerAttackPower > (enemyPower * 1.5) && enemyTraitMain !== 'Aggressive' && currentImpression >= 95) || (getPlayerPhilosophy() === 'supremacist' && getStatRun() > 1 && getPhilosophyAbilityActive() === true && playerAttackPower > enemyPower * 3):
                active = true;
                break;
            
@@ -7990,8 +7990,67 @@ function handlePowerAllButtonState() {
 export function gainPillageVoidResourcesAndCompounds() {
     const gained = decideWhichResourcesAndCompoundsGainedByPillage();
 
-    // Store or process the gained resources and compounds as needed
-    console.log("Gained by Pillage:", gained);
+    const currentValues = {
+        resources: {},
+        compounds: {}
+    };
+
+    const gains = {
+        resources: {},
+        compounds: {}
+    };
+
+    gained.resources.forEach(resource => {
+        const quantity = getResourceDataObject('resources', [resource, 'quantity']);
+        const storageCapacity = getResourceDataObject('resources', [resource, 'storageCapacity']);
+        currentValues.resources[resource] = { quantity, storageCapacity };
+
+        const diff = storageCapacity - quantity;
+        const maxGain = Math.floor(diff * 0.30);
+        const actualGain = Math.floor(Math.random() * (maxGain + 1));
+
+        gains.resources[resource] = actualGain;
+
+        const updatedQuantity = quantity + actualGain;
+        setResourceDataObject(updatedQuantity, 'resources', [resource, 'quantity']);
+    });
+
+    gained.compounds.forEach(compound => {
+        const quantity = getResourceDataObject('compounds', [compound, 'quantity']);
+        const storageCapacity = getResourceDataObject('compounds', [compound, 'storageCapacity']);
+        currentValues.compounds[compound] = { quantity, storageCapacity };
+
+        const diff = storageCapacity - quantity;
+        const maxGain = Math.floor(diff * 0.20);
+        const actualGain = Math.floor(Math.random() * (maxGain + 1));
+
+        gains.compounds[compound] = actualGain;
+
+        const updatedQuantity = quantity + actualGain;
+        setResourceDataObject(updatedQuantity, 'compounds', [compound, 'quantity']);
+    });
+
+    showNotification(
+        `Pillage Void Complete!<br><br>${
+            Object.entries(gains.resources).length
+                ? 'Resources Gained:<br>' +
+                  Object.entries(gains.resources)
+                      .map(([resourceName, gainAmount]) => `${gainAmount} ${capitaliseString(resourceName)}`)
+                      .join('<br>') +
+                  '<br><br>'
+                : ''
+        }${
+            Object.entries(gains.compounds).length
+                ? 'Compounds Gained:<br>' +
+                  Object.entries(gains.compounds)
+                      .map(([compoundName, gainAmount]) => `${gainAmount} ${capitaliseString(compoundName)}`)
+                      .join('<br>')
+                : ''
+        }`,
+        'info',
+        4000,
+        'special'
+    );
 }
 
 export function decideWhichResourcesAndCompoundsGainedByPillage() {
@@ -8402,7 +8461,7 @@ export function calculateAscendencyPoints(distance) {
     }
 
     // Add any extra AP for voidborn players
-    if (getPlayerPhilosophy() === 'voidborn') {
+    if (getPlayerPhilosophy() === 'voidborn' && getStatRun() > 1) {
         const amountOfAPToAddFromRepeatables = calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'));
         modifiedAP += amountOfAPToAddFromRepeatables;
     }
@@ -8912,7 +8971,7 @@ export function updateDiplomacySituation(buttonPressed, starData) {
     }
 }
 
-export function setEnemyFleetPower() { //TODO
+export function setEnemyFleetPower() {
     let enemyFleetPowerAir = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'air'])  * 2;
     let enemyFleetPowerLand = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'land']) * 4;
     let enemyFleetPowerSea = getStarSystemDataObject('stars', ['destinationStar', 'enemyFleets', 'sea']) * 6;
@@ -9525,7 +9584,6 @@ function decideIfMoreSystemsAreAutomaticallySettled() {
 }
 
 export function addPermanentBuffsBackInAfterRebirth() {
-    //might need to add buffs back affecting rocket and starship travel time TODO
     if (getBuffSmartAutoBuyersData()['boughtYet'] > 0) {
         for (let i = 0; i < getBuffSmartAutoBuyersData()['boughtYet']; i++) {
             buffSmartAutoBuyersRateMultiplier();
@@ -9579,6 +9637,13 @@ export function rebirth() {
     resetUIElementsOnRebirth();
     changeWeather(1000);
     setRunStartTime();
+
+    if (getStatRun() === 2 && getPlayerPhilosophy() !== null) {
+        const targetElement = [...document.querySelectorAll('p[class*="tab3"]')].find(
+            el => el.innerHTML.includes('Philosophy')
+        );
+        appendAttentionIndicator(targetElement);
+    }
 }
 
 function resetUIElementsOnRebirth() {
