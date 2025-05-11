@@ -499,7 +499,7 @@ export async function gameLoop() {
         monitorRevealResourcesCheck();
         monitorRevealCompoundsCheck();
 
-        if (getAntimatterUnlocked() && getCurrentTab()[1] === 'Space Mining') {
+        if (getAntimatterUnlocked() && getCurrentTab()[1].includes('Space Mining')) {
             if (getElements().miningOption.parentElement.parentElement.classList.contains('invisible')) {
                 getElements().miningOption.parentElement.parentElement.classList.remove('invisible');
             }
@@ -967,7 +967,7 @@ function handleAutoCreateResourceSellRows() {
 }
 
 function updateAllPowerPlantRates() {
-    if (getCurrentTab()[1] === 'Energy') {
+    if (getCurrentTab()[1].includes('Energy')) {
         const buildings = ['powerPlant1', 'powerPlant2', 'powerPlant3'];
   
         buildings.forEach(building => {
@@ -1004,7 +1004,7 @@ function checkIfStarShipBuilt() {
 }
 
 function updateRocketNames() {
-    if (getCurrentTab()[1] === 'Space Mining') {
+    if (getCurrentTab()[1].includes('Space Mining')) {
         for (let i = 1; i <= 4; i++) {
             document.getElementById(`rocket${i}`).textContent = getRocketUserName(`rocket${i}`);
         }
@@ -1058,13 +1058,13 @@ function checkAndRevealNewBuildings(type) {
             break;
         case 'space':
             element = document.getElementById('launchPadOption');
-            if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1] === 'Space Mining') {
+            if (getTechUnlockedArray().includes('rocketComposites') && getCurrentTab()[1].includes('Space Mining')) {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
             }
             element = document.getElementById('asteroidsOption');
-            if (getAsteroidArray().length > 0 && getCurrentTab()[1] === 'Space Mining') {
+            if (getAsteroidArray().length > 0 && getCurrentTab()[1].includes('Space Mining')) {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
@@ -1072,7 +1072,7 @@ function checkAndRevealNewBuildings(type) {
             break;
         case 'starShip':
             element = document.getElementById('starShipOption');
-            if (getTechUnlockedArray().includes('orbitalConstruction') && getCurrentTab()[1] === 'Interstellar') {
+            if (getTechUnlockedArray().includes('orbitalConstruction') && getCurrentTab()[1].includes('Interstellar')) {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
@@ -1108,7 +1108,7 @@ function checkAndRevealNewBuildings(type) {
             break;
         case 'fleetHangar':
             element = document.getElementById('fleetHangarOption');
-            if (getStarShipBuilt() && getCurrentTab()[1] === 'Interstellar') {
+            if (getStarShipBuilt() && getCurrentTab()[1].includes('Interstellar')) {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
@@ -1124,7 +1124,7 @@ function checkAndRevealNewBuildings(type) {
                     .map(key => data[key].quantity);
             })();
         
-            if (!getApAwardedThisRun() && getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1] === 'Interstellar') {
+            if (!getApAwardedThisRun() && getDestinationStarScanned() && getStarShipStatus()[0] === 'orbiting' && quantitiesFleets.some(qty => qty > 0) && getCurrentTab()[1].includes('Interstellar')) {
                 element.parentElement.parentElement.classList.remove('invisible');
             } else {
                 element.parentElement.parentElement.classList.add('invisible');
@@ -4028,7 +4028,7 @@ function checkStatusAndSetTextClasses(element) {
     }  
 
     if (element.classList.contains('compound-cost-sell-check') && element.dataset && element.dataset.conditionCheck !== 'undefined' && element.dataset.resourcePriceObject !== 'undefined') {
-        if (getCurrentTab()[1] === 'Compounds') {
+        if (getCurrentTab()[1].includes('Compounds')) {
             return compoundCostSellCreateChecks(element);
         } else {
             return;
@@ -4484,7 +4484,7 @@ function ascendencyBuffChecks() {
 }
 
 function galacticMarketChecks() {
-    if (getCurrentTab()[1] === 'Galactic' && getCurrentOptionPane() === 'galactic market') {
+    if (getCurrentTab()[1].includes('Galactic') && getCurrentOptionPane() === 'galactic market') {
         const galacticMarketOutgoingStockTypeDropDown = document.getElementById('galacticMarketOutgoingStockTypeDropDown');
         const galacticMarketIncomingStockTypeDropDown = document.getElementById('galacticMarketIncomingStockTypeDropDown');
 
@@ -4839,7 +4839,7 @@ const sortedOptions = staticValues
 }
 
 function rebirthChecks() {
-    if (getCurrentTab()[1] === 'Galactic') {
+    if (getCurrentTab()[1].includes('Galactic')) {
         if (getDestinationStarScanned()) {
             document.getElementById('rebirthOption').parentElement.parentElement.classList.remove('invisible');
         } else {
@@ -4863,7 +4863,7 @@ async function coloniseChecks() {
         document.getElementById('ascendencyOption').parentElement.parentElement.classList.remove('invisible');
     }
     
-    if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1] === 'Interstellar') {
+    if (getCurrentOptionPane() === 'colonise' && getCurrentTab()[1].includes('Interstellar')) {
         const battleCanvasContainer = document.getElementById('battleCanvasContainer');
 
         if (getBattleTriggeredByPlayer() && !getBattleResolved()[0]) {
@@ -5125,11 +5125,11 @@ function checkTravelToStarElements(element) {
 
         labelElement.style.color = getStarShipTravelling() ? readyColor : (canTravel ? readyColor : disabledColor);
 
-        if (getStarShipTravelling() && getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] !== 'orbiting') {       
+        if (getStarShipTravelling() && getCurrentTab()[1].includes('Interstellar') && getStarShipStatus()[0] !== 'orbiting') {       
             drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'travelling');
             removeOrbitCircle();
             spaceTravelButtonHideAndShowDescription();
-        } else if (getCurrentTab()[1] === "Interstellar" && getStarShipStatus()[0] === 'orbiting') {
+        } else if (getCurrentTab()[1].includes('Interstellar') && getStarShipStatus()[0] === 'orbiting') {
             labelElement.textContent = 'Orbiting...'
             drawStarConnectionDrawings(getCurrentStarSystem(), getDestinationStar(), 'orbiting');
             document.getElementById('starDestinationDescription').textContent = 'Orbiting...';

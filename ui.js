@@ -2266,7 +2266,7 @@ export function drawStarConnectionDrawings(fromStar, toStar, isInteresting) {
 
     const tooltipLayer = document.getElementById('tooltipLayer') || document.body;
 
-    if (getStarShipStatus()[0] === 'orbiting' && getCurrentTab()[1] === 'Interstellar' && getCurrentOptionPane() === 'star map') {
+    if (getStarShipStatus()[0] === 'orbiting' && getCurrentTab()[1].includes('Interstellar') && getCurrentOptionPane() === 'star map') {
         orbitCircle = drawOrbitCircle(getToStarObject());
     }
 
