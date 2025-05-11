@@ -1,8 +1,9 @@
-import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, showRebirthPopup, createDropdown, createTextElement, createTextFieldArea } from './ui.js';
+import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, createDropdown, createTextElement, createTextFieldArea, callPopupModal, showHideModal } from './ui.js';
 import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
-import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade } from './game.js';
-import { getAscendencyBuffDataObject } from './resourceDataObject.js';
+import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade, rebirth } from './game.js';
+import { getAscendencyBuffDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { capitaliseString } from './utilityFunctions.js';
+import { modalRebirthText, modalRebirthHeader } from './descriptions.js';
 
 export function drawTab7Content(heading, optionContentElement) {
     const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
@@ -21,7 +22,37 @@ export function drawTab7Content(heading, optionContentElement) {
                 null,
                 'Rebirth:',
                 createButton(`REBIRTH`, ['option-button', 'red-disabled-text', 'rebirth-check'], () => {
-                    showRebirthPopup();
+                    const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+                    const spanClass = currentAp === 0 ? "red-disabled-text" : "green-ready-text";
+
+                    const content = modalRebirthText.replace(
+                        /<span class="green-ready-text">.*?<\/span>/,
+                        `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
+                    );
+
+                    callPopupModal(
+                        modalRebirthHeader,
+                        content,
+                        true,
+                        true,
+                        false,
+                        false,
+                        function () {
+                            rebirth();
+                            showHideModal();
+                        },
+                        function () {
+                            showHideModal();
+                        },
+                        null,
+                        null,
+                        'RESET ALL PROGRESS AND KEEP AP',
+                        'CANCEL',
+                        null,
+                        null,
+                        false
+                    );
+
                 }, null, null, null, null, null, true, null, 'rebirth'),
                 null,
                 null,

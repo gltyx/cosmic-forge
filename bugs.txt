@@ -1,6 +1,8 @@
 megaStructures:
 -TODO
 
+bugs:
+save game and reload after bulding starship but before launching and cannot see details on star map of starship
 
 
 

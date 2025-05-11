@@ -1723,255 +1723,120 @@ export function createStarDestinationRow(starData, isInteresting) {
 
     const buttonContainer = document.getElementById('starDestinationButton');
     const button = createButton(`Travel`, ['option-button', 'red-disabled-text', 'travel-starship-button'], () => {
-        showLaunchWarningModal(true);
+        callPopupModal(
+            launchStarShipWarningHeader, 
+            launchStarShipWarningText, 
+            true, 
+            true, 
+            false, 
+            false, 
+            function() {  
+                const destinationStar = getDestinationStar();  
+                const starData = getStarSystemDataObject('stars', [destinationStar]);  
+                showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000, 'special');
+                startTravelToDestinationStarTimer([0, 'buttonClick'], false);
+                spendAntimatterOnFuelForStarShip(starData.fuel);
+                spaceTravelButtonHideAndShowDescription();
+                addToResourceAllTimeStat(1, 'starShipLaunched');
+                addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated');
+                setAchievementFlagArray('launchStarship', 'add');
+                showHideModal();
+            },
+            function() {  
+                showHideModal();
+            },
+            null,  
+            null,
+            'LAUNCH',
+            'CANCEL',
+            null,
+            null,
+            false
+        );
     }, 'upgradeCheck', '', 'autoBuyer', 'travelToStar', 'time', true, null, 'starShipPurchase');
     buttonContainer.appendChild(button);
 }
 
-function showLaunchWarningModal(show) {
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const launchConfirmButton = document.getElementById('modalConfirm');
-    const launchCancelButton = document.getElementById('modalCancel');
-    launchConfirmButton.innerText = 'CONFIRM';
-    launchCancelButton.innerText = 'CANCEL';
+export async function callPopupModal(
+  header,
+  content,
+  showConfirm,
+  showCancel,
+  showExtra1,
+  showExtra2,
+  onConfirm,
+  onCancel,
+  onExtra1,
+  onExtra2,
+  confirmLabel,
+  cancelLabel,
+  extra1Label,
+  extra2Label,
+  setupToolTips = false
+) {
+    await waitForModalToHide();
 
-    if (show) {
-        launchConfirmButton.classList.remove('invisible');
-        launchCancelButton.classList.remove('invisible');
+    if (setupToolTips) {
+        setupModalButtonTooltips();
+    }
 
-        const headerText = launchStarShipWarningHeader;
-        let content = launchStarShipWarningText;
-        populateModal(headerText, content);
+    const modalContainer = document.getElementById('modal');
+    const overlay = document.getElementById('overlay');
 
-        modalContainer.style.display = 'flex';
-        overlay.style.display = 'flex';
+    const confirmButton = document.getElementById('modalConfirm');
+    const cancelButton = document.getElementById('modalCancel');
+    const extra1Button = document.getElementById('modalExtraChoice1');
+    const extra2Button = document.getElementById('modalExtraChoice2');
 
-        launchConfirmButton.onclick = function () {
-            const destinationStar = getDestinationStar();
-            const starData = getStarSystemDataObject('stars', [destinationStar]);
-            showNotification(`Travelling to ${capitaliseWordsWithRomanNumerals(starData.name)}`, 'info', 3000, 'special');
-            startTravelToDestinationStarTimer([0, 'buttonClick'], false);
-            spendAntimatterOnFuelForStarShip(starData.fuel);
-            spaceTravelButtonHideAndShowDescription();
-            addToResourceAllTimeStat(1, 'starShipLaunched');
-            addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated');
-            showHideModal();
-            setAchievementFlagArray('launchStarship', 'add');
-        };
+    confirmButton.onclick = null;
+    cancelButton.onclick = null;
+    extra1Button.onclick = null;
+    extra2Button.onclick = null;
 
-        launchCancelButton.onclick = function () {
-            showHideModal();
+    populateModal(header, content);
+
+    if (showConfirm) {
+        confirmButton.classList.remove('invisible');
+        confirmButton.innerText = confirmLabel;
+        confirmButton.onclick = () => {
+            onConfirm?.();
         };
     } else {
-        showHideModal();
+        confirmButton.classList.add('invisible');
     }
-}
 
-export async function showGalacticTabPopup() {
-    await waitForModalToHide();
-
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const galacticTabUnlockConfirmButton = document.getElementById('modalConfirm');
-    const galacticTabUnlockCancelButton = document.getElementById('modalCancel');
-    galacticTabUnlockConfirmButton.innerText = 'CONFIRM';
-    
-    let headerText = modalGalacticTabUnlockHeader;
-    let content = modalGalacticTabUnlockText;
-
-    galacticTabUnlockConfirmButton.classList.remove('invisible');
-    galacticTabUnlockCancelButton.classList.add('invisible');
-
-    populateModal(headerText, content);
-
-    modalContainer.style.display = 'flex';
-    overlay.style.display = 'flex';
-
-    galacticTabUnlockConfirmButton.onclick = function () {
-        showHideModal();
-        showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
-    };
-}
-
-export async function showPlayerPhilosophyIntroPopup() {
-    return new Promise((resolve) => {
-        const modalContainer = getElements().modalContainer;
-        const overlay = getElements().overlay;
-        const playerPhilosophyIntroConfirmButton = document.getElementById('modalConfirm');
-        const playerPhilosophyIntroCancelButton = document.getElementById('modalCancel');
-        playerPhilosophyIntroConfirmButton.innerText = 'IT SHALL BE DONE';
-
-        let modalPlayerLeaderIntroContentText;
-
-        switch (getPlayerPhilosophy()) {
-            case 'constructor':
-                modalPlayerLeaderIntroContentText = modalPlayerLeaderIntroContentText1;
-                break;
-            case 'supremacist':
-                modalPlayerLeaderIntroContentText = modalPlayerLeaderIntroContentText2;
-                break;
-            case 'voidborn':
-                modalPlayerLeaderIntroContentText = modalPlayerLeaderIntroContentText3;
-                break;
-            case 'expansionist':
-                modalPlayerLeaderIntroContentText = modalPlayerLeaderIntroContentText4;
-                break;
-        }
-
-        let headerText = modalPlayerLeaderIntroHeaderText;
-        let content = modalPlayerLeaderIntroContentText;
-
-        playerPhilosophyIntroConfirmButton.classList.remove('invisible');
-        playerPhilosophyIntroCancelButton.classList.add('invisible');
-
-        populateModal(headerText, content);
-
-        modalContainer.style.display = 'flex';
-        overlay.style.display = 'flex';
-
-        playerPhilosophyIntroConfirmButton.onclick = function () {
-            showHideModal();
-            resolve();
+    if (showCancel) {
+        cancelButton.classList.remove('invisible');
+        cancelButton.innerText = cancelLabel;
+        cancelButton.onclick = () => {
+            onCancel?.();
         };
-    });
-}
+    } else {
+        cancelButton.classList.add('invisible');
+    }
 
-function waitForModalToHide() {
-    return new Promise((resolve) => {
-        const interval = setInterval(() => {
-            const modalContainer = getElements().modalContainer;
-            if (modalContainer && modalContainer.style.display === 'none') {
-                clearInterval(interval);
-                resolve();
-            }
-        }, 100);
-    });
-}
+    if (showExtra1) {
+        extra1Button.classList.remove('invisible');
+        extra1Button.innerText = extra1Label;
+        extra1Button.onclick = () => {
+            onExtra1?.();
+        };
+    } else {
+        extra1Button.classList.add('invisible');
+    }
 
-export async function showPlayerLeaderPhilosophySelectionPopup() {
-    await waitForModalToHide();
-
-    setupModalButtonTooltips();
-
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const playerLeaderPhilosophyChoice1Button = document.getElementById('modalExtraChoice1');
-    const playerLeaderPhilosophyChoice2Button = document.getElementById('modalExtraChoice2');
-    const playerLeaderPhilosophyChoice3Button = document.getElementById('modalConfirm');
-    const playerLeaderPhilosophyChoice4Button = document.getElementById('modalCancel');
-
-    playerLeaderPhilosophyChoice1Button.innerText = 'CONSTRUCTOR';
-    playerLeaderPhilosophyChoice2Button.innerText = 'SUPREMACIST';
-    playerLeaderPhilosophyChoice3Button.innerText = 'VOIDBORN';
-    playerLeaderPhilosophyChoice4Button.innerText = 'EXPANSIONIST';
-    
-    let headerText = modalPlayerLeaderPhilosophyHeaderText;
-    let content = modalPlayerLeaderPhilosophyContentText;
-
-    playerLeaderPhilosophyChoice1Button.classList.remove('invisible');
-    playerLeaderPhilosophyChoice2Button.classList.remove('invisible');
-    playerLeaderPhilosophyChoice3Button.classList.remove('invisible');
-    playerLeaderPhilosophyChoice4Button.classList.remove('invisible');
-
-    populateModal(headerText, content);
+    if (showExtra2) {
+        extra2Button.classList.remove('invisible');
+        extra2Button.innerText = extra2Label;
+        extra2Button.onclick = () => {
+            onExtra2?.();
+        };
+    } else {
+        extra2Button.classList.add('invisible');
+    }
 
     modalContainer.style.display = 'flex';
     overlay.style.display = 'flex';
-
-    const onChoice1Click = () => {
-        setPlayerPhilosophy('constructor');
-        showNotification('You are a CONSTRUCTOR!', 'warning', 3000, 'special');
-        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
-        showHideModal();
-        removeModalButtonTooltips();
-    };
-
-    const onChoice2Click = () => {
-        setPlayerPhilosophy('supremacist');
-        showNotification('You are a SUPREMACIST!', 'warning', 3000, 'special');
-        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
-        showHideModal();
-        removeModalButtonTooltips();
-    };
-
-    const onChoice3Click = () => {
-        setPlayerPhilosophy('voidborn');
-        showNotification('You are VOIDBORN!', 'warning', 3000, 'special');
-        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
-        showHideModal();
-        removeModalButtonTooltips();
-    };
-
-    const onChoice4Click = () => {
-        setPlayerPhilosophy('expansionist');
-        showNotification('You are an EXPANSIONIST!', 'warning', 3000, 'special');
-        playerLeaderPhilosophyChoice1Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice2Button.classList.add('invisible');
-        playerLeaderPhilosophyChoice1Button.removeEventListener('click', onChoice1Click);
-        playerLeaderPhilosophyChoice2Button.removeEventListener('click', onChoice2Click);
-        playerLeaderPhilosophyChoice3Button.removeEventListener('click', onChoice3Click);
-        playerLeaderPhilosophyChoice4Button.removeEventListener('click', onChoice4Click);
-        showHideModal();
-        removeModalButtonTooltips();
-    };
-
-    playerLeaderPhilosophyChoice1Button.addEventListener('click', onChoice1Click);
-    playerLeaderPhilosophyChoice2Button.addEventListener('click', onChoice2Click);
-    playerLeaderPhilosophyChoice3Button.addEventListener('click', onChoice3Click);
-    playerLeaderPhilosophyChoice4Button.addEventListener('click', onChoice4Click);
-}
-
-export function showRebirthPopup() {
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const rebirthConfirmButton = document.getElementById('modalConfirm');
-    const rebirthCancelButton = document.getElementById('modalCancel');
-    rebirthConfirmButton.innerText = 'RESET ALL PROGRESS AND KEEP AP';
-    rebirthCancelButton.innerText = 'CANCEL';
-    
-    let headerText = modalRebirthHeader;
-    let content = modalRebirthText;
-
-    const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
-    const spanClass = currentAp === 0 ? "red-disabled-text" : "green-ready-text";
-    
-    content = content.replace(
-        /<span class="green-ready-text">.*?<\/span>/, 
-        `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
-    );
-
-    rebirthConfirmButton.classList.remove('invisible');
-    rebirthCancelButton.classList.remove('invisible');
-
-    populateModal(headerText, content);
-
-    modalContainer.style.display = 'flex';
-    overlay.style.display = 'flex';
-
-    rebirthConfirmButton.onclick = function () {
-        rebirth();
-        showHideModal();
-    };
-
-    rebirthCancelButton.onclick = function () {
-        showHideModal();
-    };
 }
 
 export function showEnterWarModeModal(reason) {
@@ -2094,36 +1959,6 @@ export function showEnterWarModeModal(reason) {
     });
 }
 
-export function showHardResetModal() {
-    const modalContainer = getElements().modalContainer;
-    const overlay = getElements().overlay;
-    const hardResetConfirmButton = document.getElementById('modalConfirm');
-    const hardResetCancelButton = document.getElementById('modalCancel');
-    hardResetConfirmButton.innerText = '! RESET ALL PROGRESS, EVEN ON CLOUD !';
-    hardResetCancelButton.innerText = 'CANCEL TO SAFETY';
-
-    hardResetConfirmButton.classList.remove('invisible');
-    hardResetCancelButton.classList.remove('invisible');
-
-    const headerText = hardResetWarningHeader;
-    let content = hardResetWarningText;
-    populateModal(headerText, content);
-
-    modalContainer.style.display = 'flex';
-    overlay.style.display = 'flex';
-
-    hardResetConfirmButton.onclick = function () {
-        destroySaveGameOnCloud();
-        showNotification(`GAME HARD RESET!<br><br>Please REFRESH your Browser and use same Pioneer name to start the new game!`, 'error', 200000000, 'special');
-        showHideModal();
-        overlay.style.display = 'flex';
-    };
-
-    hardResetCancelButton.onclick = function () {
-        showHideModal();
-    };
-}
-
 export async function triggerFeedBackModal(feedback) {
     const modalContainer = getElements().modalContainer;
     const overlay = getElements().overlay;
@@ -2170,18 +2005,6 @@ export async function triggerFeedBackModal(feedback) {
     };
 }
 
-function setFeedbackValueAndSaveGame(wanted, text) {
-    setFeedbackCanBeRequested(false);
-    setFeedbackContent([wanted, text]);
-
-    saveGame('feedbackSave');
-    const saveData = getSaveData();
-    if (saveData) {
-        saveGameToCloud(saveData, 'manualExportCloud');
-    }
-    setSaveData(null);
-}
-
 export async function showBattlePopup(won, apGain = 0) {
     return new Promise((resolve) => {
         const modalContainer = getElements().modalContainer;
@@ -2224,6 +2047,30 @@ export async function showBattlePopup(won, apGain = 0) {
             resolve();
         };
     });
+}
+
+function waitForModalToHide() {
+    return new Promise((resolve) => {
+        const interval = setInterval(() => {
+            const modalContainer = getElements().modalContainer;
+            if (modalContainer && modalContainer.style.display === 'none') {
+                clearInterval(interval);
+                resolve();
+            }
+        }, 100);
+    });
+}
+
+function setFeedbackValueAndSaveGame(wanted, text) {
+    setFeedbackCanBeRequested(false);
+    setFeedbackContent([wanted, text]);
+
+    saveGame('feedbackSave');
+    const saveData = getSaveData();
+    if (saveData) {
+        saveGameToCloud(saveData, 'manualExportCloud');
+    }
+    setSaveData(null);
 }
 
 export function setWarUI(setWarState) {
@@ -2542,7 +2389,7 @@ export function sortTechRows(now) {
     setTechRenderChange(true);
 }
 
-function showHideModal() {
+export function showHideModal() {
     if (getElements().modalContainer.style.display === 'flex') {
         getElements().modalContainer.style.display = 'none';
         getElements().overlay.style.display = 'none';

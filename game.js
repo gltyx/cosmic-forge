@@ -331,13 +331,12 @@ import {
     resetTab4ClassesRebirth,
     resetTab5ClassesRebirth,
     resetTab6ClassesRebirth,
-    showGalacticTabPopup,
     updateAttentionIndicators,
     appendAttentionIndicator,
-    showPlayerLeaderPhilosophySelectionPopup,
-    showPlayerPhilosophyIntroPopup,
     getStarDataAndDistancesToAllStarsFromSettledStar,
-    removeAllIndicatorIcons
+    callPopupModal,
+    showHideModal,
+    removeModalButtonTooltips
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -347,7 +346,7 @@ import {
     capitaliseWordsWithRomanNumerals
  } from './utilityFunctions.js';
 
- import { newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
+ import { modalPlayerLeaderPhilosophyHeaderText, modalPlayerLeaderPhilosophyContentText, modalPlayerLeaderIntroHeaderText, modalPlayerLeaderIntroContentText1, modalPlayerLeaderIntroContentText2, modalPlayerLeaderIntroContentText3, modalPlayerLeaderIntroContentText4, modalGalacticTabUnlockHeader, modalGalacticTabUnlockText, newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
  import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
@@ -6539,7 +6538,26 @@ export function startTravelToDestinationStarTimer(adjustment) {
                     if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
                         setTechUnlockedArray('apAwardedThisRun');
                     }   
-                    showGalacticTabPopup();
+                    callPopupModal(
+                        modalGalacticTabUnlockHeader, 
+                        modalGalacticTabUnlockText, 
+                        true, 
+                        false, 
+                        false, 
+                        false, 
+                        function() {
+                            showHideModal();
+                            showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
+                        },
+                        null, 
+                        null, 
+                        null,
+                        'CONFIRM',
+                        null,
+                        null,
+                        null,
+                        false
+                    );
                 }
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);
@@ -6665,7 +6683,43 @@ export function startInvestigateStarTimer(adjustment) {
                 if (counter >= searchDuration) {
                     extendStarDataRange(false);
                     if (!getPlayerPhilosophy()) {
-                        showPlayerLeaderPhilosophySelectionPopup();
+                        callPopupModal(
+                            modalPlayerLeaderPhilosophyHeaderText, 
+                            modalPlayerLeaderPhilosophyContentText, 
+                            true, 
+                            true, 
+                            true, 
+                            true, 
+                            function() {  
+                                setPlayerPhilosophy('constructor');
+                                showNotification('You are a CONSTRUCTOR!', 'warning', 3000, 'special');
+                                showHideModal();
+                                removeModalButtonTooltips();
+                            }, 
+                            function() {  
+                                setPlayerPhilosophy('supremacist');
+                                showNotification('You are a SUPREMACIST!', 'warning', 3000, 'special');
+                                showHideModal();
+                                removeModalButtonTooltips();
+                            }, 
+                            function() {  
+                                setPlayerPhilosophy('voidborn');
+                                showNotification('You are VOIDBORN!', 'warning', 3000, 'special');
+                                showHideModal();
+                                removeModalButtonTooltips();
+                            }, 
+                            function() {  
+                                setPlayerPhilosophy('expansionist');
+                                showNotification('You are an EXPANSIONIST!', 'warning', 3000, 'special');
+                                showHideModal();
+                                removeModalButtonTooltips();
+                            }, 
+                            'CONSTRUCTOR', 
+                            'SUPREMACIST', 
+                            'VOIDBORN', 
+                            'EXPANSIONIST',
+                            true
+                        );
                     }
                     timerManager.removeTimer(timerName);
                     if (searchTimerDescriptionElement) {             
@@ -9494,7 +9548,26 @@ export async function settleSystemAfterBattle(accessPoint) {
     }
 
     if (getStatRun() < 2) {
-        await showPlayerPhilosophyIntroPopup();
+        callPopupModal(
+            modalPlayerLeaderIntroHeaderText,
+            getPlayerPhilosophy() === 'constructor' ? modalPlayerLeaderIntroContentText1 :
+            getPlayerPhilosophy() === 'supremacist' ? modalPlayerLeaderIntroContentText2 :
+            getPlayerPhilosophy() === 'voidborn' ? modalPlayerLeaderIntroContentText3 :
+            modalPlayerLeaderIntroContentText4,
+            true,
+            false,
+            false,
+            false,
+            function() { showHideModal() },
+            null,
+            null,
+            null,
+            'IT SHALL BE DONE',
+            null,
+            null,
+            null,
+            false
+    );
     }
 
     switch(accessPoint) {

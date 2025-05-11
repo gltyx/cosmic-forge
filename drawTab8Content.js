@@ -1,7 +1,7 @@
 import { getCurrentOptionPane, getCurrentTheme, setAutoSaveToggle, getAutoSaveToggle, getAutoSaveFrequency, setAutoSaveFrequency, getSaveData, setSaveData, getCurrencySymbol, setCurrencySymbol, getNotationType, setNotationType, setNotificationsToggle, getNotificationsToggle, getSaveName, getWeatherEffectSetting, setWeatherEffectSetting, setNewsTickerSetting, getNewsTickerSetting, setSaveExportCloudFlag, getBackgroundAudio, setBackgroundAudio, getSfx, setSfx, setWasAutoSaveToggled } from './constantsAndGlobalVars.js';
-import { setupAchievementTooltip, createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme, showHardResetModal } from './ui.js';
-import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame } from './saveLoadGame.js';
-import { getStatisticsContent, getHelpContent } from './descriptions.js';
+import { setupAchievementTooltip, createHtmlTableAchievementsGrid, createHtmlTableStatistics, createHtmlTextAreaProse, toggleGameFullScreen, createButton, createTextFieldArea, createOptionRow, createDropdown, createToggleSwitch, selectTheme, callPopupModal, showHideModal, showNotification } from './ui.js';
+import { importSaveStringFileFromComputer, downloadSaveStringToComputer, initializeAutoSave, saveGame, saveGameToCloud, loadGameFromCloud, copySaveStringToClipBoard, loadGame, destroySaveGameOnCloud } from './saveLoadGame.js';
+import { hardResetWarningHeader, hardResetWarningText, getStatisticsContent, getHelpContent } from './descriptions.js';
 import { setAchievementIconImageUrls, getAchievementPositionData } from './resourceDataObject.js';
 
 export function drawTab8Content(heading, optionContentElement) {
@@ -460,7 +460,36 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             'HARD RESET:',
             createButton(`!!!RESET ALL GAME PROGRESS FOR THIS PIONEER NAME!!!`, ['option-button', 'hard-reset-button'], () => {
-                showHardResetModal();
+                callPopupModal(
+                    hardResetWarningHeader,
+                    hardResetWarningText,
+                    true,
+                    true,
+                    false,
+                    false,
+                    function () {
+                        destroySaveGameOnCloud();
+                        showNotification(
+                            `GAME HARD RESET!<br><br>Please REFRESH your Browser and use same Pioneer name to start the new game!`,
+                            'error',
+                            200000000,
+                            'special'
+                        );
+                        showHideModal();
+                        document.getElementById('overlay').style.display = 'flex';
+                    },
+                    function () {
+                        showHideModal();
+                    },
+                    null,
+                    null,
+                    '! RESET ALL PROGRESS, EVEN ON CLOUD !',
+                    'CANCEL TO SAFETY',
+                    null,
+                    null,
+                    false
+                );
+
             }),
             null,
             null,
