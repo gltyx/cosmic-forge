@@ -1,8 +1,8 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor } from './constantsAndGlobalVars.js';
+import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables } from './game.js';
 import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
-import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator } from './ui.js';
-import { techNotificationMessages } from './descriptions.js';
+import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator, callPopupModal, showHideModal } from './ui.js';
+import { modalNanoBrokersUnlockHeader, modalNanoBrokersUnlockText, modalRocketCompositesTabUnlockHeader, modalRocketCompositesTabUnlockText, modalQuantumComputingTabUnlockHeader, modalQuantumComputingTabUnlockText, modalScienceLabsTabUnlockHeader, modalScienceLabsTabUnlockText, modalKnowledgeSharingTabUnlockHeader, modalKnowledgeSharingTabUnlockText, modalInterstellarTabUnlockHeader, modalInterstellarTabUnlockText, modalEnergyTabUnlockHeader, modalEnergyTabUnlockText, modalSpaceMiningTabUnlockText, modalSpaceMiningTabUnlockHeader, modalCompoundsTabUnlockHeader, modalCompoundsTabUnlockText, techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
     const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
@@ -133,6 +133,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         showNotification(techNotificationMessages.knowledgeSharing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         appendAttentionIndicator(document.getElementById('researchOption'));
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalKnowledgeSharingTabUnlockHeader, 
+                                modalKnowledgeSharingTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'knowledgeSharing', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -522,6 +543,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         showNotification(techNotificationMessages.quantumComputing, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         indicateAllResources();
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalQuantumComputingTabUnlockHeader, 
+                                modalQuantumComputingTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'quantumComputing', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -553,6 +595,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         showNotification(techNotificationMessages.scienceLaboratories, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         appendAttentionIndicator(document.getElementById('researchOption'));
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalScienceLabsTabUnlockHeader, 
+                                modalScienceLabsTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'scienceLaboratories', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -647,6 +710,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('nanoBrokers');
                         showNotification(techNotificationMessages.nanoBrokers, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalNanoBrokersUnlockHeader, 
+                                modalNanoBrokersUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'nanoBrokers', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -677,6 +761,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('stellarCartography');
                         showNotification(techNotificationMessages.stellarCartography, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalInterstellarTabUnlockHeader, 
+                                modalInterstellarTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'stellarCartography', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -707,6 +812,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('basicPowerGeneration');
                         showNotification(techNotificationMessages.basicPowerGeneration, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalEnergyTabUnlockHeader, 
+                                modalEnergyTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'basicPowerGeneration', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -836,7 +962,28 @@ export function drawTab3Content(heading, optionContentElement) {
                         setRenderedTechTree(false);
                         if (!document.getElementById('tab6').innerHTML.includes('???')) {
                             appendAttentionIndicator(document.getElementById(`launchPadOption`)); 
-                        }  
+                        } 
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalRocketCompositesTabUnlockHeader, 
+                                modalRocketCompositesTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                         document.getElementById('launchPadOption').parentElement.parentElement.classList.remove('invisible');
                     }, 'techUnlock', '', 'rocketComposites', null, 'research', true, null, 'tech'),
                     null,
@@ -931,6 +1078,27 @@ export function drawTab3Content(heading, optionContentElement) {
                         showNotification(techNotificationMessages.compounds, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
                         setAllCompoundsToZeroQuantity();
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalCompoundsTabUnlockHeader, 
+                                modalCompoundsTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'compounds', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1027,7 +1195,28 @@ export function drawTab3Content(heading, optionContentElement) {
                         setRenderedTechTree(false);
                         if (!document.getElementById('tab6').innerHTML.includes('???')) {
                             appendAttentionIndicator(document.getElementById(`spaceTelescopeOption`)); 
-                        } 
+                        }
+                        if (getStatRun() === 1) {
+                            callPopupModal(
+                                modalSpaceMiningTabUnlockHeader, 
+                                modalSpaceMiningTabUnlockText, 
+                                true, 
+                                false, 
+                                false, 
+                                false, 
+                                function() {
+                                    showHideModal();
+                                },
+                                null, 
+                                null, 
+                                null,
+                                'CONFIRM',
+                                null,
+                                null,
+                                null,
+                                false
+                            );
+                        }
                     }, 'techUnlock', '', 'atmosphericTelescopes', null, 'research', true, null, 'tech'),
                     null,
                     null,

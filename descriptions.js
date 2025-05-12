@@ -55,6 +55,26 @@ export let modalPlayerLeaderIntroContentText3;
 export let modalPlayerLeaderIntroContentText4;
 export let hardResetWarningHeader;
 export let hardResetWarningText;
+export let modalCompoundsTabUnlockHeader;
+export let modalCompoundsTabUnlockText;
+export let modalSpaceMiningTabUnlockHeader;
+export let modalSpaceMiningTabUnlockText;
+export let modalEnergyTabUnlockHeader;
+export let modalEnergyTabUnlockText;
+export let modalInterstellarTabUnlockHeader;
+export let modalInterstellarTabUnlockText;
+export let modalKnowledgeSharingTabUnlockHeader;
+export let modalKnowledgeSharingTabUnlockText;
+export let modalScienceLabsTabUnlockHeader;
+export let modalScienceLabsTabUnlockText;
+export let modalQuantumComputingTabUnlockHeader;
+export let modalQuantumComputingTabUnlockText;
+export let modalRocketCompositesTabUnlockHeader;
+export let modalRocketCompositesTabUnlockText;
+export let modalNanoBrokersUnlockHeader;
+export let modalNanoBrokersUnlockText;
+export let modalCompoundMachiningTabUnlockHeader;
+export let modalCompoundMachiningTabUnlockText;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -103,6 +123,26 @@ export function initialiseDescriptions() {
     modalPlayerLeaderIntroContentText4 = `You are an Expansionist.<br>The horizon always calls.<br><span class="green-ready-text">Starships and Rockets much cheaper to build, after the first Rebirth, forever.</span><br><span class="green-ready-text">Rocket and Starships are faster.</span><br>Spread across the galaxy like wildfire.`;
     hardResetWarningHeader = `DANGER: HARD RESET!`;
     hardResetWarningText = `You are about to hard reset your game!<br><br>This will erase all progress and achievements!<br><br>Be very careful and only confirm if you are absolutely sure this<br>is what you want, otherwise CANCEL!`;
+    modalCompoundsTabUnlockHeader = `COMPOUNDS UNLOCKED!`;
+    modalCompoundsTabUnlockText = `Your Scientists have experimented with combining Hydrogen and Carbon Resources,<br>and have discovered Diesel!  With this knowledge, they are sure that<br>more of these Compounds will follow.<br><br><span class="green-ready-text">Compounds Tab Unlocked!</span>`;
+    modalSpaceMiningTabUnlockHeader = `SPACE MINING UNLOCKED!`;
+    modalSpaceMiningTabUnlockText = `You have successfully developed optics capable of scanning the Stars and Asteroids<br>Perhaps we can use these Asteroids for our benefit and mine them!<br>We will realise our dream of returning to the stars!<br><br><span class="green-ready-text">Space Mining Tab Unlocked!</span>`;
+    modalEnergyTabUnlockHeader = `ENERGY UNLOCKED!`;
+    modalEnergyTabUnlockText = `Your Engineers have harnessed the power of stored Resources<br>to generate Energy for advanced systems and automation.<br>This marks a pivotal step toward a sustainable future, and opens up possibilities unavailable until now.<br><br><span class="green-ready-text">Energy Tab Unlocked!</span>`;
+    modalInterstellarTabUnlockHeader = `INTERSTELLAR UNLOCKED!`;
+    modalInterstellarTabUnlockText = `Your Engineers have begun mapping the Stars!<br>With this capability, you will one day have a reference to explore and Colonise the Galaxy!<br><br><span class="green-ready-text">Interstellar Tab Unlocked!</span>`;
+    modalKnowledgeSharingTabUnlockHeader = `TECH RESEARCH!`;
+    modalKnowledgeSharingTabUnlockText = `People are getting together to share knowledge!<br>Scientific research will advance much faster with new Science Clubs where enthusiasts<br>can convene and develop their ideas!<br><br><span class="green-ready-text">Science Clubs Unlocked!</span>`;
+    modalScienceLabsTabUnlockHeader = `SCIENCE LABS!`;
+    modalScienceLabsTabUnlockText = `Scientists now have dedicated laboratories to carry out their experiments.<br>Research will rocket with this advancement!<br><br><span class="green-ready-text">Science Clubs Unlocked!</span>`;
+    modalQuantumComputingTabUnlockHeader = `QUANTUM COMPUTING UNLOCKED!`;
+    modalQuantumComputingTabUnlockText = `Your Researchers have breached the boundaries of classical computation.<br>With Quantum Computing, reality itself bends to optimize processes.<br>This advancement will allow us to extract Resources much faster<br><br><span class="green-ready-text">Level 2 AutoBuyers Unlocked!</span>`;
+    modalRocketCompositesTabUnlockHeader = `ROCKET COMPOSITES!`;
+    modalRocketCompositesTabUnlockText = `Scientists have developed new materials that can be used in advanced Mining, both here and on Asteroids!<br>With this technology you can now build a Launch Pad and Rockets!<br>Not only that, but also you now have access to the most advanced extraction machinery on the ground too!<br><br><span class="green-ready-text">LaunchPad and Rockets Unlocked!</span><br><span class="green-ready-text">Level 3 and 4 AutoBuyers Unlocked!</span>`
+    modalNanoBrokersUnlockHeader = 'NANO BROKERS!';
+    modalNanoBrokersUnlockText = `With this extremely advanced tech, our scientists have developed robots that can go to market<br>automatically and sell our Resources and Compounds for the best possible price!<br><br><span class="green-ready-text">Automated Resource Selling Unlocked!</span>`
+    modalCompoundMachiningTabUnlockHeader = `AUTOMATED COMPOUND CREATION!`;
+    modalCompoundMachiningTabUnlockText = `Our scientists have done it again! Now we have advanced machinery capable of automatically<br>creating Compounds at will.  This is extremely powerful indeed!<br>If we cannot conquer the Galaxy now, it is your fault!<br><br><span class="green-ready-text">Automated Compound Creation Unlocked!</span>`
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',

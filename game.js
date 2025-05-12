@@ -346,7 +346,7 @@ import {
     capitaliseWordsWithRomanNumerals
  } from './utilityFunctions.js';
 
- import { modalPlayerLeaderPhilosophyHeaderText, modalPlayerLeaderPhilosophyContentText, modalPlayerLeaderIntroHeaderText, modalPlayerLeaderIntroContentText1, modalPlayerLeaderIntroContentText2, modalPlayerLeaderIntroContentText3, modalPlayerLeaderIntroContentText4, modalGalacticTabUnlockHeader, modalGalacticTabUnlockText, newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
+ import { modalCompoundMachiningTabUnlockHeader, modalCompoundMachiningTabUnlockText, modalPlayerLeaderPhilosophyHeaderText, modalPlayerLeaderPhilosophyContentText, modalPlayerLeaderIntroHeaderText, modalPlayerLeaderIntroContentText1, modalPlayerLeaderIntroContentText2, modalPlayerLeaderIntroContentText3, modalPlayerLeaderIntroContentText4, modalGalacticTabUnlockHeader, modalGalacticTabUnlockText, newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
  import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
@@ -6374,6 +6374,27 @@ export function purchaseBuff(buff) {
     }
 
     if (buff === 'compoundAutomation') {
+        if (getStatRun() === 1) {
+            callPopupModal(
+                modalCompoundMachiningTabUnlockHeader, 
+                modalCompoundMachiningTabUnlockText, 
+                true, 
+                false, 
+                false, 
+                false, 
+                function() {
+                    showHideModal();
+                },
+                null, 
+                null, 
+                null,
+                'CONFIRM',
+                null,
+                null,
+                null,
+                false
+            );
+        }
         setTechUnlockedArray('compoundMachining');
     }
 }
@@ -6537,27 +6558,29 @@ export function startTravelToDestinationStarTimer(adjustment) {
                 if (getStatRun() === 1) {
                     if (!getTechUnlockedArray().includes('apAwardedThisRun')) {
                         setTechUnlockedArray('apAwardedThisRun');
-                    }   
-                    callPopupModal(
-                        modalGalacticTabUnlockHeader, 
-                        modalGalacticTabUnlockText, 
-                        true, 
-                        false, 
-                        false, 
-                        false, 
-                        function() {
-                            showHideModal();
-                            showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
-                        },
-                        null, 
-                        null, 
-                        null,
-                        'CONFIRM',
-                        null,
-                        null,
-                        null,
-                        false
-                    );
+                    }
+                    if (getStatRun() === 1) {
+                        callPopupModal(
+                            modalGalacticTabUnlockHeader, 
+                            modalGalacticTabUnlockText, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                                showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
+                    }
                 }
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);

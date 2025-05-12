@@ -2,3 +2,8 @@ megaStructures:
 -TODO
 
 
+find out when following are unlocked:
+
+- compounds
+- space mining
+- interstellar
