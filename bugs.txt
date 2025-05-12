@@ -2,8 +2,7 @@ megaStructures:
 -TODO
 
 
-find out when following are unlocked:
-
-- compounds
-- space mining
-- interstellar
+factory star stuff is wrong.  so far we find ancient manuscripts and get the popup
+then we have to generate another star to be the factory star inside the function that makes the ancient manuscript and set that as the factory star all in that function ie [generatedStarName, 1, false]
+then when we are creating a star and checking if is factory star we need to compare it with the name in the ancient manuscript and set that as factoryStar: Dyson sphere etc
+then we need logic to color the map with factory star symbols and color it yellow or something in the star data table

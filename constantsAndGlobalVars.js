@@ -49,6 +49,14 @@ export const ENEMY_FLEET_SPEED_SEA = 1;
 export const AP_BASE_SELL_PRICE = 100000;
 export const AP_BASE_BUY_PRICE = 1000000;
 export const CASH_LIQUIDATION_MODIFIER = 10;
+export const MAX_ANCIENT_MANUSCRIPTS = 4;
+
+export const factoryStarMap = {
+    1: "Dyson Sphere",
+    2: "Celestial Processing Core",
+    3: "Plasma Forge",
+    4: "Galactic Memory Archive"
+};
 
 export const enemyFleetData = {
     air: {
@@ -243,6 +251,7 @@ let multiplierPermanentCompounds = 1;
 let playerStartingUnitHealth = 100;
 let initialImpression = 35;
 let additionalSystemsToSettleThisRun = [];
+let starsWithAncientManuscripts = [];
 
 let battleUnits = { 
     player: [], 
@@ -1092,6 +1101,7 @@ export function captureGameStatusForSaving(type) {
     gameState.starShipTravelSpeed = starShipTravelSpeed;
     gameState.increaseStorageFactor = increaseStorageFactor;
     gameState.additionalSystemsToSettleThisRun = additionalSystemsToSettleThisRun;
+    gameState.starsWithAncientManuscripts = starsWithAncientManuscripts;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1311,6 +1321,7 @@ export function restoreGameStatus(gameState, type) {
             starShipTravelSpeed = gameState.starShipTravelSpeed ?? 360000;
             increaseStorageFactor = gameState.increaseStorageFactor ?? 2;
             additionalSystemsToSettleThisRun = gameState.additionalSystemsToSettleThisRun ?? [];
+            starsWithAncientManuscripts = gameState.starsWithAncientManuscripts ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3298,6 +3309,28 @@ export function setAdditionalSystemsToSettleThisRun(value) {
 
 export function getAdditionalSystemsToSettleThisRun() {
     return additionalSystemsToSettleThisRun;
+}
+
+export function getStarsWithAncientManuscripts() {
+    return starsWithAncientManuscripts;
+}
+
+export function setStarsWithAncientManuscripts(value) {
+    starsWithAncientManuscripts.push(value);
+}
+
+export function getMaxAncientManuscripts() {
+    return MAX_ANCIENT_MANUSCRIPTS;
+}
+
+export function reportManuscriptStar(star) { //mark a factory star as reported once the user sees the popup after a battle victory and so knows which star is a factory star
+    for (let i = 0; i < starsWithAncientManuscripts.length; i++) {
+        const current = starsWithAncientManuscripts[i];
+        if (current[0] === star[0] && current[1] === star[1]) {
+            starsWithAncientManuscripts[i][2] = true;
+            break;
+        }
+    }
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

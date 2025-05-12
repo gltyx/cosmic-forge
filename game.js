@@ -1,4 +1,9 @@
 import {
+    reportManuscriptStar,
+    factoryStarMap,
+    getMaxAncientManuscripts,
+    setStarsWithAncientManuscripts,
+    getStarsWithAncientManuscripts,
     setPlayerPhilosophy,
     getPillageVoidTimerCanContinue,
     setPillageVoidTimerCanContinue,
@@ -4883,7 +4888,7 @@ async function coloniseChecks() {
                     setEnemyFleetsAdjustedForDiplomacy(false);
                     resetFleetPrices();
                     autoSelectOption('fleetHangarOption');
-                    showBattlePopup(false);
+                    await showBattlePopup(false);
                 } else {
                     setBattleOngoing(false);
                     setBattleTriggeredByPlayer(false);
@@ -8493,6 +8498,9 @@ export function generateStarDataAndAddToDataObject(starElement, distance) {
     });
 
     const randomPrecipitationType = calculatePrecipitationType();
+    
+    calculateIfHasAncientManuscript(starElement.id.toLowerCase());
+    const factoryStar = checkIfFactoryStar(starElement.id.toLowerCase());
 
     const newStarData = {
         startingStar: false,
@@ -8509,10 +8517,62 @@ export function generateStarDataAndAddToDataObject(starElement, distance) {
             rain: [weatherProbabilities.rain, weatherTypes.rain[0], 0.4, weatherTypes.rain[1]],
             volcano: [weatherProbabilities.volcano, weatherTypes.volcano[0], 0.05, weatherTypes.volcano[1]]
         },
-        weatherTendency: weatherTendency
+        weatherTendency: weatherTendency,
+        factoryStar: factoryStar ? factoryStarMap[factoryStar] : false
     };
 
     setStarSystemDataObject(newStarData, 'stars', [starElement.id.toLowerCase()]);
+}
+
+function checkIfFactoryStar(starName) {
+    const entries = getStarsWithAncientManuscripts();
+
+    for (const [manuscriptStar, factoryStarName, value, reported] of entries) {
+        if (factoryStarName === starName) {
+            return value;
+        }
+    }
+
+    return false;
+}
+
+function calculateIfHasAncientManuscript(starName) {
+    const ancientManuscriptsGenerated = getStarsWithAncientManuscripts().length;
+    const maxAncientManuscripts = getMaxAncientManuscripts();
+    
+    let probability = 0;
+
+    if (ancientManuscriptsGenerated >= maxAncientManuscripts) {
+        return;
+    } else {
+        const visionDistance = getStarVisionDistance();
+
+        if (visionDistance < 5 && ancientManuscriptsGenerated === 0) {
+            probability = 20;
+        } else if (visionDistance === 5 && ancientManuscriptsGenerated === 0) {
+            probability = 100;
+        } else if (visionDistance >= 6 && visionDistance <= 19 && ancientManuscriptsGenerated < 2) {
+            probability = 20;
+        } else if (visionDistance === 20 && ancientManuscriptsGenerated < 2) {
+            probability = 100;
+        } else if (visionDistance >= 21 && visionDistance <= 34 && ancientManuscriptsGenerated < 3) {
+            probability = 20;
+        } else if (visionDistance === 35 && ancientManuscriptsGenerated < 3) {
+            probability = 100;
+        } else if (visionDistance >= 36 && visionDistance <= 44 && ancientManuscriptsGenerated < 4) {
+            probability = 20;
+        } else if (visionDistance === 45 && ancientManuscriptsGenerated < 4) {
+            probability = 100;
+        } else {
+            probability = 0;
+        }
+    }
+
+    if (Math.random() * 100 < probability) {
+        const position = ancientManuscriptsGenerated + 1;
+        // TODO const factoryStarToPointTo = selectFactoryStarSystem(position) //pick any uninteresting star not yet studied or settled nor the last star and put in new factoryStars{} object
+        setStarsWithAncientManuscripts([starName, position, false]); //add factoryStarToPointTo as second argument and shift others along
+    }
 }
 
 export function calculateAscendencyPoints(distance) {
@@ -8528,16 +8588,15 @@ export function calculateAscendencyPoints(distance) {
 
     const exponent = 2.5;
     let ascendencyPoints = MIN_AP + (MAX_AP - MIN_AP) * Math.pow(normalizedDistance, exponent);
-    ascendencyPoints = Math.min(MAX_AP - 1, Math.round(ascendencyPoints)); // Ensures max is 49 until 97.5
+    ascendencyPoints = Math.min(MAX_AP - 1, Math.round(ascendencyPoints));
 
     let modifiedAP = ascendencyPoints;
     if (ascendencyPoints > 1 && ascendencyPoints < MAX_AP) {
         if (Math.random() < 0.2) {
-            modifiedAP -= Math.ceil(Math.random() * Math.max(1, modifiedAP * 0.1)); // Small random reduction
+            modifiedAP -= Math.ceil(Math.random() * Math.max(1, modifiedAP * 0.1));
         }
     }
 
-    // Add any extra AP for voidborn players
     if (getPlayerPhilosophy() === 'voidborn' && getStatRun() > 1) {
         const amountOfAPToAddFromRepeatables = calculateAndAddExtraAPFromPhilosophyRepeatable(getRepeatableTechMultipliers('4'));
         modifiedAP += amountOfAPToAddFromRepeatables;
@@ -9604,6 +9663,42 @@ export async function settleSystemAfterBattle(accessPoint) {
             await showBattlePopup(true, apGain);
             break;
     }
+
+    if (getStarsWithAncientManuscripts().some(star => star[0] === getDestinationStar())) {
+        let factoryStarToReport = null;
+
+        for (let i = 1; i < 5; i++) {
+            const manuscriptData = getStarsWithAncientManuscripts()[i];
+            if (manuscriptData && manuscriptData[2] === false) {
+                factoryStarToReport = manuscriptData[0];
+                reportManuscriptStar(getStarsWithAncientManuscripts()[i]);
+                break;
+            }
+        }
+
+        const header = 'ANCIENT MANUSCRIPT!';
+        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the ${capitaliseWordsWithRomanNumerals(factoryStarToReport)} System!`;
+
+        callPopupModal(
+            header, 
+            content, 
+            true, 
+            false, 
+            false, 
+            false, 
+            function() {
+                showHideModal();
+            },
+            null, 
+            null, 
+            null,
+            'CONFIRM',
+            null,
+            null,
+            null,
+            false
+        );
+    }    
 
     autoSelectOption('fleetHangarOption', apGain);
 }
