@@ -4178,117 +4178,119 @@ function specialMessageBuilder(message, prizeCategory) {
 function addOneOffEventListeners() {
     const oneOffElement = document.getElementById('prizeTickerSpan');
 
-    oneOffElement.addEventListener('click', function () {
-        addToResourceAllTimeStat(1, 'newsTickerPrizesCollected');
-        sfxPlayer.playAudio('goodPrize');
-        const multiplier = parseFloat(this.getAttribute('data-multiplier'));
-
-        let categoryArray;
-        if (this.getAttribute("data-category") === "antimatter") {
-            categoryArray = ["antimatter"];
-        } else {
-            categoryArray = JSON.parse(this.getAttribute("data-category"));
-        }
-
-        let item = this.getAttribute('data-item');
-
-        if (item.startsWith('[') && item.endsWith(']')) {
-            item = JSON.parse(item);
-        }
-
-        const type = this.getAttribute('data-type');
-
-        let resourcesToInclude = getResourceDataObject('resources');
-        let compoundsToInclude = getResourceDataObject('compounds');
-
-        let resourcesAndCompoundsToInclude = {
-            resources: resourcesToInclude,
-            compounds: compoundsToInclude
-        };
-
-        resourcesToInclude = filterObjectsByCondition(resourcesToInclude);
-        compoundsToInclude = filterObjectsByCondition(compoundsToInclude);
-
-        if (type === 'storageMultiplier') {
-            categoryArray.forEach(category => { // resource or compounds storage capacity
-                if (category === 'resources' || category === 'compounds') {
-                    const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
-                    Object.keys(categoryTypeToUse).forEach(element => {
-                        setResourceDataObject(
-                            Math.floor(
-                                getResourceDataObject(category, [element, 'storageCapacity']) * multiplier
-                            ),
-                            category,
-                            [element, 'storageCapacity']
-                        );
-                    });
-                } else if (category === 'buildings') { //battery storage capacity
-                    const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
-
-                    const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
-                    const currentCapacityOfBuilding = Math.floor(quantityOfBuilding * getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * quantityOfBuilding);
-                    const currentTotalCapacityMinusBuildingType = Math.floor(getResourceDataObject('buildings', [item[0], 'storageCapacity']) - currentCapacityOfBuilding);
-                    const newTotalCapacity = Math.floor(currentTotalCapacityMinusBuildingType + (currentCapacityOfBuilding * multiplier));
-
-                    setResourceDataObject(newTotalCapacity, 'buildings', [item[0], 'storageCapacity']);
-                    setResourceDataObject(Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * multiplier),'buildings',[item[0], 'upgrades', item[1], 'capacity']);
-                   
-                    if (buyBuildingButtonElement)  {
-                        buyBuildingButtonElement.innerHTML = `Add ${Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) / 1000)} MWh`;
-                    }
-                }
-            });
-        } else if (type === 'rateMultiplier') {
-            categoryArray.forEach(category => { // resource, compounds, or building rate multiplier
-                if (category === 'resources' || category === 'compounds') {
-                    const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
-                    Object.keys(categoryTypeToUse).forEach(element => { //set future purchase rate * multiplier
-                        setResourceDataObject(getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * multiplier, category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']
-                        );
-
-                        if (getCurrentOptionPane() === element) { //set autobuyer button text if on that screen at the moment prize is clicked
-                            const buyBuildingButtonElement = document.querySelector(`#${element}AutoBuyer${item[1].replace(/^\D+/g, '')}Row .option-row-main .input-container button[data-auto-buyer-tier="${item[1]}`);
-                            buyBuildingButtonElement.innerHTML = `Add ${getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * getTimerRateRatio()} ${capitaliseString(element)} /s`;
-                        }
-                    });
-                } else if (category === 'buildings') { // building rate multiplier e.g. Power Plants
-                    const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
-                    const rateElement = document.getElementById(`${item[1]}Rate`);
-                    
-                    const currentPurchasedRateOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
-                    const newPurchasedRateOfBuilding = (currentPurchasedRateOfBuilding * multiplier);
-
-                    const currentRatePerBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'rate']);
-                    const newRateOfBuilding = (currentRatePerBuilding * multiplier);
-
-                    setResourceDataObject(newPurchasedRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
-                    setResourceDataObject(newRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'rate']);
-        
-                    if (buyBuildingButtonElement) {
-                        buyBuildingButtonElement.innerHTML = `Add ${Math.floor(newRateOfBuilding * getTimerRateRatio())} KW /s`;
-                    }
-
-                    if (rateElement) {
-                        const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
-                        rateElement.innerHTML = `${Math.floor((newRateOfBuilding * getTimerRateRatio()) * quantityOfBuilding)} KW / s`;
-                    }
-                }
-            });
-        } else if (type === 'adder') {
-            const itemToAddType = categoryArray;
-            const quantityToAdd = multiplier;
-            setResourceDataObject(getResourceDataObject(itemToAddType, ['quantity']) + quantityToAdd, itemToAddType, ['quantity']);
-            if (itemToAddType === 'antimatter') {
-                addToResourceAllTimeStat(quantityToAdd, 'antimatter');
-                addToResourceAllTimeStat(quantityToAdd, 'antimatterThisRun');
-            } else if (itemToAddType === 'ascendencyPoints') {
-                addToResourceAllTimeStat(quantityToAdd, 'totalApGain')
+    if (oneOffElement !== null) {
+        oneOffElement.addEventListener('click', function () {
+            addToResourceAllTimeStat(1, 'newsTickerPrizesCollected');
+            sfxPlayer.playAudio('goodPrize');
+            const multiplier = parseFloat(this.getAttribute('data-multiplier'));
+    
+            let categoryArray;
+            if (this.getAttribute("data-category") === "antimatter") {
+                categoryArray = ["antimatter"];
+            } else {
+                categoryArray = JSON.parse(this.getAttribute("data-category"));
             }
-        }
-
-        this.style.pointerEvents = 'none';
-        this.style.opacity = '0.5';
-    });
+    
+            let item = this.getAttribute('data-item');
+    
+            if (item.startsWith('[') && item.endsWith(']')) {
+                item = JSON.parse(item);
+            }
+    
+            const type = this.getAttribute('data-type');
+    
+            let resourcesToInclude = getResourceDataObject('resources');
+            let compoundsToInclude = getResourceDataObject('compounds');
+    
+            let resourcesAndCompoundsToInclude = {
+                resources: resourcesToInclude,
+                compounds: compoundsToInclude
+            };
+    
+            resourcesToInclude = filterObjectsByCondition(resourcesToInclude);
+            compoundsToInclude = filterObjectsByCondition(compoundsToInclude);
+    
+            if (type === 'storageMultiplier') {
+                categoryArray.forEach(category => { // resource or compounds storage capacity
+                    if (category === 'resources' || category === 'compounds') {
+                        const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
+                        Object.keys(categoryTypeToUse).forEach(element => {
+                            setResourceDataObject(
+                                Math.floor(
+                                    getResourceDataObject(category, [element, 'storageCapacity']) * multiplier
+                                ),
+                                category,
+                                [element, 'storageCapacity']
+                            );
+                        });
+                    } else if (category === 'buildings') { //battery storage capacity
+                        const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
+    
+                        const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
+                        const currentCapacityOfBuilding = Math.floor(quantityOfBuilding * getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * quantityOfBuilding);
+                        const currentTotalCapacityMinusBuildingType = Math.floor(getResourceDataObject('buildings', [item[0], 'storageCapacity']) - currentCapacityOfBuilding);
+                        const newTotalCapacity = Math.floor(currentTotalCapacityMinusBuildingType + (currentCapacityOfBuilding * multiplier));
+    
+                        setResourceDataObject(newTotalCapacity, 'buildings', [item[0], 'storageCapacity']);
+                        setResourceDataObject(Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) * multiplier),'buildings',[item[0], 'upgrades', item[1], 'capacity']);
+                       
+                        if (buyBuildingButtonElement)  {
+                            buyBuildingButtonElement.innerHTML = `Add ${Math.floor(getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'capacity']) / 1000)} MWh`;
+                        }
+                    }
+                });
+            } else if (type === 'rateMultiplier') {
+                categoryArray.forEach(category => { // resource, compounds, or building rate multiplier
+                    if (category === 'resources' || category === 'compounds') {
+                        const categoryTypeToUse = category === 'resources' ? resourcesToInclude : compoundsToInclude;
+                        Object.keys(categoryTypeToUse).forEach(element => { //set future purchase rate * multiplier
+                            setResourceDataObject(getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * multiplier, category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']
+                            );
+    
+                            if (getCurrentOptionPane() === element) { //set autobuyer button text if on that screen at the moment prize is clicked
+                                const buyBuildingButtonElement = document.querySelector(`#${element}AutoBuyer${item[1].replace(/^\D+/g, '')}Row .option-row-main .input-container button[data-auto-buyer-tier="${item[1]}`);
+                                buyBuildingButtonElement.innerHTML = `Add ${getResourceDataObject(category, [element, 'upgrades', 'autoBuyer', item[1], 'rate']) * getTimerRateRatio()} ${capitaliseString(element)} /s`;
+                            }
+                        });
+                    } else if (category === 'buildings') { // building rate multiplier e.g. Power Plants
+                        const buyBuildingButtonElement = document.querySelector(`#${item[0]}${capitaliseString(item[1])}Row .option-row-main .input-container .building-purchase-button`);
+                        const rateElement = document.getElementById(`${item[1]}Rate`);
+                        
+                        const currentPurchasedRateOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
+                        const newPurchasedRateOfBuilding = (currentPurchasedRateOfBuilding * multiplier);
+    
+                        const currentRatePerBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'rate']);
+                        const newRateOfBuilding = (currentRatePerBuilding * multiplier);
+    
+                        setResourceDataObject(newPurchasedRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'purchasedRate']);
+                        setResourceDataObject(newRateOfBuilding, 'buildings', [item[0], 'upgrades', item[1], 'rate']);
+            
+                        if (buyBuildingButtonElement) {
+                            buyBuildingButtonElement.innerHTML = `Add ${Math.floor(newRateOfBuilding * getTimerRateRatio())} KW /s`;
+                        }
+    
+                        if (rateElement) {
+                            const quantityOfBuilding = getResourceDataObject('buildings', [item[0], 'upgrades', item[1], 'quantity']);
+                            rateElement.innerHTML = `${Math.floor((newRateOfBuilding * getTimerRateRatio()) * quantityOfBuilding)} KW / s`;
+                        }
+                    }
+                });
+            } else if (type === 'adder') {
+                const itemToAddType = categoryArray;
+                const quantityToAdd = multiplier;
+                setResourceDataObject(getResourceDataObject(itemToAddType, ['quantity']) + quantityToAdd, itemToAddType, ['quantity']);
+                if (itemToAddType === 'antimatter') {
+                    addToResourceAllTimeStat(quantityToAdd, 'antimatter');
+                    addToResourceAllTimeStat(quantityToAdd, 'antimatterThisRun');
+                } else if (itemToAddType === 'ascendencyPoints') {
+                    addToResourceAllTimeStat(quantityToAdd, 'totalApGain')
+                }
+            }
+    
+            this.style.pointerEvents = 'none';
+            this.style.opacity = '0.5';
+        });
+    }
 }
 
 function filterObjectsByCondition(dataObject) {
