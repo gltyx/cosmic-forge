@@ -3854,7 +3854,8 @@ export function setPlayerPhilosophy(value) {
 
 //image urls----------------------------------------------------------------------------------------------------------------------
 
-/*
+const IMAGE_URLS = {
+    'resources': `
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡾⠋⠙⢷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡿⠁⠀⠀⠈⢿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -3870,24 +3871,7 @@ export function setPlayerPhilosophy(value) {
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷⡀⠀⠀⢀⣾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢷⣄⣠⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-*/
-const IMAGE_URLS = {
-    'resources': `
-IMPORTANT!!
-PHILOSOPHIES WILL BE RELEASED ON MONDAY 9AM CET!!
-This means ALL SAVE PROGRESS WILL BE LOST!!
-It is necessary due to the change in mechanics
-requiring a philosophy to be selected in the first run.
-It should be a much better game, and going forward,
-new games will continue to be saved, and migrated for new
-versions.  I apologise for the incovenience, but it is necessary,
-and the game should be a lot better for it. Enjoy Philosophies!
-If you want to know about it, it will be in the CosmicoPedia!
-
-A NOTE ABOUT THE EXPORT SAVE BUTTON:
-The Clipboard API is disabled in Chrome when on the 
-itch site, so if playing there you should save to cloud
- or export an external file.`,
+`,
 
     'compounds': `
 ⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⣿⣿⣿⣷⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
