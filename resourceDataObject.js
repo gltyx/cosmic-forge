@@ -2807,10 +2807,19 @@ export function setupNewRunStarSystem() {
 }
 
 export function setRebirthStarSystemToStarSystemDataObject(newObject) {
-    starSystems.stars = {};
-    starSystems.stars[newObject.starCode.toLowerCase()] = newObject;
-}
+    const preservedStars = {};
 
+    for (const [key, value] of Object.entries(starSystems.stars)) {
+        if (value.factoryStar && value.factoryStar !== false) {
+            preservedStars[key] = value;
+        }
+    }
+
+    starSystems.stars = {
+        ...preservedStars,
+        [newObject.starCode.toLowerCase()]: newObject
+    };
+}
 
 export function setAutoBuyerTierLevel(key, value, override = false, type) {
     if (resourceData[type][key].upgrades.autoBuyer.normalProgression === true || override) {
