@@ -1,5 +1,5 @@
 import { removeTabAttentionIfNoIndicators, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
-import { setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, getStarShipTravelling, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray } from './constantsAndGlobalVars.js';
+import { getFactoryStarsArray, setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, getStarShipTravelling, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
@@ -126,12 +126,24 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
 
             const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
             const hasEnoughFuel = currentAntimatter >= fuel;
+            const isFactoryStar = getFactoryStarsArray().includes(nameStar);
             const fuelClass = hasEnoughFuel ? 'green-ready-text' : 'red-disabled-text';
+
+            const starNameClass = !hasEnoughFuel 
+                ? 'red-disabled-text' 
+                : isFactoryStar 
+                    ? 'factory-star-text-star-data-screen' 
+                    : 'green-ready-text';
+            
+            const starNameLabel = [
+                `${capitaliseWordsWithRomanNumerals(nameStar)}:`,
+                starNameClass
+            ];
         
             const starDataRow = createOptionRow(
                 `${starRowName}`,
                 null,
-                [`${capitaliseWordsWithRomanNumerals(nameStar)}:`, fuelClass],
+                starNameLabel,
                 createTextElement(
                     `${distance.toFixed(2)} ly`,
                     'starInfoContainerDistance',

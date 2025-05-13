@@ -1,6 +1,4 @@
 megaStructures:
 -TODO
 
-then we need logic to color the map with factory star symbols and color it yellow or something in the star data table
-
-wwhen studying stars, check the code doesnt incldue settled systems as an afterthought
+when studying stars, check the code doesnt include settled systems as an afterthought

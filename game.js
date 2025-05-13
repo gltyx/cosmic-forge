@@ -9710,17 +9710,17 @@ export async function settleSystemAfterBattle(accessPoint) {
     if (getStarsWithAncientManuscripts().some(star => star[0] === getDestinationStar())) {
         let factoryStarToReport = null;
 
-        for (let i = 1; i < 5; i++) {
+        for (let i = 0; i < 4; i++) {
             const manuscriptData = getStarsWithAncientManuscripts()[i];
-            if (manuscriptData && manuscriptData[2] === false) {
-                factoryStarToReport = manuscriptData[0];
+            if (manuscriptData && manuscriptData[3] === false) {
+                factoryStarToReport = manuscriptData[1];
                 reportManuscriptStar(getStarsWithAncientManuscripts()[i]);
                 break;
             }
         }
 
         const header = 'ANCIENT MANUSCRIPT!';
-        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the ${capitaliseWordsWithRomanNumerals(factoryStarToReport)} System!`;
+        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the <span class="factory-star-text-star-data-screen">${capitaliseWordsWithRomanNumerals(factoryStarToReport)}</span> System!`;
 
         callPopupModal(
             header, 

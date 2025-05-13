@@ -2205,5 +2205,7 @@ body.debug-window-open {
         transform: scale(1.8);
     }
 }
-  
 
+.factory-star-text-star-data-screen {
+    color: yellow;
+}
