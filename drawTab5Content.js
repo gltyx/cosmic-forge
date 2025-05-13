@@ -126,7 +126,13 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
 
             const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
             const hasEnoughFuel = currentAntimatter >= fuel;
-            const isFactoryStar = getFactoryStarsArray().includes(nameStar);
+            const factoryStarStatus = getStarSystemDataObject('stars', [nameStar, 'factoryStar']);
+
+            const isFactoryStar = getFactoryStarsArray().includes(nameStar) && 
+              (!Number.isInteger(Number(factoryStarStatus)) || isNaN(Number(factoryStarStatus))) 
+              ? factoryStarStatus
+              : false;
+            
             const fuelClass = hasEnoughFuel ? 'green-ready-text' : 'red-disabled-text';
 
             const starNameClass = !hasEnoughFuel 
@@ -551,50 +557,52 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
                 [true, '15%', '85%']
             );                    
         
-        let anomaliesText = (getStellarScannerBuilt() && starData.anomalies.length > 0)
-        ? starData.anomalies.map(a => {
-            if (a.name === 'None') {
-                return `<span>N/A</span>`;
-            }
-            return `${a.name}: <span class="${a.class}">${a.effect}</span>`;
-        }).join('<br/>')
-        : '<span class="red-disabled-text">???</span>';
-        
-        if (starData.anomalies.length === 0) {
-            anomaliesText = '<span>None</span>';
-        }
+            let anomaliesText;
 
-        if (starData.civilizationLevel === 'None') {
-            anomaliesText = '<span>N/A</span>';
-        }
-        
-        const anomaliesRow = createOptionRow(
-            'anomaliesRow',
-            null,
-            'Anomalies:',
-            createTextElement(
-                anomaliesText,
-                'anomaliesTextField'
-                ['value-text'],
-            ),
-            null,
-            null,
-            null,
-            null,
-            ``,
-            '',
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            null,
-            null,
-            '',
-            [true, '15%', '85%']
-        );        
-        
+            if (getFactoryStarsArray().includes(getDestinationStar())) {
+                anomaliesText = '<span class="red-disabled-text">Megastructure</span>';
+            } else if (starData.civilizationLevel === 'None') {
+                anomaliesText = '<span>N/A</span>';
+            } else if (!getStellarScannerBuilt()) {
+                anomaliesText = '<span class="red-disabled-text">???</span>';
+            } else if (starData.anomalies.length === 0) {
+                anomaliesText = '<span>None</span>';
+            } else {
+                anomaliesText = starData.anomalies.map(a => {
+                    if (a.name === 'None') {
+                        return `<span>N/A</span>`;
+                    }
+                    return `${a.name}: <span class="${a.class}">${a.effect}</span>`;
+                }).join('<br/>');
+            }
+            
+            const anomaliesRow = createOptionRow(
+                'anomaliesRow',
+                null,
+                'Anomalies:',
+                createTextElement(
+                    anomaliesText,
+                    'anomaliesTextField',
+                    ['value-text']
+                ),
+                null,
+                null,
+                null,
+                null,
+                ``,
+                '',
+                null,
+                null,
+                null,
+                null,
+                null,
+                false,
+                null,
+                null,
+                '',
+                [true, '15%', '85%']
+            );
+            
             optionContentElement.appendChild(starNameRow);
             optionContentElement.appendChild(civilizationRow);
             optionContentElement.appendChild(populationRow);

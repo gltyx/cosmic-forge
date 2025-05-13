@@ -3326,15 +3326,24 @@ export function getMaxAncientManuscripts() {
     return MAX_ANCIENT_MANUSCRIPTS;
 }
 
-export function reportManuscriptStar(star) { //mark a factory star as reported once the user sees the popup after a battle victory and so knows which star is a factory star
+export function activateFactoryStar(star) {
+    const factoryStarName = star[1];
+    const factoryStarId = starSystems.stars[factoryStarName].factoryStar
+
+    const mappedFactoryStarString = factoryStarMap[factoryStarId];
+    starSystems.stars[factoryStarName].factoryStar = mappedFactoryStarString;
+    
     for (let i = 0; i < starsWithAncientManuscripts.length; i++) {
         const current = starsWithAncientManuscripts[i];
-        if (current[0] === star[0] && current[1] === star[1]) {
-            starsWithAncientManuscripts[i][2] = true;
+        const isExactMatch = current.length === star.length && current.every((value, index) => value === star[index]);
+
+        if (isExactMatch) {
+            starsWithAncientManuscripts[i][3] = true;
             break;
         }
     }
 }
+
 
 export function getFactoryStarsArray() {
     return factoryStarsArray;

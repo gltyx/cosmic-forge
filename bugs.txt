@@ -1,0 +1,4 @@
+rare cases where 0 0 0 for enemy in battle but can still click conquest, in this case should say settle always
+
+not setting to true correctly for reported stars Pioneer-testermanuscript3 in correct save situation to test this
+after rebirth need to loop through manuscripts object and any that are true we need to find out how to readd it back in either show it from the start or catch it when studying a star and get it back in.

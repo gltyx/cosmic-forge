@@ -3,7 +3,7 @@ import {
     setFactoryStarsArray,
     NUMBER_OF_STARS, 
     STAR_FIELD_SEED,
-    reportManuscriptStar,
+    activateFactoryStar,
     factoryStarMap,
     getMaxAncientManuscripts,
     setStarsWithAncientManuscripts,
@@ -4349,14 +4349,17 @@ function waitForAnimationEnd(element, animationClass) {
     });
 }
 
+let settleSystemAfterBattleCalled = false;
+
 async function initiateBattleFadeOut(battleResolved) {
     const battleCanvas = document.getElementById('battleCanvas');
     if (battleCanvas) {
         await waitForAnimationEnd(battleCanvas, 'fade-in-stretch');
         setBattleResolved(true, battleResolved[1]);
 
-        if (battleResolved[1] !== 'enemy') {
-            settleSystemAfterBattle('battle'); 
+        if (battleResolved[1] !== 'enemy' && !settleSystemAfterBattleCalled) {
+            settleSystemAfterBattle('battle');
+            settleSystemAfterBattleCalled = true; 
         }
     }
 }
@@ -8523,7 +8526,7 @@ export function generateStarDataAndAddToDataObject(starElement, distance) {
             volcano: [weatherProbabilities.volcano, weatherTypes.volcano[0], 0.05, weatherTypes.volcano[1]]
         },
         weatherTendency: weatherTendency,
-        factoryStar: factoryStar ? factoryStarMap[factoryStar] : false
+        factoryStar: factoryStar ? factoryStar : false
     };
 
     setStarSystemDataObject(newStarData, 'stars', [starElement.id.toLowerCase()]);
@@ -8747,14 +8750,22 @@ export function generateDestinationStarData() {
 }
 
 function generateLifeDetection() {
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return true;
+    } 
+
     return Math.random() < 0.97;
 }
 
 function generateLifeformTraits(civilizationLevel) {
-    const primaryTraits = [["Aggressive", "red-disabled-text"], ["Diplomatic", "green-ready-text"]];
-    const habitatTraits = [["Terrans", ""], ["Aquatic", ""], ["Aerialians", ""]];
-    const extraTraits = [["Armored", "red-disabled-text"], ["Hive Mind", "red-disabled-text"], ["Power Siphon", "warning-orange-text"], ["Hypercharge", "warning-orange-text"]];
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return [['Aggressive', 'red-disabled-text'], ['Mechanized', ''], ['Armored', 'red-disabled-text']];
+    }
 
+    const primaryTraits = [['Aggressive', 'red-disabled-text'], ['Diplomatic', 'green-ready-text']];
+    const habitatTraits = [['Terrans', ''], ['Aquatic', ''], ['Aerialians', '']];
+    const extraTraits = [['Armored', 'red-disabled-text'], ['Hive Mind', 'red-disabled-text'], ['Power Siphon', 'warning-orange-text'], ['Hypercharge', 'warning-orange-text']];
+    
     if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') {
         return [['N/A', ''], ['N/A', ''], ['N/A', '']];
     }
@@ -8767,30 +8778,44 @@ function generateLifeformTraits(civilizationLevel) {
 }
 
 function generateCivilizationLevel(starData) {
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return 'Robotic';
+    } 
+
     const randomValue = Math.random();
 
     if (randomValue < 0.1) {
-        return "Unsentient";
+        return 'Unsentient';
     } else if (randomValue < 0.55) {
         addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated'); //double anticipated if a civilization is there
-        return "Industrial";
+        return 'Industrial';
     } else {
         addToResourceAllTimeStat(starData.ascendencyPoints, 'apAnticipated'); //double anticipated if a civilization is there
-        return "Spacefaring";
+        return 'Spacefaring';
     }
 }
 
 function generatePopulationEstimate(lifeformTraits) {
-    let population = Math.floor(Math.random() * (50000000 - 1000000 + 1)) + 1000000;
+    let population;
 
-    if (lifeformTraits.some(trait => trait[0] === "Hive Mind")) {
-        population *= 4;
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        population = Math.floor(Math.random() * (100000000 - 50000000 + 1)) + 50000000;
+    } else {
+        population = Math.floor(Math.random() * (50000000 - 1000000 + 1)) + 1000000;
+
+        if (lifeformTraits.some(trait => trait[0] === 'Hive Mind')) {
+            population *= 4;
+        }
     }
 
     return population;
 }
 
 function generateThreatLevel(civilizationLevel, population, lifeformTraits) {
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return 'Extreme';
+    } 
+
     let threatLevel = "None";
 
     if (civilizationLevel === "Unsentient") {
@@ -8870,7 +8895,7 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
     if (totalFleets === 0) return { land: 0, air: 0, sea: 0, fleetPower: 0 };
 
     let primaryType;
-    if (lifeformTraits.some(trait => trait[0] === "Terrans")) primaryType = "land";
+    if (lifeformTraits.some(trait => trait[0] === "Terrans") || lifeformTraits.some(trait => trait[0] === "Mechanized")) primaryType = "land";
     else if (lifeformTraits.some(trait => trait[0] === "Aerialians")) primaryType = "air";
     else if (lifeformTraits.some(trait => trait[0] === "Aquatic")) primaryType = "sea";    
     else primaryType = ["land", "air", "sea"][Math.floor(Math.random() * 3)];
@@ -8893,6 +8918,21 @@ function generateEnemyFleets(threatLevel, population, lifeformTraits) {
 }
 
 function generateAnomalies(defenseRating, enemyFleets) {
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return [
+            ["Stalwart"],
+            defenseRating,
+            {
+                ...enemyFleets,
+                fleetChanges: {
+                    air: { value: 0, class: "red-disabled-text" },
+                    land: { value: 0, class: "red-disabled-text" },
+                    sea: { value: 0, class: "red-disabled-text" }
+                }
+            }
+        ];
+    }
+
     const possibleAnomalies = [
         { name: "Electromagnetic Surge", effect: "Enemy defense -20%", value: -20, type: "enemy-defense-debuff", counter: "enemy-defense-buff", target: "enemy", class: "green-ready-text" },
         { name: "Fortified Magnetic Field", effect: "Enemy defense +20%", value: 20, type: "enemy-defense-buff", counter: "enemy-defense-debuff", target: "enemy", class: "red-disabled-text" },
@@ -8946,7 +8986,13 @@ function generateAnomalies(defenseRating, enemyFleets) {
 }
 
 function generateRaceName(civilizationLevel) {
-
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        const baseName = getStarSystemDataObject('stars', [getDestinationStar(), 'factoryStar']);
+        const suffixes = ['Sentinels', 'Wardens', 'Guardians', 'Protectors', 'Custodians', 'Overseers', 'Aegis'];
+        const randomSuffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+        return `${baseName} ${randomSuffix}`;
+    }
+    
     if (civilizationLevel === 'Unsentient') {
         const unsentientRaces = ['Floral', 'Bacterial', 'Cellular', 'Fungal', 'Mossy', 'Lichenous', 'Microbial', 'Protozoan'];
         return unsentientRaces[Math.floor(Math.random() * unsentientRaces.length)];
@@ -8999,6 +9045,12 @@ function generateRaceName(civilizationLevel) {
 }
 
 function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLevel, enemyFleets, population) {
+
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        setDiplomacyPossible(false);
+        return 0;
+    }
+
     if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') {
         return 100;
     }
@@ -9067,15 +9119,20 @@ function calculateInitialImpression(lifeformTraits, civilizationLevel, threatLev
 }
 
 function calculateAttitude(impression, civilizationLevel) {
+
+    if (getFactoryStarsArray().includes(getDestinationStar())) {
+        return 'Belligerent';
+    }
+
     if (civilizationLevel === 'Unsentient' || civilizationLevel === 'None') return 'None';
     if (impression >= 60) {
-        return "Receptive";
+        return 'Receptive';
     } else if (impression >= 45) {
-        return "Neutral";
+        return 'Neutral';
     } else if (impression >= 10) {
-        return "Reserved";
+        return 'Reserved';
     } else {
-        return "Belligerent";
+        return 'Belligerent';
     }
 }
 
@@ -9712,9 +9769,9 @@ export async function settleSystemAfterBattle(accessPoint) {
 
         for (let i = 0; i < 4; i++) {
             const manuscriptData = getStarsWithAncientManuscripts()[i];
-            if (manuscriptData && manuscriptData[3] === false) {
-                factoryStarToReport = manuscriptData[1];
-                reportManuscriptStar(getStarsWithAncientManuscripts()[i]);
+            if (manuscriptData && manuscriptData[3] === false) { //finds first false manuscript slot to activate that factory star
+                factoryStarToReport = getStarsWithAncientManuscripts()[i][1];
+                activateFactoryStar(getStarsWithAncientManuscripts()[i]);
                 break;
             }
         }
