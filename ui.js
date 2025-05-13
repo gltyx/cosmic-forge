@@ -118,7 +118,8 @@ import {
     NUMBER_OF_STARS,
     getStarMapMode,
     getPhilosophyAbilityActive,
-    getStarsWithAncientManuscripts
+    getStarsWithAncientManuscripts,
+    getFactoryStarsArray
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -1632,10 +1633,30 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
     stars.forEach(star => {
         const distance = starDistanceData[star.name];
         const isInteresting = distance <= getStarVisionDistance() || star.name === currentStar.name || getSettledStars().includes(star.name.toLowerCase());
-        const starElement = document.createElement('div');
-        starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
-        starElement.id = isInteresting && getCurrentStarSystem() !== starElement.id.toLowerCase() && getSettledStars().includes(star.name.toLowerCase()) ? `settledStar${star.name}` : starElement.id;        
-        starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
+        const isFactoryStar = getFactoryStarsArray().includes(star.name.toLowerCase());
+
+        let starElement;
+
+        if (isFactoryStar) {
+            starElement = document.createElement('div');
+            starElement.classList.add('star', 'factory-star');
+            starElement.id = star.name;
+        } else {
+            starElement = document.createElement('div');
+            starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
+            if (
+                isInteresting &&
+                getCurrentStarSystem() !== star.name.toLowerCase() &&
+                getSettledStars().includes(star.name.toLowerCase())
+            ) {
+                starElement.id = `settledStar${star.name}`;
+            }
+
+            starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
+            if (starElement.id.includes("settledStar")) {
+                starElement.classList.add("settled-star");
+            }
+        }
 
         if (starElement.id.includes("settledStar")) {
             starElement.classList.add("settled-star");
@@ -1645,6 +1666,8 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             starElement.setAttribute("titler", `${star.name} (SETTLED)`);
         } else if (starElement.classList.contains("star-uninteresting") || starElement.id === capitaliseString(getCurrentStarSystem())) {
             starElement.setAttribute("titler", `${star.name}`);
+        } else if (starElement.classList.contains("factory-star")) {
+            starElement.setAttribute("titler", `${star.name} (MEGASTRUCTURE)`);
         } else {
             starElement.setAttribute("titler", `${star.name} (${distance}ly)`);
         }        

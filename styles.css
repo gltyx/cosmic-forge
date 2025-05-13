@@ -1657,6 +1657,10 @@ button.red-disabled-text {
     background-color: var(--star-color-settled);
 }
 
+.factory-star {
+    background-color: orange;
+}
+
 @keyframes twinkle {
     0% { 
         transform: scale(1); 
@@ -1671,12 +1675,14 @@ button.red-disabled-text {
 }
 
 .star-uninteresting:hover,
+.factory-star:hover,
 .current-star:hover,
 .star:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);
 }
 
 .star-uninteresting::after,
+.factory-star::after,
 .current-star::after,
 .star::after {
     content: attr(titler);
@@ -1695,7 +1701,13 @@ button.red-disabled-text {
     transition: opacity 0.3s ease-in-out;
 }
 
+.factory-star::after {
+    color: orange;
+}
+
+
 .star-uninteresting:hover::after,
+.factory-star:hover::after,
 .current-star:hover::after,
 .star:hover::after {
     visibility: visible;
