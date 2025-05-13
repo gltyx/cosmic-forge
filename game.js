@@ -1,4 +1,8 @@
 import {
+    getFactoryStarsArray,
+    setFactoryStarsArray,
+    NUMBER_OF_STARS, 
+    STAR_FIELD_SEED,
     reportManuscriptStar,
     factoryStarMap,
     getMaxAncientManuscripts,
@@ -341,7 +345,8 @@ import {
     getStarDataAndDistancesToAllStarsFromSettledStar,
     callPopupModal,
     showHideModal,
-    removeModalButtonTooltips
+    removeModalButtonTooltips,
+    generateStarfield
 } from "./ui.js";
 
 import { playClickSfx } from "./audioManager.js";
@@ -8542,7 +8547,7 @@ function calculateIfHasAncientManuscript(starName) {
     
     let probability = 0;
 
-    if (ancientManuscriptsGenerated >= maxAncientManuscripts) {
+    if (ancientManuscriptsGenerated >= maxAncientManuscripts || getFactoryStarsArray().includes(starName)) {
         return;
     } else {
         const visionDistance = getStarVisionDistance();
@@ -8570,10 +8575,48 @@ function calculateIfHasAncientManuscript(starName) {
 
     if (Math.random() * 100 < probability) {
         const position = ancientManuscriptsGenerated + 1;
-        // TODO const factoryStarToPointTo = selectFactoryStarSystem(position) //pick any uninteresting star not yet studied or settled nor the last star and put in new factoryStars{} object
-        setStarsWithAncientManuscripts([starName, position, false]); //add factoryStarToPointTo as second argument and shift others along
+        const factoryStarToPointTo = selectFactoryStarSystem(position);
+        setFactoryStarsArray(factoryStarToPointTo); //watch out for null being set in here by not finding a factoryStarToPointTo and handle if this happens
+        setStarsWithAncientManuscripts([starName, factoryStarToPointTo, position, false]); //add factoryStarToPointTo as second argument and shift others along
     }
 }
+
+export function selectFactoryStarSystem(position) {
+    const dummyContainer = document.createElement('div');
+    const factoryStarCandidates = generateStarfield(dummyContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, null, false, null, true);
+
+    let minDistance = 0;
+    let maxDistance = 100;
+
+    switch (position) {
+        case 1:
+            minDistance = 5;
+            maxDistance = 15;
+            break;
+        case 2:
+            minDistance = 16;
+            maxDistance = 25;
+            break;
+        case 3:
+            minDistance = 26;
+            maxDistance = 40;
+            break;
+        case 4:
+            minDistance = 41;
+            maxDistance = 60;
+            break;
+    }
+
+    const filteredCandidates = factoryStarCandidates.filter(
+        ([name, distance]) => distance >= minDistance && distance <= maxDistance
+    );
+
+    if (filteredCandidates.length === 0) return null;
+
+    const randomIndex = Math.floor(Math.random() * filteredCandidates.length);
+    return filteredCandidates[randomIndex][0];
+}
+
 
 export function calculateAscendencyPoints(distance) {
     const MIN_DISTANCE = 1;

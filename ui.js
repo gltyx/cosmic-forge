@@ -117,7 +117,8 @@ import {
     STAR_FIELD_SEED,
     NUMBER_OF_STARS,
     getStarMapMode,
-    getPhilosophyAbilityActive
+    getPhilosophyAbilityActive,
+    getStarsWithAncientManuscripts
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -299,7 +300,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (getCurrentOptionPane()) {
             const starContainer = document.querySelector('#optionContentTab5');
             starContainer.innerHTML = '';
-            generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode(), false, null);
+            generateStarfield(starContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, getStarMapMode(), false, null, false);
         }
     });
 
@@ -1553,11 +1554,11 @@ function getStarColorForTravel(fuelRequired, starName) {
 
 export function getStarDataAndDistancesToAllStarsFromSettledStar(settledStar) {
     const dummyContainer = document.createElement('div');
-    const { stars, starDistanceData } = generateStarfield(dummyContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, null, true, settledStar);
+    const { stars, starDistanceData } = generateStarfield(dummyContainer, NUMBER_OF_STARS, STAR_FIELD_SEED, null, true, settledStar, false);
     return { stars, starDistanceData };
 }
 
-export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode, calculationMode = false, originStarName = null) {
+export function generateStarfield(starfieldContainer, numberOfStars = 70, seed = 1, mapMode, calculationMode = false, originStarName = null, factoryStarChooserMode = false) {
     const stars = [];
     const starDistanceData = {};
     const minSize = 2;
@@ -1599,6 +1600,34 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
     if (calculationMode) {
         return { stars, starDistanceData };
     }
+
+    if (factoryStarChooserMode) {
+        const destination = getDestinationStar();
+        const current = getCurrentStarSystem();
+        const settled = getSettledStars();
+        const visionDistance = getStarVisionDistance();
+        const ancientManuscriptStars = getStarsWithAncientManuscripts();
+    
+        const filteredStarData = stars
+            .filter(star => {
+                const name = star.name;
+                const distance = starDistanceData[name];
+                return (
+                    name !== 'Miaplacidus' &&
+                    name !== destination &&
+                    name !== current &&
+                    !ancientManuscriptStars.includes(name) &&
+                    !settled.includes(name) &&
+                    distance > visionDistance
+                );
+            })
+            .map(star => [
+                star.name.toLowerCase(),
+                parseFloat(starDistanceData[star.name].toFixed(2))
+            ]);
+    
+        return filteredStarData;
+    }    
 
     stars.forEach(star => {
         const distance = starDistanceData[star.name];

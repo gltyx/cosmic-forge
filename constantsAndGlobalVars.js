@@ -252,6 +252,7 @@ let playerStartingUnitHealth = 100;
 let initialImpression = 35;
 let additionalSystemsToSettleThisRun = [];
 let starsWithAncientManuscripts = [];
+let factoryStarsArray = [];
 
 let battleUnits = { 
     player: [], 
@@ -1102,6 +1103,7 @@ export function captureGameStatusForSaving(type) {
     gameState.increaseStorageFactor = increaseStorageFactor;
     gameState.additionalSystemsToSettleThisRun = additionalSystemsToSettleThisRun;
     gameState.starsWithAncientManuscripts = starsWithAncientManuscripts;
+    gameState.factoryStarsArray = factoryStarsArray;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1322,6 +1324,7 @@ export function restoreGameStatus(gameState, type) {
             increaseStorageFactor = gameState.increaseStorageFactor ?? 2;
             additionalSystemsToSettleThisRun = gameState.additionalSystemsToSettleThisRun ?? [];
             starsWithAncientManuscripts = gameState.starsWithAncientManuscripts ?? [];
+            factoryStarsArray = gameState.factoryStarsArray ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3331,6 +3334,14 @@ export function reportManuscriptStar(star) { //mark a factory star as reported o
             break;
         }
     }
+}
+
+export function getFactoryStarsArray() {
+    return factoryStarsArray;
+}
+
+export function setFactoryStarsArray(value) {
+    factoryStarsArray.push(value);
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
