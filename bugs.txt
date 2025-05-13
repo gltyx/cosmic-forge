@@ -1,4 +1,0 @@
-megaStructures:
--TODO
-
-when studying stars, check the code doesnt include settled systems as an afterthought
