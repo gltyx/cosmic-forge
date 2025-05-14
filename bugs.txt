@@ -1,4 +1,16 @@
 rare cases where 0 0 0 for enemy in battle but can still click conquest, in this case should say settle always
 
 Pioneer-testermanuscript3
-maybe allow megastructure research on runs where there is a megastructure ie understand what it is, then research its capabilities and tech spec, how to disconnect from miaplacidus, then how to tap into the power for the system, and then how to connect to all systems
+
+REALLY TO DO TO END OF GAME
+    - BLOCK MIAPLACIDUS UNTIL MEGASTRUCTURES CONQUERED
+    - IMPLEMENT MEGASTRUCTURE BONUSES
+    - ADD REST OF STATISTICS
+    - ADD ACHIEVEMENTS TO INCLUDE PHILOSOPHIES AND MEGASTRUCTURE STORY ARC
+    - ADD MEGA BATTLE AT MIAPLACIDUS
+    - ADD LORE INTO THE NEWS TICKER
+    - TELL A STORY IN THE INTRO POPUPS AND ADD MORE OF THIS THROUGHOUT ALL THE GAME
+    - HAVE AN ENDING AFTER CONQUERING HOME SYSTEM
+
+WRITE THE STORY!
+YOU ARE A....

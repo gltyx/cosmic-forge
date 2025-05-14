@@ -75,6 +75,46 @@ export let modalNanoBrokersUnlockHeader;
 export let modalNanoBrokersUnlockText;
 export let modalCompoundMachiningTabUnlockHeader;
 export let modalCompoundMachiningTabUnlockText;
+export let modalMegaStructureTechDysonSphere1Header;
+export let modalMegaStructureTechDysonSphere1Text;
+export let modalMegaStructureTechDysonSphere2Header;
+export let modalMegaStructureTechDysonSphere2Text;
+export let modalMegaStructureTechDysonSphere3Header;
+export let modalMegaStructureTechDysonSphere3Text;
+export let modalMegaStructureTechDysonSphere4Header;
+export let modalMegaStructureTechDysonSphere4Text;
+export let modalMegaStructureTechDysonSphere5Header;
+export let modalMegaStructureTechDysonSphere5Text;
+export let modalMegaStructureTechCelestialProcessingCore1Header;
+export let modalMegaStructureTechCelestialProcessingCore1Text;
+export let modalMegaStructureTechCelestialProcessingCore2Header;
+export let modalMegaStructureTechCelestialProcessingCore2Text;
+export let modalMegaStructureTechCelestialProcessingCore3Header;
+export let modalMegaStructureTechCelestialProcessingCore3Text;
+export let modalMegaStructureTechCelestialProcessingCore4Header;
+export let modalMegaStructureTechCelestialProcessingCore4Text;
+export let modalMegaStructureTechCelestialProcessingCore5Header;
+export let modalMegaStructureTechCelestialProcessingCore5Text;
+export let modalMegaStructureTechPlasmaForge1Header;
+export let modalMegaStructureTechPlasmaForge1Text;
+export let modalMegaStructureTechPlasmaForge2Header;
+export let modalMegaStructureTechPlasmaForge2Text;
+export let modalMegaStructureTechPlasmaForge3Header;
+export let modalMegaStructureTechPlasmaForge3Text;
+export let modalMegaStructureTechPlasmaForge4Header;
+export let modalMegaStructureTechPlasmaForge4Text;
+export let modalMegaStructureTechPlasmaForge5Header;
+export let modalMegaStructureTechPlasmaForge5Text;
+export let modalMegaStructureTechGalacticMemoryArchive1Header;
+export let modalMegaStructureTechGalacticMemoryArchive1Text;
+export let modalMegaStructureTechGalacticMemoryArchive2Header;
+export let modalMegaStructureTechGalacticMemoryArchive2Text;
+export let modalMegaStructureTechGalacticMemoryArchive3Header;
+export let modalMegaStructureTechGalacticMemoryArchive3Text;
+export let modalMegaStructureTechGalacticMemoryArchive4Header;
+export let modalMegaStructureTechGalacticMemoryArchive4Text;
+export let modalMegaStructureTechGalacticMemoryArchive5Header;
+export let modalMegaStructureTechGalacticMemoryArchive5Text;
 
 export function initialiseDescriptions() {
     gameIntroHeader = 'Welcome to the Cosmic Forge!';
@@ -143,6 +183,46 @@ export function initialiseDescriptions() {
     modalNanoBrokersUnlockText = `With this extremely advanced tech, our scientists have developed robots that can go to market<br>automatically and sell our Resources and Compounds for the best possible price!<br><br><span class="green-ready-text">Automated Resource Selling Unlocked!</span>`
     modalCompoundMachiningTabUnlockHeader = `AUTOMATED COMPOUND CREATION!`;
     modalCompoundMachiningTabUnlockText = `Our scientists have done it again! Now we have advanced machinery capable of automatically<br>creating Compounds at will.  This is extremely powerful indeed!<br>If we cannot conquer the Galaxy now, it is your fault!<br><br><span class="green-ready-text">Automated Compound Creation Unlocked!</span>`
+    modalMegaStructureTechDysonSphere1Header = `UNDERSTANDING THE DYSON SPHERE`;
+    modalMegaStructureTechDysonSphere1Text = `You have studied and now understand what the MegaStructure before you is - it is a Dyson Sphere<br><br><span class="green-ready-text">All Batteries Double in Capacity!</span>`;
+    modalMegaStructureTechDysonSphere2Header = `DYSON SPHERE CAPABILITIES`;
+    modalMegaStructureTechDysonSphere2Text = `After studying how the Dyson Sphere works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">All Energy producing Buildings 25% more powerful!</span>`;
+    modalMegaStructureTechDysonSphere3Header = `DISCONNECTING THE DYSON SPHERE`;
+    modalMegaStructureTechDysonSphere3Text = `You have managed to disconnect the Dyson Sphere from its current role,<br>which was providing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechDysonSphere4Header = `HARNESSING THE DYSON SPHERE`;
+    modalMegaStructureTechDysonSphere4Text = `You have harnessed the Dyson Sphere for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">Power Always On for this System!</span>`;
+    modalMegaStructureTechDysonSphere5Header = `CONNECTING THE DYSON SPHERE TO THE FABRIC`;
+    modalMegaStructureTechDysonSphere5Text = `You have connected this Dyson Sphere into the fabric of the galaxy<br>meaning its benefits are now permanently available in whichever<br>system you might one day settle. This has enormous potential.<br><br><span class="green-ready-text">Power Always On!</span>`;
+    modalMegaStructureTechCelestialProcessingCore1Header = `UNDERSTANDING THE CELESTIAL PROCESSING CORE`;
+    modalMegaStructureTechCelestialProcessingCore1Text = `You have studied and now understand what the MegaStructure before you is - it is a Celestial Processing Core<br><br><span class="green-ready-text">Gain 50 Research per Second!</span>`;
+    modalMegaStructureTechCelestialProcessingCore2Header = `CELESTIAL PROCESSING CORE CAPABILITIES`;
+    modalMegaStructureTechCelestialProcessingCore2Text = `After studying how the Celestial Processing Core works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">Gain 100 Research per Second!</span>`;
+    modalMegaStructureTechCelestialProcessingCore3Header = `DISCONNECTING THE CELESTIAL PROCESSING CORE`;
+    modalMegaStructureTechCelestialProcessingCore3Text = `You have managed to disconnect the Celestial Processing Core from its current role<br>which was providing processing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechCelestialProcessingCore4Header = `HARNESSING THE CELESTIAL PROCESSING CORE`;
+    modalMegaStructureTechCelestialProcessingCore4Text = `You have harnessed the Celestial Processing Core for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">Gain 150 Research per Second!</span>`;
+    modalMegaStructureTechCelestialProcessingCore5Header = `CONNECTING THE CELESTIAL PROCESSING CORE TO THE FABRIC`;
+    modalMegaStructureTechCelestialProcessingCore5Text = `You have connected this Celestial Processing Core into the fabric of the galaxy<br>meaning its benefits are now permanently available in whichever<br>system you might one day settle. This has enormous potential.<br><br><span class="green-ready-text">Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!</span>`;
+    modalMegaStructureTechPlasmaForge1Header = `UNDERSTANDING THE PLASMA FORGE`;
+    modalMegaStructureTechPlasmaForge1Text = `You have studied and now understand what the MegaStructure before you is - it is a Plasma Forge<br><br><span class="green-ready-text">+25% Resource AutoBuyer Rates!</span>`;
+    modalMegaStructureTechPlasmaForge2Header = `PLASMA FORGE CAPABILITIES`;
+    modalMegaStructureTechPlasmaForge2Text = `After studying how the Plasma Forge works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">+50% Resource AutoBuyer Rates!</span>`;
+    modalMegaStructureTechPlasmaForge3Header = `DISCONNECTING THE PLASMA FORGE`;
+    modalMegaStructureTechPlasmaForge3Text = `You have managed to disconnect the Plasma Forge from its current role<br>which was providing plasma to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechPlasmaForge4Header = `HARNESSING THE PLASMA FORGE`;
+    modalMegaStructureTechPlasmaForge4Text = `You have harnessed the Plasma Forge for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">+75% Resource AutoBuyer Rates!</span>`;
+    modalMegaStructureTechPlasmaForge5Header = `CONNECTING THE PLASMA FORGE TO THE FABRIC`;
+    modalMegaStructureTechPlasmaForge5Text = `You have connected this Plasma Forge into the fabric of the galaxy<br>meaning its benefits are now permanently available in whichever<br>system you might one day settle. This has enormous potential.<br><br><span class="green-ready-text">Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive1Header = `UNDERSTANDING THE GALACTIC MEMORY ARCHIVE`;
+    modalMegaStructureTechGalacticMemoryArchive1Text = `You have studied and now understand what the MegaStructure before you is - it is a Galactic Memory Archive<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 100K!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive2Header = `GALACTIC MEMORY ARCHIVE CAPABILITIES`;
+    modalMegaStructureTechGalacticMemoryArchive2Text = `After studying how the Galactic Memory Archive works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 1M!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive3Header = `DISCONNECTING THE GALACTIC MEMORY ARCHIVE`;
+    modalMegaStructureTechGalacticMemoryArchive3Text = `You have managed to disconnect the Galactic Memory Archive from its current role<br>which was providing memory functions to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive4Header = `HARNESSING THE GALACTIC MEMORY ARCHIVE`;
+    modalMegaStructureTechGalacticMemoryArchive4Text = `You have harnessed the Galactic Memory Archive for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 1B!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive5Header = `CONNECTING THE GALACTIC MEMORY ARCHIVE TO THE FABRIC`;
+    modalMegaStructureTechGalacticMemoryArchive5Text = `You have connected this Galactic Memory Archive into the fabric of the galaxy<br>meaning its benefits are now permanently available in whichever<br>system you might one day settle. This has enormous potential.<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!</span>`;
 
     headerDescriptions = {
         'Resources': 'Here you can gain and sell resources. You can also upgrade your storage capacity and automate resource harvesting.  When you discover fusion, you will also handle that here.',
@@ -976,104 +1056,104 @@ export function initialiseDescriptions() {
         }, 
         techDysonSphereUnderstandingRow: {
             content1: "Unlock Dyson Sphere Understanding to comprehend the nature of a Dyson Sphere.",
-            content2: "Unlock Dyson Sphere Understanding to learn what a Dyson Sphere is and how it can change the course of your technological development.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Dyson Sphere Understanding to learn what a Dyson Sphere is and how it can change the course of your technological development.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techDysonSphereCapabilitiesRow: {
             content1: "Unlock Dyson Sphere Capabilities to understand its potential uses and abilities.",
-            content2: "Unlock Dyson Sphere Capabilities to gain insight into the incredible powers and capabilities of a Dyson Sphere.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Dyson Sphere Capabilities to gain insight into the incredible powers and capabilities of a Dyson Sphere.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techDysonSphereDisconnectRow: {
             content1: "Unlock Dyson Sphere Disconnect to sever its connection from the Miaplacidus System Force Field.",
-            content2: "Unlock Dyson Sphere Disconnect to disconnect the Dyson Sphere from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Dyson Sphere Disconnect to disconnect the Dyson Sphere from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techDysonSpherePowerRow: {
             content1: "Unlock Dyson Sphere Power to harness its energy for your system.",
-            content2: "Unlock Dyson Sphere Power to learn how to tap into the vast energy reserves of the Dyson Sphere, powering your system and beyond.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Dyson Sphere Power to learn how to tap into the vast energy reserves of the Dyson Sphere, powering your system and beyond.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techDysonSphereConnectRow: {
             content1: "Unlock Dyson Sphere Connect to link its power across the galaxy.",
-            content2: "Unlock Dyson Sphere Connect to understand how to distribute the Dyson Sphere's energy across all systems, linking it to the galaxy at large.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Dyson Sphere Connect to understand how to distribute the Dyson Sphere's energy across all systems, linking it to the galaxy at large.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techCelestialProcessingCoreUnderstandingRow: {
             content1: "Unlock Celestial Processing Core Understanding to comprehend the nature of a Celestial Processing Core.",
-            content2: "Unlock Celestial Processing Core Understanding to learn what a Celestial Processing Core is and how it can revolutionize your technological infrastructure.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Celestial Processing Core Understanding to learn what a Celestial Processing Core is and how it can revolutionize your technological infrastructure.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techCelestialProcessingCoreCapabilitiesRow: {
             content1: "Unlock Celestial Processing Core Capabilities to understand its potential uses and abilities.",
-            content2: "Unlock Celestial Processing Core Capabilities to gain insight into the immense power and functions of the Celestial Processing Core.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Celestial Processing Core Capabilities to gain insight into the immense power and functions of the Celestial Processing Core.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techCelestialProcessingCoreDisconnectRow: {
             content1: "Unlock Celestial Processing Core Disconnect to sever its connection from the Miaplacidus System Force Field.",
-            content2: "Unlock Celestial Processing Core Disconnect to disconnect the Celestial Processing Core from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Celestial Processing Core Disconnect to disconnect the Celestial Processing Core from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techCelestialProcessingCorePowerRow: {
             content1: "Unlock Celestial Processing Core Power to harness its energy for your system.",
-            content2: "Unlock Celestial Processing Core Power to learn how to tap into the vast power of the Celestial Processing Core, empowering your system.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Celestial Processing Core Power to learn how to tap into the vast power of the Celestial Processing Core, empowering your system.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techCelestialProcessingCoreConnectRow: {
             content1: "Unlock Celestial Processing Core Connect to distribute its power galaxy-wide.",
-            content2: "Unlock Celestial Processing Core Connect to learn how to distribute the Celestial Processing Core's energy across the galaxy.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Celestial Processing Core Connect to learn how to distribute the Celestial Processing Core's energy across the galaxy.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
 
         techPlasmaForgeUnderstandingRow: {
             content1: "Unlock Plasma Forge Understanding to comprehend the Plasma Forge’s nature.",
-            content2: "Unlock Plasma Forge Understanding to learn what a Plasma Forge is and how it plays a critical role in your technological future.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Plasma Forge Understanding to learn what a Plasma Forge is and how it plays a critical role in your technological future.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techPlasmaForgeCapabilitiesRow: {
             content1: "Unlock Plasma Forge Capabilities to understand its potential uses and abilities.",
-            content2: "Unlock Plasma Forge Capabilities to understand the vast array of functions and capabilities that the Plasma Forge offers.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Plasma Forge Capabilities to understand the vast array of functions and capabilities that the Plasma Forge offers.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techPlasmaForgeDisconnectRow: {
             content1: "Unlock Plasma Forge Disconnect to sever its connection from the Miaplacidus System Force Field.",
-            content2: "Unlock Plasma Forge Disconnect to disconnect the Plasma Forge from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Plasma Forge Disconnect to disconnect the Plasma Forge from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techPlasmaForgePowerRow: {
             content1: "Unlock Plasma Forge Power to harness its energy for your system.",
-            content2: "Unlock Plasma Forge Power to learn how to utilize the immense energy of the Plasma Forge for powering your system.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Plasma Forge Power to learn how to utilize the immense energy of the Plasma Forge for powering your system.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techPlasmaForgeConnectRow: {
             content1: "Unlock Plasma Forge Connect to connect its power across the galaxy.",
-            content2: "Unlock Plasma Forge Connect to learn how to extend the Plasma Forge’s energy across multiple systems, expanding your reach.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Plasma Forge Connect to learn how to extend the Plasma Forge’s energy across multiple systems, expanding your reach.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
 
         techGalacticMemoryArchiveUnderstandingRow: {
             content1: "Unlock Galactic Memory Archive Understanding to comprehend the Galactic Memory Archive’s function.",
-            content2: "Unlock Galactic Memory Archive Understanding to understand what the Galactic Memory Archive is and how it holds vital cosmic data.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Galactic Memory Archive Understanding to understand what the Galactic Memory Archive is and how it holds vital cosmic data.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techGalacticMemoryArchiveCapabilitiesRow: {
             content1: "Unlock Galactic Memory Archive Capabilities to understand its potential uses and abilities.",
-            content2: "Unlock Galactic Memory Archive Capabilities to discover the powerful functions and capabilities that the Galactic Memory Archive holds.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Galactic Memory Archive Capabilities to discover the powerful functions and capabilities that the Galactic Memory Archive holds.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techGalacticMemoryArchiveDisconnectRow: {
             content1: "Unlock Galactic Memory Archive Disconnect to sever its connection from the Miaplacidus System Force Field.",
-            content2: "Unlock Galactic Memory Archive Disconnect to disconnect the Galactic Memory Archive from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Galactic Memory Archive Disconnect to disconnect the Galactic Memory Archive from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techGalacticMemoryArchivePowerRow: {
             content1: "Unlock Galactic Memory Archive Power to harness its energy for your system.",
-            content2: "Unlock Galactic Memory Archive Power to tap into the cosmic energy stored in the Galactic Memory Archive for your system’s benefit.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Galactic Memory Archive Power to tap into the cosmic energy stored in the Galactic Memory Archive for your system’s benefit.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },
         techGalacticMemoryArchiveConnectRow: {
             content1: "Unlock Galactic Memory Archive Connect to connect its power across the galaxy.",
-            content2: "Unlock Galactic Memory Archive Connect to connect the Galactic Memory Archive’s energy across all systems, extending your technological network.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            content2: "Unlock Galactic Memory Archive Connect to connect the Galactic Memory Archive’s energy across all systems, extending your technological network.<br><br><span class='green-ready-text'>???</span>",
             updateAt: ""
         },      
         techPhilosophySpaceStorageTankResearchRow: {

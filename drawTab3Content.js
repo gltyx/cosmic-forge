@@ -2,7 +2,7 @@ import { getCurrentStarSystem, setCanFuelRockets, setCanTravelToAsteroids, getTe
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables } from './game.js';
 import { getStarSystemDataObject, setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator, callPopupModal, showHideModal } from './ui.js';
-import { modalNanoBrokersUnlockHeader, modalNanoBrokersUnlockText, modalRocketCompositesTabUnlockHeader, modalRocketCompositesTabUnlockText, modalQuantumComputingTabUnlockHeader, modalQuantumComputingTabUnlockText, modalScienceLabsTabUnlockHeader, modalScienceLabsTabUnlockText, modalKnowledgeSharingTabUnlockHeader, modalKnowledgeSharingTabUnlockText, modalInterstellarTabUnlockHeader, modalInterstellarTabUnlockText, modalEnergyTabUnlockHeader, modalEnergyTabUnlockText, modalSpaceMiningTabUnlockText, modalSpaceMiningTabUnlockHeader, modalCompoundsTabUnlockHeader, modalCompoundsTabUnlockText, techNotificationMessages } from './descriptions.js';
+import { modalMegaStructureTechDysonSphere1Header, modalMegaStructureTechDysonSphere1Text, modalMegaStructureTechDysonSphere2Header, modalMegaStructureTechDysonSphere2Text, modalMegaStructureTechDysonSphere3Header, modalMegaStructureTechDysonSphere3Text, modalMegaStructureTechDysonSphere4Header, modalMegaStructureTechDysonSphere4Text, modalMegaStructureTechDysonSphere5Header, modalMegaStructureTechDysonSphere5Text, modalMegaStructureTechCelestialProcessingCore1Header, modalMegaStructureTechCelestialProcessingCore1Text, modalMegaStructureTechCelestialProcessingCore2Header, modalMegaStructureTechCelestialProcessingCore2Text, modalMegaStructureTechCelestialProcessingCore3Header, modalMegaStructureTechCelestialProcessingCore3Text, modalMegaStructureTechCelestialProcessingCore4Header, modalMegaStructureTechCelestialProcessingCore4Text, modalMegaStructureTechCelestialProcessingCore5Header, modalMegaStructureTechCelestialProcessingCore5Text, modalMegaStructureTechPlasmaForge1Header, modalMegaStructureTechPlasmaForge1Text, modalMegaStructureTechPlasmaForge2Header, modalMegaStructureTechPlasmaForge2Text, modalMegaStructureTechPlasmaForge3Header, modalMegaStructureTechPlasmaForge3Text, modalMegaStructureTechPlasmaForge4Header, modalMegaStructureTechPlasmaForge4Text, modalMegaStructureTechPlasmaForge5Header, modalMegaStructureTechPlasmaForge5Text, modalMegaStructureTechGalacticMemoryArchive1Header, modalMegaStructureTechGalacticMemoryArchive1Text, modalMegaStructureTechGalacticMemoryArchive2Header, modalMegaStructureTechGalacticMemoryArchive2Text, modalMegaStructureTechGalacticMemoryArchive3Header, modalMegaStructureTechGalacticMemoryArchive3Text, modalMegaStructureTechGalacticMemoryArchive4Header, modalMegaStructureTechGalacticMemoryArchive4Text, modalMegaStructureTechGalacticMemoryArchive5Header, modalMegaStructureTechGalacticMemoryArchive5Text, modalNanoBrokersUnlockHeader, modalNanoBrokersUnlockText, modalRocketCompositesTabUnlockHeader, modalRocketCompositesTabUnlockText, modalQuantumComputingTabUnlockHeader, modalQuantumComputingTabUnlockText, modalScienceLabsTabUnlockHeader, modalScienceLabsTabUnlockText, modalKnowledgeSharingTabUnlockHeader, modalKnowledgeSharingTabUnlockText, modalInterstellarTabUnlockHeader, modalInterstellarTabUnlockText, modalEnergyTabUnlockHeader, modalEnergyTabUnlockText, modalSpaceMiningTabUnlockText, modalSpaceMiningTabUnlockHeader, modalCompoundsTabUnlockHeader, modalCompoundsTabUnlockText, techNotificationMessages } from './descriptions.js';
 
 export function drawTab3Content(heading, optionContentElement) {
     const optionElement = document.getElementById(heading.toLowerCase().replace(/\s(.)/g, (match, group1) => group1.toUpperCase()).replace(/\s+/g, '') + 'Option');
@@ -1522,6 +1522,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('dysonSphereUnderstanding');
                         showNotification(techNotificationMessages.dysonSphereUnderstanding, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechDysonSphere1Header, 
+                            modalMegaStructureTechDysonSphere1Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'dysonSphereUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1553,6 +1572,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('dysonSphereCapabilities');
                         showNotification(techNotificationMessages.dysonSphereCapabilities, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechDysonSphere2Header, 
+                            modalMegaStructureTechDysonSphere2Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'dysonSphereCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1584,6 +1622,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('dysonSphereDisconnect');
                         showNotification(techNotificationMessages.dysonSphereDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechDysonSphere3Header, 
+                            modalMegaStructureTechDysonSphere3Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'dysonSphereDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1615,6 +1672,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('dysonSpherePower');
                         showNotification(techNotificationMessages.dysonSpherePower, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechDysonSphere4Header, 
+                            modalMegaStructureTechDysonSphere4Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'dysonSpherePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1646,6 +1722,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('dysonSphereConnect');
                         showNotification(techNotificationMessages.dysonSphereConnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechDysonSphere5Header, 
+                            modalMegaStructureTechDysonSphere5Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'dysonSphereConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1677,6 +1772,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('celestialProcessingCoreUnderstanding');
                         showNotification(techNotificationMessages.celestialProcessingCoreUnderstanding, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechCelestialProcessingCore1Header, 
+                            modalMegaStructureTechCelestialProcessingCore1Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'celestialProcessingCoreUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1708,6 +1822,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('celestialProcessingCoreCapabilities');
                         showNotification(techNotificationMessages.celestialProcessingCoreCapabilities, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechCelestialProcessingCore2Header, 
+                            modalMegaStructureTechCelestialProcessingCore2Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'celestialProcessingCoreCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1739,6 +1872,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('celestialProcessingCoreDisconnect');
                         showNotification(techNotificationMessages.celestialProcessingCoreDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechCelestialProcessingCore3Header, 
+                            modalMegaStructureTechCelestialProcessingCore3Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'celestialProcessingCoreDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1770,6 +1922,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('celestialProcessingCorePower');
                         showNotification(techNotificationMessages.celestialProcessingCorePower, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechCelestialProcessingCore4Header, 
+                            modalMegaStructureTechCelestialProcessingCore4Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'celestialProcessingCorePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1801,6 +1972,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('celestialProcessingCoreConnect');
                         showNotification(techNotificationMessages.celestialProcessingCoreConnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechCelestialProcessingCore5Header, 
+                            modalMegaStructureTechCelestialProcessingCore5Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'celestialProcessingCoreConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1832,6 +2022,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('plasmaForgeUnderstanding');
                         showNotification(techNotificationMessages.plasmaForgeUnderstanding, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechPlasmaForge1Header, 
+                            modalMegaStructureTechPlasmaForge1Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'plasmaForgeUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1863,6 +2072,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('plasmaForgeCapabilities');
                         showNotification(techNotificationMessages.plasmaForgeCapabilities, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechPlasmaForge2Header, 
+                            modalMegaStructureTechPlasmaForge2Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'plasmaForgeCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1894,6 +2122,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('plasmaForgeDisconnect');
                         showNotification(techNotificationMessages.plasmaForgeDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechPlasmaForge3Header, 
+                            modalMegaStructureTechPlasmaForge3Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'plasmaForgeDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1925,6 +2172,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('plasmaForgePower');
                         showNotification(techNotificationMessages.plasmaForgePower, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechPlasmaForge4Header, 
+                            modalMegaStructureTechPlasmaForge4Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'plasmaForgePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1956,6 +2222,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('plasmaForgeConnect');
                         showNotification(techNotificationMessages.plasmaForgeConnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechPlasmaForge5Header, 
+                            modalMegaStructureTechPlasmaForge5Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'plasmaForgeConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1987,6 +2272,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('galacticMemoryArchiveUnderstanding');
                         showNotification(techNotificationMessages.galacticMemoryArchiveUnderstanding, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechGalacticMemoryArchive1Header, 
+                            modalMegaStructureTechGalacticMemoryArchive1Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'galacticMemoryArchiveUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2018,6 +2322,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('galacticMemoryArchiveCapabilities');
                         showNotification(techNotificationMessages.galacticMemoryArchiveCapabilities, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechGalacticMemoryArchive2Header, 
+                            modalMegaStructureTechGalacticMemoryArchive2Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'galacticMemoryArchiveCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2049,6 +2372,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('galacticMemoryArchiveDisconnect');
                         showNotification(techNotificationMessages.galacticMemoryArchiveDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechGalacticMemoryArchive3Header, 
+                            modalMegaStructureTechGalacticMemoryArchive3Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'galacticMemoryArchiveDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2080,6 +2422,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('galacticMemoryArchivePower');
                         showNotification(techNotificationMessages.galacticMemoryArchivePower, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechGalacticMemoryArchive4Header, 
+                            modalMegaStructureTechGalacticMemoryArchive4Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'galacticMemoryArchivePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2111,6 +2472,25 @@ export function drawTab3Content(heading, optionContentElement) {
                         setTechUnlockedArray('galacticMemoryArchiveConnect');
                         showNotification(techNotificationMessages.galacticMemoryArchiveConnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
+                        callPopupModal(
+                            modalMegaStructureTechGalacticMemoryArchive5Header, 
+                            modalMegaStructureTechGalacticMemoryArchive5Text, 
+                            true, 
+                            false, 
+                            false, 
+                            false, 
+                            function() {
+                                showHideModal();
+                            },
+                            null, 
+                            null, 
+                            null,
+                            'CONFIRM',
+                            null,
+                            null,
+                            null,
+                            false
+                        );
                     }, 'techUnlock', '', 'galacticMemoryArchiveConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,

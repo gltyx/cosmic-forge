@@ -1771,9 +1771,13 @@ export function createStarDestinationRow(starData, isInteresting) {
 
     const buttonContainer = document.getElementById('starDestinationButton');
     const button = createButton(`Travel`, ['option-button', 'red-disabled-text', 'travel-starship-button'], () => {
+        let content = launchStarShipWarningText;
+        if (getFactoryStarsArray().includes(getDestinationStar())) {
+            content += `<br><br><span class="warning-orange-text">WARNING: MegaStructure Systems are Extremely difficult to conquer!<br>Only go if you have high Production to rebuild broken Fleets multiple times!</span>`;
+        }
         callPopupModal(
             launchStarShipWarningHeader, 
-            launchStarShipWarningText, 
+            content, 
             true, 
             true, 
             false, 
