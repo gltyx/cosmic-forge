@@ -1,4 +1,6 @@
 import {
+    getMegaStructuresInPossessionArray,
+    setMegaStructuresInPossessionArray,
     getFactoryStarsArray,
     setFactoryStarsArray,
     NUMBER_OF_STARS, 
@@ -9751,6 +9753,7 @@ export async function settleSystemAfterBattle(accessPoint) {
     
     if (isFactoryStar) {
         apModifier *= 2;
+        setMegaStructuresInPossessionArray(getStarSystemDataObject('stars', [getDestinationStar(), 'factoryStar']));
     }
 
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
@@ -9791,7 +9794,7 @@ export async function settleSystemAfterBattle(accessPoint) {
             if (getPlayerPhilosophy() === 'expansionist' && getPhilosophyAbilityActive()) {
                 setAdditionalSystemsToSettleThisRun(decideIfMoreSystemsAreAutomaticallySettled());
             }
-            
+
             if (isFactoryStar) {
                 await showBattlePopup('megastructure', apGain);
             } else {

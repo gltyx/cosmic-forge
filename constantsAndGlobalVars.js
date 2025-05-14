@@ -253,6 +253,7 @@ let initialImpression = 35;
 let additionalSystemsToSettleThisRun = [];
 let starsWithAncientManuscripts = [];
 let factoryStarsArray = [];
+let megaStructuresInPossessionArray = [];
 
 let battleUnits = { 
     player: [], 
@@ -1104,6 +1105,7 @@ export function captureGameStatusForSaving(type) {
     gameState.additionalSystemsToSettleThisRun = additionalSystemsToSettleThisRun;
     gameState.starsWithAncientManuscripts = starsWithAncientManuscripts;
     gameState.factoryStarsArray = factoryStarsArray;
+    gameState.megaStructuresInPossessionArray = megaStructuresInPossessionArray;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1325,6 +1327,7 @@ export function restoreGameStatus(gameState, type) {
             additionalSystemsToSettleThisRun = gameState.additionalSystemsToSettleThisRun ?? [];
             starsWithAncientManuscripts = gameState.starsWithAncientManuscripts ?? [];
             factoryStarsArray = gameState.factoryStarsArray ?? [];
+            megaStructuresInPossessionArray = gameState.megaStructuresInPossessionArray ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -3344,6 +3347,13 @@ export function activateFactoryStar(star) {
     }
 }
 
+export function setMegaStructuresInPossessionArray(value) {
+    megaStructuresInPossessionArray.push(value);
+}
+
+export function getMegaStructuresInPossessionArray() {
+    return megaStructuresInPossessionArray;
+}
 
 export function getFactoryStarsArray() {
     return factoryStarsArray;
