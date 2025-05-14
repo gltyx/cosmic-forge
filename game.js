@@ -6602,7 +6602,7 @@ export function startTravelToDestinationStarTimer(adjustment) {
 
                 if (getFactoryStarsArray().includes(getDestinationStar())) {
                     const header = 'MEGASTRUCTURE';
-                    const content = `Your Starship arrived at the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!<br>You gasp at what you see! The main star has been completely enveloped by a gigantic structure!<br>It looks to be some kind of <span class="factory-star-text">${getStarSystemDataObject('stars', [getDestinationStar(), 'factoryStar'])}</span><br>This system is going to be heavily defended for sure, but if we can conquer it,<br>for sure it will open up vast opportunities for us...`;
+                    const content = `Your Starship arrived at the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!<br>You gasp at what you see! The main star has been completely enveloped by a gigantic structure!<br>It looks to be some kind of <span class="factory-star-text">${getStarSystemDataObject('stars', [getDestinationStar(), 'factoryStar'])}</span><br>No wonder we didn't discover this System before,<br>the star is not visible due to the size of this structure!<br>This system is going to be heavily defended for sure, but if we can conquer it,<br>for sure it will open up vast opportunities for us...`;
                     callPopupModal(
                         header, 
                         content, 
@@ -9818,7 +9818,7 @@ export async function settleSystemAfterBattle(accessPoint) {
         }
 
         const header = 'ANCIENT MANUSCRIPT!';
-        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(factoryStarToReport)}</span> System!`;
+        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in a previously undiscovered System, the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(factoryStarToReport)}</span> System! Its location has also<br>been revealed to us!`;
 
         callPopupModal(
             header, 
