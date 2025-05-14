@@ -388,7 +388,7 @@ export function migrateResourceData(saveData, objectType) {
                     dysonSpherePower: { appearsAt: [160000, "dysonSphereDisconnect", ""], prereqs: ['Dyson Sphere Disconnect'], price: 200000, idForRenderPosition: 10004, special: 'megastructure' },
                     dysonSphereConnect: { appearsAt: [200000, "dysonSpherePower", ""], prereqs: ['Dyson Sphere Power'], price: 250000, idForRenderPosition: 10005, special: 'megastructure' },
 
-                    celestialProcessingCoreUnderstanding: { appearsAt: [40000, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 50000, idForRenderPosition: 10101 },
+                    celestialProcessingCoreUnderstanding: { appearsAt: [40000, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 50000, idForRenderPosition: 10101, special: 'megastructure' },
                     celestialProcessingCoreCapabilities: { appearsAt: [80000, "celestialProcessingCoreUnderstanding", ""], prereqs: ['Celestial Processing Core Understanding'], price: 100000, idForRenderPosition: 10102, special: 'megastructure' },
                     celestialProcessingCoreDisconnect: { appearsAt: [120000, "celestialProcessingCoreCapabilities", ""], prereqs: ['Celestial Processing Core Capabilities'], price: 150000, idForRenderPosition: 10103, special: 'megastructure' },
                     celestialProcessingCorePower: { appearsAt: [160000, "celestialProcessingCoreDisconnect", ""], prereqs: ['Celestial Processing Core Disconnect'], price: 200000, idForRenderPosition: 10104, special: 'megastructure' },

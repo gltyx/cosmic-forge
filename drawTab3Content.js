@@ -1,6 +1,6 @@
-import { setCanFuelRockets, setCanTravelToAsteroids, getTechTreeData, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun } from './constantsAndGlobalVars.js';
+import { getCurrentStarSystem, setCanFuelRockets, setCanTravelToAsteroids, getTechTreeDataAndDraw, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun, getCurrentRunIsMegaStructureRun } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables } from './game.js';
-import { setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
+import { getStarSystemDataObject, setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator, callPopupModal, showHideModal } from './ui.js';
 import { modalNanoBrokersUnlockHeader, modalNanoBrokersUnlockText, modalRocketCompositesTabUnlockHeader, modalRocketCompositesTabUnlockText, modalQuantumComputingTabUnlockHeader, modalQuantumComputingTabUnlockText, modalScienceLabsTabUnlockHeader, modalScienceLabsTabUnlockText, modalKnowledgeSharingTabUnlockHeader, modalKnowledgeSharingTabUnlockText, modalInterstellarTabUnlockHeader, modalInterstellarTabUnlockText, modalEnergyTabUnlockHeader, modalEnergyTabUnlockText, modalSpaceMiningTabUnlockText, modalSpaceMiningTabUnlockHeader, modalCompoundsTabUnlockHeader, modalCompoundsTabUnlockText, techNotificationMessages } from './descriptions.js';
 
@@ -1511,6 +1511,7 @@ export function drawTab3Content(heading, optionContentElement) {
 
             {
                 techName: 'dysonSphereUnderstanding',
+                special: ['megastructure', 'Dyson Sphere'],
                 row: createOptionRow(
                     'techDysonSphereUnderstandingRow',
                     null,
@@ -1541,6 +1542,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'dysonSphereCapabilities',
+                special: ['megastructure', 'Dyson Sphere'],
                 row: createOptionRow(
                     'techDysonSphereCapabilitiesRow',
                     null,
@@ -1571,6 +1573,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'dysonSphereDisconnect',
+                special: ['megastructure', 'Dyson Sphere'],
                 row: createOptionRow(
                     'techDysonSphereDisconnectRow',
                     null,
@@ -1601,6 +1604,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'dysonSpherePower',
+                special: ['megastructure', 'Dyson Sphere'],
                 row: createOptionRow(
                     'techDysonSpherePowerRow',
                     null,
@@ -1631,6 +1635,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'dysonSphereConnect',
+                special: ['megastructure', 'Dyson Sphere'],
                 row: createOptionRow(
                     'techDysonSphereConnectRow',
                     null,
@@ -1661,6 +1666,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'celestialProcessingCoreUnderstanding',
+                special: ['megastructure', 'Celestial Processing Core'],
                 row: createOptionRow(
                     'techCelestialProcessingCoreUnderstandingRow',
                     null,
@@ -1691,6 +1697,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'celestialProcessingCoreCapabilities',
+                special: ['megastructure', 'Celestial Processing Core'],
                 row: createOptionRow(
                     'techCelestialProcessingCoreCapabilitiesRow',
                     null,
@@ -1721,6 +1728,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'celestialProcessingCoreDisconnect',
+                special: ['megastructure', 'Celestial Processing Core'],
                 row: createOptionRow(
                     'techCelestialProcessingCoreDisconnectRow',
                     null,
@@ -1751,6 +1759,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'celestialProcessingCorePower',
+                special: ['megastructure', 'Celestial Processing Core'],
                 row: createOptionRow(
                     'techCelestialProcessingCorePowerRow',
                     null,
@@ -1781,6 +1790,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'celestialProcessingCoreConnect',
+                special: ['megastructure', 'Celestial Processing Core'],
                 row: createOptionRow(
                     'techCelestialProcessingCoreConnectRow',
                     null,
@@ -1811,6 +1821,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'plasmaForgeUnderstanding',
+                special: ['megastructure', 'Plasma Forge'],
                 row: createOptionRow(
                     'techPlasmaForgeUnderstandingRow',
                     null,
@@ -1841,6 +1852,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'plasmaForgeCapabilities',
+                special: ['megastructure', 'Plasma Forge'],
                 row: createOptionRow(
                     'techPlasmaForgeCapabilitiesRow',
                     null,
@@ -1871,6 +1883,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'plasmaForgeDisconnect',
+                special: ['megastructure', 'Plasma Forge'],
                 row: createOptionRow(
                     'techPlasmaForgeDisconnectRow',
                     null,
@@ -1901,6 +1914,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'plasmaForgePower',
+                special: ['megastructure', 'Plasma Forge'],
                 row: createOptionRow(
                     'techPlasmaForgePowerRow',
                     null,
@@ -1931,6 +1945,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'plasmaForgeConnect',
+                special: ['megastructure', 'Plasma Forge'],
                 row: createOptionRow(
                     'techPlasmaForgeConnectRow',
                     null,
@@ -1961,6 +1976,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'galacticMemoryArchiveUnderstanding',
+                special: ['megastructure', 'Galactic Memory Archive'],
                 row: createOptionRow(
                     'techGalacticMemoryArchiveUnderstandingRow',
                     null,
@@ -1991,6 +2007,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'galacticMemoryArchiveCapabilities',
+                special: ['megastructure', 'Galactic Memory Archive'],
                 row: createOptionRow(
                     'techGalacticMemoryArchiveCapabilitiesRow',
                     null,
@@ -2021,6 +2038,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'galacticMemoryArchiveDisconnect',
+                special: ['megastructure', 'Galactic Memory Archive'],
                 row: createOptionRow(
                     'techGalacticMemoryArchiveDisconnectRow',
                     null,
@@ -2051,6 +2069,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'galacticMemoryArchivePower',
+                special: ['megastructure', 'Galactic Memory Archive'],
                 row: createOptionRow(
                     'techGalacticMemoryArchivePowerRow',
                     null,
@@ -2081,6 +2100,7 @@ export function drawTab3Content(heading, optionContentElement) {
             },
             {
                 techName: 'galacticMemoryArchiveConnect',
+                special: ['megastructure', 'Galactic Memory Archive'],
                 row: createOptionRow(
                     'techGalacticMemoryArchiveConnectRow',
                     null,
@@ -2111,12 +2131,38 @@ export function drawTab3Content(heading, optionContentElement) {
             }
         ];
 
-        rows.forEach(item => {
+        const rowsToRemove = [];
+
+        rows.forEach((item, index) => {
             const rowElement = item.row;
+
             if (rowElement) {
-                optionContentElement.appendChild(rowElement);
+                if (getCurrentRunIsMegaStructureRun()) {
+                    const systemMegaStructure = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']);
+                    
+                    if (item.special) {
+                        if (item.special[1] === systemMegaStructure) {
+                            optionContentElement.appendChild(rowElement);
+                        } else {
+                            rowsToRemove.push(index);
+                        }
+                    } else {
+                        optionContentElement.appendChild(rowElement);
+                    }
+                } else {
+                    if (!item.special || item.special[0] !== 'megastructure') {
+                        optionContentElement.appendChild(rowElement);
+                    } else {
+                        rowsToRemove.push(index);
+                    }
+                }
             }
         });
+
+        rowsToRemove.reverse().forEach(index => {
+            rows.splice(index, 1);
+        });
+
 
         const container = optionContentElement;
         setTemporaryCoreTechRowsRepo(container, rows);
@@ -2152,7 +2198,7 @@ export function drawTab3Content(heading, optionContentElement) {
         if (tooltip) {
             tooltip.remove();
         }
-        getTechTreeData(false);
+        getTechTreeDataAndDraw(false);
         setTechTreeDrawnYet(true);   
 
     }

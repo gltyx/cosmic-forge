@@ -2397,8 +2397,7 @@ export function getRenderedTechTree() {
     return cachedRenderedTechTree;
 }
 
-export async function getTechTreeData(renew) {
-
+export async function getTechTreeDataAndDraw(renew) {
     let techData = getResourceDataObject('techs');
     const unlockedTechs = getTechUnlockedArray();
     const upcomingTechs = getUpcomingTechArray();
@@ -2408,6 +2407,25 @@ export async function getTechTreeData(renew) {
             unlockedTechs.includes(key) || upcomingTechs.includes(key)
         )
     );
+
+    if (getCurrentRunIsMegaStructureRun()) {
+        const systemMegaStructure = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']);
+        
+        techData = Object.fromEntries(
+            Object.entries(techData).filter(([key, tech]) => {
+                if (tech.special === 'megastructure') {
+                    const techName = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    console.log(techName, systemMegaStructure);
+                    return techName.includes(systemMegaStructure);
+                }
+                return true;
+            })
+        );
+    } else {
+        techData = Object.fromEntries(
+            Object.entries(techData).filter(([key, tech]) => tech.special !== 'megastructure')
+        );
+    }
 
     await drawTechTree(techData, '#techTreeSvg', renew);
 }

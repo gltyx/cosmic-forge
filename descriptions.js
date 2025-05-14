@@ -999,7 +999,6 @@ export function initialiseDescriptions() {
             content2: "Unlock Dyson Sphere Connect to understand how to distribute the Dyson Sphere's energy across all systems, linking it to the galaxy at large.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
             updateAt: ""
         },
-
         techCelestialProcessingCoreUnderstandingRow: {
             content1: "Unlock Celestial Processing Core Understanding to comprehend the nature of a Celestial Processing Core.",
             content2: "Unlock Celestial Processing Core Understanding to learn what a Celestial Processing Core is and how it can revolutionize your technological infrastructure.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",

@@ -225,7 +225,7 @@ import {
     getCompoundSalePreview,
     getCompoundCreatePreview,
     getNotationType,
-    getTechTreeData,
+    getTechTreeDataAndDraw,
     getSaveName,
     setHasAntimatterSvgRightBoxDataChanged,
     getCanTravelToAsteroids,
@@ -2840,7 +2840,7 @@ function monitorTechTree() {
                     if (tooltip) {
                         tooltip.remove();
                     }
-                    getTechTreeData(true);
+                    getTechTreeDataAndDraw(true);
                     setTechTreeDrawnYet(true);
                 }
             }
@@ -2851,7 +2851,7 @@ function monitorTechTree() {
                     if (tooltip) {
                         tooltip.remove();
                     }
-                    getTechTreeData(true);
+                    getTechTreeDataAndDraw(true);
                     setTechTreeDrawnYet(true);
                 }
             }
