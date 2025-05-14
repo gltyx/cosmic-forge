@@ -256,6 +256,26 @@ export function initialiseDescriptions() {
         lifeSupportSystems: 'Life Support Systems Researched\n\nYou can now sustain life in deep space!',
         starshipFleets: 'Starship Fleets Researched\n\nYou can now construct Starship Offensive capabilities!',
         stellarScanners: 'Stellar Scanners Researched\n\nWhen you arrive at a new Star System you can see details of alien life and if it poses a threat!',
+        dysonSphereUnderstanding: 'Dyson Sphere Understanding Researched\n\nYou now understand what a Dyson Sphere is.',
+        dysonSphereCapabilities: 'Dyson Sphere Capabilities Researched\n\nYou now understand what a Dyson Sphere can do.',
+        dysonSphereDisconnect: 'Dyson Sphere Disconnect Researched\n\nYou have disconnected the Dyson Sphere from the Miaplacidus System Force Field.',
+        dysonSpherePower: 'Dyson Sphere Power Researched\n\nYou can now harness the Dyson Sphere\'s power for use within the system.',
+        dysonSphereConnect: 'Dyson Sphere Connect Researched\n\nYou can now connect the Dyson Sphere\'s power across the galaxy.',
+        celestialProcessingCoreUnderstanding: 'Celestial Processing Core Understanding Researched\n\nYou now understand what the Celestial Processing Core is.',
+        celestialProcessingCoreCapabilities: 'Celestial Processing Core Capabilities Researched\n\nYou now understand what the Celestial Processing Core can do.',
+        celestialProcessingCoreDisconnect: 'Celestial Processing Core Disconnect Researched\n\nYou have disconnected the Celestial Processing Core from the Miaplacidus System Force Field.',
+        celestialProcessingCorePower: 'Celestial Processing Core Power Researched\n\nYou can now harness the Celestial Processing Core\'s power for use within the system.',
+        celestialProcessingCoreConnect: 'Celestial Processing Core Connect Researched\n\nYou can now connect the Celestial Processing Core\'s power across the galaxy.',
+        plasmaForgeUnderstanding: 'Plasma Forge Understanding Researched\n\nYou now understand what the Plasma Forge is.',
+        plasmaForgeCapabilities: 'Plasma Forge Capabilities Researched\n\nYou now understand what the Plasma Forge can do.',
+        plasmaForgeDisconnect: 'Plasma Forge Disconnect Researched\n\nYou have disconnected the Plasma Forge from the Miaplacidus System Force Field.',
+        plasmaForgePower: 'Plasma Forge Power Researched\n\nYou can now harness the Plasma Forge\'s power for use within the system.',
+        plasmaForgeConnect: 'Plasma Forge Connect Researched\n\nYou can now connect the Plasma Forge\'s power across the galaxy.',
+        galacticMemoryArchiveUnderstanding: 'Galactic Memory Archive Understanding Researched\n\nYou now understand what the Galactic Memory Archive is.',
+        galacticMemoryArchiveCapabilities: 'Galactic Memory Archive Capabilities Researched\n\nYou now understand what the Galactic Memory Archive can do.',
+        galacticMemoryArchiveDisconnect: 'Galactic Memory Archive Disconnect Researched\n\nYou have disconnected the Galactic Memory Archive from the Miaplacidus System Force Field.',
+        galacticMemoryArchivePower: 'Galactic Memory Archive Power Researched\n\nYou can now harness the Galactic Memory Archive\'s power for use within the system.',
+        galacticMemoryArchiveConnect: 'Galactic Memory Archive Connect Researched\n\nYou can now connect the Galactic Memory Archive\'s power across the galaxy.'
     };
 
     optionDescriptions = {
@@ -953,7 +973,110 @@ export function initialiseDescriptions() {
             content1: "Unlock Stellar Scanners to identify life signatures around Star Systems.",
             content2: "Unlock Stellar Scanners to identify life signatures around Star Systems.<br><br><span class='green-ready-text'>Allow building of Stellar Scanner onboard the Star Ship!</span>",
             updateAt: ""
-        },       
+        }, 
+        techDysonSphereUnderstandingRow: {
+            content1: "Unlock Dyson Sphere Understanding to comprehend the nature of a Dyson Sphere.",
+            content2: "Unlock Dyson Sphere Understanding to learn what a Dyson Sphere is and how it can change the course of your technological development.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techDysonSphereCapabilitiesRow: {
+            content1: "Unlock Dyson Sphere Capabilities to understand its potential uses and abilities.",
+            content2: "Unlock Dyson Sphere Capabilities to gain insight into the incredible powers and capabilities of a Dyson Sphere.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techDysonSphereDisconnectRow: {
+            content1: "Unlock Dyson Sphere Disconnect to sever its connection from the Miaplacidus System Force Field.",
+            content2: "Unlock Dyson Sphere Disconnect to disconnect the Dyson Sphere from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techDysonSpherePowerRow: {
+            content1: "Unlock Dyson Sphere Power to harness its energy for your system.",
+            content2: "Unlock Dyson Sphere Power to learn how to tap into the vast energy reserves of the Dyson Sphere, powering your system and beyond.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techDysonSphereConnectRow: {
+            content1: "Unlock Dyson Sphere Connect to link its power across the galaxy.",
+            content2: "Unlock Dyson Sphere Connect to understand how to distribute the Dyson Sphere's energy across all systems, linking it to the galaxy at large.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+
+        techCelestialProcessingCoreUnderstandingRow: {
+            content1: "Unlock Celestial Processing Core Understanding to comprehend the nature of a Celestial Processing Core.",
+            content2: "Unlock Celestial Processing Core Understanding to learn what a Celestial Processing Core is and how it can revolutionize your technological infrastructure.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techCelestialProcessingCoreCapabilitiesRow: {
+            content1: "Unlock Celestial Processing Core Capabilities to understand its potential uses and abilities.",
+            content2: "Unlock Celestial Processing Core Capabilities to gain insight into the immense power and functions of the Celestial Processing Core.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techCelestialProcessingCoreDisconnectRow: {
+            content1: "Unlock Celestial Processing Core Disconnect to sever its connection from the Miaplacidus System Force Field.",
+            content2: "Unlock Celestial Processing Core Disconnect to disconnect the Celestial Processing Core from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techCelestialProcessingCorePowerRow: {
+            content1: "Unlock Celestial Processing Core Power to harness its energy for your system.",
+            content2: "Unlock Celestial Processing Core Power to learn how to tap into the vast power of the Celestial Processing Core, empowering your system.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techCelestialProcessingCoreConnectRow: {
+            content1: "Unlock Celestial Processing Core Connect to distribute its power galaxy-wide.",
+            content2: "Unlock Celestial Processing Core Connect to learn how to distribute the Celestial Processing Core's energy across the galaxy.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+
+        techPlasmaForgeUnderstandingRow: {
+            content1: "Unlock Plasma Forge Understanding to comprehend the Plasma Forge’s nature.",
+            content2: "Unlock Plasma Forge Understanding to learn what a Plasma Forge is and how it plays a critical role in your technological future.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techPlasmaForgeCapabilitiesRow: {
+            content1: "Unlock Plasma Forge Capabilities to understand its potential uses and abilities.",
+            content2: "Unlock Plasma Forge Capabilities to understand the vast array of functions and capabilities that the Plasma Forge offers.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techPlasmaForgeDisconnectRow: {
+            content1: "Unlock Plasma Forge Disconnect to sever its connection from the Miaplacidus System Force Field.",
+            content2: "Unlock Plasma Forge Disconnect to disconnect the Plasma Forge from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techPlasmaForgePowerRow: {
+            content1: "Unlock Plasma Forge Power to harness its energy for your system.",
+            content2: "Unlock Plasma Forge Power to learn how to utilize the immense energy of the Plasma Forge for powering your system.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techPlasmaForgeConnectRow: {
+            content1: "Unlock Plasma Forge Connect to connect its power across the galaxy.",
+            content2: "Unlock Plasma Forge Connect to learn how to extend the Plasma Forge’s energy across multiple systems, expanding your reach.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+
+        techGalacticMemoryArchiveUnderstandingRow: {
+            content1: "Unlock Galactic Memory Archive Understanding to comprehend the Galactic Memory Archive’s function.",
+            content2: "Unlock Galactic Memory Archive Understanding to understand what the Galactic Memory Archive is and how it holds vital cosmic data.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techGalacticMemoryArchiveCapabilitiesRow: {
+            content1: "Unlock Galactic Memory Archive Capabilities to understand its potential uses and abilities.",
+            content2: "Unlock Galactic Memory Archive Capabilities to discover the powerful functions and capabilities that the Galactic Memory Archive holds.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techGalacticMemoryArchiveDisconnectRow: {
+            content1: "Unlock Galactic Memory Archive Disconnect to sever its connection from the Miaplacidus System Force Field.",
+            content2: "Unlock Galactic Memory Archive Disconnect to disconnect the Galactic Memory Archive from the Miaplacidus System Force Field.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techGalacticMemoryArchivePowerRow: {
+            content1: "Unlock Galactic Memory Archive Power to harness its energy for your system.",
+            content2: "Unlock Galactic Memory Archive Power to tap into the cosmic energy stored in the Galactic Memory Archive for your system’s benefit.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },
+        techGalacticMemoryArchiveConnectRow: {
+            content1: "Unlock Galactic Memory Archive Connect to connect its power across the galaxy.",
+            content2: "Unlock Galactic Memory Archive Connect to connect the Galactic Memory Archive’s energy across all systems, extending your technological network.<br><br><span class='green-ready-text'>PlaceHolderTechName</span>",
+            updateAt: ""
+        },      
         techPhilosophySpaceStorageTankResearchRow: {
             content1: "ABILITY: Unlock Storage Research and base storage increases are not x2 but x5 every time.",
             content2: "",

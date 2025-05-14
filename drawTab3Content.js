@@ -1505,7 +1505,610 @@ export function drawTab3Content(heading, optionContentElement) {
                     null,
                     'tech'
                 )
-            }                                  
+            }, 
+            
+            //MEGASTRUCTURE TECHS
+
+            {
+                techName: 'dysonSphereUnderstanding',
+                row: createOptionRow(
+                    'techDysonSphereUnderstandingRow',
+                    null,
+                    'Dyson Sphere Understanding',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('dysonSphereUnderstanding', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('dysonSphereUnderstanding');
+                        showNotification(techNotificationMessages.dysonSphereUnderstanding, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'dysonSphereUnderstanding', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['dysonSphereUnderstanding', 'price'])} Research${getResourceDataObject('techs', ['dysonSphereUnderstanding', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="dysonSphereUnderstandingPrereq">${getResourceDataObject('techs', ['dysonSphereUnderstanding', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'dysonSphereUnderstanding',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'dysonSphereCapabilities',
+                row: createOptionRow(
+                    'techDysonSphereCapabilitiesRow',
+                    null,
+                    'Dyson Sphere Capabilities',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('dysonSphereCapabilities', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('dysonSphereCapabilities');
+                        showNotification(techNotificationMessages.dysonSphereCapabilities, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'dysonSphereCapabilities', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['dysonSphereCapabilities', 'price'])} Research${getResourceDataObject('techs', ['dysonSphereCapabilities', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="dysonSphereCapabilitiesPrereq">${getResourceDataObject('techs', ['dysonSphereCapabilities', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'dysonSphereCapabilities',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'dysonSphereDisconnect',
+                row: createOptionRow(
+                    'techDysonSphereDisconnectRow',
+                    null,
+                    'Dyson Sphere Disconnect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('dysonSphereDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('dysonSphereDisconnect');
+                        showNotification(techNotificationMessages.dysonSphereDisconnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'dysonSphereDisconnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['dysonSphereDisconnect', 'price'])} Research${getResourceDataObject('techs', ['dysonSphereDisconnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="dysonSphereDisconnectPrereq">${getResourceDataObject('techs', ['dysonSphereDisconnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'dysonSphereDisconnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'dysonSpherePower',
+                row: createOptionRow(
+                    'techDysonSpherePowerRow',
+                    null,
+                    'Dyson Sphere Power',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('dysonSpherePower', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('dysonSpherePower');
+                        showNotification(techNotificationMessages.dysonSpherePower, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'dysonSpherePower', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['dysonSpherePower', 'price'])} Research${getResourceDataObject('techs', ['dysonSpherePower', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="dysonSpherePowerPrereq">${getResourceDataObject('techs', ['dysonSpherePower', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'dysonSpherePower',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'dysonSphereConnect',
+                row: createOptionRow(
+                    'techDysonSphereConnectRow',
+                    null,
+                    'Dyson Sphere Connect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('dysonSphereConnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('dysonSphereConnect');
+                        showNotification(techNotificationMessages.dysonSphereConnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'dysonSphereConnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['dysonSphereConnect', 'price'])} Research${getResourceDataObject('techs', ['dysonSphereConnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="dysonSphereConnectPrereq">${getResourceDataObject('techs', ['dysonSphereConnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'dysonSphereConnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'celestialProcessingCoreUnderstanding',
+                row: createOptionRow(
+                    'techCelestialProcessingCoreUnderstandingRow',
+                    null,
+                    'Celestial Processing Core Understanding',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('celestialProcessingCoreUnderstanding', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('celestialProcessingCoreUnderstanding');
+                        showNotification(techNotificationMessages.celestialProcessingCoreUnderstanding, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'celestialProcessingCoreUnderstanding', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['celestialProcessingCoreUnderstanding', 'price'])} Research${getResourceDataObject('techs', ['celestialProcessingCoreUnderstanding', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="celestialProcessingCoreUnderstandingPrereq">${getResourceDataObject('techs', ['celestialProcessingCoreUnderstanding', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'celestialProcessingCoreUnderstanding',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'celestialProcessingCoreCapabilities',
+                row: createOptionRow(
+                    'techCelestialProcessingCoreCapabilitiesRow',
+                    null,
+                    'Celestial Processing Core Capabilities',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('celestialProcessingCoreCapabilities', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('celestialProcessingCoreCapabilities');
+                        showNotification(techNotificationMessages.celestialProcessingCoreCapabilities, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'celestialProcessingCoreCapabilities', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['celestialProcessingCoreCapabilities', 'price'])} Research${getResourceDataObject('techs', ['celestialProcessingCoreCapabilities', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="celestialProcessingCoreCapabilitiesPrereq">${getResourceDataObject('techs', ['celestialProcessingCoreCapabilities', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'celestialProcessingCoreCapabilities',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'celestialProcessingCoreDisconnect',
+                row: createOptionRow(
+                    'techCelestialProcessingCoreDisconnectRow',
+                    null,
+                    'Celestial Processing Core Disconnect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('celestialProcessingCoreDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('celestialProcessingCoreDisconnect');
+                        showNotification(techNotificationMessages.celestialProcessingCoreDisconnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'celestialProcessingCoreDisconnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['celestialProcessingCoreDisconnect', 'price'])} Research${getResourceDataObject('techs', ['celestialProcessingCoreDisconnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="celestialProcessingCoreDisconnectPrereq">${getResourceDataObject('techs', ['celestialProcessingCoreDisconnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'celestialProcessingCoreDisconnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'celestialProcessingCorePower',
+                row: createOptionRow(
+                    'techCelestialProcessingCorePowerRow',
+                    null,
+                    'Celestial Processing Core Power',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('celestialProcessingCorePower', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('celestialProcessingCorePower');
+                        showNotification(techNotificationMessages.celestialProcessingCorePower, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'celestialProcessingCorePower', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['celestialProcessingCorePower', 'price'])} Research${getResourceDataObject('techs', ['celestialProcessingCorePower', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="celestialProcessingCorePowerPrereq">${getResourceDataObject('techs', ['celestialProcessingCorePower', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'celestialProcessingCorePower',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'celestialProcessingCoreConnect',
+                row: createOptionRow(
+                    'techCelestialProcessingCoreConnectRow',
+                    null,
+                    'Celestial Processing Core Connect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('celestialProcessingCoreConnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('celestialProcessingCoreConnect');
+                        showNotification(techNotificationMessages.celestialProcessingCoreConnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'celestialProcessingCoreConnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['celestialProcessingCoreConnect', 'price'])} Research${getResourceDataObject('techs', ['celestialProcessingCoreConnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="celestialProcessingCoreConnectPrereq">${getResourceDataObject('techs', ['celestialProcessingCoreConnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'celestialProcessingCoreConnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'plasmaForgeUnderstanding',
+                row: createOptionRow(
+                    'techPlasmaForgeUnderstandingRow',
+                    null,
+                    'Plasma Forge Understanding',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('plasmaForgeUnderstanding', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('plasmaForgeUnderstanding');
+                        showNotification(techNotificationMessages.plasmaForgeUnderstanding, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'plasmaForgeUnderstanding', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['plasmaForgeUnderstanding', 'price'])} Research${getResourceDataObject('techs', ['plasmaForgeUnderstanding', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="plasmaForgeUnderstandingPrereq">${getResourceDataObject('techs', ['plasmaForgeUnderstanding', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'plasmaForgeUnderstanding',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'plasmaForgeCapabilities',
+                row: createOptionRow(
+                    'techPlasmaForgeCapabilitiesRow',
+                    null,
+                    'Plasma Forge Capabilities',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('plasmaForgeCapabilities', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('plasmaForgeCapabilities');
+                        showNotification(techNotificationMessages.plasmaForgeCapabilities, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'plasmaForgeCapabilities', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['plasmaForgeCapabilities', 'price'])} Research${getResourceDataObject('techs', ['plasmaForgeCapabilities', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="plasmaForgeCapabilitiesPrereq">${getResourceDataObject('techs', ['plasmaForgeCapabilities', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'plasmaForgeCapabilities',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'plasmaForgeDisconnect',
+                row: createOptionRow(
+                    'techPlasmaForgeDisconnectRow',
+                    null,
+                    'Plasma Forge Disconnect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('plasmaForgeDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('plasmaForgeDisconnect');
+                        showNotification(techNotificationMessages.plasmaForgeDisconnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'plasmaForgeDisconnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['plasmaForgeDisconnect', 'price'])} Research${getResourceDataObject('techs', ['plasmaForgeDisconnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="plasmaForgeDisconnectPrereq">${getResourceDataObject('techs', ['plasmaForgeDisconnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'plasmaForgeDisconnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'plasmaForgePower',
+                row: createOptionRow(
+                    'techPlasmaForgePowerRow',
+                    null,
+                    'Plasma Forge Power',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('plasmaForgePower', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('plasmaForgePower');
+                        showNotification(techNotificationMessages.plasmaForgePower, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'plasmaForgePower', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['plasmaForgePower', 'price'])} Research${getResourceDataObject('techs', ['plasmaForgePower', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="plasmaForgePowerPrereq">${getResourceDataObject('techs', ['plasmaForgePower', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'plasmaForgePower',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'plasmaForgeConnect',
+                row: createOptionRow(
+                    'techPlasmaForgeConnectRow',
+                    null,
+                    'Plasma Forge Connect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('plasmaForgeConnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('plasmaForgeConnect');
+                        showNotification(techNotificationMessages.plasmaForgeConnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'plasmaForgeConnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['plasmaForgeConnect', 'price'])} Research${getResourceDataObject('techs', ['plasmaForgeConnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="plasmaForgeConnectPrereq">${getResourceDataObject('techs', ['plasmaForgeConnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'plasmaForgeConnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'galacticMemoryArchiveUnderstanding',
+                row: createOptionRow(
+                    'techGalacticMemoryArchiveUnderstandingRow',
+                    null,
+                    'Galactic Memory Archive Understanding',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('galacticMemoryArchiveUnderstanding', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('galacticMemoryArchiveUnderstanding');
+                        showNotification(techNotificationMessages.galacticMemoryArchiveUnderstanding, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'galacticMemoryArchiveUnderstanding', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['galacticMemoryArchiveUnderstanding', 'price'])} Research${getResourceDataObject('techs', ['galacticMemoryArchiveUnderstanding', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="galacticMemoryArchiveUnderstandingPrereq">${getResourceDataObject('techs', ['galacticMemoryArchiveUnderstanding', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'galacticMemoryArchiveUnderstanding',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'galacticMemoryArchiveCapabilities',
+                row: createOptionRow(
+                    'techGalacticMemoryArchiveCapabilitiesRow',
+                    null,
+                    'Galactic Memory Archive Capabilities',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('galacticMemoryArchiveCapabilities', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('galacticMemoryArchiveCapabilities');
+                        showNotification(techNotificationMessages.galacticMemoryArchiveCapabilities, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'galacticMemoryArchiveCapabilities', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['galacticMemoryArchiveCapabilities', 'price'])} Research${getResourceDataObject('techs', ['galacticMemoryArchiveCapabilities', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="galacticMemoryArchiveCapabilitiesPrereq">${getResourceDataObject('techs', ['galacticMemoryArchiveCapabilities', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'galacticMemoryArchiveCapabilities',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'galacticMemoryArchiveDisconnect',
+                row: createOptionRow(
+                    'techGalacticMemoryArchiveDisconnectRow',
+                    null,
+                    'Galactic Memory Archive Disconnect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('galacticMemoryArchiveDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('galacticMemoryArchiveDisconnect');
+                        showNotification(techNotificationMessages.galacticMemoryArchiveDisconnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'galacticMemoryArchiveDisconnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['galacticMemoryArchiveDisconnect', 'price'])} Research${getResourceDataObject('techs', ['galacticMemoryArchiveDisconnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="galacticMemoryArchiveDisconnectPrereq">${getResourceDataObject('techs', ['galacticMemoryArchiveDisconnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'galacticMemoryArchiveDisconnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'galacticMemoryArchivePower',
+                row: createOptionRow(
+                    'techGalacticMemoryArchivePowerRow',
+                    null,
+                    'Galactic Memory Archive Power',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('galacticMemoryArchivePower', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('galacticMemoryArchivePower');
+                        showNotification(techNotificationMessages.galacticMemoryArchivePower, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'galacticMemoryArchivePower', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['galacticMemoryArchivePower', 'price'])} Research${getResourceDataObject('techs', ['galacticMemoryArchivePower', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="galacticMemoryArchivePowerPrereq">${getResourceDataObject('techs', ['galacticMemoryArchivePower', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'galacticMemoryArchivePower',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            },
+            {
+                techName: 'galacticMemoryArchiveConnect',
+                row: createOptionRow(
+                    'techGalacticMemoryArchiveConnectRow',
+                    null,
+                    'Galactic Memory Archive Connect',
+                    createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
+                        gain('galacticMemoryArchiveConnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
+                        event.currentTarget.classList.add('unlocked-tech');
+                        setTechUnlockedArray('galacticMemoryArchiveConnect');
+                        showNotification(techNotificationMessages.galacticMemoryArchiveConnect, 'info', 3000, 'tech');
+                        setRenderedTechTree(false);
+                    }, 'techUnlock', '', 'galacticMemoryArchiveConnect', null, 'research', true, null, 'tech'),
+                    null,
+                    null,
+                    null,
+                    null,
+                    `${getResourceDataObject('techs', ['galacticMemoryArchiveConnect', 'price'])} Research${getResourceDataObject('techs', ['galacticMemoryArchiveConnect', 'prereqs']).filter(prereq => prereq !== null).length > 0 ? ', ' : ''}<span id="galacticMemoryArchiveConnectPrereq">${getResourceDataObject('techs', ['galacticMemoryArchiveConnect', 'prereqs']).filter(prereq => prereq !== null).join(', ') || ''}</span>`,
+                    '',
+                    'techUnlock',
+                    'galacticMemoryArchiveConnect',
+                    null,
+                    'research',
+                    null,
+                    ['research', 'researchPoints'],
+                    null,
+                    null,
+                    'tech'
+                )
+            }
         ];
 
         rows.forEach(item => {
