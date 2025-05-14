@@ -1,7 +1,7 @@
 import { replaceRocketNames } from "./descriptions.js";
 import { migrateResourceData } from "./saveLoadGame.js";
 import { addPermanentBuffsBackInAfterRebirth, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, calculateAndAddExtraAPFromPhilosophyRepeatable, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables } from './game.js';
-import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText, getStatRun, getPlayerPhilosophy, getAllRepeatableTechMultipliersObject } from "./constantsAndGlobalVars.js";
+import { getMultiplierPermanentCompounds, getMultiplierPermanentResources, getCurrentTheme, setCompoundCreateDropdownRecipeText, getCompoundCreateDropdownRecipeText, getStatRun, getPlayerPhilosophy, getAllRepeatableTechMultipliersObject, getFactoryStarsArray } from "./constantsAndGlobalVars.js";
 import { achievementAchieve100FusionEfficiency, achievementActivateAllWackyNewsTickers, achievementBeatEnemy, achievementCollect100Precipitation, achievementCollect100TitaniumAsPrecipitation, achievementConquerStarSystems, achievementCreateCompound, achievementDiscoverAsteroid, achievementDiscoverLegendaryAsteroid, achievementHave4RocketsMiningAntimatter, achievementHave50HoursWithOnePioneer, achievementInitiateDiplomacyWithAlienRace, achievementLaunchRocket, achievementLaunchStarShip, achievementLiquidateAllAssets, achievementMineAllAntimatterAsteroid, achievementPerformGalaticMarketTransaction, achievementRebirth, achievementResearchAllTechnologies, achievementSeeAllNewsTickers, achievementSpendAp, achievementStudyAllStarsInOneRun, achievementStudyAStar, achievementTrade10APForCash, achievementTripPower } from "./achievements.js";
 import { showNotification } from "./ui.js";
 
@@ -2800,7 +2800,8 @@ export function setupNewRunStarSystem() {
         starCode: destinationStar.starCode,
         precipitationResourceCategory: destinationStar.precipitationResourceCategory,
         precipitationType: destinationStar.precipitationType,
-        weather: destinationStar.weather
+        weather: destinationStar.weather,
+        factoryStar: destinationStar.factoryStar
     };
 
     setRebirthStarSystemToStarSystemDataObject(starObject);

@@ -1,4 +1,6 @@
 import {
+    setCurrentRunIsMegaStructureRun,
+    getCurrentRunIsMegaStructureRun,
     getMegaStructuresInPossessionArray,
     setMegaStructuresInPossessionArray,
     getFactoryStarsArray,
@@ -9965,6 +9967,7 @@ export function rebirth() {
     resetResourceDataObjectOnRebirthAndAddApAndPermanentBuffsBack(); //resets resource data, adds permanent buffs, and adds AP back in
     resetTabsOnRebirth();
     resetUIElementsOnRebirth();
+    setCurrentRunIsMegaStructureRun(getFactoryStarsArray().includes(getCurrentStarSystem()));
     changeWeather(1000);
     setRunStartTime();
 

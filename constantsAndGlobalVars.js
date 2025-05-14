@@ -426,6 +426,7 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let currentRunIsMegaStructureRun = false;
 let rebirthPossible = false;
 let sfx = false;
 let backgroundAudio = false;
@@ -947,6 +948,7 @@ export function resetAllVariablesOnRebirth() {
         rocket4: true
     }
     
+    currentRunIsMegaStructureRun = false;
     techRenderChange = false;
     losingEnergy = false;
     powerOnOff = false;
@@ -1161,7 +1163,8 @@ export function captureGameStatusForSaving(type) {
         liquidatedThisRun: liquidatedThisRun,
         belligerentEnemyFlag: belligerentEnemyFlag,
         feedbackCanBeRequested: feedbackCanBeRequested,
-        philosophyAbilityActive: philosophyAbilityActive
+        philosophyAbilityActive: philosophyAbilityActive,
+        currentRunIsMegaStructureRun: currentRunIsMegaStructureRun
     }
 
     return gameState;
@@ -1366,6 +1369,7 @@ export function restoreGameStatus(gameState, type) {
             belligerentEnemyFlag = gameState.flags.belligerentEnemyFlag ?? false;
             feedbackCanBeRequested = gameState.flags.feedbackCanBeRequested ?? true;
             philosophyAbilityActive = gameState.flags.philosophyAbilityActive ?? false;
+            currentRunIsMegaStructureRun = gameState.flags.currentRunIsMegaStructureRun ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -3361,6 +3365,14 @@ export function getFactoryStarsArray() {
 
 export function setFactoryStarsArray(value) {
     factoryStarsArray.push(value);
+}
+
+export function getCurrentRunIsMegaStructureRun() {
+    return currentRunIsMegaStructureRun;
+}
+
+export function setCurrentRunIsMegaStructureRun(value) {
+    currentRunIsMegaStructureRun = value;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------
