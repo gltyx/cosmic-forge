@@ -9746,7 +9746,13 @@ export function turnAround(unit) {
 export async function settleSystemAfterBattle(accessPoint) {
     setAchievementFlagArray('settleSystem', 'add');
     setRebirthPossible(true);
-    const apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
+    const isFactoryStar = getFactoryStarsArray().includes(getDestinationStar());
+    let apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
+    
+    if (isFactoryStar) {
+        apModifier *= 2;
+    }
+
     const apGain = Math.floor(getStarSystemDataObject('stars', ['destinationStar', 'ascendencyPoints']) * apModifier);
     
     if (!getApAwardedThisRun()) {   
@@ -9785,7 +9791,12 @@ export async function settleSystemAfterBattle(accessPoint) {
             if (getPlayerPhilosophy() === 'expansionist' && getPhilosophyAbilityActive()) {
                 setAdditionalSystemsToSettleThisRun(decideIfMoreSystemsAreAutomaticallySettled());
             }
-            await showBattlePopup(true, apGain);
+            
+            if (isFactoryStar) {
+                await showBattlePopup('megastructure', apGain);
+            } else {
+                await showBattlePopup(true, apGain);
+            }
             break;
     }
 

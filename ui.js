@@ -2058,7 +2058,11 @@ export async function showBattlePopup(won, apGain = 0) {
         let content = won ? modalBattleWonText.replace(' X ', ` ${apGain} `) : modalBattleLostText;
 
         if (won) {
-            content += `<br>- You have conquered the <span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!`;
+            if (won !== 'megastructure') {
+                content += `<br>- You have conquered the -<span class="green-ready-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!`;
+            } else {
+                content += `<br>- You have defeated the Mechanized army and conquered the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!<br>You will be able to conduct investigative research on how to harness its power on your next run!<br><br><span class="green-ready-text">Prepare for Glory!</span>`;
+            }
 
             const extraSystems = getAdditionalSystemsToSettleThisRun();
             if (Array.isArray(extraSystems) && extraSystems.length > 0) {
