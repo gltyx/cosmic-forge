@@ -1728,6 +1728,13 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             }
         });
         
+        if (
+            getFactoryStarsArray().includes(star.name.toLowerCase()) &&
+            getStarsWithAncientManuscripts().some(entry => entry[1] === star.name.toLowerCase() && entry[3] === false)
+        ) {
+            return;
+        }        
+        
         starfieldContainer.appendChild(starElement);
     });
 }
@@ -4742,6 +4749,16 @@ export function sortStarTable(starsObject, sortMethod) {
             default:
                 return 0;
         }
+    });
+
+    const factoryStars = getFactoryStarsArray();
+    const manuscripts = getStarsWithAncientManuscripts();
+
+    sortedEntries = sortedEntries.filter(([name, star]) => {
+        return !(
+            factoryStars.includes(name) &&
+            manuscripts.some(entry => entry[1] === name && entry[3] === false)
+        );
     });
 
     return Object.fromEntries(sortedEntries);

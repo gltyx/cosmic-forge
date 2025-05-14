@@ -1,5 +1,5 @@
 import { removeTabAttentionIfNoIndicators, createColoniseOpinionProgressBar, setColoniseOpinionProgressBar, spaceTravelButtonHideAndShowDescription, drawStarConnectionDrawings, createStarDestinationRow, sortStarTable, handleSortStarClick, createTextElement, createOptionRow, createButton, generateStarfield, showNotification, showEnterWarModeModal, setWarUI } from './ui.js';
-import { getFactoryStarsArray, setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, getStarShipTravelling, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray } from './constantsAndGlobalVars.js';
+import { getFactoryStarsArray, setInFormation, setRedrawBattleDescription, setFleetChangedSinceLastDiplomacy, setDestinationStarScanned, getDestinationStarScanned, getStellarScannerBuilt, getStarShipTravelling, getDestinationStar, getCurrencySymbol, getSortStarMethod, getCurrentStarSystem, STAR_FIELD_SEED, NUMBER_OF_STARS, getStarMapMode, setStarMapMode, getWarMode, replaceBattleUnits, setNeedNewBattleCanvas, setFormationGoal, setBattleResolved, getBelligerentEnemyFlag, setAchievementFlagArray, getStarsWithAncientManuscripts } from './constantsAndGlobalVars.js';
 import { getMaxFleetShip, getFleetShips, copyStarDataToDestinationStarField, getResourceDataObject, getStarShipParts, getStarShipPartsNeededInTotalPerModule, getStarSystemDataObject, setStarSystemDataObject } from './resourceDataObject.js';
 import { capitaliseString, capitaliseWordsWithRomanNumerals } from './utilityFunctions.js';
 import { updateDiplomacySituation, calculateModifiedAttitude, increaseAttackAndDefensePower, generateDestinationStarData, gain } from './game.js';
@@ -119,6 +119,13 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
         let sortedStars = sortStarTable(starsObject, getSortStarMethod());
 
         Object.entries(sortedStars).forEach(([nameStar, star]) => {
+            const factoryStarStatus = getStarSystemDataObject('stars', [nameStar, 'factoryStar']);
+
+            const isFactoryStar = getFactoryStarsArray().includes(nameStar) && 
+            (!Number.isInteger(Number(factoryStarStatus)) || isNaN(Number(factoryStarStatus))) 
+            ? factoryStarStatus
+            : false;
+
             const { distance, fuel, ascendencyPoints, name, weatherTendency, precipitationType } = star;
             const starRowName = `starRow_${name}`;
             const weatherIconSpan = `<span class="${weatherTendency[2]}">${weatherTendency[0]}</span>`;
@@ -126,12 +133,6 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
 
             const currentAntimatter = getResourceDataObject('antimatter', ['quantity']);
             const hasEnoughFuel = currentAntimatter >= fuel;
-            const factoryStarStatus = getStarSystemDataObject('stars', [nameStar, 'factoryStar']);
-
-            const isFactoryStar = getFactoryStarsArray().includes(nameStar) && 
-              (!Number.isInteger(Number(factoryStarStatus)) || isNaN(Number(factoryStarStatus))) 
-              ? factoryStarStatus
-              : false;
             
             const fuelClass = hasEnoughFuel ? 'green-ready-text' : 'red-disabled-text';
 

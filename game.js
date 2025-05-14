@@ -9816,7 +9816,7 @@ export async function settleSystemAfterBattle(accessPoint) {
         }
 
         const header = 'ANCIENT MANUSCRIPT!';
-        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the <span class="factory-star-text-star-data-screen">${capitaliseWordsWithRomanNumerals(factoryStarToReport)}</span> System!`;
+        const content = `Exploring a habitable Planet in the ${capitaliseWordsWithRomanNumerals(getDestinationStar())} System after your victory, you discover<br>an Ancient Manuscript!  It seems to point out about strange activities<br>in the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(factoryStarToReport)}</span> System!`;
 
         callPopupModal(
             header, 
