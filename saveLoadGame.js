@@ -371,28 +371,53 @@ export function generateRandomPioneerName() {
     setSaveName(pioneerName);
 }
 
-export function migrateResourceData(saveData, objectType) { //WILL EVOLVE OVER TIME
+export function migrateResourceData(saveData, objectType) {
     const currentVersion = getCurrentGameVersion();
     saveData.version = saveData.version ? saveData.version : getMinimumVersion();
 
     while (saveData.version < currentVersion) {
 
-        // if (saveData.version < 0.64) { //EXAMPLE
-        //     if (objectType === 'resourceData') {
-        //         saveData.compounds.diesel.autoCreate = false;
-        //     } else if (objectType === 'starSystemsData') {
+        // Migration for version 0.74 or lower
+        if (saveData.version < 0.74) {
+            if (objectType === 'resourceData') {
+                // Add the new techs to the saveData.techs object for versions <= 0.74
+                const newTechs = {
+                    dysonSphereUnderstanding: { appearsAt: [40000, "advancedPowerGeneration", ""], prereqs: ['Advanced Power Generation'], price: 50000, idForRenderPosition: 10001, special: 'megastructure' },
+                    dysonSphereCapabilities: { appearsAt: [80000, "dysonSphereUnderstanding", ""], prereqs: ['Dyson Sphere Understanding'], price: 100000, idForRenderPosition: 10002, special: 'megastructure' },
+                    dysonSphereDisconnect: { appearsAt: [120000, "dysonSphereCapabilities", ""], prereqs: ['Dyson Sphere Capabilities'], price: 150000, idForRenderPosition: 10003, special: 'megastructure' },
+                    dysonSpherePower: { appearsAt: [160000, "dysonSphereDisconnect", ""], prereqs: ['Dyson Sphere Disconnect'], price: 200000, idForRenderPosition: 10004, special: 'megastructure' },
+                    dysonSphereConnect: { appearsAt: [200000, "dysonSpherePower", ""], prereqs: ['Dyson Sphere Power'], price: 250000, idForRenderPosition: 10005, special: 'megastructure' },
 
-        //     } else if (objectType === 'rocketNames') {
-            
-        //     } else if (objectType === 'galacticMarketData') {
+                    celestialProcessingCoreUnderstanding: { appearsAt: [40000, "quantumComputing", ""], prereqs: ['Quantum Computing'], price: 50000, idForRenderPosition: 10101 },
+                    celestialProcessingCoreCapabilities: { appearsAt: [80000, "celestialProcessingCoreUnderstanding", ""], prereqs: ['Celestial Processing Core Understanding'], price: 100000, idForRenderPosition: 10102, special: 'megastructure' },
+                    celestialProcessingCoreDisconnect: { appearsAt: [120000, "celestialProcessingCoreCapabilities", ""], prereqs: ['Celestial Processing Core Capabilities'], price: 150000, idForRenderPosition: 10103, special: 'megastructure' },
+                    celestialProcessingCorePower: { appearsAt: [160000, "celestialProcessingCoreDisconnect", ""], prereqs: ['Celestial Processing Core Disconnect'], price: 200000, idForRenderPosition: 10104, special: 'megastructure' },
+                    celestialProcessingCoreConnect: { appearsAt: [200000, "celestialProcessingCorePower", ""], prereqs: ['Celestial Processing Core Power'], price: 250000, idForRenderPosition: 10105, special: 'megastructure' },
 
-        //     } else if (objectType === 'ascendencyBuffsData') {
-        //     }
-        //     saveData.version = 0.64;
-        // }
-    
+                    plasmaForgeUnderstanding: { appearsAt: [40000, "neutronCapture", ""], prereqs: ['Neutron Capture'], price: 50000, idForRenderPosition: 10201, special: 'megastructure' },
+                    plasmaForgeCapabilities: { appearsAt: [80000, "plasmaForgeUnderstanding", ""], prereqs: ['Plasma Forge Understanding'], price: 100000, idForRenderPosition: 10202, special: 'megastructure' },
+                    plasmaForgeDisconnect: { appearsAt: [120000, "plasmaForgeCapabilities", ""], prereqs: ['Plasma Forge Capabilities'], price: 150000, idForRenderPosition: 10203, special: 'megastructure' },
+                    plasmaForgePower: { appearsAt: [160000, "plasmaForgeDisconnect", ""], prereqs: ['Plasma Forge Disconnect'], price: 200000, idForRenderPosition: 10204, special: 'megastructure' },
+                    plasmaForgeConnect: { appearsAt: [200000, "plasmaForgePower", ""], prereqs: ['Plasma Forge Power'], price: 250000, idForRenderPosition: 10205, special: 'megastructure' },
+
+                    galacticMemoryArchiveUnderstanding: { appearsAt: [50000, "orbitalConstruction", ""], prereqs: ['Orbital Construction'], price: 50000, idForRenderPosition: 10301, special: 'megastructure' },
+                    galacticMemoryArchiveCapabilities: { appearsAt: [100000, "galacticMemoryArchiveUnderstanding", ""], prereqs: ['Galactic Memory Archive Understanding'], price: 100000, idForRenderPosition: 10302, special: 'megastructure' },
+                    galacticMemoryArchiveDisconnect: { appearsAt: [150000, "galacticMemoryArchiveCapabilities", ""], prereqs: ['Galactic Memory Archive Capabilities'], price: 150000, idForRenderPosition: 10303, special: 'megastructure' },
+                    galacticMemoryArchivePower: { appearsAt: [200000, "galacticMemoryArchiveDisconnect", ""], prereqs: ['Galactic Memory Archive Disconnect'], price: 200000, idForRenderPosition: 10304, special: 'megastructure' },
+                    galacticMemoryArchiveConnect: { appearsAt: [250000, "galacticMemoryArchivePower", ""], prereqs: ['Galactic Memory Archive Power'], price: 250000, idForRenderPosition: 10305, special: 'megastructure' }
+                };
+
+                // Add the new techs to the saveData.techs object
+                saveData.techs = {
+                    ...saveData.techs,
+                    ...newTechs
+                };
+            }
+            saveData.version = 0.74;
+        }
+
         saveData.version += 0.001;
-    }   
+    }
 
     return saveData;
 }

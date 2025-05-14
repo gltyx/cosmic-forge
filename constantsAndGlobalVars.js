@@ -18,7 +18,7 @@ let saveData = null;
 
 //CONSTANTS
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.70;
-export const GAME_VERSION_FOR_SAVES = 0.70;
+export const GAME_VERSION_FOR_SAVES = 0.75;
 export const deferredActions = [];
 
 //NOTIFICATIONS
