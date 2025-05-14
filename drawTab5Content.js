@@ -138,7 +138,7 @@ export async function drawTab5Content(heading, optionContentElement, starDestina
             const starNameClass = !hasEnoughFuel 
                 ? 'red-disabled-text' 
                 : isFactoryStar 
-                    ? 'factory-star-text-star-data-screen' 
+                    ? 'factory-star-text' 
                     : 'green-ready-text';
             
             const starNameLabel = [

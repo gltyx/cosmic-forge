@@ -1658,7 +1658,8 @@ button.red-disabled-text {
 }
 
 .factory-star {
-    background-color: orange;
+    background-color: yellow;
+    border: 1px solid black;
 }
 
 @keyframes twinkle {
@@ -1702,7 +1703,7 @@ button.red-disabled-text {
 }
 
 .factory-star::after {
-    color: orange;
+    color: yellow;
 }
 
 
@@ -2218,6 +2219,6 @@ body.debug-window-open {
     }
 }
 
-.factory-star-text-star-data-screen {
+.factory-star-text {
     color: yellow;
 }

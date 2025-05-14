@@ -6595,6 +6595,31 @@ export function startTravelToDestinationStarTimer(adjustment) {
                         );
                     }
                 }
+
+                if (getFactoryStarsArray().includes(getDestinationStar())) {
+                    const header = 'MEGASTRUCTURE';
+                    const content = `Your Starship arrived at the <span class="factory-star-text">${capitaliseWordsWithRomanNumerals(getDestinationStar())}</span> System!<br>You gasp at what you see! The main star has been completely enveloped by a gigantic structure!<br>It looks to be some kind of <span class="factory-star-text">${getStarSystemDataObject('stars', [getDestinationStar(), 'factoryStar'])}</span><br>This system is going to be heavily defended for sure, but if we can conquer it,<br>for sure it will open up vast opportunities for us...`;
+                    callPopupModal(
+                        header, 
+                        content, 
+                        true, 
+                        false, 
+                        false, 
+                        false, 
+                        function() {
+                            showHideModal();
+                            showNotification('Galactic Tab Unlocked!', 'warning', 3000, 'special');
+                        },
+                        null, 
+                        null, 
+                        null,
+                        'CONFIRM',
+                        null,
+                        null,
+                        null,
+                        false
+                    );
+                }
             } else {
                 setTimeLeftUntilTravelToDestinationStarTimerFinishes(timeLeft);
                 const elapsedTime = getStarTravelDuration() - getTimeLeftUntilTravelToDestinationStarTimerFinishes();
