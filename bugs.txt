@@ -3,6 +3,7 @@ rare cases where 0 0 0 for enemy in battle but can still click conquest, in this
 Pioneer-testermanuscript3
 
 REALLY TO DO TO END OF GAME
+    - MAKE the third tech of each megastructure a condition for rebirth of that system
     - IMPLEMENT MEGASTRUCTURE BONUSES
     - ADD REST OF STATISTICS
     - ADD ACHIEVEMENTS TO INCLUDE PHILOSOPHIES AND MEGASTRUCTURE STORY ARC
@@ -15,13 +16,8 @@ YOU ARE A....
 
 
 
-bonuses:
+bonuses to do:
 [
-  "All Batteries Double in Capacity!",
-  "All Energy producing Buildings 25% more powerful!",
-  "Miaplacidus Milestone Achieved!",
-  "Power Always On for this System!",
-  "Power Always On!",
   "Gain 50 Research per Second!",
   "Gain 100 Research per Second!",
   "Miaplacidus Milestone Achieved!",
