@@ -1,4 +1,8 @@
 import {
+    getInfinitePower,
+    setInfinitePower,
+    getMegaStructureTechsResearched,
+    setMegaStructureTechsResearched,
     getMiaplacidusMilestoneLevel,
     setMiaplacidusMilestoneLevel,
     setCurrentRunIsMegaStructureRun,
@@ -275,7 +279,8 @@ import {
     setRocketTravelSpeed,
     setStarShipTravelSpeed,
     getSettledStars,
-    getBasePillageVoidTimerDuration
+    getBasePillageVoidTimerDuration,
+    getInfinitePowerRate
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -3210,7 +3215,7 @@ function energyChecks(element) {
 function powerOnOrOffChecks(element) {
     if (!getResourceDataObject('buildings', ['energy', 'batteryBoughtYet'])) {
         // No battery purchased yet
-        if (getResourceDataObject('buildings', ['energy', 'rate']) > 0) {
+        if (getInfinitePower() || getResourceDataObject('buildings', ['energy', 'rate']) > 0) {
             element.textContent = '• ON';
             element.classList.remove('red-disabled-text');
             element.classList.add('green-ready-text');
@@ -3228,7 +3233,7 @@ function powerOnOrOffChecks(element) {
         }
     } else {
         // Battery is purchased
-        if (getResourceDataObject('buildings', ['energy', 'quantity']) > 0.00001) {
+        if (getInfinitePower() || getResourceDataObject('buildings', ['energy', 'quantity']) > 0.00001) {
             element.textContent = '• ON';
             element.classList.remove('red-disabled-text');
             element.classList.add('green-ready-text');
@@ -5927,7 +5932,7 @@ function startInitialTimers() {
                     newEnergyRate += getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'purchasedRate'])
                 }
 
-                let totalRate = newEnergyRate - getTotalEnergyUse();
+                let totalRate = getInfinitePower() ? getInfinitePowerRate() : newEnergyRate - getTotalEnergyUse();
 
                 if (batteryBought) {
                     if (Math.floor(currentEnergyQuantity) === energyStorageCapacity) {
@@ -5942,13 +5947,16 @@ function startInitialTimers() {
                             getElements().energyQuantity.classList.remove('green-ready-text');
                         }
                     } else { //energy climbing
-                        setResourceDataObject(currentEnergyQuantity + totalRate, 'buildings', ['energy', 'quantity']);
+                        setResourceDataObject(Math.min(currentEnergyQuantity + totalRate, getResourceDataObject('buildings', ['energy', 'storageCapacity'])), 'buildings', ['energy', 'quantity']);
                         getElements().energyQuantity.classList.remove('red-disabled-text');
                         getElements().energyQuantity.classList.remove('green-ready-text');
                     }
                 }
-
-                getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} KW / s`;
+                if (getInfinitePower()) {
+                    getElements().energyRate.textContent = `∞ DYSON ∞`;     
+                } else {
+                    getElements().energyRate.textContent = `${Math.floor(totalRate * getTimerRateRatio())} KW / s`;
+                }
             } else {
                 getElements().energyQuantity.classList.remove('red-disabled-text');
                 getElements().energyQuantity.classList.remove('green-ready-text');
@@ -5965,7 +5973,12 @@ function startInitialTimers() {
             setResourceDataObject(0, 'buildings', ['energy', 'quantity']);
         }
 
-        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
+        if (getInfinitePower()) {
+            setResourceDataObject(getInfinitePowerRate(), 'buildings', ['energy', 'rate']); 
+        } else {
+            setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']); 
+        }
+        
         const powerOnNow = getPowerOnOff();
         let powerOnAfterSwitch;
 
@@ -5973,11 +5986,19 @@ function startInitialTimers() {
 
         if (!batteryBought) {
             const totalRate = newEnergyRate - getTotalEnergyUse();
-            setPowerOnOff(totalRate > 0);
-            powerOnAfterSwitch = getPowerOnOff();
+            if (!getInfinitePower()) {
+                setPowerOnOff(totalRate > 0);
+                powerOnAfterSwitch = getPowerOnOff();
+            } else {
+                powerOnAfterSwitch = true;
+            }
         } else {
-            setPowerOnOff(currentEnergyQuantity > 0.00001);
-            powerOnAfterSwitch = getPowerOnOff();
+            if (!getInfinitePower()) {
+                setPowerOnOff(currentEnergyQuantity > 0.00001);
+                powerOnAfterSwitch = getPowerOnOff();
+            } else {
+                powerOnAfterSwitch = true;
+            }
         }
 
         if (powerOnAfterSwitch !== initialPowerState) {
@@ -6945,7 +6966,11 @@ function startUpdateEnergyTimers(elementName, action) {
             getElements()[elementName + 'Rate'].textContent = `${Math.floor(powerBuildingPotentialPower * getTimerRateRatio())} KW / s`;
         }
 
-        setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
+        if (getInfinitePower()) {
+            setResourceDataObject(getInfinitePowerRate(), 'buildings', ['energy', 'rate']);
+        } else {
+            setResourceDataObject(newEnergyRate, 'buildings', ['energy', 'rate']);
+        }
     }
 }
 
@@ -7341,6 +7366,14 @@ export function setEnergyCapacity(battery) {
 }
 
 function updateEnergyStat(element) {
+    const themeElement = document.querySelector('[data-theme]');
+    const themeStyles = getComputedStyle(themeElement);
+
+    if (getInfinitePower()) {
+        element.style.color = themeStyles.getPropertyValue('--ready-text');
+        element.textContent = `∞ DYSON ∞`;
+        return;
+    }
     const totalRate = (getResourceDataObject('buildings', ['energy', 'rate']) * getTimerRateRatio()) - (getTotalEnergyUse() * getTimerRateRatio());
     if (getPowerOnOff()) {
         element.textContent = `${Math.floor(totalRate)} KW / s`;
@@ -8077,7 +8110,9 @@ export function toggleAllPower() {
         toggleBuildingTypeOnOff('powerPlant3', false);
         startUpdateTimersAndRates('powerPlant3', 'toggle');
 
-        setPowerOnOff(false);
+        if (!getInfinitePower()) {
+            setPowerOnOff(false);
+        }
         sfxPlayer.playAudio('powerOff', 'powerOn');
     }
 }
@@ -8094,8 +8129,14 @@ function handlePowerAllButtonState() {
         powerAllButton.classList.remove('red-disabled-text');
         powerAllButton.classList.remove('activate-grid-disabled-border');
         if (getPowerOnOff()) {
-            powerAllButton.textContent = 'Power Off';
-            powerAllButton.classList.add('power-on-fill-state');
+            if (getInfinitePower()) {
+                powerAllButton.textContent = 'Dyson Sphere';
+                powerAllButton.classList.add('power-on-fill-state');
+            } else {
+                powerAllButton.textContent = 'Power Off';
+                powerAllButton.classList.add('power-on-fill-state');
+            }
+
         } else {
             powerAllButton.textContent = 'Power On';
             powerAllButton.classList.remove('power-on-fill-state');
@@ -10091,12 +10132,11 @@ export function setAutoCreateToggleState(item) {
 }
 
 export function applyMegaStructureBonuses(megastructure, tech) {
-    if (tech === 3) return;
-
     switch (megastructure) {
         case 1:
             switch (tech) {
                 case 1:
+                    setMegaStructureTechsResearched([1,1]);
                     const batteries = ['battery1', 'battery2', 'battery3'];
 
                     batteries.forEach(battery => {
@@ -10107,6 +10147,7 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                     setResourceDataObject(Math.floor(getResourceDataObject('buildings', ['energy', 'storageCapacity']) * 2), 'buildings', ['energy', 'storageCapacity']);
                     return;
                 case 2:
+                    setMegaStructureTechsResearched([1,2]);
                     const multiplier = 1.25;
                     const powerPlants = ['powerPlant1', 'powerPlant2', 'powerPlant3'];
 
@@ -10119,73 +10160,96 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                         const newRateOfBuilding = powerPlantObject.rate * multiplier;
                         setResourceDataObject(newRateOfBuilding, 'buildings', ['energy', 'upgrades', powerPlantName, 'rate']);
                     });
-
                     return;
                 case 3:
-                    // Bonus for Dyson Sphere tech 3
-                    return "Miaplacidus Milestone Achieved!";
+                    setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
+                    setMegaStructureTechsResearched([1,3]);
+                    return;
                 case 4:
-                    // Bonus for Dyson Sphere tech 4
-                    return "Power Always On for this System!";
+                    setInfinitePower(true);
+                    setMegaStructureTechsResearched([1,4]);
+                    setPowerOnOff(true);
+                    return;
                 case 5:
-                    // Bonus for Dyson Sphere tech 5
-                    return "Power Always On!";
+                    setInfinitePower(true);
+                    setMegaStructureTechsResearched([1,5]);
+                    setPowerOnOff(true);
+                    return;
             }
+            break;
         case 2:
             switch (tech) {
                 case 1:
+                    setMegaStructureTechsResearched([2,1]);
                     // Bonus for Celestial Processing Core tech 1
                     return "Gain 50 Research per Second!";
                 case 2:
+                    setMegaStructureTechsResearched([2,2]);
                     // Bonus for Celestial Processing Core tech 2
                     return "Gain 100 Research per Second!";
                 case 3:
-                    // Bonus for Celestial Processing Core tech 3
-                    return "Miaplacidus Milestone Achieved!";
+                    setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
+                    setMegaStructureTechsResearched([2,3]);
+                    return;
                 case 4:
+                    setMegaStructureTechsResearched([2,4]);
                     // Bonus for Celestial Processing Core tech 4
                     return "Gain 150 Research per Second!";
                 case 5:
+                    setMegaStructureTechsResearched([2,5]);
                     // Bonus for Celestial Processing Core tech 5
                     return "Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!";
             }
+            break;
         case 3:
             switch (tech) {
                 case 1:
+                    setMegaStructureTechsResearched([3,1]);
                     // Bonus for Plasma Forge tech 1
                     return "+25% Resource AutoBuyer Rates!";
                 case 2:
+                    setMegaStructureTechsResearched([3,2]);
                     // Bonus for Plasma Forge tech 2
                     return "+50% Resource AutoBuyer Rates!";
                 case 3:
-                    // Bonus for Plasma Forge tech 3
-                    return "Miaplacidus Milestone Achieved!";
+                    setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
+                    setMegaStructureTechsResearched([3,3]);
+                    return;
                 case 4:
+                    setMegaStructureTechsResearched([3,4]);
                     // Bonus for Plasma Forge tech 4
                     return "+75% Resource AutoBuyer Rates!";
                 case 5:
+                    setMegaStructureTechsResearched([3,5]);
                     // Bonus for Plasma Forge tech 5
                     return "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!";
             }
+            break;
         case 4:
             switch (tech) {
                 case 1:
+                    setMegaStructureTechsResearched([4,1]);
                     // Bonus for Galactic Memory Archive tech 1
                     return "All Resource And Compound Storage Capacity + 100K!";
                 case 2:
+                    setMegaStructureTechsResearched([4,2]);
                     // Bonus for Galactic Memory Archive tech 2
                     return "All Resource And Compound Storage Capacity + 1M!";
                 case 3:
-                    // Bonus for Galactic Memory Archive tech 3
-                    return "Miaplacidus Milestone Achieved!";
+                    setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
+                    setMegaStructureTechsResearched([4,3]);
+                    return;
                 case 4:
+                    setMegaStructureTechsResearched([4,4]);
                     // Bonus for Galactic Memory Archive tech 4
                     return "All Resource And Compound Storage Capacity + 1B!";
                 case 5:
+                    setMegaStructureTechsResearched([4,5]);
                     // Bonus for Galactic Memory Archive tech 5
                     return "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!";
-            } 
-    }  
+            }
+            break;
+    }
 }
 
 //===============================================================================================================

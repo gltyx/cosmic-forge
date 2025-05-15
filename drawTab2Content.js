@@ -1,4 +1,4 @@
-import { getImageUrls, getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, getCurrentStarSystemWeatherEfficiency } from './constantsAndGlobalVars.js';
+import { getImageUrls, getTimerRateRatio, getCurrencySymbol, getBuildingTypeOnOff, setPowerOnOff, getCurrentStarSystemWeatherEfficiency, getInfinitePower } from './constantsAndGlobalVars.js';
 import { sellBuilding, toggleBuildingTypeOnOff, addOrRemoveUsedPerSecForFuelRate, setEnergyCapacity, gain, startUpdateTimersAndRates, addBuildingPotentialRate, addToResourceAllTimeStat } from './game.js';
 import { setResourceDataObject, getResourceDataObject } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, switchBatteryStatBarWhenBatteryBought, createTextElement, createOptionRow, createButton } from './ui.js';
@@ -137,7 +137,9 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('carbon', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant1', activeState);
                 startUpdateTimersAndRates('powerPlant1', 'toggle');
-                setPowerOnOff(true);
+                if (!getInfinitePower()) {
+                    setPowerOnOff(true);
+                }
                 sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant1', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant1', 'fuel'])[0])}:`, 'powerPlant1FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
@@ -186,7 +188,9 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('hydrogen', event.target, 'resources', null, false);
                 toggleBuildingTypeOnOff('powerPlant2', activeState);
                 startUpdateTimersAndRates('powerPlant2', 'toggle');
-                setPowerOnOff(true);
+                if (!getInfinitePower()) {
+                    setPowerOnOff(true);
+                }
                 sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant2', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant2', 'fuel'])[0])}:`, 'powerPlant2FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),
@@ -235,7 +239,9 @@ export function drawTab2Content(heading, optionContentElement) {
                 const activeState = addOrRemoveUsedPerSecForFuelRate('diesel', event.target, 'compounds', null, false);
                 toggleBuildingTypeOnOff('powerPlant3', activeState);
                 startUpdateTimersAndRates('powerPlant3', 'toggle');
-                setPowerOnOff(true);
+                if (!getInfinitePower()) {
+                    setPowerOnOff(true);
+                }
                 sfxPlayer.playAudio('powerOn', 'powerOff');
             }, 'toggle', null, null, 'powerPlant3', null, true, null, 'building'),
             createTextElement(`${capitaliseString(getResourceDataObject('buildings', ['energy', 'upgrades', 'powerPlant3', 'fuel'])[0])}:`, 'powerPlant3FuelType', ['red-disabled-text', 'fuel-type', 'invisible']),

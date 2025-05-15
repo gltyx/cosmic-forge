@@ -27,6 +27,7 @@ export const MAX_STACKS = 4;
 export const STACK_WIDTH = 220;
 export const BASE_RIGHT = 0;        
 
+export const INFINITE_POWER_RATE = 5000000000000000;
 export const MENU_STATE = 'menuState';
 export const GAME_VISIBLE_ACTIVE = 'gameVisibleActive';
 export const TIMER_UPDATE_INTERVAL = 10;
@@ -176,6 +177,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let megaStructureTechsResearched = [];
 let miaplacidusMilestoneLevel = 0;
 let increaseStorageFactor = 2;
 let rocketTravelSpeed = 0.1;
@@ -428,6 +430,7 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let infinitePower = false;
 let currentRunIsMegaStructureRun = false;
 let rebirthPossible = false;
 let sfx = false;
@@ -710,6 +713,10 @@ export function getElements() {
 }
 
 export function resetAllVariablesOnRebirth() {
+    if (!getMegaStructureTechsResearched().includes([1,5])) {
+        infinitePower = false;
+    }
+
     rocketTravelSpeed = 0.1;
     starShipTravelSpeed = 360000; //3600000 one real hour per light year
     runStartTimeStamp = null;
@@ -1111,6 +1118,7 @@ export function captureGameStatusForSaving(type) {
     gameState.factoryStarsArray = factoryStarsArray;
     gameState.megaStructuresInPossessionArray = megaStructuresInPossessionArray;
     gameState.miaplacidusMilestoneLevel = miaplacidusMilestoneLevel;
+    gameState.megaStructureTechsResearched = megaStructureTechsResearched;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1167,7 +1175,8 @@ export function captureGameStatusForSaving(type) {
         belligerentEnemyFlag: belligerentEnemyFlag,
         feedbackCanBeRequested: feedbackCanBeRequested,
         philosophyAbilityActive: philosophyAbilityActive,
-        currentRunIsMegaStructureRun: currentRunIsMegaStructureRun
+        currentRunIsMegaStructureRun: currentRunIsMegaStructureRun,
+        infinitePower: infinitePower
     }
 
     return gameState;
@@ -1335,6 +1344,7 @@ export function restoreGameStatus(gameState, type) {
             factoryStarsArray = gameState.factoryStarsArray ?? [];
             megaStructuresInPossessionArray = gameState.megaStructuresInPossessionArray ?? [];
             miaplacidusMilestoneLevel = gameState.miaplacidusMilestoneLevel ?? [];
+            megaStructureTechsResearched = gameState.megaStructureTechsResearched ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -1374,6 +1384,7 @@ export function restoreGameStatus(gameState, type) {
             feedbackCanBeRequested = gameState.flags.feedbackCanBeRequested ?? true;
             philosophyAbilityActive = gameState.flags.philosophyAbilityActive ?? false;
             currentRunIsMegaStructureRun = gameState.flags.currentRunIsMegaStructureRun ?? false;
+            infinitePower = gameState.flags.infinitePower ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -2206,7 +2217,11 @@ export function getLosingEnergy() {
 }
 
 export function setPowerOnOff(value) {
-    powerOnOff = value;
+    if (!getInfinitePower()) {
+        powerOnOff = value;
+    } else {
+        powerOnOff = true;
+    }
 
     if (!value) { //if power cuts off set all buttons to Activate mode ie deactivated.
         const powerBuildings = getResourceDataObject('buildings', ['energy', 'upgrades']);
@@ -2263,7 +2278,7 @@ export function setBuildingTypeOnOff(building, value) {
     const energyQuantity = getResourceDataObject('buildings', ['energy', 'quantity']);
     
     if (
-        (!batteryBought && energyConsumption > totalRate) ||
+        (!getInfinitePower() && !batteryBought && energyConsumption > totalRate) ||
         (batteryBought && energyQuantity === 0 && energyConsumption > totalRate)
     ) {
         setTrippedStatus(true);
@@ -3407,6 +3422,26 @@ export function setMiaplacidusMilestoneLevel(value) {
 
 export function getMiaplacidusMilestoneLevel() {
     return miaplacidusMilestoneLevel;
+}
+
+export function getMegaStructureTechsResearched() {
+    return megaStructureTechsResearched;
+}
+
+export function setMegaStructureTechsResearched(value) {
+    megaStructureTechsResearched.push(value);
+}
+
+export function getInfinitePower() {
+    return infinitePower;
+}
+
+export function setInfinitePower(value) {
+    infinitePower = value;
+}
+
+export function getInfinitePowerRate() {
+    return INFINITE_POWER_RATE;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

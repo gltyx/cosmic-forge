@@ -1,4 +1,5 @@
 import {
+    getInfinitePowerRate,
     getStatRun,
     getAdditionalSystemsToSettleThisRun,
     getPlayerStartingUnitHealth,
@@ -121,7 +122,8 @@ import {
     getStarsWithAncientManuscripts,
     getFactoryStarsArray,
     getMiaplacidusMilestoneLevel,
-    getHomeStarName
+    getHomeStarName,
+    getInfinitePower
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -297,7 +299,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const powerAllButton = document.getElementById('activateGridButton');
     powerAllButton.addEventListener('click', () => {
-        toggleAllPower();
+        if (!getInfinitePower()) {
+            toggleAllPower();
+        }
     });
      
     window.addEventListener('resize', () => {
@@ -2602,14 +2606,14 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
 
     let maxValue;
 
-    if (powerPlant2Status) { 
+    if (powerPlant2Status) {
         const difference = solarPlantMaxPurchasedRate - generationValues[1];
-    
+
         const adjustedGenerationValues = [...generationValues];
         if (difference > 0) {
             adjustedGenerationValues[1] = adjustedGenerationValues[1] + difference;
         }
-    
+
         maxValue = Math.max(
             ...adjustedGenerationValues,
             ...consumptionValues,
@@ -2647,17 +2651,23 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
     const sortedGenerationValues = generationData.map(data => data.value);
     const sortedGenerationStatuses = generationData.map(data => data.status);
 
+    const barWidth = width * 0.3;
+    const gap = 10;
+
+    const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
+    const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
+
     function drawBar(x, values, colors, status, powerOn, barType, solarMaxPurchasedRate) {
         const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
         let currentY = height - 11;
-    
+
         values.forEach((value, index) => {
             const barHeight = (value / maxValue) * maxBarHeight;
-    
+
             if (barType === 'consumption' && !powerOn) {
                 ctx.fillStyle = bgColor;
                 ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
-    
+
                 ctx.save();
                 ctx.setLineDash([5, 5]);
                 ctx.strokeStyle = 'red';
@@ -2667,7 +2677,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
             } else {
                 ctx.fillStyle = (status[index] === false) ? bgColor : colors[index];
                 ctx.fillRect(x, currentY - barHeight, barWidth, barHeight);
-    
+
                 if (status[index] === false) {
                     ctx.save();
                     ctx.setLineDash([5, 5]);
@@ -2677,8 +2687,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
                     ctx.restore();
                 }
             }
-    
-            // Move the currentY position up
+
             currentY -= barHeight;
         });
 
@@ -2687,7 +2696,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
             if (powerPlant2Index !== -1 && getBuildingTypeOnOff('powerPlant2')) {
                 const powerPlant2Value = values[powerPlant2Index];
                 const solarExtra = Math.max(0, solarMaxPurchasedRate - powerPlant2Value);
-        
+
                 if (solarExtra > 0) {
                     const solarExtraHeight = (solarExtra / maxValue) * maxBarHeight;
 
@@ -2705,27 +2714,67 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
 
                     const centerX = x + (barWidth / 2) - (textWidth / 2);
                     const centerY = currentY - solarExtraHeight + 50;
-        
+
                     ctx.fillText(symbol, centerX, centerY);
-                    
+
                     currentY -= solarExtraHeight;
                 }
             }
-        }        
-    }    
-    
-    const barWidth = width * 0.3;
-    const gap = 10;
 
-    const generationColors = getComputedStyle(canvas).getPropertyValue('--generation-colors').trim().split(',');
-    const consumptionColors = getComputedStyle(canvas).getPropertyValue('--consumption-colors').trim().split(',');
+            if (getInfinitePower()) {
+                const infinitePowerValue = getInfinitePowerRate();
+                const infiniteBarHeight = (infinitePowerValue / maxValue) * maxBarHeight;
 
+                ctx.fillStyle = 'yellow';
+                ctx.fillRect(x, currentY - infiniteBarHeight, barWidth, infiniteBarHeight);
+
+                ctx.font = '30px Arial';
+                ctx.fillStyle = 'yellow';
+                ctx.fillText('∞', x + (barWidth / 2) - 10, currentY - infiniteBarHeight + 30);
+
+                currentY -= infiniteBarHeight;
+            }
+        }
+    }
+
+    if (getInfinitePower()) {
+        // Draw only the infinite power bar
+        const infinitePowerValue = getInfinitePowerRate();
+        maxValue = infinitePowerValue; // Override maxValue to infinite power for consistent scaling
+
+        drawBar((gap * 6), [infinitePowerValue], ['yellow'], [true], getPowerOnOff(), 'generation', solarPlantMaxPurchasedRate);
+
+        // Draw axis line
+        ctx.beginPath();
+        ctx.moveTo(0, height - 10);
+        ctx.lineTo(width, height - 10);
+        ctx.strokeStyle = textColor;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Draw infinity symbols as vertical labels
+        ctx.fillStyle = 'yellow';
+        ctx.font = '30px Arial';
+
+        for (let i = 0; i <= 5; i++) {
+            const yPosition = height - (i / 5) * maxBarHeight;
+            ctx.fillText('∞', gap * 2, yPosition);
+        }
+
+        const genLabelX = (gap * 4) + barWidth / 2 - 10;
+        ctx.fillText('Gen.', genLabelX, height + 20);
+
+        // Don't draw any other bars or labels
+        return;
+    }
+
+    // Normal drawing (no infinite power)
     if (generationData.length > 0 && generationData[0].originalIndex === 1) {
         drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation', solarPlantMaxPurchasedRate);
     } else {
         drawBar((gap * 6), sortedGenerationValues, generationColors, sortedGenerationStatuses, getPowerOnOff(), 'generation', solarPlantMaxPurchasedRate);
     }
-    
+
     drawBar((gap * 6) + barWidth + gap, consumptionValues, consumptionColors, [true, true, true], getPowerOnOff(), 'consumption', solarPlantMaxPurchasedRate);
 
     ctx.beginPath();
@@ -2758,6 +2807,8 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
     ctx.fillText('Gen.', genLabelX, height + 20);
     ctx.fillText('Con.', consLabelX, height + 20);
 }
+
+
 
 export function removeAllIndicatorIcons(iconText = '⚠️', indicatorClass = 'attention-indicator') {
     const indicators = document.querySelectorAll(`.${indicatorClass}`);
@@ -4707,7 +4758,7 @@ export function setBatteryIndicator(value) {
         batteryBarContainer.parentElement.appendChild(indicatorSymbol);
     }
 
-    const energyRate = getResourceDataObject('buildings', ['energy', 'rate']);
+    const energyRate = getInfinitePower() ? getInfinitePowerRate() : getResourceDataObject('buildings', ['energy', 'rate']);
     const consumption = getResourceDataObject('buildings', ['energy', 'consumption']);
 
     if (energyRate > consumption && getPowerOnOff()) {
