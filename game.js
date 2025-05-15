@@ -5923,21 +5923,23 @@ function startInitialTimers() {
         });
 
         let finalRate = getPowerOnOff() ? newRate : newRateUnpowered;
+        
+        if (getCurrentRunIsMegaStructureRun()) {
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 1)) {
+                finalRate += 0.5;
+            }
 
-        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 1)) {
-            finalRate += 0.5;
-        }
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 2)) {
+                finalRate += 1;
+            }
 
-        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 2)) {
-            finalRate += 1;
-        }
-
-        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 4)) {
-            finalRate += 1.5;
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 4)) {
+                finalRate += 1.5;
+            }
         }
 
         if (getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 5)) {
-            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core') {
+            if (getCurrentRunIsMegaStructureRun() && getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']) === 'Celestial Processing Core') {
                 finalRate += 2;
             } else {
                 finalRate += 5;
