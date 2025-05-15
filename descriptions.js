@@ -1,4 +1,4 @@
-import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol, getPlayerPhilosophy, getRepeatableTechMultipliers, getStatRun } from "./constantsAndGlobalVars.js";
+import { getGameActiveCountTime, getTimerRateRatio, getSaveName, getRocketUserName, getDestinationStar, getCurrencySymbol, getPlayerPhilosophy, getRepeatableTechMultipliers, getStatRun, getCurrentRunIsMegaStructureRun } from "./constantsAndGlobalVars.js";
 import { calculateAndAddExtraAPFromPhilosophyRepeatable } from "./game.js";
 import { getAchievementDataObject, getResourceDataObject } from "./resourceDataObject.js";
 import { capitaliseWordsWithRomanNumerals } from "./utilityFunctions.js";
@@ -270,7 +270,10 @@ export function initialiseDescriptions() {
         'asteroids': "Here you can see discovered Asteroids and analyse them.",
         'launch pad': "Build vessels to mine asteroids for valuable Antimatter.",
 
-        'rebirth': "Here you can reset the run at your new system, once settled!",
+        'rebirth': getCurrentRunIsMegaStructureRun()
+            ? `Here you can reset the run at your new system, once settled!<br><br><span class="warning-orange-text">MEGASTRUCTURE STARS:  It's Mandatory to Disconnect the MegaStructure before Rebirth!</span>`
+            : `Here you can reset the run at your new system, once settled!`,
+
         'galactic market': "Here you can make various trades in the Galactic Market.",
         'ascendency': "Here you can spend AP for permanent buffs to speed up your runs!",
 

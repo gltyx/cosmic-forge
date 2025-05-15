@@ -311,8 +311,8 @@ import {
     getBuffEnhancedMiningData,
     getBuffQuantumEnginesData,
     setAchievementIconImageUrls} from "./resourceDataObject.js";
-import { checkForAchievements } from "./achievements.js";
-import { resetAchievementsOnRebirth } from "./achievements.js";
+
+import { checkForAchievements, resetAchievementsOnRebirth } from "./achievements.js";
 
 import { 
     updateContent,
@@ -360,8 +360,6 @@ import {
     generateStarfield
 } from "./ui.js";
 
-import { playClickSfx } from "./audioManager.js";
-
 import { 
     capitaliseString,
     capitaliseWordsWithRomanNumerals
@@ -370,8 +368,9 @@ import {
  import { modalCompoundMachiningTabUnlockHeader, modalCompoundMachiningTabUnlockText, modalPlayerLeaderPhilosophyHeaderText, modalPlayerLeaderPhilosophyContentText, modalPlayerLeaderIntroHeaderText, modalPlayerLeaderIntroContentText1, modalPlayerLeaderIntroContentText2, modalPlayerLeaderIntroContentText3, modalPlayerLeaderIntroContentText4, modalGalacticTabUnlockHeader, modalGalacticTabUnlockText, newsTickerContent, refreshAchievementTooltipDescriptions } from './descriptions.js';
 
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
- import { sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
+ import { playClickSfx, sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
  import { timerManager } from './timerManager.js';
+ import { initialiseDescriptions } from './descriptions.js';
 
  import { drawTab5Content } from './drawTab5Content.js';
 
@@ -4871,6 +4870,28 @@ function rebirthChecks() {
         }
     }
 
+    const [status, winner] = getBattleResolved();
+
+    if (status === true && winner === 'player' && getRebirthPossible() === false) {
+        if (getCurrentRunIsMegaStructureRun()) {
+            const megaStructure = getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']);
+            const megastructureNumber = Number(
+                Object.keys(factoryStarMap).find(
+                    key => factoryStarMap[key] === megaStructure
+                )
+            );
+
+            if (getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === megastructureNumber && arr[1] === 3)) {
+                setRebirthPossible(true);
+            } else {
+                setRebirthPossible(false);
+            }
+
+        } else {
+            setRebirthPossible(true);
+        }
+    }
+
     if (getCurrentOptionPane() === 'rebirth') {
         if (getRebirthPossible()) {
             document.querySelector('.rebirth-check').classList.remove('red-disabled-text');
@@ -5901,7 +5922,27 @@ function startInitialTimers() {
             }
         });
 
-        const finalRate = getPowerOnOff() ? newRate : newRateUnpowered;
+        let finalRate = getPowerOnOff() ? newRate : newRateUnpowered;
+
+        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 1)) {
+            finalRate += 0.5;
+        }
+
+        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 2)) {
+            finalRate += 1;
+        }
+
+        if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 4)) {
+            finalRate += 1.5;
+        }
+
+        if (getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 5)) {
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core') {
+                finalRate += 2;
+            } else {
+                finalRate += 5;
+            }
+        }
 
         setResourceDataObject(currentResearchQuantity + finalRate, 'research', ['quantity']);
         addToResourceAllTimeStat(finalRate, 'researchPoints');
@@ -6946,7 +6987,6 @@ function startUpdateScienceTimers(elementName) {
        
     newResearchRate = getResourceDataObject('research', ['rate']) + upgradeRatePerUnit;
     
-
     setResourceDataObject(newResearchRatePower, 'research', ['ratePower']);
     setResourceDataObject(newResearchRate, 'research', ['rate']);
 }
@@ -9791,8 +9831,7 @@ export function turnAround(unit) {
 }
 
 export async function settleSystemAfterBattle(accessPoint) {
-    setAchievementFlagArray('settleSystem', 'add');
-    setRebirthPossible(true);
+    setAchievementFlagArray('settleSystem', 'add');    
     const isFactoryStar = getFactoryStarsArray().includes(getDestinationStar());
     let apModifier = accessPoint === 'battle' || accessPoint === 'surrender' ? 2 : 1;
     
@@ -10011,6 +10050,7 @@ export function rebirth() {
     resetTabsOnRebirth();
     resetUIElementsOnRebirth();
     setCurrentRunIsMegaStructureRun(getFactoryStarsArray().includes(getCurrentStarSystem()));
+    initialiseDescriptions();
     changeWeather(1000);
     setRunStartTime();
 
@@ -10181,24 +10221,20 @@ export function applyMegaStructureBonuses(megastructure, tech) {
             switch (tech) {
                 case 1:
                     setMegaStructureTechsResearched([2,1]);
-                    // Bonus for Celestial Processing Core tech 1
-                    return "Gain 50 Research per Second!";
+                    return;
                 case 2:
                     setMegaStructureTechsResearched([2,2]);
-                    // Bonus for Celestial Processing Core tech 2
-                    return "Gain 100 Research per Second!";
+                    return;
                 case 3:
                     setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                     setMegaStructureTechsResearched([2,3]);
                     return;
                 case 4:
                     setMegaStructureTechsResearched([2,4]);
-                    // Bonus for Celestial Processing Core tech 4
-                    return "Gain 150 Research per Second!";
+                    return;
                 case 5:
                     setMegaStructureTechsResearched([2,5]);
-                    // Bonus for Celestial Processing Core tech 5
-                    return "Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!";
+                    return;
             }
             break;
         case 3:

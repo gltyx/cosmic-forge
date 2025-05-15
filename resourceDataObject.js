@@ -2776,10 +2776,10 @@ function addPermanentResourcesModifiersBackIn() {
     }
 }
 
-export function getStarSystemDataObject(key, subKeys) {
+export function getStarSystemDataObject(key, subKeys, noWarning = false) {
     let current = starSystems[key];
 
-    if (!current) {
+    if (!current && !noWarning) {
         console.warn(`Resource data not found for key: ${key}`);
         return undefined;
     }
@@ -2787,7 +2787,7 @@ export function getStarSystemDataObject(key, subKeys) {
     if (subKeys) {
         for (const subKey of subKeys) {
             current = current?.[subKey];
-            if (current === undefined) {
+            if (current === undefined && !noWarning) {
                 console.warn(`Missing subKey: ${subKey}`);
                 return undefined;
             }

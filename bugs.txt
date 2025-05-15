@@ -18,19 +18,12 @@ YOU ARE A....
 
 bonuses to do:
 [
-  "Gain 50 Research per Second!",
-  "Gain 100 Research per Second!",
-  "Miaplacidus Milestone Achieved!",
-  "Gain 150 Research per Second!",
-  "Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!",
   "+25% Resource AutoBuyer Rates!",
   "+50% Resource AutoBuyer Rates!",
-  "Miaplacidus Milestone Achieved!",
   "+75% Resource AutoBuyer Rates!",
   "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!",
   "All Resource And Compound Storage Capacity + 100K!",
   "All Resource And Compound Storage Capacity + 1M!",
-  "Miaplacidus Milestone Achieved!",
   "All Resource And Compound Storage Capacity + 1B!",
   "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!"
 ]
