@@ -10015,20 +10015,6 @@ export function buffOptimizedPowerGridsMultiplier() {
         if (building.rate) {
             const newRateOfBuilding = building.rate * multiplier;
             setResourceDataObject(newRateOfBuilding, 'buildings', ['energy', 'upgrades', buildingKey, 'rate']);
-
-            const buyBuildingButtonElement = document.querySelector(
-                `#${buildingKey}${capitaliseString(buildingKey)}Row .option-row-main .input-container .building-purchase-button`
-            );
-            const rateElement = document.getElementById(`${buildingKey}Rate`);
-
-            if (buyBuildingButtonElement) {
-                buyBuildingButtonElement.innerHTML = `Add ${Math.floor(newRateOfBuilding * getTimerRateRatio())} KW /s`;
-            }
-
-            if (rateElement) {
-                const quantityOfBuilding = getResourceDataObject('buildings', ['energy', 'upgrades', buildingKey, 'quantity']) || 0;
-                rateElement.innerHTML = `${Math.floor((newRateOfBuilding * getTimerRateRatio()) * quantityOfBuilding)} KW / s`;
-            }
         }
     });
 }
@@ -10111,11 +10097,30 @@ export function applyMegaStructureBonuses(megastructure, tech) {
         case 1:
             switch (tech) {
                 case 1:
-                    // Bonus for Dyson Sphere tech 1
-                    return "All Batteries Double in Capacity!";
+                    const batteries = ['battery1', 'battery2', 'battery3'];
+
+                    batteries.forEach(battery => {
+                        const currentCapacity = getResourceDataObject('buildings', ['energy', 'upgrades', battery, 'capacity']);
+                        const newCapacity = Math.floor(currentCapacity * 2);
+                        setResourceDataObject(newCapacity, 'buildings', ['energy', 'upgrades', battery, 'capacity']);
+                    });
+                    setResourceDataObject(Math.floor(getResourceDataObject('buildings', ['energy', 'storageCapacity']) * 2), 'buildings', ['energy', 'storageCapacity']);
+                    return;
                 case 2:
-                    // Bonus for Dyson Sphere tech 2
-                    return "All Energy producing Buildings 25% more powerful!";
+                    const multiplier = 1.25;
+                    const powerPlants = ['powerPlant1', 'powerPlant2', 'powerPlant3'];
+
+                    powerPlants.forEach(powerPlantName => {
+                        const powerPlantObject = getResourceDataObject('buildings', ['energy', 'upgrades', powerPlantName]);
+
+                        setResourceDataObject(powerPlantObject.maxPurchasedRate * multiplier, 'buildings', ['energy', 'upgrades', powerPlantName, 'maxPurchasedRate']);
+                        setResourceDataObject(powerPlantObject.purchasedRate * multiplier, 'buildings', ['energy', 'upgrades', powerPlantName, 'purchasedRate']);
+
+                        const newRateOfBuilding = powerPlantObject.rate * multiplier;
+                        setResourceDataObject(newRateOfBuilding, 'buildings', ['energy', 'upgrades', powerPlantName, 'rate']);
+                    });
+
+                    return;
                 case 3:
                     // Bonus for Dyson Sphere tech 3
                     return "Miaplacidus Milestone Achieved!";
