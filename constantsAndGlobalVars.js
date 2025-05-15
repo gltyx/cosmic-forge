@@ -17,6 +17,7 @@ let elements;
 let saveData = null;
 
 //CONSTANTS
+export const HOMESTAR = 'miaplacidus';
 export const MINIMUM_GAME_VERSION_FOR_SAVES = 0.70;
 export const GAME_VERSION_FOR_SAVES = 0.75;
 export const deferredActions = [];
@@ -175,6 +176,7 @@ let compoundCreateDropdownRecipeText = {
 export let gameState;
 let achievementFlagArray = [];
 
+let miaplacidusMilestoneLevel = 0;
 let increaseStorageFactor = 2;
 let rocketTravelSpeed = 0.1;
 let starShipTravelSpeed = 360000; //3600000 one real hour per light year
@@ -1108,6 +1110,7 @@ export function captureGameStatusForSaving(type) {
     gameState.starsWithAncientManuscripts = starsWithAncientManuscripts;
     gameState.factoryStarsArray = factoryStarsArray;
     gameState.megaStructuresInPossessionArray = megaStructuresInPossessionArray;
+    gameState.miaplacidusMilestoneLevel = miaplacidusMilestoneLevel;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1331,6 +1334,7 @@ export function restoreGameStatus(gameState, type) {
             starsWithAncientManuscripts = gameState.starsWithAncientManuscripts ?? [];
             factoryStarsArray = gameState.factoryStarsArray ?? [];
             megaStructuresInPossessionArray = gameState.megaStructuresInPossessionArray ?? [];
+            miaplacidusMilestoneLevel = gameState.miaplacidusMilestoneLevel ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -1493,6 +1497,10 @@ function fixLaunchPadAndSpaceTelescope(rocketsBuilt, asteroidArray) { //for fixi
     if (asteroidArray.length > 0 || starVisionDistance > 0) {
         setResourceDataObject(true, 'space', ['upgrades', 'spaceTelescope', 'spaceTelescopeBoughtYet']);
     }
+}
+
+export function getHomeStarName() {
+    return HOMESTAR;
 }
 
 export function getGameVisibleActive() {
@@ -3391,6 +3399,14 @@ export function getCurrentRunIsMegaStructureRun() {
 
 export function setCurrentRunIsMegaStructureRun(value) {
     currentRunIsMegaStructureRun = value;
+}
+
+export function setMiaplacidusMilestoneLevel(value) {
+    miaplacidusMilestoneLevel = value;
+}
+
+export function getMiaplacidusMilestoneLevel() {
+    return miaplacidusMilestoneLevel;
 }
 
 //stat retrievers-------------------------------------------------------------------------------------------------------

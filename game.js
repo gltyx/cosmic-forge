@@ -1,4 +1,6 @@
 import {
+    getMiaplacidusMilestoneLevel,
+    setMiaplacidusMilestoneLevel,
     setCurrentRunIsMegaStructureRun,
     getCurrentRunIsMegaStructureRun,
     getMegaStructuresInPossessionArray,
@@ -4191,7 +4193,7 @@ function starShipUiChecks() {
         }
     }
 
-    if (getCurrentOptionPane() !== 'star map' || getCurrentTab()[1] !== 'Interstellar') {
+    if (getCurrentOptionPane() !== 'star map' || !getCurrentTab()[1].includes('Interstellar')) {
         removeStarConnectionTooltip();
         removeOrbitCircle();
     }
@@ -6416,7 +6418,7 @@ export function purchaseBuff(buff) {
     }
 }
 
-function calculateStarTravelDuration(destination) {
+export function calculateStarTravelDuration(destination) {
     const starData = getStarSystemDataObject('stars', [destination]);
     if (!starData) return;
 

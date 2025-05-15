@@ -1662,6 +1662,14 @@ button.red-disabled-text {
     border: 1px solid black;
 }
 
+.home-star {
+    background-color: red;
+}
+
+.home-star-accessible {
+    background-color: var(--ready-text);
+}
+
 @keyframes twinkle {
     0% { 
         transform: scale(1); 
@@ -1677,6 +1685,7 @@ button.red-disabled-text {
 
 .star-uninteresting:hover,
 .factory-star:hover,
+.home-star:hover,
 .current-star:hover,
 .star:hover {
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);
@@ -1684,6 +1693,7 @@ button.red-disabled-text {
 
 .star-uninteresting::after,
 .factory-star::after,
+.home-star::after,
 .current-star::after,
 .star::after {
     content: attr(titler);
@@ -1706,9 +1716,18 @@ button.red-disabled-text {
     color: yellow;
 }
 
+.home-star::after {
+    color: red;
+}
+
+.home-star-accessible::after {
+    color: var(--ready-text);
+}
+
 
 .star-uninteresting:hover::after,
 .factory-star:hover::after,
+.home-star:hover::after,
 .current-star:hover::after,
 .star:hover::after {
     visibility: visible;

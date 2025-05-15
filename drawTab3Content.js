@@ -1,4 +1,4 @@
-import { getCurrentStarSystem, setCanFuelRockets, setCanTravelToAsteroids, getTechTreeDataAndDraw, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun, getCurrentRunIsMegaStructureRun } from './constantsAndGlobalVars.js';
+import { setMiaplacidusMilestoneLevel, getMiaplacidusMilestoneLevel, getCurrentStarSystem, setCanFuelRockets, setCanTravelToAsteroids, getTechTreeDataAndDraw, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun, getCurrentRunIsMegaStructureRun } from './constantsAndGlobalVars.js';
 import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables } from './game.js';
 import { getStarSystemDataObject, setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator, callPopupModal, showHideModal } from './ui.js';
@@ -1619,6 +1619,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('dysonSphereDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
+                        setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                         setTechUnlockedArray('dysonSphereDisconnect');
                         showNotification(techNotificationMessages.dysonSphereDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
@@ -1869,6 +1870,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('celestialProcessingCoreDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
+                        setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                         setTechUnlockedArray('celestialProcessingCoreDisconnect');
                         showNotification(techNotificationMessages.celestialProcessingCoreDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
@@ -2119,6 +2121,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('plasmaForgeDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
+                        setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                         setTechUnlockedArray('plasmaForgeDisconnect');
                         showNotification(techNotificationMessages.plasmaForgeDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);
@@ -2369,6 +2372,7 @@ export function drawTab3Content(heading, optionContentElement) {
                     createButton(`Research`, ['option-button', 'red-disabled-text', 'resource-cost-sell-check', 'tech-unlock'], (event) => {
                         gain('galacticMemoryArchiveDisconnect', null, 'techUnlock', 'techUnlock', false, 'techs', 'resources');
                         event.currentTarget.classList.add('unlocked-tech');
+                        setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                         setTechUnlockedArray('galacticMemoryArchiveDisconnect');
                         showNotification(techNotificationMessages.galacticMemoryArchiveDisconnect, 'info', 3000, 'tech');
                         setRenderedTechTree(false);

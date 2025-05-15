@@ -119,7 +119,9 @@ import {
     getStarMapMode,
     getPhilosophyAbilityActive,
     getStarsWithAncientManuscripts,
-    getFactoryStarsArray
+    getFactoryStarsArray,
+    getMiaplacidusMilestoneLevel,
+    getHomeStarName
 } from './constantsAndGlobalVars.js';
 import {
     getResourceDataObject,
@@ -196,7 +198,8 @@ import {
     rebirth,
     settleSystemAfterBattle,
     setAutoSellToggleState,
-    setAutoCreateToggleState
+    setAutoCreateToggleState,
+    calculateStarTravelDuration
 } from './game.js';
 
 import { 
@@ -1634,15 +1637,21 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         const distance = starDistanceData[star.name];
         const isInteresting = distance <= getStarVisionDistance() || star.name === currentStar.name || getSettledStars().includes(star.name.toLowerCase());
         const isFactoryStar = getFactoryStarsArray().includes(star.name.toLowerCase());
+        const isHomeStar = star.name === 'Miaplacidus';
 
-        let starElement;
+        let starElement = document.createElement('div');
 
-        if (isFactoryStar) {
-            starElement = document.createElement('div');
+        if (isHomeStar) {
+            if (getMiaplacidusMilestoneLevel() === 4) {
+                starElement.classList.add('star', 'home-star-accessible');
+            } else {
+                starElement.classList.add('star', 'home-star');
+            }
+            starElement.id = star.name;
+        } else if (isFactoryStar) {
             starElement.classList.add('star', 'factory-star');
             starElement.id = star.name;
         } else {
-            starElement = document.createElement('div');
             starElement.id = isInteresting ? star.name : `noneInterestingStar${star.name}`;
             if (
                 isInteresting &&
@@ -1655,6 +1664,14 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
             starElement.classList.add(isInteresting ? 'star' : 'star-uninteresting');
             if (starElement.id.includes("settledStar")) {
                 starElement.classList.add("settled-star");
+            } 
+
+            if (isHomeStar) {
+                if (getMiaplacidusMilestoneLevel() === 4) {
+                    starElement.classList.add('home-star-accessible');
+                } else {
+                    starElement.classList.add('home-star');
+                }
             }
         }
 
@@ -1710,6 +1727,9 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
         starElement.addEventListener('click', () => {
             if (!getStarShipTravelling()) {
                 if (isInteresting) {
+                    if (isHomeStar && getMiaplacidusMilestoneLevel() !== 4) {
+                        return;
+                    }
                     const starData = getStarSystemDataObject('stars');
                     if (star.name === currentStar.name) {
                         return;
@@ -1720,6 +1740,13 @@ export function generateStarfield(starfieldContainer, numberOfStars = 70, seed =
                     createStarDestinationRow(starData[star.name.toLowerCase()] || star.name, true);
                     if (starData[star.name.toLowerCase()]) {
                         setDestinationStar(starData[star.name.toLowerCase()].name);
+                    }
+                } else if (isHomeStar) {
+                    if (getMiaplacidusMilestoneLevel() === 4) {
+                        drawStarConnectionDrawings(currentStar, star, false);
+                        createStarDestinationRow(star.name, false);
+                    } else {
+                        return;
                     }
                 } else {
                     drawStarConnectionDrawings(currentStar, star, false);
@@ -1774,7 +1801,26 @@ export function createStarDestinationRow(starData, isInteresting) {
         let content = launchStarShipWarningText;
         if (getFactoryStarsArray().includes(getDestinationStar())) {
             content += `<br><br><span class="warning-orange-text">WARNING: MegaStructure Systems are Extremely difficult to conquer!<br>Only go if you have high Production to rebuild broken Fleets multiple times!</span>`;
+        } else if (getHomeStarName() === getDestinationStar()) {
+            content += `<br><br><span class="red-disabled-text">WARNING: Flying to Miaplacidus is suicidal unless you are VERY strong with<br>VERY high production capabilities to rebuild broken Fleets multiple times!</span>`;
         }
+
+        content += `<br><br><span class="${
+            (() => {
+                const s = Math.floor(calculateStarTravelDuration(getDestinationStar()) / 1000);
+                return s >= 10800 ? 'red-disabled-text' : s >= 3600 ? 'warning-orange-text' : 'green-ready-text';
+            })()
+        }">Real Time Flight Time approximately: ${
+            (() => {
+                const s = Math.floor(calculateStarTravelDuration(getDestinationStar()) / 1000);
+                return s >= 3600
+                    ? `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m ${s % 60}s`
+                    : s >= 60
+                    ? `${Math.floor(s / 60)}m ${s % 60}s`
+                    : `${s}s`;
+            })()
+        }</span>`;
+
         callPopupModal(
             launchStarShipWarningHeader, 
             content, 
@@ -3920,7 +3966,7 @@ function initializeTabEventListeners() {
                     content = 'Settings';
                 }
 
-                if (content !== 'Interstellar') {
+                if (!content.includes('Interstellar')) {
                     removeStarConnectionTooltip();
                     if (document.getElementById('descriptionContentTab5') && !getStarShipTravelling()) {
                         document.getElementById('descriptionContentTab5').innerHTML = getHeaderDescriptions('star map');
