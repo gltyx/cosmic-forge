@@ -1,5 +1,5 @@
 import { setMiaplacidusMilestoneLevel, getMiaplacidusMilestoneLevel, getCurrentStarSystem, setCanFuelRockets, setCanTravelToAsteroids, getTechTreeDataAndDraw, getTimerRateRatio, deferredActions, getCanAffordDeferred, setCanAffordDeferred, setTechUnlockedArray, setTemporaryCoreTechRowsRepo, setTechTreeDrawnYet, setRenderedTechTree, setUnlockedCompoundsArray, getTechUnlockedArray, getUnlockedResourcesArray, getPlayerPhilosophy, setRepeatableTechMultipliers, getRepeatableTechMultipliers, setIncreaseStorageFactor, getStatRun, getCurrentRunIsMegaStructureRun } from './constantsAndGlobalVars.js';
-import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables } from './game.js';
+import { setAllCompoundsToZeroQuantity, gain, startUpdateTimersAndRates, addToResourceAllTimeStat, setFleetArmorBuffsAfterRepeatables, setFleetSpeedsAfterRepeatables, setFleetAttackDamageAfterRepeatables, setInitialImpressionBaseAfterRepeatables, setStarStudyEfficiencyAfterRepeatables, setAsteroidSearchEfficiencyAfterRepeatables, setRocketTravelTimeReductionAfterRepeatables, setStarshipTravelTimeReductionAfterRepeatables, setResourceAutobuyerPricesAfterRepeatables, setCompoundRecipePricesAfterRepeatables, setEnergyAndResearchBuildingPricesAfterRepeatables, setFleetPricesAfterRepeatables, setStarshipPartPricesAfterRepeatables, setRocketPartPricesAfterRepeatables, applyMegaStructureBonuses } from './game.js';
 import { getStarSystemDataObject, setResourceDataObject, getResourceDataObject, setAutoBuyerTierLevel } from './resourceDataObject.js';
 import { removeTabAttentionIfNoIndicators, createToggleSwitch, createSvgElement, createTextElement, sortTechRows, createOptionRow, createButton, showNotification, updateDescriptionRow, appendAttentionIndicator, callPopupModal, showHideModal } from './ui.js';
 import { modalMegaStructureTechDysonSphere1Header, modalMegaStructureTechDysonSphere1Text, modalMegaStructureTechDysonSphere2Header, modalMegaStructureTechDysonSphere2Text, modalMegaStructureTechDysonSphere3Header, modalMegaStructureTechDysonSphere3Text, modalMegaStructureTechDysonSphere4Header, modalMegaStructureTechDysonSphere4Text, modalMegaStructureTechDysonSphere5Header, modalMegaStructureTechDysonSphere5Text, modalMegaStructureTechCelestialProcessingCore1Header, modalMegaStructureTechCelestialProcessingCore1Text, modalMegaStructureTechCelestialProcessingCore2Header, modalMegaStructureTechCelestialProcessingCore2Text, modalMegaStructureTechCelestialProcessingCore3Header, modalMegaStructureTechCelestialProcessingCore3Text, modalMegaStructureTechCelestialProcessingCore4Header, modalMegaStructureTechCelestialProcessingCore4Text, modalMegaStructureTechCelestialProcessingCore5Header, modalMegaStructureTechCelestialProcessingCore5Text, modalMegaStructureTechPlasmaForge1Header, modalMegaStructureTechPlasmaForge1Text, modalMegaStructureTechPlasmaForge2Header, modalMegaStructureTechPlasmaForge2Text, modalMegaStructureTechPlasmaForge3Header, modalMegaStructureTechPlasmaForge3Text, modalMegaStructureTechPlasmaForge4Header, modalMegaStructureTechPlasmaForge4Text, modalMegaStructureTechPlasmaForge5Header, modalMegaStructureTechPlasmaForge5Text, modalMegaStructureTechGalacticMemoryArchive1Header, modalMegaStructureTechGalacticMemoryArchive1Text, modalMegaStructureTechGalacticMemoryArchive2Header, modalMegaStructureTechGalacticMemoryArchive2Text, modalMegaStructureTechGalacticMemoryArchive3Header, modalMegaStructureTechGalacticMemoryArchive3Text, modalMegaStructureTechGalacticMemoryArchive4Header, modalMegaStructureTechGalacticMemoryArchive4Text, modalMegaStructureTechGalacticMemoryArchive5Header, modalMegaStructureTechGalacticMemoryArchive5Text, modalNanoBrokersUnlockHeader, modalNanoBrokersUnlockText, modalRocketCompositesTabUnlockHeader, modalRocketCompositesTabUnlockText, modalQuantumComputingTabUnlockHeader, modalQuantumComputingTabUnlockText, modalScienceLabsTabUnlockHeader, modalScienceLabsTabUnlockText, modalKnowledgeSharingTabUnlockHeader, modalKnowledgeSharingTabUnlockText, modalInterstellarTabUnlockHeader, modalInterstellarTabUnlockText, modalEnergyTabUnlockHeader, modalEnergyTabUnlockText, modalSpaceMiningTabUnlockText, modalSpaceMiningTabUnlockHeader, modalCompoundsTabUnlockHeader, modalCompoundsTabUnlockText, techNotificationMessages } from './descriptions.js';
@@ -1541,6 +1541,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(1,1);
                     }, 'techUnlock', '', 'dysonSphereUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1591,6 +1592,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(1,2);
                     }, 'techUnlock', '', 'dysonSphereCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1642,6 +1644,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(1,3);
                     }, 'techUnlock', '', 'dysonSphereDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1692,6 +1695,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(1,4);
                     }, 'techUnlock', '', 'dysonSpherePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1742,6 +1746,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(1,5);
                     }, 'techUnlock', '', 'dysonSphereConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1792,6 +1797,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(2,1);
                     }, 'techUnlock', '', 'celestialProcessingCoreUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1842,6 +1848,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(2,2);
                     }, 'techUnlock', '', 'celestialProcessingCoreCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1893,6 +1900,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(2,3);
                     }, 'techUnlock', '', 'celestialProcessingCoreDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1943,6 +1951,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(2,4);
                     }, 'techUnlock', '', 'celestialProcessingCorePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -1993,6 +2002,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(2,5);
                     }, 'techUnlock', '', 'celestialProcessingCoreConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2043,6 +2053,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(3,1);
                     }, 'techUnlock', '', 'plasmaForgeUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2093,6 +2104,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(3,2);
                     }, 'techUnlock', '', 'plasmaForgeCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2144,6 +2156,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(3,3);
                     }, 'techUnlock', '', 'plasmaForgeDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2194,6 +2207,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(3,4);
                     }, 'techUnlock', '', 'plasmaForgePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2244,6 +2258,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(3,5);
                     }, 'techUnlock', '', 'plasmaForgeConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2294,6 +2309,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(4,1);
                     }, 'techUnlock', '', 'galacticMemoryArchiveUnderstanding', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2344,6 +2360,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(4,2);
                     }, 'techUnlock', '', 'galacticMemoryArchiveCapabilities', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2395,6 +2412,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(4,3);
                     }, 'techUnlock', '', 'galacticMemoryArchiveDisconnect', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2445,6 +2463,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(4,4);
                     }, 'techUnlock', '', 'galacticMemoryArchivePower', null, 'research', true, null, 'tech'),
                     null,
                     null,
@@ -2495,6 +2514,7 @@ export function drawTab3Content(heading, optionContentElement) {
                             null,
                             false
                         );
+                        applyMegaStructureBonuses(4,5);
                     }, 'techUnlock', '', 'galacticMemoryArchiveConnect', null, 'research', true, null, 'tech'),
                     null,
                     null,

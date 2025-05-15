@@ -7,9 +7,34 @@ REALLY TO DO TO END OF GAME
     - ADD REST OF STATISTICS
     - ADD ACHIEVEMENTS TO INCLUDE PHILOSOPHIES AND MEGASTRUCTURE STORY ARC
     - ADD MEGA BATTLE AT MIAPLACIDUS
-    - ADD LORE INTO THE NEWS TICKER
     - TELL A STORY IN THE INTRO POPUPS AND ADD MORE OF THIS THROUGHOUT ALL THE GAME
     - HAVE AN ENDING AFTER CONQUERING HOME SYSTEM
 
 WRITE THE STORY!
 YOU ARE A....
+
+
+
+bonuses:
+[
+  "All Batteries Double in Capacity!",
+  "All Energy producing Buildings 25% more powerful!",
+  "Miaplacidus Milestone Achieved!",
+  "Power Always On for this System!",
+  "Power Always On!",
+  "Gain 50 Research per Second!",
+  "Gain 100 Research per Second!",
+  "Miaplacidus Milestone Achieved!",
+  "Gain 150 Research per Second!",
+  "Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!",
+  "+25% Resource AutoBuyer Rates!",
+  "+50% Resource AutoBuyer Rates!",
+  "Miaplacidus Milestone Achieved!",
+  "+75% Resource AutoBuyer Rates!",
+  "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!",
+  "All Resource And Compound Storage Capacity + 100K!",
+  "All Resource And Compound Storage Capacity + 1M!",
+  "Miaplacidus Milestone Achieved!",
+  "All Resource And Compound Storage Capacity + 1B!",
+  "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!"
+]

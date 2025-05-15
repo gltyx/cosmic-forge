@@ -10104,6 +10104,84 @@ export function setAutoCreateToggleState(item) {
     }
 }
 
+export function applyMegaStructureBonuses(megastructure, tech) {
+    if (tech === 3) return;
+
+    switch (megastructure) {
+        case 1:
+            switch (tech) {
+                case 1:
+                    // Bonus for Dyson Sphere tech 1
+                    return "All Batteries Double in Capacity!";
+                case 2:
+                    // Bonus for Dyson Sphere tech 2
+                    return "All Energy producing Buildings 25% more powerful!";
+                case 3:
+                    // Bonus for Dyson Sphere tech 3
+                    return "Miaplacidus Milestone Achieved!";
+                case 4:
+                    // Bonus for Dyson Sphere tech 4
+                    return "Power Always On for this System!";
+                case 5:
+                    // Bonus for Dyson Sphere tech 5
+                    return "Power Always On!";
+            }
+        case 2:
+            switch (tech) {
+                case 1:
+                    // Bonus for Celestial Processing Core tech 1
+                    return "Gain 50 Research per Second!";
+                case 2:
+                    // Bonus for Celestial Processing Core tech 2
+                    return "Gain 100 Research per Second!";
+                case 3:
+                    // Bonus for Celestial Processing Core tech 3
+                    return "Miaplacidus Milestone Achieved!";
+                case 4:
+                    // Bonus for Celestial Processing Core tech 4
+                    return "Gain 150 Research per Second!";
+                case 5:
+                    // Bonus for Celestial Processing Core tech 5
+                    return "Gain 200 Research Per Second!<br>Gain 500 Research Per Second in every new System!";
+            }
+        case 3:
+            switch (tech) {
+                case 1:
+                    // Bonus for Plasma Forge tech 1
+                    return "+25% Resource AutoBuyer Rates!";
+                case 2:
+                    // Bonus for Plasma Forge tech 2
+                    return "+50% Resource AutoBuyer Rates!";
+                case 3:
+                    // Bonus for Plasma Forge tech 3
+                    return "Miaplacidus Milestone Achieved!";
+                case 4:
+                    // Bonus for Plasma Forge tech 4
+                    return "+75% Resource AutoBuyer Rates!";
+                case 5:
+                    // Bonus for Plasma Forge tech 5
+                    return "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!";
+            }
+        case 4:
+            switch (tech) {
+                case 1:
+                    // Bonus for Galactic Memory Archive tech 1
+                    return "All Resource And Compound Storage Capacity + 100K!";
+                case 2:
+                    // Bonus for Galactic Memory Archive tech 2
+                    return "All Resource And Compound Storage Capacity + 1M!";
+                case 3:
+                    // Bonus for Galactic Memory Archive tech 3
+                    return "Miaplacidus Milestone Achieved!";
+                case 4:
+                    // Bonus for Galactic Memory Archive tech 4
+                    return "All Resource And Compound Storage Capacity + 1B!";
+                case 5:
+                    // Bonus for Galactic Memory Archive tech 5
+                    return "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!";
+            } 
+    }  
+}
 
 //===============================================================================================================
 
