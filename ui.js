@@ -1810,7 +1810,7 @@ export function createStarDestinationRow(starData, isInteresting) {
                 const s = Math.floor(calculateStarTravelDuration(getDestinationStar()) / 1000);
                 return s >= 10800 ? 'red-disabled-text' : s >= 3600 ? 'warning-orange-text' : 'green-ready-text';
             })()
-        }">Real Time Flight Time approximately: ${
+        }">Real Time Flight Time to ${capitaliseWordsWithRomanNumerals(getDestinationStar())} approximately: ${
             (() => {
                 const s = Math.floor(calculateStarTravelDuration(getDestinationStar()) / 1000);
                 return s >= 3600
