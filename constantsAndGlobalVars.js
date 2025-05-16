@@ -458,6 +458,7 @@ let asteroidTimerCanContinue = false;
 let starInvestigationTimerCanContinue = false;
 let pillageVoidTimerCanContinue = false;
 let antimatterUnlocked = false;
+let permanentAntimatterUnlock = false;
 let isAntimatterBoostActive = false;
 let antimatterSvgEventListeners = false;
 let canTravelToAsteroids = false;
@@ -974,7 +975,11 @@ export function resetAllVariablesOnRebirth() {
     asteroidTimerCanContinue = false;
     starInvestigationTimerCanContinue = false;
     pillageVoidTimerCanContinue = false;
-    antimatterUnlocked = false;
+
+    if (!getPermanentAntimatterUnlock()) {
+        antimatterUnlocked = false;
+    }
+    
     isAntimatterBoostActive = false;
     antimatterSvgEventListeners = false;
     canTravelToAsteroids = false;
@@ -1181,6 +1186,7 @@ export function captureGameStatusForSaving(type) {
         infinitePower: infinitePower,
         megaStructureResourceBonus: megaStructureResourceBonus,
         storageAdderBonus: storageAdderBonus,
+        permanentAntimatterUnlock: permanentAntimatterUnlock
     }
 
     return gameState;
@@ -1347,7 +1353,7 @@ export function restoreGameStatus(gameState, type) {
             starsWithAncientManuscripts = gameState.starsWithAncientManuscripts ?? [];
             factoryStarsArray = gameState.factoryStarsArray ?? [];
             megaStructuresInPossessionArray = gameState.megaStructuresInPossessionArray ?? [];
-            miaplacidusMilestoneLevel = gameState.miaplacidusMilestoneLevel ?? [];
+            miaplacidusMilestoneLevel = gameState.miaplacidusMilestoneLevel ?? 0;
             megaStructureTechsResearched = gameState.megaStructureTechsResearched ?? [];
             
             if (gameState.compoundCreateDropdownRecipeText) {
@@ -1391,6 +1397,7 @@ export function restoreGameStatus(gameState, type) {
             infinitePower = gameState.flags.infinitePower ?? false;
             megaStructureResourceBonus = gameState.flags.megaStructureResourceBonus ?? false;
             storageAdderBonus = gameState.flags.storageAdderBonus ?? false;
+            permanentAntimatterUnlock = gameState.flags.permanentAntimatterUnlock ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -2845,6 +2852,14 @@ export function getAntimatterUnlocked() {
 
 export function setAntimatterUnlocked(value) {
     antimatterUnlocked = value;
+}
+
+export function getPermanentAntimatterUnlock() {
+    return permanentAntimatterUnlock;
+}
+
+export function setPermanentAntimatterUnlock(value) {
+    permanentAntimatterUnlock = value;
 }
 
 export function getNormalMaxAntimatterRate() {
