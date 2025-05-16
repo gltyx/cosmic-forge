@@ -288,7 +288,8 @@ import {
     setStarShipTravelSpeed,
     getSettledStars,
     getBasePillageVoidTimerDuration,
-    getInfinitePowerRate
+    getInfinitePowerRate,
+    getCurrentTheme
 } from './constantsAndGlobalVars.js';
 
 import {
@@ -607,14 +608,16 @@ export async function gameLoop() {
 
 function megastructureUIChecks() {
     if (getCurrentRunIsMegaStructureRun() || getPermanentAntimatterUnlock()) {
-        if (document.getElementById('megastructuresOption').parentElement.parentElement.classList.contains('invisible')) {
+        const optionElement = document.getElementById('megastructuresOption');
+        if (optionElement?.parentElement?.parentElement.classList.contains('invisible')) {
             showNotification(`The MegaStructure Option is now available in the Galactic Tab!`, 'info', 3000, 'tech');
-            document.getElementById('megastructuresOption').parentElement.parentElement.classList.remove('invisible');
+            optionElement.parentElement.parentElement.classList.remove('invisible');
         }
     }
 
     if (getCurrentOptionPane() === 'megastructures') {
         const researched = getMegaStructureTechsResearched();
+        const themeKey = capitaliseString(getCurrentTheme());
 
         const dysonSphereDisconnected = researched.some(pair => pair[0] === 1 && pair[1] === 3);
         const celestialProcessingCoreDisconnected = researched.some(pair => pair[0] === 2 && pair[1] === 3);
@@ -627,15 +630,16 @@ function megastructureUIChecks() {
         const galacticMemoryArchiveContainer = document.getElementById('galacticMemoryArchiveContainer');
         const starSystemContainer = document.getElementById('starSystemBox');
 
-        function updateContainerImage(container, disconnected, activeKey, notActiveKey) {
+        function updateContainerImage(container, disconnected, activeKeyBase, notActiveKeyBase) {
             if (!container) return;
+            const key = (disconnected ? activeKeyBase : notActiveKeyBase) + themeKey;
+            const expectedSrc = megaStructureImageUrls[key];
 
-            const expectedSrc = disconnected ? megaStructureImageUrls[activeKey] : megaStructureImageUrls[notActiveKey];
             let img = container.querySelector('img');
-
             if (img) {
-                if (img.src.endsWith(expectedSrc)) return;
-                img.src = expectedSrc;
+                if (!img.src.endsWith(expectedSrc)) {
+                    img.src = expectedSrc;
+                }
             } else {
                 img = document.createElement('img');
                 img.className = 'mega-structure-image';
@@ -651,12 +655,10 @@ function megastructureUIChecks() {
 
         if (starSystemContainer) {
             const allActive = dysonSphereDisconnected && celestialProcessingCoreDisconnected && plasmaForgeDisconnected && galacticMemoryArchiveDisconnected;
-            const starSystemActiveSrc = megaStructureImageUrls['starSystemActive'] || './images/megaStructure/MiaplacidusActive.png';
-            const starSystemNotActiveSrc = megaStructureImageUrls['starSystemNotActive'] || './images/megaStructure/MiaplacidusNotActive.png';
+            const key = (allActive ? 'starSystemActive' : 'starSystemNotActive') + themeKey;
+            const expectedSrc = megaStructureImageUrls[key];
 
             let img = starSystemContainer.querySelector('img');
-            const expectedSrc = allActive ? starSystemActiveSrc : starSystemNotActiveSrc;
-
             if (img) {
                 if (!img.src.endsWith(expectedSrc)) {
                     img.src = expectedSrc;
@@ -668,7 +670,7 @@ function megastructureUIChecks() {
                 starSystemContainer.appendChild(img);
             }
         }
-        // Count how many megastructures are disconnected
+
         const disconnectedCount = 
             (dysonSphereDisconnected ? 1 : 0) + 
             (celestialProcessingCoreDisconnected ? 1 : 0) + 
@@ -677,8 +679,8 @@ function megastructureUIChecks() {
 
         const forceFieldContainer = document.getElementById('forceFieldBox');
         if (forceFieldContainer) {
-            const forceFieldKey = `forceField${disconnectedCount}`;
-            const forceFieldSrc = megaStructureImageUrls[forceFieldKey] || `./images/megaStructure/ForceField${disconnectedCount}.png`;
+            const key = `forceField${disconnectedCount}${themeKey}`;
+            const forceFieldSrc = megaStructureImageUrls[key];
 
             let img = forceFieldContainer.querySelector('img');
             if (img) {
