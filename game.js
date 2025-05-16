@@ -605,8 +605,10 @@ export async function gameLoop() {
 
 function megastructureUIChecks() {
     if (getCurrentRunIsMegaStructureRun() || getPermanentAntimatterUnlock()) {
-        showNotification(`The MegaStructure Option is now available in the Galactic Tab!`, 'info', 3000, 'tech');
-        document.getElementById('megastructuresOption').parentElement.parentElement.classList.remove('invisible');
+        if (document.getElementById('megastructuresOption').parentElement.parentElement.classList.contains('invisible')) {
+            showNotification(`The MegaStructure Option is now available in the Galactic Tab!`, 'info', 3000, 'tech');
+            document.getElementById('megastructuresOption').parentElement.parentElement.classList.remove('invisible');
+        }
     }
 }
 
