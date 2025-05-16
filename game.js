@@ -318,7 +318,9 @@ import {
     getBuffRocketFuelOptimizationData,
     getBuffEnhancedMiningData,
     getBuffQuantumEnginesData,
-    setAchievementIconImageUrls} from "./resourceDataObject.js";
+    setAchievementIconImageUrls,
+    megaStructureImageUrls 
+} from "./resourceDataObject.js";
 
 import { checkForAchievements, resetAchievementsOnRebirth } from "./achievements.js";
 
@@ -608,6 +610,87 @@ function megastructureUIChecks() {
         if (document.getElementById('megastructuresOption').parentElement.parentElement.classList.contains('invisible')) {
             showNotification(`The MegaStructure Option is now available in the Galactic Tab!`, 'info', 3000, 'tech');
             document.getElementById('megastructuresOption').parentElement.parentElement.classList.remove('invisible');
+        }
+    }
+
+    if (getCurrentOptionPane() === 'megastructures') {
+        const researched = getMegaStructureTechsResearched();
+
+        const dysonSphereDisconnected = researched.some(pair => pair[0] === 1 && pair[1] === 3);
+        const celestialProcessingCoreDisconnected = researched.some(pair => pair[0] === 2 && pair[1] === 3);
+        const plasmaForgeDisconnected = researched.some(pair => pair[0] === 3 && pair[1] === 3);
+        const galacticMemoryArchiveDisconnected = researched.some(pair => pair[0] === 4 && pair[1] === 3);
+
+        const dysonSphereContainer = document.getElementById('dysonSphereContainer');
+        const celestialProcessingCoreContainer = document.getElementById('celestialProcessingCoreContainer');
+        const plasmaForgeContainer = document.getElementById('plasmaForgeContainer');
+        const galacticMemoryArchiveContainer = document.getElementById('galacticMemoryArchiveContainer');
+        const starSystemContainer = document.getElementById('starSystemBox');
+
+        function updateContainerImage(container, disconnected, activeKey, notActiveKey) {
+            if (!container) return;
+
+            const expectedSrc = disconnected ? megaStructureImageUrls[activeKey] : megaStructureImageUrls[notActiveKey];
+            let img = container.querySelector('img');
+
+            if (img) {
+                if (img.src.endsWith(expectedSrc)) return;
+                img.src = expectedSrc;
+            } else {
+                img = document.createElement('img');
+                img.className = 'mega-structure-image';
+                img.src = expectedSrc;
+                container.appendChild(img);
+            }
+        }
+
+        updateContainerImage(dysonSphereContainer, dysonSphereDisconnected, 'dysonSphereActive', 'dysonSphereNotActive');
+        updateContainerImage(celestialProcessingCoreContainer, celestialProcessingCoreDisconnected, 'celestialProcessingCoreActive', 'celestialProcessingCoreNotActive');
+        updateContainerImage(plasmaForgeContainer, plasmaForgeDisconnected, 'plasmaForgeActive', 'plasmaForgeNotActive');
+        updateContainerImage(galacticMemoryArchiveContainer, galacticMemoryArchiveDisconnected, 'galacticMemoryArchiveActive', 'galacticMemoryArchiveNotActive');
+
+        if (starSystemContainer) {
+            const allActive = dysonSphereDisconnected && celestialProcessingCoreDisconnected && plasmaForgeDisconnected && galacticMemoryArchiveDisconnected;
+            const starSystemActiveSrc = megaStructureImageUrls['starSystemActive'] || './images/megaStructure/MiaplacidusActive.png';
+            const starSystemNotActiveSrc = megaStructureImageUrls['starSystemNotActive'] || './images/megaStructure/MiaplacidusNotActive.png';
+
+            let img = starSystemContainer.querySelector('img');
+            const expectedSrc = allActive ? starSystemActiveSrc : starSystemNotActiveSrc;
+
+            if (img) {
+                if (!img.src.endsWith(expectedSrc)) {
+                    img.src = expectedSrc;
+                }
+            } else {
+                img = document.createElement('img');
+                img.className = 'star-system-image';
+                img.src = expectedSrc;
+                starSystemContainer.appendChild(img);
+            }
+        }
+        // Count how many megastructures are disconnected
+        const disconnectedCount = 
+            (dysonSphereDisconnected ? 1 : 0) + 
+            (celestialProcessingCoreDisconnected ? 1 : 0) + 
+            (plasmaForgeDisconnected ? 1 : 0) + 
+            (galacticMemoryArchiveDisconnected ? 1 : 0);
+
+        const forceFieldContainer = document.getElementById('forceFieldBox');
+        if (forceFieldContainer) {
+            const forceFieldKey = `forceField${disconnectedCount}`;
+            const forceFieldSrc = megaStructureImageUrls[forceFieldKey] || `./images/megaStructure/ForceField${disconnectedCount}.png`;
+
+            let img = forceFieldContainer.querySelector('img');
+            if (img) {
+                if (!img.src.endsWith(forceFieldSrc)) {
+                    img.src = forceFieldSrc;
+                }
+            } else {
+                img = document.createElement('img');
+                img.className = 'force-field-image';
+                img.src = forceFieldSrc;
+                forceFieldContainer.appendChild(img);
+            }
         }
     }
 }

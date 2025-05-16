@@ -1,4 +1,4 @@
-import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, createDropdown, createTextElement, createTextFieldArea, callPopupModal, showHideModal } from './ui.js';
+import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, createDropdown, createTextElement, createTextFieldArea, callPopupModal, showHideModal, createMegaStructureDiagram } from './ui.js';
 import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
 import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade, rebirth } from './game.js';
 import { getAscendencyBuffDataObject, getResourceDataObject } from './resourceDataObject.js';
@@ -16,61 +16,61 @@ export function drawTab7Content(heading, optionContentElement) {
     removeTabAttentionIfNoIndicators('tab7');
 
     if (heading === 'Rebirth') {
-    
-            const rebirthRow = createOptionRow(
-                'rebirthRow',
-                null,
-                'Rebirth:',
-                createButton(`REBIRTH`, ['option-button', 'red-disabled-text', 'rebirth-check'], () => {
-                    const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
-                    const spanClass = currentAp === 0 ? "red-disabled-text" : "green-ready-text";
+        const rebirthRow = createOptionRow(
+            'rebirthRow',
+            null,
+            'Rebirth:',
+            createButton(`REBIRTH`, ['option-button', 'red-disabled-text', 'rebirth-check'], () => {
+                const currentAp = getResourceDataObject('ascendencyPoints', ['quantity']);
+                const spanClass = currentAp === 0 ? "red-disabled-text" : "green-ready-text";
 
-                    const content = modalRebirthText.replace(
-                        /<span class="green-ready-text">.*?<\/span>/,
-                        `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
-                    );
+                const content = modalRebirthText.replace(
+                    /<span class="green-ready-text">.*?<\/span>/,
+                    `<span class="${spanClass}">You will carry over ${currentAp} AP!</span>`
+                );
 
-                    callPopupModal(
-                        modalRebirthHeader,
-                        content,
-                        true,
-                        true,
-                        false,
-                        false,
-                        function () {
-                            rebirth();
-                            showHideModal();
-                        },
-                        function () {
-                            showHideModal();
-                        },
-                        null,
-                        null,
-                        'RESET ALL PROGRESS AND KEEP AP',
-                        'CANCEL',
-                        null,
-                        null,
-                        false
-                    );
+                callPopupModal(
+                    modalRebirthHeader,
+                    content,
+                    true,
+                    true,
+                    false,
+                    false,
+                    function () {
+                        rebirth();
+                        showHideModal();
+                    },
+                    function () {
+                        showHideModal();
+                    },
+                    null,
+                    null,
+                    'RESET ALL PROGRESS AND KEEP AP',
+                    'CANCEL',
+                    null,
+                    null,
+                    false
+                );
 
-                }, null, null, null, null, null, true, null, 'rebirth'),
-                null,
-                null,
-                null,
-                null,
-                `RESET ALL PROGRESS AND KEEP AWARDED AP`,
-                '',
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                'rebirth'
-            );
-            optionContentElement.appendChild(rebirthRow);
+            }, null, null, null, null, null, true, null, 'rebirth'),
+            null,
+            null,
+            null,
+            null,
+            `RESET ALL PROGRESS AND KEEP AWARDED AP`,
+            '',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            'rebirth'
+        );
+        
+        optionContentElement.appendChild(rebirthRow);
     }
 
     if (heading === 'Galactic Market') {
@@ -322,6 +322,29 @@ export function drawTab7Content(heading, optionContentElement) {
     }  
     
     if (heading === 'Megastructures') {
-
+        const megastructureDiagramRow = createOptionRow(
+            'megastructureDiagramRow',
+            null,
+            '',
+            createMegaStructureDiagram(),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%']
+        );
+    
+        optionContentElement.appendChild(megastructureDiagramRow);
     }
 }

@@ -178,7 +178,7 @@ import {
     modalPlayerLeaderIntroContentText4
 } from "./descriptions.js";
 
-import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud, destroySaveGameOnCloud } from './saveLoadGame.js';
+import { saveGame, loadGameFromCloud, generateRandomPioneerName, saveGameToCloud } from './saveLoadGame.js';
 
 import {
     setSellFuseCreateTextDescriptionClassesBasedOnButtonStates,
@@ -5856,6 +5856,44 @@ export function setColoniseOpinionProgressBar(value, parentElement) {
             }
         });
     }
+
+export function createMegaStructureDiagram() {
+    const container = document.createElement('div');
+    container.className = 'mega-structure-diagram-container';
+    container.id = 'container';
+
+    const forceFieldBox = document.createElement('div');
+    forceFieldBox.className = 'force-field-container';
+    forceFieldBox.id = 'forceFieldBox';
+    container.appendChild(forceFieldBox);
+
+    const starSystemBox = document.createElement('div');
+    starSystemBox.className = 'star-system-container';
+    starSystemBox.id = 'starSystemBox';
+    container.appendChild(starSystemBox);
+
+    const dysonSphereContainer = document.createElement('div');
+    dysonSphereContainer.className = 'dyson-sphere-container';
+    dysonSphereContainer.id = 'dysonSphereContainer';
+    container.appendChild(dysonSphereContainer);
+
+    const celestialProcessingCoreContainer = document.createElement('div');
+    celestialProcessingCoreContainer.className = 'celestial-processing-core-container';
+    celestialProcessingCoreContainer.id = 'celestialProcessingCoreContainer';
+    container.appendChild(celestialProcessingCoreContainer);
+
+    const plasmaForgeContainer = document.createElement('div');
+    plasmaForgeContainer.className = 'plasma-forge-container';
+    plasmaForgeContainer.id = 'plasmaForgeContainer';
+    container.appendChild(plasmaForgeContainer);
+
+    const galacticMemoryArchiveContainer = document.createElement('div');
+    galacticMemoryArchiveContainer.className = 'galactic-memory-archive-container';
+    galacticMemoryArchiveContainer.id = 'galacticMemoryArchiveContainer';
+    container.appendChild(galacticMemoryArchiveContainer);
+
+    return container;
+}
     
 //-------------------------------------------------------------------------------------------------
 //--------------DEBUG-------------------------------------------------------------------------------

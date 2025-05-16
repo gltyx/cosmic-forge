@@ -276,7 +276,7 @@ export function initialiseDescriptions() {
 
         'galactic market': "Here you can make various trades in the Galactic Market.",
         'ascendency': "Here you can spend AP for permanent buffs to speed up your runs!",
-        'megastructures': "Here you can monitor your progress with harnessing Megastructures and disabling the Miaplacidus Force Field!",
+        'megastructures': "This shows your progress in harnessing the power of MegaStructures, and the slow dismantling of the Miaplacidus Force Field!",
 
         'contact': "Contact Channels for Feedback and Suggestions",
         'get started': "Learn how to get started in Cosmic Forge.",
@@ -289,7 +289,6 @@ export function initialiseDescriptions() {
         'saving / loading': "Save and Load your progress in the game.",
         'statistics': `Here you can see your progress in the game.`,
         'achievements': `Here you can see your earned achievements, and their effects.`
-
     };
 
     rocketNames = {
@@ -1396,6 +1395,11 @@ export function initialiseDescriptions() {
         },
         rebirthRow: {
             content1: "Rebirth to start over at the new System.  This will reset all progress, but you will keep unspent AP and any permanent buffs purchased with it",
+            content2: "",
+            updateAt: ""
+        },
+        megastructureDiagramRow: {
+            content1: "",
             content2: "",
             updateAt: ""
         },

@@ -2319,6 +2319,23 @@ const achievementPositionDataLinker = {
     have50HoursWithOnePioneer: { id: 'have50HoursWithOnePioneer', gridRow: 4, gridColumn: 9 }
 };
 
+export const megaStructureImageUrls = {
+    forceField0: './images/megaStructure/ForceField0.png',
+    forceField1: './images/megaStructure/ForceField1.png',
+    forceField2: './images/megaStructure/ForceField2.png',
+    forceField3: './images/megaStructure/ForceField3.png',
+    forceField4: './images/megaStructure/ForceField4.png',
+    starSystemActive: './images/megaStructure/MiaplacidusActive.png',
+    starSystemNotActive: './images/megaStructure/MiaplacidusNotActive.png',
+    dysonSphereActive: './images/megaStructure/DysonSphereActive.png',
+    dysonSphereNotActive: './images/megaStructure/DysonSphereNotActive.png',
+    celestialProcessingCoreActive: './images/megaStructure/CelestialProcessingCoreActive.png',
+    celestialProcessingCoreNotActive: './images/megaStructure/CelestialProcessingCoreNotActive.png',
+    plasmaForgeActive: './images/megaStructure/PlasmaForgeActive.png',
+    plasmaForgeNotActive: './images/megaStructure/PlasmaForgeNotActive.png',
+    galacticMemoryArchiveActive: './images/megaStructure/GalacticMemoryArchiveActive.png',
+    galacticMemoryArchiveNotActive: './images/megaStructure/GalacticMemoryArchiveNotActive.png',
+};
 
 //----------------------------------------------------------------------------------------------------------
 //GETTER SETTERS
