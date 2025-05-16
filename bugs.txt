@@ -3,7 +3,6 @@ rare cases where 0 0 0 for enemy in battle but can still click conquest, in this
 Pioneer-testermanuscript3
 
 REALLY TO DO TO END OF GAME
-    - IMPLEMENT MEGASTRUCTURE BONUSES
     - ADD REST OF STATISTICS
     - ADD ACHIEVEMENTS TO INCLUDE PHILOSOPHIES AND MEGASTRUCTURE STORY ARC
     - ADD MEGA BATTLE AT MIAPLACIDUS
@@ -12,17 +11,3 @@ REALLY TO DO TO END OF GAME
 
 WRITE THE STORY!
 YOU ARE A....
-
-
-
-bonuses to do:
-[
-  "+25% Resource AutoBuyer Rates!",
-  "+50% Resource AutoBuyer Rates!",
-  "+75% Resource AutoBuyer Rates!",
-  "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!",
-  "All Resource And Compound Storage Capacity + 100K!",
-  "All Resource And Compound Storage Capacity + 1M!",
-  "All Resource And Compound Storage Capacity + 1B!",
-  "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!"
-]

@@ -430,6 +430,8 @@ let rocketReadyToTravel = {
     rocket4: true
 }
 
+let storageAdderBonus = false;
+let megaStructureResourceBonus = false;
 let infinitePower = false;
 let currentRunIsMegaStructureRun = false;
 let rebirthPossible = false;
@@ -713,7 +715,7 @@ export function getElements() {
 }
 
 export function resetAllVariablesOnRebirth() {
-    if (!getMegaStructureTechsResearched().includes([1,5])) {
+    if (!getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 1 && arr[1] === 5)) {
         infinitePower = false;
     }
 
@@ -1176,7 +1178,9 @@ export function captureGameStatusForSaving(type) {
         feedbackCanBeRequested: feedbackCanBeRequested,
         philosophyAbilityActive: philosophyAbilityActive,
         currentRunIsMegaStructureRun: currentRunIsMegaStructureRun,
-        infinitePower: infinitePower
+        infinitePower: infinitePower,
+        megaStructureResourceBonus: megaStructureResourceBonus,
+        storageAdderBonus: storageAdderBonus,
     }
 
     return gameState;
@@ -1385,6 +1389,8 @@ export function restoreGameStatus(gameState, type) {
             philosophyAbilityActive = gameState.flags.philosophyAbilityActive ?? false;
             currentRunIsMegaStructureRun = gameState.flags.currentRunIsMegaStructureRun ?? false;
             infinitePower = gameState.flags.infinitePower ?? false;
+            megaStructureResourceBonus = gameState.flags.megaStructureResourceBonus ?? false;
+            storageAdderBonus = gameState.flags.storageAdderBonus ?? false;
 
             selectTheme(getCurrentTheme());
             setLastSavedTimeStamp(gameState.timeStamp);
@@ -3438,6 +3444,22 @@ export function getInfinitePower() {
 
 export function setInfinitePower(value) {
     infinitePower = value;
+}
+
+export function getMegaStructureResourceBonus() {
+    return megaStructureResourceBonus;
+}
+
+export function setMegaStructureResourceBonus(value) {
+    megaStructureResourceBonus = value;
+}
+
+export function getStorageAdderBonus() {
+    return storageAdderBonus;
+}
+
+export function setStorageAdderBonus(value) {
+    storageAdderBonus = value;
 }
 
 export function getInfinitePowerRate() {

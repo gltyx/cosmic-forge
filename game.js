@@ -1,4 +1,8 @@
 import {
+    setStorageAdderBonus,
+    getStorageAdderBonus,
+    setMegaStructureResourceBonus,
+    getMegaStructureResourceBonus,
     getInfinitePower,
     setInfinitePower,
     getMegaStructureTechsResearched,
@@ -10173,6 +10177,47 @@ export function setAutoCreateToggleState(item) {
     }
 }
 
+export const addStorageCapacityAndCompoundsToAllResources = (addValue) => {
+    let resObj = getResourceDataObject('resources');
+
+    for (const key in resObj) {
+        if (key === 'solar') continue;
+
+        const storagePath = [key, 'storageCapacity'];
+        const currentCapacity = getResourceDataObject('resources', storagePath);
+        const newCapacity = currentCapacity + addValue;
+        setResourceDataObject(newCapacity, 'resources', storagePath);
+    }
+
+    resObj = getResourceDataObject('compounds');
+
+    for (const key in resObj) {
+        const storagePath = [key, 'storageCapacity'];
+        const currentCapacity = getResourceDataObject('compounds', storagePath);
+        const newCapacity = currentCapacity + addValue;
+        setResourceDataObject(newCapacity, 'compounds', storagePath);
+    }
+};
+
+export const applyRateMultiplierToAllResources = (multiplier) => {
+    const resObj = getResourceDataObject('resources');
+
+    for (const key in resObj) {
+        if (key === 'solar') continue;
+
+        for (let i = 1; i <= 4; i++) {
+            const tierKey = `tier${i}`;
+            const path = [key, 'upgrades', 'autoBuyer', tierKey, 'rate'];
+            const rate = getResourceDataObject('resources', path);
+
+            if (typeof rate === 'number') {
+                const newRate = rate * multiplier;
+                setResourceDataObject(newRate, 'resources', path);
+            }
+        }
+    }
+};
+
 export function applyMegaStructureBonuses(megastructure, tech) {
     switch (megastructure) {
         case 1:
@@ -10242,49 +10287,50 @@ export function applyMegaStructureBonuses(megastructure, tech) {
         case 3:
             switch (tech) {
                 case 1:
-                    setMegaStructureTechsResearched([3,1]);
-                    // Bonus for Plasma Forge tech 1
-                    return "+25% Resource AutoBuyer Rates!";
+                    applyRateMultiplierToAllResources(1.25);
+                    setMegaStructureTechsResearched([3, 1]);
+                    return;
                 case 2:
-                    setMegaStructureTechsResearched([3,2]);
-                    // Bonus for Plasma Forge tech 2
-                    return "+50% Resource AutoBuyer Rates!";
+                    applyRateMultiplierToAllResources(1.5);
+                    setMegaStructureTechsResearched([3, 2]);
+                    return;
                 case 3:
                     setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
-                    setMegaStructureTechsResearched([3,3]);
+                    setMegaStructureTechsResearched([3, 3]);
                     return;
                 case 4:
-                    setMegaStructureTechsResearched([3,4]);
-                    // Bonus for Plasma Forge tech 4
-                    return "+75% Resource AutoBuyer Rates!";
+                    applyRateMultiplierToAllResources(1.75);
+                    setMegaStructureTechsResearched([3, 4]);
+                    return;
                 case 5:
-                    setMegaStructureTechsResearched([3,5]);
-                    // Bonus for Plasma Forge tech 5
-                    return "Double Resource AutoBuyer Rates!<br>Resource AutoBuyer Rates are 500% higher in every new System!";
+                    applyRateMultiplierToAllResources(2);
+                    setMegaStructureResourceBonus(true);
+                    setMegaStructureTechsResearched([3, 5]);
+                    return;
             }
-            break;
         case 4:
             switch (tech) {
                 case 1:
+                    addStorageCapacityAndCompoundsToAllResources(100000);
                     setMegaStructureTechsResearched([4,1]);
-                    // Bonus for Galactic Memory Archive tech 1
-                    return "All Resource And Compound Storage Capacity + 100K!";
+                    return;
                 case 2:
+                    addStorageCapacityAndCompoundsToAllResources(1000000);
                     setMegaStructureTechsResearched([4,2]);
-                    // Bonus for Galactic Memory Archive tech 2
-                    return "All Resource And Compound Storage Capacity + 1M!";
+                    return;
                 case 3:
                     setMiaplacidusMilestoneLevel(++getMiaplacidusMilestoneLevel());
                     setMegaStructureTechsResearched([4,3]);
                     return;
                 case 4:
+                    addStorageCapacityAndCompoundsToAllResources(1000000000);
                     setMegaStructureTechsResearched([4,4]);
-                    // Bonus for Galactic Memory Archive tech 4
-                    return "All Resource And Compound Storage Capacity + 1B!";
+                    return;
                 case 5:
+                    addStorageCapacityAndCompoundsToAllResources(10000000000);
+                    setStorageAdderBonus(true);
                     setMegaStructureTechsResearched([4,5]);
-                    // Bonus for Galactic Memory Archive tech 5
-                    return "All Resource And Compound Storage Capacity + 10B!<br>All Resource And Compound Storage Capacity starts at 10B in every new System!";
+                    return;
             }
             break;
     }
