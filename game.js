@@ -506,6 +506,7 @@ export async function gameLoop() {
         coloniseChecks();
         galacticMarketChecks();
         ascendencyBuffChecks();
+        megastructureUIChecks();
         rebirthChecks();
         calculateLiquidationValue();
 
@@ -599,6 +600,12 @@ export async function gameLoop() {
         }
 
         requestAnimationFrame(gameLoop);
+    }
+}
+
+function megastructureUIChecks() {
+    if (getCurrentRunIsMegaStructureRun() || getPermanentAntimatterUnlock()) {
+        document.getElementById('megastructuresOption').parentElement.parentElement.classList.remove('invisible');
     }
 }
 
@@ -5938,11 +5945,11 @@ function startInitialTimers() {
                 finalRate += 0.5;
             }
 
-            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 2)) {
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 2)) {
                 finalRate += 1;
             }
 
-            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar']) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 4)) {
+            if (getStarSystemDataObject('stars', [getCurrentStarSystem(), 'factoryStar'], true) === 'Celestial Processing Core' && getMegaStructureTechsResearched().some(arr => Array.isArray(arr) && arr[0] === 2 && arr[1] === 4)) {
                 finalRate += 1.5;
             }
         }

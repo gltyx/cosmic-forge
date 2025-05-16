@@ -3874,6 +3874,16 @@ function initializeTabEventListeners() {
             setFirstAccessArray('ascendency');
         });
     });
+
+    document.querySelectorAll('[class*="tab7"][class*="option4"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab7', 'megastructures');
+            setCurrentOptionPane('megastructures');
+            updateContent('Megastructures', 'tab7', 'content');
+            setFirstAccessArray('megastructures');
+        });
+    });
     
     document.querySelectorAll('[class*="tab8"][class*="option1"]').forEach(function(element) {
         element.addEventListener('click', function() {

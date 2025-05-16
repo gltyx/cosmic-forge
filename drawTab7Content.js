@@ -319,5 +319,9 @@ export function drawTab7Content(heading, optionContentElement) {
     
             optionContentElement.appendChild(buffRow);
         });
-    }    
+    }  
+    
+    if (heading === 'Megastructures') {
+
+    }
 }

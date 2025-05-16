@@ -276,6 +276,7 @@ export function initialiseDescriptions() {
 
         'galactic market': "Here you can make various trades in the Galactic Market.",
         'ascendency': "Here you can spend AP for permanent buffs to speed up your runs!",
+        'megastructures': "Here you can monitor your progress with harnessing Megastructures and disabling the Miaplacidus Force Field!",
 
         'contact': "Contact Channels for Feedback and Suggestions",
         'get started': "Learn how to get started in Cosmic Forge.",
