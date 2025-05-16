@@ -188,7 +188,7 @@ export function initialiseDescriptions() {
     modalMegaStructureTechDysonSphere2Header = `DYSON SPHERE CAPABILITIES`;
     modalMegaStructureTechDysonSphere2Text = `After studying how the Dyson Sphere works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">All Energy producing Buildings 25% more powerful!</span>`;
     modalMegaStructureTechDysonSphere3Header = `DISCONNECTING THE DYSON SPHERE`;
-    modalMegaStructureTechDysonSphere3Text = `You have managed to disconnect the Dyson Sphere from its current role,<br>which was providing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechDysonSphere3Text = `You have managed to disconnect the Dyson Sphere from its current role,<br>which was providing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!<br>+0.15 Antimatter /s forever!</span>`;
     modalMegaStructureTechDysonSphere4Header = `HARNESSING THE DYSON SPHERE`;
     modalMegaStructureTechDysonSphere4Text = `You have harnessed the Dyson Sphere for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">Power Always On for this System!</span>`;
     modalMegaStructureTechDysonSphere5Header = `CONNECTING THE DYSON SPHERE TO THE FABRIC`;
@@ -198,7 +198,7 @@ export function initialiseDescriptions() {
     modalMegaStructureTechCelestialProcessingCore2Header = `CELESTIAL PROCESSING CORE CAPABILITIES`;
     modalMegaStructureTechCelestialProcessingCore2Text = `After studying how the Celestial Processing Core works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">Gain 100 Research per Second!</span>`;
     modalMegaStructureTechCelestialProcessingCore3Header = `DISCONNECTING THE CELESTIAL PROCESSING CORE`;
-    modalMegaStructureTechCelestialProcessingCore3Text = `You have managed to disconnect the Celestial Processing Core from its current role<br>which was providing processing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechCelestialProcessingCore3Text = `You have managed to disconnect the Celestial Processing Core from its current role<br>which was providing processing power to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!<br>+0.15 Antimatter /s forever!</span>`;
     modalMegaStructureTechCelestialProcessingCore4Header = `HARNESSING THE CELESTIAL PROCESSING CORE`;
     modalMegaStructureTechCelestialProcessingCore4Text = `You have harnessed the Celestial Processing Core for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">Gain 150 Research per Second!</span>`;
     modalMegaStructureTechCelestialProcessingCore5Header = `CONNECTING THE CELESTIAL PROCESSING CORE TO THE FABRIC`;
@@ -208,7 +208,7 @@ export function initialiseDescriptions() {
     modalMegaStructureTechPlasmaForge2Header = `PLASMA FORGE CAPABILITIES`;
     modalMegaStructureTechPlasmaForge2Text = `After studying how the Plasma Forge works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">+50% Resource AutoBuyer Rates!</span>`;
     modalMegaStructureTechPlasmaForge3Header = `DISCONNECTING THE PLASMA FORGE`;
-    modalMegaStructureTechPlasmaForge3Text = `You have managed to disconnect the Plasma Forge from its current role<br>which was providing plasma to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechPlasmaForge3Text = `You have managed to disconnect the Plasma Forge from its current role<br>which was providing plasma to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!<br>+0.15 Antimatter /s forever!</span>`;
     modalMegaStructureTechPlasmaForge4Header = `HARNESSING THE PLASMA FORGE`;
     modalMegaStructureTechPlasmaForge4Text = `You have harnessed the Plasma Forge for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">+75% Resource AutoBuyer Rates!</span>`;
     modalMegaStructureTechPlasmaForge5Header = `CONNECTING THE PLASMA FORGE TO THE FABRIC`;
@@ -218,7 +218,7 @@ export function initialiseDescriptions() {
     modalMegaStructureTechGalacticMemoryArchive2Header = `GALACTIC MEMORY ARCHIVE CAPABILITIES`;
     modalMegaStructureTechGalacticMemoryArchive2Text = `After studying how the Galactic Memory Archive works you are now<br>confident of its capabilities and you now want to plan how you are going to disconnect<br>it from its current role so you can somehow harness it.<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 1M!</span>`;
     modalMegaStructureTechGalacticMemoryArchive3Header = `DISCONNECTING THE GALACTIC MEMORY ARCHIVE`;
-    modalMegaStructureTechGalacticMemoryArchive3Text = `You have managed to disconnect the Galactic Memory Archive from its current role<br>which was providing memory functions to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!</span>`;
+    modalMegaStructureTechGalacticMemoryArchive3Text = `You have managed to disconnect the Galactic Memory Archive from its current role<br>which was providing memory functions to the great force field around your home star Miaplacidus<br><br><span class="green-ready-text">Miaplacidus Milestone Achieved!<br>+0.15 Antimatter /s forever!</span>`;
     modalMegaStructureTechGalacticMemoryArchive4Header = `HARNESSING THE GALACTIC MEMORY ARCHIVE`;
     modalMegaStructureTechGalacticMemoryArchive4Text = `You have harnessed the Galactic Memory Archive for the benefit of this System,<br>its huge power will benefit you as it provides the following bonus:<br><br><span class="green-ready-text">All Resource And Compound Storage Capacity + 1B!</span>`;
     modalMegaStructureTechGalacticMemoryArchive5Header = `CONNECTING THE GALACTIC MEMORY ARCHIVE TO THE FABRIC`;

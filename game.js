@@ -1,4 +1,6 @@
 import {
+    getMegaStructureAntimatterAmount,
+    setMegaStructureAntimatterAmount,
     setPermanentAntimatterUnlock,
     getPermanentAntimatterUnlock,
     setStorageAdderBonus,
@@ -2812,6 +2814,7 @@ function updateAntimatterAndDiagram() {
     } 
 
     //console.log(totalAntimatterExtractionRate);
+    setResourceDataObject(antimatterTotalQuantity + (getMegaStructureAntimatterAmount() / getTimerRateRatio()), 'antimatter', ['quantity']);
     setResourceDataObject(totalAntimatterExtractionRate, 'antimatter', ['rate']);
 
     if (getCurrentOptionPane() === 'mining') {
@@ -10251,6 +10254,7 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                     });
                     return;
                 case 3:
+                    setMegaStructureAntimatterAmount(0.15);
                     setPermanentAntimatterUnlock(true);
                     setMiaplacidusMilestoneLevel(getMiaplacidusMilestoneLevel() + 1);
                     setMegaStructureTechsResearched([1,3]);
@@ -10276,6 +10280,7 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                     setMegaStructureTechsResearched([2,2]);
                     return;
                 case 3:
+                    setMegaStructureAntimatterAmount(0.15);
                     setPermanentAntimatterUnlock(true);
                     setMiaplacidusMilestoneLevel(getMiaplacidusMilestoneLevel() + 1);
                     setMegaStructureTechsResearched([2,3]);
@@ -10299,6 +10304,7 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                     setMegaStructureTechsResearched([3, 2]);
                     return;
                 case 3:
+                    setMegaStructureAntimatterAmount(0.15);
                     setPermanentAntimatterUnlock(true);
                     setMiaplacidusMilestoneLevel(getMiaplacidusMilestoneLevel() + 1);
                     setMegaStructureTechsResearched([3, 3]);
@@ -10324,6 +10330,7 @@ export function applyMegaStructureBonuses(megastructure, tech) {
                     setMegaStructureTechsResearched([4,2]);
                     return;
                 case 3:
+                    setMegaStructureAntimatterAmount(0.15);
                     setPermanentAntimatterUnlock(true);
                     setMiaplacidusMilestoneLevel(getMiaplacidusMilestoneLevel() + 1);
                     setMegaStructureTechsResearched([4,3]);

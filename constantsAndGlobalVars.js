@@ -407,6 +407,7 @@ let allTimeBattery3Built = 0;
 let asteroidsMinedThisRun = 0;
 let formationGoal = null;
 let liquidationValue = 0;
+let megastructureAntimatterAmount = 0;
 
 //FLAGS
 let checkRocketFuellingStatus = {
@@ -1126,6 +1127,7 @@ export function captureGameStatusForSaving(type) {
     gameState.megaStructuresInPossessionArray = megaStructuresInPossessionArray;
     gameState.miaplacidusMilestoneLevel = miaplacidusMilestoneLevel;
     gameState.megaStructureTechsResearched = megaStructureTechsResearched;
+    gameState.megaStructureAntimatterAmount = megastructureAntimatterAmount;
 
     gameState.runNumber = runNumber;
     gameState.starShipTravelDistance = starShipTravelDistance;
@@ -1355,6 +1357,7 @@ export function restoreGameStatus(gameState, type) {
             megaStructuresInPossessionArray = gameState.megaStructuresInPossessionArray ?? [];
             miaplacidusMilestoneLevel = gameState.miaplacidusMilestoneLevel ?? 0;
             megaStructureTechsResearched = gameState.megaStructureTechsResearched ?? [];
+            megastructureAntimatterAmount = gameState.megaStructureAntimatterAmount ?? 0;
             
             if (gameState.compoundCreateDropdownRecipeText) {
                 compoundCreateDropdownRecipeText = gameState.compoundCreateDropdownRecipeText;
@@ -2856,6 +2859,14 @@ export function setAntimatterUnlocked(value) {
 
 export function getPermanentAntimatterUnlock() {
     return permanentAntimatterUnlock;
+}
+
+export function setMegaStructureAntimatterAmount(value) {
+    megastructureAntimatterAmount += value;
+}
+
+export function getMegaStructureAntimatterAmount() {
+    return megastructureAntimatterAmount;
 }
 
 export function setPermanentAntimatterUnlock(value) {
