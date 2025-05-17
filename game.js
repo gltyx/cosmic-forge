@@ -381,7 +381,7 @@ import {
  import { initializeAutoSave, saveGame } from './saveLoadGame.js';
  import { playClickSfx, sfxPlayer, weatherAmbienceManager, backgroundAudio } from './audioManager.js';
  import { timerManager } from './timerManager.js';
- import { initialiseDescriptions } from './descriptions.js';
+ import { initialiseDescriptions, megaStructureTableText } from './descriptions.js';
 
  import { drawTab5Content } from './drawTab5Content.js';
 
@@ -606,6 +606,130 @@ export async function gameLoop() {
     }
 }
 
+export function drawMegaStructureTableText() {
+    const tableContainer = document.getElementById('tableContainer');
+    if (!tableContainer) return;
+
+    for (const [id, text] of Object.entries(megaStructureTableText)) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.innerHTML = `<span class="red-disabled-text">${text}</span>`;
+        }
+    }
+
+    function colorMegaStructureTableText() {
+        const themeElement = document.querySelector('[data-theme]');
+        const themeStyles = getComputedStyle(themeElement);
+        let readyColor = themeStyles.getPropertyValue('--text-color').trim();
+
+        function darkenColor(color, amount = 80) {
+            let r, g, b;
+
+            if (color.startsWith('rgb')) {
+                const match = color.match(/\d+/g);
+                if (match && match.length >= 3) {
+                    [r, g, b] = match.map(Number);
+                }
+            } 
+            else if (color.startsWith('#')) {
+                const hex = color.replace('#', '');
+                if (hex.length === 6) {
+                    r = parseInt(hex.slice(0, 2), 16);
+                    g = parseInt(hex.slice(2, 4), 16);
+                    b = parseInt(hex.slice(4, 6), 16);
+                }
+            }
+
+            if (r !== undefined && g !== undefined && b !== undefined) {
+                r = Math.max(0, r - amount);
+                g = Math.max(0, g - amount);
+                b = Math.max(0, b - amount);
+                return `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // Fallback
+            return color;
+        }
+
+        readyColor = darkenColor(readyColor, 128);
+
+        const megaKeys = [
+            'DysonSphere',
+            'CelestialProcessingCore',
+            'PlasmaForge',
+            'GalacticMemoryArchive'
+        ];
+
+        for (const [id, _] of Object.entries(megaStructureTableText)) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+
+            const span = el.querySelector('span');
+            if (!span) continue;
+
+            span.className = 'red-disabled-text';
+
+            if (conditionForId(id)) {
+                span.className = 'green-ready-text';
+            }
+        }
+
+        megaKeys.forEach(key => {
+            const ids = [
+                `name${key}`,
+                ...[1, 2, 3, 4, 5].map(i => `research${key}${i}`),
+                ...[1, 2, 3, 4, 5].map(i => `effect${key}${i}`)
+            ];
+
+            const allGreen = ids.every(id => {
+                const el = document.getElementById(id);
+                const span = el?.querySelector('span');
+                return span && span.classList.contains('green-ready-text');
+            });
+
+            if (allGreen) {
+                ids.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.backgroundColor = readyColor;
+                });
+            }
+        });
+    }
+
+    function conditionForId(id) {
+        if (id.startsWith('name')) {
+            const owned = getMegaStructuresInPossessionArray();
+            const name = megaStructureTableText[id];
+            return owned.includes(name);
+        }
+
+        const researched = getMegaStructureTechsResearched();
+        const idMatch = id.match(/^(research|effect)([A-Za-z]+)(\d)$/);
+
+        if (idMatch) {
+            const [, , key, indexStr] = idMatch;
+            const structureIndexMap = {
+                DysonSphere: 1,
+                CelestialProcessingCore: 2,
+                PlasmaForge: 3,
+                GalacticMemoryArchive: 4
+            };
+            const structureIndex = structureIndexMap[key];
+            const researchIndex = parseInt(indexStr);
+
+            return researched.some(
+                ([msIndex, rIndex]) =>
+                    msIndex === structureIndex && rIndex === researchIndex
+            );
+        }
+
+        return false;
+    }
+
+    colorMegaStructureTableText();
+}
+
+
 function megastructureUIChecks() {
     if (getCurrentRunIsMegaStructureRun() || getPermanentAntimatterUnlock()) {
         const optionElement = document.getElementById('megastructuresOption');
@@ -616,6 +740,8 @@ function megastructureUIChecks() {
     }
 
     if (getCurrentOptionPane() === 'megastructures') {
+        drawMegaStructureTableText();
+
         const researched = getMegaStructureTechsResearched();
         const themeKey = capitaliseString(getCurrentTheme());
 

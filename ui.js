@@ -497,7 +497,8 @@ export function createOptionRow(
     optionalIterationParam,
     rowCategory,
     noDescriptionContainer,
-    specialInputContainerClasses = false
+    specialInputContainerClasses = false,
+    hideMainDescriptionRow = false
 ) {
     // Main wrapper container
     const wrapper = document.createElement('div');
@@ -667,7 +668,9 @@ export function createOptionRow(
         mainRow.appendChild(descriptionContainer);
     }
 
-    wrapper.appendChild(descriptionRowContainer);
+    if (!hideMainDescriptionRow) {
+         wrapper.appendChild(descriptionRowContainer);
+    }
     wrapper.appendChild(mainRow);
 
     return wrapper;
@@ -5893,6 +5896,73 @@ export function createMegaStructureDiagram() {
     container.appendChild(galacticMemoryArchiveContainer);
 
     return container;
+}
+
+export function createMegaStructureTable() {
+    const tableContainer = document.createElement('div');
+    tableContainer.className = 'mega-structure-table-container';
+    tableContainer.id = 'tableContainer';
+
+    const infoGrid = document.createElement('div');
+    infoGrid.className = 'mega-info-grid';
+
+    const megaStructures = [
+        {
+            name: 'Dyson Sphere',
+            key: 'DysonSphere',
+            research: ['ds1', 'ds2', 'ds3', 'ds4', 'ds5'],
+            effects: ['effect1', 'effect2', 'effect3', 'effect4', 'effect5']
+        },
+        {
+            name: 'Celestial Processing Core',
+            key: 'CelestialProcessingCore',
+            research: ['cpc1', 'cpc2', 'cpc3', 'cpc4', 'cpc5'],
+            effects: ['effect1', 'effect2', 'effect3', 'effect4', 'effect5']
+        },
+        {
+            name: 'Plasma Forge',
+            key: 'PlasmaForge',
+            research: ['pf1', 'pf2', 'pf3', 'pf4', 'pf5'],
+            effects: ['effect1', 'effect2', 'effect3', 'effect4', 'effect5']
+        },
+        {
+            name: 'Galactic Memory Archive',
+            key: 'GalacticMemoryArchive',
+            research: ['gma1', 'gma2', 'gma3', 'gma4', 'gma5'],
+            effects: ['effect1', 'effect2', 'effect3', 'effect4', 'effect5']
+        }
+    ];
+
+    megaStructures.forEach(structure => {
+        const nameCell = document.createElement('div');
+        nameCell.className = 'info-cell name-cell';
+        nameCell.id = `name${structure.key}`;
+        nameCell.textContent = structure.name;
+        infoGrid.appendChild(nameCell);
+
+        const researchCell = document.createElement('div');
+        researchCell.className = 'info-cell research-cell';
+        structure.research.forEach((text, index) => {
+            const line = document.createElement('div');
+            line.textContent = text;
+            line.id = `research${structure.key}${index + 1}`;
+            researchCell.appendChild(line);
+        });
+        infoGrid.appendChild(researchCell);
+
+        const effectCell = document.createElement('div');
+        effectCell.className = 'info-cell effect-cell';
+        structure.effects.forEach((text, index) => {
+            const line = document.createElement('div');
+            line.textContent = text;
+            line.id = `effect${structure.key}${index + 1}`;
+            effectCell.appendChild(line);
+        });
+        infoGrid.appendChild(effectCell);
+    });
+
+    tableContainer.appendChild(infoGrid);
+    return tableContainer;
 }
     
 //-------------------------------------------------------------------------------------------------

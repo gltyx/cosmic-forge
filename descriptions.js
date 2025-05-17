@@ -3018,6 +3018,56 @@ achievementNotifications = {
     "have50HoursWithOnePioneerNotification": "ACHIEVEMENT:\nYou have logged 50 active hours with one Pioneer Name!\n\nREWARD: 50AP"
 };
 
+export const megaStructureTableText = {
+    nameDysonSphere: `Dyson Sphere`,
+    researchDysonSphere1: `Dyson Sphere Understanding`,
+    researchDysonSphere2: `Dyson Sphere Capabilities`,
+    researchDysonSphere3: `Dyson Sphere Disconnect`,
+    researchDysonSphere4: `Dyson Sphere Power`,
+    researchDysonSphere5: `Dyson Sphere Connect`,
+    effectDysonSphere1: `All Batteries x2 Capacity`,
+    effectDysonSphere2: `All Energy Buildings +25%`,
+    effectDysonSphere3: `+0.15 Antimatter/s + Force Field Reduced`,
+    effectDysonSphere4: `Power Always On for this System`,
+    effectDysonSphere5: `Power Always On`,
+
+    nameCelestialProcessingCore: `Celestial Processing Core`,
+    researchCelestialProcessingCore1: `CPC Understanding`,
+    researchCelestialProcessingCore2: `CPC Capabilities`,
+    researchCelestialProcessingCore3: `CPC Disconnect`,
+    researchCelestialProcessingCore4: `CPC Power`,
+    researchCelestialProcessingCore5: `CPC Connect`,
+    effectCelestialProcessingCore1: `+50 Research/s`,
+    effectCelestialProcessingCore2: `+100 Research/s`,
+    effectCelestialProcessingCore3: `+0.15 Antimatter/s + Force Field Reduced`,
+    effectCelestialProcessingCore4: `+150 Research/s`,
+    effectCelestialProcessingCore5: `+200 Research/s & +500 Research/s /System`,
+
+    namePlasmaForge: `Plasma Forge`,
+    researchPlasmaForge1: `Plasma Forge Understanding`,
+    researchPlasmaForge2: `Plasma Forge Capabilities`,
+    researchPlasmaForge3: `Plasma Forge Disconnect`,
+    researchPlasmaForge4: `Plasma Forge Power`,
+    researchPlasmaForge5: `Plasma Forge Connect`,
+    effectPlasmaForge1: `+25% AutoBuyer Rates`,
+    effectPlasmaForge2: `+50% AutoBuyer Rates`,
+    effectPlasmaForge3: `+0.15 Antimatter/s + Force Field Reduced`,
+    effectPlasmaForge4: `+75% AutoBuyer Rates`,
+    effectPlasmaForge5: `x2 AutoBuyer Rates & +500% AutoBuyer Rates /System`,
+
+    nameGalacticMemoryArchive: `Galactic Memory Archive`,
+    researchGalacticMemoryArchive1: `GMA Understanding`,
+    researchGalacticMemoryArchive2: `GMA Capabilities`,
+    researchGalacticMemoryArchive3: `GMA Disconnect`,
+    researchGalacticMemoryArchive4: `GMA Power`,
+    researchGalacticMemoryArchive5: `GMA Connect`,
+    effectGalacticMemoryArchive1: `All Res. & Cmp. Storage Cap. +100K`,
+    effectGalacticMemoryArchive2: `All Res. & Cmp. Storage Cap. +1M`,
+    effectGalacticMemoryArchive3: `+0.15 Antimatter/s + Force Field Destroyed`,
+    effectGalacticMemoryArchive4: `All Res. & Cmp. Storage Cap. +1B`,
+    effectGalacticMemoryArchive5: `All Res. & Cmp. Storage Cap. +10B<br>All Res. & Cmp. Storage Cap. starts at 10B /System`
+};
+
 export function getAchievementTooltipDescriptionTexts(achievementKey) {
     const tooltipDescriptionText = achievementTooltipDescriptionTexts[achievementKey];
     

@@ -2252,6 +2252,14 @@ body.debug-window-open {
     top: 0;
 }
 
+.mega-structure-table-container {
+    background-color: var(--container-bg-color);
+    width: 95%;
+    position: relative;
+    padding-top: 15%;
+    color: var(--text-color);
+}
+
 .star-system-container {
     background-color: transparent;
     position: absolute;
@@ -2330,3 +2338,26 @@ body.debug-window-open {
     transform: translate(-50%, -50%);
 }
 
+.mega-info-grid {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2.5fr 4.5fr;
+    background: var(--background-color);
+    border-radius: 15px;
+    box-sizing: border-box;
+}
+
+.info-cell {
+    border-top: 1px solid var(--text-color);
+    border-bottom: 1px solid var(--text-color);
+    font-size: 0.85rem;
+}
+
+.name-cell {
+    font-weight: bold;
+    font-size: 0.95rem;
+}

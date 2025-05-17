@@ -1,4 +1,4 @@
-import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, createDropdown, createTextElement, createTextFieldArea, callPopupModal, showHideModal, createMegaStructureDiagram } from './ui.js';
+import { removeTabAttentionIfNoIndicators, createOptionRow, createButton, createDropdown, createTextElement, createTextFieldArea, callPopupModal, showHideModal, createMegaStructureDiagram, createMegaStructureTable } from './ui.js';
 import { setApLiquidationQuantity, setGalacticMarketIncomingQuantity, setHasClickedOutgoingOptionGalacticMarket, setGalacticMarketOutgoingStockType, setGalacticMarketIncomingStockType, setGalacticMarketOutgoingQuantitySelectionType, setGalacticMarketOutgoingQuantitySelectionTypeDisabledStatus, setGalacticMarketSellApForCashQuantity, getGalacticMarketSellApForCashQuantity, setGalacticMarketLiquidationAuthorization, getApLiquidationQuantity } from './constantsAndGlobalVars.js';
 import { purchaseBuff, galacticMarketLiquidateForAp, galacticMarketSellApForCash, galacticMarketTrade, rebirth } from './game.js';
 import { getAscendencyBuffDataObject, getResourceDataObject } from './resourceDataObject.js';
@@ -346,5 +346,32 @@ export function drawTab7Content(heading, optionContentElement) {
         );
     
         optionContentElement.appendChild(megastructureDiagramRow);
+
+        const megastructureTableRow = createOptionRow(
+            'megastructureTableRow',
+            null,
+            '',
+            createMegaStructureTable(),
+            null,
+            null,
+            null,
+            null,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            null,
+            false,
+            null,
+            null,
+            '',
+            [true, 'invisible', '100%'],
+            null,
+            true
+        );
+    
+        optionContentElement.appendChild(megastructureTableRow);
     }
 }
