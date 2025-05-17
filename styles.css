@@ -451,13 +451,13 @@ button {
     --battleBgImg: url('./resources/images/battleImage1_terminal.png');
     --twinkle-scale: 1.2;
     --disabled-text: red;
-    --ready-text: lime;
+    --ready-text: rgba(0, 255, 0, 1);
     --warning-text: orange;
     --stats-this-run-text: #87cefa;
     --stats-all-time-text: #ff80ff;
     --font-family: Consolas, 'Courier New', monospace;
     --bg-color: black;
-    --text-color: white;
+    --text-color: rgba(255, 255, 255, 1);
     --text-color-rgb: 255, 255, 255;
     --text-hover-color: #ddd;
     --text-focus-color: #eee;
@@ -487,7 +487,7 @@ button {
     --stats-this-run-text: #2e7d32; /* Dark green for contrast on light background */
     --stats-all-time-text: #00695c; /* Deep cyan for contrast */
     --bg-color: white;
-    --text-color: black;
+    --text-color: rgba(0, 0, 0, 1);
     --text-color-rgb: 0, 0, 0;
     --text-hover-color: #666;
     --text-focus-color: #333;
@@ -517,7 +517,7 @@ button {
     --stats-this-run-text: #1565c0; /* A vibrant blue for contrast on frosty light background */
     --stats-all-time-text: #009688; /* Rich cyan for contrast */
     --bg-color: #e1f7ff;
-    --text-color: #129fdb;
+    --text-color: rgba(18, 159, 219, 1);
     --text-color-rgb: 18, 159, 219;
     --text-hover-color: #0e7aa8;
     --text-focus-color: #0e7aa8;
@@ -547,7 +547,7 @@ button {
     --stats-this-run-text: #e65100; /* Bright orange for contrast */
     --stats-all-time-text: #6d4c41; /* Dark brown for contrast instead of yellow */
     --bg-color: #fffae6;
-    --text-color: #8e5122;
+    --text-color: rgba(142, 81, 34, 1);
     --text-color-rgb: 142, 81, 34;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
@@ -572,12 +572,12 @@ button {
 [data-theme="forest"] {
     --battleBgImg: url('./resources/images/battleImage1_forest.png');
     --disabled-text: red;
-    --ready-text: lime;
+    --ready-text: rgba(0, 255, 0, 1);
     --warning-text: orange;
     --stats-this-run-text: #32a132; /* Strong green for forest theme */
     --stats-all-time-text: #7a4118; /* Bold magenta for contrast */
     --bg-color: #2f4f4f;
-    --text-color: #7a4118;
+    --text-color: rgba(122, 65, 24, 1);
     --text-color-rgb: 122, 65, 24;
     --text-hover-color: #91ca2e;
     --text-focus-color: #32a132;
@@ -607,24 +607,24 @@ button {
     --stats-this-run-text: magenta; /* Much darker green for better contrast */
     --stats-all-time-text: cyan; /* Cyan for contrast */
     --bg-color: black;
-    --text-color: lime;
+    --text-color: rgba(0, 255, 0, 1);
     --text-color-rgb: 0, 255, 0;
     --text-hover-color: #fff;
     --text-focus-color: #fff;
     --tab-bg-color: #111;
     --tab-bg-hover: rgb(0, 114, 0);
     --tab-selected-bg-color: rgb(0, 154, 0);
-    --tab-border-color: lime;
+    --tab-border-color: rgba(0, 255, 0, 1);
     --tab-invisible-bg-color: #000;
-    --tab-invisible-text-color: lime;
-    --container-border-color: lime;
+    --tab-invisible-text-color: rgba(0, 255, 0, 1);
+    --container-border-color: rgba(0, 255, 0, 1);
     --container-bg-color: #000;
     --button-bg-color: #212121;
     --button-bg-active: #333;
     --star-color-prominent: #ffffff;
     --star-color-settled: #00aaff;
     --current-star-border: #ff4500;
-    --generation-colors: lime, #00b200, #005400;
+    --generation-colors: rgba(0, 255, 0, 1), #00b200, #005400;
     --consumption-colors: red, #f00, #800;
 }
 
@@ -634,10 +634,10 @@ button {
     --disabled-text: #ff0000;
     --ready-text: #00ff00;
     --warning-text: orange;
-    --stats-this-run-text: #90caf9; /* Light blue for dark theme contrast */
-    --stats-all-time-text: #8e24aa; /* Magenta for strong contrast */
+    --stats-this-run-text: #90caf9;
+    --stats-all-time-text: #8e24aa;
     --bg-color: #000;
-    --text-color: #c4c4c4;
+    --text-color: rgba(196, 196, 196, 1);
     --text-color-rgb: 196, 196, 196;
     --text-hover-color: #ccc;
     --text-focus-color: #fff;
@@ -1261,7 +1261,7 @@ cursor: pointer;
     left: 0;
     height: 30px;
     width: 0%;
-    background-color: limegreen;
+    background-color: rgba(0, 255, 0, 1);
     z-index: 1000;
 }
 
@@ -2347,7 +2347,8 @@ body.debug-window-open {
     display: grid;
     grid-template-columns: 1fr 2.5fr 4.5fr;
     background: var(--background-color);
-    border-radius: 15px;
+    border: 3px var(--text-color) solid;
+    border-radius: 10px;
     box-sizing: border-box;
 }
 
@@ -2356,6 +2357,15 @@ body.debug-window-open {
     border-bottom: 1px solid var(--text-color);
     font-size: 0.85rem;
 }
+
+.info-cell:nth-of-type(1),
+.info-cell:nth-of-type(4),
+.info-cell:nth-of-type(7),
+.info-cell:nth-of-type(10) {
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
 
 .name-cell {
     font-weight: bold;

@@ -621,37 +621,7 @@ export function drawMegaStructureTableText() {
         const themeElement = document.querySelector('[data-theme]');
         const themeStyles = getComputedStyle(themeElement);
         let readyColor = themeStyles.getPropertyValue('--text-color').trim();
-
-        function darkenColor(color, amount = 80) {
-            let r, g, b;
-
-            if (color.startsWith('rgb')) {
-                const match = color.match(/\d+/g);
-                if (match && match.length >= 3) {
-                    [r, g, b] = match.map(Number);
-                }
-            } 
-            else if (color.startsWith('#')) {
-                const hex = color.replace('#', '');
-                if (hex.length === 6) {
-                    r = parseInt(hex.slice(0, 2), 16);
-                    g = parseInt(hex.slice(2, 4), 16);
-                    b = parseInt(hex.slice(4, 6), 16);
-                }
-            }
-
-            if (r !== undefined && g !== undefined && b !== undefined) {
-                r = Math.max(0, r - amount);
-                g = Math.max(0, g - amount);
-                b = Math.max(0, b - amount);
-                return `rgb(${r}, ${g}, ${b})`;
-            }
-
-            // Fallback
-            return color;
-        }
-
-        readyColor = darkenColor(readyColor, 128);
+        readyColor = readyColor.replace(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/, 'rgba($1, $2, $3, 0.5)');
 
         const megaKeys = [
             'DysonSphere',
