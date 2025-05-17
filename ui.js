@@ -3989,7 +3989,7 @@ function initializeTabEventListeners() {
         });    
     });
 
-        document.querySelectorAll('[class*="tab8"][class*="option11"]').forEach(function(element) {
+    document.querySelectorAll('[class*="tab8"][class*="option11"]').forEach(function(element) {
         element.addEventListener('click', function() {
             selectRowCss(this);
             setLastScreenOpenRegister('tab8', 'philosophies');
@@ -3997,6 +3997,17 @@ function initializeTabEventListeners() {
             setCurrentOptionPane('philosophies');
             updateContent('Philosophies', 'tab8', 'content');
             setFirstAccessArray('philosophies');
+        });    
+    });
+
+    document.querySelectorAll('[class*="tab8"][class*="option12"]').forEach(function(element) {
+        element.addEventListener('click', function() {
+            selectRowCss(this);
+            setLastScreenOpenRegister('tab8', 'story');
+            setLastScreenOpenRegister('tab8', 'story');
+            setCurrentOptionPane('story');
+            updateContent('Story', 'tab8', 'content');
+            setFirstAccessArray('story');
         });    
     });
 

@@ -7,6 +7,7 @@ import { setAchievementIconImageUrls, getAchievementPositionData } from './resou
 export function drawTab8Content(heading, optionContentElement) {
     if (heading === 'Contact') createHelpSectionRow('contactRow', ['discord-link', 'email-link']);
     if (heading === 'Get Started') createHelpSectionRow('getStartedRow', []);
+    if (heading === 'Story') createHelpSectionRow('storyRow', []);
     if (heading === 'Concepts - Early') createHelpSectionRow('conceptsEarlyRow', []);
     if (heading === 'Concepts - Mid') createHelpSectionRow('conceptsMidRow', []);
     if (heading === 'Concepts - Late') createHelpSectionRow('conceptsLateRow', []);
