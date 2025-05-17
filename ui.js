@@ -2632,7 +2632,7 @@ function drawStackedBarChart(canvasId, generationValues, consumptionValues, sola
         );
     }
 
-    const textColor = getComputedStyle(canvas).getPropertyValue('--text-color').trim();
+    const textColor = getComputedStyle(canvas).getPropertyValue('--text-color-hex').trim();
     const bgColor = getComputedStyle(canvas).getPropertyValue('--bg-color').trim();
 
     ctx.clearRect(0, 0, width, height);

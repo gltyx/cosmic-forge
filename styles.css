@@ -459,6 +459,7 @@ button {
     --bg-color: black;
     --text-color: rgba(255, 255, 255, 1);
     --text-color-rgb: 255, 255, 255;
+    --text-color-hex: #00ff00;
     --text-hover-color: #ddd;
     --text-focus-color: #eee;
     --tab-bg-color: #444;
@@ -489,6 +490,7 @@ button {
     --bg-color: white;
     --text-color: rgba(0, 0, 0, 1);
     --text-color-rgb: 0, 0, 0;
+    --text-color-hex: #000000;
     --text-hover-color: #666;
     --text-focus-color: #333;
     --tab-bg-color: #f0f0f0;
@@ -519,6 +521,7 @@ button {
     --bg-color: #e1f7ff;
     --text-color: rgba(18, 159, 219, 1);
     --text-color-rgb: 18, 159, 219;
+    --text-color-hex: #129fdb;
     --text-hover-color: #0e7aa8;
     --text-focus-color: #0e7aa8;
     --tab-bg-color: #b0e0e6;
@@ -549,6 +552,7 @@ button {
     --bg-color: #fffae6;
     --text-color: rgba(142, 81, 34, 1);
     --text-color-rgb: 142, 81, 34;
+    --text-color-hex: #8e5122;
     --text-hover-color: #ffee57;
     --text-focus-color: #ffee57;
     --tab-bg-color: #e4c066;
@@ -579,6 +583,7 @@ button {
     --bg-color: #2f4f4f;
     --text-color: rgba(122, 65, 24, 1);
     --text-color-rgb: 122, 65, 24;
+    --text-color-hex: #7a4118;
     --text-hover-color: #91ca2e;
     --text-focus-color: #32a132;
     --tab-bg-color: #46a361;
@@ -609,6 +614,7 @@ button {
     --bg-color: black;
     --text-color: rgba(0, 255, 0, 1);
     --text-color-rgb: 0, 255, 0;
+    --text-color-hex: #00ff00;
     --text-hover-color: #fff;
     --text-focus-color: #fff;
     --tab-bg-color: #111;
@@ -624,7 +630,7 @@ button {
     --star-color-prominent: #ffffff;
     --star-color-settled: #00aaff;
     --current-star-border: #ff4500;
-    --generation-colors: rgba(0, 255, 0, 1), #00b200, #005400;
+    --generation-colors: lime, #00b200, #005400;
     --consumption-colors: red, #f00, #800;
 }
 
@@ -639,6 +645,7 @@ button {
     --bg-color: #000;
     --text-color: rgba(196, 196, 196, 1);
     --text-color-rgb: 196, 196, 196;
+    --text-color-hex: #c4c4c4;
     --text-hover-color: #ccc;
     --text-focus-color: #fff;
     --tab-bg-color: #333;
