@@ -1,0 +1,1 @@
+export function drawTab6Content(n,t){}

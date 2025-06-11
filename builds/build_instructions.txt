@@ -1,0 +1,3 @@
+- update production_resources file
+- update game version in constants
+- python create_build.py cosmicForge_vx.xx

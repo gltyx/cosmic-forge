@@ -1,0 +1,1 @@
+import{generateStarfield}from"./ui.js";export function drawTab5Content(e,t){const n=document.querySelector("#optionContentTab5");generateStarfield(n,100,80)}
