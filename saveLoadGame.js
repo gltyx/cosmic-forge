@@ -20,9 +20,10 @@ import { showNotification } from './ui.js';
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 import { getNavigatorLanguage } from './game.js';
 
-const supabaseUrl = 'https://riogcxvtomyjlzkcnujf.supabase.co';
+// const supabaseUrl = 'https://riogcxvtomyjlzkcnujf.supabase.co';
+const supabaseUrl = './';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpb2djeHZ0b215amx6a2NudWpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMjY1NDgsImV4cCI6MjA1OTYwMjU0OH0.HH7KXPrcORvl6Wiefupl422gRYxAa_kFCRM2-puUcsQ';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -47,7 +48,7 @@ export function initializeAutoSave() {
             saveGame('autoSave');
 
             if (getSaveData()) {
-                saveGameToCloud(getSaveData(), 'autosave');
+                // saveGameToCloud(getSaveData(), 'autosave');
             }
 
             setSaveData(null);
@@ -111,56 +112,56 @@ export async function destroySaveGameOnCloud() {
 
 
 export async function saveGameToCloud(gameData, type) {
-    try {
-        const userId = getSaveName();
-        const currentTimestamp = new Date().toISOString();
+    // try {
+    //     const userId = getSaveName();
+    //     const currentTimestamp = new Date().toISOString();
 
-        const { data: existingData, error: fetchError } = await supabase
-            .from('CosmicForge_saves')
-            .select('*')
-            .eq('pioneer_name', userId)
-            .single();
+    //     const { data: existingData, error: fetchError } = await supabase
+    //         .from('CosmicForge_saves')
+    //         .select('*')
+    //         .eq('pioneer_name', userId)
+    //         .single();
 
-        if (fetchError && fetchError.code !== 'PGRST116') {
-            throw fetchError;
-        }
+    //     if (fetchError && fetchError.code !== 'PGRST116') {
+    //         throw fetchError;
+    //     }
 
-        if (existingData) {
-            const { error: updateError } = await supabase
-                .from('CosmicForge_saves')
-                .update({ 
-                    data: gameData,
-                    'created_at': currentTimestamp,
-                    'region': getUserPlatform(),
-                    'feedback': getFeedbackGiven(),
-                    'feedback_content': getFeedbackContent()
-                })
-                .eq('pioneer_name', userId);
+    //     if (existingData) {
+    //         const { error: updateError } = await supabase
+    //             .from('CosmicForge_saves')
+    //             .update({ 
+    //                 data: gameData,
+    //                 'created_at': currentTimestamp,
+    //                 'region': getUserPlatform(),
+    //                 'feedback': getFeedbackGiven(),
+    //                 'feedback_content': getFeedbackContent()
+    //             })
+    //             .eq('pioneer_name', userId);
 
-            if (updateError) {
-                throw updateError;
-            }
+    //         if (updateError) {
+    //             throw updateError;
+    //         }
 
-            if (type !== 'initialise') {
-                showNotification('Game updated in the cloud!', 'info', 3000, 'loadSave');
-            }
-        } else {
-            const { error: insertError } = await supabase
-                .from('CosmicForge_saves')
-                .insert([{ pioneer_name: userId, data: gameData, 'created_at': currentTimestamp }]);
+    //         if (type !== 'initialise') {
+    //             showNotification('Game updated in the cloud!', 'info', 3000, 'loadSave');
+    //         }
+    //     } else {
+    //         const { error: insertError } = await supabase
+    //             .from('CosmicForge_saves')
+    //             .insert([{ pioneer_name: userId, data: gameData, 'created_at': currentTimestamp }]);
 
-            if (insertError) {
-                throw insertError;
-            }
+    //         if (insertError) {
+    //             throw insertError;
+    //         }
 
-            if (type !== 'initialise') {
-                showNotification('Game saved to the cloud!', 'info', 3000, 'loadSave');
-            }
-        }
+    //         if (type !== 'initialise') {
+    //             showNotification('Game saved to the cloud!', 'info', 3000, 'loadSave');
+    //         }
+    //     }
 
-    } catch (error) {
-        showNotification('Error saving game to cloud!', 'error', 3000, 'loadSave');
-    }
+    // } catch (error) {
+    //     showNotification('Error saving game to cloud!', 'error', 3000, 'loadSave');
+    // }
 }
 
 export function saveGame(type) {
@@ -261,45 +262,45 @@ export function copySaveStringToClipBoard() {
 }
 
 export async function loadGameFromCloud() {
-    try {
-        const userId = localStorage.getItem('saveName') || getSaveName();
+    // try {
+    //     const userId = localStorage.getItem('saveName') || getSaveName();
 
-        const { data, error } = await supabase
-            .from('CosmicForge_saves')
-            .select('data')
-            .eq('pioneer_name', userId)
-            .single();
+    //     const { data, error } = await supabase
+    //         .from('CosmicForge_saves')
+    //         .select('data')
+    //         .eq('pioneer_name', userId)
+    //         .single();
 
-        if (error && error.code !== 'PGRST116') {
-            throw error;
-        }
+    //     if (error && error.code !== 'PGRST116') {
+    //         throw error;
+    //     }
 
-        if (!data) {
-            // No row found at all
-            showNotification('No saved game data found.', 'warning', 3000, 'loadSave');
-            return false;
-        }
+    //     if (!data) {
+    //         // No row found at all
+    //         showNotification('No saved game data found.', 'warning', 3000, 'loadSave');
+    //         return false;
+    //     }
 
-        if (data.data === null) {
-            showNotification('This Pioneer name is being reused for a new game.', 'info', 5000, 'loadSave');
-            return false;
-        }
+    //     if (data.data === null) {
+    //         showNotification('This Pioneer name is being reused for a new game.', 'info', 5000, 'loadSave');
+    //         return false;
+    //     }
 
-        const gameData = data.data;
-        const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
-        const gameState = JSON.parse(decompressedJson);
+    //     const gameData = data.data;
+    //     const decompressedJson = LZString.decompressFromEncodedURIComponent(gameData);
+    //     const gameState = JSON.parse(decompressedJson);
 
-        await initialiseLoadedGame(gameState, 'cloud');
-        setAchievementIconImageUrls();
-        getNavigatorLanguage();
-        showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
-        return true;
+    //     await initialiseLoadedGame(gameState, 'cloud');
+    //     setAchievementIconImageUrls();
+    //     getNavigatorLanguage();
+    //     showNotification('Game loaded successfully!', 'info', 3000, 'loadSave');
+    //     return true;
 
-    } catch (error) {
-        console.error("Error loading game from cloud:", error);
-        showNotification('Error loading game data from the cloud.', 'error', 3000, 'loadSave');
-        return false;
-    }
+    // } catch (error) {
+    //     console.error("Error loading game from cloud:", error);
+    //     showNotification('Error loading game data from the cloud.', 'error', 3000, 'loadSave');
+    //     return false;
+    // }
 }
 
 export function loadGame() {

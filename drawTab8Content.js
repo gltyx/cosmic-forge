@@ -406,7 +406,7 @@ export function drawTab8Content(heading, optionContentElement) {
                 saveGame('manualExportCloud');
                 const saveData = getSaveData();
                 if (saveData) {
-                    saveGameToCloud(saveData, 'manualExportCloud');
+                    // saveGameToCloud(saveData, 'manualExportCloud');
                     setSaveExportCloudFlag(saveData);
                 }
                 setSaveData(null);
@@ -435,7 +435,7 @@ export function drawTab8Content(heading, optionContentElement) {
             null,
             'Import Cloud Save:',
             createButton(`Import Cloud Save`, ['option-button', 'save-load-button'], () => {
-                loadGameFromCloud();
+                // loadGameFromCloud();
             }),
             null,
             null,

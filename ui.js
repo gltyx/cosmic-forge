@@ -2177,7 +2177,7 @@ function setFeedbackValueAndSaveGame(wanted, text) {
     saveGame('feedbackSave');
     const saveData = getSaveData();
     if (saveData) {
-        saveGameToCloud(saveData, 'manualExportCloud');
+        // saveGameToCloud(saveData, 'manualExportCloud');
     }
     setSaveData(null);
 }
@@ -2530,7 +2530,7 @@ async function getUserSaveName() {
                 localStorage.setItem('saveName', getSaveName());
                 saveNameButton.innerText = 'START';
                 showHideModal();
-                loadGameFromCloud();
+                // loadGameFromCloud();
                 saveGame('initialise');
                 saveNameButton.removeEventListener('click', handleSaveNameClick); // Remove handler after successful input
                 resolve();
